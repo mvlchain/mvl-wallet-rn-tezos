@@ -7,7 +7,7 @@ function Login({ navigation }: PageProps<'LOGIN'>) {
     <SafeAreaView>
       <Text>Login</Text>
 
-      <Button title='Go Home' onPress={() => navigation.navigate(ROUTE_NAME.HOME)} />
+      <Button title='Go Home' onPress={() => navigation.navigate(ROUTE_NAME.WALLET)} />
     </SafeAreaView>
   );
 }

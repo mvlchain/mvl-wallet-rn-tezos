@@ -11,7 +11,7 @@ export type RouteName = valueOf<typeof ROUTE_NAME>;
 
 export type ParamList = {
   LOGIN: undefined;
-  HOME: undefined;
+  WALLET: undefined;
 };
 
 export type PageProps<T extends RouteName> = NativeStackScreenProps<ParamList, T, 'MVL_WALLET'>;
