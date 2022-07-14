@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, SafeAreaView, Text } from 'react-native';
 
 import { ROUTE_NAME, type PageProps } from '@@assets/constants';
