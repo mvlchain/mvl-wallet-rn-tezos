@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from '@web3auth/react-native-sdk';
 import { ethers } from 'ethers';
 
 import { PageProps } from '@@assets/constants';
 import useStore from '@@store/index';
+
+import { Auth, AuthImpl } from '../../domain/auth/auth';
 
 const Wallet = createBottomTabNavigator();
 
@@ -16,48 +16,15 @@ const resolvedRedirectUrl = `${scheme}://***REMOVED***/redirect`;
 
 function HomeScreen() {
   const { isAuthenticated, toggle } = useStore();
+  const auth: Auth = new AuthImpl();
 
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
   const login = async () => {
     try {
-      const web3auth = new Web3Auth(WebBrowser, {
-        clientId: 'BHtkl316SIVJuuFmmWlrHPb6MztS9JRcN_iKXmQuCnWZGGiYBGbSKd_ZfziAIidGarYorDACGSOBCJtF5ZMyrII',
-        network: OPENLOGIN_NETWORK.TESTNET, // or other networks
-
-        whiteLabel: {
-          name: 'Clutch',
-          defaultLanguage: 'en', // or other language
-          dark: true, // or false,
-          theme: {},
-        },
-
-        loginConfig: {
-          google: {
-            name: 'Clutch',
-            verifier: '***REMOVED***',
-            typeOfLogin: 'google',
-            clientId: '***REMOVED***',
-          },
-        },
-      });
-
-      const state = await web3auth.login({
-        loginProvider: LOGIN_PROVIDER.GOOGLE,
-        redirectUrl: resolvedRedirectUrl,
-
-        // extraLoginOptions: {
-        //   domain: 'any_nonempty_string',
-        //   verifierIdField: 'sub',
-        //   id_token: 'JWT_TOKEN',
-        // },
-        dappShare:
-          // eslint-disable-next-line max-len
-          'coconut goddess giraffe feed river photo wife shrug hard nephew shoot lounge hundred trouble album veteran couple health decrease lecture six blame daughter spin',
-      });
-
-      setKey(state.privKey || 'no key');
-      console.log(state);
+      const key = await auth.signIn();
+      setKey(key);
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
