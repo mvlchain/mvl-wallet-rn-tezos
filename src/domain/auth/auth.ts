@@ -7,6 +7,8 @@ import { SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase/src/SeedPhrase';
 import ServiceProviderBase from '@tkey/service-provider-base';
 import TorusServiceProvider from '@tkey/service-provider-torus';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
+import * as WebBrowser from '@toruslabs/react-native-web-browser';
+import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from '@web3auth/react-native-sdk';
 import BN from 'bn.js';
 
 // const serviceProviderWithPostboxKey = (enableLoggin: boolean, postboxKey: string) => {
@@ -18,7 +20,52 @@ export interface Auth {
   signIn(): Promise<string>;
 }
 
-export class AuthImpl implements Auth {
+const scheme = 'clutchwallet'; // Or your desired app redirection scheme
+const resolvedRedirectUrl = `${scheme}://***REMOVED***/redirect`;
+
+export class Web3AuthImpl implements Auth {
+  async signIn(): Promise<string> {
+    const web3auth = new Web3Auth(WebBrowser, {
+      clientId: 'BHtkl316SIVJuuFmmWlrHPb6MztS9JRcN_iKXmQuCnWZGGiYBGbSKd_ZfziAIidGarYorDACGSOBCJtF5ZMyrII',
+      network: OPENLOGIN_NETWORK.TESTNET, // or other networks
+      redirectUrl: resolvedRedirectUrl,
+
+      whiteLabel: {
+        name: 'Clutch',
+        defaultLanguage: 'en', // or other language
+        dark: true, // or false,
+        theme: {},
+      },
+
+      loginConfig: {
+        google: {
+          name: 'Clutch',
+          verifier: '***REMOVED***',
+          typeOfLogin: 'google',
+          clientId: '***REMOVED***',
+        },
+      },
+    });
+
+    const state = await web3auth.login({
+      loginProvider: LOGIN_PROVIDER.GOOGLE,
+      redirectUrl: resolvedRedirectUrl,
+
+      // extraLoginOptions: {
+      //   domain: 'any_nonempty_string',
+      //   verifierIdField: 'sub',
+      //   id_token: 'JWT_TOKEN',
+      // },
+      dappShare:
+        // eslint-disable-next-line max-len
+        'coconut goddess giraffe feed river photo wife shrug hard nephew shoot lounge hundred trouble album veteran couple health decrease lecture six blame daughter spin',
+    });
+
+    return Promise.resolve(state.privKey ?? '');
+  }
+}
+
+export class TkeyAuthImpl implements Auth {
   private privateKeyModule = new PrivateKeyModule([new SECP256k1Format(new BN(0))]);
   private seedPhraseModule = new SeedPhraseModule([new MetamaskSeedPhraseFormat('https://mainnet.infura.io/v3/bca735fdbba0408bb09471e86463ae68')]);
 

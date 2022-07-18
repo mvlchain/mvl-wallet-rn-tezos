@@ -7,16 +7,14 @@ import { ethers } from 'ethers';
 import { PageProps } from '@@assets/constants';
 import useStore from '@@store/index';
 
-import { Auth, AuthImpl } from '../../domain/auth/auth';
+import { Auth, TkeyAuthImpl, Web3AuthImpl } from '../../domain/auth/auth';
 
 const Wallet = createBottomTabNavigator();
 
-const scheme = 'clutchwallet'; // Or your desired app redirection scheme
-const resolvedRedirectUrl = `${scheme}://***REMOVED***/redirect`;
-
 function HomeScreen() {
   const { isAuthenticated, toggle } = useStore();
-  const auth: Auth = new AuthImpl();
+  // const auth: Auth = new TkeyAuthImpl();
+  const auth: Auth = new Web3AuthImpl();
 
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -49,7 +47,6 @@ function HomeScreen() {
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text>Key: {key}</Text>
       <Text>Error: {errorMsg}</Text>
-      <Text>Linking URL: {resolvedRedirectUrl}</Text>
       <Button title='Login with Web3Auth' onPress={login} />
 
       <TextInput onChangeText={onChangeText} value={text} />
