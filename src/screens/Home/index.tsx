@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from '@web3auth/react-native-sdk';
-import { Colors, DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+import { ethers } from 'ethers';
 
 import { PageProps } from '@@assets/constants';
 import useStore from '@@store/index';
@@ -22,7 +22,7 @@ function HomeScreen() {
   const login = async () => {
     try {
       const web3auth = new Web3Auth(WebBrowser, {
-        clientId: '354250895959-eed00inuv99rtdhk0unktor6jaale1vu.apps.googleusercontent.com',
+        clientId: 'BKyoEuWeForFX3YQh8tasTUDcMMsPoiH63s7CKcf4j335yROIlm4R_34HTTQhr66b3BIwA3dvs6C6WmTu_pCqNo',
         network: OPENLOGIN_NETWORK.TESTNET, // or other networks
 
         whiteLabel: {
@@ -60,6 +60,13 @@ function HomeScreen() {
     }
   };
 
+  const [text, onChangeText] = useState('Input text');
+
+  const transformMnemonic = async () => {
+    const hdNode = ethers.utils.HDNode.fromSeed(text);
+    console.log(`mnemonic: ${hdNode.mnemonic}`);
+  };
+
   return (
     <View style={styles.container}>
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
@@ -68,6 +75,9 @@ function HomeScreen() {
       <Text>Error: {errorMsg}</Text>
       <Text>Linking URL: {resolvedRedirectUrl}</Text>
       <Button title='Login with Web3Auth' onPress={login} />
+
+      <TextInput onChangeText={onChangeText} value={text} />
+      <Button title='to Mnemonic' onPress={transformMnemonic} />
     </View>
   );
 }
