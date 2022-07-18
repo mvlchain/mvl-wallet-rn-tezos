@@ -22,7 +22,7 @@ function HomeScreen() {
   const login = async () => {
     try {
       const web3auth = new Web3Auth(WebBrowser, {
-        clientId: 'BKyoEuWeForFX3YQh8tasTUDcMMsPoiH63s7CKcf4j335yROIlm4R_34HTTQhr66b3BIwA3dvs6C6WmTu_pCqNo',
+        clientId: 'BHtkl316SIVJuuFmmWlrHPb6MztS9JRcN_iKXmQuCnWZGGiYBGbSKd_ZfziAIidGarYorDACGSOBCJtF5ZMyrII',
         network: OPENLOGIN_NETWORK.TESTNET, // or other networks
 
         whiteLabel: {
@@ -35,9 +35,9 @@ function HomeScreen() {
         loginConfig: {
           google: {
             name: 'Clutch',
-            verifier: 'clutch-google-testnet',
+            verifier: '***REMOVED***',
             typeOfLogin: 'google',
-            clientId: '354250895959-eed00inuv99rtdhk0unktor6jaale1vu.apps.googleusercontent.com',
+            clientId: '***REMOVED***',
           },
         },
       });
@@ -51,20 +51,29 @@ function HomeScreen() {
         //   verifierIdField: 'sub',
         //   id_token: 'JWT_TOKEN',
         // },
+        dappShare:
+          // eslint-disable-next-line max-len
+          'coconut goddess giraffe feed river photo wife shrug hard nephew shoot lounge hundred trouble album veteran couple health decrease lecture six blame daughter spin',
       });
 
       setKey(state.privKey || 'no key');
+      console.log(state);
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
     }
   };
 
-  const [text, onChangeText] = useState('Input text');
+  const [text, onChangeText] = useState('');
+  // eslint-disable-next-line max-len
+  // decrease simple approve artist merit voice vivid strategy quantum income problem giant brave uncle hockey crush loyal replace marble catalog trash wave field reveal
 
-  const transformMnemonic = async () => {
-    const hdNode = ethers.utils.HDNode.fromSeed(text);
-    console.log(`mnemonic: ${hdNode.mnemonic}`);
+  const [mnemonic, setMnemonic] = useState('');
+
+  const transformMnemonic = () => {
+    const mne = ethers.utils.entropyToMnemonic(text);
+    console.log(`mnemonic: ${mne}`);
+    setMnemonic(mne);
   };
 
   return (
@@ -78,6 +87,7 @@ function HomeScreen() {
 
       <TextInput onChangeText={onChangeText} value={text} />
       <Button title='to Mnemonic' onPress={transformMnemonic} />
+      <TextInput value={mnemonic} />
     </View>
   );
 }
