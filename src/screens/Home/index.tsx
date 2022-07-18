@@ -7,14 +7,15 @@ import { ethers } from 'ethers';
 import { PageProps } from '@@assets/constants';
 import useStore from '@@store/index';
 
-import { Auth, TkeyAuthImpl, Web3AuthImpl } from '../../domain/auth/auth';
+import { Auth, CustomAuthImpl, TkeyAuthImpl, Web3AuthImpl } from '../../domain/auth/auth';
 
 const Wallet = createBottomTabNavigator();
 
 function HomeScreen() {
   const { isAuthenticated, toggle } = useStore();
   // const auth: Auth = new TkeyAuthImpl();
-  const auth: Auth = new Web3AuthImpl();
+  // const auth: Auth = new Web3AuthImpl();
+  const auth: Auth = new CustomAuthImpl();
 
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');

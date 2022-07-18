@@ -26,18 +26,19 @@
             <category android:name="android.intent.category.LAUNCHER" />
             <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
+      </activity>
+      <activity android:name="org.torusresearch.customauth.activity.StartUpActivity"
+        android:launchMode="singleTop"
+          android:exported="true">
         <intent-filter>
-            <action android:name="android.intent.action.VIEW"/>
-
-            <category android:name="android.intent.category.DEFAULT"/>
-            <category android:name="android.intent.category.BROWSABLE"/>
-
-            <data
-                android:host="***REMOVED***"
-                android:pathPattern="/*"
-                android:pathPrefix="/redirect"
-                android:scheme="clutchwallet"
-            />
+          <action android:name="android.intent.action.VIEW"/>
+          <category android:name="android.intent.category.DEFAULT"/>
+          <category android:name="android.intent.category.BROWSABLE"/>
+          <data
+            android:host="${torusRedirectHost}"
+            android:pathPattern="/*"
+            android:pathPrefix="${torusRedirectPathPrefix}"
+            android:scheme="${torusRedirectScheme}" />
         </intent-filter>
       </activity>
     </application>

@@ -7,13 +7,17 @@ import { SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase/src/SeedPhrase';
 import ServiceProviderBase from '@tkey/service-provider-base';
 import TorusServiceProvider from '@tkey/service-provider-torus';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
-import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from '@web3auth/react-native-sdk';
+// import * as WebBrowser from '@toruslabs/react-native-web-browser';
+// import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from '@web3auth/react-native-sdk';
+import CustomAuth from '@toruslabs/customauth-react-native-sdk';
 import BN from 'bn.js';
+// @ts-ignore
 
-// const serviceProviderWithPostboxKey = (enableLoggin: boolean, postboxKey: string) => {
-//   return new ServiceProviderBase({ enableLogging, postboxKey })
-// }
+const enableLogging = process.env.ENABLE_TORUS_LOGGING === 'true';
+
+const serviceProviderWithPostboxKey = ((enableLogging: boolean) => (postboxKey: string) => {
+  return new ServiceProviderBase({ enableLogging, postboxKey: new BN(postboxKey, 'hex').toString('hex') });
+})(enableLogging);
 
 export interface Auth {
   // best effort to get private key
@@ -22,48 +26,117 @@ export interface Auth {
 
 const scheme = 'clutchwallet'; // Or your desired app redirection scheme
 const resolvedRedirectUrl = `${scheme}://***REMOVED***/redirect`;
+const browserRedirectUri = '***REMOVED***';
+const web3authClientId = 'BHtkl316SIVJuuFmmWlrHPb6MztS9JRcN_iKXmQuCnWZGGiYBGbSKd_ZfziAIidGarYorDACGSOBCJtF5ZMyrII';
+const googleClientId = '***REMOVED***';
+const verifier = '***REMOVED***';
 
-export class Web3AuthImpl implements Auth {
+const privateKeyModule = new PrivateKeyModule([new SECP256k1Format(new BN(0))]);
+const seedPhraseModule = new SeedPhraseModule([new MetamaskSeedPhraseFormat('https://mainnet.infura.io/v3/bca735fdbba0408bb09471e86463ae68')]);
+
+const storageLayer = new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' });
+
+export class CustomAuthImpl implements Auth {
+  private async fetchServerShare(): Promise<ShareStore> {
+    return ShareStore.fromJSON({
+      share: {
+        share: '2cec8588aa5bad477ebe3a69328b1a4226f3d2017f99312d44e4bf8c9c2e4df6',
+        shareIndex: 'd0b4f68a80494ef651ce09629406f0af25e25301d262807a2f50ac6b5f580943',
+      },
+      polynomialID:
+        '039a3f34da6780ed048d871e876db4fd5a3f6e85e3330dae0932be5713a73e4ebb|024dc508b004f7b61e3926d9da2d74f66953835c6708dcbba961a48eeb0af746b8',
+    });
+  }
+
   async signIn(): Promise<string> {
-    const web3auth = new Web3Auth(WebBrowser, {
-      clientId: 'BHtkl316SIVJuuFmmWlrHPb6MztS9JRcN_iKXmQuCnWZGGiYBGbSKd_ZfziAIidGarYorDACGSOBCJtF5ZMyrII',
-      network: OPENLOGIN_NETWORK.TESTNET, // or other networks
-      redirectUrl: resolvedRedirectUrl,
+    CustomAuth.init({
+      network: 'testnet',
+      redirectUri: resolvedRedirectUrl,
+      browserRedirectUri,
+      enableLogging: false,
+    });
 
-      whiteLabel: {
+    try {
+      const credentials = await CustomAuth.triggerLogin({
         name: 'Clutch',
-        defaultLanguage: 'en', // or other language
-        dark: true, // or false,
-        theme: {},
-      },
+        typeOfLogin: 'google',
+        clientId: googleClientId,
+        verifier,
+      });
 
-      loginConfig: {
-        google: {
-          name: 'Clutch',
-          verifier: '***REMOVED***',
-          typeOfLogin: 'google',
-          clientId: '***REMOVED***',
+      const postboxKey = credentials.privateKey;
+      console.log(`postboxKey: ${postboxKey}`);
+
+      const serviceProvider = serviceProviderWithPostboxKey(postboxKey);
+
+      const tKey = new ThresholdKey({
+        serviceProvider,
+        storageLayer: storageLayer,
+        modules: {
+          [PRIVATE_KEY_MODULE_NAME]: privateKeyModule,
+          [SEED_PHRASE_MODULE_NAME]: seedPhraseModule,
         },
-      },
-    });
+      });
+      console.log(tKey);
 
-    const state = await web3auth.login({
-      loginProvider: LOGIN_PROVIDER.GOOGLE,
-      redirectUrl: resolvedRedirectUrl,
+      const serverShare = await this.fetchServerShare();
+      tKey.inputShareStore(serverShare);
+      console.log(serverShare);
 
-      // extraLoginOptions: {
-      //   domain: 'any_nonempty_string',
-      //   verifierIdField: 'sub',
-      //   id_token: 'JWT_TOKEN',
-      // },
-      dappShare:
-        // eslint-disable-next-line max-len
-        'coconut goddess giraffe feed river photo wife shrug hard nephew shoot lounge hundred trouble album veteran couple health decrease lecture six blame daughter spin',
-    });
+      await tKey.initialize({ neverInitializeNewKey: true });
+      console.log(`tKey.init`);
+      const res = await tKey.reconstructKey();
+      console.log(`reconstructed: ${res}`, res);
 
-    return Promise.resolve(state.privKey ?? '');
+      return res.privKey.toString('hex').padStart(64, '0');
+    } catch (error) {
+      console.error(error, 'login caught');
+    }
+    return '';
   }
 }
+
+// export class Web3AuthImpl implements Auth {
+//   async signIn(): Promise<string> {
+//     const web3auth = new Web3Auth(WebBrowser, {
+//       clientId: web3authClientId,
+//       network: OPENLOGIN_NETWORK.TESTNET, // or other networks
+//       redirectUrl: resolvedRedirectUrl,
+//
+//       whiteLabel: {
+//         name: 'Clutch',
+//         defaultLanguage: 'en', // or other language
+//         dark: true, // or false,
+//         theme: {},
+//       },
+//
+//       loginConfig: {
+//         google: {
+//           name: 'Clutch',
+//           verifier: verifier,
+//           typeOfLogin: 'google',
+//           clientId: googleClientId,
+//         },
+//       },
+//     });
+//
+//     const state = await web3auth.login({
+//       loginProvider: LOGIN_PROVIDER.GOOGLE,
+//       redirectUrl: resolvedRedirectUrl,
+//
+//       // extraLoginOptions: {
+//       //   domain: 'any_nonempty_string',
+//       //   verifierIdField: 'sub',
+//       //   id_token: 'JWT_TOKEN',
+//       // },
+//       dappShare:
+// eslint-disable-next-line max-len
+//         'coconut goddess giraffe feed river photo wife shrug hard nephew shoot lounge hundred trouble album veteran couple health decrease lecture six blame daughter spin',
+//     });
+//
+//     return Promise.resolve(state.privKey ?? '');
+//   }
+// }
 
 export class TkeyAuthImpl implements Auth {
   private privateKeyModule = new PrivateKeyModule([new SECP256k1Format(new BN(0))]);
