@@ -21,7 +21,6 @@
     "@tkey/default": "^6.1.0",
     "@tkey/private-keys": "^6.1.0",
     "@tkey/seed-phrase": "^6.1.0",
-    "@tkey/service-provider-torus": "^6.1.0",
     "@tkey/storage-layer-torus": "^6.1.0",
     "@toruslabs/customauth-react-native-sdk": "^1.0.2",
     "assert": "^2.0.0",
