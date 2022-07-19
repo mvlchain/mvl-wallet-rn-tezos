@@ -26,7 +26,8 @@ module.exports = {
     'no-extra-boolean-cast': 'off',
     'no-constant-condition': 'off',
     'no-case-declarations': 'off',
-    'space-before-function-paren': ['error', { anonymous: 'always', named: 'never', asyncArrow: 'always' }],
+    'space-before-function-paren': 'off',
+    '@typescript-eslint/space-before-function-paren': ['error', { anonymous: 'always', named: 'never', asyncArrow: 'always' }],
     'max-len': ['error', { code: 150 }],
     'max-lines': ['error', { max: 180, skipComments: true, skipBlankLines: true }],
     'import/order': [
