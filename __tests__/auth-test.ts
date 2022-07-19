@@ -1,6 +1,6 @@
-import { Auth, TkeyAuthImpl } from '../src/domain/auth/auth';
+import { Auth, CustomAuthImpl } from '../src/domain/auth/auth';
 
-const auth: Auth = new TkeyAuthImpl();
+const auth: Auth = new CustomAuthImpl();
 
 it('constructs correctly', () => {
   expect(auth).toBeDefined();
