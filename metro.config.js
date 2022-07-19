@@ -15,6 +15,7 @@ module.exports = {
       os: require.resolve('os-browserify'),
       url: require.resolve('url'),
       assert: require.resolve('assert'),
+      process: require.resolve('process/browser'),
     },
   },
   transformer: {
