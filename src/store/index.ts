@@ -6,10 +6,11 @@ import createMigrate from './createMigration';
 import { version, migrations } from './migrations';
 
 const useStore = createStore(
-  persist<{ isAuthenticated: boolean; toggle: () => void }>(
+  persist<{ isAuthenticated: boolean; toggle: () => void; deviceShare?: Record<string, any> }>(
     (set) => ({
       isAuthenticated: false,
       toggle: () => set((state) => ({ isAuthenticated: !state.isAuthenticated })),
+      deviceShare: undefined,
     }),
     {
       name: 'root',
