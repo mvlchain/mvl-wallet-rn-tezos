@@ -9,13 +9,6 @@ import { ROUTE_NAME } from '@@assets/constants';
 import Home from '@@screens/Home';
 import Login from '@@screens/Login';
 
-setAxiosConfig({
-  baseURL: 'API_HOST',
-  headers: {
-    Authorization: '',
-  },
-});
-
 const Stack = createNativeStackNavigator();
 
 function App() {
