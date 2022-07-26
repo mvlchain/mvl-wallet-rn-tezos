@@ -19,7 +19,7 @@ module.exports = {
           '@@config': './src/config',
           '@@hooks': './src/hooks',
           '@@screens': './src/screens',
-          '@@utils': './src/utilss',
+          '@@utils': './src/utils',
           '@@types': './src/types',
           '@@store': './src/store',
         },

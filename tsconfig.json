@@ -35,7 +35,7 @@
       "@@config/*": ["config/*"],
       "@@hooks/*": ["hooks/*"],
       "@@screens/*": ["screens/*"],
-      "@@utils/*": ["utilss/*"],
+      "@@utils/*": ["utils/*"],
       "@@types/*": ["types/*"],
       "@@store/*": ["store/*"],
     },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
