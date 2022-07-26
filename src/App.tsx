@@ -1,7 +1,7 @@
 import React from 'react';
 import 'reflect-metadata';
 
-import { useToggle } from '@@hooks/useToggle';
+import { useToggle } from '@@hooks/common/useToggle';
 import Login from '@@screens/Login';
 import Router from '@@screens/Router';
 import PaperProvider from '@@style/PaperProvider';
