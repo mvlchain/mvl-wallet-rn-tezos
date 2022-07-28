@@ -3,10 +3,24 @@ import createStore from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import createMigrate from './createMigration';
-import { version, migrations } from './migrations';
+import { migrations, version } from './migrations';
+
+export class DeviceShareHolderDto {
+  readonly postboxKeyJsonEncrypted: string;
+  readonly shareJsonEncrypted: string;
+  readonly polynomialId: string;
+  readonly idTokenJsonEncrypted: string;
+
+  constructor(postboxKeyJsonEncrypted: string, shareJsonEncrypted: string, polynomialId: string, idTokenJsonEncrypted: string) {
+    this.postboxKeyJsonEncrypted = postboxKeyJsonEncrypted;
+    this.shareJsonEncrypted = shareJsonEncrypted;
+    this.polynomialId = polynomialId;
+    this.idTokenJsonEncrypted = idTokenJsonEncrypted;
+  }
+}
 
 const useStore = createStore(
-  persist<{ isAuthenticated: boolean; toggle: () => void; deviceShare?: Record<string, any> }>(
+  persist<{ isAuthenticated: boolean; toggle: () => void; deviceShare?: DeviceShareHolderDto }>(
     (set) => ({
       isAuthenticated: false,
       toggle: () => set((state) => ({ isAuthenticated: !state.isAuthenticated })),

@@ -1,6 +1,7 @@
-import { Auth, CustomAuthImpl } from '../src/domain/auth/auth';
+import IAuthService from '../src/domain/auth/auth.interface';
+import { CustomAuthImpl } from '../src/domain/auth/auth.service';
 
-const auth: Auth = new CustomAuthImpl();
+const auth: IAuthService = new CustomAuthImpl();
 
 it('constructs correctly', () => {
   expect(auth).toBeDefined();

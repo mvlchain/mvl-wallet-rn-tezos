@@ -6,22 +6,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { PageProps } from '@@assets/constants';
 import useStore from '@@store/index';
 
-import { Auth, CustomAuthImpl } from '../../domain/auth/auth';
+import IAuthService, { AUTH_PROVIDER, AuthProvider } from '../../domain/auth/auth.interface';
+import { CustomAuthImpl } from '../../domain/auth/auth.service';
 
 const Wallet = createBottomTabNavigator();
 
 function HomeScreen() {
   const { isAuthenticated, toggle } = useStore();
-  // const auth: Auth = new TkeyAuthImpl();
-  // const auth: Auth = new Web3AuthImpl();
-  const auth: Auth = new CustomAuthImpl();
+  const auth: IAuthService = new CustomAuthImpl();
 
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const login = async () => {
+  const login = async (provider: AuthProvider) => {
     try {
-      const key = await auth.signIn();
+      const key = await auth.signIn(provider, () => Promise.resolve('1234'));
       setKey(key);
     } catch (e) {
       console.error(e);
@@ -35,7 +34,7 @@ function HomeScreen() {
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text>Key: {key}</Text>
       <Text>Error: {errorMsg}</Text>
-      <Button title='Login with Web3Auth' onPress={login} />
+      <Button title='Login with Web3Auth' onPress={() => login(AUTH_PROVIDER.GOOGLE)} />
     </View>
   );
 }
