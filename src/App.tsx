@@ -9,9 +9,13 @@ import { ROUTE_NAME } from '@@assets/constants';
 import Home from '@@screens/Home';
 import Login from '@@screens/Login';
 
+import SecureKeychain from './utils/SecureKeychain';
+
 const Stack = createNativeStackNavigator();
 
-function App() {
+function App(props: { salt?: string }) {
+  SecureKeychain.init(props.salt || 'debug');
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={ROUTE_NAME.WALLET}>
