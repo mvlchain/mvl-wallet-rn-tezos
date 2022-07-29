@@ -9,13 +9,13 @@ export class DeviceShareHolderDto {
   readonly postboxKeyJsonEncrypted: string;
   readonly shareJsonEncrypted: string;
   readonly polynomialId: string;
-  readonly idTokenJsonEncrypted: string;
+  readonly providerTokenJsonEncrypted: string;
 
-  constructor(postboxKeyJsonEncrypted: string, shareJsonEncrypted: string, polynomialId: string, idTokenJsonEncrypted: string) {
+  constructor(postboxKeyJsonEncrypted: string, shareJsonEncrypted: string, polynomialId: string, providerTokenJsonEncrypted: string) {
     this.postboxKeyJsonEncrypted = postboxKeyJsonEncrypted;
     this.shareJsonEncrypted = shareJsonEncrypted;
     this.polynomialId = polynomialId;
-    this.idTokenJsonEncrypted = idTokenJsonEncrypted;
+    this.providerTokenJsonEncrypted = providerTokenJsonEncrypted;
   }
 }
 

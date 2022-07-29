@@ -28,6 +28,16 @@ function HomeScreen() {
     }
   };
 
+  const logout = async () => {
+    await auth.logout();
+  };
+  const test = async () => {
+    await auth.test();
+  };
+  const deleteAccount = async () => {
+    await auth.deleteAccount();
+  };
+
   return (
     <View style={styles.container}>
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
@@ -35,6 +45,9 @@ function HomeScreen() {
       <Text>Key: {key}</Text>
       <Text>Error: {errorMsg}</Text>
       <Button title='Login with Web3Auth' onPress={() => login(AUTH_PROVIDER.GOOGLE)} />
+      <Button title='Logout' onPress={() => logout()} />
+      <Button title='Delete Account' onPress={() => deleteAccount()} />
+      <Button title='Test' onPress={() => test()} />
     </View>
   );
 }

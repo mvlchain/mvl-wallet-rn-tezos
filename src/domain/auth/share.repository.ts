@@ -4,11 +4,11 @@ import ThresholdKey from '@tkey/core';
 import qs from 'qs';
 
 import useStore, { DeviceShareHolderDto } from '@@store/index';
+import { request } from '@@utils/request';
 
 import { components } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
 import SecureKeychain from '../../utils/SecureKeychain';
-import { request } from '../../utils/request';
 
 import { AuthProvider, DeviceShareHolder } from './auth.interface';
 
@@ -29,13 +29,18 @@ export default class ShareRepository {
     }
 
     const postboxKeyJson = await this.encryptor.decrypt(credentials.password, dto.postboxKeyJsonEncrypted);
-    const idTokenJson = await this.encryptor.decrypt(credentials.password, dto.idTokenJsonEncrypted);
+    const providerTokenJson = await this.encryptor.decrypt(credentials.password, dto.providerTokenJsonEncrypted);
     const shareJson = await this.encryptor.decrypt(credentials.password, dto.shareJsonEncrypted);
 
-    return new DeviceShareHolder(postboxKeyJson.postboxKey, ShareStore.fromJSON(shareJson), dto.polynomialId, idTokenJson.idToken);
+    return new DeviceShareHolder(postboxKeyJson.postboxKey, ShareStore.fromJSON(shareJson), dto.polynomialId, providerTokenJson);
   }
 
-  static async findServerShare(tKey: ThresholdKey, provider: AuthProvider, providerIdToken: string): Promise<ShareStore | undefined> {
+  static async findServerShare(
+    tKey: ThresholdKey,
+    provider: AuthProvider,
+    providerIdToken?: string,
+    providerAccessToken?: string,
+  ): Promise<ShareResponseDto | undefined> {
     // TODO: use latestPublicPolynomial first
 
     for (const polyId in tKey.metadata.publicPolynomials) {
@@ -47,30 +52,53 @@ export default class ShareRepository {
       if (torusShare === undefined) {
         continue;
       }
-      const serverShareResponse = await ShareRepository.fetchServerShare(provider, providerIdToken, torusShare.polynomialID);
-      if (serverShareResponse !== undefined) {
-        return ShareStore.fromJSON(JSON.parse(serverShareResponse.jsonString));
-      }
+      return ShareRepository.fetchServerShare(provider, torusShare.polynomialID, providerIdToken, providerAccessToken);
     }
     return undefined;
   }
 
-  static async fetchServerShare(provider: AuthProvider, idToken: string, polynomialId: string): Promise<ShareResponseDto | undefined> {
+  static async fetchServerShare(
+    provider: AuthProvider,
+    polynomialId: string,
+    idToken?: string,
+    accessToken?: string,
+  ): Promise<ShareResponseDto | undefined> {
     try {
       const endpoint = `/v1/accounts/ss?${qs.stringify({
         provider: provider,
         // 대문자 없이 idtoken 임 조심할것
         idtoken: idToken,
+        accessToken: accessToken,
         polynomialId: polynomialId,
       })}`;
       const res = await request.get(endpoint);
-      return res.data;
+      if (res.status === 200) {
+        return res.data;
+      } else {
+        return undefined;
+      }
     } catch (e) {
       return undefined;
     }
   }
 
-  static async updateServerShare(share: string, shareIndex: string, polynomialId: string): Promise<ShareResponseDto | undefined> {
+  static shareToShareJson(shareStore: ShareStore) {
+    return JSON.stringify({
+      share: {
+        share: shareStore.share.share.toString('hex', 64),
+        shareIndex: shareStore.share.shareIndex.toString('hex', 64),
+      },
+      // polynomialID 에서 ID 대문자인것 조심
+      polynomialID: shareStore.polynomialID,
+    });
+  }
+
+  static async updateServerShare(
+    share: string,
+    shareIndex: string,
+    polynomialID: string,
+    deviceShareIndex?: string,
+  ): Promise<ShareResponseDto | undefined> {
     try {
       const endpoint = '/v1/accounts/ss';
       const jsonString = JSON.stringify({
@@ -79,7 +107,8 @@ export default class ShareRepository {
           shareIndex,
         },
         // polynomialID 에서 ID 대문자인것 조심
-        polynomialID: polynomialId,
+        polynomialID,
+        deviceShareIndex,
       });
       const body: components['schemas']['UpdateServerShareDto'] = {
         share: jsonString,
@@ -93,17 +122,25 @@ export default class ShareRepository {
     }
   }
 
-  static async saveDeviceShare(postboxKey: string, deviceShare: ShareStore, idToken: string, requirePassword: () => Promise<string>) {
-    const pw = await requirePassword();
-    let postboxKeyJsonEncrypted = await this.encryptor.encrypt(pw, {
+  static async saveDeviceShare(postboxKey: string, deviceShare: ShareStore, password: string, idToken?: string, accessToken?: string) {
+    let postboxKeyJsonEncrypted = await this.encryptor.encrypt(password, {
       postboxKey: postboxKey,
     });
-    let shareJsonEncrypted = await this.encryptor.encrypt(pw, deviceShare.toJSON());
-    let idTokenJsonEncrypted = await this.encryptor.encrypt(pw, {
-      idToken: idToken,
+    let shareJsonEncrypted = await this.encryptor.encrypt(password, deviceShare.toJSON());
+    let providerTokenJsonEncrypted = await this.encryptor.encrypt(password, {
+      idToken,
+      accessToken,
     });
-    const deviceShareHolder = new DeviceShareHolderDto(postboxKeyJsonEncrypted, shareJsonEncrypted, deviceShare.polynomialID, idTokenJsonEncrypted);
+    const deviceShareHolder = new DeviceShareHolderDto(
+      postboxKeyJsonEncrypted,
+      shareJsonEncrypted,
+      deviceShare.polynomialID,
+      providerTokenJsonEncrypted,
+    );
     useStore.setState({ deviceShare: deviceShareHolder });
-    // TODO: save deviceShareIndex to server
+  }
+
+  static async clearDeviceShare() {
+    useStore.setState({ deviceShare: undefined });
   }
 }

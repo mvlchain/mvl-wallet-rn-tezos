@@ -407,6 +407,7 @@ export interface components {
       /** @example {"share":{"share":"xxxx","shareIndex":"xxx"},"polynomialID":"xxx|xxx"} */
       jsonString: string;
       polynomialId: string;
+      deviceShareIndex?: string;
     };
     HmacErrorDTO: {
       /** @default Invalid Hmac sig! */

@@ -7,6 +7,7 @@ import ServiceProviderBase from '@tkey/service-provider-base';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
 // @ts-ignore
 import CustomAuth from '@toruslabs/customauth-react-native-sdk';
+import { TorusLoginResponse } from '@toruslabs/customauth/src/handlers/interfaces';
 import { LOGIN, LOGIN_TYPE } from '@toruslabs/customauth/src/utils/enums';
 import BN from 'bn.js';
 
@@ -17,7 +18,7 @@ import { AUTH_PROVIDER, AuthProvider } from './auth.interface';
 export default class TkeyRepository {
   private static readonly authConfig = appconfig().auth;
 
-  private static serviceProviderWithPostboxKey(postboxKey: string) {
+  static serviceProviderWithPostboxKey(postboxKey: string) {
     const enableLogging = process.env.ENABLE_TORUS_LOGGING === 'true';
     return new ServiceProviderBase({ enableLogging, postboxKey });
   }
@@ -33,7 +34,7 @@ export default class TkeyRepository {
     }
   }
 
-  static async initTkey(postboxKey: string): Promise<ThresholdKey> {
+  static async initTkey(postboxKey: string, onlySignIn: boolean): Promise<ThresholdKey> {
     const tKey = new ThresholdKey({
       serviceProvider: this.serviceProviderWithPostboxKey(postboxKey),
       storageLayer: new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' }),
@@ -44,23 +45,38 @@ export default class TkeyRepository {
         ]),
       },
     });
-    await tKey.initialize({ neverInitializeNewKey: true });
+    await tKey.initialize({ neverInitializeNewKey: onlySignIn });
     return tKey;
   }
 
-  static async triggerProviderLogin(provider: AuthProvider): Promise<{ postboxKey: string; providerIdToken: string }> {
+  static async triggerProviderLogin(provider: AuthProvider): Promise<{ postboxKey: string; providerIdToken?: string; providerAccessToken?: string }> {
     await CustomAuth.init({
       network: TkeyRepository.authConfig.web3Auth.network,
       redirectUri: TkeyRepository.authConfig.authRedirectUrl,
       browserRedirectUri: TkeyRepository.authConfig.browserRedirectUrl,
       enableLogging: false,
     });
-    const credentials = await CustomAuth.triggerLogin({
+    const credentials: TorusLoginResponse = await CustomAuth.triggerLogin({
       name: 'Clutch',
       typeOfLogin: TkeyRepository.authProviderToTypeOfLogin(provider),
       clientId: TkeyRepository.authConfig.googleClientId,
       verifier: TkeyRepository.authConfig.web3Auth.verifier,
     });
-    return { postboxKey: credentials.privateKey, providerIdToken: credentials.userInfo.idToken };
+    return {
+      postboxKey: credentials.privateKey,
+      providerIdToken: credentials.userInfo.idToken,
+      providerAccessToken: credentials.userInfo.accessToken,
+    };
+  }
+
+  static async checkSignedUp(postboxKey: string): Promise<boolean> {
+    const tKey = new ThresholdKey({
+      serviceProvider: TkeyRepository.serviceProviderWithPostboxKey(postboxKey),
+      storageLayer: new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' }),
+    });
+
+    const shareStore: any = await tKey.storageLayer.getMetadata({ privKey: new BN(postboxKey, 'hex') });
+    const isNewKey = shareStore.message === 'KEY_NOT_FOUND';
+    return !isNewKey;
   }
 }
