@@ -9,6 +9,7 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:react/recommended',
   ],
+  ignorePatterns: ['generated-scheme.ts', '__mocks__'],
   plugins: ['@typescript-eslint'],
   overrides: [
     {
