@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+/* eslint-disable max-lines */
 
 import { KEY_NOT_FOUND, ShareStore } from '@tkey/common-types';
 import ThresholdKey from '@tkey/core';
@@ -50,10 +50,10 @@ export class CustomAuthImpl implements IAuthService {
 
     CustomAuthImpl.logTKey(tKey);
 
-    // TODO
     const privateKey = tKey.privKey.toString('hex', 64);
-    const hmacManager = new ClutchKeyManager(privateKey);
-    const pubKey = hmacManager.accountExtendedKey().xpub;
+    const clutchKeyManager = new ClutchKeyManager(privateKey);
+    const pubKey = clutchKeyManager.accountExtendedKey().xpub;
+    // TODO: set identifier when apple login
     const identifier = undefined;
 
     this.userRepository.signUp({
@@ -65,12 +65,12 @@ export class CustomAuthImpl implements IAuthService {
       pubKey,
     });
 
-    await ShareRepository.updateServerShare(
-      serverShare.share.share.toString('hex', 64),
-      serverShare.share.shareIndex.toString('hex', 64),
-      serverShare.polynomialID,
-      undefined,
-    );
+    // await ShareRepository.updateServerShare(
+    //   serverShare.share.share.toString('hex', 64),
+    //   serverShare.share.shareIndex.toString('hex', 64),
+    //   serverShare.polynomialID,
+    //   undefined,
+    // );
 
     const polyId = serverShare.polynomialID;
 
@@ -219,7 +219,6 @@ export class CustomAuthImpl implements IAuthService {
 
   private static logTKey(tKey: ThresholdKey) {
     console.log(tKey);
-    // eslint-disable-next-line max-lines
     console.log(tKey.metadata);
     console.log(tKey.metadata.publicPolynomials);
     console.log('------------------------------------');
@@ -270,6 +269,7 @@ export class CustomAuthImpl implements IAuthService {
     const shareIndexs = tKey.metadata.getShareIndexesForPolynomial(polyId);
     const usedIndexes = ['1', serverShare.share.shareIndex.toString('hex', 64)];
     const deviceShareIndex = shareIndexs.find((shareIndex) => !usedIndexes.includes(shareIndex));
+
     if (deviceShareIndex === undefined) {
       throw new Error('deviceShareIndex not identified');
     }

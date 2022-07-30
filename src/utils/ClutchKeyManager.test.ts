@@ -28,3 +28,20 @@ it('export xprv, xpub correctly', () => {
     'xpub6CKexbJFKJVtpM4xmtEVMuaemz9chKYVVdRLhCEZfh47Kych4E2epxMfSbqXAXA2pJ3XUTJtnPDAw93yGQtfodJKu8ML7TgSGSXHWeVVZjQ',
   );
 });
+it('sign & verify message correctly', () => {
+  const message = 'This is the test for signing and verifying message';
+  // // Sign message
+  //         val sign = WalletManager.sign(MESSAGE, rootKey)
+  //         assertEquals(
+  //             true,
+  //             WalletManager.verifyWithRootPublicKey(MESSAGE, sign, rootKey.publicKey)
+  //         )
+
+  let sign = clutchKeyManager.generateSign(message, '1659172820501');
+  expect(sign).toBe(
+    // eslint-disable-next-line max-len
+    'xpub6CKexbJFKJVtpM4xmtEVMuaemz9chKYVVdRLhCEZfh47Kych4E2epxMfSbqXAXA2pJ3XUTJtnPDAw93yGQtfodJKu8ML7TgSGSXHWeVVZjQ:1659172820501:IILUyuXv5bOAHY0yTa5lB6zpw4eTqr91igVd02yWB3E9dpjC+cH8sCCvsfdpLX49NW4O0SXkNwEvOMHTCup1RQU=',
+  );
+
+  expect(clutchKeyManager.verifyMessage(message, sign)).toBe(true);
+});
