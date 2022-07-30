@@ -56,7 +56,7 @@ export class CustomAuthImpl implements IAuthService {
     // TODO: set identifier when apple login
     const identifier = undefined;
 
-    this.userRepository.signUp({
+    await this.userRepository.signUp({
       type: provider,
       idtoken: providerIdToken,
       accessToken: providerAccessToken,

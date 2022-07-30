@@ -3,6 +3,10 @@ import { AUTH_PROVIDER } from '@@domain/auth/auth.interface';
 
 const devConfig: ClutchAppConfig = {
   auth: {
+    basic: {
+      username: '***REMOVED***',
+      password: '***REMOVED***',
+    },
     authRedirectUrl: '***REMOVED***',
     browserRedirectUrl: '***REMOVED***',
     googleClientId: '***REMOVED***',

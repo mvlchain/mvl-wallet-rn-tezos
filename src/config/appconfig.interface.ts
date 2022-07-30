@@ -5,6 +5,10 @@ export interface ClutchAppConfig {
 }
 
 export interface AuthConfig {
+  basic: {
+    username: string;
+    password: string;
+  };
   authRedirectUrl: string;
   browserRedirectUrl: string;
   googleClientId: string;
