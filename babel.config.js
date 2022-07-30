@@ -14,6 +14,7 @@ module.exports = {
         root: ['./src'],
         extensions: ['.ts', '.tsx'],
         alias: {
+          // `yarn start --reset-cache` is needed when you add new alias
           '@@assets': './src/assets',
           '@@components': './src/components',
           '@@config': './src/config',
@@ -22,6 +23,7 @@ module.exports = {
           '@@utils': './src/utils',
           '@@types': './src/types',
           '@@store': './src/store',
+          '@@domain': './src/domain',
         },
       },
     ],

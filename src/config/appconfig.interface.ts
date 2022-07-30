@@ -1,3 +1,5 @@
+import { AuthProvider } from '@@domain/auth/auth.interface';
+
 export interface ClutchAppConfig {
   auth: AuthConfig;
 }
@@ -7,7 +9,9 @@ export interface AuthConfig {
   browserRedirectUrl: string;
   googleClientId: string;
   web3Auth: {
-    verifier: string;
+    verifier: {
+      [key in AuthProvider]: string;
+    };
     network: 'testnet' | 'mainnet';
   };
 }

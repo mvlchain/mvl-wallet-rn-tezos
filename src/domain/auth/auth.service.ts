@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import { KEY_NOT_FOUND, ShareStore } from '@tkey/common-types';
 import ThresholdKey from '@tkey/core';
 import PrivateKeyModule, { SECP256k1Format } from '@tkey/private-keys';
@@ -7,15 +9,18 @@ import { SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase/src/SeedPhrase';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
 import BN from 'bn.js';
 
+import ClutchKeyManager from '@@utils/ClutchKeyManager';
+
 import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
 
-import IAuthService, { AUTH_PROVIDER, AuthProvider, DeviceShareHolder, RequirePassword } from './auth.interface';
+import IAuthService, { AuthProvider, DeviceShareHolder, RequirePassword } from './auth.interface';
 import ShareRepository from './share.repository';
 import TkeyRepository from './tkey.repository';
 import UserRepository from './user.repository';
 
 export class CustomAuthImpl implements IAuthService {
-  private static userRepository = new UserRepository();
+  private readonly userRepository = new UserRepository();
+  private readonly tkeyRepository = new TkeyRepository();
 
   private static async whenDeviceShareExists(deviceShare: DeviceShareHolder): Promise<string> {
     const postboxKey: string = deviceShare.postboxKey,
@@ -24,21 +29,10 @@ export class CustomAuthImpl implements IAuthService {
     tKey.inputShareStore(inputShare);
 
     const res = await tKey.reconstructKey();
-    return res.privKey.toString('hex').padStart(64, '0');
+    return res.privKey.toString('hex', 64);
   }
 
-  private static authProviderToType(provider: AuthProvider): 'GOOGLE' | 'APPLE' {
-    switch (provider) {
-      case AUTH_PROVIDER.GOOGLE:
-        return 'GOOGLE';
-      case AUTH_PROVIDER.APPLE:
-        return 'APPLE';
-      default:
-        throw new Error(`undefined provider: ${provider}`);
-    }
-  }
-
-  private static async signUp(
+  private async signUp(
     provider: AuthProvider,
     postboxKey: string,
     password: string,
@@ -57,12 +51,13 @@ export class CustomAuthImpl implements IAuthService {
     CustomAuthImpl.logTKey(tKey);
 
     // TODO
-    const privateKey = tKey.privKey;
-    const pubKey = '';
-    const identifier = '';
+    const privateKey = tKey.privKey.toString('hex', 64);
+    const hmacManager = new ClutchKeyManager(privateKey);
+    const pubKey = hmacManager.accountExtendedKey().xpub;
+    const identifier = undefined;
 
     this.userRepository.signUp({
-      type: this.authProviderToType(provider),
+      type: provider,
       idtoken: providerIdToken,
       accessToken: providerAccessToken,
       identifier,
@@ -95,7 +90,7 @@ export class CustomAuthImpl implements IAuthService {
     return tKey.privKey.toString('hex', 64);
   }
 
-  private static async whenUserExists(
+  private async whenUserExists(
     provider: AuthProvider,
     postboxKey: string,
     password: string,
@@ -135,11 +130,11 @@ export class CustomAuthImpl implements IAuthService {
     }
     await ShareRepository.saveDeviceShare(postboxKey, deviceShare, password, providerIdToken);
 
-    return res.privKey.toString('hex').padStart(64, '0');
+    return res.privKey.toString('hex', 64);
   }
 
-  private static async whenDriverShareNotExists(provider: AuthProvider, requirePassword: RequirePassword): Promise<string> {
-    const authResult = await TkeyRepository.triggerProviderLogin(provider);
+  private async whenDriverShareNotExists(provider: AuthProvider, requirePassword: RequirePassword): Promise<string> {
+    const authResult = await this.tkeyRepository.triggerProviderLogin(provider);
     const postboxKey = authResult.postboxKey,
       providerIdToken = authResult.providerIdToken,
       providerAccessToken = authResult.providerAccessToken;
@@ -160,7 +155,7 @@ export class CustomAuthImpl implements IAuthService {
       if (deviceShare !== undefined) {
         return CustomAuthImpl.whenDeviceShareExists(deviceShare);
       } else {
-        return CustomAuthImpl.whenDriverShareNotExists(provider, requirePassword);
+        return this.whenDriverShareNotExists(provider, requirePassword);
       }
     } catch (error) {
       console.error(error, 'login caught');
@@ -217,7 +212,6 @@ export class CustomAuthImpl implements IAuthService {
     await tKey.initialize({ neverInitializeNewKey: true });
     tKey.inputShareStore(deviceShare.share);
 
-    // eslint-disable-next-line max-lines
     const res = await tKey.reconstructKey();
     CustomAuthImpl.logTKey(tKey);
     console.log(res);
@@ -225,6 +219,7 @@ export class CustomAuthImpl implements IAuthService {
 
   private static logTKey(tKey: ThresholdKey) {
     console.log(tKey);
+    // eslint-disable-next-line max-lines
     console.log(tKey.metadata);
     console.log(tKey.metadata.publicPolynomials);
     console.log('------------------------------------');
@@ -238,7 +233,7 @@ export class CustomAuthImpl implements IAuthService {
     }
   }
 
-  private static async createNewWallet(
+  private async createNewWallet(
     postboxKey: string,
     password: string,
     providerIdToken: string | undefined,

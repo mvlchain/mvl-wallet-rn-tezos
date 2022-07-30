@@ -1,11 +1,18 @@
 import { ClutchAppConfig } from '@@config/appconfig.interface';
+import { AUTH_PROVIDER } from '@@domain/auth/auth.interface';
 
 const devConfig: ClutchAppConfig = {
   auth: {
     authRedirectUrl: '***REMOVED***',
     browserRedirectUrl: '***REMOVED***',
     googleClientId: '***REMOVED***',
-    web3Auth: { verifier: '***REMOVED***', network: 'testnet' },
+    web3Auth: {
+      verifier: {
+        [AUTH_PROVIDER.GOOGLE]: '***REMOVED***',
+        [AUTH_PROVIDER.APPLE]: '***REMOVED***',
+      },
+      network: 'testnet',
+    },
   },
 };
 

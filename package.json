@@ -8,6 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "test:transaction": "jest __tests__/transaction-test.ts",
+    "test:keymanager": "jest --watch src/utils/ClutchKeyManager.test.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky install",
     "lint-staged": "lint-staged",

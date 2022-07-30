@@ -4,10 +4,10 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { PageProps } from '@@assets/constants';
+import { CustomAuthImpl } from '@@domain/auth/auth.service';
 import useStore from '@@store/index';
 
 import IAuthService, { AUTH_PROVIDER, AuthProvider } from '../../domain/auth/auth.interface';
-import { CustomAuthImpl } from '../../domain/auth/auth.service';
 
 const Wallet = createBottomTabNavigator();
 
@@ -20,7 +20,7 @@ function HomeScreen() {
 
   const login = async (provider: AuthProvider) => {
     try {
-      const key = await auth.signIn(provider, () => Promise.resolve('1234'));
+      const key = await auth.signIn(provider, () => Promise.resolve('000000'));
       setKey(key);
     } catch (e) {
       console.error(e);

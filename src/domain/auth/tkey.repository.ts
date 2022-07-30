@@ -16,7 +16,7 @@ import appconfig from '@@config/appconfig';
 import { AUTH_PROVIDER, AuthProvider } from './auth.interface';
 
 export default class TkeyRepository {
-  private static readonly authConfig = appconfig().auth;
+  private readonly authConfig = appconfig().auth;
 
   static serviceProviderWithPostboxKey(postboxKey: string) {
     const enableLogging = process.env.ENABLE_TORUS_LOGGING === 'true';
@@ -29,8 +29,6 @@ export default class TkeyRepository {
         return LOGIN.GOOGLE;
       case AUTH_PROVIDER.APPLE:
         return LOGIN.APPLE;
-      default:
-        throw new Error(`undefined provider: ${provider}`);
     }
   }
 
@@ -49,18 +47,18 @@ export default class TkeyRepository {
     return tKey;
   }
 
-  static async triggerProviderLogin(provider: AuthProvider): Promise<{ postboxKey: string; providerIdToken?: string; providerAccessToken?: string }> {
+  async triggerProviderLogin(provider: AuthProvider): Promise<{ postboxKey: string; providerIdToken?: string; providerAccessToken?: string }> {
     await CustomAuth.init({
-      network: TkeyRepository.authConfig.web3Auth.network,
-      redirectUri: TkeyRepository.authConfig.authRedirectUrl,
-      browserRedirectUri: TkeyRepository.authConfig.browserRedirectUrl,
+      network: this.authConfig.web3Auth.network,
+      redirectUri: this.authConfig.authRedirectUrl,
+      browserRedirectUri: this.authConfig.browserRedirectUrl,
       enableLogging: false,
     });
     const credentials: TorusLoginResponse = await CustomAuth.triggerLogin({
       name: 'Clutch',
       typeOfLogin: TkeyRepository.authProviderToTypeOfLogin(provider),
-      clientId: TkeyRepository.authConfig.googleClientId,
-      verifier: TkeyRepository.authConfig.web3Auth.verifier,
+      clientId: this.authConfig.googleClientId,
+      verifier: this.authConfig.web3Auth.verifier[provider],
     });
     return {
       postboxKey: credentials.privateKey,
