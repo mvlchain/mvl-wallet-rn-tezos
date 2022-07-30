@@ -22,6 +22,14 @@ function Login({ login }: { login: () => void }) {
     }
   };
 
+  const deleteAccount = async () => {
+    await auth.deleteAccount();
+  };
+
+  const logout = async () => {
+    await auth.logout();
+  };
+
   return (
     <View style={styles.container}>
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
@@ -29,6 +37,8 @@ function Login({ login }: { login: () => void }) {
       <Text>Key: {key}</Text>
       <Text>Error: {errorMsg}</Text>
       <Button title='Login with Web3Auth' onPress={signIn} />
+      <Button title='Logout' onPress={logout} />
+      <Button title='Delete Account' onPress={deleteAccount} />
       <Button title='Go to Main' onPress={login} />
     </View>
   );
