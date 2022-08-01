@@ -1,4 +1,4 @@
-import { AuthProvider } from '@@domain/auth/auth.interface';
+import { AuthProvider } from '@@domain/auth/IAuthService';
 
 export interface ClutchAppConfig {
   auth: AuthConfig;

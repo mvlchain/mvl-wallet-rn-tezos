@@ -4,16 +4,15 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { PageProps } from '@@assets/constants';
-import { CustomAuthImpl } from '@@domain/auth/auth.service';
+import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
+import IAuthService, { AUTH_PROVIDER, AuthProvider } from '@@domain/auth/IAuthService';
 import useStore from '@@store/index';
-
-import IAuthService, { AUTH_PROVIDER, AuthProvider } from '../../domain/auth/auth.interface';
 
 const Wallet = createBottomTabNavigator();
 
 function HomeScreen() {
   const { isAuthenticated, toggle } = useStore();
-  const auth: IAuthService = new CustomAuthImpl();
+  const auth: IAuthService = new CustomAuthAuthServiceImpl();
 
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');

@@ -3,7 +3,6 @@ import 'reflect-metadata';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { setAxiosConfig } from 'utils/request';
 
 import { ROUTE_NAME } from '@@assets/constants';
 import Home from '@@screens/Home';

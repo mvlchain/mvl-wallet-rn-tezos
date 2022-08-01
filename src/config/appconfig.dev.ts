@@ -1,5 +1,5 @@
 import { ClutchAppConfig } from '@@config/appconfig.interface';
-import { AUTH_PROVIDER } from '@@domain/auth/auth.interface';
+import { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 
 const devConfig: ClutchAppConfig = {
   auth: {

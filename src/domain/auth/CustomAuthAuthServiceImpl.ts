@@ -11,12 +11,12 @@ import ClutchKeyManager from '@@utils/ClutchKeyManager';
 
 import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
 
-import IAuthService, { AuthProvider, DeviceShareHolder, RequirePassword } from './auth.interface';
-import ShareRepository from './share.repository';
-import TkeyRepository from './tkey.repository';
-import UserRepository from './user.repository';
+import IAuthService, { AuthProvider, DeviceShareHolder, RequirePassword } from './IAuthService';
+import ShareRepository from './ShareRepository';
+import TkeyRepository from './TkeyRepository';
+import UserRepository from './UserRepository';
 
-export class CustomAuthImpl implements IAuthService {
+export class CustomAuthAuthServiceImpl implements IAuthService {
   private readonly userRepository = new UserRepository();
   private readonly tkeyRepository = new TkeyRepository();
 
@@ -39,14 +39,14 @@ export class CustomAuthImpl implements IAuthService {
   ): Promise<string> {
     console.log('signUp started');
     const tKey = await TkeyRepository.initTkey(postboxKey, false);
-    CustomAuthImpl.logTKey(tKey);
+    CustomAuthAuthServiceImpl.logTKey(tKey);
 
     console.log('gen serverShare');
     const newShare = await tKey.generateNewShare();
     const serverShare = newShare.newShareStores[newShare.newShareIndex.toString('hex', 64)];
     console.log('update serverShare', serverShare);
 
-    CustomAuthImpl.logTKey(tKey);
+    CustomAuthAuthServiceImpl.logTKey(tKey);
 
     const privateKey = tKey.privKey.toString('hex', 64);
     const clutchKeyManager = new ClutchKeyManager(privateKey);
@@ -151,7 +151,7 @@ export class CustomAuthImpl implements IAuthService {
     try {
       const deviceShare = await ShareRepository.fetchDeviceShare();
       if (deviceShare !== undefined) {
-        return CustomAuthImpl.whenDeviceShareExists(deviceShare);
+        return CustomAuthAuthServiceImpl.whenDeviceShareExists(deviceShare);
       } else {
         return this.whenDriverShareNotExists(provider, requirePassword);
       }
@@ -211,7 +211,7 @@ export class CustomAuthImpl implements IAuthService {
     tKey.inputShareStore(deviceShare.share);
 
     const res = await tKey.reconstructKey();
-    CustomAuthImpl.logTKey(tKey);
+    CustomAuthAuthServiceImpl.logTKey(tKey);
     console.log(res);
   }
 
@@ -242,14 +242,14 @@ export class CustomAuthImpl implements IAuthService {
     });
     await tKey._initializeNewKey({});
 
-    CustomAuthImpl.logTKey(tKey);
+    CustomAuthAuthServiceImpl.logTKey(tKey);
 
     console.log('gen serverShare');
     const newShare = await tKey.generateNewShare();
     const serverShare = newShare.newShareStores[newShare.newShareIndex.toString('hex', 64)];
     console.log('update serverShare', serverShare);
 
-    CustomAuthImpl.logTKey(tKey);
+    CustomAuthAuthServiceImpl.logTKey(tKey);
 
     await ShareRepository.updateServerShare(
       serverShare.share.share.toString('hex', 64),

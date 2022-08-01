@@ -10,7 +10,7 @@ import BN from 'bn.js';
 
 import appconfig from '@@config/appconfig';
 
-import { AUTH_PROVIDER, AuthProvider } from './auth.interface';
+import { AUTH_PROVIDER, AuthProvider } from './IAuthService';
 
 export default class TkeyRepository {
   private readonly authConfig = appconfig().auth;

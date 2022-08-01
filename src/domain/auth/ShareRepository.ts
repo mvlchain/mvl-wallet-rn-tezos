@@ -10,7 +10,7 @@ import { components } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
 import SecureKeychain from '../../utils/SecureKeychain';
 
-import { AuthProvider, DeviceShareHolder } from './auth.interface';
+import { AuthProvider, DeviceShareHolder } from './IAuthService';
 
 type ShareResponseDto = components['schemas']['ShareResponseDto'];
 
