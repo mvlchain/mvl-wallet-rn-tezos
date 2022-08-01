@@ -2,10 +2,8 @@
 
 import { KEY_NOT_FOUND, ShareStore } from '@tkey/common-types';
 import ThresholdKey from '@tkey/core';
-import PrivateKeyModule, { SECP256k1Format } from '@tkey/private-keys';
-import { PRIVATE_KEY_MODULE_NAME } from '@tkey/private-keys/src/PrivateKeys';
-import SeedPhraseModule, { MetamaskSeedPhraseFormat } from '@tkey/seed-phrase';
-import { SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase/src/SeedPhrase';
+import PrivateKeyModule, { SECP256k1Format, PRIVATE_KEY_MODULE_NAME } from '@tkey/private-keys';
+import SeedPhraseModule, { MetamaskSeedPhraseFormat, SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
 import BN from 'bn.js';
 

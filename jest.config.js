@@ -13,6 +13,10 @@ module.exports = {
     '^.+\\.jsx$': 'babel-jest',
     '^.+\\.tsx?$': 'ts-jest',
   },
+  transformIgnorePatterns: [
+    // eslint-disable-next-line max-len
+    'node_modules/(?!(@react-native|react-native|rn-fetch|redux-persist-filesystem|@react-navigation|@react-native-community|@react-native-masked-view|react-navigation|react-navigation-redux-helpers|@sentry))',
+  ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFiles: ['<rootDir>/jest/setup.js'],
   moduleNameMapper: {

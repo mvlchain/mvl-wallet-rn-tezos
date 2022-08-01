@@ -1,6 +1,13 @@
 import { Platform } from 'react-native';
-import * as Keychain from 'react-native-keychain';
-import { ACCESS_CONTROL } from 'react-native-keychain';
+import {
+  ACCESS_CONTROL,
+  ACCESSIBLE,
+  AUTHENTICATION_TYPE,
+  getGenericPassword,
+  getSupportedBiometryType,
+  resetGenericPassword,
+  setGenericPassword,
+} from 'react-native-keychain';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -64,20 +71,20 @@ const secureKeychain = {
   },
 
   getSupportedBiometryType() {
-    return Keychain.getSupportedBiometryType();
+    return getSupportedBiometryType();
   },
 
   async resetGenericPassword() {
     const options = { service: defaultOptions.service };
     await AsyncStorage.removeItem(BIOMETRY_CHOICE);
     await AsyncStorage.removeItem(PASSCODE_CHOICE);
-    return Keychain.resetGenericPassword(options);
+    return resetGenericPassword(options);
   },
 
   async getGenericPassword() {
     if (instance) {
       instance.isAuthenticating = true;
-      const keychainObject = await Keychain.getGenericPassword(defaultOptions);
+      const keychainObject = await getGenericPassword(defaultOptions);
       if (keychainObject !== false && keychainObject.password) {
         const encryptedPassword = keychainObject.password;
         const decrypted = await instance.decryptPassword(encryptedPassword);
@@ -92,17 +99,17 @@ const secureKeychain = {
 
   async setGenericPassword(password: string, type?: SecureType) {
     const authOptions: {
-      accessible: Keychain.ACCESSIBLE;
+      accessible: ACCESSIBLE;
       accessControl?: ACCESS_CONTROL;
     } = {
-      accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
       accessControl: undefined,
     };
 
     if (type === SECURE_TYPES.BIOMETRICS) {
-      authOptions.accessControl = Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET;
+      authOptions.accessControl = ACCESS_CONTROL.BIOMETRY_CURRENT_SET;
     } else if (type === SECURE_TYPES.PASSCODE) {
-      authOptions.accessControl = Keychain.ACCESS_CONTROL.DEVICE_PASSCODE;
+      authOptions.accessControl = ACCESS_CONTROL.DEVICE_PASSCODE;
     } else if (type === SECURE_TYPES.REMEMBER_ME) {
       //Don't need to add any parameter
     } else {
@@ -111,7 +118,7 @@ const secureKeychain = {
     }
 
     const encryptedPassword = await instance.encryptPassword(password);
-    await Keychain.setGenericPassword('clutch-user', encryptedPassword, {
+    await setGenericPassword('clutch-user', encryptedPassword, {
       ...defaultOptions,
       ...authOptions,
     });
@@ -140,9 +147,9 @@ const secureKeychain = {
       //Don't need to add any parameter
     }
   },
-  ACCESS_CONTROL: Keychain.ACCESS_CONTROL,
-  ACCESSIBLE: Keychain.ACCESSIBLE,
-  AUTHENTICATION_TYPE: Keychain.AUTHENTICATION_TYPE,
+  ACCESS_CONTROL: ACCESS_CONTROL,
+  ACCESSIBLE: ACCESSIBLE,
+  AUTHENTICATION_TYPE: AUTHENTICATION_TYPE,
 };
 
 export default secureKeychain;

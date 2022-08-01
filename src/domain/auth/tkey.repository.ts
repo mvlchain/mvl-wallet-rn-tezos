@@ -1,14 +1,11 @@
 import ThresholdKey from '@tkey/core';
-import PrivateKeyModule, { SECP256k1Format } from '@tkey/private-keys';
-import { PRIVATE_KEY_MODULE_NAME } from '@tkey/private-keys/src/PrivateKeys';
-import SeedPhraseModule, { MetamaskSeedPhraseFormat } from '@tkey/seed-phrase';
-import { SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase/src/SeedPhrase';
+import PrivateKeyModule, { SECP256k1Format, PRIVATE_KEY_MODULE_NAME } from '@tkey/private-keys';
+import SeedPhraseModule, { MetamaskSeedPhraseFormat, SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase';
 import ServiceProviderBase from '@tkey/service-provider-base';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
+import { TorusLoginResponse, LOGIN, LOGIN_TYPE } from '@toruslabs/customauth';
 // @ts-ignore
 import CustomAuth from '@toruslabs/customauth-react-native-sdk';
-import { TorusLoginResponse } from '@toruslabs/customauth/src/handlers/interfaces';
-import { LOGIN, LOGIN_TYPE } from '@toruslabs/customauth/src/utils/enums';
 import BN from 'bn.js';
 
 import appconfig from '@@config/appconfig';
