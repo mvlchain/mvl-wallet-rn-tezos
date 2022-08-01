@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/auth.interface';
-import { CustomAuthImpl } from '@@domain/auth/auth.service';
+import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
+import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 import useStore from '@@store/index';
 
 function Login({ login }: { login: () => void }) {
-  const auth: IAuthService = new CustomAuthImpl();
+  const auth: IAuthService = new CustomAuthAuthServiceImpl();
 
   const { isAuthenticated, toggle } = useStore();
   const [key, setKey] = useState('');
