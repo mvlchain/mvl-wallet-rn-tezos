@@ -1,3 +1,4 @@
+import React from 'react';
 import { Avatar } from 'react-native-paper';
 
 function TempIcon({ size }: { size: number }) {

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { DefaultTheme, Provider } from 'react-native-paper';
 
 declare global {
