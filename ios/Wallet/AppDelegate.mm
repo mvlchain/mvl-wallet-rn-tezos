@@ -17,7 +17,6 @@
 #import <react/config/ReactNativeConfig.h>
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
-static NSString *const kRNOptionFoxCode = @"foxCode";
 
 @interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {
   RCTTurboModuleManager *_turboModuleManager;
@@ -27,6 +26,8 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
 }
 @end
 #endif
+
+static NSString *const kRNOptionFoxCode = @"foxCode";
 
 @implementation AppDelegate
 
