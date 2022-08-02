@@ -13,3 +13,4 @@ export { default as ChevronDownBlueIcon } from './ic-chevron-down-blue.svg';
 export { default as ChevronDownBlackIcon } from './ic-chevron-down-black.svg';
 export { default as WhiteQrIcon } from './ic-qr-white.svg';
 export { default as WhiteScanIcon } from './ic-scan-white.svg';
+export { default as CheckBoxIcon } from './ic-check.svg';

@@ -37,7 +37,7 @@ module.exports = {
         groups: ['builtin', 'external', ['type', 'internal', 'unknown'], 'parent', 'sibling', 'index'],
         pathGroups: [
           {
-            pattern: 'react*',
+            pattern: '{react, react-native}',
             group: 'builtin',
             position: 'before',
           },
@@ -102,5 +102,6 @@ module.exports = {
     '@typescript-eslint/prefer-for-of': 'off',
     '@typescript-eslint/semi': 'off',
     '@typescript-eslint/type-annotation-spacing': 'off',
+    'react-hooks/exhaustive-deps': 'off',
   },
 };

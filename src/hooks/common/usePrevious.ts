@@ -7,5 +7,5 @@ export const usePrevious = <T>(data: T) => {
     prevData.current = data;
   }, [data]);
 
-  return prevData;
+  return prevData.current;
 };
