@@ -12,8 +12,8 @@ import SecureKeychain from './utils/SecureKeychain';
 
 const Stack = createNativeStackNavigator();
 
-function App(props: { salt?: string }) {
-  SecureKeychain.init(props.salt || 'debug');
+function App(props: { foxCode?: string }) {
+  SecureKeychain.init(props.foxCode || 'debug');
 
   return (
     <NavigationContainer>

@@ -17,6 +17,7 @@
 #import <react/config/ReactNativeConfig.h>
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
+static NSString *const kRNOptionFoxCode = @"foxCode";
 
 @interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {
   RCTTurboModuleManager *_turboModuleManager;
@@ -78,6 +79,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #ifdef RCT_NEW_ARCH_ENABLED
   initProps[kRNConcurrentRoot] = @([self concurrentRootEnabled]);
 #endif
+  
+  initProps[kRNOptionFoxCode] = @"***REMOVED***";
 
   return initProps;
 }
