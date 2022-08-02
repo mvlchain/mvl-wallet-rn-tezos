@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { View } from 'react-native';
 
 import { ROUTE_NAME } from '@@assets/constants';
 import { BrowserNormal, BrowserSelected, HomeNormal, HomeSelected, SettingNormal, SettingSelected, TradeNormal, TradeSelected } from '@@assets/image';
@@ -45,9 +46,17 @@ const screens: Array<ScreenProps> = [
   },
 ];
 
+const routerTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#fff',
+  },
+};
+
 function Router() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={routerTheme}>
       <Wallet.Navigator
         screenOptions={{
           tabBarShowLabel: false,
