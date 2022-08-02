@@ -1,37 +1,26 @@
 import React from 'react';
 import 'reflect-metadata';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import { ROUTE_NAME } from '@@assets/constants';
-import Home from '@@screens/Home';
+import { useToggle } from '@@hooks/common/useToggle';
 import Login from '@@screens/Login';
+import Router from '@@screens/Router';
+import PaperProvider from '@@style/PaperProvider';
 
 import SecureKeychain from './utils/SecureKeychain';
-
-const Stack = createNativeStackNavigator();
 
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
 
+  const [isAuthenticated, toggle] = useToggle(false);
+
+  if (!isAuthenticated) {
+    return <Login login={toggle} />;
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={ROUTE_NAME.WALLET}>
-        <Stack.Screen
-          name={ROUTE_NAME.WALLET}
-          component={Home}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen name={ROUTE_NAME.LOGIN} component={Login} />
-        <Stack.Group screenOptions={{ presentation: 'modal' }}>
-          {/* // Modal */}
-          {/* <Stack.Screen name="MyModal" component={ModalScreen} /> */}
-        </Stack.Group>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <PaperProvider>
+      <Router />
+    </PaperProvider>
   );
 }
 

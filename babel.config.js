@@ -23,6 +23,7 @@ module.exports = {
           '@@utils': './src/utils',
           '@@types': './src/types',
           '@@store': './src/store',
+          '@@style': './src/style',
           '@@domain': './src/domain',
         },
       },
