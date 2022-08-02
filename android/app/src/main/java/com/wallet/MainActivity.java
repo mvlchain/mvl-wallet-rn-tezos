@@ -2,11 +2,14 @@ package com.wallet;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 
 public class MainActivity extends ReactActivity {
+  private static final String OPTION_FOX_CODE = "foxCode";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
@@ -34,6 +37,14 @@ public class MainActivity extends ReactActivity {
   public static class MainActivityDelegate extends ReactActivityDelegate {
     public MainActivityDelegate(ReactActivity activity, String mainComponentName) {
       super(activity, mainComponentName);
+    }
+
+    @Nullable
+    @Override
+    protected Bundle getLaunchOptions() {
+      Bundle options = new Bundle();
+      options.putString(OPTION_FOX_CODE, BuildConfig.FOX_CODE);
+      return options;
     }
 
     @Override

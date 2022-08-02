@@ -243,6 +243,9 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'FOX_CODE', '"***REMOVED***"'
+    }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -256,7 +259,6 @@ android {
                 output.versionCodeOverride =
                         defaultConfig.versionCode * 1000 + versionCodes.get(abi)
             }
-
         }
     }
 }
