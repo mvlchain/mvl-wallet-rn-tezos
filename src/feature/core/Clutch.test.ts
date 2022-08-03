@@ -6,12 +6,6 @@ const PRIVATE_KEY = '9ccef3bb3a34182dfd138e101997bdf1770a3b92aeb525cfed548ace0bd
 const MNEMONIC =
   'antenna guess solve guard cross scrap leg check three art galaxy sail jacket fade tool frost false tree relief mule sock future rail abuse';
 
-it('create a wallet with random key', () => {
-  const wallet = Clutch.createWallet();
-
-  expect(wallet.address).not.toBe('');
-});
-
 it('create a wallet with string type entropy, no hex prefix, no zero padding', () => {
   const wallet = Clutch.createWalletWithEntropy(PRIVATE_KEY, "m/44'/60'/0'/0/0");
 
@@ -44,10 +38,10 @@ it('create extended KeyPair, BIP32 RootKey', () => {
   const extendedKeyPair = Clutch.extendedKeyPair(entropy, 'm');
 
   expect(extendedKeyPair.xprv).toBe(
-    'xprv9s21ZrQH143K2zumkK1om7cGwfRaEwAGffFBC92jYJdvPMkKtG78DaY2iUKzA3LNENuWwaSAuxv8nZLXtS7Vb6x2GUTfaj3EXPtyhHhr8H9',
+    'xprv9s21ZrQH143K2zumkK1om7cGwfRaEwAGffFBC92jYJdvPMkKtG78DaY2iUKzA3LNENuWwaSAuxv8nZLXtS7Vb6x2GUTfaj3EXPtyhHhr8H9'
   );
   expect(extendedKeyPair.xpub).toBe(
-    'xpub661MyMwAqRbcFUzErLYp8FZ1VhG4ePt82tAmzXSM6eAuGA5URoRNmNrWZkxfAGA5QMBuukJkdCYmdBa8aQXpCQrVMMvYkvWjqfNWcfaKLDW',
+    'xpub661MyMwAqRbcFUzErLYp8FZ1VhG4ePt82tAmzXSM6eAuGA5URoRNmNrWZkxfAGA5QMBuukJkdCYmdBa8aQXpCQrVMMvYkvWjqfNWcfaKLDW'
   );
 });
 
@@ -55,10 +49,10 @@ it('create extended KeyPair from mnemonic, BIP32 RootKey', () => {
   const extendedKeyPair = Clutch.extendedKeyPairWithMnemonic(MNEMONIC, 'm');
 
   expect(extendedKeyPair.xprv).toBe(
-    'xprv9s21ZrQH143K2zumkK1om7cGwfRaEwAGffFBC92jYJdvPMkKtG78DaY2iUKzA3LNENuWwaSAuxv8nZLXtS7Vb6x2GUTfaj3EXPtyhHhr8H9',
+    'xprv9s21ZrQH143K2zumkK1om7cGwfRaEwAGffFBC92jYJdvPMkKtG78DaY2iUKzA3LNENuWwaSAuxv8nZLXtS7Vb6x2GUTfaj3EXPtyhHhr8H9'
   );
   expect(extendedKeyPair.xpub).toBe(
-    'xpub661MyMwAqRbcFUzErLYp8FZ1VhG4ePt82tAmzXSM6eAuGA5URoRNmNrWZkxfAGA5QMBuukJkdCYmdBa8aQXpCQrVMMvYkvWjqfNWcfaKLDW',
+    'xpub661MyMwAqRbcFUzErLYp8FZ1VhG4ePt82tAmzXSM6eAuGA5URoRNmNrWZkxfAGA5QMBuukJkdCYmdBa8aQXpCQrVMMvYkvWjqfNWcfaKLDW'
   );
 });
 
@@ -95,10 +89,10 @@ it('create extended KeyPair, BIP32 ethereum', () => {
   const extendedKeyPair = Clutch.extendedKeyPair(entropy, extendedKeyPath(ETHEREUM));
 
   expect(extendedKeyPair.xprv).toBe(
-    'xprv9yxj3pfGaK9o63tNT2MJjGvGRNtTF7wd356VKFgjUCBaEnRtPzPggmmnwi6GfeyGVLb3mixDEvW88vCeXRQwsky8Q1SsbDnoGkSpVBDJzQn',
+    'xprv9yxj3pfGaK9o63tNT2MJjGvGRNtTF7wd356VKFgjUCBaEnRtPzPggmmnwi6GfeyGVLb3mixDEvW88vCeXRQwsky8Q1SsbDnoGkSpVBDJzQn'
   );
   expect(extendedKeyPair.xpub).toBe(
-    'xpub6Cx5TLCAQgi6JXxqZ3tK6QrzyQiweafUQJ267e6M2XiZ7am2wXhwEa6Go18ScekXdN1DTazvUCu87sJESH6AWHLacQTRUYVcYAUgvUJkCFA',
+    'xpub6Cx5TLCAQgi6JXxqZ3tK6QrzyQiweafUQJ267e6M2XiZ7am2wXhwEa6Go18ScekXdN1DTazvUCu87sJESH6AWHLacQTRUYVcYAUgvUJkCFA'
   );
 });
 
@@ -123,7 +117,7 @@ it('sign a message by extended private key', () => {
   const signed = Clutch.signMessageByExtendedKeyPair(keyNode, message, '1659172820501');
   expect(signed).toBe(
     'xpub6Cx5TLCAQgi6JXxqZ3tK6QrzyQiweafUQJ267e6M2XiZ7am2wXhwEa6Go18ScekXdN1DTazvUCu87sJESH6AWHLacQTRUYVcYAUgvUJkCFA' +
-      ':1659172820501:H6oM3YyW5k0FB5dQYymrjDPWouJsrAH2UUZBnmWmIUJ3KDv3Q3UXK1hQiJnB6/2GAlIapytoH1UEUF4K9FMxvSc=',
+      ':1659172820501:H6oM3YyW5k0FB5dQYymrjDPWouJsrAH2UUZBnmWmIUJ3KDv3Q3UXK1hQiJnB6/2GAlIapytoH1UEUF4K9FMxvSc='
   );
 
   expect(Clutch.verifyMessageByExtendedKeyPair(message, signed)).toBe(true);
