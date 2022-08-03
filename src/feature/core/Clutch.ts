@@ -2,7 +2,7 @@
 /**
  * HDWallet implementation that creates multiple wallets
  *
- * Clutch is an wallet class that manages public, private key pair which hierachically derives
+ * Clutch is an wallet class that manages public, private key pair which hierarchically derives
  * key pairs.
  *
  * dependencies
@@ -132,7 +132,7 @@ export class Clutch {
    * signingMessage: message|timestamp
    * @param account
    * @param message a message to sign
-   * @param timestampInMs timestamp in milli-second
+   * @param timestampInMs timestamp in millisecond
    * @return signature of the message in a format as follows:
    *  {publicKey}:{timestamp}:{sig}
    */
@@ -165,10 +165,10 @@ export class Clutch {
 }
 
 function createNodeWithEntropy(entropy: string | Uint8Array): HDNode {
-  let seed = '';
+  let seed: string;
   if (typeof entropy === 'string') {
     seed = entropyToSeed(entropy);
-  } else if (entropy instanceof Uint8Array) {
+  } else {
     seed = entropyToSeed(entropy);
   }
   return HDNode.fromSeed(seed);
