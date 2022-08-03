@@ -34,20 +34,8 @@ export class Clutch {
     return this.wallet.address;
   }
 
-  get mnemonic(): string {
-    return this.wallet.mnemonic.phrase;
-  }
-
-  get privateKey(): string {
-    return this.wallet.privateKey;
-  }
-
   get publicKey(): string {
     return this.wallet.publicKey;
-  }
-
-  static createWallet(): Clutch {
-    return new Clutch(Wallet.createRandom());
   }
 
   static createWalletWithEntropy(entropy: string | Uint8Array, derivePath?: string): Clutch {
@@ -107,6 +95,8 @@ export class Clutch {
     }
   }
 
+  // https://wolovim.medium.com/ethereum-201-hd-wallets-11d0c93c87f7
+  // https://iancoleman.io/bip39/
   static extendedKeyPair(entropy: string | Uint8Array, derivePath?: string): ExtendedKeyPair {
     const root = createNodeWithEntropy(entropy);
     return extendedKeyPairFrom(root, derivePath);
