@@ -39,11 +39,18 @@ export default class ShareRepository {
     tKey: ThresholdKey,
     provider: AuthProvider,
     providerIdToken?: string,
-    providerAccessToken?: string,
+    providerAccessToken?: string
   ): Promise<ShareResponseDto | undefined> {
-    // TODO: use latestPublicPolynomial first
+    const latestPolyId = tKey.metadata.getLatestPublicPolynomial().polynomialId;
+    const res = await ShareRepository.fetchServerShare(provider, latestPolyId, providerIdToken, providerAccessToken);
+    if (res !== undefined) {
+      return res;
+    }
 
     for (const polyId in tKey.metadata.publicPolynomials) {
+      if (polyId === latestPolyId) {
+        continue;
+      }
       const shareStoreMap: ShareStoreMap | undefined = tKey.shares[polyId];
       if (shareStoreMap === undefined) {
         continue;
@@ -61,7 +68,7 @@ export default class ShareRepository {
     provider: AuthProvider,
     polynomialId: string,
     idToken?: string,
-    accessToken?: string,
+    accessToken?: string
   ): Promise<ShareResponseDto | undefined> {
     try {
       const endpoint = `/v1/accounts/ss?${qs.stringify({
@@ -97,7 +104,7 @@ export default class ShareRepository {
     share: string,
     shareIndex: string,
     polynomialID: string,
-    deviceShareIndex?: string,
+    deviceShareIndex?: string
   ): Promise<ShareResponseDto | undefined> {
     try {
       const endpoint = '/v1/accounts/ss';
@@ -135,7 +142,7 @@ export default class ShareRepository {
       postboxKeyJsonEncrypted,
       shareJsonEncrypted,
       deviceShare.polynomialID,
-      providerTokenJsonEncrypted,
+      providerTokenJsonEncrypted
     );
     useStore.setState({ deviceShare: deviceShareHolder });
   }

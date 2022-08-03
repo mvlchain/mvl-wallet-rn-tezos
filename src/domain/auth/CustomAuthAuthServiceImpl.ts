@@ -62,13 +62,6 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
       pubKey,
     });
 
-    // await ShareRepository.updateServerShare(
-    //   serverShare.share.share.toString('hex', 64),
-    //   serverShare.share.shareIndex.toString('hex', 64),
-    //   serverShare.polynomialID,
-    //   undefined,
-    // );
-
     const polyId = serverShare.polynomialID;
 
     let latestPolyId = tKey.metadata.getLatestPublicPolynomial().polynomialId;
