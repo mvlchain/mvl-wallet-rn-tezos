@@ -6,8 +6,7 @@ import PrivateKeyModule, { SECP256k1Format, PRIVATE_KEY_MODULE_NAME } from '@tke
 import SeedPhraseModule, { MetamaskSeedPhraseFormat, SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
 import BN from 'bn.js';
-
-import ClutchKeyManager from '@@utils/ClutchKeyManager';
+import { Clutch } from 'feature/core/Clutch';
 
 import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
 
@@ -35,7 +34,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     postboxKey: string,
     password: string,
     providerIdToken: string | undefined,
-    providerAccessToken: string | undefined,
+    providerAccessToken: string | undefined
   ): Promise<string> {
     console.log('signUp started');
     const tKey = await TkeyRepository.initTkey(postboxKey, false);
@@ -49,8 +48,8 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     CustomAuthAuthServiceImpl.logTKey(tKey);
 
     const privateKey = tKey.privKey.toString('hex', 64);
-    const clutchKeyManager = new ClutchKeyManager(privateKey);
-    const pubKey = clutchKeyManager.accountExtendedKey().xpub;
+    const pubKey = Clutch.extendedPublicKey(privateKey);
+
     // TODO: set identifier when apple login
     const identifier = undefined;
 
@@ -93,7 +92,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     postboxKey: string,
     password: string,
     providerIdToken: string | undefined,
-    providerAccessToken: string | undefined,
+    providerAccessToken: string | undefined
   ): Promise<string> {
     const tKey = await TkeyRepository.initTkey(postboxKey, true);
     const serverShareResponse = await ShareRepository.findServerShare(tKey, provider, providerIdToken, providerAccessToken);
@@ -234,7 +233,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     postboxKey: string,
     password: string,
     providerIdToken: string | undefined,
-    providerAccessToken: string | undefined,
+    providerAccessToken: string | undefined
   ): Promise<string> {
     const tKey = new ThresholdKey({
       serviceProvider: TkeyRepository.serviceProviderWithPostboxKey(postboxKey),
@@ -255,7 +254,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
       serverShare.share.share.toString('hex', 64),
       serverShare.share.shareIndex.toString('hex', 64),
       serverShare.polynomialID,
-      undefined,
+      undefined
     );
 
     const polyId = serverShare.polynomialID;
