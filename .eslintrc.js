@@ -20,6 +20,7 @@ module.exports = {
     },
   ],
   rules: {
+    'prettier/prettier': 'error',
     'no-shadow': 'off',
     'no-undef': 'off',
     'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
