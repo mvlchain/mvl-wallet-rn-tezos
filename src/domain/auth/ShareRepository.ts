@@ -4,15 +4,13 @@ import ThresholdKey from '@tkey/core';
 import qs from 'qs';
 
 import useStore, { DeviceShareHolderDto } from '@@store/index';
-import { request } from '@@utils/request';
+import { request, authenticatedRequest } from '@@utils/request';
 
-import { components } from '../../generated/generated-scheme';
+import { ShareResponseDto, UpdateServerShareDto } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
 import SecureKeychain from '../../utils/SecureKeychain';
 
 import { AuthProvider, DeviceShareHolder } from './IAuthService';
-
-type ShareResponseDto = components['schemas']['ShareResponseDto'];
 
 export default class ShareRepository {
   private static encryptor = new Encryptor();
@@ -117,10 +115,10 @@ export default class ShareRepository {
         polynomialID,
         deviceShareIndex,
       });
-      const body: components['schemas']['UpdateServerShareDto'] = {
+      const body: UpdateServerShareDto = {
         share: jsonString,
       };
-      const res = await request.post(endpoint, {
+      const res = await authenticatedRequest.post(endpoint, {
         data: body,
       });
       return res.data;
