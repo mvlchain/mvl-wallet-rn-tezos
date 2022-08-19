@@ -548,6 +548,7 @@ export interface components {
       share: string;
       /** @description root public key in form of xpub */
       pubKey: string;
+      walletAddress0: string;
     };
     SimpleResponseDto: {
       /** @default ok */

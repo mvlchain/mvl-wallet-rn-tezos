@@ -2,18 +2,34 @@
 
 import { KEY_NOT_FOUND, ShareStore } from '@tkey/common-types';
 import ThresholdKey from '@tkey/core';
-import PrivateKeyModule, { SECP256k1Format, PRIVATE_KEY_MODULE_NAME } from '@tkey/private-keys';
+import PrivateKeyModule, { PRIVATE_KEY_MODULE_NAME, SECP256k1Format } from '@tkey/private-keys';
 import SeedPhraseModule, { MetamaskSeedPhraseFormat, SEED_PHRASE_MODULE_NAME } from '@tkey/seed-phrase';
+import ServiceProviderBase from '@tkey/service-provider-base';
 import TorusStorageLayer from '@tkey/storage-layer-torus';
+import { LoginWindowResponse, TorusVerifierResponse } from '@toruslabs/customauth';
 import BN from 'bn.js';
-import { Clutch } from 'feature/core/Clutch';
+import { ethers } from 'ethers';
+import { Clutch, extendedKeyPath, keyDerivationPath } from 'feature/core/Clutch';
 
+import { ETHEREUM } from '../../feature/core/BlockChain';
 import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
 
 import IAuthService, { AuthProvider, DeviceShareHolder, RequirePassword } from './IAuthService';
 import ShareRepository from './ShareRepository';
 import TkeyRepository from './TkeyRepository';
 import UserRepository from './UserRepository';
+
+const storageLayer = new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us', enableLogging: false });
+
+const pkeyToMnemonic = (pkey: BN): string => ethers.utils.entropyToMnemonic('0x' + pkey.toString('hex', 64));
+
+type UserInfo = TorusVerifierResponse & LoginWindowResponse;
+type RestoreResult = {
+  success: boolean;
+  postboxKey?: string;
+  mnemonic?: string;
+  userInfo?: UserInfo;
+};
 
 export class CustomAuthAuthServiceImpl implements IAuthService {
   private readonly userRepository = new UserRepository();
@@ -165,13 +181,12 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
 
     const tKey = new ThresholdKey({
       serviceProvider: TkeyRepository.serviceProviderWithPostboxKey(postboxKey),
-      storageLayer: new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' }),
+      storageLayer,
     });
 
-    const storageLayer = tKey.storageLayer;
     const serviceProvider = tKey.serviceProvider;
     console.log('deleteAccount setMetadataStream');
-    await storageLayer.setMetadataStream({
+    await tKey.storageLayer.setMetadataStream({
       input: [{ message: KEY_NOT_FOUND, dateAdded: Date.now() }],
       privKey: [new BN(postboxKey, 'hex')],
       serviceProvider: serviceProvider,
@@ -190,7 +205,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
 
     const tKey = new ThresholdKey({
       serviceProvider: TkeyRepository.serviceProviderWithPostboxKey(postboxKey),
-      storageLayer: new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' }),
+      storageLayer,
       modules: {
         [PRIVATE_KEY_MODULE_NAME]: new PrivateKeyModule([new SECP256k1Format(new BN(0))]),
         [SEED_PHRASE_MODULE_NAME]: new SeedPhraseModule([
@@ -230,7 +245,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
   ): Promise<string> {
     const tKey = new ThresholdKey({
       serviceProvider: TkeyRepository.serviceProviderWithPostboxKey(postboxKey),
-      storageLayer: new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' }),
+      storageLayer,
     });
     await tKey._initializeNewKey({});
 
@@ -266,5 +281,61 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     const deviceShare = await tKey.outputShareStore(deviceShareIndex);
     await ShareRepository.saveDeviceShare(postboxKey, deviceShare, password, providerIdToken, providerAccessToken);
     return tKey.privKey.toString('hex', 64);
+  }
+
+  async generateNewMnemonic(postboxKey: string, userInfo: UserInfo): Promise<RestoreResult> {
+    const serviceProvider = new ServiceProviderBase({ postboxKey });
+    const tKey = new ThresholdKey({ serviceProvider, storageLayer, enableLogging: false });
+
+    await tKey._initializeNewKey({});
+    const newShare = await tKey.generateNewShare();
+    const serverShare = newShare.newShareStores[newShare.newShareIndex.toString('hex', 64)];
+    const pkey = await tKey.reconstructKey();
+    const extendedKeyPair = Clutch.extendedKeyPair(pkey.privKey.toString('hex', 64), extendedKeyPath(ETHEREUM));
+    const wallet0 = Clutch.createWalletWithEntropy(pkey.privKey.toString('hex', 64), keyDerivationPath(ETHEREUM, 0));
+
+    await this.userRepository.restoreAccount({
+      type: 'GOOGLE',
+      idtoken: userInfo.idToken,
+      accessToken: userInfo.accessToken,
+      // identifier: when Apple login,
+      share: ShareRepository.shareToShareJson(serverShare),
+      pubKey: extendedKeyPair.xpub,
+      walletAddress0: wallet0.address,
+    });
+    return {
+      success: true,
+      mnemonic: pkeyToMnemonic(pkey.privKey),
+    };
+  }
+
+  async importUserMnemonic(postboxKey: string, mnemonic: string, userInfo: UserInfo): Promise<RestoreResult> {
+    const serviceProvider = new ServiceProviderBase({ postboxKey });
+    const tkey = new ThresholdKey({ serviceProvider, storageLayer, enableLogging: false });
+
+    await tkey._initializeNewKey({
+      importedKey: new BN(ethers.utils.mnemonicToEntropy(mnemonic).slice(2), 'hex'),
+    });
+    const newShare = await tkey.generateNewShare();
+    const serverShare = newShare.newShareStores[newShare.newShareIndex.toString('hex', 64)];
+    const pkey = await tkey.reconstructKey();
+
+    const extendedKeyPair = Clutch.extendedKeyPair(pkey.privKey.toString('hex', 64), extendedKeyPath(ETHEREUM));
+
+    const wallet0 = Clutch.createWalletWithEntropy(pkey.privKey.toString('hex', 64), keyDerivationPath(ETHEREUM, 0));
+
+    await this.userRepository.restoreAccount({
+      type: 'GOOGLE',
+      idtoken: userInfo.idToken,
+      accessToken: userInfo.accessToken,
+      // identifier: when Apple login,
+      share: ShareRepository.shareToShareJson(serverShare),
+      pubKey: extendedKeyPair.xpub,
+      walletAddress0: wallet0.address,
+    });
+    return {
+      success: true,
+      mnemonic: pkeyToMnemonic(pkey.privKey),
+    };
   }
 }
