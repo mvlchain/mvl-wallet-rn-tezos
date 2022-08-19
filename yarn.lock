@@ -2481,6 +2481,25 @@
     loglevel "^1.8.0"
     web3-utils "^1.7.4"
 
+"@toruslabs/customauth@^10.1.1":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-10.1.1.tgz#66c96d29fc9e04fe9ff923ef5000769d9f58a377"
+  integrity sha512-E6pfrOz6ZwgLK3w2nL8DIUiBUr/YU9V+lJ0S+qScb9fd04sRCTDmblvh0hmeM2kH3PCm7co9o4FxQ+7xp5vN+A==
+  dependencies:
+    "@chaitanyapotti/register-service-worker" "^1.7.3"
+    "@toruslabs/broadcast-channel" "^6.1.0"
+    "@toruslabs/eccrypto" "^1.1.8"
+    "@toruslabs/fetch-node-details" "^7.0.2"
+    "@toruslabs/http-helpers" "^3.1.0"
+    "@toruslabs/metadata-helpers" "^3.0.0"
+    "@toruslabs/torus.js" "^6.1.0"
+    bowser "^2.11.0"
+    events "^3.3.0"
+    jwt-decode "^3.1.2"
+    lodash.merge "^4.6.2"
+    loglevel "^1.8.0"
+    web3-utils "^1.7.5"
+
 "@toruslabs/eccrypto@^1.1.8":
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@toruslabs/eccrypto/-/eccrypto-1.1.8.tgz#ce1eac9c3964a091cdc74956a62036b5719a41eb"
@@ -10107,6 +10126,19 @@ web3-utils@1.7.4, web3-utils@^1.7.4:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.4.tgz#eb6fa3706b058602747228234453811bbee017f5"
   integrity sha512-acBdm6Evd0TEZRnChM/MCvGsMwYKmSh7OaUfNf5OKG0CIeGWD/6gqLOWIwmwSnre/2WrA1nKGId5uW2e5EfluA==
+  dependencies:
+    bn.js "^5.2.1"
+    ethereum-bloom-filters "^1.0.6"
+    ethereumjs-util "^7.1.0"
+    ethjs-unit "0.1.6"
+    number-to-bn "1.7.0"
+    randombytes "^2.1.0"
+    utf8 "3.0.0"
+
+web3-utils@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.5.tgz#081a952ac6e0322e25ac97b37358a43c7372ef6a"
+  integrity sha512-9AqNOziQky4wNQadEwEfHiBdOZqopIHzQQVzmvvv6fJwDSMhP+khqmAZC7YTiGjs0MboyZ8tWNivqSO1699XQw==
   dependencies:
     bn.js "^5.2.1"
     ethereum-bloom-filters "^1.0.6"
