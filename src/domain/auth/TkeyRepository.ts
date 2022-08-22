@@ -6,6 +6,7 @@ import TorusStorageLayer from '@tkey/storage-layer-torus';
 import { TorusLoginResponse, LOGIN, LOGIN_TYPE } from '@toruslabs/customauth';
 // @ts-ignore
 import CustomAuth from '@toruslabs/customauth-react-native-sdk';
+import { TorusAggregateLoginResponse } from '@toruslabs/customauth/src/handlers/interfaces';
 import BN from 'bn.js';
 
 import appconfig from '@@config/appconfig';
@@ -45,23 +46,47 @@ export default class TkeyRepository {
   }
 
   async triggerProviderLogin(provider: AuthProvider): Promise<{ postboxKey: string; providerIdToken?: string; providerAccessToken?: string }> {
+    console.log('triggerProviderLogin calls CustomAuth.init');
+    const network = this.authConfig.web3Auth.network;
     await CustomAuth.init({
-      network: this.authConfig.web3Auth.network,
+      network,
+      nativeNetwork: this.authConfig.web3Auth.nativeNetwork,
       redirectUri: this.authConfig.authRedirectUrl,
       browserRedirectUri: this.authConfig.browserRedirectUrl,
       enableLogging: false,
     });
-    const credentials: TorusLoginResponse = await CustomAuth.triggerLogin({
-      name: 'Clutch',
-      typeOfLogin: TkeyRepository.authProviderToTypeOfLogin(provider),
-      clientId: this.authConfig.googleClientId,
-      verifier: this.authConfig.web3Auth.verifier[provider],
-    });
-    return {
-      postboxKey: credentials.privateKey,
-      providerIdToken: credentials.userInfo.idToken,
-      providerAccessToken: credentials.userInfo.accessToken,
-    };
+    if (provider === AUTH_PROVIDER.GOOGLE) {
+      console.log('triggerProviderLogin calls CustomAuth.triggerLogin');
+      const verifier = this.authConfig.web3Auth.verifier[provider];
+      const credentials: TorusLoginResponse = await CustomAuth.triggerLogin({
+        name: 'Clutch',
+        typeOfLogin: TkeyRepository.authProviderToTypeOfLogin(provider),
+        clientId: this.authConfig.googleClientId,
+        verifier: verifier,
+      });
+      return {
+        postboxKey: credentials.privateKey,
+        providerIdToken: credentials.userInfo.idToken,
+        providerAccessToken: credentials.userInfo.accessToken,
+      };
+    } else {
+      console.log('triggerProviderLogin calls CustomAuth.triggerAggregateLogin');
+      const verifier = this.authConfig.web3Auth.verifier[provider];
+
+      CustomAuth.getTorusKey();
+
+      const credentials: TorusAggregateLoginResponse = await CustomAuth.triggerAggregateLogin({
+        aggregateVerifierType: 'single_login',
+        verifierIdentifier: verifier,
+        subVerifierDetailsArray: [],
+      });
+      const userInfo = credentials.userInfo[0];
+      return {
+        postboxKey: credentials.privateKey,
+        providerIdToken: userInfo.idToken,
+        providerAccessToken: userInfo.accessToken,
+      };
+    }
   }
 
   static async checkSignedUp(postboxKey: string): Promise<boolean> {
