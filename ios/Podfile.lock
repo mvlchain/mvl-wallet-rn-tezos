@@ -306,6 +306,8 @@ PODS:
     - React-jsi (= 0.69.1)
     - React-logger (= 0.69.1)
     - React-perflogger (= 0.69.1)
+  - RNAppleAuthentication (2.2.2):
+    - React-Core
   - RNCAsyncStorage (1.17.7):
     - React-Core
   - RNCustomAuthSdk (1.0.2):
@@ -347,6 +349,8 @@ PODS:
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
+  - RNSVG (12.4.1):
+    - React-Core
   - secp256k1.swift (0.1.4)
   - Torus-fetchNodeDetails (1.3.0):
     - PromiseKit/Foundation (~> 6.0)
@@ -400,6 +404,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCustomAuthSdk (from `../node_modules/@toruslabs/customauth-react-native-sdk`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -407,6 +412,7 @@ DEPENDENCIES:
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -493,6 +499,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNAppleAuthentication:
+    :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCustomAuthSdk:
@@ -507,6 +515,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -552,6 +562,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: e8b7dd6635cc95689b5db643b5a3848f1e05b30b
   React-runtimeexecutor: 27f468c5576eaf05ffb7a907528e44c75a3fcbae
   ReactCommon: e30ec17dfb1d4c4f3419eac254350d6abca6d5a2
+  RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNCAsyncStorage: d81ee5c3db1060afd49ea7045ad460eff82d2b7d
   RNCustomAuthSdk: f111e2c5327245fea719a4aefe60d833d4137f45
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
@@ -559,6 +570,7 @@ SPEC CHECKSUMS:
   RNLocalize: 95a43f85e41a966be7bc9cff2437128911c52da0
   RNReanimated: 2cf7451318bb9cc430abeec8d67693f9cf4e039c
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
+  RNSVG: f2bbcdece1e7d8e5f2f94536ed2a2dcf8f95ea4f
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   Torus-fetchNodeDetails: f25e2edb3919441bcd135fa03aa53c511305bd1b
   Torus-utils: b7ce3b4890cdc43f058b71e6e2c99d00e048ddd5
