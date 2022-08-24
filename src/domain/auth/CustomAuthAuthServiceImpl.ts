@@ -50,7 +50,8 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     postboxKey: string,
     password: string,
     providerIdToken: string | undefined,
-    providerAccessToken: string | undefined
+    providerAccessToken: string | undefined,
+    providerUserIdentifier: string | undefined
   ): Promise<string> {
     console.log('signUp started');
     const tKey = await TkeyRepository.initTkey(postboxKey, false);
@@ -66,8 +67,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     const privateKey = tKey.privKey.toString('hex', 64);
     const pubKey = Clutch.extendedPublicKey(privateKey);
 
-    // TODO: set identifier when apple login
-    const identifier = undefined;
+    const identifier = providerUserIdentifier;
 
     await this.userRepository.signUp({
       type: provider,
@@ -143,7 +143,8 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     const authResult = await this.tkeyRepository.triggerProviderLogin(provider);
     const postboxKey = authResult.postboxKey,
       providerIdToken = authResult.providerIdToken,
-      providerAccessToken = authResult.providerAccessToken;
+      providerAccessToken = authResult.providerAccessToken,
+      providerUserIdentifier = authResult.providerUserIdentifier;
 
     const password = await requirePassword();
     await SecureKeychain.setGenericPassword(password, SECURE_TYPES.REMEMBER_ME);
@@ -151,7 +152,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     if (signedUp) {
       return await this.whenUserExists(provider, postboxKey, password, providerIdToken, providerAccessToken);
     } else {
-      return await this.signUp(provider, postboxKey, password, providerIdToken, providerAccessToken);
+      return await this.signUp(provider, postboxKey, password, providerIdToken, providerAccessToken, providerUserIdentifier);
     }
   }
 
