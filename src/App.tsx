@@ -1,5 +1,9 @@
 import React from 'react';
 import 'reflect-metadata';
+/**
+ * initializing DI modules, should be placed under reflect-metadata import statement
+ */
+import './di/di';
 
 import { useToggle } from '@@hooks/common/useToggle';
 import Login from '@@screens/Login';
