@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
@@ -22,6 +23,16 @@ function Login({ login }: { login: () => void }) {
     }
   };
 
+  const signInApple = async () => {
+    try {
+      const key = await auth.signIn(AUTH_PROVIDER.APPLE, () => Promise.resolve('000000'));
+      setKey(key);
+    } catch (e) {
+      console.error(e);
+      setErrorMsg(String(e));
+    }
+  };
+
   const deleteAccount = async () => {
     await auth.deleteAccount();
   };
@@ -36,7 +47,8 @@ function Login({ login }: { login: () => void }) {
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text>Key: {key}</Text>
       <Text>Error: {errorMsg}</Text>
-      <Button title='Login with Web3Auth' onPress={signIn} />
+      <Button title='Login with Google' onPress={signIn} />
+      <Button title='Login with Apple' onPress={signInApple} />
       <Button title='Logout' onPress={logout} />
       <Button title='Delete Account' onPress={deleteAccount} />
       <Button title='Go to Main' onPress={login} />

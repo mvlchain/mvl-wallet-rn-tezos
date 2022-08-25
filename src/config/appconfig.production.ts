@@ -15,7 +15,8 @@ const productionConfig: ClutchAppConfig = {
         [AUTH_PROVIDER.GOOGLE]: '***REMOVED***',
         [AUTH_PROVIDER.APPLE]: '***REMOVED***',
       },
-      network: 'testnet',
+      network: 'mainnet',
+      nativeNetwork: 'mainnet',
     },
   },
 };

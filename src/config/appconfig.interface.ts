@@ -17,5 +17,6 @@ export interface AuthConfig {
       [key in AuthProvider]: string;
     };
     network: 'testnet' | 'mainnet';
+    nativeNetwork: 'ropsten' | 'mainnet';
   };
 }
