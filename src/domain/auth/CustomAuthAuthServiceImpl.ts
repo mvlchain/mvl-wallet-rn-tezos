@@ -9,10 +9,11 @@ import TorusStorageLayer from '@tkey/storage-layer-torus';
 import { LoginWindowResponse, TorusVerifierResponse } from '@toruslabs/customauth';
 import BN from 'bn.js';
 import { ethers } from 'ethers';
-import { Clutch, extendedKeyPath, keyDerivationPath } from 'feature/core/Clutch';
 
-import { ETHEREUM } from '../../feature/core/BlockChain';
+import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/Clutch';
+
 import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
+import { ETHEREUM } from '../blockchain/BlockChain';
 
 import IAuthService, { AuthProvider, DeviceShareHolder, RequirePassword } from './IAuthService';
 import ShareRepository from './ShareRepository';
