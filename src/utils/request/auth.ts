@@ -1,7 +1,8 @@
 import { Method } from 'axios';
 
-import { ETHEREUM } from '../../feature/core/BlockChain';
-import { Clutch, extendedKeyPath } from '../../feature/core/Clutch';
+import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
+
+import { ETHEREUM } from '../../domain/blockchain/BlockChain';
 
 import { promiseRequest } from './req';
 import { RequestConfig, Response } from './type';
