@@ -1,10 +1,16 @@
+import { ROOT_KEY_CREDENTIAL } from 'constants/storage';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ShareStore } from '@tkey/common-types';
 import { ShareStoreMap } from '@tkey/common-types/src/base/ShareStore';
 import ThresholdKey from '@tkey/core';
 import qs from 'qs';
 
+import { InvalidCredentialError } from '@@domain/error/InvalidKeyStoreError';
+import { InvalidPasswordError } from '@@domain/error/InvalidPasswordError';
 import useStore, { DeviceShareHolderDto } from '@@store/index';
 import { request, authenticatedRequest } from '@@utils/request';
+import { isEmpty } from '@@utils/strings';
 
 import { ShareResponseDto, UpdateServerShareDto } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
@@ -145,7 +151,57 @@ export default class ShareRepository {
     useStore.setState({ deviceShare: deviceShareHolder });
   }
 
+  /**
+   * Save a torus root private key to KeyChain with encryption.
+   * SecureKeychain.setGenericPassword should be set prior to run this method.
+   *
+   * code to fetch a password from keychain
+   * ```
+   * const credentials = await SecureKeychain.getGenericPassword();
+   * if (credentials === null) {
+   *   throw new InvalidPasswordError();
+   * } else {
+   *   console.log(`Key credentials: ${credentials}`);
+   * }
+   * const encrypted = await this.encryptor.encrypt(credentials.password, { credentials: privateKey } as KeyCredentials);
+   * ```
+   *
+   * Testing
+   * await ShareRepository.saveRootKey(key, '000000');
+   * const restoredKey = await ShareRepository.getRootKey('000000');
+   *
+   * @param privateKey a private key retreived from Torus bridge interface.
+   */
+  static async saveRootKey(privateKey: string, password: string) {
+    const encrypted = await this.encryptor.encrypt(password, { credentials: privateKey } as KeyCredentials);
+    await AsyncStorage.setItem(ROOT_KEY_CREDENTIAL, encrypted);
+  }
+
+  /**
+   *
+   * @param password
+   * @returns decrypted key
+   * @throws InvalidPasswordError if failed to decrypt key
+   * @throws InvalidCredentialError if key credentials are empty or null
+   */
+  static async getRootKey(password: string): Promise<string> {
+    const encrypted = await AsyncStorage.getItem(ROOT_KEY_CREDENTIAL);
+    if (!encrypted) {
+      throw new InvalidCredentialError();
+    }
+    try {
+      const decrypted: KeyCredentials = await this.encryptor.decrypt(password, encrypted);
+      return decrypted.credentials;
+    } catch (e) {
+      throw new InvalidPasswordError();
+    }
+  }
+
   static async clearDeviceShare() {
     useStore.setState({ deviceShare: undefined });
   }
 }
+
+type KeyCredentials = {
+  credentials: string;
+};

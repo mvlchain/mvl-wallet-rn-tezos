@@ -4,6 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
 import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
+import ShareRepository from '@@domain/auth/ShareRepository';
 import useStore from '@@store/index';
 
 function Login({ login }: { login: () => void }) {
@@ -45,8 +46,8 @@ function Login({ login }: { login: () => void }) {
     <View style={styles.container}>
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
       <Button title='Toggle Auth' onPress={() => toggle()} />
-      <Text>Key: {key}</Text>
-      <Text>Error: {errorMsg}</Text>
+      <Text style={styles.itemLabel}>Key: {key}</Text>
+      <Text style={styles.errorLabel}>Error: {errorMsg}</Text>
       <Button title='Login with Google' onPress={signIn} />
       <Button title='Login with Apple' onPress={signInApple} />
       <Button title='Logout' onPress={logout} />
@@ -62,6 +63,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  itemLabel: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  errorLabel: {
+    color: 'red',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
