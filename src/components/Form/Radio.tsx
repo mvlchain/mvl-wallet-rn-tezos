@@ -8,8 +8,10 @@ import { Base, BaseProps } from './Base';
 
 function Radio({ checked, style, children, ...props }: PropsWithChildren<BaseProps>) {
   return (
-    <Base {...props} style={[styles.container, checked && styles.checked, style]} checked={checked}>
-      <View style={[styles.inner, checked && styles.innerChecked]} />
+    <Base {...props} style={[styles.container, style]} checked={checked}>
+      <View style={[styles.radio, checked && styles.checked]}>
+        <View style={[styles.inner, checked && styles.innerChecked]} />
+      </View>
       {children}
     </Base>
   );
@@ -19,6 +21,9 @@ const size = width * 20;
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+  },
+  radio: {
     alignItems: 'center',
     justifyContent: 'center',
     width: size,
