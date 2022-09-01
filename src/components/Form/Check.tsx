@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { CheckBoxIcon } from '@@assets/image';
 import { width } from '@@utils/ui';
@@ -9,8 +9,8 @@ import { Base, BaseProps } from './Base';
 
 function Check({ checked, style, children, ...props }: PropsWithChildren<BaseProps>) {
   return (
-    <Base {...props} style={[styles.container, checked && styles.checked, style]} checked={checked}>
-      {checked && <CheckBoxIcon width={size * 0.6} height={size * 0.4} />}
+    <Base {...props} style={[styles.container, style]} checked={checked}>
+      <View style={[styles.checkbox, checked && styles.checked]}>{checked && <CheckBoxIcon width={size * 0.6} height={size * 0.4} />}</View>
       {children}
     </Base>
   );
@@ -20,6 +20,9 @@ const size = width * 20;
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+  },
+  checkbox: {
     alignItems: 'center',
     justifyContent: 'center',
     width: size,
