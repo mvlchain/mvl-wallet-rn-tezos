@@ -66,6 +66,7 @@ export default class TkeyRepository {
         typeOfLogin: TkeyRepository.authProviderToTypeOfLogin(provider),
         clientId: this.authConfig.googleClientId,
         verifier: verifier,
+        browserType: 'external',
       });
       return {
         postboxKey: credentials.privateKey,
@@ -85,7 +86,7 @@ export default class TkeyRepository {
       const { user: verifierId, identityToken: idToken } = appleAuthRequestResponse;
 
       const verifier = this.authConfig.web3Auth.verifier[provider];
-      const torusKey = await CustomAuth.getTorusKey(verifier, verifierId, { verifier_id: verifierId }, idToken, undefined);
+      const torusKey = await CustomAuth.getTorusKey(verifier, verifierId, { verifier_id: verifierId }, idToken);
 
       const postboxKey = torusKey.privateKey;
       return {
