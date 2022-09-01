@@ -1,9 +1,10 @@
 PODS:
   - BigInt (5.0.0)
   - boost (1.76.0)
-  - CryptoSwift (1.4.3)
-  - CustomAuth (2.1.0):
-    - Torus-utils (~> 1.3.0)
+  - CryptoSwift (1.5.1)
+  - CustomAuth (4.0.1):
+    - JWTDecode (~> 2.6)
+    - Torus-utils (~> 3.0.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.69.1)
   - FBReactNativeSpec (0.69.1):
@@ -16,8 +17,9 @@ PODS:
   - fmt (6.2.1)
   - GenericJSON (2.0.1)
   - glog (0.3.5)
-  - PromiseKit/CorePromise (6.18.0)
-  - PromiseKit/Foundation (6.18.0):
+  - JWTDecode (2.6.3)
+  - PromiseKit/CorePromise (6.18.1)
+  - PromiseKit/Foundation (6.18.1):
     - PromiseKit/CorePromise
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -310,8 +312,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.17.7):
     - React-Core
-  - RNCustomAuthSdk (1.0.2):
-    - CustomAuth (~> 2.1.0)
+  - RNCustomAuthSdk (3.0.1):
+    - CustomAuth (~> 4.0.1)
     - React
   - RNGestureHandler (2.5.0):
     - React-Core
@@ -352,15 +354,17 @@ PODS:
   - RNSVG (12.4.1):
     - React-Core
   - secp256k1.swift (0.1.4)
-  - Torus-fetchNodeDetails (1.3.0):
+  - Torus-fetchNodeDetails (3.0.0):
     - PromiseKit/Foundation (~> 6.0)
-    - web3.swift (~> 0.8.1)
-  - Torus-utils (1.3.0):
-    - CryptoSwift (~> 1.4.1)
+    - web3.swift (~> 0.9.3)
+  - Torus-utils (3.0.0):
+    - CryptoSwift (~> 1.5.1)
     - PromiseKit/Foundation (~> 6.0)
     - secp256k1.swift (~> 0.1.4)
-    - Torus-fetchNodeDetails (~> 1.3.0)
-  - web3.swift (0.8.2):
+    - Torus-fetchNodeDetails (~> 3.0.0)
+    - TweetNacl
+  - TweetNacl (1.0.2)
+  - web3.swift (0.9.3):
     - BigInt (~> 5.0.0)
     - GenericJSON (~> 2.0)
     - secp256k1.swift (~> 0.1)
@@ -368,6 +372,7 @@ PODS:
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
+  - CustomAuth (~> 4.0.1)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -422,10 +427,12 @@ SPEC REPOS:
     - CustomAuth
     - fmt
     - GenericJSON
+    - JWTDecode
     - PromiseKit
     - secp256k1.swift
     - Torus-fetchNodeDetails
     - Torus-utils
+    - TweetNacl
     - web3.swift
 
 EXTERNAL SOURCES:
@@ -523,15 +530,16 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: a7c83b31436843459a1961bfd74b96033dc77234
-  CryptoSwift: a0799ee936271bd2253a006f1e4523df21845000
-  CustomAuth: 404244ccfe3ef82cf2f28603244b0e92448325b6
+  CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
+  CustomAuth: d392381016783e281df11f175efbba2096feab19
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 068141206af867f72854753423d0117c4bf53419
   FBReactNativeSpec: 546a637adc797fa436dd51d1c63c580f820de31c
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
-  PromiseKit: 879fa89b55fcb8f11ade9aad0c9721850bb71b9f
+  JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
+  PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: ae07282b2ec9c90d7eb98251603bc3f82403d239
   RCTTypeSafety: a04dc1339af2e1da759ccd093bf11c310dce1ef6
@@ -564,7 +572,7 @@ SPEC CHECKSUMS:
   ReactCommon: e30ec17dfb1d4c4f3419eac254350d6abca6d5a2
   RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNCAsyncStorage: d81ee5c3db1060afd49ea7045ad460eff82d2b7d
-  RNCustomAuthSdk: f111e2c5327245fea719a4aefe60d833d4137f45
+  RNCustomAuthSdk: ca3bdec521524b339ce09c75729bdde50304e1f1
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: 95a43f85e41a966be7bc9cff2437128911c52da0
@@ -572,11 +580,12 @@ SPEC CHECKSUMS:
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: f2bbcdece1e7d8e5f2f94536ed2a2dcf8f95ea4f
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
-  Torus-fetchNodeDetails: f25e2edb3919441bcd135fa03aa53c511305bd1b
-  Torus-utils: b7ce3b4890cdc43f058b71e6e2c99d00e048ddd5
-  web3.swift: 8034153a81569424312ef4113c6f7a002bbcc2f1
+  Torus-fetchNodeDetails: 186d6bc852bfd943f8d25154f25b5cc5fd6a03b1
+  Torus-utils: e3bbb4f884fce6290b43a86ee88544fbd5addb91
+  TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
+  web3.swift: c6c3bf1f853743f8a7a58d263e5f7e46545e22c7
   Yoga: 7ab6e3ee4ce47d7b789d1cb520163833e515f452
 
-PODFILE CHECKSUM: 8c8e4c18f6424132052e559927f93bfba9463887
+PODFILE CHECKSUM: 22c5ac8aefbd406789769a9acd20fc797b89feea
 
 COCOAPODS: 1.11.3
