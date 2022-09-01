@@ -27,7 +27,7 @@
     "@tkey/seed-phrase": "^6.1.0",
     "@tkey/storage-layer-torus": "^6.1.0",
     "@toruslabs/customauth": "^10.1.1",
-    "@toruslabs/customauth-react-native-sdk": "^1.0.2",
+    "@toruslabs/customauth-react-native-sdk": "^3.0.1",
     "@tradle/react-native-http": "^2.0.1",
     "assert": "^2.0.0",
     "axios": "^0.27.2",

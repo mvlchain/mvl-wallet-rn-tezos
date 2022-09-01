@@ -1,10 +1,12 @@
 #import "AppDelegate.h"
+#import <RNCustomAuthSdk/RNTorus.h>
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
 #import <React/RCTAppSetupUtils.h>
+#import <React/RCTLinkingManager.h>
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -94,6 +96,32 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
+
+#pragma mark - RCTLinkingManager
+
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  NSString *myString = url.absoluteString;
+  NSLog(@"String to handle : %@ ", myString);
+  if ([myString hasPrefix:@"clutchwallet"]) {
+    if ([myString hasPrefix:@"clutchwallet://***REMOVED***"] || [myString hasPrefix:@"clutchwallet://***REMOVED***"]) {
+      if (@available(iOS 13.0, *)) {
+        [RNCustomAuthSdk handle:myString];
+        return YES;
+      } else {
+        // RNCustomAuthSdk can't handle earlier versions
+        return NO;
+      }
+    } else {
+      return [RCTLinkingManager application:application openURL:url options:options];
+    }
+  }
+
+  return YES;
+}
+
 
 #if RCT_NEW_ARCH_ENABLED
 

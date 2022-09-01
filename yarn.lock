@@ -2462,10 +2462,10 @@
     socket.io-client "^4.5.1"
     unload "^2.3.1"
 
-"@toruslabs/customauth-react-native-sdk@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@toruslabs/customauth-react-native-sdk/-/customauth-react-native-sdk-1.0.2.tgz#fee8d108c14be13eb1dea2eeba15c8f591d4dd94"
-  integrity sha512-5Q8NAl/EbZdDbNQjdHnt1m1E++XydDo3JC8e1zFUByMc2j92r01aFrnVMvCLVgTp8ZXpY6B4IBuSv1Oojb//TA==
+"@toruslabs/customauth-react-native-sdk@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/customauth-react-native-sdk/-/customauth-react-native-sdk-3.0.1.tgz#fe570c72a85cd7e283ccaebab1924daff6eb2756"
+  integrity sha512-83+LptLKDYxWNPxVb32aCr9/vPnnIFzp8JrSkxYbtvC37Zh6EJtro1A96lXDvMsLbdmHuqo9vcBmlkH+ehSeiA==
 
 "@toruslabs/customauth@^10.0.0":
   version "10.1.0"
