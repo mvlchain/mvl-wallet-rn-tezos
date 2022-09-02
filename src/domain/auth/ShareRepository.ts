@@ -151,6 +151,10 @@ export default class ShareRepository {
     useStore.setState({ deviceShare: deviceShareHolder });
   }
 
+  static async clearDeviceShare() {
+    useStore.setState({ deviceShare: undefined });
+  }
+
   /**
    * Save a torus root private key to KeyChain with encryption.
    * SecureKeychain.setGenericPassword should be set prior to run this method.
@@ -178,7 +182,7 @@ export default class ShareRepository {
   }
 
   /**
-   *
+   * get a torus root private key
    * @param password
    * @returns decrypted key
    * @throws InvalidPasswordError if failed to decrypt key
@@ -197,8 +201,8 @@ export default class ShareRepository {
     }
   }
 
-  static async clearDeviceShare() {
-    useStore.setState({ deviceShare: undefined });
+  static async clearRootKey() {
+    await AsyncStorage.removeItem(ROOT_KEY_CREDENTIAL);
   }
 }
 
