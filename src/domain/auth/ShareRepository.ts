@@ -6,8 +6,7 @@ import { ShareStoreMap } from '@tkey/common-types/src/base/ShareStore';
 import ThresholdKey from '@tkey/core';
 import qs from 'qs';
 
-import { InvalidCredentialError } from '@@domain/error/InvalidKeyStoreError';
-import { InvalidPasswordError } from '@@domain/error/InvalidPasswordError';
+import { InvalidCredentialError, InvalidPasswordError, NoCredentialFoundError } from '@@domain/error';
 import useStore, { DeviceShareHolderDto } from '@@store/index';
 import { request, authenticatedRequest } from '@@utils/request';
 import { isEmpty } from '@@utils/strings';
@@ -29,7 +28,7 @@ export default class ShareRepository {
 
     const credentials = await SecureKeychain.getGenericPassword();
     if (credentials === null) {
-      throw new Error('local pin code not defined?!?');
+      throw new NoCredentialFoundError('local pin code not defined?!?');
     }
 
     const postboxKeyJson = await this.encryptor.decrypt(credentials.password, dto.postboxKeyJsonEncrypted);
@@ -156,7 +155,7 @@ export default class ShareRepository {
   }
 
   /**
-   * Save a torus root private key to KeyChain with encryption.
+   * Save a torus root private key to local storage with encryption.
    * SecureKeychain.setGenericPassword should be set prior to run this method.
    *
    * code to fetch a password from keychain
@@ -182,9 +181,23 @@ export default class ShareRepository {
   }
 
   /**
+   * Save a torus root private key to local storage with encryption.
+   * This method will get a password from KeyChain.
+   * @param privateKey a private key retreived from Torus bridge interface.
+   * @throws NoCredentialFoundError if pin-code credential no found from KeyChain
+   */
+  static async saveRootKeyByCredentials(privateKey: string) {
+    const credentials = await SecureKeychain.getGenericPassword();
+    if (credentials === null) {
+      throw new NoCredentialFoundError();
+    }
+    await ShareRepository.saveRootKey(privateKey, credentials.password);
+  }
+
+  /**
    * get a torus root private key
    * @param password
-   * @returns decrypted key
+   * @returns a decrypted root private key
    * @throws InvalidPasswordError if failed to decrypt key
    * @throws InvalidCredentialError if key credentials are empty or null
    */
@@ -199,6 +212,19 @@ export default class ShareRepository {
     } catch (e) {
       throw new InvalidPasswordError();
     }
+  }
+
+  /**
+   * Get a torus root private key with credential
+   * @returns a decrypted root private key
+   * @throws InvalidCredentialError if key credentials are empty or null
+   */
+  static async getRootKeyByCredentials(): Promise<string> {
+    const credentials = await SecureKeychain.getGenericPassword();
+    if (credentials === null) {
+      throw new NoCredentialFoundError();
+    }
+    return ShareRepository.getRootKey(credentials.password);
   }
 
   static async clearRootKey() {
