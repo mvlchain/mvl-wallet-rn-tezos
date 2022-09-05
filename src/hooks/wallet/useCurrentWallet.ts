@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { WalletRepository } from '@@domain/wallet/WalletRepository';
-import { useWalletStore } from '@@store/WalletStore';
+import { useWalletStore } from '@@store/useWalletStore';
 
 /**
  * UseCase: get current selected wallet from local storage
@@ -11,7 +11,7 @@ export const useCurrentWallet = (repository: WalletRepository) => {
 
   useEffect(() => {
     (async () => {
-      // TODO we will get param xpub from the store, mayby?
+      // TODO we will get param xpub from the store, maybe?
       const result = await repository.getWallets('xpub');
 
       // updates wallets state
