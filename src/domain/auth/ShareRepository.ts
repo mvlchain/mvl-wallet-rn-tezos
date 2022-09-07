@@ -1,4 +1,6 @@
-import { ROOT_KEY_CREDENTIAL } from 'constants/storage';
+/* eslint-disable max-lines */
+
+import { ROOT_KEY, EXTENDED_PRIVATE_KEY, EXTENDED_PUBLIC_KEY } from 'constants/storage';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ShareStore } from '@tkey/common-types';
@@ -6,17 +8,18 @@ import { ShareStoreMap } from '@tkey/common-types/src/base/ShareStore';
 import ThresholdKey from '@tkey/core';
 import qs from 'qs';
 
+import { ETHEREUM } from '@@domain/blockchain/BlockChain';
+import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
+import { ExtendedKeyPair } from '@@domain/blockchain/ExtendedKeyPair';
 import { InvalidCredentialError, InvalidPasswordError, NoCredentialFoundError } from '@@domain/error';
 import useStore, { DeviceShareHolderDto } from '@@store/index';
 import { request, authenticatedRequest } from '@@utils/request';
-import { isEmpty } from '@@utils/strings';
 
 import { ShareResponseDto, UpdateServerShareDto } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
 import SecureKeychain from '../../utils/SecureKeychain';
 
 import { AuthProvider, DeviceShareHolder } from './IAuthService';
-
 export default class ShareRepository {
   private static encryptor = new Encryptor();
 
@@ -176,8 +179,19 @@ export default class ShareRepository {
    * @param privateKey a private key retreived from Torus bridge interface.
    */
   static async saveRootKey(privateKey: string, password: string) {
-    const encrypted = await this.encryptor.encrypt(password, { credentials: privateKey } as KeyCredentials);
-    await AsyncStorage.setItem(ROOT_KEY_CREDENTIAL, encrypted);
+    // extendedKeyPath(60) == "m/44'/60'/0'"
+    const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(ETHEREUM));
+
+    const [encryptedRootKey, encryptedExtendedPrivateKey] = await Promise.all([
+      this.encryptor.encrypt(password, { credentials: privateKey } as KeyCredentials),
+      this.encryptor.encrypt(password, { credentials: extendedKeyPair.xprv } as KeyCredentials),
+    ]);
+
+    await AsyncStorage.multiSet([
+      [ROOT_KEY, encryptedRootKey],
+      [EXTENDED_PRIVATE_KEY, encryptedExtendedPrivateKey],
+      [EXTENDED_PUBLIC_KEY, extendedKeyPair.xpub],
+    ]);
   }
 
   /**
@@ -202,7 +216,7 @@ export default class ShareRepository {
    * @throws InvalidCredentialError if key credentials are empty or null
    */
   static async getRootKey(password: string): Promise<string> {
-    const encrypted = await AsyncStorage.getItem(ROOT_KEY_CREDENTIAL);
+    const encrypted = await AsyncStorage.getItem(ROOT_KEY);
     if (!encrypted) {
       throw new InvalidCredentialError();
     }
@@ -227,8 +241,50 @@ export default class ShareRepository {
     return ShareRepository.getRootKey(credentials.password);
   }
 
+  /**
+   * @returns extended key pair by decrypting it with credential
+   */
+  static async getExtendedKeyPairByCredentials(): Promise<ExtendedKeyPair> {
+    const credentials = await SecureKeychain.getGenericPassword();
+    if (credentials === null) {
+      throw new NoCredentialFoundError();
+    }
+
+    return ShareRepository.getExtendedKeyPair(credentials.password);
+  }
+
+  /**
+   * @param password to decrypt extended private key
+   * @returns extended key pair from AsyncStorage
+   */
+  static async getExtendedKeyPair(password: string): Promise<ExtendedKeyPair> {
+    const [[, encryptedExtendPrivateKey], [, xpub]] = await AsyncStorage.multiGet([EXTENDED_PRIVATE_KEY, EXTENDED_PUBLIC_KEY]);
+    if (!encryptedExtendPrivateKey || !xpub) {
+      throw new InvalidCredentialError();
+    }
+
+    try {
+      const decrypted: KeyCredentials = await this.encryptor.decrypt(password, encryptedExtendPrivateKey);
+      return {
+        xprv: decrypted.credentials,
+        xpub: xpub,
+      };
+    } catch (e) {
+      throw new InvalidPasswordError();
+    }
+  }
+
+  static async getExtendedPublicKey(): Promise<string> {
+    const result = await AsyncStorage.getItem(EXTENDED_PUBLIC_KEY);
+    if (!result) {
+      throw new InvalidCredentialError('No extended public key found.');
+    }
+
+    return result;
+  }
+
   static async clearRootKey() {
-    await AsyncStorage.removeItem(ROOT_KEY_CREDENTIAL);
+    await AsyncStorage.multiRemove([ROOT_KEY, EXTENDED_PRIVATE_KEY, EXTENDED_PUBLIC_KEY]);
   }
 }
 

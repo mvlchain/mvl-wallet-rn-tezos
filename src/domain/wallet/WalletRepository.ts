@@ -1,3 +1,4 @@
+import qs from 'qs';
 import { injectable } from 'tsyringe';
 
 import { ApiError } from '@@domain/error/ApiError';
@@ -18,11 +19,11 @@ export class WalletRepositoryImpl implements WalletRepository {
    */
   async getWallets(extendedPublicKey: string): Promise<WalletDto[]> {
     try {
-      const endpoint = 'v1/wallets';
-      const res = await authenticatedRequest.get(endpoint, {
-        params: { pubkey: extendedPublicKey },
-      });
+      const endpoint = `v1/wallets?${qs.stringify({
+        pubkey: extendedPublicKey,
+      })}`;
 
+      const res = await authenticatedRequest.get(endpoint);
       if (res.ok) {
         return res.data;
       } else {

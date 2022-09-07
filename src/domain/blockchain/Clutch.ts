@@ -19,9 +19,12 @@ import HDKey from 'hdkey';
 
 import { stripHexPrefix } from '@@utils/platform';
 
-import { BlockChain } from './BlockChain';
+import { ETHEREUM, BlockChain } from './BlockChain';
 import { ExtendedKeyPair } from './ExtendedKeyPair';
 import { KeyPair } from './KeyPair';
+
+// extendedKeyPath(60) == "m/44'/60'/0'"
+export const CLUTCH_EXTENDED_KEY_PATH = extendedKeyPath(ETHEREUM);
 
 export class Clutch {
   private wallet: Wallet;
@@ -136,14 +139,32 @@ export class Clutch {
    * @return signature of the message in a format as follows:
    *  {publicKey}:{timestamp}:{sig}
    */
-  static signMessageByExtendedKeyPair(account: HDNode, message: string, timestampInMs: string): string {
+  static async signMessageByExtendedKeyNode(account: HDNode, message: string, timestampInMs: string): Promise<string> {
     const node = HDNode.fromExtendedKey(account.extendedKey);
     const xpub = node.neuter().extendedKey;
-    const prv = stripHexPrefix(node.privateKey);
-    console.log(`Clutch> signing xprv: ${prv}, xpub: ${node.publicKey}`);
+    const xprv = stripHexPrefix(node.privateKey);
 
     const signingMessage = `${message}|${timestampInMs}`;
-    const signature = bitcoinMessage.sign(signingMessage, Buffer.from(prv, 'hex'), true).toString('base64');
+    const signature = bitcoinMessage.sign(signingMessage, Buffer.from(xprv, 'hex'), true).toString('base64');
+    return `${xpub}:${timestampInMs}:${signature}`;
+  }
+
+  /**
+   * Sign a given message with root key calculated from extended private key
+   * signingMessage: message|timestamp
+   * @param keyPair extended key pair
+   * @param message a message to sign
+   * @param timestampInMs timestamp in millisecond
+   * @return signature of the message in a format as follows:
+   *  {publicKey}:{timestamp}:{sig}
+   */
+  static async signMessageByExtendedKeyPair(keyPair: ExtendedKeyPair, message: string, timestampInMs: string): Promise<string> {
+    const node = HDNode.fromExtendedKey(keyPair.xprv);
+    const xprv = stripHexPrefix(node.privateKey);
+    const xpub = node.neuter().extendedKey;
+    const signingMessage = `${message}|${timestampInMs}`;
+
+    const signature = bitcoinMessage.sign(signingMessage, Buffer.from(xprv, 'hex'), true).toString('base64');
     return `${xpub}:${timestampInMs}:${signature}`;
   }
 

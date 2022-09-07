@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
 
-import { WalletRepository } from '@@domain/wallet/WalletRepository';
+import { WalletService } from '@@domain/wallet/WalletService';
+import { WalletState } from '@@store/WalletSlice';
 import { useWalletStore } from '@@store/useWalletStore';
 
 /**
  * UseCase: get current selected wallet from local storage
  */
-export const useCurrentWallet = (repository: WalletRepository) => {
+export const useCurrentWallet = (service: WalletService) => {
   const [wallets, setWallets] = useWalletStore((state) => [state.wallets, state.setWallets]);
 
   useEffect(() => {
     (async () => {
-      // TODO we will get param xpub from the store, maybe?
-      const result = await repository.getWallets('xpub');
+      const result = await service.getWalletList();
 
       // updates wallets state
-      setWallets(result);
+      // (WalletDto and WalletState have the same fields. just casting)
+      setWallets(result as WalletState[]);
     })();
   }, []);
 

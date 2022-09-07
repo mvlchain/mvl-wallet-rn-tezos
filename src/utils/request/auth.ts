@@ -1,8 +1,8 @@
 import { Method } from 'axios';
+import { container, inject, injectable } from 'tsyringe';
 
-import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
-
-import { ETHEREUM } from '../../domain/blockchain/BlockChain';
+import { WalletService } from '@@domain/wallet/WalletService';
+import { useDi } from '@@hooks/common/useDi';
 
 import { promiseRequest } from './req';
 import { RequestConfig, Response } from './type';
@@ -13,32 +13,6 @@ const getUnauthorizedData = () => ({
   message: 'Your token has expired. Please login again.',
 });
 
-class AuthenticationConfiguration {
-  private rootPrivateKey: string | undefined;
-  setPrivateKey = (privateKey: string) => {
-    this.rootPrivateKey = privateKey;
-  };
-  getAuthorization = (data: any): string => {
-    if (this.rootPrivateKey === undefined) {
-      throw new Error('privateKey needed');
-    }
-    const keyNode = Clutch.keyNode(this.rootPrivateKey, extendedKeyPath(ETHEREUM));
-    const timestampInMs = `${Date.now()}`;
-    console.log(data, timestampInMs);
-    let dataStr;
-    if (typeof data === 'string') {
-      dataStr = data;
-    } else {
-      dataStr = JSON.stringify(data, null, 0);
-    }
-    return Clutch.signMessageByExtendedKeyPair(keyNode, dataStr, timestampInMs);
-  };
-}
-
-// TODO: setPrivateKey should be called when pkey is reconstructed
-//  ex) authenticationConfiguration.setPrivateKey(pkey.privKey.toString('hex', 64));
-export const authenticationConfiguration = new AuthenticationConfiguration();
-
 const HEADER_X_HMAC_SIG = 'x-hmac-sig';
 
 // @TODO refresh
@@ -46,12 +20,26 @@ const tokenExpiredCallback = async () => {
   return {} as Response<any>;
 };
 
+//const walletService = useDi('WalletService');
+@injectable()
+class AuthenticationConfiguration {
+  constructor(@inject('WalletService') private walletService: WalletService) {}
+
+  // xHmacAuthorization
+  async getAuthorization(data: any): Promise<string> {
+    return await this.walletService.signMessageByExtendedKey(data);
+  }
+}
+const authenticationConfiguration = container.resolve(AuthenticationConfiguration);
+
 const authRequest =
   (method: Method) =>
   async <D = any>(endpoint: string, reqConfig: RequestConfig = {}): Promise<Response<D>> => {
+    const xHmacAuthorization = await authenticationConfiguration.getAuthorization(reqConfig.data);
+
     reqConfig.headers = {
       ...reqConfig.headers,
-      [HEADER_X_HMAC_SIG]: authenticationConfiguration.getAuthorization(reqConfig.data),
+      [HEADER_X_HMAC_SIG]: xHmacAuthorization,
     };
 
     const res = await promiseRequest(method)(endpoint, reqConfig);
@@ -60,7 +48,7 @@ const authRequest =
       const refreshRes = await tokenExpiredCallback();
 
       if (refreshRes.ok) {
-        reqConfig.headers[HEADER_X_HMAC_SIG] = authenticationConfiguration.getAuthorization(reqConfig.data);
+        reqConfig.headers[HEADER_X_HMAC_SIG] = await authenticationConfiguration.getAuthorization(reqConfig.data);
 
         const refetch = await promiseRequest(method)(endpoint, reqConfig);
 
