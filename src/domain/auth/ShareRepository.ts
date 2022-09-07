@@ -13,7 +13,7 @@ import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
 import { ExtendedKeyPair } from '@@domain/blockchain/ExtendedKeyPair';
 import { InvalidCredentialError, InvalidPasswordError, NoCredentialFoundError } from '@@domain/error';
 import useStore, { DeviceShareHolderDto } from '@@store/index';
-import { request, authenticatedRequest } from '@@utils/request';
+import { request, authRequest } from '@@utils/request';
 
 import { ShareResponseDto, UpdateServerShareDto } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
@@ -126,7 +126,7 @@ export default class ShareRepository {
       const body: UpdateServerShareDto = {
         share: jsonString,
       };
-      const res = await authenticatedRequest.post(endpoint, {
+      const res = await authRequest.post(endpoint, {
         data: body,
       });
       return res.data;

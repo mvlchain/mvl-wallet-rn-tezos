@@ -3,7 +3,7 @@ import { injectable } from 'tsyringe';
 
 import { ApiError } from '@@domain/error/ApiError';
 import { WalletDto } from '@@domain/model/WalletDto';
-import { authenticatedRequest } from '@@utils/request';
+import { authRequest } from '@@utils/request';
 
 export interface WalletRepository {
   getWallets(extendedPublicKey: string): Promise<WalletDto[]>;
@@ -23,7 +23,7 @@ export class WalletRepositoryImpl implements WalletRepository {
         pubkey: extendedPublicKey,
       })}`;
 
-      const res = await authenticatedRequest.get(endpoint);
+      const res = await authRequest.get(endpoint);
       if (res.ok) {
         return res.data;
       } else {
