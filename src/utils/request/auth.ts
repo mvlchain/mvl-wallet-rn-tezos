@@ -20,7 +20,9 @@ const tokenExpiredCallback = async () => {
   return {} as Response<any>;
 };
 
-//const walletService = useDi('WalletService');
+/**
+ * Configuration for AuthRequest
+ */
 @injectable()
 class AuthenticationConfiguration {
   constructor(@inject('WalletService') private walletService: WalletService) {}
@@ -32,7 +34,10 @@ class AuthenticationConfiguration {
 }
 const authenticationConfiguration = container.resolve(AuthenticationConfiguration);
 
-const authRequest =
+/**
+ * API request factory that automatically adds xHmacAuthorization to http header
+ */
+const doAuthRequest =
   (method: Method) =>
   async <D = any>(endpoint: string, reqConfig: RequestConfig = {}): Promise<Response<D>> => {
     const xHmacAuthorization = await authenticationConfiguration.getAuthorization(reqConfig.data);
@@ -63,9 +68,9 @@ const authRequest =
     return res;
   };
 
-export const authenticatedRequest = {
-  get: authRequest('get'),
-  post: authRequest('post'),
-  put: authRequest('put'),
-  delete: authRequest('delete'),
+export const authRequest = {
+  get: doAuthRequest('get'),
+  post: doAuthRequest('post'),
+  put: doAuthRequest('put'),
+  delete: doAuthRequest('delete'),
 };
