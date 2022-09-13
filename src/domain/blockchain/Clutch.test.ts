@@ -108,17 +108,32 @@ it('create KeyPair with entropy -> m/44 style address', () => {
   expect(keyPair.publicKey).toBe('0x0272c2bef09f46c1fc947ca9b7c20351dd1f0d005895c1c7d098ba6b3b1b985899');
 });
 
-it('sign a message by extended private key', () => {
+it('sign a message by extended private key from key node', async () => {
   const keyNode = Clutch.keyNode(PRIVATE_KEY, extendedKeyPath(ETHEREUM));
   console.log(`Clutch> xprv: ${keyNode.extendedKey}, xpub: ${keyNode.neuter().extendedKey}`);
 
   const message = 'This is the test for signing and verifying message';
 
-  const signed = Clutch.signMessageByExtendedKeyPair(keyNode, message, '1659172820501');
+  const signed = await Clutch.signMessageByExtendedKeyNode(keyNode, message, '1659172820501');
   expect(signed).toBe(
     'xpub6Cx5TLCAQgi6JXxqZ3tK6QrzyQiweafUQJ267e6M2XiZ7am2wXhwEa6Go18ScekXdN1DTazvUCu87sJESH6AWHLacQTRUYVcYAUgvUJkCFA' +
       ':1659172820501:H6oM3YyW5k0FB5dQYymrjDPWouJsrAH2UUZBnmWmIUJ3KDv3Q3UXK1hQiJnB6/2GAlIapytoH1UEUF4K9FMxvSc='
   );
 
+  expect(Clutch.verifyMessageByExtendedKeyPair(message, signed)).toBe(true);
+});
+
+it('sign a message by extended private key from key pair', async () => {
+  const extendedKeyPair = {
+    xprv: 'xprv9yxj3pfGaK9o63tNT2MJjGvGRNtTF7wd356VKFgjUCBaEnRtPzPggmmnwi6GfeyGVLb3mixDEvW88vCeXRQwsky8Q1SsbDnoGkSpVBDJzQn',
+    xpub: 'xpub6Cx5TLCAQgi6JXxqZ3tK6QrzyQiweafUQJ267e6M2XiZ7am2wXhwEa6Go18ScekXdN1DTazvUCu87sJESH6AWHLacQTRUYVcYAUgvUJkCFA',
+  };
+
+  const message = 'This is the test for signing and verifying message';
+  const signed = await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, '1659172820501');
+  expect(signed).toBe(
+    'xpub6Cx5TLCAQgi6JXxqZ3tK6QrzyQiweafUQJ267e6M2XiZ7am2wXhwEa6Go18ScekXdN1DTazvUCu87sJESH6AWHLacQTRUYVcYAUgvUJkCFA' +
+      ':1659172820501:H6oM3YyW5k0FB5dQYymrjDPWouJsrAH2UUZBnmWmIUJ3KDv3Q3UXK1hQiJnB6/2GAlIapytoH1UEUF4K9FMxvSc='
+  );
   expect(Clutch.verifyMessageByExtendedKeyPair(message, signed)).toBe(true);
 });

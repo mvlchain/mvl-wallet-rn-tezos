@@ -1,4 +1,6 @@
-import { ROOT_KEY_CREDENTIAL } from 'constants/storage';
+/* eslint-disable max-lines */
+
+import { ROOT_KEY, EXTENDED_PRIVATE_KEY, EXTENDED_PUBLIC_KEY } from 'constants/storage';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ShareStore } from '@tkey/common-types';
@@ -6,18 +8,18 @@ import { ShareStoreMap } from '@tkey/common-types/src/base/ShareStore';
 import ThresholdKey from '@tkey/core';
 import qs from 'qs';
 
-import { InvalidCredentialError } from '@@domain/error/InvalidKeyStoreError';
-import { InvalidPasswordError } from '@@domain/error/InvalidPasswordError';
+import { ETHEREUM } from '@@domain/blockchain/BlockChain';
+import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
+import { ExtendedKeyPair } from '@@domain/blockchain/ExtendedKeyPair';
+import { InvalidCredentialError, InvalidPasswordError, NoCredentialFoundError } from '@@domain/error';
 import useStore, { DeviceShareHolderDto } from '@@store/index';
-import { request, authenticatedRequest } from '@@utils/request';
-import { isEmpty } from '@@utils/strings';
+import { request, authRequest } from '@@utils/request';
 
 import { ShareResponseDto, UpdateServerShareDto } from '../../generated/generated-scheme';
 import Encryptor from '../../utils/Encryptor';
 import SecureKeychain from '../../utils/SecureKeychain';
 
 import { AuthProvider, DeviceShareHolder } from './IAuthService';
-
 export default class ShareRepository {
   private static encryptor = new Encryptor();
 
@@ -29,7 +31,7 @@ export default class ShareRepository {
 
     const credentials = await SecureKeychain.getGenericPassword();
     if (credentials === null) {
-      throw new Error('local pin code not defined?!?');
+      throw new NoCredentialFoundError('local pin code not defined?!?');
     }
 
     const postboxKeyJson = await this.encryptor.decrypt(credentials.password, dto.postboxKeyJsonEncrypted);
@@ -124,7 +126,7 @@ export default class ShareRepository {
       const body: UpdateServerShareDto = {
         share: jsonString,
       };
-      const res = await authenticatedRequest.post(endpoint, {
+      const res = await authRequest.post(endpoint, {
         data: body,
       });
       return res.data;
@@ -151,8 +153,12 @@ export default class ShareRepository {
     useStore.setState({ deviceShare: deviceShareHolder });
   }
 
+  static async clearDeviceShare() {
+    useStore.setState({ deviceShare: undefined });
+  }
+
   /**
-   * Save a torus root private key to KeyChain with encryption.
+   * Save a torus root private key to local storage with encryption.
    * SecureKeychain.setGenericPassword should be set prior to run this method.
    *
    * code to fetch a password from keychain
@@ -173,19 +179,44 @@ export default class ShareRepository {
    * @param privateKey a private key retreived from Torus bridge interface.
    */
   static async saveRootKey(privateKey: string, password: string) {
-    const encrypted = await this.encryptor.encrypt(password, { credentials: privateKey } as KeyCredentials);
-    await AsyncStorage.setItem(ROOT_KEY_CREDENTIAL, encrypted);
+    // extendedKeyPath(60) == "m/44'/60'/0'"
+    const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(ETHEREUM));
+
+    const [encryptedRootKey, encryptedExtendedPrivateKey] = await Promise.all([
+      this.encryptor.encrypt(password, { credentials: privateKey } as KeyCredentials),
+      this.encryptor.encrypt(password, { credentials: extendedKeyPair.xprv } as KeyCredentials),
+    ]);
+
+    await AsyncStorage.multiSet([
+      [ROOT_KEY, encryptedRootKey],
+      [EXTENDED_PRIVATE_KEY, encryptedExtendedPrivateKey],
+      [EXTENDED_PUBLIC_KEY, extendedKeyPair.xpub],
+    ]);
   }
 
   /**
-   *
+   * Save a torus root private key to local storage with encryption.
+   * This method will get a password from KeyChain.
+   * @param privateKey a private key retreived from Torus bridge interface.
+   * @throws NoCredentialFoundError if pin-code credential no found from KeyChain
+   */
+  static async saveRootKeyByCredentials(privateKey: string) {
+    const credentials = await SecureKeychain.getGenericPassword();
+    if (credentials === null) {
+      throw new NoCredentialFoundError();
+    }
+    await ShareRepository.saveRootKey(privateKey, credentials.password);
+  }
+
+  /**
+   * get a torus root private key
    * @param password
-   * @returns decrypted key
+   * @returns a decrypted root private key
    * @throws InvalidPasswordError if failed to decrypt key
    * @throws InvalidCredentialError if key credentials are empty or null
    */
   static async getRootKey(password: string): Promise<string> {
-    const encrypted = await AsyncStorage.getItem(ROOT_KEY_CREDENTIAL);
+    const encrypted = await AsyncStorage.getItem(ROOT_KEY);
     if (!encrypted) {
       throw new InvalidCredentialError();
     }
@@ -197,8 +228,63 @@ export default class ShareRepository {
     }
   }
 
-  static async clearDeviceShare() {
-    useStore.setState({ deviceShare: undefined });
+  /**
+   * Get a torus root private key with credential
+   * @returns a decrypted root private key
+   * @throws InvalidCredentialError if key credentials are empty or null
+   */
+  static async getRootKeyByCredentials(): Promise<string> {
+    const credentials = await SecureKeychain.getGenericPassword();
+    if (credentials === null) {
+      throw new NoCredentialFoundError();
+    }
+    return ShareRepository.getRootKey(credentials.password);
+  }
+
+  /**
+   * @returns extended key pair by decrypting it with credential
+   */
+  static async getExtendedKeyPairByCredentials(): Promise<ExtendedKeyPair> {
+    const credentials = await SecureKeychain.getGenericPassword();
+    if (credentials === null) {
+      throw new NoCredentialFoundError();
+    }
+
+    return ShareRepository.getExtendedKeyPair(credentials.password);
+  }
+
+  /**
+   * @param password to decrypt extended private key
+   * @returns extended key pair from AsyncStorage
+   */
+  static async getExtendedKeyPair(password: string): Promise<ExtendedKeyPair> {
+    const [[, encryptedExtendPrivateKey], [, xpub]] = await AsyncStorage.multiGet([EXTENDED_PRIVATE_KEY, EXTENDED_PUBLIC_KEY]);
+    if (!encryptedExtendPrivateKey || !xpub) {
+      throw new InvalidCredentialError();
+    }
+
+    try {
+      const decrypted: KeyCredentials = await this.encryptor.decrypt(password, encryptedExtendPrivateKey);
+      return {
+        xprv: decrypted.credentials,
+        xpub: xpub,
+      };
+    } catch (e) {
+      throw new InvalidPasswordError();
+    }
+  }
+
+  static async getExtendedPublicKey(): Promise<string> {
+    const result = await AsyncStorage.getItem(EXTENDED_PUBLIC_KEY);
+    if (!result) {
+      throw new InvalidCredentialError('No extended public key found.');
+    }
+
+    return result;
+  }
+
+  static async clearRootKey() {
+    await AsyncStorage.multiRemove([ROOT_KEY, EXTENDED_PRIVATE_KEY, EXTENDED_PUBLIC_KEY]);
   }
 }
 

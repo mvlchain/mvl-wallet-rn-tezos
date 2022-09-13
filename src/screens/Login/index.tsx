@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, StyleSheet, Text, View } from 'react-native';
 
@@ -14,10 +14,23 @@ function Login({ login }: { login: () => void }) {
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  // TEST only
+  useEffect(() => {
+    try {
+      (async () => {
+        const rootKey = await ShareRepository.getRootKey('000000');
+        setKey(rootKey);
+      })();
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+
   const signIn = async () => {
     try {
       const key = await auth.signIn(AUTH_PROVIDER.GOOGLE, () => Promise.resolve('000000'));
       setKey(key);
+      await ShareRepository.saveRootKey(key, '000000');
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
@@ -28,6 +41,7 @@ function Login({ login }: { login: () => void }) {
     try {
       const key = await auth.signIn(AUTH_PROVIDER.APPLE, () => Promise.resolve('000000'));
       setKey(key);
+      await ShareRepository.saveRootKey(key, '000000');
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));

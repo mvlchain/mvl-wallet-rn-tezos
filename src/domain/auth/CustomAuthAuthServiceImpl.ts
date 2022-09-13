@@ -173,6 +173,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
 
   async logout(): Promise<void> {
     await ShareRepository.clearDeviceShare();
+    await ShareRepository.clearRootKey();
   }
 
   async deleteAccount(): Promise<void> {
