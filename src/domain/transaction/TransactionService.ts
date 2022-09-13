@@ -1,5 +1,6 @@
 import { InMemorySigner } from '@taquito/signer';
 import { TezosToolkit } from '@taquito/taquito';
+import Decimal from 'decimal.js';
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 
@@ -71,8 +72,7 @@ export class TezosTaquitoTransactionsImpl implements TransactionService {
     const txHash = await Tezos.wallet
       .transfer({
         to: to,
-        // FIXME: use decimal js?
-        amount: parseFloat(formatEther(value)),
+        amount: new Decimal(formatEther(value)).toNumber(),
         fee: Number(this.selectedGasFeeInfo.gasPrice),
       })
       .send()
