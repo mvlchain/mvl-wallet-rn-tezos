@@ -1,5 +1,6 @@
 import './shim';
 
+import Decimal from 'decimal.js';
 import { AppRegistry } from 'react-native';
 
 import appconfig from '@@config/appconfig';
@@ -7,6 +8,8 @@ import { setAxiosConfig } from '@@utils/request';
 
 import { name as appName } from './app.json';
 import App from './src/App';
+
+Decimal.set({ precision: 1e9, toExpPos: 9e15 });
 
 (() => {
   const { username, password } = appconfig().auth.basic;
