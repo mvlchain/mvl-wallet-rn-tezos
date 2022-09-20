@@ -35,8 +35,8 @@ const useStore = createStore(
       }),
       version,
       migrate: createMigrate(migrations),
-    },
-  ),
+    }
+  )
 );
 
 export default useStore;

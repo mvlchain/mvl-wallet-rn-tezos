@@ -11,6 +11,7 @@ import BN from 'bn.js';
 import { ethers } from 'ethers';
 
 import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/Clutch';
+import { usePinStore, Mode } from '@@store/pin';
 
 import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
 import { ETHEREUM } from '../blockchain/BlockChain';
@@ -140,15 +141,14 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     return res.privKey.toString('hex', 64);
   }
 
-  private async whenDriverShareNotExists(provider: AuthProvider, requirePassword: RequirePassword): Promise<string> {
+  private async whenDriverShareNotExists(provider: AuthProvider): Promise<string> {
     const authResult = await this.tkeyRepository.triggerProviderLogin(provider);
     const postboxKey = authResult.postboxKey,
       providerIdToken = authResult.providerIdToken,
       providerAccessToken = authResult.providerAccessToken,
       providerUserIdentifier = authResult.providerUserIdentifier;
 
-    const password = await requirePassword();
-    await SecureKeychain.setGenericPassword(password, SECURE_TYPES.REMEMBER_ME);
+    const password = await this.requirePassword();
     const signedUp = await TkeyRepository.checkSignedUp(postboxKey);
     if (signedUp) {
       return await this.whenUserExists(provider, postboxKey, password, providerIdToken, providerAccessToken);
@@ -157,13 +157,13 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     }
   }
 
-  async signIn(provider: AuthProvider, requirePassword: RequirePassword): Promise<string> {
+  async signIn(provider: AuthProvider): Promise<string> {
     try {
       const deviceShare = await ShareRepository.fetchDeviceShare();
       if (deviceShare !== undefined) {
         return CustomAuthAuthServiceImpl.whenDeviceShareExists(deviceShare);
       } else {
-        return this.whenDriverShareNotExists(provider, requirePassword);
+        return this.whenDriverShareNotExists(provider);
       }
     } catch (error) {
       console.error(error, 'login caught');
@@ -340,5 +340,23 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
       success: true,
       mnemonic: pkeyToMnemonic(pkey.privKey),
     };
+  }
+
+  async requirePassword() {
+    let pinModalResolver, pinModalRejector;
+    const pinModalObserver = new Promise((resolve, reject) => {
+      pinModalResolver = resolve;
+      pinModalRejector = reject;
+    });
+    let mode: Mode;
+    const credentials = await SecureKeychain.getGenericPassword();
+    mode = credentials === null ? 'choose' : 'enter';
+
+    usePinStore.getState().init({ mode, pinModalResolver, pinModalRejector });
+    usePinStore.getState().open();
+
+    const password = await pinModalObserver;
+    // usePinStore.destroy();
+    return password as string;
   }
 }
