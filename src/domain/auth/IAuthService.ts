@@ -30,8 +30,9 @@ export class DeviceShareHolder {
 
 export default interface IAuthService {
   // best effort to get private key
-  signIn(provider: AuthProvider, requirePassword: RequirePassword): Promise<string>;
+  signIn(provider: AuthProvider): Promise<string>;
   logout(): Promise<void>;
   test(): Promise<void>;
   deleteAccount(): Promise<void>;
+  requirePassword(): Promise<string>;
 }

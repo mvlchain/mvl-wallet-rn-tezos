@@ -7,6 +7,8 @@ import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 import ShareRepository from '@@domain/auth/ShareRepository';
 import useStore from '@@store/index';
 
+import PinModal from './pin';
+
 function Login({ login }: { login: () => void }) {
   const auth: IAuthService = new CustomAuthAuthServiceImpl();
 
@@ -28,7 +30,7 @@ function Login({ login }: { login: () => void }) {
 
   const signIn = async () => {
     try {
-      const key = await auth.signIn(AUTH_PROVIDER.GOOGLE, () => Promise.resolve('000000'));
+      const key = await auth.signIn(AUTH_PROVIDER.GOOGLE);
       setKey(key);
       await ShareRepository.saveRootKey(key, '000000');
     } catch (e) {
@@ -39,7 +41,7 @@ function Login({ login }: { login: () => void }) {
 
   const signInApple = async () => {
     try {
-      const key = await auth.signIn(AUTH_PROVIDER.APPLE, () => Promise.resolve('000000'));
+      const key = await auth.signIn(AUTH_PROVIDER.APPLE);
       setKey(key);
       await ShareRepository.saveRootKey(key, '000000');
     } catch (e) {
@@ -58,6 +60,7 @@ function Login({ login }: { login: () => void }) {
 
   return (
     <View style={styles.container}>
+      <PinModal />
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text style={styles.itemLabel}>Key: {key}</Text>
