@@ -13,7 +13,7 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   overrides: [
     {
-      files: ['*.{js,ts}', '*Form*.tsx'],
+      files: ['*.js', '[!use]*.ts', '*Form*.tsx'], // Form component or non-hooks ts file
       rules: {
         'max-lines': 'off',
       },
