@@ -59,8 +59,13 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     const tKey = await TkeyRepository.initTkey(postboxKey, false);
     CustomAuthAuthServiceImpl.logTKey(tKey);
 
+    // 만약 여기에 generateNewShare를 부르기 전에 생성되어있는 share를 쓰면 안됨 (polynomialId가 바뀔 예정이기 때문)
+
     console.log('gen serverShare');
+    // 위에 initTkey를 통해 init을하면 기본 생성되는 share가 2개
     const newShare = await tKey.generateNewShare();
+    // generateNewShare를 불러주면 총 3개 share 상태
+    // generateNewShare를 부르면 polynomialId (group)이 무조건 바뀜
     const serverShare = newShare.newShareStores[newShare.newShareIndex.toString('hex', 64)];
     console.log('update serverShare', serverShare);
 
@@ -87,7 +92,8 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
       throw new Error(`polyId not matched: ${polyId}, ${latestPolyId}`);
     }
     const shareIndexs = tKey.metadata.getShareIndexesForPolynomial(polyId);
-    const usedIndexes = ['1', serverShare.share.shareIndex.toString('hex', 64)];
+    const torusShareFixedIndex = '1';
+    const usedIndexes = [torusShareFixedIndex, serverShare.share.shareIndex.toString('hex', 64)];
     const deviceShareIndex = shareIndexs.find((shareIndex) => !usedIndexes.includes(shareIndex));
     if (deviceShareIndex === undefined) {
       throw new Error('deviceShareIndex not identified');
@@ -125,6 +131,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
       // torus, server share already exist. So generate new device share
       const newDeviceShareRes = await tKey.generateNewShare();
       deviceShare = newDeviceShareRes.newShareStores[newDeviceShareRes.newShareIndex.toString('hex', 64)];
+      // TODO: server share를 새로 저장해줘야함 (generateNewShare를 통해 polyId가 바뀌었을테니)
     } else if (shareIndexs.length === 3) {
       // '1' index used for torus share
       const usedIndexes = ['1', serverShare.share.shareIndex.toString('hex', 64)];
@@ -141,7 +148,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     return res.privKey.toString('hex', 64);
   }
 
-  private async whenDriverShareNotExists(provider: AuthProvider): Promise<string> {
+  private async whenDeviceShareNotExists(provider: AuthProvider): Promise<string> {
     const authResult = await this.tkeyRepository.triggerProviderLogin(provider);
     const postboxKey = authResult.postboxKey,
       providerIdToken = authResult.providerIdToken,
@@ -163,7 +170,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
       if (deviceShare !== undefined) {
         return CustomAuthAuthServiceImpl.whenDeviceShareExists(deviceShare);
       } else {
-        return this.whenDriverShareNotExists(provider);
+        return this.whenDeviceShareNotExists(provider);
       }
     } catch (error) {
       console.error(error, 'login caught');
@@ -240,6 +247,7 @@ export class CustomAuthAuthServiceImpl implements IAuthService {
     }
   }
 
+  // test용으로 썼던거라 사용하는부분 지우고 이 함수도 지워도 됨: generateNewMnemonic 으로 대체
   private async createNewWallet(
     postboxKey: string,
     password: string,
