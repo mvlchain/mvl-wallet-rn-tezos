@@ -31,6 +31,7 @@ export default class TkeyRepository {
     }
   }
 
+  // mnemonic = priv key = BigNumber
   static async initTkey(postboxKey: string, onlySignIn: boolean): Promise<ThresholdKey> {
     const tKey = new ThresholdKey({
       serviceProvider: this.serviceProviderWithPostboxKey(postboxKey),
