@@ -81,19 +81,22 @@ const common = {
   fmSBold: 'AppleSDGothicNeoSB00',
   fmExBold: 'AppleSDGothicNeoEB00',
   fmHeavey: 'AppleSDGothicNeoH00',
-};
 
-const darkColors = {
-  // font color
-  fc01: '#000000',
-  fc02: '#ffffff',
-  fc03: '#0089E7',
+  // common font color
+  cfc01: '#ffffff',
+  cfc02: '#808080',
+  cfc03: '#FF3F3F',
 
-  // background color
-  bg01: '#ffffff',
+  // common backgrond color
+  cbg01: '#0089E7',
+  cbg02: '#FFC400',
+  cbg03: '#E6E6E6',
+  cbg04: '#CCE7FA',
+  cbg05: '#ffffff',
 
-  // line color
-  lc01: '#0089E7',
+  // common line color
+  clc01: '#0089E7',
+  clc02: '#FF3F3F',
 };
 
 const lightColors = {
@@ -104,9 +107,30 @@ const lightColors = {
 
   // background color
   bg01: '#ffffff',
+  bg02: '#E6E6E6',
+  bg03: '#CCE7FA',
+  bg04: '#333333',
 
   // line color
   lc01: '#0089E7',
+  lc02: '#E6E6E6',
+};
+
+const darkColors = {
+  // font color
+  fc01: '#ffffff',
+  fc02: '#000000',
+  fc03: '#0089E7',
+
+  // background color
+  bg01: '#000000',
+  bg02: '#1A1A1A',
+  bg03: '#001B2E',
+  bg04: '#CCCCCC',
+
+  // line color
+  lc01: '#0089E7',
+  lc02: '#1A1A1A',
 };
 
 export const dark = {
