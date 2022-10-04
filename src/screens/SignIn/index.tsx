@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, Text, View } from 'react-native';
+import styled from 'styled-components/native';
 
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
 import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
@@ -78,7 +79,7 @@ function SignIn({ login }: { login: () => void }) {
       <Text>{t('address')}</Text>
       <Button title='Change Language' onPress={changeLang} />
       <PinModal />
-      <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
+      <SText>{isAuthenticated ? 'Auth' : 'Unauth'}</SText>
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text style={styles.itemLabel}>Key: {key}</Text>
       <Text style={styles.errorLabel}>Error: {errorMsg}</Text>
@@ -90,6 +91,10 @@ function SignIn({ login }: { login: () => void }) {
     </View>
   );
 }
+
+const SText = styled.Text`
+  ${({ theme }) => theme.font.Paragraph.lg}
+`;
 
 const styles = StyleSheet.create({
   container: {
