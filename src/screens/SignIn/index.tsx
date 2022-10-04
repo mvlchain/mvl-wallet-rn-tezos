@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components/native';
 
-import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
-import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
-import ShareRepository from '@@domain/auth/ShareRepository';
+import { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
+import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import useStore from '@@store/index';
 
@@ -18,29 +17,27 @@ type StackProps = TRootStackNavigationProps<'AUTH'>;
 function SignIn({ login }: { login: () => void }) {
   const { t, i18n } = useTranslation();
 
-  const auth: IAuthService = new CustomAuthAuthServiceImpl();
+  const auth = useDi('AuthService');
 
   const navigation = useNavigation<StackProps>();
   const { isAuthenticated, toggle } = useStore();
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  // TEST only
-  useEffect(() => {
-    try {
-      (async () => {
-        const rootKey = await ShareRepository.getRootKey('000000');
-        setKey(rootKey);
-      })();
-    } catch (e) {
-      console.log(e);
+  const autoSignIn = async () => {
+    const res = await auth.autoSignIn();
+    if (res) {
+      setKey('Auto signin SUCCESS');
     }
+  };
+
+  useEffect(() => {
+    autoSignIn();
   }, []);
 
   const signIn = async () => {
     try {
       const key = await auth.signIn(AUTH_PROVIDER.GOOGLE);
       setKey(key);
-      await ShareRepository.saveRootKey(key, '000000');
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
@@ -51,7 +48,6 @@ function SignIn({ login }: { login: () => void }) {
     try {
       const key = await auth.signIn(AUTH_PROVIDER.APPLE);
       setKey(key);
-      await ShareRepository.saveRootKey(key, '000000');
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
@@ -59,7 +55,7 @@ function SignIn({ login }: { login: () => void }) {
   };
 
   const deleteAccount = async () => {
-    await auth.deleteAccount();
+    await auth.signOut();
   };
 
   const logout = async () => {
