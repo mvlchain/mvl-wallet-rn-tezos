@@ -1,13 +1,12 @@
 import ShareStore from '@tkey/common-types/src/base/ShareStore';
 import { inject, injectable } from 'tsyringe';
 
+import { AuthProvider, AUTH_PROVIDER } from '@@domain/auth/constants/constants';
+import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
+import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
+import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
+import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/Clutch';
-
-import { ETHEREUM } from '../../blockchain/BlockChain';
-import { AuthProvider, AUTH_PROVIDER } from '../constants/constants';
-import { DeviceShareRepository } from '../repositories/DeviceShareRepository';
-import { ServerShareRepository } from '../repositories/ServerShareRepository';
-import { TorusShareRepository } from '../repositories/TorusShareRepository';
 
 import { KeyClientUtil } from './KeyClientUtil';
 interface PostboxKeyHolder {
@@ -36,7 +35,7 @@ export interface KeyClient {
   generateKey: () => Promise<void>;
   generateMnemonic: () => Promise<string>;
   generateDevice: () => Promise<string>;
-  updateServer: (groupId: string) => Promise<void>;
+  updateServer: () => Promise<void>;
   restoreServer: () => Promise<void>;
   delete: () => Promise<void>;
 }
@@ -180,16 +179,15 @@ export class KeyClientImpl implements KeyClient {
     const newPolynomialId = this.deviceShareIndex;
     return newPolynomialId;
   }
-  async updateServer(groupId: string) {
+  async updateServer() {
     if (!this.serverShare || !this.deviceShare || !this.deviceShareIndex) {
       throw new Error('serverShare, deviceShare, deviceShareindex is required');
     }
 
-    this.serverShare.polynomialID = groupId;
     await this.serverShareRepository.updateServerShare(
       this.serverShare.share.share.toString('hex', 64),
       this.serverShare.share.shareIndex.toString('hex', 64),
-      groupId,
+      this.serverShare.polynomialID,
       this.deviceShareIndex
     );
   }

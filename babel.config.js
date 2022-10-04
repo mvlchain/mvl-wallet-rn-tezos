@@ -28,6 +28,7 @@ module.exports = {
           '@@domain': './src/domain',
           '@@navigation': './src/navigation',
           '@@constants': './src/constants',
+          '@@generated': './src/generated',
         },
       },
     ],
