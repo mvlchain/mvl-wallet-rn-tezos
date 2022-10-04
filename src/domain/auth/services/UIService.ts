@@ -1,6 +1,5 @@
 import { usePinStore, Mode } from '@@store/pin';
 
-import SecureKeychain, { SECURE_TYPES } from '../../../utils/SecureKeychain';
 export interface UIService {
   triggerGetPincode: () => Promise<string>;
   triggerSetPincode: () => Promise<string>;
