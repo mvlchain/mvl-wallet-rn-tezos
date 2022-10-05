@@ -4,9 +4,13 @@ import { Pressable, TextProps, ViewProps } from 'react-native';
 import Styled, { css } from 'styled-components/native';
 
 import { CommonColor, ThemeColor } from '@@style/theme';
+import { valueOf } from '@@types/etc';
 
-type ButtonType = 'primary' | 'secondary' | 'outline' | 'black' | 'text' | 'outlineText';
-type ButtonSizeType = 'small' | 'default';
+const BUTTON_SIZE = { SMALL: 'small', DEFAULT: 'default' } as const;
+const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
+
+type ButtonType = typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];
+type ButtonSizeType = typeof BUTTON_SIZE[keyof typeof BUTTON_SIZE];
 interface Wrapper {
   size?: ButtonSizeType;
 }
@@ -90,23 +94,11 @@ const styles: BaseStyle[] = [
       txColorDisabled: 'fc04',
     },
   },
-  {
-    type: 'text',
-    bg: {
-      bgColor: 'bg05',
-      bgColorPressed: 'bg06',
-      bgColorDisabled: 'bg07',
-    },
-    tx: {
-      txColor: 'fc02',
-      txColorDisabled: 'fc04',
-    },
-  },
 ];
 
 const BaseButtonContainer = Styled.Pressable<Wrapper>`
 ${({ size }) =>
-  size === 'small'
+  size === BUTTON_SIZE.SMALL
     ? null
     : css`
         width: 100%;
@@ -117,16 +109,16 @@ width:100%;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  height: ${({ size }) => (size === 'small' ? '40px' : '60px')};
+  height: ${({ size }) => (size === BUTTON_SIZE.SMALL ? '40px' : '60px')};
   padding: 12px 16px ;
   background-color:${({ theme, pressed, disabled, bgColor, bgColorPressed, bgColorDisabled }) =>
     disabled ? theme.color[bgColorDisabled] : !disabled && pressed ? theme.color[bgColorPressed] : theme.color[bgColor]};
   border-color:${({ theme, lcColor }) => (lcColor ? theme.color[lcColor] : 'transparent')};
-  border-style:solid;
-  border-width:1px;
+  border-style: solid;
+  border-width: 1px;
 `;
 const Text = Styled.Text<Label>`
-  ${({ theme, size }) => (size === 'small' ? theme.font.Label.sm : theme.font.Label.lg)};
+  ${({ theme, size }) => (size === BUTTON_SIZE.SMALL ? theme.font.Label.sm : theme.font.Label.lg)};
   color: ${({ theme, disabled, txColor, txColorDisabled }) => (disabled ? theme.color[txColorDisabled] : theme.color[txColor])};
   font-Family:${({ theme }) => theme.fmRegular};
 `;
