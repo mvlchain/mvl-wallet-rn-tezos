@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components/native';
 
+import { PrimaryButton, SecondaryButton, OutlineButton, BlackButton } from '@@components/Buttons/BaseButton';
+import { GoogleButton, AppleButton } from '@@components/Buttons/SocialButton';
+import { TextButton } from '@@components/Buttons/TextButton';
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
 import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 import ShareRepository from '@@domain/auth/ShareRepository';
@@ -79,6 +82,16 @@ function SignIn({ login }: { login: () => void }) {
       <Text>{t('address')}</Text>
       <Button title='Change Language' onPress={changeLang} />
       <PinModal />
+      <View style={styles.row}>
+        <PrimaryButton label={'gdsgdagag'} onPress={() => {}} disabled={false} wrapperStyle={{ width: '50%' }} />
+        <SecondaryButton label={'gdsgdagag'} onPress={() => {}} disabled={false} wrapperStyle={{ width: '50%' }} />
+      </View>
+      <TextButton label={'label'} onPress={() => {}} disabled={false} />
+      <PrimaryButton label={'Label'} onPress={() => {}} disabled={false} size={'small'} />
+      <OutlineButton label={'gdsgdagag'} onPress={() => {}} disabled={false} />
+      <BlackButton label={'gdsgdagag'} onPress={() => {}} disabled={false} />
+      <GoogleButton onPress={() => {}} />
+      <AppleButton onPress={() => {}} />
       <SText>{isAuthenticated ? 'Auth' : 'Unauth'}</SText>
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text style={styles.itemLabel}>Key: {key}</Text>
@@ -112,6 +125,9 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 16,
     fontWeight: '600',
+  },
+  row: {
+    flexDirection: 'row',
   },
 });
 
