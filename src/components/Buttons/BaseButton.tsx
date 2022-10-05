@@ -1,50 +1,9 @@
 import React from 'react';
 
-import { Pressable, TextProps, ViewProps } from 'react-native';
-import Styled, { css } from 'styled-components/native';
+import { BaseButtonContainer, BaseButton, BaseButtonLabel } from './styled';
+import { BaseStyle, ComponentProps } from './type';
 
-import { CommonColor, ThemeColor } from '@@style/theme';
-import { valueOf } from '@@types/etc';
-
-const BUTTON_SIZE = { SMALL: 'small', DEFAULT: 'default' } as const;
-const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
-
-type ButtonType = typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];
-type ButtonSizeType = typeof BUTTON_SIZE[keyof typeof BUTTON_SIZE];
-interface Wrapper {
-  size?: ButtonSizeType;
-}
-interface BackGround {
-  bgColor: CommonColor | ThemeColor;
-  bgColorPressed: CommonColor | ThemeColor;
-  bgColorDisabled: CommonColor | ThemeColor;
-  lcColor?: CommonColor | ThemeColor;
-  pressed?: boolean;
-  disabled?: boolean;
-  size?: ButtonSizeType;
-}
-interface Label {
-  txColor: CommonColor | ThemeColor;
-  txColorDisabled: CommonColor | ThemeColor;
-  disabled?: boolean;
-  size?: ButtonSizeType;
-}
-interface BaseStyle {
-  type: ButtonType;
-  bg: BackGround;
-  tx: Label;
-}
-interface ComponentProps {
-  label: string;
-  disabled: boolean;
-  wrapperStyle?: ViewProps['style'];
-  buttonStyle?: ViewProps['style'];
-  textStyle?: TextProps['style'];
-  size?: ButtonSizeType;
-  onPress(): void;
-}
-
-const styles: BaseStyle[] = [
+export const styles: BaseStyle[] = [
   {
     type: 'primary',
     bg: {
@@ -96,33 +55,6 @@ const styles: BaseStyle[] = [
   },
 ];
 
-const BaseButtonContainer = Styled.Pressable<Wrapper>`
-${({ size }) =>
-  size === BUTTON_SIZE.SMALL
-    ? null
-    : css`
-        width: 100%;
-      `};
-`;
-const ButtonBase = Styled.View<BackGround>`
-width:100%;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  height: ${({ size }) => (size === BUTTON_SIZE.SMALL ? '40px' : '60px')};
-  padding: 12px 16px ;
-  background-color:${({ theme, pressed, disabled, bgColor, bgColorPressed, bgColorDisabled }) =>
-    disabled ? theme.color[bgColorDisabled] : !disabled && pressed ? theme.color[bgColorPressed] : theme.color[bgColor]};
-  border-color:${({ theme, lcColor }) => (lcColor ? theme.color[lcColor] : 'transparent')};
-  border-style: solid;
-  border-width: 1px;
-`;
-const Text = Styled.Text<Label>`
-  ${({ theme, size }) => (size === BUTTON_SIZE.SMALL ? theme.font.Label.sm : theme.font.Label.lg)};
-  color: ${({ theme, disabled, txColor, txColorDisabled }) => (disabled ? theme.color[txColorDisabled] : theme.color[txColor])};
-  font-Family:${({ theme }) => theme.fmRegular};
-`;
-
 const generator = () =>
   styles.map(
     (baseStyle) =>
@@ -130,11 +62,11 @@ const generator = () =>
         return (
           <BaseButtonContainer onPress={onPress} size={size} style={wrapperStyle}>
             {({ pressed }) => (
-              <ButtonBase pressed={pressed} disabled={disabled} {...baseStyle.bg} size={size} style={buttonStyle}>
-                <Text {...baseStyle.tx} size={size} style={textStyle} disabled={disabled}>
+              <BaseButton pressed={pressed} disabled={disabled} {...baseStyle.bg} size={size} style={buttonStyle}>
+                <BaseButtonLabel {...baseStyle.tx} size={size} style={textStyle} disabled={disabled}>
                   {label}
-                </Text>
-              </ButtonBase>
+                </BaseButtonLabel>
+              </BaseButton>
             )}
           </BaseButtonContainer>
         );
