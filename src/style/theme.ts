@@ -89,6 +89,8 @@ const commonColors = {
   cfc03: '#FF3F3F',
   cfc04: '#B3B3B3',
   cfc05: '#000000',
+  cfc06: '#0089E7',
+  cfc07: '#CCE7FA',
 
   // common backgrond color
   cbg01: '#0089E7',
