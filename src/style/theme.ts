@@ -112,6 +112,7 @@ const lightColors = {
   fc03: '#0089E7',
   fc04: '#ffffff',
   fc05: '#B3B3B3',
+  fc06: '#0089E7',
 
   // background color
   bg01: '#ffffff',
@@ -136,6 +137,7 @@ const darkColors = {
   fc03: '#0089E7',
   fc04: '#B3B3B3',
   fc05: '#4D4D4D',
+  fc06: '#001B2E',
 
   // background color
   bg01: '#000000',
