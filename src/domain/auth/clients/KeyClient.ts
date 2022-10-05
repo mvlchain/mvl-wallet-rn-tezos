@@ -16,6 +16,9 @@ interface PostboxKeyHolder {
   providerAccessToken?: string;
   providerUserIdentifier?: string;
 }
+
+const serverShareRequiredError = new Error('servershare is required');
+
 export interface KeyClient {
   postboxKeyHolder: PostboxKeyHolder | null;
   serverShare: ShareStore | null;
@@ -38,6 +41,8 @@ export interface KeyClient {
   updateServer: () => Promise<void>;
   restoreServer: () => Promise<void>;
   delete: () => Promise<void>;
+  signOut: () => void;
+  findDeviceShareByServerShare: () => void;
 }
 @injectable()
 export class KeyClientImpl implements KeyClient {
@@ -86,14 +91,14 @@ export class KeyClientImpl implements KeyClient {
   }
   checkSet() {
     if (!this.serverShare) {
-      throw new Error('servershare is required');
+      throw serverShareRequiredError;
     }
     const count = this.torusShareRepository.countTotalSharesInGroupOf(this.serverShare);
     switch (count) {
       case 2:
-        return false;
-      case 3:
         return true;
+      case 3:
+        return false;
       default:
         throw new Error('???오ㅐ때문에 없서');
     }
@@ -145,7 +150,7 @@ export class KeyClientImpl implements KeyClient {
   }
   async setKeyByServer() {
     if (!this.serverShare) {
-      throw new Error('srevershare is missing');
+      throw serverShareRequiredError;
     }
     await this.torusShareRepository.assembleShares(this.serverShare);
   }
@@ -219,5 +224,16 @@ export class KeyClientImpl implements KeyClient {
     const postboxKey = deviceShare.postboxKey;
     await this.torusShareRepository.delete(postboxKey);
     this.deviceShareRepository.clearDeviceShare();
+  }
+
+  signOut() {
+    this.deviceShareRepository.clearDeviceShare();
+  }
+
+  async findDeviceShareByServerShare() {
+    if (!this.serverShare) {
+      throw serverShareRequiredError;
+    }
+    this.deviceShare = await this.torusShareRepository.findUknownShareByKnown(this.serverShare);
   }
 }

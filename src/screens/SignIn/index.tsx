@@ -55,7 +55,7 @@ function SignIn({ login }: { login: () => void }) {
   };
 
   const deleteAccount = async () => {
-    await auth.signOut();
+    await auth.deleteAccount();
   };
 
   const logout = async () => {
