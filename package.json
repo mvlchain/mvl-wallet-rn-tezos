@@ -13,7 +13,8 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto,http,https,url,assert,process --hack --yarn",
-    "openapi:generate": "node ./scripts/openapi-typescript-generator.mjs"
+    "openapi:generate": "node ./scripts/openapi-typescript-generator.mjs",
+    "download:i18n": "node translation/download.js"
   },
   "dependencies": {
     "@haskkor/react-native-pincode": "^1.22.6",
@@ -100,6 +101,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "google-spreadsheet": "^3.3.0",
     "husky": "^8.0.1",
     "jest": "^28.1.3",
     "lint-staged": "^13.0.3",

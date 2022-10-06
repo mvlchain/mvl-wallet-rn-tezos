@@ -65,7 +65,7 @@ function Login({ login }: { login: () => void }) {
 
   return (
     <View style={styles.container}>
-      <Text>{t('welcome')}</Text>
+      <Text>{t('address')}</Text>
       <Button title='Change Language' onPress={changeLang} />
       <PinModal />
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>

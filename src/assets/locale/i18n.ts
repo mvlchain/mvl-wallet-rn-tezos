@@ -4,9 +4,21 @@ import { initReactI18next } from 'react-i18next';
 import { en, ko, km } from './languages';
 
 const resources = {
-  ...en,
-  ...ko,
-  ...km,
+  en: {
+    translation: {
+      ...en,
+    },
+  },
+  ko: {
+    translation: {
+      ...ko,
+    },
+  },
+  km: {
+    translation: {
+      ...km,
+    },
+  },
 };
 
 use(initReactI18next).init({
