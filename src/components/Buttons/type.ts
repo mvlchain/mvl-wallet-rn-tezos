@@ -3,6 +3,8 @@ import React from 'react';
 import { TextProps, ViewProps } from 'react-native';
 
 import { CommonColor, ThemeColor } from '@@style/theme';
+
+import { BaseButton } from './styled';
 //Base
 export const BUTTON_SIZE = { SMALL: 'small', DEFAULT: 'default' } as const;
 export const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
@@ -27,13 +29,19 @@ export interface BaseButtonLabelProps {
   disabled?: boolean;
   size?: ButtonSizeType;
 }
-export interface BaseStyle {
-  type: ButtonType;
+export interface BaseButtonStyle {
   bg: BaseButtonProps;
   tx: BaseButtonLabelProps;
 }
 
-export interface ComponentProps {
+export interface BaseButtonStyleObj {
+  primary: BaseButtonStyle;
+  secondary: BaseButtonStyle;
+  outline: BaseButtonStyle;
+  black: BaseButtonStyle;
+}
+
+export interface BaseButtonComponentProps {
   label?: string;
   disabled?: boolean;
   wrapperStyle?: ViewProps['style'];

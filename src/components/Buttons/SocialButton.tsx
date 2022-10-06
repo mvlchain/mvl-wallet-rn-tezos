@@ -1,11 +1,10 @@
 import { SocialAppleDark, SocialAppleLight, SocialGoogle } from '@@assets/image';
 
-import { styles } from './BaseButton';
-import { BaseButtonContainer, IconWrapper, BoldLabel, SocialButton, TextWrapper, BaseButtonLabel } from './styled';
-import { ComponentProps } from './type';
+import { BaseButtonContainer, IconWrapper, BoldLabel, SocialButton, TextWrapper, BaseButtonLabel, baseButtonStyleObj } from './styled';
+import { BaseButtonComponentProps } from './type';
 
-export function GoogleButton({ onPress, disabled, wrapperStyle }: ComponentProps) {
-  const outlineStyle = styles[2];
+export function GoogleButton({ onPress, disabled, wrapperStyle }: BaseButtonComponentProps) {
+  const outlineStyle = baseButtonStyleObj.outline;
   return (
     <BaseButtonContainer onPress={onPress} style={wrapperStyle}>
       {({ pressed }) => (
@@ -27,8 +26,8 @@ export function GoogleButton({ onPress, disabled, wrapperStyle }: ComponentProps
   );
 }
 
-export function AppleButton({ onPress, disabled, wrapperStyle }: ComponentProps) {
-  const blackStyle = styles[3];
+export function AppleButton({ onPress, disabled, wrapperStyle }: BaseButtonComponentProps) {
+  const blackStyle = baseButtonStyleObj.black;
   return (
     <BaseButtonContainer onPress={onPress} style={wrapperStyle}>
       {({ pressed }) => (
