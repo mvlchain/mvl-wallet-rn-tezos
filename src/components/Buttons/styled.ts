@@ -1,6 +1,14 @@
 import Styled, { css } from 'styled-components/native';
 
-import { BaseButtonWrapper, BaseButtonProps, BaseButtonLabelProps, BUTTON_TYPE, BUTTON_SIZE, IconWrapperProps, TextButtonLabelProps } from './type';
+import {
+  BaseButtonWrapper,
+  BaseButtonProps,
+  BaseButtonLabelProps,
+  BaseButtonStyleObj,
+  BUTTON_SIZE,
+  IconWrapperProps,
+  TextButtonLabelProps,
+} from './type';
 
 //Base
 export const BaseButtonContainer = Styled.Pressable<BaseButtonWrapper>`
@@ -30,6 +38,54 @@ export const BaseButtonLabel = Styled.Text<BaseButtonLabelProps>`
   font-Family:${({ theme }) => theme.fmRegular};
 `;
 
+export const baseButtonStyleObj: BaseButtonStyleObj = {
+  primary: {
+    bg: {
+      bgColor: 'white',
+      bgColorPressed: 'primary',
+      bgColorDisabled: 'lightestDarkest',
+    },
+    tx: {
+      txColor: 'white',
+      txColorDisabled: 'grey300Grey700',
+    },
+  },
+  secondary: {
+    bg: {
+      bgColor: 'grey100Grey900',
+      bgColorPressed: 'grey300Grey800',
+      bgColorDisabled: 'grey100Grey900',
+    },
+    tx: {
+      txColor: 'black',
+      txColorDisabled: 'grey300Grey700',
+    },
+  },
+  outline: {
+    bg: {
+      bgColor: 'white',
+      bgColorPressed: 'grey100',
+      bgColorDisabled: 'white',
+      lcColor: 'grey100Transparent',
+    },
+    tx: {
+      txColor: 'black',
+      txColorDisabled: 'grey300',
+    },
+  },
+  black: {
+    bg: {
+      bgColor: 'grey900White',
+      bgColorPressed: 'blackGrey100',
+      bgColorDisabled: 'grey300White',
+    },
+    tx: {
+      txColor: 'whiteBlack',
+      txColorDisabled: 'whiteGrey300',
+    },
+  },
+};
+
 //Social
 export const SocialButton = Styled(BaseButton)`
   flex-direction: row;
@@ -57,6 +113,6 @@ export const TextButtonContainer = Styled.Pressable`
 
 export const TextButtonLabel = Styled.Text<TextButtonLabelProps>`
   ${({ theme }) => theme.font.Label.sm};
-  color: ${({ theme, disabled }) => (disabled ? theme.color.fc06 : theme.color.cfc06)};
-  background-color: ${({ theme, pressed }) => (pressed ? theme.color.bg02 : 'transparent')};
+  color: ${({ theme, disabled }) => (disabled ? theme.color.primaryDarkest : theme.color.primary)};
+  background-color: ${({ theme, pressed }) => (pressed ? theme.color.grey100Grey900 : 'transparent')};
 `;

@@ -1,5 +1,7 @@
 import { fontSize } from '@@utils/ui';
 
+import { commonColors, lightColors, darkColors } from './colors';
+
 const commonFont = {
   Paragraph: {
     md: {
@@ -81,79 +83,6 @@ const commonFontFamily = {
   fmSBold: 'AppleSDGothicNeoSB00',
   fmExBold: 'AppleSDGothicNeoEB00',
   fmHeavey: 'AppleSDGothicNeoH00',
-};
-const commonColors = {
-  // common font color
-  cfc01: '#ffffff',
-  cfc02: '#808080',
-  cfc03: '#FF3F3F',
-  cfc04: '#B3B3B3',
-  cfc05: '#000000',
-  cfc06: '#0089E7',
-  cfc07: '#CCE7FA',
-
-  // common backgrond color
-  cbg01: '#0089E7',
-  cbg02: '#FFC400',
-  cbg03: '#E6E6E6',
-  cbg04: '#CCE7FA',
-  cbg05: '#ffffff',
-  cbg06: '#0060A2',
-  cbg07: '#B3B3B3',
-
-  // common line color
-  clc01: '#0089E7',
-  clc02: '#FF3F3F',
-};
-const lightColors = {
-  // font color
-  fc01: '#000000',
-  fc02: '#ffffff',
-  fc03: '#0089E7',
-  fc04: '#ffffff',
-  fc05: '#B3B3B3',
-  fc06: '#0089E7',
-
-  // background color
-  bg01: '#ffffff',
-  bg02: '#E6E6E6',
-  bg03: '#CCE7FA',
-  bg04: '#333333',
-  bg05: '#1A1A1A',
-  bg06: '#000000',
-  bg07: '#B3B3B3',
-  bg08: '#B3B3B3',
-  bg09: '#CCE7FA',
-
-  // line color
-  lc01: '#0089E7',
-  lc02: '#E6E6E6',
-  lc03: '#E6E6E6',
-};
-const darkColors = {
-  // font color
-  fc01: '#ffffff',
-  fc02: '#000000',
-  fc03: '#0089E7',
-  fc04: '#B3B3B3',
-  fc05: '#4D4D4D',
-  fc06: '#001B2E',
-
-  // background color
-  bg01: '#000000',
-  bg02: '#1A1A1A',
-  bg03: '#001B2E',
-  bg04: '#CCCCCC',
-  bg05: '#ffffff',
-  bg06: '#E6E6E6',
-  bg07: '#ffffff',
-  bg08: '#333333',
-  bg09: '#001B2E',
-
-  // line color
-  lc01: '#0089E7',
-  lc02: '#1A1A1A',
-  lc03: 'transparent',
 };
 
 const common = {
