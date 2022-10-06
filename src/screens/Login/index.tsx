@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
@@ -10,12 +11,12 @@ import useStore from '@@store/index';
 import PinModal from './pin';
 
 function Login({ login }: { login: () => void }) {
+  const { t, i18n } = useTranslation();
   const auth: IAuthService = new CustomAuthAuthServiceImpl();
 
   const { isAuthenticated, toggle } = useStore();
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-
   // TEST only
   useEffect(() => {
     try {
@@ -58,8 +59,14 @@ function Login({ login }: { login: () => void }) {
     await auth.logout();
   };
 
+  const changeLang = () => {
+    i18n.changeLanguage(i18n.language === 'en' ? 'ko' : 'en');
+  };
+
   return (
     <View style={styles.container}>
+      <Text>{t('welcome')}</Text>
+      <Button title='Change Language' onPress={changeLang} />
       <PinModal />
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
       <Button title='Toggle Auth' onPress={() => toggle()} />
