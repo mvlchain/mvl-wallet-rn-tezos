@@ -33,6 +33,7 @@ export function AppleButton({ onPress, disabled, wrapperStyle }: BaseButtonCompo
       {({ pressed }) => (
         <SocialButton pressed={pressed} disabled={disabled} {...blackStyle.bg}>
           <IconWrapper disabled={disabled}>
+            {/* TODO: store에 theme저장되면 수정 필요 */}
             <SocialAppleLight />
           </IconWrapper>
           <TextWrapper>
