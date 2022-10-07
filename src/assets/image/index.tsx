@@ -13,9 +13,11 @@ export { default as ChevronDownBlueIcon } from './ic-chevron-down-blue.svg';
 export { default as ChevronDownBlackIcon } from './ic-chevron-down-black.svg';
 export { default as WhiteQrIcon } from './ic-qr-white.svg';
 export { default as WhiteScanIcon } from './ic-scan-white.svg';
+export { default as BlackScanIcon } from './ic-scan-black.svg';
 export { default as CheckBoxIcon } from './ic-check.svg';
 export { default as HideDark } from './ic-hide-dark.svg';
 export { default as HideLight } from './ic-hide-light.svg';
+export { default as TextFieldDelete } from './ic-text-field-delete.svg';
 export { default as PasswordDeleteDark } from './ic-password-delete-black-dark.svg';
 export { default as PasswordDeleteLight } from './ic-password-delete-black-light.svg';
 
