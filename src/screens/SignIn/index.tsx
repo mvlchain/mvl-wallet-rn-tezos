@@ -8,7 +8,7 @@ import styled from 'styled-components/native';
 import { PrimaryButton, SecondaryButton, OutlineButton, BlackButton } from '@@components/Buttons/BaseButton';
 import { GoogleButton, AppleButton } from '@@components/Buttons/SocialButton';
 import { TextButton } from '@@components/Buttons/TextButton';
-import { DecimalTextField } from '@@components/TextFields/TextField';
+import { BaseTextField } from '@@components/TextFields/BaseTextField';
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
 import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 import ShareRepository from '@@domain/auth/ShareRepository';
@@ -70,8 +70,8 @@ function SignIn({ login }: { login: () => void }) {
     await auth.logout();
   };
   const [value, setValue] = useState<any>('');
-  const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    setValue(e.target.valueOf());
+  const onChange = (input: any) => {
+    setValue(input);
   };
 
   const goToMain = () => {
@@ -91,7 +91,7 @@ function SignIn({ login }: { login: () => void }) {
         <PrimaryButton label={'gdsgdagag'} onPress={() => {}} disabled={false} wrapperStyle={{ width: '50%' }} />
         <SecondaryButton label={'gdsgdagag'} onPress={() => {}} disabled={false} wrapperStyle={{ width: '50%' }} />
       </View>
-      <DecimalTextField value={value} onChange={onChange} />
+      <BaseTextField type={'gas'} value={value} onChange={onChange} unit={'GWEI'} scanable={true} />
       <TextButton label={'label'} onPress={() => {}} disabled={false} />
       <PrimaryButton label={'Label'} onPress={() => {}} disabled={false} size={'small'} />
       <OutlineButton label={'gdsgdagag'} onPress={() => {}} disabled={false} />
