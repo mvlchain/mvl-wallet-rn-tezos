@@ -4,6 +4,7 @@ import { TextInputProps, Text } from 'react-native';
 import Styled from 'styled-components/native';
 
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
+import { Color, commonColors } from '@@style/colors';
 import { theme } from '@@style/theme';
 import { fontSize } from '@@utils/ui';
 
@@ -12,12 +13,12 @@ const inputHeight = fontSize(48) + 'px';
 const BaseInput = Styled.TextInput<BaseTextFieldProps>`
    flex:9;
 `;
-const BaseTextFieldContainer = Styled.View`
+const BaseTextFieldContainer = Styled.View<ContainerProps>`
     width: 100%;
     flex-direction: row;
     border-style : solid;
     border-width : 1px;
-    border-color : ${({ theme }) => theme.color.grey100Grey900};
+    border-color : ${({ theme, lcColor }) => (lcColor ? lcColor : theme.color.grey100Grey900)};
     border-radius : 8px;
     ${({ theme }) => theme.font.Paragraph.md};
     height: ${inputHeight};
@@ -53,13 +54,23 @@ interface BaseTextFieldProps {
   scanable?: boolean;
 }
 
+interface ContainerProps {
+  lcColor: string | null;
+}
 export function BaseTextField({ placeholder, isValid, value, onChange, scanable, style, unit, type }: BaseTextFieldComponentProps) {
+  const [lcColor, setLcColor] = useState<string | null>(null);
   const clearTextField = () => {
     onChange('');
   };
+  const onBlur = () => {
+    setLcColor(null);
+  };
+  const onFocus = () => {
+    setLcColor(commonColors.primary);
+  };
 
   return (
-    <BaseTextFieldContainer>
+    <BaseTextFieldContainer lcColor={lcColor}>
       <BaseInput
         keyboardType={KeyboardTypeByInputType[type]}
         placeholder={placeholder}
@@ -71,6 +82,8 @@ export function BaseTextField({ placeholder, isValid, value, onChange, scanable,
         scanable={scanable}
         style={style}
         selectionColor={theme.light.color.black}
+        onBlur={onBlur}
+        onFocus={onFocus}
       />
       {unit && <Unit>{unit}</Unit>}
       <TextFieldDelete onPress={clearTextField} style={{ marginLeft: 8 }} />
