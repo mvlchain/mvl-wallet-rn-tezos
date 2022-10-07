@@ -47,38 +47,30 @@ export const colorCombine = {
 
   lightestDarkest: [primary.lightest, primary.darkest],
   primaryDarkest: [primary.primary, primary.darkest],
-} as const;
+};
 
 export type ColorCombines = { [key in ColorCombineType]: Color[] };
 export type ColorCombine = { [key in ColorCombineType]: Color };
 export type ColorCombineType = keyof typeof colorCombine;
 export type Color = keyof typeof commonColors;
+
 const lightIndex = 0;
 const darkIndex = 1;
+
+const themeColorGenerator = (index: number) => {
+  const obj: Record<string, unknown> = {};
+  const keyArr = Object.keys(colorCombine) as unknown as ColorCombineType[];
+  for (const key of keyArr) {
+    obj[key] = colorCombine[key][index] as Color;
+  }
+  return obj as ColorCombine;
+};
+
+export const lightColors = themeColorGenerator(lightIndex);
+export const darkColors = themeColorGenerator(darkIndex);
 
 export const commonColors = {
   ...mono,
   ...primary,
   ...solid,
 };
-
-interface ProxeeHandler<T extends object, TOut extends object> {
-  get?<K extends keyof TOut>(target: T, p: K, receiver: TOut): TOut[K];
-  set?<K extends keyof TOut>(target: T, p: K, value: TOut[K], receiver: TOut): boolean;
-}
-interface ProxeeConstructor {
-  new <T extends object, TOut extends object>(target: T, handler: ProxeeHandler<T, TOut>): TOut;
-}
-declare let Proxee: ProxeeConstructor;
-
-export const lightColors: Record<ColorCombineType, Color> = new Proxee(colorCombine, {
-  get(target, name) {
-    return target[name][lightIndex] as Color;
-  },
-});
-
-export const darkColors: Record<ColorCombineType, Color> = new Proxee(colorCombine, {
-  get(target, name) {
-    return target[name][darkIndex] as Color;
-  },
-});
