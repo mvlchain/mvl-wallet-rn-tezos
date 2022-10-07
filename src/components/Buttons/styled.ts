@@ -41,8 +41,8 @@ export const BaseButtonLabel = Styled.Text<BaseButtonLabelProps>`
 export const baseButtonStyleObj: BaseButtonStyleObj = {
   primary: {
     bg: {
-      bgColor: 'white',
-      bgColorPressed: 'primary',
+      bgColor: 'primary',
+      bgColorPressed: 'medium',
       bgColorDisabled: 'lightestDarkest',
     },
     tx: {
