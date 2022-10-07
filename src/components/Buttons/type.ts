@@ -1,10 +1,7 @@
-import React from 'react';
-
 import { TextProps, ViewProps } from 'react-native';
 
 import { CommonColor, ThemeColor } from '@@style/theme';
 
-import { BaseButton } from './styled';
 //Base
 export const BUTTON_SIZE = { SMALL: 'small', DEFAULT: 'default' } as const;
 export const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
