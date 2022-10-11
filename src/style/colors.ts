@@ -32,6 +32,7 @@ const transparent = 'transparent';
 const { white, grey100, grey200, grey300, grey400, grey500, grey600, grey700, grey800, grey900, black } = mono;
 export const colorCombine = {
   whiteGrey300: [white, grey300],
+  whiteGrey800: [white, grey800],
   whiteBlack: [white, black],
 
   grey100Transparent: [grey100, transparent],
