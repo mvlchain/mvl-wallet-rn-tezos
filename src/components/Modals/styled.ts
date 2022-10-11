@@ -1,6 +1,7 @@
 import Styled from 'styled-components/native';
 
-//common
+import { Center, ModalTypeProps } from './type';
+
 export const ModalTitle = Styled.Text`
 ${({ theme }) => theme.font.Title.sm};
 fontFamily: ${({ theme }) => theme.fmBold};
@@ -29,30 +30,17 @@ export const Gap = Styled.View`
 width: 16px;
 `;
 
-//bottomModal
-export const BottomModalContainer = Styled.View`
-borderTopLeftRadius: 24px;
-borderTopRightRadius: 24px;
+export const ModalContainer = Styled.View<ModalTypeProps>`
+
 backgroundColor: ${({ theme }) => theme.color.whiteBlack};
 color: ${({ theme }) => theme.color.blackWhite};
-padding: 24px;
-paddingBottom: 34px;
-`;
-
-export const BottomModalBackDrop = Styled.View`
-flex: 1;
-justifyContent: flex-end;
-margin:0;
-`;
-//middleModal
-export const MiddleModalContainer = Styled.View`
 borderRadius: 24px;
-backgroundColor: ${({ theme }) => theme.color.whiteBlack};
-color: ${({ theme }) => theme.color.blackWhite};
 padding: 24px;
+paddingBottom:${({ type }) => (type === Center ? '24px' : '34px')};
 `;
 
-export const MiddleModalBackDrop = Styled.View`
+export const ModalBackDrop = Styled.View<ModalTypeProps>`
 flex: 1;
-justifyContent: center;
+justifyContent:${({ type }) => (type === Center ? 'center' : 'flex-end')};
+margin:0;
 `;

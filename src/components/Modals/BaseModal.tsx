@@ -1,20 +1,19 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
 
-import { CloseBlackIconLight } from '@@assets/image';
+import { CloseBlackIconLight, NFTImage } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/Buttons/BaseButton';
-import { useTokenBalanceList } from '@@hooks/useTokenBalanceList';
 
 import * as S from './styled';
 import * as Type from './type';
 
-export function BottomModal({ title, children, onCancel, onConfirm, onClose, isVisible }: Type.ModalComponentProps) {
+export function BaseModal({ title, children, onCancel, onConfirm, onClose, isVisible, type, image }: Type.ModalComponentProps) {
+  const margin = type === Type.Center ? 16 : 0;
   return (
-    <Modal isVisible={isVisible} backdropOpacity={0.25} style={{ justifyContent: 'flex-end', margin: 0 }}>
-      <S.BottomModalBackDrop>
-        <S.BottomModalContainer>
+    <Modal isVisible={isVisible} backdropOpacity={0.25} style={{ justifyContent: 'flex-end', margin: margin }}>
+      <S.ModalBackDrop type={type}>
+        <S.ModalContainer type={type}>
           <S.ModalTopWrapper>
             <S.ModalTitle>{title}</S.ModalTitle>
             {!!onClose && <CloseBlackIconLight onPress={onClose} />}
@@ -27,8 +26,8 @@ export function BottomModal({ title, children, onCancel, onConfirm, onClose, isV
               <PrimaryButton label={'confirm'} onPress={() => {}} disabled={false} wrapperStyle={{ flex: 1 }} />
             </S.ButtonWrapper>
           )}
-        </S.BottomModalContainer>
-      </S.BottomModalBackDrop>
+        </S.ModalContainer>
+      </S.ModalBackDrop>
     </Modal>
   );
 }
