@@ -29,13 +29,19 @@ function SeedPhrase() {
       <Mnemonic type={'show'} mnemonic={mnemonic} />
       {type && (
         <>
+          {/* TODO: image text button 만들기 */}
           <TextButton
             label='Copy to Clipboard'
             onPress={() => console.log('hello')}
             disabled={false}
             wrapperStyle={{ marginTop: height * 30, marginBottom: height * 18 }}
           />
-          <PrimaryButton label='Next' onPress={() => navigation.navigate(ROUTE_NAME.CONFIRM_SEEDPHRASE)} disabled={false} />
+          <PrimaryButton
+            label='Next'
+            onPress={() => navigation.navigate(ROUTE_NAME.CONFIRM_SEEDPHRASE)}
+            disabled={false}
+            wrapperStyle={{ marginBottom: height * 30 }}
+          />
         </>
       )}
     </STC.Container>
