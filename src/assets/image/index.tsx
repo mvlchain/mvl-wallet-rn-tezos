@@ -29,3 +29,5 @@ export { default as Simple } from './img-simple.svg';
 export { default as SocialAppleDark } from './img-social-apple-dark.svg';
 export { default as SocialAppleLight } from './img-social-apple-light.svg';
 export { default as SocialGoogle } from './img-social-google.svg';
+
+export { default as TokenMVL32Icon } from './ic-token-mvlx32.svg';

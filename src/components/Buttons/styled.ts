@@ -108,7 +108,6 @@ export const TextButtonContainer = Styled.Pressable`
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  padding: 12px 16px;
 `;
 
 export const TextButtonLabel = Styled.Text<TextButtonLabelProps>`
