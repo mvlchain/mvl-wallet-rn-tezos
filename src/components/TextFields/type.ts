@@ -25,11 +25,11 @@ export interface ContainerProps {
 
 //TradeVolume
 export interface TradeVolumeComponentProps {
-  useMax: boolean;
-  onSelect: () => void;
-  label: string;
-  symbol: string;
-  value: string;
-  onChange: () => void;
+  useMax?: boolean;
+  onSelect?: () => void;
+  label?: string;
+  symbol?: string;
+  value?: string;
+  onChange?: () => void;
   hint: string;
 }
