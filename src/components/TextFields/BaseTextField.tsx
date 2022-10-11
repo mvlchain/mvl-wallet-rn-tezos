@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { TextInputProps, Text } from 'react-native';
+import { TextInputProps } from 'react-native';
 import Styled from 'styled-components/native';
 
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
@@ -13,7 +13,7 @@ const inputHeight = fontSize(48) + 'px';
 const BaseInput = Styled.TextInput<BaseTextFieldProps>`
    flex:9;
 `;
-const BaseTextFieldContainer = Styled.View<ContainerProps>`
+const BaseTextFieldInputWrapper = Styled.View<ContainerProps>`
     width: 100%;
     flex-direction: row;
     border-style : solid;
@@ -34,6 +34,20 @@ const Unit = Styled.Text`
   margin-left: 8px;
 `;
 
+const BaseTextFieldLabel = Styled.Text`
+  color: ${({ theme }) => theme.color.blackWhite};
+  line-height: 20px;
+  margin-bottom: 8px;
+`;
+
+const BaseTextFieldHint = Styled.Text`
+color: ${({ theme }) => theme.color.grey500};
+line-height: 20px;
+margin-top: 8px;
+`;
+
+const BaseTextFieldContainer = Styled.View`
+`;
 const KeyboardTypeByInputType = {
   address: 'default',
   gas: 'numeric',
@@ -50,6 +64,8 @@ interface BaseTextFieldProps {
   value: any;
   onChange: (value: any) => void;
   placeholder?: string;
+  label?: string;
+  hint?: string;
   isValid?: boolean;
   scanable?: boolean;
 }
@@ -57,8 +73,9 @@ interface BaseTextFieldProps {
 interface ContainerProps {
   lcColor: string | null;
 }
-export function BaseTextField({ placeholder, isValid, value, onChange, scanable, style, unit, type }: BaseTextFieldComponentProps) {
+export function BaseTextField({ placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint }: BaseTextFieldComponentProps) {
   const [lcColor, setLcColor] = useState<string | null>(null);
+
   const clearTextField = () => {
     onChange('');
   };
@@ -70,25 +87,29 @@ export function BaseTextField({ placeholder, isValid, value, onChange, scanable,
   };
 
   return (
-    <BaseTextFieldContainer lcColor={lcColor}>
-      <BaseInput
-        keyboardType={KeyboardTypeByInputType[type]}
-        placeholder={placeholder}
-        //TODO: 스토어에 theme 들어오면 수정필요
-        placeholderTextColor={theme.light.color.grey300Grey700}
-        isValid={isValid}
-        value={value}
-        onChange={onChange}
-        scanable={scanable}
-        style={style}
-        selectionColor={theme.light.color.black}
-        onBlur={onBlur}
-        onFocus={onFocus}
-      />
-      {unit && <Unit>{unit}</Unit>}
-      <TextFieldDelete onPress={clearTextField} style={{ marginLeft: 8 }} />
-      {/* TODO: 스캔함수 작성되면 추가 필요*/}
-      {scanable && <BlackScanIcon onPress={() => {}} style={{ marginLeft: 8 }} />}
+    <BaseTextFieldContainer>
+      {label && <BaseTextFieldLabel>{label}</BaseTextFieldLabel>}
+      <BaseTextFieldInputWrapper lcColor={lcColor}>
+        <BaseInput
+          keyboardType={KeyboardTypeByInputType[type]}
+          placeholder={placeholder}
+          //TODO: 스토어에 theme 들어오면 수정필요
+          placeholderTextColor={theme.light.color.grey300Grey700}
+          isValid={isValid}
+          value={value}
+          onChange={onChange}
+          scanable={scanable}
+          style={style}
+          selectionColor={theme.light.color.black}
+          onBlur={onBlur}
+          onFocus={onFocus}
+        />
+        {unit && <Unit>{unit}</Unit>}
+        <TextFieldDelete onPress={clearTextField} style={{ marginLeft: 8 }} />
+        {/* TODO: 스캔함수 작성되면 추가 필요*/}
+        {scanable && <BlackScanIcon onPress={() => {}} style={{ marginLeft: 8 }} />}
+      </BaseTextFieldInputWrapper>
+      {hint && <BaseTextFieldHint>{hint}</BaseTextFieldHint>}
     </BaseTextFieldContainer>
   );
 }
