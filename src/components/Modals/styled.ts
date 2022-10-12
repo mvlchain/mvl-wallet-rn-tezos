@@ -54,3 +54,24 @@ export const inlineStyles = (type: ModalType) =>
     },
     halfbutton: { flex: 1 },
   });
+
+//image
+export const ImageModalContainer = Styled(ModalContainer)`
+borderRadius: 0;
+paddingTop: 0;
+`;
+export const ImageModalTopWrapper = Styled(ModalTopWrapper)`
+position:absolute;
+width:100%;
+top:24px;
+paddingLeft:24px;
+paddingRight:24px;
+`;
+export const ImageModalTitle = Styled(ModalTitle)`
+color: ${({ theme }) => theme.color.white};
+`;
+export const ImageWrapper = Styled.View`
+borderTopLeftRadius:24px;
+borderTopRightRadius:24px;
+overflow: hidden;
+`;
