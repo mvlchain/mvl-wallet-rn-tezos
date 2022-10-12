@@ -80,6 +80,7 @@ export const ImageWrapper = styled.View`
 //toast
 export const ToastPopupContainer = styled.View`
   width: 100%;
+  padding: 0 ${width * 16}px;
 `;
 
 export const ToastTextWrapper = styled.View`
