@@ -1,22 +1,16 @@
 import React from 'react';
 
-import { TextButtonContainer, TextButtonLabel } from './styled';
-import { TextButtonComponentProps } from './type';
+import * as S from './styled';
+import * as Type from './type';
 
-export function TextButton({ label, onPress, disabled, wrapperStyle, textStyle }: TextButtonComponentProps) {
+export function TextButton({ label, onPress, disabled, wrapperStyle, textStyle }: Type.TextButtonComponentProps) {
   return (
-    <TextButtonContainer
-      onPress={() => {
-        if (disabled) return;
-        onPress();
-      }}
-      style={wrapperStyle}
-    >
+    <S.TextButtonContainer onPress={onPress} style={wrapperStyle}>
       {({ pressed }) => (
-        <TextButtonLabel pressed={pressed} style={textStyle} disabled={disabled}>
+        <S.TextButtonLabel pressed={pressed} style={textStyle} disabled={disabled}>
           {label}
-        </TextButtonLabel>
+        </S.TextButtonLabel>
       )}
-    </TextButtonContainer>
+    </S.TextButtonContainer>
   );
 }

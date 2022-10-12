@@ -1,57 +1,51 @@
 import { SocialAppleDark, SocialAppleLight, SocialGoogle } from '@@assets/image';
 
-import { BaseButtonContainer, IconWrapper, BoldLabel, SocialButton, TextWrapper, BaseButtonLabel, baseButtonStyleObj } from './styled';
-import { BaseButtonComponentProps } from './type';
+import * as S from './styled';
+import * as Type from './type';
 
-export function GoogleButton({ onPress, disabled, wrapperStyle }: BaseButtonComponentProps) {
-  const outlineStyle = baseButtonStyleObj.outline;
+export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.BaseButtonComponentProps) {
+  const outlineStyle = S.baseButtonStyleObj.outline;
   return (
-    <BaseButtonContainer
-      onPress={() => {
-        if (disabled) return;
-        onPress();
-      }}
-      style={wrapperStyle}
-    >
+    <S.BaseButtonContainer onPress={onPress} style={wrapperStyle}>
       {({ pressed }) => (
-        <SocialButton pressed={pressed} disabled={disabled} {...outlineStyle.bg}>
-          <IconWrapper disabled={disabled}>
+        <S.SocialButton pressed={pressed} disabled={disabled} {...outlineStyle.bg}>
+          <S.IconWrapper disabled={disabled}>
             <SocialGoogle />
-          </IconWrapper>
-          <TextWrapper>
-            <BaseButtonLabel {...outlineStyle.tx} disabled={disabled}>
-              {'Continue with'}
-            </BaseButtonLabel>
-            <BoldLabel {...outlineStyle.tx} disabled={disabled}>
+          </S.IconWrapper>
+          <S.TextWrapper>
+            <S.BaseButtonLabel {...outlineStyle.tx} disabled={disabled}>
+              a{'Continue with'}
+            </S.BaseButtonLabel>
+            <S.BoldLabel {...outlineStyle.tx} disabled={disabled}>
               {' Google'}
-            </BoldLabel>
-          </TextWrapper>
-        </SocialButton>
+            </S.BoldLabel>
+          </S.TextWrapper>
+        </S.SocialButton>
       )}
-    </BaseButtonContainer>
+    </S.BaseButtonContainer>
   );
 }
 
-export function AppleButton({ onPress, disabled, wrapperStyle }: BaseButtonComponentProps) {
-  const blackStyle = baseButtonStyleObj.black;
+export function AppleButton({ onPress, disabled, wrapperStyle }: Type.BaseButtonComponentProps) {
+  const blackStyle = S.baseButtonStyleObj.black;
   return (
-    <BaseButtonContainer onPress={onPress} style={wrapperStyle}>
+    <S.BaseButtonContainer onPress={onPress} style={wrapperStyle}>
       {({ pressed }) => (
-        <SocialButton pressed={pressed} disabled={disabled} {...blackStyle.bg}>
-          <IconWrapper disabled={disabled}>
+        <S.SocialButton pressed={pressed} disabled={disabled} {...blackStyle.bg}>
+          <S.IconWrapper disabled={disabled}>
             {/* TODO: store에 theme저장되면 수정 필요 */}
             <SocialAppleLight />
-          </IconWrapper>
-          <TextWrapper>
-            <BaseButtonLabel {...blackStyle.tx} disabled={disabled}>
+          </S.IconWrapper>
+          <S.TextWrapper>
+            <S.BaseButtonLabel {...blackStyle.tx} disabled={disabled}>
               {'Continue with'}
-            </BaseButtonLabel>
-            <BoldLabel {...blackStyle.tx} disabled={disabled}>
+            </S.BaseButtonLabel>
+            <S.BoldLabel {...blackStyle.tx} disabled={disabled}>
               {' Apple'}
-            </BoldLabel>
-          </TextWrapper>
-        </SocialButton>
+            </S.BoldLabel>
+          </S.TextWrapper>
+        </S.SocialButton>
       )}
-    </BaseButtonContainer>
+    </S.BaseButtonContainer>
   );
 }
