@@ -37,7 +37,7 @@ export const ModalContainer = Styled.View<ModalTypeProps>`
 backgroundColor: ${({ theme }) => theme.color.whiteBlack};
 borderRadius: 24px;
 padding: 24px;
-paddingBottom:${({ type }) => (type === Center ? '24px' : '34px')};
+paddingBottom:${({ type }) => (type === Center ? '0' : '34px')};
 `;
 
 export const ModalBackDrop = Styled.View<ModalTypeProps>`
