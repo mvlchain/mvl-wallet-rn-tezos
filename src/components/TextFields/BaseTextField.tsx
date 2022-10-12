@@ -45,9 +45,9 @@ export function BaseTextField({ placeholder, isValid, value, onChange, scanable,
           onFocus={onFocus}
         />
         {unit && <S.Unit>{unit}</S.Unit>}
-        <TextFieldDelete onPress={clearTextField} style={{ marginLeft: 8 }} />
+        <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
         {/* TODO: 스캔함수 작성되면 추가 필요*/}
-        {scanable && <BlackScanIcon onPress={() => {}} style={{ marginLeft: 8 }} />}
+        {scanable && <BlackScanIcon onPress={() => {}} style={S.inlineStyles.marginProvider} />}
       </S.BaseTextFieldInputWrapper>
       {hint && <S.BaseTextFieldHint>{hint}</S.BaseTextFieldHint>}
     </S.BaseTextFieldContainer>

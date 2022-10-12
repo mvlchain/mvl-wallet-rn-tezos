@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components/native';
 
+import { width } from '@@utils/ui';
+
 import {
   BaseButtonWrapper,
   BaseButtonProps,
@@ -23,14 +25,14 @@ export const BaseButton = styled.View<BaseButtonProps>`
   width: 100%;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  height: ${({ size }) => (size === BUTTON_SIZE.SMALL ? '40px' : '60px')};
-  padding: 12px 16px;
+  border-radius: ${width * 8}px;
+  height: ${({ size }) => (size === BUTTON_SIZE.SMALL ? `${width * 40}px` : `${width * 60}px`)};
+  padding: ${width * 12}px ${width * 16}px;
   background-color: ${({ theme, pressed, disabled, bgColor, bgColorPressed, bgColorDisabled }) =>
     disabled ? theme.color[bgColorDisabled] : !disabled && pressed ? theme.color[bgColorPressed] : theme.color[bgColor]};
   border-color: ${({ theme, lcColor }) => (lcColor ? theme.color[lcColor] : 'transparent')};
   border-style: solid;
-  border-width: 1px;
+  border-width: ${width * 1}px;
 `;
 export const BaseButtonLabel = styled.Text<BaseButtonLabelProps>`
   ${({ theme, size }) => (size === BUTTON_SIZE.SMALL ? theme.font.Label.sm : theme.font.Label.lg)};
@@ -96,7 +98,7 @@ export const BoldLabel = styled(BaseButtonLabel)`
 
 export const IconWrapper = styled.View<IconWrapperProps>`
   position: absolute;
-  left: 16px;
+  left: ${width * 16}px;
   opacity: ${({ disabled }) => (disabled ? 0.2 : 1)};
 `;
 export const TextWrapper = styled.View`
@@ -107,7 +109,7 @@ export const TextWrapper = styled.View`
 export const TextButtonContainer = styled.Pressable`
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: ${width * 8}px;
 `;
 
 export const TextButtonLabel = styled.Text<TextButtonLabelProps>`

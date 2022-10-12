@@ -22,6 +22,7 @@ export interface ModalTypeProps {
   type: ModalType;
 }
 
+//image
 export interface ImageModalComponentProps extends ModalComponentProps {
   /**
    * @param image
@@ -29,4 +30,9 @@ export interface ImageModalComponentProps extends ModalComponentProps {
    * @example <SVG width={SCREEN_WIDTH} height={SCREEN_WIDTH} />
    */
   image?: React.ReactNode;
+}
+
+//toast
+export interface ToastPopupComponentProps {
+  text: string;
 }
