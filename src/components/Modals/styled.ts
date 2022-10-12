@@ -1,43 +1,44 @@
 import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
-import { Center, ModalTypeProps, ModalType } from './type';
+import { width } from '@@utils/ui';
 
+import { Center, ModalTypeProps, ModalType } from './type';
 export const ModalTitle = styled.Text`
   ${({ theme }) => theme.font.Title.sm};
   color: ${({ theme }) => theme.color.blackWhite};
   font-family: ${({ theme }) => theme.fmBold};
-  line-height: 32px;
+  line-height: ${width * 32}px;
 `;
 
 export const ModalTopWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  height: 40px;
-  padding-top: 8px;
+  height: ${width * 40}px;
+  padding-top: ${width * 8}px;
 `;
 
 export const ButtonWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin: 24px 0;
+  margin: ${width * 24}px 0;
 `;
 
 export const ContentWrapper = styled.View`
   color: ${({ theme }) => theme.color.blackWhite};
-  padding: 24px 0;
+  padding: ${width * 24}px 0;
 `;
 
 export const Gap = styled.View`
-  width: 16px;
+  width: ${width * 16}px;
 `;
 
 export const ModalContainer = styled.View<ModalTypeProps>`
   background-color: ${({ theme }) => theme.color.whiteBlack};
-  border-radius: 24px;
-  padding: 24px;
-  padding-bottom: ${({ type }) => (type === Center ? '0' : '34px')};
+  border-radius: ${width * 24}px;
+  padding: ${width * 24}px;
+  padding-bottom: ${({ type }) => (type === Center ? '0' : `${width * 34}px`)};
 `;
 
 export const ModalBackDrop = styled.View<ModalTypeProps>`
@@ -63,16 +64,16 @@ export const ImageModalContainer = styled(ModalContainer)`
 export const ImageModalTopWrapper = styled(ModalTopWrapper)`
   position: absolute;
   width: 100%;
-  top: 24px;
-  padding-left: 24px;
-  padding-right: 24px;
+  top: ${width * 24}px;
+  padding-left: ${width * 24}px;
+  padding-right: ${width * 24}px;
 `;
 export const ImageModalTitle = styled(ModalTitle)`
   color: ${({ theme }) => theme.color.white};
 `;
 export const ImageWrapper = styled.View`
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  border-top-left-radius: ${width * 24}px;
+  border-top-right-radius: ${width * 24}px;
   overflow: hidden;
 `;
 
@@ -83,8 +84,8 @@ export const ToastPopupContainer = styled.View`
 
 export const ToastTextWrapper = styled.View`
   background-color: ${({ theme }) => theme.color.grey800Grey200};
-  border-radius: 24px;
-  padding: 24px;
+  border-radius: ${width * 24}px;
+  padding: ${width * 24}px;
   width: 100%;
 `;
 

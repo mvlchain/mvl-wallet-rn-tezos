@@ -10,7 +10,7 @@ export function TradeVolume({ useMax, onSelect, label, symbol, value, onChange, 
   return (
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
-        <S.From>{label}</S.From>
+        <S.Label>{label}</S.Label>
         <TextButton label={'Max'} onPress={() => {}} disabled={true} />
       </S.TradeVolumeTop>
       <S.TradeVolumeMiddle>
@@ -25,12 +25,12 @@ export function TradeVolume({ useMax, onSelect, label, symbol, value, onChange, 
             placeholderTextColor={theme.light.color.grey300Grey700}
           />
 
-          <TextFieldDelete onPress={clearTextField} style={{ marginLeft: 8 }} />
+          <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
           <TokenMVL32Icon />
           <S.Token>bMVL</S.Token>
-          {!!onSelect && <ChevronDownBlackIcon style={{ marginBottom: 4, marginLeft: 8 }} onPress={() => {}} />}
+          {!!onSelect && <ChevronDownBlackIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
       {hint && <S.Hint>{hint}</S.Hint>}
