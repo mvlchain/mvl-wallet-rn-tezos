@@ -1,10 +1,7 @@
 import { useState } from 'react';
 
-import { TextInputProps } from 'react-native';
-import Styled from 'styled-components/native';
-
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
-import { Color, commonColors } from '@@style/colors';
+import { commonColors } from '@@style/colors';
 import { theme } from '@@style/theme';
 
 import * as S from './styled';
