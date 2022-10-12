@@ -23,11 +23,12 @@ const ShowMnemonicText = styled.Text`
 
 const ChipContainer = styled.View`
   flex-direction: row;
+  justify-content: space-between;
   width: 100%;
 `;
 
 const Row = styled.View`
-  width: 50%;
+  width: 47%;
 `;
 
 function TypedMnemonic({ mnemonic }: ITypedMnemonicProps) {
@@ -40,11 +41,15 @@ function TypedMnemonic({ mnemonic }: ITypedMnemonicProps) {
       <ChipContainer>
         <Row>
           {typedMnemonicArr.length > 0 &&
-            typedMnemonicArr.slice(0, 5).map((mnemonic, index) => <TypedChip mnemonic={mnemonic} index={index + 1} pressed={false} />)}
+            typedMnemonicArr.slice(0, 3).map((mnemonic, index) => <TypedChip mnemonic={mnemonic} index={index + 1} typed={true} isFocused={true} />)}
+          <TypedChip mnemonic={1} index={1} typed={false} isFocused={true} />
+          <TypedChip mnemonic={1} index={1} typed={true} isFocused={false} />
         </Row>
         <Row>
           {typedMnemonicArr.length > 0 &&
-            typedMnemonicArr.slice(5, 10).map((mnemonic, index) => <TypedChip mnemonic={mnemonic} index={index + 13} pressed={false} />)}
+            typedMnemonicArr
+              .slice(5, 10)
+              .map((mnemonic, index) => <TypedChip mnemonic={mnemonic} index={index + 13} typed={false} isFocused={false} />)}
         </Row>
       </ChipContainer>
     </STC.MnemonicContainer>
