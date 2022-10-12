@@ -57,7 +57,7 @@ export const baseButtonStyleObj: BaseButtonStyleObj = {
       bgColorDisabled: 'grey100Grey900',
     },
     tx: {
-      txColor: 'black',
+      txColor: 'blackWhite',
       txColorDisabled: 'grey300Grey700',
     },
   },
