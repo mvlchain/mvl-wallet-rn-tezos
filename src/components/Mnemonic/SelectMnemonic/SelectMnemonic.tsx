@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import { height } from '@@utils/ui';
 
 import SelectChip from './SelectChip';
+import useSelectMnemonic from './useSelectMnemonic';
 
 interface ISelectMnemonicProps {
   mnemonic: string;
@@ -19,19 +20,18 @@ const SelectChipContainer = styled.View`
 `;
 
 function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {
+  const { onPressSelectChip } = useSelectMnemonic();
   const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
 
   useEffect(() => {
-    setMnemonicArr(mnemonic.split(' '));
+    setMnemonicArr(mnemonic.split(' ').sort(() => Math.random() - 0.5));
   }, []);
 
   return (
     <SelectChipContainer>
-      {mnemonicArr
-        .sort(() => Math.random() - 0.5)
-        .map((mnemonic) => (
-          <SelectChip mnemonic={mnemonic} pressed={false} />
-        ))}
+      {mnemonicArr.map((mnemonic) => (
+        <SelectChip mnemonic={mnemonic} pressed={false} onPress={() => onPressSelectChip(mnemonic)} />
+      ))}
     </SelectChipContainer>
   );
 }

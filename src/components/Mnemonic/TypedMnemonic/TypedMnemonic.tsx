@@ -35,6 +35,7 @@ function TypedMnemonic({ mnemonic }: ITypedMnemonicProps) {
               .slice(0, 5)
               .map((mnemonic) => (
                 <TypedChip
+                  key={mnemonic.index}
                   word={mnemonic.word}
                   index={mnemonic.index}
                   typed={mnemonic.word !== ''}
@@ -49,6 +50,7 @@ function TypedMnemonic({ mnemonic }: ITypedMnemonicProps) {
               .slice(5, 10)
               .map((mnemonic) => (
                 <TypedChip
+                  key={mnemonic.index}
                   word={mnemonic.word}
                   index={mnemonic.index}
                   typed={mnemonic.word !== ''}

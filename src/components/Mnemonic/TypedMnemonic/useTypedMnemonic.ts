@@ -22,13 +22,10 @@ const useTypedMnemonic = () => {
       throw new Error('random index not matching');
     }
 
-    if (mnemonic.word === '') {
-      // focus on
-      setFocusedIndex(index);
-    } else {
-      // focus off
+    if (mnemonic.word !== '') {
       removeMnemonic(mnemonic.word);
     }
+    setFocusedIndex(index);
   };
 
   return {
