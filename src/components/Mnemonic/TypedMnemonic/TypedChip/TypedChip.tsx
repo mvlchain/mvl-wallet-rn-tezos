@@ -5,11 +5,11 @@ import styled, { css } from 'styled-components/native';
 import { width } from '@@utils/ui';
 
 interface ITypedChipChipProp {
-  mnemonic: number;
+  word: string;
   index: number;
   typed: boolean;
   isFocused: boolean;
-  // onPress: () => void;
+  onPress: () => void;
 }
 
 const SelectChipContainer = styled.Pressable``;
@@ -47,12 +47,12 @@ const ChipText = styled.Text`
   font-family: ${({ theme }) => theme.fmMedium};
 `;
 
-function TypedChip({ mnemonic, index, typed, isFocused }: ITypedChipChipProp) {
+function TypedChip({ word, index, typed, isFocused, onPress }: ITypedChipChipProp) {
   return (
-    <SelectChipContainer>
+    <SelectChipContainer onPress={onPress}>
       <SelectChipWrapper typed={typed} isFocused={isFocused}>
         <ChipText>
-          {index}. {mnemonic}
+          {index}. {word}
         </ChipText>
       </SelectChipWrapper>
     </SelectChipContainer>
