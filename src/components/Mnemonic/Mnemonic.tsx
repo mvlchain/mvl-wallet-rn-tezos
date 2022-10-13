@@ -6,7 +6,7 @@ import { HideLight } from '@@assets/image';
 import { PrimaryButton } from '@@components/Buttons/BaseButton';
 import { height } from '@@utils/ui';
 
-import * as STC from './Mnemonic.style';
+import * as S from './Mnemonic.style';
 import MnemonicChip from './MnemonicChip';
 
 interface IMnemonicProps {
@@ -38,7 +38,7 @@ function Mnemonic({ type, mnemonic }: IMnemonicProps) {
   }, []);
 
   return (
-    <STC.MnemonicContainer>
+    <S.MnemonicContainer>
       {type === 'hide' ? (
         <>
           <ShowMnemonicText>Make sure no one is watching your screen.</ShowMnemonicText>
@@ -66,7 +66,7 @@ function Mnemonic({ type, mnemonic }: IMnemonicProps) {
           </Row>
         </ChipContainer>
       )}
-    </STC.MnemonicContainer>
+    </S.MnemonicContainer>
   );
 }
 

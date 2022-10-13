@@ -5,7 +5,7 @@ import SelectMnemonic from '@@components/Mnemonic/SelectMnemonic';
 import TypedMnemonic from '@@components/Mnemonic/TypedMnemonic/TypedMnemonic';
 import { height } from '@@utils/ui';
 
-import * as STC from '../Mnemonic.style';
+import * as S from '../Mnemonic.style';
 
 import useConfirmSeedPhrase from './useConfirmSeedPhrase';
 const mnemonic =
@@ -15,12 +15,12 @@ function ConfirmSeedPhrase() {
   const { disabled } = useConfirmSeedPhrase();
 
   return (
-    <STC.Container bounces={false}>
-      <STC.Description>{`Type each word in the order it was presented to you.`}</STC.Description>
-      <TypedMnemonic mnemonic='asdf' />
+    <S.Container bounces={false}>
+      <S.Description>{`Type each word in the order it was presented to you.`}</S.Description>
+      <TypedMnemonic />
       <SelectMnemonic mnemonic={mnemonic} />
       <PrimaryButton label='Next' onPress={() => console.log('hello')} disabled={disabled} wrapperStyle={{ marginBottom: height * 30 }} />
-    </STC.Container>
+    </S.Container>
   );
 }
 

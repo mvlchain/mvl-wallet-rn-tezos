@@ -6,7 +6,13 @@ import * as Type from './type';
 export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.BaseButtonComponentProps) {
   const outlineStyle = S.baseButtonStyleObj.outline;
   return (
-    <S.BaseButtonContainer onPress={onPress} style={wrapperStyle}>
+    <S.BaseButtonContainer
+      onPress={() => {
+        if (disabled) return;
+        onPress();
+      }}
+      style={wrapperStyle}
+    >
       {({ pressed }) => (
         <S.SocialButton pressed={pressed} disabled={disabled} {...outlineStyle.bg}>
           <S.IconWrapper disabled={disabled}>
