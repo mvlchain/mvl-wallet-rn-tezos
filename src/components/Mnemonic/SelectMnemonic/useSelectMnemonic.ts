@@ -1,9 +1,19 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 import authStore from '@@store/authStore';
 
-const useSelectMnemonic = () => {
+interface IuseSelectMnemonic {
+  mnemonic: string;
+}
+
+const useSelectMnemonic = ({ mnemonic }: IuseSelectMnemonic) => {
   const { mnemonicList, focusedIndex, setMnemonic, removeMnemonic, setFocusedIndex } = authStore();
+  const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
+
+  useEffect(() => {
+    setMnemonicArr(mnemonic.split(' ').sort(() => Math.random() - 0.5));
+  }, []);
+
   const onPressSelectChip = (word: string, index: number) => {
     const selected = mnemonicList.filter((mnemonic) => mnemonic.selectChipIndex === index);
     if (selected.length !== 0) {
@@ -16,6 +26,7 @@ const useSelectMnemonic = () => {
   };
   return {
     mnemonicList,
+    mnemonicArr,
     onPressSelectChip,
   };
 };

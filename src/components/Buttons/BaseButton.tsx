@@ -8,7 +8,14 @@ const generator = () =>
     (baseStyle) =>
       function Button({ label, onPress, disabled, wrapperStyle, buttonStyle, textStyle, size }: BaseButtonComponentProps) {
         return (
-          <BaseButtonContainer onPress={onPress} size={size} style={wrapperStyle}>
+          <BaseButtonContainer
+            onPress={() => {
+              if (disabled) return;
+              onPress();
+            }}
+            size={size}
+            style={wrapperStyle}
+          >
             {({ pressed }) => (
               <BaseButton pressed={pressed} disabled={disabled} {...baseStyle.bg} size={size} style={buttonStyle}>
                 <BaseButtonLabel {...baseStyle.tx} size={size} style={textStyle} disabled={disabled}>
