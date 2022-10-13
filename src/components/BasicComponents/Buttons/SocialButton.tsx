@@ -1,7 +1,7 @@
 import { SocialAppleDark, SocialAppleLight, SocialGoogle } from '@@assets/image';
 
-import * as S from './styled';
-import * as Type from './type';
+import * as S from './Button.style';
+import * as Type from './Button.type';
 
 export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.BaseButtonComponentProps) {
   const outlineStyle = S.baseButtonStyleObj.outline;

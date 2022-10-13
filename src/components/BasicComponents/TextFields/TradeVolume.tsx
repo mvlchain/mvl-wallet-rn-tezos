@@ -1,9 +1,9 @@
 import { ChevronDownBlackIcon, TextFieldDelete, TokenMVL32Icon } from '@@assets/image';
-import { TextButton } from '@@components/Buttons/TextButton';
+import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { theme } from '@@style/theme';
 
-import * as S from './styled';
-import * as Type from './type';
+import * as S from './TextField.style';
+import * as Type from './TextField.type';
 
 export function TradeVolume({ useMax, onSelect, label, symbol, value, onChange, hint }: Type.TradeVolumeComponentProps) {
   const clearTextField = () => {};

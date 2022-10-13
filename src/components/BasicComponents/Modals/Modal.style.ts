@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 import { width } from '@@utils/ui';
 
-import { Center, ModalTypeProps, ModalType } from './type';
+import { Center, ModalTypeProps, ModalType } from './Modal.type';
 export const ModalTitle = styled.Text`
   ${({ theme }) => theme.font.Title.sm};
   color: ${({ theme }) => theme.color.blackWhite};

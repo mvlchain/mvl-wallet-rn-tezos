@@ -10,7 +10,7 @@ import {
   BUTTON_SIZE,
   IconWrapperProps,
   TextButtonLabelProps,
-} from './type';
+} from './Button.type';
 
 //Base
 export const BaseButtonContainer = styled.Pressable<BaseButtonWrapper>`

@@ -4,8 +4,8 @@ import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
 import { commonColors } from '@@style/colors';
 import { theme } from '@@style/theme';
 
-import * as S from './styled';
-import * as Type from './type';
+import * as S from './TextField.style';
+import * as Type from './TextField.type';
 
 export const KeyboardTypeByInputType = {
   address: 'default',
