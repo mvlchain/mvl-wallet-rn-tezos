@@ -1,5 +1,5 @@
-import { MODAL_TYPE, MODAL_TYPES } from '@@store/globalModal/types';
-import useGlobalModalStore from '@@store/globalModal/useGlobalModalStore';
+import globalModalStore from '@@store/globalModal/globalModalStore';
+import { MODAL_TYPE, MODAL_TYPES } from '@@store/globalModal/globalModalStore.types';
 
 import { TestModal } from './TestModal';
 import { TostModal } from './TostModal';
@@ -10,7 +10,7 @@ export const MODAL_COMPONENTS = {
 };
 
 export const GlobalModal = () => {
-  const { modalType, modalProps } = useGlobalModalStore();
+  const { modalType, modalProps } = globalModalStore();
   if (!modalType) {
     return null;
   }

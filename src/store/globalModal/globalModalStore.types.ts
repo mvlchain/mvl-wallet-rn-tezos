@@ -1,4 +1,4 @@
-import { MODAL_COMPONENTS } from '@@components/ModalTest/GlobalModal';
+import { MODAL_COMPONENTS } from '@@components/Modals/GlobalModal';
 
 export const MODAL_TYPES = {
   TEST_MODAL: 'TEST_MODAL',
