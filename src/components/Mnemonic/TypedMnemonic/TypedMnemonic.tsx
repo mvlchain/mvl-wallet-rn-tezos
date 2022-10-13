@@ -13,7 +13,7 @@ const ChipContainer = styled.View`
   width: 100%;
 `;
 
-const Row = styled.View`
+const Column = styled.View`
   width: 47%;
 `;
 
@@ -23,7 +23,7 @@ function TypedMnemonic() {
   return (
     <S.MnemonicContainer>
       <ChipContainer>
-        <Row>
+        <Column>
           {mnemonicList.length > 0 &&
             mnemonicList
               .slice(0, 5)
@@ -37,8 +37,8 @@ function TypedMnemonic() {
                   onPress={() => onPressTypedChip(mnemonic.index)}
                 />
               ))}
-        </Row>
-        <Row>
+        </Column>
+        <Column>
           {mnemonicList.length > 0 &&
             mnemonicList
               .slice(5, 10)
@@ -52,7 +52,7 @@ function TypedMnemonic() {
                   onPress={() => onPressTypedChip(mnemonic.index)}
                 />
               ))}
-        </Row>
+        </Column>
       </ChipContainer>
     </S.MnemonicContainer>
   );

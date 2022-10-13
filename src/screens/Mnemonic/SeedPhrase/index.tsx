@@ -17,7 +17,7 @@ const mnemonic =
 type seedPhraseProp = BottomTabNavigationProp<MainTabParamList, 'SEEDPHRASE'>;
 
 function SeedPhrase() {
-  const [type, setType] = useState<'show' | 'hide'>('show');
+  const [type, setType] = useState<'show' | 'hide'>('hide');
   const navigation = useNavigation<seedPhraseProp>();
   return (
     <S.Container bounces={false}>
@@ -26,8 +26,8 @@ function SeedPhrase() {
         DO NOT reveal this phrase to other people!\n
         Clutch team never request you to share this Seed Phrase.`}
       </S.Description>
-      <Mnemonic type={'show'} mnemonic={mnemonic} />
-      {type && (
+      <Mnemonic type={type} mnemonic={mnemonic} />
+      {type === 'show' && (
         <>
           {/* TODO: image text button 만들기 */}
           <TextButton

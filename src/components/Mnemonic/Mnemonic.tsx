@@ -19,6 +19,7 @@ const ShowMnemonicText = styled.Text`
   margin-bottom: ${height * 32}px;
   ${({ theme }) => theme.font.Label.md}
   font-family: ${({ theme }) => theme.fmMedium};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
 const ChipContainer = styled.View`
@@ -26,7 +27,7 @@ const ChipContainer = styled.View`
   width: 100%;
 `;
 
-const Row = styled.View`
+const Column = styled.View`
   width: 50%;
 `;
 
@@ -54,16 +55,16 @@ function Mnemonic({ type, mnemonic }: IMnemonicProps) {
         </>
       ) : (
         <ChipContainer>
-          <Row>
+          <Column>
             {mnemonicArr.length > 0 &&
               mnemonicArr.slice(0, 12).map((mnemonic, index) => <MnemonicChip key={`${mnemonic}_${index}`} label={mnemonic} index={index + 1} />)}
-          </Row>
-          <Row>
+          </Column>
+          <Column>
             {mnemonicArr.length > 0 &&
               mnemonicArr
                 .slice(12, 24)
                 .map((mnemonic, index) => <MnemonicChip key={`${mnemonic}_${index + 12}`} label={mnemonic} index={index + 13} />)}
-          </Row>
+          </Column>
         </ChipContainer>
       )}
     </S.MnemonicContainer>
