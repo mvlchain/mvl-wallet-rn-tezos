@@ -18,5 +18,6 @@ export const GlobalModal = () => {
   if (!ModalComponent) {
     return null;
   }
+  //@ts-ignore
   return <ModalComponent {...modalProps} />;
 };
