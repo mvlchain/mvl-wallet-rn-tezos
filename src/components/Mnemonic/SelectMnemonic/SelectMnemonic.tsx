@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components/native';
 
@@ -17,15 +17,11 @@ const SelectChipContainer = styled.View`
   flex-direction: row;
   align-items: baseline;
   margin-top: ${height * 24}px;
+  margin-bottom: ${height * 32}px; ;
 `;
 
 function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {
-  const { mnemonicList, onPressSelectChip } = useSelectMnemonic();
-  const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
-
-  useEffect(() => {
-    setMnemonicArr(mnemonic.split(' ').sort(() => Math.random() - 0.5));
-  }, []);
+  const { mnemonicList, mnemonicArr, onPressSelectChip } = useSelectMnemonic({ mnemonic });
 
   return (
     <SelectChipContainer>

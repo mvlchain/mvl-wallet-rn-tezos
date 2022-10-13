@@ -5,7 +5,13 @@ import { TextButtonComponentProps } from './type';
 
 export function TextButton({ label, onPress, disabled, wrapperStyle, textStyle }: TextButtonComponentProps) {
   return (
-    <TextButtonContainer onPress={onPress} style={wrapperStyle}>
+    <TextButtonContainer
+      onPress={() => {
+        if (disabled) return;
+        onPress();
+      }}
+      style={wrapperStyle}
+    >
       {({ pressed }) => (
         <TextButtonLabel pressed={pressed} style={textStyle} disabled={disabled}>
           {label}

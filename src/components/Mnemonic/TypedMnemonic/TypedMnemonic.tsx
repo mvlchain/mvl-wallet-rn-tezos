@@ -9,10 +9,6 @@ import * as STC from '../Mnemonic.style';
 import TypedChip from './TypedChip';
 import useTypedMnemonic from './useTypedMnemonic';
 
-interface ITypedMnemonicProps {
-  mnemonic: string;
-}
-
 const ChipContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -23,7 +19,7 @@ const Row = styled.View`
   width: 47%;
 `;
 
-function TypedMnemonic({ mnemonic }: ITypedMnemonicProps) {
+function TypedMnemonic() {
   const { mnemonicList, focusedIndex, onPressTypedChip } = useTypedMnemonic();
 
   return (
