@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import authStore from '@@store/authStore';
+import useAuthStore from '@@store/useAuthStore';
 
 interface IuseSelectMnemonic {
   mnemonic: string;
 }
 
 const useSelectMnemonic = ({ mnemonic }: IuseSelectMnemonic) => {
-  const { mnemonicList, focusedIndex, setMnemonic, removeMnemonic, setFocusedIndex } = authStore();
+  const { mnemonicList, focusedIndex, setMnemonic, removeMnemonic, setFocusedIndex } = useAuthStore();
   const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
 
   useEffect(() => {

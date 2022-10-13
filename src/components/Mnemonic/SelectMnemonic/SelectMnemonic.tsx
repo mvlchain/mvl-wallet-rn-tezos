@@ -27,6 +27,7 @@ function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {
     <SelectChipContainer>
       {mnemonicArr.map((mnemonic, index) => (
         <SelectChip
+          key={`${mnemonic}_${index}`}
           mnemonic={mnemonic}
           pressed={mnemonicList.filter((mnemonic) => mnemonic.selectChipIndex === index).length !== 0}
           onPress={() => onPressSelectChip(mnemonic, index)}
