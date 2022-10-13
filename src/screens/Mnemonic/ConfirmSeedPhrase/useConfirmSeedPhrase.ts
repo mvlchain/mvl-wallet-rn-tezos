@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import authStore from '@@store/authStore';
+import useAuthStore from '@@store/useAuthStore';
 
 const useConfirmSeedPhrase = () => {
-  const { mnemonicList } = authStore();
+  const { mnemonicList } = useAuthStore();
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {

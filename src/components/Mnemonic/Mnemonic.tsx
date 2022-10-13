@@ -55,10 +55,14 @@ function Mnemonic({ type, mnemonic }: IMnemonicProps) {
       ) : (
         <ChipContainer>
           <Row>
-            {mnemonicArr.length > 0 && mnemonicArr.slice(0, 12).map((mnemonic, index) => <MnemonicChip label={mnemonic} index={index + 1} />)}
+            {mnemonicArr.length > 0 &&
+              mnemonicArr.slice(0, 12).map((mnemonic, index) => <MnemonicChip key={`${mnemonic}_${index}`} label={mnemonic} index={index + 1} />)}
           </Row>
           <Row>
-            {mnemonicArr.length > 0 && mnemonicArr.slice(12, 24).map((mnemonic, index) => <MnemonicChip label={mnemonic} index={index + 13} />)}
+            {mnemonicArr.length > 0 &&
+              mnemonicArr
+                .slice(12, 24)
+                .map((mnemonic, index) => <MnemonicChip key={`${mnemonic}_${index + 12}`} label={mnemonic} index={index + 13} />)}
           </Row>
         </ChipContainer>
       )}
