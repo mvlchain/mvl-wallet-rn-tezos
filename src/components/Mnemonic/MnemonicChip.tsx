@@ -21,7 +21,8 @@ const LabelContainer = styled.View<{ isLast: boolean }>`
 `;
 
 const LabelText = styled.Text`
-  ${({ theme }) => theme.font.Paragraph.md}
+  ${({ theme }) => theme.font.Paragraph.md};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
 function MnemonicChip({ label, index }: IMnemomicChipProps) {
