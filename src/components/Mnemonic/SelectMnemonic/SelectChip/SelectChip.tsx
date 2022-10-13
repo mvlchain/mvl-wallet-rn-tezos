@@ -19,7 +19,7 @@ const SelectChipWrapper = styled.View<{ pressed: boolean }>`
   border-radius: ${width * 8}px;
   border-width: 1px;
   border-color: ${({ theme }) => theme.color.primary};
-  background-color: ${({ theme, pressed }) => (pressed ? theme.color.primary : theme.color.white)};
+  background-color: ${({ theme, pressed }) => (pressed ? theme.color.primary : theme.color.whiteBlack)};
 `;
 
 const ChipText = styled.Text<{ pressed: boolean }>`
