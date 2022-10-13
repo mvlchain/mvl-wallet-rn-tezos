@@ -10,7 +10,7 @@ import Mnemonic from '@@components/Mnemonic/Mnemonic';
 import { MainTabParamList } from '@@types/MainTabType';
 import { height } from '@@utils/ui';
 
-import * as STC from '../Mnemonic.style';
+import * as S from '../Mnemonic.style';
 
 const mnemonic =
   'legend shop meadow arch border eagle river puppy earth express turn media debris brass kite error daughter food option bag extra blame food year';
@@ -20,12 +20,12 @@ function SeedPhrase() {
   const [type, setType] = useState<'show' | 'hide'>('show');
   const navigation = useNavigation<seedPhraseProp>();
   return (
-    <STC.Container bounces={false}>
-      <STC.Description>
+    <S.Container bounces={false}>
+      <S.Description>
         {`Keep this Seed Phrase in a safe and secret place.\n
         DO NOT reveal this phrase to other people!\n
         Clutch team never request you to share this Seed Phrase.`}
-      </STC.Description>
+      </S.Description>
       <Mnemonic type={'show'} mnemonic={mnemonic} />
       {type && (
         <>
@@ -44,7 +44,7 @@ function SeedPhrase() {
           />
         </>
       )}
-    </STC.Container>
+    </S.Container>
   );
 }
 

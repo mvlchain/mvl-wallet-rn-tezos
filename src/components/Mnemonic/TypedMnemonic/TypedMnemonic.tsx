@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components/native';
 
-import { height } from '@@utils/ui';
-
-import * as STC from '../Mnemonic.style';
+import * as S from '../Mnemonic.style';
 
 import TypedChip from './TypedChip';
 import useTypedMnemonic from './useTypedMnemonic';
@@ -23,7 +21,7 @@ function TypedMnemonic() {
   const { mnemonicList, focusedIndex, onPressTypedChip } = useTypedMnemonic();
 
   return (
-    <STC.MnemonicContainer>
+    <S.MnemonicContainer>
       <ChipContainer>
         <Row>
           {mnemonicList.length > 0 &&
@@ -56,7 +54,7 @@ function TypedMnemonic() {
               ))}
         </Row>
       </ChipContainer>
-    </STC.MnemonicContainer>
+    </S.MnemonicContainer>
   );
 }
 
