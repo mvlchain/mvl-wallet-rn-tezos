@@ -6,7 +6,7 @@ import { TMnemonic } from '@@types/MnemonicType';
 interface IAuth extends IAuthState {
   initMnemonic: (mnemonicArr: TMnemonic[]) => void;
   setMnemonic: (mnemonic: TMnemonic) => void;
-  removeMnemonic: (mnemonicWord: string) => void;
+  removeMnemonic: (selectedChipIndex: number) => void;
   setFocusedIndex: (index: number) => void;
 }
 
@@ -29,16 +29,18 @@ const authStore = create<IAuth>()(
         mnemonicList: state.mnemonicList.map((mnemonic) => {
           if (mnemonic.index === typedMnemonic.index) {
             mnemonic.word = typedMnemonic.word;
+            mnemonic.selectChipIndex = typedMnemonic.selectChipIndex;
           }
           return mnemonic;
         }),
         focusedIndex: state.mnemonicList.filter((mnemonic) => mnemonic.word === '')[0]?.index ?? -1,
       })),
-    removeMnemonic: (mnemonicWord: string) =>
+    removeMnemonic: (selectedChipIndex: number) =>
       set((state) => ({
         mnemonicList: state.mnemonicList.map((mnemonic) => {
-          if (mnemonic.word === mnemonicWord) {
+          if (mnemonic.selectChipIndex === selectedChipIndex) {
             mnemonic.word = '';
+            mnemonic.selectChipIndex = -1;
           }
           return mnemonic;
         }),

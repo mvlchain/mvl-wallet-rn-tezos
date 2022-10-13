@@ -20,7 +20,7 @@ const SelectChipContainer = styled.View`
 `;
 
 function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {
-  const { onPressSelectChip } = useSelectMnemonic();
+  const { mnemonicList, onPressSelectChip } = useSelectMnemonic();
   const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
 
   useEffect(() => {
@@ -29,8 +29,12 @@ function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {
 
   return (
     <SelectChipContainer>
-      {mnemonicArr.map((mnemonic) => (
-        <SelectChip mnemonic={mnemonic} pressed={false} onPress={() => onPressSelectChip(mnemonic)} />
+      {mnemonicArr.map((mnemonic, index) => (
+        <SelectChip
+          mnemonic={mnemonic}
+          pressed={mnemonicList.filter((mnemonic) => mnemonic.selectChipIndex === index).length !== 0}
+          onPress={() => onPressSelectChip(mnemonic, index)}
+        />
       ))}
     </SelectChipContainer>
   );
