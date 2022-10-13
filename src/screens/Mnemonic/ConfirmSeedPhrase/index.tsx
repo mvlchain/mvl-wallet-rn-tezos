@@ -8,6 +8,7 @@ import { height } from '@@utils/ui';
 import * as S from '../Mnemonic.style';
 
 import useConfirmSeedPhrase from './useConfirmSeedPhrase';
+
 const mnemonic =
   'legend shop shop arch border eagle river puppy earth express turn media debris brass kite error daughter food option bag extra blame food year';
 

@@ -35,7 +35,13 @@ export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButt
 export function AppleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButtonComponentProps) {
   const blackStyle = S.baseButtonStyleObj.black;
   return (
-    <S.BaseButtonContainer onPress={onPress} style={wrapperStyle}>
+    <S.BaseButtonContainer
+      onPress={() => {
+        if (disabled) return;
+        onPress();
+      }}
+      style={wrapperStyle}
+    >
       {({ pressed }) => (
         <S.SocialButton pressed={pressed} disabled={disabled} {...blackStyle.bg}>
           <S.IconWrapper disabled={disabled}>
