@@ -45,6 +45,7 @@ const SelectChipWrapper = styled.View<{ typed: boolean; isFocused: boolean }>`
 const ChipText = styled.Text`
   ${({ theme }) => theme.font.Label.md};
   font-family: ${({ theme }) => theme.fmMedium};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
 function TypedChip({ word, index, typed, isFocused, onPress }: ITypedChipChipProp) {

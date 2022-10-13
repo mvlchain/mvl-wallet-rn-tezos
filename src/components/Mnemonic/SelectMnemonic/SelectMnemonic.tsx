@@ -17,7 +17,7 @@ const SelectChipContainer = styled.View`
   flex-direction: row;
   align-items: baseline;
   margin-top: ${height * 24}px;
-  margin-bottom: ${height * 32}px; ;
+  margin-bottom: ${height * 32}px;
 `;
 
 function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {

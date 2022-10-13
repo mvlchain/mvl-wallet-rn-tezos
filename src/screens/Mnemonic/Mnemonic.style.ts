@@ -5,6 +5,7 @@ import { width, height } from '@@utils/ui';
 export const Container = styled.ScrollView`
   flex: 1;
   padding: 0 ${width * 24}px;
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
 export const Description = styled.Text`
