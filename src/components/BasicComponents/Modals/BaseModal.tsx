@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Text } from 'react-native';
 import Modal from 'react-native-modal';
 
 import { CloseBlackIconLight } from '@@assets/image';
@@ -8,7 +9,9 @@ import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/But
 import * as S from './Modal.style';
 import * as Type from './Modal.type';
 
-export function BaseModal({ title, children, onCancel, onConfirm, onClose, isVisible, type }: Type.BaseModalComponentProps) {
+export function BaseModal(props: Type.IBaseModalComponentProps) {
+  const { title, children, onCancel, onConfirm, onClose, isVisible, type } = props;
+
   return (
     <Modal isVisible={isVisible} backdropOpacity={0.25} style={S.inlineStyles(type).modal}>
       <S.ModalBackDrop type={type}>

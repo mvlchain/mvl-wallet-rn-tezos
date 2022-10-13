@@ -1,5 +1,5 @@
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { MODAL_TYPE, MODAL_TYPES } from '@@store/globalModal/globalModalStore.types';
+import { MODAL_TYPE, MODAL_TYPES } from '@@store/globalModal/globalModalStore.type';
 
 import { TestModal } from './TestModal';
 import { TostModal } from './TostModal';

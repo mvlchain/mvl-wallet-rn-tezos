@@ -11,7 +11,8 @@ import * as Type from './Modal.type';
 /**
  * image modal position is fixed at the bottom
  */
-export function ImageModal({ title, children, onCancel, onConfirm, onClose, isVisible, image }: Type.ImageModalComponentProps) {
+export function ImageModal(props: Type.IImageModalComponentProps) {
+  const { title, children, onCancel, onConfirm, onClose, isVisible, image } = props;
   const type = Type.Bottom;
   return (
     <Modal isVisible={isVisible} backdropOpacity={0.25} style={S.inlineStyles(type).modal}>
