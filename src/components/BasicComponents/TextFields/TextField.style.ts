@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 import { width, height } from '@@utils/ui';
 
-import * as Type from './type';
+import * as Type from './TextField.type';
 
 //Base
 export const BaseInput = styled.TextInput<Type.BaseTextFieldProps>`

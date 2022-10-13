@@ -2,7 +2,7 @@ import React from 'react';
 
 import Toast from 'react-native-toast-message';
 
-import * as S from './styled';
+import * as S from './Modal.style';
 
 export function ToastPopup() {
   const toastConfig = {

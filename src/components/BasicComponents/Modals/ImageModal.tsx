@@ -3,10 +3,10 @@ import React from 'react';
 import Modal from 'react-native-modal';
 
 import { CloseBlackIconDark } from '@@assets/image';
-import { PrimaryButton, SecondaryButton } from '@@components/Buttons/BaseButton';
+import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 
-import * as S from './styled';
-import * as Type from './type';
+import * as S from './Modal.style';
+import * as Type from './Modal.type';
 
 /**
  * image modal position is fixed at the bottom

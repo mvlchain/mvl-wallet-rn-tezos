@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as S from './styled';
-import * as Type from './type';
+import * as S from './Button.style';
+import * as Type from './Button.type';
 
 const generator = () =>
   Object.values(S.baseButtonStyleObj).map(
