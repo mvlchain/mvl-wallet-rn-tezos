@@ -32,6 +32,7 @@ const authStore = create<IAuth>()(
           }
           return mnemonic;
         }),
+        focusedIndex: state.mnemonicList.filter((mnemonic) => mnemonic.word === '')[0]?.index ?? -1,
       })),
     removeMnemonic: (mnemonicWord: string) =>
       set((state) => ({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components/native';
 
@@ -7,7 +7,7 @@ import { width } from '@@utils/ui';
 interface ISelectChipProp {
   mnemonic: string;
   pressed: boolean;
-  // onPress: () => void;
+  onPress: () => void;
 }
 
 const SelectChipContainer = styled.Pressable``;
@@ -28,9 +28,9 @@ const ChipText = styled.Text<{ pressed: boolean }>`
   font-family: ${({ theme }) => theme.fmMedium};
 `;
 
-function SelectChip({ mnemonic, pressed }: ISelectChipProp) {
+function SelectChip({ mnemonic, pressed, onPress }: ISelectChipProp) {
   return (
-    <SelectChipContainer>
+    <SelectChipContainer onPress={onPress}>
       <SelectChipWrapper pressed={pressed}>
         <ChipText pressed={pressed}>{mnemonic}</ChipText>
       </SelectChipWrapper>
