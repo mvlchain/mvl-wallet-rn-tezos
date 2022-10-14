@@ -626,3 +626,5 @@ fabric.properties
 !debug.keystore
 
 # End of https://www.toptal.com/developers/gitignore/api/reactnative,yarn,node,java,android,androidstudio,xcode,ruby,gradle,cocoapods
+
+credentials
