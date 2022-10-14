@@ -6,7 +6,7 @@ import * as Type from './Button.type';
 const generator = () =>
   Object.values(S.baseButtonStyleObj).map(
     (baseStyle) =>
-      function Button({ label, onPress, disabled, wrapperStyle, buttonStyle, textStyle, size }: Type.BaseButtonComponentProps) {
+      function Button({ label, onPress, disabled, wrapperStyle, buttonStyle, textStyle, size }: Type.IBaseButtonComponentProps) {
         return (
           <S.BaseButtonContainer
             onPress={() => {
