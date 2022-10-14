@@ -6,10 +6,10 @@ import { width, height } from '@@utils/ui';
 import * as Type from './TextField.type';
 
 //Base
-export const BaseInput = styled.TextInput<Type.BaseTextFieldProps>`
+export const BaseInput = styled.TextInput<Type.IBaseTextFieldProps>`
   flex: 9;
 `;
-export const BaseTextFieldInputWrapper = styled.View<Type.ContainerProps>`
+export const BaseTextFieldInputWrapper = styled.View<Type.ITextFieldContainerProps>`
   width: 100%;
   flex-direction: row;
   border-style: solid;

@@ -13,7 +13,8 @@ export const KeyboardTypeByInputType = {
   search: 'default',
 } as const;
 
-export function BaseTextField({ placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint }: Type.BaseTextFieldComponentProps) {
+export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
+  const { placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint } = props;
   const [lcColor, setLcColor] = useState<string | null>(null);
 
   const clearTextField = () => {
