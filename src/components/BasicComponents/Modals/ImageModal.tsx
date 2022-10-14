@@ -13,10 +13,10 @@ import * as Type from './Modal.type';
  */
 export function ImageModal(props: Type.IImageModalComponentProps) {
   const { title, children, onCancel, onConfirm, onClose, isVisible, image } = props;
-  const type = Type.Bottom;
+  const modalPosition = Type.Bottom;
   return (
-    <Modal isVisible={isVisible} backdropOpacity={0.25} style={S.inlineStyles(type).modal}>
-      <S.ModalBackDrop type={type}>
+    <Modal isVisible={isVisible} backdropOpacity={0.25} style={S.inlineStyles(modalPosition).modal}>
+      <S.ModalBackDrop modalPosition={modalPosition}>
         <S.ImageWrapper>
           {image}
           <S.ImageModalTopWrapper>
@@ -24,13 +24,15 @@ export function ImageModal(props: Type.IImageModalComponentProps) {
             {!!onClose && <CloseBlackIconDark onPress={onClose} />}
           </S.ImageModalTopWrapper>
         </S.ImageWrapper>
-        <S.ImageModalContainer type={type}>
+        <S.ImageModalContainer modalPosition={modalPosition}>
           <S.ContentWrapper>{children}</S.ContentWrapper>
           {!!onConfirm && (
             <S.ButtonWrapper>
-              {!!onCancel && <SecondaryButton label={'cancel'} onPress={() => {}} disabled={false} wrapperStyle={S.inlineStyles(type).halfbutton} />}
+              {!!onCancel && (
+                <SecondaryButton label={'cancel'} onPress={() => {}} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
+              )}
               {!!onCancel && <S.Gap />}
-              <PrimaryButton label={'confirm'} onPress={() => {}} disabled={false} wrapperStyle={S.inlineStyles(type).halfbutton} />
+              <PrimaryButton label={'confirm'} onPress={() => {}} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
             </S.ButtonWrapper>
           )}
         </S.ImageModalContainer>

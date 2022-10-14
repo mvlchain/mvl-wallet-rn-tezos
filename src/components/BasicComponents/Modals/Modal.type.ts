@@ -3,8 +3,7 @@ import React, { ReactComponentElement } from 'react';
 export const Center = 'center' as const;
 export const Bottom = 'bottom' as const;
 
-export type ModalType = typeof Center | typeof Bottom;
-
+export type TModalPosition = typeof Center | typeof Bottom;
 export interface IModalComponentProps {
   title: string;
   children: React.ReactNode;
@@ -15,11 +14,11 @@ export interface IModalComponentProps {
 }
 
 export interface IBaseModalComponentProps extends IModalComponentProps {
-  type: ModalType;
+  modalPosition: TModalPosition;
 }
 
 export interface IModalTypeProps {
-  type: ModalType;
+  modalPosition: TModalPosition;
 }
 
 //image
