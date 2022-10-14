@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import authStore from '@@store/authStore';
+import authStore from '@@store/auth/authStore';
 
 interface IuseSelectMnemonic {
   mnemonic: string;

@@ -3,46 +3,22 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 
 import { HideLight } from '@@assets/image';
-import { PrimaryButton } from '@@components/Buttons/BaseButton';
+import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { height } from '@@utils/ui';
 
 import * as S from './Mnemonic.style';
-import MnemonicChip from './MnemonicChip';
-
-interface IMnemonicProps {
-  type: 'hide' | 'show';
-  mnemonic: string;
-}
-
-const ShowMnemonicText = styled.Text`
-  margin-top: ${height * 66}px;
-  margin-bottom: ${height * 32}px;
-  ${({ theme }) => theme.font.Label.md}
-  font-family: ${({ theme }) => theme.fmMedium};
-  color: ${({ theme }) => theme.color.blackWhite};
-`;
-
-const ChipContainer = styled.View`
-  flex-direction: row;
-  width: 100%;
-`;
-
-const Column = styled.View`
-  width: 50%;
-`;
+import { IMnemonicProps } from './Mnemonic.type';
+import MnemonicChip from './MnemonicChip/MnemonicChip';
+import useMnemonic from './useMnemonic';
 
 function Mnemonic({ type, mnemonic }: IMnemonicProps) {
-  const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
-
-  useEffect(() => {
-    setMnemonicArr(mnemonic.split(' '));
-  }, []);
+  const { mnemonicArr } = useMnemonic({ mnemonic });
 
   return (
     <S.MnemonicContainer>
       {type === 'hide' ? (
         <>
-          <ShowMnemonicText>Make sure no one is watching your screen.</ShowMnemonicText>
+          <S.ShowMnemonicText>Make sure no one is watching your screen.</S.ShowMnemonicText>
           <HideLight />
           <PrimaryButton
             label='View Seed Phrase'
@@ -54,18 +30,18 @@ function Mnemonic({ type, mnemonic }: IMnemonicProps) {
           />
         </>
       ) : (
-        <ChipContainer>
-          <Column>
+        <S.ChipContainer>
+          <S.Column>
             {mnemonicArr.length > 0 &&
               mnemonicArr.slice(0, 12).map((mnemonic, index) => <MnemonicChip key={`${mnemonic}_${index}`} label={mnemonic} index={index + 1} />)}
-          </Column>
-          <Column>
+          </S.Column>
+          <S.Column>
             {mnemonicArr.length > 0 &&
               mnemonicArr
                 .slice(12, 24)
                 .map((mnemonic, index) => <MnemonicChip key={`${mnemonic}_${index + 12}`} label={mnemonic} index={index + 13} />)}
-          </Column>
-        </ChipContainer>
+          </S.Column>
+        </S.ChipContainer>
       )}
     </S.MnemonicContainer>
   );

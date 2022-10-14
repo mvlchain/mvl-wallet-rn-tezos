@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PrimaryButton } from '@@components/Buttons/BaseButton';
+import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import SelectMnemonic from '@@components/Mnemonic/SelectMnemonic';
 import TypedMnemonic from '@@components/Mnemonic/TypedMnemonic/TypedMnemonic';
 import { height } from '@@utils/ui';

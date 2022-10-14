@@ -4,8 +4,8 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 
 import { ROUTE_NAME } from '@@assets/constants';
-import { PrimaryButton } from '@@components/Buttons/BaseButton';
-import { TextButton } from '@@components/Buttons/TextButton';
+import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Mnemonic from '@@components/Mnemonic/Mnemonic';
 import { MainTabParamList } from '@@types/MainTabType';
 import { height } from '@@utils/ui';

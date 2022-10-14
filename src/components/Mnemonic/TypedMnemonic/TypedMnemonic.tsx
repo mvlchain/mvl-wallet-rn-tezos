@@ -1,29 +1,18 @@
 import React from 'react';
 
-import styled from 'styled-components/native';
-
-import * as S from '../Mnemonic.style';
+import * as CS from '../Mnemonic.style';
 
 import TypedChip from './TypedChip';
+import * as S from './TypedMnemonic.style';
 import useTypedMnemonic from './useTypedMnemonic';
-
-const ChipContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const Column = styled.View`
-  width: 47%;
-`;
 
 function TypedMnemonic() {
   const { mnemonicList, focusedIndex, onPressTypedChip } = useTypedMnemonic();
 
   return (
-    <S.MnemonicContainer>
-      <ChipContainer>
-        <Column>
+    <CS.MnemonicContainer>
+      <S.ChipContainer>
+        <S.Column>
           {mnemonicList.length > 0 &&
             mnemonicList
               .slice(0, 5)
@@ -37,8 +26,8 @@ function TypedMnemonic() {
                   onPress={() => onPressTypedChip(mnemonic.index)}
                 />
               ))}
-        </Column>
-        <Column>
+        </S.Column>
+        <S.Column>
           {mnemonicList.length > 0 &&
             mnemonicList
               .slice(5, 10)
@@ -52,9 +41,9 @@ function TypedMnemonic() {
                   onPress={() => onPressTypedChip(mnemonic.index)}
                 />
               ))}
-        </Column>
-      </ChipContainer>
-    </S.MnemonicContainer>
+        </S.Column>
+      </S.ChipContainer>
+    </CS.MnemonicContainer>
   );
 }
 

@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-import useAuthStore from '@@store/useAuthStore';
+import authStore from '@@store/auth/authStore';
 import { TMnemonic } from '@@types/MnemonicType';
 
 const useTypedMnemonic = () => {
-  const { mnemonicList, focusedIndex, initMnemonic, setFocusedIndex, removeMnemonic } = useAuthStore();
+  const { mnemonicList, focusedIndex, initMnemonic, setFocusedIndex, removeMnemonic } = authStore();
 
   useEffect(() => {
     const nums = new Set<number>();
