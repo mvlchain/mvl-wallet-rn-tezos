@@ -21,3 +21,20 @@ export const MnemonicContainer = styled.View`
   border-radius: ${width * 16}px;
   background-color: ${({ theme }) => theme.color.grey100Grey900};
 `;
+
+export const ShowMnemonicText = styled.Text`
+  margin-top: ${height * 66}px;
+  margin-bottom: ${height * 32}px;
+  ${({ theme }) => theme.font.Label.md}
+  font-family: ${({ theme }) => theme.fmMedium};
+  color: ${({ theme }) => theme.color.blackWhite};
+`;
+
+export const ChipContainer = styled.View`
+  flex-direction: row;
+  width: 100%;
+`;
+
+export const Column = styled.View`
+  width: 50%;
+`;

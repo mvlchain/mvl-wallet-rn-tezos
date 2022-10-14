@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import authStore from '@@store/authStore';
+import authStore from '@@store/auth/authStore';
 
 const useConfirmSeedPhrase = () => {
   const { mnemonicList } = authStore();

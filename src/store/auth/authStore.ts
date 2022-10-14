@@ -3,24 +3,14 @@ import { devtools } from 'zustand/middleware';
 
 import { TMnemonic } from '@@types/MnemonicType';
 
-interface IAuth extends IAuthState {
-  initMnemonic: (mnemonicArr: TMnemonic[]) => void;
-  setMnemonic: (mnemonic: TMnemonic) => void;
-  removeMnemonic: (selectedChipIndex: number) => void;
-  setFocusedIndex: (index: number) => void;
-}
-
-interface IAuthState {
-  mnemonicList: TMnemonic[];
-  focusedIndex: number;
-}
+import { IAuth, IAuthState } from './autStore.type';
 
 const initState: IAuthState = {
   mnemonicList: [],
   focusedIndex: 0,
 };
 
-const useAuthStore = create<IAuth>()(
+const authStore = create<IAuth>()(
   devtools((set) => ({
     ...initState,
     initMnemonic: (mnemonicArr: TMnemonic[]) => set(() => ({ mnemonicList: mnemonicArr }), false, 'initMnemonic'),
@@ -57,4 +47,4 @@ const useAuthStore = create<IAuth>()(
   }))
 );
 
-export default useAuthStore;
+export default authStore;
