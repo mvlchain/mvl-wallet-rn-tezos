@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Text } from 'react-native';
 import Modal from 'react-native-modal';
 
 import { CloseBlackIconLight } from '@@assets/image';
