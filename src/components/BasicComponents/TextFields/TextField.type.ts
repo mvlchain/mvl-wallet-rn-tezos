@@ -3,13 +3,13 @@ import { TextInputProps } from 'react-native';
 import { KeyboardTypeByInputType } from './BaseTextField';
 
 //Base
-export interface BaseTextFieldComponentProps extends BaseTextFieldProps {
+export interface IBaseTextFieldComponentProps extends IBaseTextFieldProps {
   style?: TextInputProps['style'];
   unit?: 'GWEI' | 'ETHER';
   type: keyof typeof KeyboardTypeByInputType;
 }
 
-export interface BaseTextFieldProps {
+export interface IBaseTextFieldProps {
   value: any;
   onChange: (value: any) => void;
   placeholder?: string;
@@ -19,12 +19,12 @@ export interface BaseTextFieldProps {
   scanable?: boolean;
 }
 
-export interface ContainerProps {
+export interface ITextFieldContainerProps {
   lcColor: string | null;
 }
 
 //TradeVolume
-export interface TradeVolumeComponentProps {
+export interface ITradeVolumeComponentProps {
   useMax?: boolean;
   onSelect?: () => void;
   label?: string;

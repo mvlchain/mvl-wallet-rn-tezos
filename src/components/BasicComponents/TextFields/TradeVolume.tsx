@@ -5,7 +5,8 @@ import { theme } from '@@style/theme';
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
-export function TradeVolume({ useMax, onSelect, label, symbol, value, onChange, hint }: Type.TradeVolumeComponentProps) {
+export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
+  const { useMax, onSelect, label, symbol, value, onChange, hint } = props;
   const clearTextField = () => {};
   return (
     <S.TradeVolumeContainer>
