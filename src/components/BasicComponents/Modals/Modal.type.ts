@@ -1,4 +1,4 @@
-import React, { ReactComponentElement } from 'react';
+import React from 'react';
 
 export const Center = 'center' as const;
 export const Bottom = 'bottom' as const;
@@ -6,11 +6,11 @@ export const Bottom = 'bottom' as const;
 export type TModalPosition = typeof Center | typeof Bottom;
 export interface IModalComponentProps {
   title: string;
-  children: React.ReactNode;
   isVisible: boolean;
   onCancel?: Function;
   onConfirm?: Function;
   onClose?: Function;
+  children: React.ReactNode;
 }
 
 export interface IBaseModalComponentProps extends IModalComponentProps {
