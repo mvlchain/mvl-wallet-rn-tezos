@@ -3,7 +3,8 @@ import styled from 'styled-components/native';
 
 import { width } from '@@utils/ui';
 
-import { Center, ModalTypeProps, ModalType } from './Modal.type';
+import * as Type from './Modal.type';
+
 export const ModalTitle = styled.Text`
   ${({ theme }) => theme.font.Title.sm};
   color: ${({ theme }) => theme.color.blackWhite};
@@ -34,24 +35,24 @@ export const Gap = styled.View`
   width: ${width * 16}px;
 `;
 
-export const ModalContainer = styled.View<ModalTypeProps>`
+export const ModalContainer = styled.View<Type.IModalTypeProps>`
   background-color: ${({ theme }) => theme.color.whiteBlack};
   border-radius: ${width * 24}px;
   padding: ${width * 24}px;
-  padding-bottom: ${({ type }) => (type === Center ? '0' : `${width * 34}px`)};
+  padding-bottom: ${({ modalPosition }) => (modalPosition === Type.Center ? '0' : `${width * 34}px`)};
 `;
 
-export const ModalBackDrop = styled.View<ModalTypeProps>`
+export const ModalBackDrop = styled.View<Type.IModalTypeProps>`
   flex: 1;
-  justify-content: ${({ type }) => (type === Center ? 'center' : 'flex-end')};
+  justify-content: ${({ modalPosition }) => (modalPosition === Type.Center ? 'center' : 'flex-end')};
   margin: 0;
 `;
 
-export const inlineStyles = (type: ModalType) =>
+export const inlineStyles = (modalPosition: Type.TModalPosition) =>
   StyleSheet.create({
     modal: {
       justifyContent: 'flex-end',
-      margin: type === Center ? 16 : 0,
+      margin: modalPosition === Type.Center ? 16 : 0,
     },
     halfbutton: { flex: 1 },
   });
