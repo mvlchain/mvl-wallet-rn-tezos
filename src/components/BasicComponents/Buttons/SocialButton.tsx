@@ -3,7 +3,7 @@ import { SocialAppleDark, SocialAppleLight, SocialGoogle } from '@@assets/image'
 import * as S from './Button.style';
 import * as Type from './Button.type';
 
-export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.BaseButtonComponentProps) {
+export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButtonComponentProps) {
   const outlineStyle = S.baseButtonStyleObj.outline;
   return (
     <S.BaseButtonContainer
@@ -32,7 +32,7 @@ export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.BaseButto
   );
 }
 
-export function AppleButton({ onPress, disabled, wrapperStyle }: Type.BaseButtonComponentProps) {
+export function AppleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButtonComponentProps) {
   const blackStyle = S.baseButtonStyleObj.black;
   return (
     <S.BaseButtonContainer onPress={onPress} style={wrapperStyle}>

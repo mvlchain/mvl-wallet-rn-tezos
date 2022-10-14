@@ -6,58 +6,58 @@ import { CommonColor, ThemeColor } from '@@style/theme';
 export const BUTTON_SIZE = { SMALL: 'small', DEFAULT: 'default' } as const;
 export const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
 
-export type ButtonType = typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];
-export type ButtonSizeType = typeof BUTTON_SIZE[keyof typeof BUTTON_SIZE];
-export interface BaseButtonWrapper {
-  size?: ButtonSizeType;
+export type TButtonType = typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];
+export type TButtonSizeType = typeof BUTTON_SIZE[keyof typeof BUTTON_SIZE];
+export interface IBaseButtonWrapper {
+  size?: TButtonSizeType;
 }
-export interface BaseButtonProps {
+export interface IBaseButtonProps {
   bgColor: CommonColor | ThemeColor;
   bgColorPressed: CommonColor | ThemeColor;
   bgColorDisabled: CommonColor | ThemeColor;
   lcColor?: CommonColor | ThemeColor;
   pressed?: boolean;
   disabled?: boolean;
-  size?: ButtonSizeType;
+  size?: TButtonSizeType;
 }
-export interface BaseButtonLabelProps {
+export interface IBaseButtonLabelProps {
   txColor: CommonColor | ThemeColor;
   txColorDisabled: CommonColor | ThemeColor;
   disabled?: boolean;
-  size?: ButtonSizeType;
+  size?: TButtonSizeType;
 }
-export interface BaseButtonStyle {
-  bg: BaseButtonProps;
-  tx: BaseButtonLabelProps;
-}
-
-export interface BaseButtonStyleObj {
-  primary: BaseButtonStyle;
-  secondary: BaseButtonStyle;
-  outline: BaseButtonStyle;
-  black: BaseButtonStyle;
+export interface IBaseButtonStyleProps {
+  bg: IBaseButtonProps;
+  tx: IBaseButtonLabelProps;
 }
 
-export interface BaseButtonComponentProps {
+export interface IBaseButtonStyleObj {
+  primary: IBaseButtonStyleProps;
+  secondary: IBaseButtonStyleProps;
+  outline: IBaseButtonStyleProps;
+  black: IBaseButtonStyleProps;
+}
+
+export interface IBaseButtonComponentProps {
   label?: string;
   disabled?: boolean;
   wrapperStyle?: ViewProps['style'];
   buttonStyle?: ViewProps['style'];
   textStyle?: TextProps['style'];
-  size?: ButtonSizeType;
+  size?: TButtonSizeType;
   onPress(): void;
 }
 //Social
-export interface IconWrapperProps {
+export interface IIconWrapperProps {
   disabled?: boolean;
 }
 //Text
-export interface TextButtonLabelProps {
+export interface ITextButtonLabelProps {
   disabled?: boolean;
   pressed?: boolean;
 }
 
-export interface TextButtonComponentProps {
+export interface ITextButtonComponentProps {
   label: string;
   disabled: boolean;
   wrapperStyle?: ViewProps['style'];

@@ -3,7 +3,7 @@ import React from 'react';
 import * as S from './Button.style';
 import * as Type from './Button.type';
 
-export function TextButton({ label, onPress, disabled, wrapperStyle, textStyle }: Type.TextButtonComponentProps) {
+export function TextButton({ label, onPress, disabled, wrapperStyle, textStyle }: Type.ITextButtonComponentProps) {
   return (
     <S.TextButtonContainer
       onPress={() => {
