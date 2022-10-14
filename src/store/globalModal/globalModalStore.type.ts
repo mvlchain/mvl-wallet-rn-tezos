@@ -1,10 +1,7 @@
-import { KEY_NOT_FOUND } from '@tkey/common-types';
-
 import { MODAL_COMPONENTS } from '@@components/Modals/GlobalModal';
 
 export const MODAL_TYPES = {
   TEST_MODAL: 'TEST_MODAL',
-  TOST_MODAL: 'TOST_MODAL',
 } as const;
 
 export type MODAL_TYPE = keyof typeof MODAL_TYPES;
