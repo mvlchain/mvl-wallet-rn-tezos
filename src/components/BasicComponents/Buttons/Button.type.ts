@@ -45,7 +45,7 @@ export interface IBaseButtonComponentProps {
   buttonStyle?: ViewProps['style'];
   textStyle?: TextProps['style'];
   size?: TButtonSizeType;
-  onPress(): void;
+  onPress: Function;
 }
 //Social
 export interface IIconWrapperProps {
@@ -62,5 +62,5 @@ export interface ITextButtonComponentProps {
   disabled: boolean;
   wrapperStyle?: ViewProps['style'];
   textStyle?: TextProps['style'];
-  onPress(): void;
+  onPress: Function;
 }
