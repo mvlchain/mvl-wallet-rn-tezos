@@ -33,6 +33,10 @@ export const LoginButtonWrapper = styled.View`
   width: 100%;
 `;
 
+export const PrimaryButtonWrapper = styled(LoginButtonWrapper)`
+  margin-top: ${width * 78}px;
+`;
+
 export const LoginInlineStyle = StyleSheet.create({
   marginTop: {
     marginTop: height * 16,
