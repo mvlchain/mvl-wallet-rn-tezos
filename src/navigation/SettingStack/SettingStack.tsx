@@ -2,22 +2,22 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import SignIn from '@@screens/SignIn';
+import SettingMain from '@@screens/Setting';
 
-import { AUTH_STACK_ROUTE, TAuthStackParamList } from './AuthStack.type';
+import { SETTING_STACK_ROUTE, TSettingStackParamList } from './SettingStack.type';
 
-const { Navigator, Screen } = createNativeStackNavigator<TAuthStackParamList>();
+const { Navigator, Screen } = createNativeStackNavigator<TSettingStackParamList>();
 
 type ScreenProps = Parameters<typeof Screen>[0];
 
 const screens: Array<ScreenProps> = [
   {
-    name: AUTH_STACK_ROUTE.SIGN_IN,
-    component: SignIn,
+    name: SETTING_STACK_ROUTE.SETTING,
+    component: SettingMain,
   },
 ];
 
-function AuthStack() {
+function SettingStack() {
   return (
     <Navigator
       screenOptions={{
@@ -31,4 +31,4 @@ function AuthStack() {
   );
 }
 
-export default AuthStack;
+export default SettingStack;
