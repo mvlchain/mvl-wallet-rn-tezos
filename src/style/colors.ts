@@ -37,8 +37,10 @@ export const colorCombine = {
 
   grey100Transparent: [grey100, transparent],
   grey100Grey900: [grey100, grey900],
+  grey100Grey800: [grey100, grey800],
+  grey200Grey800: [grey200, grey800],
+  grey200Grey900: [grey200, grey900],
   grey800Grey200: [grey800, grey200],
-  grey900Whithe: [grey900, white],
   grey300White: [grey300, white],
   grey300Grey700: [grey300, grey700],
   grey300Grey800: [grey300, grey800],
