@@ -1,8 +1,6 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { View } from 'react-native';
 
 import { ROUTE_NAME } from '@@assets/constants';
 import { BrowserNormal, BrowserSelected, HomeNormal, HomeSelected, SettingNormal, SettingSelected, TradeNormal, TradeSelected } from '@@assets/image';
@@ -11,9 +9,11 @@ import Home from '@@screens/Home';
 import Setting from '@@screens/Setting';
 import Trade from '@@screens/Trade';
 
-const Wallet = createBottomTabNavigator();
+import { TMainTabParamList } from './MainTab.type';
 
-type ScreenProps = Parameters<typeof Wallet.Screen>[0];
+const { Navigator, Screen } = createBottomTabNavigator<TMainTabParamList>();
+
+type ScreenProps = Parameters<typeof Screen>[0];
 
 const screens: Array<ScreenProps> = [
   {
@@ -46,29 +46,19 @@ const screens: Array<ScreenProps> = [
   },
 ];
 
-const routerTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: '#fff',
-  },
-};
-
-function Router() {
+function MainTab() {
   return (
-    <NavigationContainer theme={routerTheme}>
-      <Wallet.Navigator
-        screenOptions={{
-          tabBarShowLabel: false,
-          headerShown: false,
-        }}
-      >
-        {screens.map((props) => (
-          <Wallet.Screen key={props.name} {...props} />
-        ))}
-      </Wallet.Navigator>
-    </NavigationContainer>
+    <Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        headerShown: false,
+      }}
+    >
+      {screens.map((props) => (
+        <Screen key={props.name} {...props} />
+      ))}
+    </Navigator>
   );
 }
 
-export default Router;
+export default MainTab;
