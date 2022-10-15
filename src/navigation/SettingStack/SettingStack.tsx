@@ -12,7 +12,7 @@ type ScreenProps = Parameters<typeof Screen>[0];
 
 const screens: Array<ScreenProps> = [
   {
-    name: SETTING_STACK_ROUTE.SETTING,
+    name: SETTING_STACK_ROUTE.SETTING_MAIN,
     component: SettingMain,
   },
 ];
