@@ -20,7 +20,7 @@ export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButt
           </S.IconWrapper>
           <S.TextWrapper>
             <S.BaseButtonLabel {...outlineStyle.tx} disabled={disabled}>
-              a{'Continue with'}
+              {'Continue with'}
             </S.BaseButtonLabel>
             <S.BoldLabel {...outlineStyle.tx} disabled={disabled}>
               {' Google'}
