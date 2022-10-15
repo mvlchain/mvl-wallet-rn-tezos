@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { ROUTE_NAME } from '@@assets/constants';
 import { BrowserNormal, BrowserSelected, HomeNormal, HomeSelected, SettingNormal, SettingSelected, TradeNormal, TradeSelected } from '@@assets/image';
+import SettingStack from '@@navigation/SettingStack';
 import Browser from '@@screens/Browser';
 import Home from '@@screens/Home';
-import Setting from '@@screens/Setting';
 import Trade from '@@screens/Trade';
 
 import { TMainTabParamList } from './MainTab.type';
@@ -39,7 +39,7 @@ const screens: Array<ScreenProps> = [
   },
   {
     name: ROUTE_NAME.SETTING,
-    component: Setting,
+    component: SettingStack,
     options: {
       tabBarIcon: ({ size, focused }) => (focused ? <SettingSelected width={size} height={size} /> : <SettingNormal width={size} height={size} />),
     },

@@ -1,21 +1,13 @@
 import React from 'react';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text, View } from 'react-native';
 
-import SettingMainScreen from './Main';
-
-const SettingNavigator = createNativeStackNavigator();
-
-function Setting() {
+function SettingMain() {
   return (
-    <SettingNavigator.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <SettingNavigator.Screen name='Main' component={SettingMainScreen} />
-    </SettingNavigator.Navigator>
+    <View>
+      <Text>Setting!</Text>
+    </View>
   );
 }
 
-export default Setting;
+export default SettingMain;
