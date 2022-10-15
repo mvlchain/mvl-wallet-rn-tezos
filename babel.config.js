@@ -26,6 +26,7 @@ module.exports = {
           '@@store': './src/store',
           '@@style': './src/style',
           '@@domain': './src/domain',
+          '@@navigation': './src/navigation',
         },
       },
     ],
