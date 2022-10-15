@@ -29,10 +29,10 @@ export function ImageModal(props: Type.IImageModalComponentProps) {
           {!!onConfirm && (
             <S.ButtonWrapper>
               {!!onCancel && (
-                <SecondaryButton label={'cancel'} onPress={() => {}} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
+                <SecondaryButton label={'cancel'} onPress={onCancel} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
               )}
               {!!onCancel && <S.Gap />}
-              <PrimaryButton label={'confirm'} onPress={() => {}} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
+              <PrimaryButton label={'confirm'} onPress={onConfirm} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
             </S.ButtonWrapper>
           )}
         </S.ImageModalContainer>
