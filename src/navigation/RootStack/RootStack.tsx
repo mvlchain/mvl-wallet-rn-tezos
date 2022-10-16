@@ -2,6 +2,7 @@ import React from 'react';
 
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native';
 
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
@@ -16,10 +17,16 @@ const screens: Array<ScreenProps> = [
   {
     name: ROOT_STACK_ROUTE.AUTH,
     component: AuthStack,
+    options: {
+      headerShown: false,
+    },
   },
   {
     name: ROOT_STACK_ROUTE.MAIN,
     component: MainTab,
+    options: {
+      headerShown: false,
+    },
   },
 ];
 
@@ -33,13 +40,15 @@ const routerTheme = {
 
 function RootStack() {
   return (
-    <NavigationContainer theme={routerTheme}>
-      <Navigator initialRouteName={ROOT_STACK_ROUTE.AUTH}>
-        {screens.map((props) => (
-          <Screen key={props.name} {...props} />
-        ))}
-      </Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1 }}>
+      <NavigationContainer theme={routerTheme}>
+        <Navigator initialRouteName={ROOT_STACK_ROUTE.AUTH}>
+          {screens.map((props) => (
+            <Screen key={props.name} {...props} />
+          ))}
+        </Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
