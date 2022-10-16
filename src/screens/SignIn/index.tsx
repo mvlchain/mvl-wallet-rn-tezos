@@ -6,12 +6,12 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
 import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 import ShareRepository from '@@domain/auth/ShareRepository';
-import { ROOT_STACK_ROUTE, RootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import useStore from '@@store/index';
 
 import PinModal from './pin';
 
-type StackProps = RootStackNavigationProps<'AUTH'>;
+type StackProps = TRootStackNavigationProps<'AUTH'>;
 
 function SignIn({ login }: { login: () => void }) {
   const auth: IAuthService = new CustomAuthAuthServiceImpl();
