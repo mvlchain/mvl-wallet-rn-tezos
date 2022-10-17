@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SettingAppVersion from '@@screens/Setting/SettingAppVersion';
 import SettingDeleteAccount from '@@screens/Setting/SettingDeleteAccount';
+import SettingFAQ from '@@screens/Setting/SettingFAQ';
 import SettingMain from '@@screens/Setting/SettingMain';
 import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
@@ -45,6 +46,10 @@ const screens: Array<ScreenProps> = [
   {
     name: SETTING_STACK_ROUTE.SETTING_PRIVATE_KEY,
     component: SettingPrivateKey,
+  },
+  {
+    name: SETTING_STACK_ROUTE.SETTING_FAQ,
+    component: SettingFAQ,
   },
 ];
 
