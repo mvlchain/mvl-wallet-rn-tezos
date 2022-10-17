@@ -7,6 +7,7 @@ import SettingDeleteAccount from '@@screens/Setting/SettingDeleteAccount';
 import SettingMain from '@@screens/Setting/SettingMain';
 import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
+import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingDeleteAccount/SettingPrivateKey';
 import SettingTermsOfService from '@@screens/Setting/SettingTermsOfService';
 
 import { SETTING_STACK_ROUTE, TSettingStackParamList } from './SettingStack.type';
@@ -15,6 +16,7 @@ const { Navigator, Screen } = createNativeStackNavigator<TSettingStackParamList>
 
 type ScreenProps = Parameters<typeof Screen>[0];
 
+// TODO: header 추가하기
 const screens: Array<ScreenProps> = [
   {
     name: SETTING_STACK_ROUTE.SETTING_MAIN,
@@ -39,6 +41,10 @@ const screens: Array<ScreenProps> = [
   {
     name: SETTING_STACK_ROUTE.SETTING_APP_VERSION,
     component: SettingAppVersion,
+  },
+  {
+    name: SETTING_STACK_ROUTE.SETTING_PRIVATE_KEY,
+    component: SettingPrivateKey,
   },
 ];
 
