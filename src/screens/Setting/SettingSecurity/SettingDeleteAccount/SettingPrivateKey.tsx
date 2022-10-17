@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-function SettingMain() {
+function SettingPrivateKey() {
   return (
     <View>
-      <Text>Setting!</Text>
+      <Text>Setting Private Key</Text>
     </View>
   );
 }
 
-export default SettingMain;
+export default SettingPrivateKey;

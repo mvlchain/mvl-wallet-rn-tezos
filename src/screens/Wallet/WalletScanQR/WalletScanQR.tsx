@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-function SettingMain() {
+function WalletScanQR() {
   return (
     <View>
-      <Text>Setting!</Text>
+      <Text>Wallet Scan QR</Text>
     </View>
   );
 }
 
-export default SettingMain;
+export default WalletScanQR;

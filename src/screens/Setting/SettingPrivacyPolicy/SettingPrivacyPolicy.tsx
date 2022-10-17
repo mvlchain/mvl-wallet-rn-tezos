@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-function SettingMain() {
+function SettingPrivacyPolicy() {
   return (
     <View>
-      <Text>Setting!</Text>
+      <Text>Setting Privacy Policy</Text>
     </View>
   );
 }
 
-export default SettingMain;
+export default SettingPrivacyPolicy;
