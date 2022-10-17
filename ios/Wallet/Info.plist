@@ -63,7 +63,15 @@
 		<string></string>
 		<key>UIAppFonts</key>
 		<array>
-			<string>Fonts/AppleSDGothicNeo.ttf</string>
+			<string>Fonts/AppleSDGothicNeoH00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoEB00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoB00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoSB00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoM00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoR00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoL00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoUL00.ttf</string>
+			<string>Fonts/AppleSDGothicNeoT00.ttf</string>
 			<string>Fonts/MaterialIcons.ttf</string>
 		</array>
 		<key>UIBackgroundModes</key>

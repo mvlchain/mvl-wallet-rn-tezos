@@ -7,6 +7,8 @@ export const ROUTE_NAME = {
   BROWSER: 'BROWSER',
   TRADE: 'TRADE',
   SETTING: 'SETTING',
+  SEEDPHRASE: 'SEEDPHRASE',
+  CONFIRM_SEEDPHRASE: 'CONFIRM_SEEDPHRASE',
 } as const;
 
 export type RouteName = valueOf<typeof ROUTE_NAME>;
