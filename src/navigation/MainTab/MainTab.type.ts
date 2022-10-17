@@ -3,7 +3,7 @@ import { BottomTabScreenProps, BottomTabNavigationProp } from '@react-navigation
 import { valueOf } from '@@types/etc';
 
 export type TMainTabParamList = {
-  HOME: undefined;
+  WALLET: undefined;
   BROWSER: undefined;
   SETTING: undefined;
   TRADE: undefined;
@@ -12,7 +12,7 @@ export type TMainTabParamList = {
 export type MainTabRouteType = Record<keyof TMainTabParamList, keyof TMainTabParamList>;
 
 export const MAIN_TAB_ROUTE: MainTabRouteType = {
-  HOME: 'HOME',
+  WALLET: 'WALLET',
   BROWSER: 'BROWSER',
   TRADE: 'TRADE',
   SETTING: 'SETTING',
