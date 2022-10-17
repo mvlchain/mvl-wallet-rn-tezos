@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
@@ -14,13 +15,14 @@ import PinModal from './pin';
 type StackProps = TRootStackNavigationProps<'AUTH'>;
 
 function SignIn({ login }: { login: () => void }) {
+  const { t, i18n } = useTranslation();
+
   const auth: IAuthService = new CustomAuthAuthServiceImpl();
 
   const navigation = useNavigation<StackProps>();
   const { isAuthenticated, toggle } = useStore();
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-
   // TEST only
   useEffect(() => {
     try {
@@ -67,8 +69,14 @@ function SignIn({ login }: { login: () => void }) {
     navigation.navigate(ROOT_STACK_ROUTE.MAIN);
   };
 
+  const changeLang = () => {
+    i18n.changeLanguage(i18n.language === 'en' ? 'ko' : 'en');
+  };
+
   return (
     <View style={styles.container}>
+      <Text>{t('address')}</Text>
+      <Button title='Change Language' onPress={changeLang} />
       <PinModal />
       <Text>{isAuthenticated ? 'Auth' : 'Unauth'}</Text>
       <Button title='Toggle Auth' onPress={() => toggle()} />
