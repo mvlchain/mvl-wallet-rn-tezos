@@ -3,13 +3,12 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import SettingMenu from '@@components/Setting/SettingMenu';
+import useCommonSetting from '@@hooks/setting/useCommonSetting';
 import { SETTING_STACK_ROUTE } from '@@navigation/SettingStack/SettingStack.type';
-
-import useSettingMain from './useSettingMain';
 
 function SettingMain() {
   // TODO: title 다국어, subtitle 데이터 연동하기, 디자인 추가
-  const { onPressSettingMenu } = useSettingMain();
+  const { onPressSettingMenu } = useCommonSetting({ routeName: 'SETTING_MAIN' });
   return (
     <View>
       <Text style={{ fontSize: 30 }}>Setting</Text>

@@ -2,9 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 
 import { TSettingStackNavigationProps, TSettingStackParamList } from '@@navigation/SettingStack/SettingStack.type';
 
-type StackProps = TSettingStackNavigationProps<'SETTING_MAIN'>;
+import { IUseCommonSettingProps } from './useCommonSetting.type';
 
-const useSettingMain = () => {
+const useSettingMain = ({ routeName }: IUseCommonSettingProps) => {
+  type StackProps = TSettingStackNavigationProps<typeof routeName>;
+
   const navigation = useNavigation<StackProps>();
 
   const onPressSettingMenu = (target: keyof TSettingStackParamList) => {
