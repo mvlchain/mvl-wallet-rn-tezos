@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+
+import { StyleSheet, Text } from 'react-native';
 import { Avatar, Button } from 'react-native-paper';
+import styled from 'styled-components/native';
 
 import { MoreIcon, WhiteQrIcon, WhiteScanIcon } from '@@assets/image';
 import { useCurrentAccount } from '@@hooks/useAccount';
@@ -44,6 +46,10 @@ function Account() {
     </View>
   );
 }
+
+const View = styled.View`
+  ${({ theme }) => theme.font.Title.lg}
+`;
 
 const styles = StyleSheet.create({
   container: { padding: width * 24 },

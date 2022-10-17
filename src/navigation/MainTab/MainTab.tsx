@@ -7,8 +7,8 @@ import SettingStack from '@@navigation/SettingStack';
 import Browser from '@@screens/Browser';
 import Trade from '@@screens/Trade';
 import Wallet from '@@screens/Wallet';
-
 import { MAIN_TAB_ROUTE, TMainTabParamList } from './MainTab.type';
+
 
 const { Navigator, Screen } = createBottomTabNavigator<TMainTabParamList>();
 
