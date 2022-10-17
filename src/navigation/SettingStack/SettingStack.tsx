@@ -2,10 +2,10 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import Setting from '@@screens/Setting';
 import SettingAppVersion from '@@screens/Setting/SettingAppVersion';
 import SettingDeleteAccount from '@@screens/Setting/SettingDeleteAccount';
 import SettingFAQ from '@@screens/Setting/SettingFAQ';
-import SettingMain from '@@screens/Setting/SettingMain';
 import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
 import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingDeleteAccount/SettingPrivateKey';
@@ -21,7 +21,7 @@ type ScreenProps = Parameters<typeof Screen>[0];
 const screens: Array<ScreenProps> = [
   {
     name: SETTING_STACK_ROUTE.SETTING_MAIN,
-    component: SettingMain,
+    component: Setting,
   },
   {
     name: SETTING_STACK_ROUTE.SETTING_PRIVACY_POLITY,

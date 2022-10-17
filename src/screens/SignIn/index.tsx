@@ -97,7 +97,7 @@ function SignIn({ login }: { login: () => void }) {
 }
 
 const SText = styled.Text`
-  ${({ theme }) => theme.font.Paragraph.lg}
+  ${({ theme }) => theme.font?.Paragraph.lg}
 `;
 
 const styles = StyleSheet.create({
