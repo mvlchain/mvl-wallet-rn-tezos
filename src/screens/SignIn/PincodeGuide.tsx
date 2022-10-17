@@ -4,7 +4,7 @@ import { width, height } from '@@utils/ui';
 
 import * as S from './Login.style';
 
-export default function PincodeGuide() {
+function PincodeGuide() {
   return (
     <S.LoginContainer>
       <S.LoginTitleWrapper>
@@ -22,3 +22,5 @@ export default function PincodeGuide() {
     </S.LoginContainer>
   );
 }
+
+export default PincodeGuide;
