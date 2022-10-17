@@ -4,7 +4,7 @@ import { TSettingStackNavigationProps, TSettingStackParamList } from '@@navigati
 
 import { IUseCommonSettingProps } from './useCommonSetting.type';
 
-const useSettingMain = ({ routeName }: IUseCommonSettingProps) => {
+const useCommonSetting = ({ routeName }: IUseCommonSettingProps) => {
   type StackProps = TSettingStackNavigationProps<typeof routeName>;
 
   const navigation = useNavigation<StackProps>();
@@ -15,4 +15,4 @@ const useSettingMain = ({ routeName }: IUseCommonSettingProps) => {
   return { onPressSettingMenu };
 };
 
-export default useSettingMain;
+export default useCommonSetting;
