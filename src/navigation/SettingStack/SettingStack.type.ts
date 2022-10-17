@@ -10,6 +10,7 @@ export type TSettingStackParamList = {
   SETTING_DELETE_ACCOUNT: undefined;
   SETTING_APP_VERSION: undefined;
   SETTING_PRIVATE_KEY: undefined;
+  SETTING_FAQ: undefined;
 };
 
 export type TSettingStackRouteType = Record<keyof TSettingStackParamList, keyof TSettingStackParamList>;
@@ -22,6 +23,7 @@ export const SETTING_STACK_ROUTE: TSettingStackRouteType = {
   SETTING_DELETE_ACCOUNT: 'SETTING_DELETE_ACCOUNT',
   SETTING_APP_VERSION: 'SETTING_APP_VERSION',
   SETTING_PRIVATE_KEY: 'SETTING_PRIVATE_KEY',
+  SETTING_FAQ: 'SETTING_FAQ',
 } as const;
 
 export type RouteName = valueOf<typeof SETTING_STACK_ROUTE>;

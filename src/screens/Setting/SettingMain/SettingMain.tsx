@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, View } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 
 import SettingMenu from '@@components/Setting/SettingMenu';
 import useCommonSetting from '@@hooks/setting/useCommonSetting';
@@ -10,7 +10,7 @@ function SettingMain() {
   // TODO: title 다국어, subtitle 데이터 연동하기, 디자인 추가
   const { onPressSettingMenu } = useCommonSetting({ routeName: 'SETTING_MAIN' });
   return (
-    <View>
+    <ScrollView bounces={false}>
       <Text style={{ fontSize: 30 }}>Setting</Text>
       <SettingMenu
         title='Currency'
@@ -37,6 +37,12 @@ function SettingMain() {
         title='Security'
         onPress={() => {
           onPressSettingMenu(SETTING_STACK_ROUTE.SETTING_SECURITY);
+        }}
+      />
+      <SettingMenu
+        title='FAQ'
+        onPress={() => {
+          onPressSettingMenu(SETTING_STACK_ROUTE.SETTING_FAQ);
         }}
       />
       <SettingMenu
@@ -70,7 +76,7 @@ function SettingMain() {
           onPressSettingMenu(SETTING_STACK_ROUTE.SETTING_DELETE_ACCOUNT);
         }}
       />
-    </View>
+    </ScrollView>
   );
 }
 
