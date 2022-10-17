@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-function SettingMain() {
+function WalletTokenDetail() {
   return (
     <View>
-      <Text>Setting!</Text>
+      <Text>Wallet Token Detail</Text>
     </View>
   );
 }
 
-export default SettingMain;
+export default WalletTokenDetail;

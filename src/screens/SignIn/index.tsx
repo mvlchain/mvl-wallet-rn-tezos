@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { CustomAuthAuthServiceImpl } from '@@domain/auth/CustomAuthAuthServiceImpl';
 import IAuthService, { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 import ShareRepository from '@@domain/auth/ShareRepository';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import useStore from '@@store/index';
 
 import PinModal from './pin';
 
-function Login({ login }: { login: () => void }) {
+type StackProps = TRootStackNavigationProps<'AUTH'>;
+
+function SignIn({ login }: { login: () => void }) {
   const { t, i18n } = useTranslation();
+
   const auth: IAuthService = new CustomAuthAuthServiceImpl();
 
+  const navigation = useNavigation<StackProps>();
   const { isAuthenticated, toggle } = useStore();
   const [key, setKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -59,6 +65,10 @@ function Login({ login }: { login: () => void }) {
     await auth.logout();
   };
 
+  const goToMain = () => {
+    navigation.navigate(ROOT_STACK_ROUTE.MAIN);
+  };
+
   const changeLang = () => {
     i18n.changeLanguage(i18n.language === 'en' ? 'ko' : 'en');
   };
@@ -76,7 +86,7 @@ function Login({ login }: { login: () => void }) {
       <Button title='Login with Apple' onPress={signInApple} />
       <Button title='Logout' onPress={logout} />
       <Button title='Delete Account' onPress={deleteAccount} />
-      <Button title='Go to Main' onPress={login} />
+      <Button title='Go to Main' onPress={goToMain} />
     </View>
   );
 }
@@ -100,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default SignIn;

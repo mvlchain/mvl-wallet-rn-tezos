@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-function SettingMain() {
+function SettingFAQ() {
   return (
     <View>
-      <Text>Setting!</Text>
+      <Text>Setting FAQ</Text>
     </View>
   );
 }
 
-export default SettingMain;
+export default SettingFAQ;

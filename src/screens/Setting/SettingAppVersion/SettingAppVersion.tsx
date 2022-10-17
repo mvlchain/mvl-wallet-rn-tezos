@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-function SettingMain() {
+function SettingAppVersion() {
   return (
     <View>
-      <Text>Setting!</Text>
+      <Text>Setting AppVersion</Text>
     </View>
   );
 }
 
-export default SettingMain;
+export default SettingAppVersion;
