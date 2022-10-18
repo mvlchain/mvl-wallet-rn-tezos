@@ -5,12 +5,12 @@ import { MODAL_TYPES } from '../GlobalModal';
 
 import SettingBottomMenu from './SettingBottomMenu';
 import { ISettingBottomModalProps } from './SettingBottomModal.type';
-function SettingBottomModal({ menuList }: ISettingBottomModalProps) {
+function SettingBottomModal({ modalTitle, menuList }: ISettingBottomModalProps) {
   const { modalType, closeModal } = globalModalStore();
 
   return (
     <BaseModal
-      title={'theme'}
+      title={modalTitle}
       modalPosition='bottom'
       isVisible={modalType === MODAL_TYPES.SETTING_BOTTOM}
       onClose={() => {
