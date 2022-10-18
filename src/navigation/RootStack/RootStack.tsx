@@ -4,6 +4,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native';
 
+import { GlobalModal } from '@@components/Modals/GlobalModal';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
 
@@ -48,6 +49,7 @@ function RootStack() {
           ))}
         </Navigator>
       </NavigationContainer>
+      <GlobalModal />
     </SafeAreaView>
   );
 }

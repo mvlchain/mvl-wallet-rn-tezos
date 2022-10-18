@@ -27,6 +27,7 @@ module.exports = {
           '@@style': './src/style',
           '@@domain': './src/domain',
           '@@navigation': './src/navigation',
+          '@@constants': './src/constants',
         },
       },
     ],

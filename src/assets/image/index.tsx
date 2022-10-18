@@ -11,6 +11,9 @@ export { default as MoreIcon } from './ic-more.svg';
 export { default as CopyIcon } from './ic-copy.svg';
 export { default as ChevronDownBlueIcon } from './ic-chevron-down-blue.svg';
 export { default as ChevronDownBlackIcon } from './ic-chevron-down-black.svg';
+export { default as ChevronRightBlackIcon } from './ic-chevron-right-black.svg';
+export { default as ChevronRightLightIcon } from './ic-chevron-right-light.svg';
+
 export { default as WhiteQrIcon } from './ic-qr-white.svg';
 export { default as WhiteScanIcon } from './ic-scan-white.svg';
 export { default as BlackScanIcon } from './ic-scan-black.svg';
@@ -35,3 +38,4 @@ export { default as NFTImage } from './img-nft.svg';
 
 export { default as TokenMVL32Icon } from './ic-token-mvlx32.svg';
 export { default as QRScanOverlay } from './img-qr-scan-overlay.svg';
+export { default as SelectIcon } from './ic-select.svg';
