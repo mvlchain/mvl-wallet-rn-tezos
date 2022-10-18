@@ -1,14 +1,16 @@
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { MODAL_TYPE } from '@@store/globalModal/globalModalStore.type';
 
+import SettingBottomModal from './SettingBottomModal/SettingBottomModal';
 import { TextModal } from './TextModal';
 
 export const MODAL_TYPES = {
   TEXT_MODAL: 'TEXT_MODAL',
+  SETTING_BOTTOM: 'SETTING_BOTTOM',
 } as const;
 
 export const MODAL_COMPONENTS = {
   [MODAL_TYPES.TEXT_MODAL]: TextModal,
+  [MODAL_TYPES.SETTING_BOTTOM]: SettingBottomModal,
 };
 
 export const GlobalModal = () => {
