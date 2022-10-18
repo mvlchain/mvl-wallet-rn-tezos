@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import useSettingBottomModal from '@@components/Modals/SettingBottomModal/useSettingBottomModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
-import { LANGUAGE_NAME } from '@@constants/setting.constant';
+import { LANGUAGE_NAME, THEME_NAME } from '@@constants/setting.constant';
 import useCommonSetting from '@@hooks/setting/useCommonSetting';
 import { SETTING_STACK_ROUTE } from '@@navigation/SettingStack/SettingStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -28,21 +28,21 @@ function Setting() {
           title={t('currency')}
           subTitle={settedCurrency}
           onPress={() => {
-            openModal('SETTING_BOTTOM', { menuList: currencyMenu });
+            openModal('SETTING_BOTTOM', { modalTitle: t('currency'), menuList: currencyMenu });
           }}
         />
         <SettingMenu
           title={t('language')}
           subTitle={LANGUAGE_NAME[settedLanguage]}
           onPress={() => {
-            openModal('SETTING_BOTTOM', { menuList: languageMenu });
+            openModal('SETTING_BOTTOM', { modalTitle: t('language'), menuList: languageMenu });
           }}
         />
         <SettingMenu
           title={t('theme')}
-          subTitle={settedTheme}
+          subTitle={t(THEME_NAME[settedTheme])}
           onPress={() => {
-            openModal('SETTING_BOTTOM', { menuList: themeMenu });
+            openModal('SETTING_BOTTOM', { modalTitle: t('theme'), menuList: themeMenu });
           }}
         />
         <SettingMenu

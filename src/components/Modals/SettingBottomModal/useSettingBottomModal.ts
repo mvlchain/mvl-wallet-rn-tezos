@@ -1,9 +1,13 @@
-import { CURRENCY, LANGUAGE_CODE, THEME } from '@@constants/setting.constant';
+import { useTranslation } from 'react-i18next';
+
+import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
 import settingStore from '@@store/setting/settingPersistStore';
 
 import { ISettingBottomMenuProps } from './SettingBottomMenu/SettingBottomMenu.type';
 
 const useSettingBottomModal = () => {
+  const { t } = useTranslation();
+
   const { settedTheme, settedCurrency, settedLanguage, setTheme, setCurrency, setLanguage } = settingStore();
   const currencyMenu: ISettingBottomMenuProps[] = [
     {
@@ -55,21 +59,21 @@ const useSettingBottomModal = () => {
 
   const themeMenu: ISettingBottomMenuProps[] = [
     {
-      title: 'System Default',
+      title: t(THEME_NAME[THEME.DEFAULT]),
       isSelected: settedTheme === THEME.DEFAULT,
       onPress: () => {
         setTheme(THEME.DEFAULT);
       },
     },
     {
-      title: 'Light',
+      title: t(THEME_NAME[THEME.LIGHT]),
       isSelected: settedTheme === THEME.LIGHT,
       onPress: () => {
         setTheme(THEME.LIGHT);
       },
     },
     {
-      title: 'Dark',
+      title: t(THEME_NAME[THEME.DARK]),
       isSelected: settedTheme === THEME.DARK,
       onPress: () => {
         setTheme(THEME.DARK);

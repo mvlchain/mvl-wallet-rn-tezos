@@ -21,3 +21,9 @@ export const THEME = {
   LIGHT: 'light',
   DARK: 'dark',
 } as const;
+
+export const THEME_NAME = {
+  default: 'theme_system_default',
+  light: 'theme_light_mode',
+  dark: 'theme_dark_mode',
+} as const;
