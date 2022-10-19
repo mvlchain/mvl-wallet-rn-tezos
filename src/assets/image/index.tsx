@@ -42,3 +42,6 @@ export { default as SelectIcon } from './ic-select.svg';
 
 export { default as ClutchImageLight } from './img-clutch-light.svg';
 export { default as ClutchImageDark } from './img-clutch-dark.svg';
+
+export { default as BackIconLight } from './ic-back-light.svg';
+export { default as BackIconDark } from './ic-back-dark.svg';

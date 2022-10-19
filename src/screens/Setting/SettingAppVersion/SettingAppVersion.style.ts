@@ -1,3 +1,4 @@
+import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 import { height, width } from '@@utils/ui';
@@ -15,16 +16,12 @@ export const ClutchImageContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-
-export const ClutchButtonContainer = styled.View`
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  margin: ${height * 24}px 0;
-`;
-
 export const AppText = styled.Text`
   margin-top: ${height * 24}px;
   ${({ theme }) => theme.font.Paragraph.md};
   color: ${({ theme }) => theme.color.grey500};
 `;
+
+export const inlineStyles = StyleSheet.create({
+  margin: { margin: height * 24 },
+});

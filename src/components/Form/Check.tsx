@@ -21,6 +21,7 @@ const size = width * 20;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   checkbox: {
     alignItems: 'center',
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
     borderWidth: size * 0.075,
     borderColor: '#000',
     overflow: 'hidden',
+    marginRight: width * 18,
   },
   checked: {
     borderColor: '#FFC400',
