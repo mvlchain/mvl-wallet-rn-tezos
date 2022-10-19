@@ -19,9 +19,7 @@ function SettingAppVersion() {
       <S.ClutchImageContainer>
         <ClutchImage />
       </S.ClutchImageContainer>
-      <S.ClutchButtonContainer>
-        <SecondaryButton onPress={() => console.log('TODO: 앱버전 확인하기')} label={'Check for Update'} />
-      </S.ClutchButtonContainer>
+      <SecondaryButton onPress={() => console.log('TODO: 앱버전 확인하기')} label={'Check for Update'} wrapperStyle={S.inlineStyles.margin} />
       <S.AppText>Version 1.0</S.AppText>
     </S.AppVersionContainer>
   );
