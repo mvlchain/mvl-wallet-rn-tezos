@@ -17,9 +17,9 @@ import SecureKeychain from './utils/SecureKeychain';
 
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
-  const { myTheme } = useApp();
+  const { appTheme } = useApp();
   return (
-    <ThemeProvider theme={theme[myTheme]}>
+    <ThemeProvider theme={theme[appTheme]}>
       <RootStack />
     </ThemeProvider>
   );

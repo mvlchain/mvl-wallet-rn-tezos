@@ -50,6 +50,12 @@ export const ModalContainer = styled.View<Type.IModalTypeProps>`
   padding-bottom: ${({ modalPosition }) => (modalPosition === Type.Center ? '0' : `${width * 34}px`)};
 `;
 
+export const ModalBackDrop = styled.View<Type.IModalTypeProps>`
+  flex: 1;
+  justify-content: ${({ modalPosition }) => (modalPosition === Type.Center ? 'center' : 'flex-end')};
+  margin: 0;
+`;
+
 export const inlineStyles = (modalPosition: Type.TModalPosition) =>
   StyleSheet.create({
     modal: {

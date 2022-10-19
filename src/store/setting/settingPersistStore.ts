@@ -2,15 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import { ISettingPersist, ISettingPersistState, TCurrency, TLanguage, TTheme } from './settingPersistStore.type';
+import { ISettingPersist, ISettingPersistState, TAppTheme, TCurrency, TLanguage, TTheme } from './settingPersistStore.type';
 
 const initState: ISettingPersistState = {
   settedCurrency: 'USD',
   settedLanguage: 'en',
   settedTheme: 'dark',
+  appTheme: 'dark',
 };
 
-const settingStore = create<ISettingPersist>()(
+const settingPersistStore = create<ISettingPersist>()(
   devtools(
     persist(
       (set) => ({
@@ -18,6 +19,7 @@ const settingStore = create<ISettingPersist>()(
         setCurrency: (currency: TCurrency) => set(() => ({ settedCurrency: currency }), false, 'setCurrency'),
         setLanguage: (language: TLanguage) => set(() => ({ settedLanguage: language }), false, 'setLanguage'),
         setTheme: (theme: TTheme) => set(() => ({ settedTheme: theme }), false, 'setTheme'),
+        setAppTheme: (theme: TAppTheme) => set(() => ({ appTheme: theme }), false, 'setAppTheme'),
       }),
       {
         name: 'setting',
@@ -27,4 +29,4 @@ const settingStore = create<ISettingPersist>()(
   )
 );
 
-export default settingStore;
+export default settingPersistStore;

@@ -68,7 +68,7 @@ const screens: Array<ScreenProps> = [
   },
 ];
 
-function SettingStack() {
+function WalletStack() {
   return (
     <Navigator
       screenOptions={{
@@ -82,4 +82,4 @@ function SettingStack() {
   );
 }
 
-export default SettingStack;
+export default WalletStack;

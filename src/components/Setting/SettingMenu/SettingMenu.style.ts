@@ -7,7 +7,6 @@ export const SettingMenuContainer = styled.View<{ isThickBorder?: boolean; isLas
   flex-direction: row;
   justify-content: space-between;
   padding: ${width * 24}px;
-  background-color: ${({ theme }) => theme.color.whiteBlack};
   border-bottom-width: ${({ isThickBorder, isLast }) => (isThickBorder ? 8 : isLast ? 0 : 1) * height}px;
   border-bottom-color: ${({ theme }) => theme.color.grey100Grey900};
 `;

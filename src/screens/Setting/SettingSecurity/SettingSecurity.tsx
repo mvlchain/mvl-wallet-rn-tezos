@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { View } from 'react-native';
-
 import SettingMenu from '@@components/Setting/SettingMenu';
 import useCommonSetting from '@@hooks/setting/useCommonSetting';
-import { SETTING_STACK_ROUTE } from '@@navigation/SettingStack/SettingStack.type';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
+
+import * as S from './SettingSecurity.style';
 
 function SettingSecurity() {
-  const { onPressSettingMenu } = useCommonSetting({ routeName: 'SETTING_SECURITY' });
+  const { onPressSettingMenu } = useCommonSetting();
 
   return (
-    <View>
+    <S.SettingSecurityContainer bounces={false}>
       <SettingMenu
         title='Reset PIN number'
         onPress={() => {
@@ -28,7 +28,7 @@ function SettingSecurity() {
            * open important modal
            * move private Key screen
            *  */
-          onPressSettingMenu(SETTING_STACK_ROUTE.SETTING_PRIVATE_KEY);
+          onPressSettingMenu(ROOT_STACK_ROUTE.SETTING_PRIVATE_KEY);
         }}
       />
       <SettingMenu
@@ -37,7 +37,7 @@ function SettingSecurity() {
           // TODO: open important modal -> move Seed Phrase Screen
         }}
       />
-    </View>
+    </S.SettingSecurityContainer>
   );
 }
 

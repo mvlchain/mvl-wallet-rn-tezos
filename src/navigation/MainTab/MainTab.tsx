@@ -3,12 +3,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { BrowserNormal, BrowserSelected, HomeNormal, HomeSelected, SettingNormal, SettingSelected, TradeNormal, TradeSelected } from '@@assets/image';
-import SettingStack from '@@navigation/SettingStack';
 import Browser from '@@screens/Browser';
+import Setting from '@@screens/Setting';
 import Trade from '@@screens/Trade';
 import Wallet from '@@screens/Wallet';
-import { MAIN_TAB_ROUTE, TMainTabParamList } from './MainTab.type';
 
+import { MAIN_TAB_ROUTE, TMainTabParamList } from './MainTab.type';
 
 const { Navigator, Screen } = createBottomTabNavigator<TMainTabParamList>();
 
@@ -37,8 +37,8 @@ const screens: Array<ScreenProps> = [
     },
   },
   {
-    name: MAIN_TAB_ROUTE.SETTING,
-    component: SettingStack,
+    name: MAIN_TAB_ROUTE.SETTING_MAIN,
+    component: Setting,
     options: {
       tabBarIcon: ({ size, focused }) => (focused ? <SettingSelected width={size} height={size} /> : <SettingNormal width={size} height={size} />),
     },

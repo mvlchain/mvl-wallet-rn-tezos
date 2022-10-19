@@ -1,17 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 
-import { TSettingStackNavigationProps, TSettingStackParamList } from '@@navigation/SettingStack/SettingStack.type';
+import { TRootStackNavigationProps, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 
-import { IUseCommonSettingProps } from './useCommonSetting.type';
+const useCommonSetting = () => {
+  type rootStackProps = TRootStackNavigationProps<'MAIN'>;
+  const rootNavigation = useNavigation<rootStackProps>();
 
-const useCommonSetting = ({ routeName }: IUseCommonSettingProps) => {
-  type StackProps = TSettingStackNavigationProps<typeof routeName>;
-
-  const navigation = useNavigation<StackProps>();
-
-  const onPressSettingMenu = (target: keyof TSettingStackParamList) => {
-    navigation.navigate(target);
+  const onPressSettingMenu = (target: keyof TRootStackParamList) => {
+    rootNavigation.navigate(target);
   };
+
   return { onPressSettingMenu };
 };
 
