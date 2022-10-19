@@ -59,6 +59,11 @@ export const inlineStyles = (modalPosition: Type.TModalPosition) =>
     halfbutton: { flex: 1 },
   });
 
+export const BackdropColor = {
+  light: undefined,
+  dark: 'rgba(255,255,255,0.25)',
+};
+
 //image
 export const ImageModalContainer = styled(ModalContainer)`
   border-radius: 0;
