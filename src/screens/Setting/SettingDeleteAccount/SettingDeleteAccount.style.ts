@@ -3,6 +3,8 @@ import styled from 'styled-components/native';
 
 import { height, width } from '@@utils/ui';
 
+const paddingSize = height * 24;
+
 export const DeleteAccountContainer = styled.View`
   flex: 1;
   justify-content: space-between;
@@ -13,13 +15,13 @@ export const DeleteAccountContainer = styled.View`
 export const DescriptionText = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md};
   color: ${({ theme }) => theme.color.blackWhite};
-  line-height: ${height * 24};
+  line-height: ${paddingSize};
 `;
 
 export const AgreeDeleteContainer = styled.View``;
 
 export const inlineStyles = StyleSheet.create({
-  marginTop: { marginTop: height * 24 },
+  marginTop: { marginTop: paddingSize },
 });
 
 export const AgreeText = styled.Text`

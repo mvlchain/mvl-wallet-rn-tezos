@@ -9,7 +9,10 @@ export interface IModalComponentProps {
   isVisible: boolean;
   onCancel?: Function;
   onConfirm?: Function;
+  confirmLabel?: string;
+  isConfirmDisabled?: boolean;
   onClose?: Function;
+  closeLabel?: string;
   children: React.ReactNode;
 }
 

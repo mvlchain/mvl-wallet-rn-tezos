@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import Modal from 'react-native-modal';
 
 import { CloseBlackIconLight } from '@@assets/image';
@@ -12,7 +13,19 @@ import { TAppTheme } from '@@store/setting/settingPersistStore.type';
 import * as S from './Modal.style';
 import * as Type from './Modal.type';
 
-export function BaseModal({ title, children, onCancel, onConfirm, onClose, isVisible, modalPosition }: Type.IBaseModalComponentProps) {
+export function BaseModal({
+  title,
+  children,
+  onCancel,
+  onConfirm,
+  confirmLabel,
+  onClose,
+  closeLabel,
+  isVisible,
+  isConfirmDisabled,
+  modalPosition,
+}: Type.IBaseModalComponentProps) {
+  const { t } = useTranslation();
   const { closeModal } = globalModalStore();
   const { settedTheme } = settingPersistStore();
   return (
@@ -35,10 +48,20 @@ export function BaseModal({ title, children, onCancel, onConfirm, onClose, isVis
           {!!onConfirm && (
             <S.ButtonWrapper>
               {!!onCancel && (
-                <SecondaryButton label={'cancel'} onPress={onCancel} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
+                <SecondaryButton
+                  label={closeLabel ? closeLabel : t('close')}
+                  onPress={onCancel}
+                  disabled={false}
+                  wrapperStyle={S.inlineStyles(modalPosition).halfbutton}
+                />
               )}
               {!!onCancel && <S.Gap />}
-              <PrimaryButton label={'confirm'} onPress={onConfirm} disabled={false} wrapperStyle={S.inlineStyles(modalPosition).halfbutton} />
+              <PrimaryButton
+                label={confirmLabel ? confirmLabel : t('btn_confirm')}
+                onPress={onConfirm}
+                disabled={isConfirmDisabled}
+                wrapperStyle={S.inlineStyles(modalPosition).halfbutton}
+              />
             </S.ButtonWrapper>
           )}
         </S.ModalContainer>
