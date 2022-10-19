@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Check from '@@components/Form/Check';

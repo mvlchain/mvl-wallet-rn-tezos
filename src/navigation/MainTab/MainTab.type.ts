@@ -5,7 +5,7 @@ import { valueOf } from '@@types/etc';
 export type TMainTabParamList = {
   WALLET: undefined;
   BROWSER: undefined;
-  SETTING: undefined;
+  SETTING_MAIN: undefined;
   TRADE: undefined;
 };
 
@@ -15,7 +15,7 @@ export const MAIN_TAB_ROUTE: MainTabRouteType = {
   WALLET: 'WALLET',
   BROWSER: 'BROWSER',
   TRADE: 'TRADE',
-  SETTING: 'SETTING',
+  SETTING_MAIN: 'SETTING_MAIN',
 } as const;
 
 export type RouteName = valueOf<typeof MAIN_TAB_ROUTE>;

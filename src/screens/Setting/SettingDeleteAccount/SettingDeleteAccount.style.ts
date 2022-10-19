@@ -7,6 +7,7 @@ export const DeleteAccountContainer = styled.View`
   flex: 1;
   justify-content: space-between;
   padding: ${width * 24}px;
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
 export const DescriptionText = styled.Text`

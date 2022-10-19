@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { TMyTheme } from 'App.type';
 import { useTranslation } from 'react-i18next';
 import { Appearance } from 'react-native';
 
 import settingPersistStore from '@@store/setting/settingPersistStore';
+import { TAppTheme } from '@@store/setting/settingPersistStore.type';
 
 const useApp = () => {
   const { i18n } = useTranslation();
-  const { settedLanguage, settedTheme } = settingPersistStore();
-  const [myTheme, setMyTheme] = useState<TMyTheme>('light');
+  const { settedLanguage, settedTheme, appTheme, setAppTheme } = settingPersistStore();
 
   useEffect(() => {
     if (settedTheme === 'default') {
       const Theme = Appearance.getColorScheme() ?? 'light';
-      setMyTheme(Theme);
+      setAppTheme(Theme);
     } else {
-      setMyTheme(settedTheme as TMyTheme);
+      setAppTheme(settedTheme as TAppTheme);
     }
   }, [settedTheme]);
 
@@ -25,7 +24,7 @@ const useApp = () => {
   }, [settedLanguage]);
 
   return {
-    myTheme,
+    appTheme,
   };
 };
 
