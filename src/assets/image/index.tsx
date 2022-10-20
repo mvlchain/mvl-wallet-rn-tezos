@@ -1,11 +1,22 @@
-export { default as BrowserNormal } from './bottom-tab-icon/browser-normal.svg';
-export { default as BrowserSelected } from './bottom-tab-icon/browser-selected.svg';
-export { default as HomeNormal } from './bottom-tab-icon/home-normal.svg';
-export { default as HomeSelected } from './bottom-tab-icon/home-selected.svg';
-export { default as SettingNormal } from './bottom-tab-icon/setting-normal.svg';
-export { default as SettingSelected } from './bottom-tab-icon/setting-selected.svg';
-export { default as TradeNormal } from './bottom-tab-icon/trade-normal.svg';
-export { default as TradeSelected } from './bottom-tab-icon/trade-selected.svg';
+export { default as BrowserNormalLight } from './bottom-tab-icon/browser-normal-light.svg';
+export { default as BrowserSelectedLight } from './bottom-tab-icon/browser-selected-light.svg';
+export { default as BrowserNormalDark } from './bottom-tab-icon/browser-normal-dark.svg';
+export { default as BrowserSelectedDark } from './bottom-tab-icon/browser-selected-dark.svg';
+
+export { default as HomeNormalLight } from './bottom-tab-icon/home-normal-light.svg';
+export { default as HomeSelectedLight } from './bottom-tab-icon/home-selected-light.svg';
+export { default as HomeNormalDark } from './bottom-tab-icon/home-normal-dark.svg';
+export { default as HomeSelectedDark } from './bottom-tab-icon/home-selected-dark.svg';
+
+export { default as SettingNormalLight } from './bottom-tab-icon/setting-normal-light.svg';
+export { default as SettingSelectedLight } from './bottom-tab-icon/setting-selected-light.svg';
+export { default as SettingNormalDark } from './bottom-tab-icon/setting-normal-dark.svg';
+export { default as SettingSelectedDark } from './bottom-tab-icon/setting-selected-dark.svg';
+
+export { default as TradeNormalLight } from './bottom-tab-icon/trade-normal-light.svg';
+export { default as TradeSelectedLight } from './bottom-tab-icon/trade-selected-light.svg';
+export { default as TradeNormalDark } from './bottom-tab-icon/trade-normal-dark.svg';
+export { default as TradeSelectedDark } from './bottom-tab-icon/trade-selected-dark.svg';
 
 export { default as MoreIcon } from './ic-more.svg';
 export { default as CopyIcon } from './ic-copy.svg';
