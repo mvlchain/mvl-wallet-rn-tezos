@@ -1,16 +1,23 @@
 import { useEffect, useRef } from 'react';
 
-import { Animated, StyleSheet } from 'react-native';
+import { Animated } from 'react-native';
 
 import { usePrevious } from '@@hooks/common/usePrevious';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import { Theme, theme } from '@@style/theme';
 import { width } from '@@utils/ui';
 
-import { Base, BaseProps } from './Base';
+import { Base, BaseProps } from '../Base';
+
+import * as S from './Toggle.style';
 
 function Toggle({ checked, style, ...props }: BaseProps) {
   const checkAnim = useRef(new Animated.Value(0)).current;
 
   const prevChecked = usePrevious(checked);
+  const { appTheme } = settingPersistStore();
+
+  const myTheme: Theme = theme[appTheme.label];
 
   useEffect(() => {
     if (prevChecked !== checked) {
@@ -23,10 +30,9 @@ function Toggle({ checked, style, ...props }: BaseProps) {
   }, [checked]);
 
   return (
-    <Base {...props} style={[styles.container, checked && styles.checked, style]} checked={checked}>
-      <Animated.View
+    <Base {...props} style={[S.styles(myTheme).container, checked && S.styles(myTheme).checked, style]} checked={checked}>
+      <S.Inner
         style={[
-          styles.inner,
           {
             // checked animation
             transform: [{ translateX: checkAnim }],
@@ -36,25 +42,5 @@ function Toggle({ checked, style, ...props }: BaseProps) {
     </Base>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: width * 42,
-    height: width * 26,
-    padding: width * 4,
-    borderRadius: width * 14,
-    backgroundColor: '#E6E6E6',
-    overflow: 'hidden',
-  },
-  checked: {
-    backgroundColor: '#FFC400',
-  },
-  inner: {
-    width: width * 18,
-    height: width * 18,
-    borderRadius: (width * 18) / 2,
-    backgroundColor: '#fff',
-  },
-});
 
 export default Toggle;

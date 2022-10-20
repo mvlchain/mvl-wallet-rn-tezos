@@ -3,12 +3,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-native-modal';
 
-import { CloseBlackIconLight } from '@@assets/image';
+import { CloseBlackIconLight, CloseBlackIconDark } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { THEME } from '@@constants/setting.constant';
+import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { TAppTheme } from '@@store/setting/settingPersistStore.type';
 
 import * as S from './Modal.style';
 import * as Type from './Modal.type';
@@ -27,12 +27,13 @@ export function BaseModal({
 }: Type.IBaseModalComponentProps) {
   const { t } = useTranslation();
   const { closeModal } = globalModalStore();
-  const { settedTheme } = settingPersistStore();
+  const { appTheme } = settingPersistStore();
+  const CloseIcon = useAssetFromTheme(CloseBlackIconLight, CloseBlackIconDark);
   return (
     <Modal
       isVisible={isVisible}
-      backdropOpacity={settedTheme === THEME.LIGHT || settedTheme === THEME.DEFAULT ? 0.25 : 1}
-      backdropColor={S.BackdropColor[settedTheme as TAppTheme]}
+      backdropOpacity={appTheme.value === THEME.LIGHT || appTheme.value === THEME.DEFAULT ? 0.25 : 1}
+      backdropColor={S.BackdropColor[appTheme.label]}
       style={S.inlineStyles(modalPosition).modal}
       onBackButtonPress={closeModal}
       onBackdropPress={closeModal}
@@ -42,7 +43,7 @@ export function BaseModal({
           <S.ModalTopWrapper>
             <S.ModalTitle>{title}</S.ModalTitle>
             {/* TODO: theme 스토어추가시 추가작업 */}
-            {!!onClose && <CloseBlackIconLight onPress={onClose} />}
+            {!!onClose && <CloseIcon onPress={() => onClose()} />}
           </S.ModalTopWrapper>
           <S.ContentWrapper>{children}</S.ContentWrapper>
           {!!onConfirm && (
