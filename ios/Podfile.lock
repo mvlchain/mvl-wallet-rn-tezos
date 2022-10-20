@@ -2,7 +2,7 @@ PODS:
   - BigInt (5.0.0)
   - boost (1.76.0)
   - CryptoSwift (1.5.1)
-  - CustomAuth (4.0.1):
+  - CustomAuth (4.1.0):
     - JWTDecode (~> 2.6)
     - Torus-utils (~> 3.0.0)
   - DoubleConversion (1.1.6)
@@ -15,7 +15,7 @@ PODS:
     - React-jsi (= 0.69.1)
     - ReactCommon/turbomodule/core (= 0.69.1)
   - fmt (6.2.1)
-  - GenericJSON (2.0.1)
+  - GenericJSON (2.0.2)
   - glog (0.3.5)
   - JWTDecode (2.6.3)
   - PromiseKit/CorePromise (6.18.1)
@@ -312,8 +312,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.17.7):
     - React-Core
-  - RNCustomAuthSdk (3.0.1):
-    - CustomAuth (~> 4.0.1)
+  - RNCustomAuthSdk (3.1.0):
+    - CustomAuth (~> 4.1.0)
     - React
   - RNGestureHandler (2.5.0):
     - React-Core
@@ -374,7 +374,7 @@ PODS:
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
-  - CustomAuth (~> 4.0.1)
+  - CustomAuth (from `https://github.com/mvlchain/customauth-swift-sdk.git`, tag `4.1.0-fa2c6`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -427,7 +427,6 @@ SPEC REPOS:
   trunk:
     - BigInt
     - CryptoSwift
-    - CustomAuth
     - fmt
     - GenericJSON
     - JWTDecode
@@ -441,6 +440,9 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
+  CustomAuth:
+    :git: https://github.com/mvlchain/customauth-swift-sdk.git
+    :tag: 4.1.0-fa2c6
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -532,16 +534,21 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
+CHECKOUT OPTIONS:
+  CustomAuth:
+    :git: https://github.com/mvlchain/customauth-swift-sdk.git
+    :tag: 4.1.0-fa2c6
+
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
-  CustomAuth: d392381016783e281df11f175efbba2096feab19
+  CustomAuth: 45d5fd9962530fa0d4c8e7e4c867c1bb81ae48ea
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 068141206af867f72854753423d0117c4bf53419
   FBReactNativeSpec: 546a637adc797fa436dd51d1c63c580f820de31c
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
+  GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
@@ -577,7 +584,7 @@ SPEC CHECKSUMS:
   ReactCommon: e30ec17dfb1d4c4f3419eac254350d6abca6d5a2
   RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNCAsyncStorage: d81ee5c3db1060afd49ea7045ad460eff82d2b7d
-  RNCustomAuthSdk: ca3bdec521524b339ce09c75729bdde50304e1f1
+  RNCustomAuthSdk: fbbc9f8aa33e1a6b4527e38277df362d214b15ee
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: 95a43f85e41a966be7bc9cff2437128911c52da0
@@ -592,6 +599,6 @@ SPEC CHECKSUMS:
   web3.swift: c6c3bf1f853743f8a7a58d263e5f7e46545e22c7
   Yoga: 7ab6e3ee4ce47d7b789d1cb520163833e515f452
 
-PODFILE CHECKSUM: 2ab6862d28288a125a89e78c4d5af04309163a08
+PODFILE CHECKSUM: 640e7a56df0a37551ece198e73af6754801df5d2
 
 COCOAPODS: 1.11.3
