@@ -140,8 +140,8 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
         </Navigator>
+        <GlobalModal />
       </NavigationContainer>
-      <GlobalModal />
     </SafeAreaView>
   );
 }
