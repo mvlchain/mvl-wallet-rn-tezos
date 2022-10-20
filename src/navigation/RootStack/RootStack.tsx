@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
 import BackButton from '@@components/BasicComponents/Header/BackButton';
+import Title from '@@components/BasicComponents/Header/Title';
 import { GlobalModal } from '@@components/Modals/GlobalModal';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
@@ -58,7 +59,7 @@ function RootStack() {
       component: SettingPrivacyPolicy,
       options: {
         headerLeft: () => <BackButton />,
-        title: t('privacy_policy'),
+        headerTitle: () => <Title label={t('privacy_policy')} />,
       },
     },
     {
@@ -66,7 +67,7 @@ function RootStack() {
       component: SettingSecurity,
       options: {
         headerLeft: () => <BackButton />,
-        title: t('security'),
+        headerTitle: () => <Title label={t('security')} />,
       },
     },
     {
@@ -74,7 +75,7 @@ function RootStack() {
       component: SettingTermsOfService,
       options: {
         headerLeft: () => <BackButton />,
-        title: t('terms_of_service'),
+        headerTitle: () => <Title label={t('terms_of_service')} />,
       },
     },
     {
@@ -82,7 +83,7 @@ function RootStack() {
       component: SettingDeleteAccount,
       options: {
         headerLeft: () => <BackButton />,
-        title: t('delete_account'),
+        headerTitle: () => <Title label={t('delete_account')} />,
       },
     },
     {
@@ -97,7 +98,7 @@ function RootStack() {
       component: SettingAppVersion,
       options: {
         headerLeft: () => <BackButton />,
-        title: '',
+        headerTitle: () => <Title label='' />,
       },
     },
     {
@@ -105,7 +106,7 @@ function RootStack() {
       component: SettingPrivateKey,
       options: {
         headerLeft: () => <BackButton />,
-        title: t('private_key'),
+        headerTitle: () => <Title label={t('private_key')} />,
       },
     },
     {
@@ -113,7 +114,7 @@ function RootStack() {
       component: SettingFAQ,
       options: {
         headerLeft: () => <BackButton />,
-        title: t('faq'),
+        headerTitle: () => <Title label={t('faq')} />,
       },
     },
   ];
