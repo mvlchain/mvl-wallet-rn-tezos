@@ -20,7 +20,7 @@ export function BaseModal({
   onConfirm,
   confirmLabel,
   onClose,
-  closeLabel,
+  cancelLabel,
   isVisible,
   isConfirmDisabled,
   modalPosition,
@@ -49,7 +49,7 @@ export function BaseModal({
             <S.ButtonWrapper>
               {!!onCancel && (
                 <SecondaryButton
-                  label={closeLabel ? closeLabel : t('close')}
+                  label={cancelLabel ? cancelLabel : t('close')}
                   onPress={onCancel}
                   disabled={false}
                   wrapperStyle={S.inlineStyles(modalPosition).halfbutton}
