@@ -11,6 +11,7 @@ import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
 import SettingAppVersion from '@@screens/Setting/SettingAppVersion';
 import SettingDeleteAccount from '@@screens/Setting/SettingDeleteAccount';
+import SettingDeleteAccountSuccess from '@@screens/Setting/SettingDeleteAccount/SettingDeleteAccountSuccess';
 import SettingFAQ from '@@screens/Setting/SettingFAQ';
 import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
@@ -82,6 +83,13 @@ function RootStack() {
       options: {
         headerLeft: () => <BackButton />,
         title: t('delete_account'),
+      },
+    },
+    {
+      name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT_SUCCESS,
+      component: SettingDeleteAccountSuccess,
+      options: {
+        headerShown: false,
       },
     },
     {

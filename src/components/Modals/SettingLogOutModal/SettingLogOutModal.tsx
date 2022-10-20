@@ -1,10 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Text } from 'react-native';
 
 import { BaseModal } from '@@components/BasicComponents/Modals/BaseModal';
 import Check from '@@components/Form/Check';
 import { useToggle } from '@@hooks/common/useToggle';
-import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
@@ -21,9 +19,6 @@ function SettingLogOutModal() {
       title={t('log_out')}
       modalPosition='center'
       isVisible={modalType === MODAL_TYPES.SETTING_LOG_OUT}
-      onClose={() => {
-        closeModal();
-      }}
       onConfirm={onPressLogOut}
       confirmLabel={t('log_out')}
       isConfirmDisabled={!isAgree}
