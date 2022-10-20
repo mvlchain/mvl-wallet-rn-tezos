@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Appearance } from 'react-native';
 
 import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
 import settingStore from '@@store/setting/settingPersistStore';
@@ -8,7 +9,7 @@ import { ISettingBottomMenuProps } from './SettingBottomMenu/SettingBottomMenu.t
 const useSettingBottomModal = () => {
   const { t } = useTranslation();
 
-  const { settedTheme, settedCurrency, settedLanguage, setTheme, setCurrency, setLanguage } = settingStore();
+  const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingStore();
   const currencyMenu: ISettingBottomMenuProps[] = [
     {
       title: 'USD',
@@ -60,23 +61,33 @@ const useSettingBottomModal = () => {
   const themeMenu: ISettingBottomMenuProps[] = [
     {
       title: t(THEME_NAME[THEME.DEFAULT]),
-      isSelected: settedTheme === THEME.DEFAULT,
+      isSelected: appTheme.value === THEME.DEFAULT,
       onPress: () => {
-        setTheme(THEME.DEFAULT);
+        const Theme = Appearance.getColorScheme() ?? 'light';
+        setAppTheme({
+          value: THEME.DEFAULT,
+          label: Theme,
+        });
       },
     },
     {
       title: t(THEME_NAME[THEME.LIGHT]),
-      isSelected: settedTheme === THEME.LIGHT,
+      isSelected: appTheme.value === THEME.LIGHT,
       onPress: () => {
-        setTheme(THEME.LIGHT);
+        setAppTheme({
+          value: THEME.LIGHT,
+          label: THEME.LIGHT,
+        });
       },
     },
     {
       title: t(THEME_NAME[THEME.DARK]),
-      isSelected: settedTheme === THEME.DARK,
+      isSelected: appTheme.value === THEME.DARK,
       onPress: () => {
-        setTheme(THEME.DARK);
+        setAppTheme({
+          value: THEME.DARK,
+          label: THEME.DARK,
+        });
       },
     },
   ];

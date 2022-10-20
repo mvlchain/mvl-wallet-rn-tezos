@@ -18,8 +18,8 @@ export const getAssetFromTheme = (appTheme: string, light: React.FC<SvgProps>, d
 };
 
 export const useAssetFromTheme = (light: any, dark: any) => {
-  const { settedTheme } = settingStore();
-  const asset = getAssetFromTheme(settedTheme, light, dark);
+  const { appTheme } = settingStore();
+  const asset = getAssetFromTheme(appTheme.label, light, dark);
 
   return asset;
 };

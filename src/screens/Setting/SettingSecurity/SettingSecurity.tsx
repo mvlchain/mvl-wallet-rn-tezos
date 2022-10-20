@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
+import SettingToggleMenu from '@@components/Setting/SettingToggleMenu';
 import useCommonSetting from '@@hooks/setting/useCommonSetting';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import * as S from './SettingSecurity.style';
 
@@ -14,10 +16,11 @@ function SettingSecurity() {
   const { t } = useTranslation();
   const { onPressSettingMenu } = useCommonSetting();
   const { openModal, closeModal } = globalModalStore();
+  const { settedBioAuth, toggleBioAuth } = settingPersistStore();
   return (
     <S.SettingSecurityContainer bounces={false}>
       <SettingMenu
-        title='Reset PIN number'
+        title={t('dialog_reset_pin_lbl_title')}
         onPress={() => {
           // TODO: Open Reset PIN number Modal -> triggerCustomAuth -> reset pin number
           openModal(MODAL_TYPES.TEXT_MODAL, {
@@ -30,9 +33,9 @@ function SettingSecurity() {
         }}
       />
       {/* TODO: toggle형태의 menu만들기 */}
-      <SettingMenu title='Biometric Authentication' onPress={() => {}} />
+      <SettingToggleMenu title={t('biometric_authentication')} isChecked={settedBioAuth} onPress={toggleBioAuth} />
       <SettingMenu
-        title='Private Key'
+        title={t('private_key')}
         onPress={() => {
           /**
            * TODO:
@@ -48,7 +51,7 @@ function SettingSecurity() {
         }}
       />
       <SettingMenu
-        title='Back Up Seed Phrase'
+        title={t('seed_phrase_lbl_title')}
         onPress={() => {
           // TODO: open important modal -> move Seed Phrase Screen
           openModal(MODAL_TYPES.TEXT_MODAL, {

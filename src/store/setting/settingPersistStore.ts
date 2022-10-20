@@ -2,13 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import { ISettingPersist, ISettingPersistState, TAppTheme, TCurrency, TLanguage, TTheme } from './settingPersistStore.type';
+import { ISettedTheme, ISettingPersist, ISettingPersistState, TCurrency, TLanguage } from './settingPersistStore.type';
 
 const initState: ISettingPersistState = {
   settedCurrency: 'USD',
   settedLanguage: 'en',
-  settedTheme: 'dark',
-  appTheme: 'dark',
+  appTheme: {
+    value: 'dark',
+    label: 'dark',
+  },
+  settedBioAuth: false,
 };
 
 const settingPersistStore = create<ISettingPersist>()(
@@ -18,8 +21,8 @@ const settingPersistStore = create<ISettingPersist>()(
         ...initState,
         setCurrency: (currency: TCurrency) => set(() => ({ settedCurrency: currency }), false, 'setCurrency'),
         setLanguage: (language: TLanguage) => set(() => ({ settedLanguage: language }), false, 'setLanguage'),
-        setTheme: (theme: TTheme) => set(() => ({ settedTheme: theme }), false, 'setTheme'),
-        setAppTheme: (theme: TAppTheme) => set(() => ({ appTheme: theme }), false, 'setAppTheme'),
+        setAppTheme: (theme: ISettedTheme) => set(() => ({ appTheme: theme }), false, 'setAppTheme'),
+        toggleBioAuth: () => set((state) => ({ settedBioAuth: !state.settedBioAuth }), false, 'toggleBioAuth'),
       }),
       {
         name: 'setting',

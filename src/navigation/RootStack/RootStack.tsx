@@ -37,7 +37,7 @@ const routerTheme = {
 function RootStack() {
   const { t } = useTranslation();
   const { appTheme } = settingPersistStore();
-  const color = theme[appTheme].color;
+  const color = theme[appTheme.label].color;
   const screens: Array<ScreenProps> = [
     {
       name: ROOT_STACK_ROUTE.AUTH,
