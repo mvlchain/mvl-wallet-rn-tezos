@@ -14,7 +14,8 @@ target 'Wallet' do
   flags = get_default_flags()
 
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
-  pod 'CustomAuth', '~> 4.0.1', :modular_headers => true
+  # pod 'CustomAuth', '~> 4.0.1', :modular_headers => true
+  pod 'CustomAuth', :git => 'https://github.com/mvlchain/customauth-swift-sdk.git', :tag => '4.1.0-fa2c6', :modular_headers => true
 
 
   use_react_native!(
