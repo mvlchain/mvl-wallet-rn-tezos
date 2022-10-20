@@ -2,7 +2,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import SettingBottomModal from './SettingBottomModal';
 import SettingLogOutModal from './SettingLogOutModal';
-import { TextModal } from './TextModal';
+import TextModal from './TextModal';
 
 export const MODAL_TYPES = {
   TEXT_MODAL: 'TEXT_MODAL',

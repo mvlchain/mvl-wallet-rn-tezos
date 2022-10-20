@@ -15,7 +15,7 @@ import SettingDeleteAccountSuccess from '@@screens/Setting/SettingDeleteAccount/
 import SettingFAQ from '@@screens/Setting/SettingFAQ';
 import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
-import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingDeleteAccount';
+import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingPrivateKey';
 import SettingTermsOfService from '@@screens/Setting/SettingTermsOfService';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';

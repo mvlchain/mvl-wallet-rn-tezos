@@ -8,11 +8,11 @@ export interface IModalComponentProps {
   title: string;
   isVisible: boolean;
   onCancel?: Function;
+  cancelLabel?: string;
   onConfirm?: Function;
   confirmLabel?: string;
   isConfirmDisabled?: boolean;
   onClose?: Function;
-  closeLabel?: string;
   children: React.ReactNode;
 }
 
