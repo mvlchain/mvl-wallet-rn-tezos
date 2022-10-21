@@ -27,3 +27,9 @@ export const THEME_NAME = {
   light: 'theme_light_mode',
   dark: 'theme_dark_mode',
 } as const;
+
+export const STATUSBAR_THEME = {
+  default: 'default',
+  light: 'light-content',
+  dark: 'dark-content',
+} as const;
