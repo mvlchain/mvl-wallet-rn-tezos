@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { StatusBar } from 'react-native';
 
+import { STATUSBAR_THEME } from '@@constants/setting.constant';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
 const useApp = () => {
@@ -11,6 +13,10 @@ const useApp = () => {
   useEffect(() => {
     i18n.changeLanguage(settedLanguage);
   }, [settedLanguage]);
+
+  useEffect(() => {
+    StatusBar.setBarStyle(STATUSBAR_THEME[appTheme.value]);
+  }, [appTheme]);
 
   return {
     appTheme,
