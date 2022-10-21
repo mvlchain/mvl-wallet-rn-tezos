@@ -690,7 +690,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: 95a43f85e41a966be7bc9cff2437128911c52da0
-  RNReanimated: 6f300530b9bb108b439da54c3de6fabf8ec106f6
+  RNReanimated: 6ef58df49ca5da3248d9c91e4944b7f60e4a6139
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: f2bbcdece1e7d8e5f2f94536ed2a2dcf8f95ea4f
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
