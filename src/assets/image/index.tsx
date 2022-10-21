@@ -34,3 +34,4 @@ export { default as SocialGoogle } from './img-social-google.svg';
 export { default as NFTImage } from './img-nft.svg';
 
 export { default as TokenMVL32Icon } from './ic-token-mvlx32.svg';
+export { default as QRScanOverlay } from './img-qr-scan-overlay.svg';
