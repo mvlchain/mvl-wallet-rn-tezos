@@ -1,22 +1,23 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { Pressable } from 'react-native';
 
 import { BackIconLight, BackIconDark } from '@@assets/image';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
+
+import * as S from './BackButton.style';
 
 function BackButton() {
   const BackIcon = useAssetFromTheme(BackIconLight, BackIconDark);
   const navigation = useNavigation();
   return (
-    <Pressable
+    <S.Pressable
       onPress={() => {
         navigation.goBack();
       }}
     >
       <BackIcon />
-    </Pressable>
+    </S.Pressable>
   );
 }
 

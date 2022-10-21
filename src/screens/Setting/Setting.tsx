@@ -15,9 +15,8 @@ import * as S from './Setting.style';
 
 function Setting() {
   const { t } = useTranslation();
-  // TODO: subtitle 데이터 연동하기 / 다국어, 디자인 추가
   const { onPressSettingMenu } = useCommonSetting();
-  const { settedCurrency, settedLanguage, settedTheme } = settingStore();
+  const { settedCurrency, settedLanguage, appTheme } = settingStore();
   const { currencyMenu, languageMenu, themeMenu } = useSettingBottomModal();
   const { openModal } = globalModalStore();
 
@@ -41,7 +40,7 @@ function Setting() {
         />
         <SettingMenu
           title={t('theme')}
-          subTitle={t(THEME_NAME[settedTheme])}
+          subTitle={t(THEME_NAME[appTheme.value])}
           onPress={() => {
             openModal(MODAL_TYPES.SETTING_BOTTOM, { modalTitle: t('theme'), menuList: themeMenu });
           }}
@@ -83,7 +82,7 @@ function Setting() {
           isThickBorder={true}
           onPress={() => {
             // TODO: Open Log Out Modal
-            openModal(MODAL_TYPES.SETTING_LOG_OUT, { modalTitle: t('language') });
+            openModal(MODAL_TYPES.SETTING_LOG_OUT, undefined);
           }}
         />
         <SettingMenu

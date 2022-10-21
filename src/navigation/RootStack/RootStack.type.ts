@@ -1,4 +1,4 @@
-import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
 import { valueOf } from '@@types/etc';
 
@@ -32,6 +32,6 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;
 
-export type TRootStackNavigationProps<T extends RouteName> = NativeStackNavigationProp<TRootStackParamList, T>;
+export type TRootStackNavigationProps<T extends RouteName> = StackNavigationProp<TRootStackParamList, T>;
 
-export type TRootStackScreenProps<T extends keyof TRootStackParamList> = NativeStackScreenProps<TRootStackParamList, T>;
+export type TRootStackScreenProps<T extends keyof TRootStackParamList> = StackScreenProps<TRootStackParamList, T>;

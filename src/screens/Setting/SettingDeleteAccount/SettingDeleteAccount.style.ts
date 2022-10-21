@@ -15,7 +15,7 @@ export const DeleteAccountContainer = styled.View`
 export const DescriptionText = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md};
   color: ${({ theme }) => theme.color.blackWhite};
-  line-height: ${paddingSize};
+  line-height: ${paddingSize}px;
 `;
 
 export const AgreeDeleteContainer = styled.View``;
