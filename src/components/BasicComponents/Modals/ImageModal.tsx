@@ -25,7 +25,7 @@ export function ImageModal(props: Type.IImageModalComponentProps) {
           </S.ImageModalTopWrapper>
         </S.ImageWrapper>
         <S.ImageModalContainer modalPosition={modalPosition}>
-          <S.ContentWrapper>{children}</S.ContentWrapper>
+          {children && <S.ContentWrapper>{children}</S.ContentWrapper>}
           {!!onConfirm && (
             <S.ButtonWrapper>
               {!!onCancel && (
