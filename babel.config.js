@@ -2,6 +2,7 @@ module.exports = {
   presets: [['module:metro-react-native-babel-preset', { useTransformReactJSXExperimental: true }]],
   plugins: [
     'babel-plugin-transform-typescript-metadata',
+    'react-native-reanimated/plugin',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     [
       '@babel/plugin-transform-react-jsx',
@@ -27,6 +28,7 @@ module.exports = {
           '@@style': './src/style',
           '@@domain': './src/domain',
           '@@navigation': './src/navigation',
+          '@@constants': './src/constants',
         },
       },
     ],

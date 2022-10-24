@@ -1,4 +1,4 @@
-import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
 import { valueOf } from '@@types/etc';
 
@@ -34,6 +34,6 @@ export const WALLET_STACK_ROUTE: TWalletStackRouteType = {
 
 export type RouteName = valueOf<typeof WALLET_STACK_ROUTE>;
 
-export type TWalletStackNavigationProps<T extends RouteName> = NativeStackNavigationProp<TWalletStackParamList, T>;
+export type TWalletStackNavigationProps<T extends RouteName> = StackNavigationProp<TWalletStackParamList, T>;
 
-export type TWalletStackScreenProps<T extends keyof TWalletStackParamList> = NativeStackScreenProps<TWalletStackParamList, T>;
+export type TWalletStackScreenProps<T extends keyof TWalletStackParamList> = StackScreenProps<TWalletStackParamList, T>;
