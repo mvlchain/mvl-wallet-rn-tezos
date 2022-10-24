@@ -15,7 +15,7 @@ function QRScan() {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
   const device = devices.back;
-  const { scan, getQRFromGallery } = useQR();
+  const { frameProcessor, getQRFromGallery } = useQR();
 
   useEffect(() => {
     (async () => {
@@ -37,7 +37,7 @@ function QRScan() {
         <QRScanOverlay />
       </S.QRScanOverlayWrapper>
       <S.QRScanCameraWrapper>
-        <Camera style={{ height: '100%' }} device={device} isActive={true} frameProcessor={scan} frameProcessorFps={5} />
+        <Camera style={{ height: '100%' }} device={device} isActive={true} frameProcessor={frameProcessor} frameProcessorFps={5} />
       </S.QRScanCameraWrapper>
       <S.QRScanGalleryButtonWrapper>
         <PrimaryButton label='Gallery' onPress={getQRFromGallery} />
