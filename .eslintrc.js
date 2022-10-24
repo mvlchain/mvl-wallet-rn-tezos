@@ -8,6 +8,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'plugin:react/recommended',
+    '@mvlchain/eslint-config/react',
   ],
   ignorePatterns: ['generated-scheme.ts', '__mocks__'],
   plugins: ['@typescript-eslint'],
