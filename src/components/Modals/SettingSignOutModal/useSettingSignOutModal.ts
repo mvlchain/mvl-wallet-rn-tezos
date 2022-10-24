@@ -1,20 +1,28 @@
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
+import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
-const useSettingLogOutModal = () => {
+const useSettingSignOutModall = () => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const rootNavigation = useNavigation<rootStackProps>();
+  const auth = useDi('AuthService');
   const { modalType, closeModal } = globalModalStore();
+
   // TODO: 로그아웃 기능 만들기
-  const onPressLogOut = () => {
-    console.log('LogOut!');
-    // LogOut 후에 SignIn으로 이동
-    onSuccessLogOut();
+  const onPressSignOut = async () => {
+    try {
+      console.log('SignOut start');
+      await auth.signOut();
+      onSuccessSignOut();
+    } catch (e: any) {
+      console.log('SignOut Fail');
+      console.error('error:  ', e);
+    }
   };
 
-  const onSuccessLogOut = () => {
+  const onSuccessSignOut = () => {
     rootNavigation.dispatch(
       CommonActions.reset({
         index: 0,
@@ -27,8 +35,8 @@ const useSettingLogOutModal = () => {
   return {
     modalType,
     closeModal,
-    onPressLogOut,
+    onPressSignOut,
   };
 };
 
-export default useSettingLogOutModal;
+export default useSettingSignOutModall;
