@@ -1,15 +1,22 @@
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
+import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 
 const useSettingDeleteAccount = () => {
   type rootStackProps = TRootStackNavigationProps<'SETTING_DELETE_ACCOUNT'>;
   const rootNavigation = useNavigation<rootStackProps>();
-  const onPressDeleteButton = () => {
-    // TODO: delete Account 기능 붙이기
-    console.log('delete account');
-    // delete 후에 success로 이동
-    onSuccessDelete();
+  const auth = useDi('AuthService');
+
+  const onPressDeleteButton = async () => {
+    try {
+      console.log('delete account start');
+      await auth.deleteAccount();
+      onSuccessDelete();
+    } catch (error) {
+      console.log('delete account Fail');
+      console.error('error:  ', error);
+    }
   };
 
   const onSuccessDelete = () => {

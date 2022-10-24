@@ -16,9 +16,9 @@ const useSettingSignOutModall = () => {
       console.log('SignOut start');
       await auth.signOut();
       onSuccessSignOut();
-    } catch (e: any) {
+    } catch (error) {
       console.log('SignOut Fail');
-      console.error('error:  ', e);
+      console.error('error:  ', error);
     }
   };
 
