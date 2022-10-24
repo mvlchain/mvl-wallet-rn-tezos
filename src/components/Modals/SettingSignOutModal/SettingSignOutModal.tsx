@@ -6,20 +6,20 @@ import { useToggle } from '@@hooks/common/useToggle';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-import * as S from './SettingLogOutModal.style';
-import useSettingLogOutModal from './useSettingLogOutModal';
+import * as S from './SettingSignOutModal.style';
+import useSettingSignOutModal from './useSettingSignOutModal';
 
-function SettingLogOutModal() {
+function SettingSignOutModal() {
   const [isAgree, toggle] = useToggle();
   const { t } = useTranslation();
-  const { modalType, closeModal, onPressLogOut } = useSettingLogOutModal();
+  const { modalType, closeModal, onPressSignOut } = useSettingSignOutModal();
 
   return (
     <BaseModal
       title={t('log_out')}
       modalPosition='center'
       isVisible={modalType === MODAL_TYPES.SETTING_LOG_OUT}
-      onConfirm={onPressLogOut}
+      onConfirm={onPressSignOut}
       confirmLabel={t('log_out')}
       isConfirmDisabled={!isAgree}
       onCancel={closeModal}
@@ -34,4 +34,4 @@ function SettingLogOutModal() {
   );
 }
 
-export default SettingLogOutModal;
+export default SettingSignOutModal;
