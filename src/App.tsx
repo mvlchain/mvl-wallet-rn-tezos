@@ -1,5 +1,6 @@
 import React from 'react';
 
+import ErrorBoundary from 'react-native-error-boundary';
 import { ThemeProvider } from 'styled-components';
 import 'reflect-metadata';
 /**
@@ -11,6 +12,7 @@ import '@@assets/locale/i18n';
 import useApp from 'useApp';
 
 import RootStack from '@@navigation/RootStack';
+import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import { theme } from '@@style/theme';
 
 import SecureKeychain from './utils/SecureKeychain';
@@ -19,9 +21,11 @@ function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
   const { appTheme } = useApp();
   return (
-    <ThemeProvider theme={theme[appTheme.label]}>
-      <RootStack />
-    </ThemeProvider>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
+      <ThemeProvider theme={theme[appTheme.label]}>
+        <RootStack />
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
