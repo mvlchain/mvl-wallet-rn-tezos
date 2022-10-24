@@ -1,24 +1,24 @@
 import React from 'react';
 
-import { Text, Pressable, View } from 'react-native';
+import { Pressable } from 'react-native';
 
+import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
+import { useAssetFromTheme } from '@@hooks/common/useTheme';
+
+import * as S from './SettingMenu.style';
 import { ISettingMenuProps } from './SettingMenu.type';
 
-function SettingMenu({ title, subTitle, onPress }: ISettingMenuProps) {
-  // TODO: 디자인 추가
+function SettingMenu({ title, subTitle, isThickBorder, isLast, onPress }: ISettingMenuProps) {
+  const Icon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   return (
     <Pressable onPress={onPress}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 24,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text>{title}</Text>
-        <Text>{subTitle && subTitle}</Text>
-      </View>
+      <S.SettingMenuContainer isThickBorder={isThickBorder} isLast={isLast}>
+        <S.SettingMenuText>{title}</S.SettingMenuText>
+        <S.SettingSubTextContainer>
+          <S.SettingMenuText isSub={true}>{subTitle && subTitle}</S.SettingMenuText>
+          <Icon style={S.inlineStyles.marginProvider} />
+        </S.SettingSubTextContainer>
+      </S.SettingMenuContainer>
     </Pressable>
   );
 }

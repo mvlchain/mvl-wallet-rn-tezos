@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 import { width } from '@@utils/ui';
 
@@ -37,7 +37,15 @@ export const Gap = styled.View`
 
 export const ModalContainer = styled.View<Type.IModalTypeProps>`
   background-color: ${({ theme }) => theme.color.whiteBlack};
-  border-radius: ${width * 24}px;
+  ${({ modalPosition }) =>
+    modalPosition === Type.Center
+      ? css`
+          border-radius: ${width * 24}px;
+        `
+      : css`
+          border-top-left-radius: ${width * 24}px;
+          border-top-right-radius: ${width * 24}px;
+        `};
   padding: ${width * 24}px;
   padding-bottom: ${({ modalPosition }) => (modalPosition === Type.Center ? '0' : `${width * 34}px`)};
 `;
@@ -56,6 +64,11 @@ export const inlineStyles = (modalPosition: Type.TModalPosition) =>
     },
     halfbutton: { flex: 1 },
   });
+
+export const BackdropColor = {
+  light: undefined,
+  dark: 'rgba(255,255,255,0.25)',
+};
 
 //image
 export const ImageModalContainer = styled(ModalContainer)`
