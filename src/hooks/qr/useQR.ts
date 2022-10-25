@@ -39,7 +39,7 @@ const useQR = (targetToken?: string) => {
         android: [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
       });
       const { DENIED, BLOCKED } = getNotGrantedList(permissionResult as TRequestPermissionResultType);
-      if (BLOCKED.length !== 0 || DENIED.length !== 0) {
+      if (BLOCKED.length !== 0) {
         openSettingAlert({
           //TODO: photo library 문구 요청 필요
           title: 'Photo library access permission is denied',

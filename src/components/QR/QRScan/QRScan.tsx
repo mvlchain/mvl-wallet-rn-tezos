@@ -21,7 +21,7 @@ function QRScan() {
   useEffect(() => {
     requestPermission({ ios: [PERMISSIONS.IOS.CAMERA], android: [PERMISSIONS.ANDROID.CAMERA] }).then(async (res) => {
       const { DENIED, BLOCKED } = getNotGrantedList(res as TRequestPermissionResultType);
-      if (BLOCKED.length !== 0 || DENIED.length !== 0) {
+      if (BLOCKED.length !== 0) {
         openSettingAlert({
           title: t('msg_camera_denied_msg'),
           content: t('ios_msg_camera_denied_message'),
