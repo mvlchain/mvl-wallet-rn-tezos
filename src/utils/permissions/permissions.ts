@@ -33,15 +33,15 @@ export const getNotGrantedList = (result: Type.TRequestPermissionResultType) => 
   return notGrantedArr;
 };
 
-export const openSettingAlert = (whenBlockedObj: Type.TWhenPermissionBlockedObj) => {
+export const openSettingAlert = (alertObj: Type.TSettingAlertObj) => {
   Alert.alert(
-    whenBlockedObj.title,
-    whenBlockedObj.content,
+    alertObj.title,
+    alertObj.content,
     [
       {
         text: i18next.t('cancel'),
         style: 'cancel',
-        onPress: whenBlockedObj.onPressCancel,
+        onPress: alertObj.onPressCancel,
       },
       { text: i18next.t('settings'), onPress: async () => openSettings() },
     ],
