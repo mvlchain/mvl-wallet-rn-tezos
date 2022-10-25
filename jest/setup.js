@@ -1,9 +1,16 @@
 import 'react-native-gesture-handler/jestSetup';
+import 'reflect-metadata';
+import mockSecureKeychain from '../__mocks__/@@utils/SecureKeychain';
+// const mockKeychain = require('../__mocks__/react-native-keychain');
 
-const mockAsyncStorage = require('../__mocks__/@react-native-async-storage/async-storage');
+// const mockAsyncStorage = require('../__mocks__/@react-native-async-storage/async-storage');
+//
+// jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+// jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+// jest.mock('react-native-keychain', () => mockKeychain);
+jest.mock('@@utils/SecureKeychain', () => mockSecureKeychain);
 
-jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
-jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
 jest.mock('@haskkor/react-native-pincode', () => () => jest.fn());
 jest.mock('react-native-reanimated', () => {
   const React = require('react');
