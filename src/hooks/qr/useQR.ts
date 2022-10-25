@@ -61,20 +61,17 @@ const useQR = (targetToken?: string) => {
     } catch (err) {
       return;
     }
-  }, [scanResult]);
+  }, []);
 
-  const frameProcessor = useFrameProcessor(
-    (frame) => {
-      'worklet';
-      const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
-      //Scan area limit to inside overlay area
-      if (!detectedBarcodes || !detectedBarcodes[0] || !detectedBarcodes[0].cornerPoints) return;
-      const [topL, bottomL, bottomR, topR] = detectedBarcodes[0].cornerPoints;
-      if (topL.x < frame.width * 0.1 || topL.y < frame.height * 0.12 || bottomR.x > frame.width * 0.9 || bottomR.y > frame.width * 0.6) return;
-      runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
-    },
-    [scanResult]
-  );
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet';
+    const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
+    //Scan area limit to inside overlay area
+    if (!detectedBarcodes || !detectedBarcodes[0] || !detectedBarcodes[0].cornerPoints) return;
+    const [topL, bottomL, bottomR, topR] = detectedBarcodes[0].cornerPoints;
+    if (topL.x < frame.width * 0.1 || topL.y < frame.height * 0.12 || bottomR.x > frame.width * 0.9 || bottomR.y > frame.width * 0.6) return;
+    runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
+  }, []);
 
   return {
     getQRFromGallery,
