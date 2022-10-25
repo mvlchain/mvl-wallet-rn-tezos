@@ -4,11 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { NativeModules } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { PERMISSIONS } from 'react-native-permissions';
 import { runOnJS } from 'react-native-reanimated';
 import { useFrameProcessor } from 'react-native-vision-camera';
 import { BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions';
 
 const useQR = (targetToken?: string) => {
   const [scanResult, setScanResult] = useState<string | null>(null);
@@ -37,6 +39,19 @@ const useQR = (targetToken?: string) => {
 
   const getQRFromGallery = useCallback(async () => {
     try {
+      const permissionResult = await requestPermission({
+        ios: [PERMISSIONS.IOS.PHOTO_LIBRARY],
+        android: [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
+      });
+
+      const { DENIED, BLOCKED } = getNotGrantedList(permissionResult);
+      if (BLOCKED.length !== 0) {
+        ({
+          title: t('msg_camera_denied_msg'),
+          content: t('ios_msg_camera_denied_message'),
+        });
+      }
+
       const result = await launchImageLibrary({ mediaType: 'photo' });
       if (!result || result.didCancel || !result.assets || !result.assets[0].uri) {
         return;
