@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import { Alert, Platform } from 'react-native';
-import { RESULTS, requestMultiple, Permission, IOSPermission, AndroidPermission, PermissionStatus, openSettings } from 'react-native-permissions';
+import { RESULTS, requestMultiple, Permission, openSettings } from 'react-native-permissions';
 
 import * as Type from './permissions.type';
 
