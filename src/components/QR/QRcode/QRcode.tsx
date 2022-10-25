@@ -8,7 +8,12 @@ import { IQRcode } from './QRcode.type';
 function QRcode(props: IQRcode) {
   return (
     <S.QRcodeWrapper>
-      <QRCode size={224} style={{ height: `${height * 224}`, width: `${width * 224}` }} value={JSON.stringify(props)} viewBox={`0 0 224 224`} />
+      <QRCode
+        size={width * 224}
+        style={{ height: `${height * 224}`, width: `${width * 224}` }}
+        value={JSON.stringify(props)}
+        viewBox={`0 0 ${width * 224} ${height * 224}`}
+      />
     </S.QRcodeWrapper>
   );
 }
