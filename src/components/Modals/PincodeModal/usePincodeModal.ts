@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-import PINCode from '@haskkor/react-native-pincode';
-import { Modal, BackHandler } from 'react-native';
+import { BackHandler } from 'react-native';
 
-import { usePinStore } from '@@store/pin';
+import { pinStore } from '@@store/pin/pinStore';
+import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
-import SecureKeychain, { SECURE_TYPES } from '../../utils/SecureKeychain';
+function usePincodeModal() {
+  const { isOpen, mode, close, success, fail } = pinStore();
 
-export default function PinModal() {
-  const { isOpen, mode, close, success, fail } = usePinStore();
   const [pin, setPin] = useState('');
 
   const initialSave = async (pin: string) => {
@@ -50,17 +49,14 @@ export default function PinModal() {
     getStoredPin();
   }, [pin]);
 
-  return (
-    <Modal visible={isOpen} onRequestClose={interruption}>
-      <PINCode
-        status={mode}
-        delayBetweenAttempts={1500}
-        passwordLength={6}
-        storePin={initialSave}
-        storedPin={pin}
-        finishProcess={whenMatch}
-        touchIDDisabled={false}
-      />
-    </Modal>
-  );
+  return {
+    isOpen,
+    mode,
+    pin,
+    interruption,
+    whenMatch,
+    initialSave,
+  };
 }
+
+export default usePincodeModal;

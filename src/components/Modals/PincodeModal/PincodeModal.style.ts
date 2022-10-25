@@ -6,7 +6,7 @@ import { fontSize, width, height } from '@@utils/ui';
 //TODO: 테마스토어 적용
 const themeColor = theme.light;
 
-export const PincodeContainer = styled.View`
+export const PincodeModalContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
@@ -34,7 +34,7 @@ export const DeleteButton = styled.View`
 `;
 
 //TODO: 스타일보기위한 주석임 완성될때까지 둘것
-export const PincodeStyle = {
+export const PincodeModalStyle = {
   colorCircleButtons: themeColor.color.whiteBlack,
   numbersButtonOverlayColor: themeColor.color.grey100Grey800,
   colorPassword: themeColor.color.primary,

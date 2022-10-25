@@ -1,4 +1,5 @@
 import { SocialAppleDark, SocialAppleLight, SocialGoogle } from '@@assets/image';
+import { useAssetFromTheme } from '@@hooks/common/useTheme';
 
 import * as S from './Button.style';
 import * as Type from './Button.type';
@@ -33,7 +34,9 @@ export function GoogleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButt
 }
 
 export function AppleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButtonComponentProps) {
+  const SocialApple = useAssetFromTheme(SocialAppleLight, SocialAppleDark);
   const blackStyle = S.baseButtonStyleObj.black;
+
   return (
     <S.BaseButtonContainer
       onPress={() => {
@@ -45,8 +48,7 @@ export function AppleButton({ onPress, disabled, wrapperStyle }: Type.IBaseButto
       {({ pressed }) => (
         <S.SocialButton pressed={pressed} disabled={disabled} {...blackStyle.bg}>
           <S.IconWrapper disabled={disabled}>
-            {/* TODO: store에 theme저장되면 수정 필요 */}
-            <SocialAppleLight />
+            <SocialApple />
           </S.IconWrapper>
           <S.TextWrapper>
             <S.BaseButtonLabel {...blackStyle.tx} disabled={disabled}>

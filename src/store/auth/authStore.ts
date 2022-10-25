@@ -6,6 +6,7 @@ import { TMnemonic } from '@@types/MnemonicType';
 import { IAuth, IAuthState } from './autStore.type';
 
 const initState: IAuthState = {
+  pKey: null,
   mnemonicList: [],
   focusedIndex: 0,
 };
@@ -13,6 +14,7 @@ const initState: IAuthState = {
 const authStore = create<IAuth>()(
   devtools((set) => ({
     ...initState,
+    setPKey: (pKey: string) => set(() => ({ pKey: pKey }), false, 'setPkey'),
     initMnemonic: (mnemonicArr: TMnemonic[]) => set(() => ({ mnemonicList: mnemonicArr }), false, 'initMnemonic'),
     setMnemonic: (typedMnemonic: TMnemonic) =>
       set(
