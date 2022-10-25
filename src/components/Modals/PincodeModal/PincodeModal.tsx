@@ -21,6 +21,7 @@ function PincodeModal() {
           storedPin={pin}
           finishProcess={whenMatch}
           touchIDDisabled={false}
+          vibrationEnabled={false}
           //TODO: 다국어
           titleChoose={t('password_pin_not_match')}
           titleEnter={t('password_enter_pin')}
