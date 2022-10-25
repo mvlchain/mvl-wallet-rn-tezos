@@ -5,9 +5,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
-import BackButton from '@@components/BasicComponents/Header/BackButton';
-import Title from '@@components/BasicComponents/Header/Title';
+import PincodeGuideModal from '@@components/Modals/Auth/PincodeGuideModal';
+import TermsOfServicesModal from '@@components/Modals/Auth/TermsOfServicesModal';
 import { GlobalModal } from '@@components/Modals/GlobalModal';
+import PincodeModal from '@@components/Modals/PincodeModal';
 import useHeader from '@@hooks/common/useHeader';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
@@ -19,7 +20,6 @@ import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
 import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingPrivateKey';
 import SettingTermsOfService from '@@screens/Setting/SettingTermsOfService';
-import PinModal from '@@screens/SignIn/pin';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -124,8 +124,10 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
         </Navigator>
+        <PincodeModal />
+        <TermsOfServicesModal />
+        <PincodeGuideModal />
         <GlobalModal />
-        <PinModal />
       </NavigationContainer>
     </SafeAreaView>
   );

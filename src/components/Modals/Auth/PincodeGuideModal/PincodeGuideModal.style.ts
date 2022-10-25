@@ -1,9 +1,8 @@
-import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 import { fontSize, height, width } from '@@utils/ui';
 
-export const LoginContainer = styled.View`
+export const PincodeContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.color.whiteBlack};
   align-items: center;
@@ -12,33 +11,27 @@ export const LoginContainer = styled.View`
   padding-bottom: ${height * 58}px;
 `;
 
-export const LoginTitleWrapper = styled.View`
+export const PincodeTitleWrapper = styled.View`
   align-items: center;
 `;
-export const LoginTitle = styled.Text`
+export const PincodeTitle = styled.Text`
   ${({ theme }) => theme.font.Title.md};
   color: ${({ theme }) => theme.color.blackWhite};
   line-height: ${fontSize(36)}px;
 `;
 
-export const LoginSubTitle = styled.Text`
+export const PincodeSubTitle = styled.Text`
   ${({ theme }) => theme.font.Paragraph.lg};
   color: ${({ theme }) => theme.color.blackWhite};
   line-height: ${fontSize(28)}px;
   margin-top: ${height * 8}px;
 `;
 
-export const LoginButtonWrapper = styled.View`
+export const PincodeButtonWrapper = styled.View`
   padding: 0 ${width * 24}px;
   width: 100%;
 `;
 
-export const PrimaryButtonWrapper = styled(LoginButtonWrapper)`
+export const PrimaryButtonWrapper = styled(PincodeButtonWrapper)`
   margin-top: ${width * 78}px;
 `;
-
-export const LoginInlineStyle = StyleSheet.create({
-  marginTop: {
-    marginTop: height * 16,
-  },
-});

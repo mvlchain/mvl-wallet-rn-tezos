@@ -1,4 +1,6 @@
-import { usePinStore, Mode } from '@@store/pin';
+import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
+import { pinStore, authModalStore } from '@@store/pin/pinStore';
+import { Mode } from '@@store/pin/pinStore.type';
 
 export interface UIService {
   triggerGetPincode: () => Promise<string>;
@@ -26,9 +28,8 @@ export class UIServiceImpl implements UIService {
       pinModalRejector = reject;
     });
 
-    usePinStore.getState().init({ mode, pinModalResolver, pinModalRejector });
-    usePinStore.getState().open();
-
+    pinStore.getState().init({ mode, pinModalResolver, pinModalRejector });
+    authModalStore.getState().open(AUTH_MODAL_NAME.TOS);
     const password = await pinModalObserver;
     return password as string;
   }
