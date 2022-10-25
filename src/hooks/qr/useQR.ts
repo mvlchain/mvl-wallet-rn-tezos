@@ -10,7 +10,8 @@ import { useFrameProcessor } from 'react-native-vision-camera';
 import { BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions';
+import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
+import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
 
 const useQR = (targetToken?: string) => {
   const [scanResult, setScanResult] = useState<string | null>(null);
@@ -20,12 +21,6 @@ const useQR = (targetToken?: string) => {
   useEffect(() => {
     goSendPage(scanResult);
   }, [scanResult]);
-
-  //TODO: figma 에는 작업되어 있지않은데 토큰을 선택하고 qr을 인식하는 경우에 기존 선택한 토큰과 인식된 qr코드의 토큰이 다른경우에 유저한테 바꿀건지 다시 인식할건지 물어봐야하지않나?
-  const isSameToken = (targetToken: string, token: string) => {
-    if (targetToken !== token) {
-    }
-  };
 
   const goSendPage = useCallback((scanResult: string | null) => {
     if (!scanResult) return;
@@ -43,13 +38,14 @@ const useQR = (targetToken?: string) => {
         ios: [PERMISSIONS.IOS.PHOTO_LIBRARY],
         android: [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
       });
-
-      const { DENIED, BLOCKED } = getNotGrantedList(permissionResult);
-      if (BLOCKED.length !== 0) {
-        ({
-          title: t('msg_camera_denied_msg'),
-          content: t('ios_msg_camera_denied_message'),
+      const { DENIED, BLOCKED } = getNotGrantedList(permissionResult as TRequestPermissionResultType);
+      if (BLOCKED.length !== 0 || DENIED.length !== 0) {
+        openSettingAlert({
+          //TODO: photo library 문구 요청 필요
+          title: 'Photo library access permission is denied',
+          content: 'To enable access, go to Setting > Clutch and turn on photo library access',
         });
+        return;
       }
 
       const result = await launchImageLibrary({ mediaType: 'photo' });
