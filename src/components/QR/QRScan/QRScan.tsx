@@ -11,11 +11,11 @@ import useQR from '@@hooks/qr/useQR';
 import * as S from './QRScan.style';
 
 function QRScan() {
-  const { t } = useTranslation();
   const [hasPermission, setHasPermission] = useState(false);
+  const { frameProcessor, getQRFromGallery } = useQR();
+  const { t } = useTranslation();
   const devices = useCameraDevices();
   const device = devices.back;
-  const { frameProcessor, getQRFromGallery } = useQR();
 
   useEffect(() => {
     (async () => {
