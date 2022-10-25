@@ -17,6 +17,12 @@ target 'Wallet' do
   # pod 'CustomAuth', '~> 4.0.1', :modular_headers => true
   pod 'CustomAuth', :git => 'https://github.com/mvlchain/customauth-swift-sdk.git', :tag => '4.1.0-955f1', :modular_headers => true
 
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-FaceID', :path => "#{permissions_path}/FaceID"
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+
+
 
   use_react_native!(
     :path => config[:reactNativePath],
