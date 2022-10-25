@@ -4,4 +4,4 @@ export type TRequestPermissionResultType = Record<Permission, PermissionStatus>;
 
 export type TPermissionObj = { ios: IOSPermission[]; android: AndroidPermission[] };
 
-export type TWhenPermissionBlockedObj = { title: string; content: string; onPressCancel?: () => void };
+export type TSettingAlertObj = { title: string; content: string; onPressCancel?: () => void };
