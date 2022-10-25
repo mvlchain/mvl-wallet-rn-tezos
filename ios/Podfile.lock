@@ -673,7 +673,7 @@ SPEC CHECKSUMS:
   RCTRequired: ae07282b2ec9c90d7eb98251603bc3f82403d239
   RCTTypeSafety: a04dc1339af2e1da759ccd093bf11c310dce1ef6
   React: dbd201f781b180eab148aa961683943c72f67dcf
-  React-bridging: 10a863fdc0fc6f9c9f8527640936b293cd288bdc
+  React-bridging: 234a3ee2837d0c481329696991b7719a4f4526e0
   React-callinvoker: 6ad32eee2630dab9023de5df2a6a8cacbfc99a67
   React-Codegen: fe3423fa6f37d05e233ab0e85e34fe0b443a5654
   React-Core: 6177b1f2dd794fe202a5042d3678b2ddfcbfb7d4
