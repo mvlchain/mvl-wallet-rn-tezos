@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { importKey } from '@taquito/signer';
 import { compose, TezosToolkit } from '@taquito/taquito';
 import { tzip12, Tzip12Module } from '@taquito/tzip12';
@@ -202,6 +200,7 @@ describe('Tezos base methods', () => {
   });
 
   it('send tezos', async () => {
+    return;
     const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
     const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);
     expect(mnemonicToSeed.length).toBe(64);
@@ -219,6 +218,7 @@ describe('Tezos base methods', () => {
   });
 
   it('send fa2 token', async () => {
+    return;
     jest.setTimeout(50000);
 
     const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
@@ -247,6 +247,7 @@ describe('Tezos base methods', () => {
   });
 
   it('send fa1.2 token', async () => {
+    return;
     const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
     Tezos.addExtension(new Tzip12Module());
     const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);

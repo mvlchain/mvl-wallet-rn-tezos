@@ -1,4 +1,4 @@
-import ShareStore from '@tkey/common-types/src/base/ShareStore';
+import { ShareStore } from '@tkey/common-types';
 import { inject, injectable } from 'tsyringe';
 
 import { AuthProvider, AUTH_PROVIDER } from '@@domain/auth/constants/constants';

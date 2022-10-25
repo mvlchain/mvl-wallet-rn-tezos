@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler/jestSetup';
-import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+
+const mockAsyncStorage = require('../__mocks__/@react-native-async-storage/async-storage');
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
-
+jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+jest.mock('@haskkor/react-native-pincode', () => () => jest.fn());
 jest.mock('react-native-reanimated', () => {
   const React = require('react');
   const { View, Text, Image, Animated, Platform, processColor } = require('react-native');
