@@ -1,4 +1,4 @@
-import { RESULTS, requestMultiple, Permission, IOSPermission, AndroidPermission, PermissionStatus, openSettings } from 'react-native-permissions';
+import { Permission, IOSPermission, AndroidPermission, PermissionStatus, openSettings } from 'react-native-permissions';
 
 export type TRequestPermissionResultType = Record<Permission, PermissionStatus>;
 
