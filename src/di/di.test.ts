@@ -1,8 +1,6 @@
-// WARNING: this must only be added once, before DI is used.
-import 'reflect-metadata';
 import { container, instanceCachingFactory } from 'tsyringe';
 
-import { WalletRepository, WalletRepositoryImpl } from '../domain/wallet/WalletRepository';
+import { WalletRepository, WalletRepositoryImpl } from '@@domain/wallet/WalletRepository';
 
 beforeAll(() => {
   container.register('WalletRepository', {
