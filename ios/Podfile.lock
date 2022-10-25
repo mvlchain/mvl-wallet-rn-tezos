@@ -78,6 +78,8 @@ PODS:
     - PromiseKit/CorePromise
   - PromisesObjC (2.1.1)
   - Protobuf (3.21.8)
+  - QrCode (1.0.0):
+    - React
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -449,6 +451,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - QrCode (from `../node_modules/react-native-qr-decode-image-camera`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -539,6 +542,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  QrCode:
+    :path: "../node_modules/react-native-qr-decode-image-camera"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -663,11 +668,12 @@ SPEC CHECKSUMS:
   PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Protobuf: 0a11f3000cd10ffa17611bf96e66a66b25c956e4
+  QrCode: 703276888a8e1e5a77606392f82ce758d895a450
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: ae07282b2ec9c90d7eb98251603bc3f82403d239
   RCTTypeSafety: a04dc1339af2e1da759ccd093bf11c310dce1ef6
   React: dbd201f781b180eab148aa961683943c72f67dcf
-  React-bridging: 234a3ee2837d0c481329696991b7719a4f4526e0
+  React-bridging: 10a863fdc0fc6f9c9f8527640936b293cd288bdc
   React-callinvoker: 6ad32eee2630dab9023de5df2a6a8cacbfc99a67
   React-Codegen: fe3423fa6f37d05e233ab0e85e34fe0b443a5654
   React-Core: 6177b1f2dd794fe202a5042d3678b2ddfcbfb7d4
