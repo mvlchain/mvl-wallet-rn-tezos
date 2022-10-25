@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import {
   ACCESS_CONTROL,
@@ -9,9 +10,8 @@ import {
   setGenericPassword,
 } from 'react-native-keychain';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BIOMETRY_CHOICE, BIOMETRY_CHOICE_DISABLED, PASSCODE_CHOICE, PASSCODE_DISABLED, TRUE } from '@@constants/storage';
 
-import { BIOMETRY_CHOICE, BIOMETRY_CHOICE_DISABLED, PASSCODE_CHOICE, PASSCODE_DISABLED, TRUE } from '../constants/storage';
 import { strings } from '../locales/i18n';
 
 import Encryptor from './Encryptor';
