@@ -19,6 +19,7 @@ import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
 import SettingSecurity from '@@screens/Setting/SettingSecurity';
 import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingPrivateKey';
 import SettingTermsOfService from '@@screens/Setting/SettingTermsOfService';
+import PinModal from '@@screens/SignIn/pin';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -124,6 +125,7 @@ function RootStack() {
           ))}
         </Navigator>
         <GlobalModal />
+        <PinModal />
       </NavigationContainer>
     </SafeAreaView>
   );
