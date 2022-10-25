@@ -1,3 +1,5 @@
+import React from 'react';
+
 import PINCode from '@haskkor/react-native-pincode';
 import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-native';
