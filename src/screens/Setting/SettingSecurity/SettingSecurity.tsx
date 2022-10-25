@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
 import SettingToggleMenu from '@@components/Setting/SettingToggleMenu';
+import { useDi } from '@@hooks/common/useDi';
 import useCommonSetting from '@@hooks/setting/useCommonSetting';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -17,6 +18,8 @@ function SettingSecurity() {
   const { onPressSettingMenu } = useCommonSetting();
   const { openModal, closeModal } = globalModalStore();
   const { settedBioAuth, toggleBioAuth } = settingPersistStore();
+  const auth = useDi('AuthService');
+
   return (
     <S.SettingSecurityContainer bounces={false}>
       <SettingMenu
@@ -27,7 +30,7 @@ function SettingSecurity() {
             title: t('reset_pin_number'),
             label: t('dialog_reset_pin_lbl_description'),
             confirmLabel: t('btn_reset'),
-            onConfirm: () => console.log('trigger customauth login '),
+            onConfirm: () => auth.resetPin(),
             onCancel: () => closeModal(),
           });
         }}

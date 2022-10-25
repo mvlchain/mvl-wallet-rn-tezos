@@ -78,7 +78,6 @@ function SignIn({ login }: { login: () => void }) {
     <View style={styles.container}>
       <Text>{t('address')}</Text>
       <Button title='Change Language' onPress={changeLang} />
-      <PinModal />
       <SText>{isAuthenticated ? 'Auth' : 'Unauth'}</SText>
       <Button title='Toggle Auth' onPress={() => toggle()} />
       <Text style={styles.itemLabel}>Key: {key}</Text>
