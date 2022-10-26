@@ -9,6 +9,7 @@ import { runOnJS } from 'react-native-reanimated';
 import { useFrameProcessor } from 'react-native-vision-camera';
 import { BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
+import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
 import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
@@ -25,7 +26,7 @@ const useQR = (targetToken?: string) => {
   const goSendPage = useCallback((scanResult: string | null) => {
     if (!scanResult) return;
     if (!scanResult.includes('token') || !scanResult.includes('address') || !scanResult.includes('amount')) {
-      openModal('TITLE_ONLY', t('dialog_wrong_qr_code_title'));
+      openModal(MODAL_TYPES.TITLE_ONLY, t('dialog_wrong_qr_code_title'));
       return;
     }
     const parsedData = JSON.parse(scanResult);
@@ -41,8 +42,8 @@ const useQR = (targetToken?: string) => {
       const { DENIED, BLOCKED } = getNotGrantedList(permissionResult as TRequestPermissionResultType);
       if (BLOCKED.length !== 0) {
         openSettingAlert({
-          //TODO: photo library 문구 요청 필요
-          title: 'Photo library access permission is denied',
+          //TODO: 문구요청
+          title: t('msg_storage_denied_msg'),
           content: 'To enable access, go to Setting > Clutch and turn on photo library access',
         });
         return;
