@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import SignIn from '@@screens/SignIn';
+import SignInScreen from '@@screens/SignInScreen';
 
 import { AUTH_STACK_ROUTE, TAuthStackParamList } from './AuthStack.type';
 
@@ -13,7 +13,7 @@ type ScreenProps = Parameters<typeof Screen>[0];
 const screens: Array<ScreenProps> = [
   {
     name: AUTH_STACK_ROUTE.SIGN_IN,
-    component: SignIn,
+    component: SignInScreen,
   },
 ];
 

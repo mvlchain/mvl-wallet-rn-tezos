@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
+import { ToastPopup } from '@@components/BasicComponents/Modals/ToastPopup';
 import PincodeGuideModal from '@@components/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/Modals/Auth/TermsOfServicesModal';
 import { GlobalModal } from '@@components/Modals/GlobalModal';
@@ -12,6 +13,8 @@ import PincodeModal from '@@components/Modals/PincodeModal';
 import useHeader from '@@hooks/common/useHeader';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
+import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
+import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
 import SettingAppVersion from '@@screens/Setting/SettingAppVersion';
 import SettingDeleteAccount from '@@screens/Setting/SettingDeleteAccount';
 import SettingDeleteAccountSuccess from '@@screens/Setting/SettingDeleteAccount/SettingDeleteAccountSuccess';
@@ -46,6 +49,20 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.AUTH,
       component: AuthStack,
+      options: {
+        headerShown: false,
+      },
+    },
+    {
+      name: ROOT_STACK_ROUTE.SEED_PHRASE,
+      component: SeedPhraseScreen,
+      options: {
+        headerShown: false,
+      },
+    },
+    {
+      name: ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM,
+      component: ConfirmSeedPhraseScreen,
       options: {
         headerShown: false,
       },
@@ -128,6 +145,7 @@ function RootStack() {
         <TermsOfServicesModal />
         <PincodeGuideModal />
         <GlobalModal />
+        <ToastPopup />
       </NavigationContainer>
     </SafeAreaView>
   );

@@ -1,7 +1,4 @@
-export interface IMnemonicProps extends IUseMnemonicProps {
+export interface IMnemonicProps {
   type: 'hide' | 'show';
-}
-
-export interface IUseMnemonicProps {
-  mnemonic: string;
+  onPress: () => void;
 }

@@ -7,12 +7,12 @@ import { Simple } from '@@assets/image';
 import { AppleButton, GoogleButton } from '@@components/BasicComponents/Buttons/SocialButton';
 import { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 
-import * as S from './SignIn.style';
-import useSignIn from './useSignIn';
+import * as S from './SignInScreen.style';
+import useSignInScreen from './useSignInScreen';
 
-function SignIn() {
+function SignInScreen() {
   const { t } = useTranslation();
-  const { signIn } = useSignIn();
+  const { signIn } = useSignInScreen();
   return (
     <S.SignInContainer>
       <S.SignInTitleWrapper>
@@ -28,4 +28,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default SignInScreen;

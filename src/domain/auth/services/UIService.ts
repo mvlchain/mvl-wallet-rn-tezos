@@ -29,7 +29,12 @@ export class UIServiceImpl implements UIService {
     });
 
     pinStore.getState().init({ mode, pinModalResolver, pinModalRejector });
-    authModalStore.getState().open(AUTH_MODAL_NAME.TOS);
+    // TODO: reset pin일 때 화면 처리 추가
+    if (mode === 'enter') {
+      pinStore.getState().open();
+    } else {
+      authModalStore.getState().open(AUTH_MODAL_NAME.TOS);
+    }
     const password = await pinModalObserver;
     return password as string;
   }
