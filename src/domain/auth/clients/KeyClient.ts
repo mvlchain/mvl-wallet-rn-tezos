@@ -37,6 +37,7 @@ export interface KeyClient {
   setKeyByServer: () => Promise<void>;
   generateKey: () => Promise<void>;
   generateMnemonic: () => Promise<string>;
+  getMnemonicByPkey: () => string;
   generateDevice: () => Promise<string>;
   updateServer: () => Promise<void>;
   restoreServer: () => Promise<void>;
@@ -165,6 +166,14 @@ export class KeyClientImpl implements KeyClient {
     const BNprivateKey = assembleRes.privKey;
     return this.util.pkeyToMnemonic(BNprivateKey);
   }
+
+  getMnemonicByPkey() {
+    if (!this.torusShareRepository.tKey) {
+      throw new Error('Tkey is required');
+    }
+    return this.util.pkeyToMnemonic(this.torusShareRepository.tKey.privKey);
+  }
+
   async generateKey() {
     if (!this.postboxKeyHolder) {
       throw new Error('Please social signin first, postboxkey is required');

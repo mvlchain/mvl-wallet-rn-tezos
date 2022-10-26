@@ -7,7 +7,7 @@ import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 
-const useSignIn = () => {
+const useSignInScreen = () => {
   type StackProps = TRootStackNavigationProps<'AUTH'>;
   const navigation = useNavigation<StackProps>();
   const { pKey, setPKey } = authStore();
@@ -25,7 +25,12 @@ const useSignIn = () => {
 
   useEffect(() => {
     if (pKey) {
-      navigation.navigate(ROOT_STACK_ROUTE.MAIN);
+      if (auth.signUpFlag) {
+        // TODO: go to mnemonic
+        navigation.navigate(ROOT_STACK_ROUTE.SEED_PHRASE);
+      } else {
+        navigation.navigate(ROOT_STACK_ROUTE.MAIN);
+      }
     }
   }, [pKey]);
 
@@ -34,4 +39,4 @@ const useSignIn = () => {
   };
 };
 
-export default useSignIn;
+export default useSignInScreen;

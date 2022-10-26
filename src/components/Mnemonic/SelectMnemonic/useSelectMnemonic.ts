@@ -2,17 +2,15 @@ import { useEffect, useState } from 'react';
 
 import authStore from '@@store/auth/authStore';
 
-interface IuseSelectMnemonic {
-  mnemonic: string;
-}
-
-const useSelectMnemonic = ({ mnemonic }: IuseSelectMnemonic) => {
-  const { mnemonicList, focusedIndex, setMnemonic, removeMnemonic, setFocusedIndex } = authStore();
+const useSelectMnemonic = () => {
+  const { mnemonic, mnemonicList, focusedIndex, setMnemonicList, removeMnemonic, setFocusedIndex } = authStore();
   const [mnemonicArr, setMnemonicArr] = useState<string[]>([]);
 
   useEffect(() => {
+    // mnemonic 없을 때 예외처리(에러처리)추가
+    if (!mnemonic) return;
     setMnemonicArr(mnemonic.split(' ').sort(() => Math.random() - 0.5));
-  }, []);
+  }, [mnemonic]);
 
   const onPressSelectChip = (word: string, index: number) => {
     const selected = mnemonicList.filter((mnemonic) => mnemonic.selectChipIndex === index);
@@ -21,7 +19,7 @@ const useSelectMnemonic = ({ mnemonic }: IuseSelectMnemonic) => {
       setFocusedIndex(selected[0].index);
     } else {
       if (focusedIndex === -1) return;
-      setMnemonic({ word, index: focusedIndex, selectChipIndex: index });
+      setMnemonicList({ word, index: focusedIndex, selectChipIndex: index });
     }
   };
   return {
