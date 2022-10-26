@@ -138,6 +138,10 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    packagingOptions {
+        pickFirst '**/*.so'
+    }
+
     defaultConfig {
         applicationId "com.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
