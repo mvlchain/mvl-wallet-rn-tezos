@@ -1,17 +1,21 @@
 package com.wallet;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import org.devio.rn.splashscreen.SplashScreen;
+
 
 public class MainActivity extends ReactActivity {
   private static final String OPTION_FOX_CODE = "foxCode";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this);
     super.onCreate(null);
   }
 
