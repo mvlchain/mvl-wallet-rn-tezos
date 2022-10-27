@@ -45,7 +45,7 @@ export class WalletServiceImpl implements WalletService {
     if (typeof data === 'string') {
       message = data;
     } else {
-      message = JSON.stringify(data, null, 0);
+      message = JSON.stringify(data ?? {}, null, 0);
     }
 
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);

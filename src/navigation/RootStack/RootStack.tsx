@@ -58,14 +58,13 @@ function RootStack() {
       component: SeedPhraseScreen,
       options: {
         headerShown: false,
+        title: t('seed_phrase_lbl_title'),
       },
     },
     {
       name: ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM,
       component: ConfirmSeedPhraseScreen,
-      options: {
-        headerShown: false,
-      },
+      options: handleStackHeaderOption(t('confirm_seed_phrase_lbl_title')),
     },
     {
       name: ROOT_STACK_ROUTE.MAIN,
