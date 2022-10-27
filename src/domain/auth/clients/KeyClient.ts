@@ -124,7 +124,7 @@ export class KeyClientImpl implements KeyClient {
       throw new Error('postboxKeyHolder, serverShare is required');
     }
     const privateKey = await this.getPrivateKey();
-    const pubKey = Clutch.extendedPublicKey(privateKey);
+    const pubKey = Clutch.extendedPublicKey(privateKey, extendedKeyPath(ETHEREUM));
     await this.serverShareRepository.saveServerShare({
       type: this.postboxKeyHolder.provider,
       idtoken: this.postboxKeyHolder.providerIdToken,
@@ -228,11 +228,16 @@ export class KeyClientImpl implements KeyClient {
     await this.serverShareRepository.restoreServerShare(restoreObj);
   }
   async delete() {
-    const deviceShare = await this.deviceShareRepository.fetchDeviceShare();
-    if (deviceShare === undefined) return;
-    const postboxKey = deviceShare.postboxKey;
-    await this.torusShareRepository.delete(postboxKey);
-    this.deviceShareRepository.clearDeviceShare();
+    try {
+      const deviceShare = await this.deviceShareRepository.fetchDeviceShare();
+      if (deviceShare === undefined) return;
+      this.serverShareRepository.deleteServerShare();
+      const postboxKey = deviceShare.postboxKey;
+      await this.torusShareRepository.delete(postboxKey);
+      this.deviceShareRepository.clearDeviceShare();
+    } catch (error) {
+      throw new Error(`delete account error:  ${error}`);
+    }
   }
 
   signOut() {
