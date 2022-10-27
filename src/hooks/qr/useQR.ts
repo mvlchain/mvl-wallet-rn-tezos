@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 import { runOnJS } from 'react-native-reanimated';
@@ -39,12 +39,13 @@ const useQR = (targetToken?: string) => {
         ios: [PERMISSIONS.IOS.PHOTO_LIBRARY],
         android: [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
       });
+
+      const isIOS = Platform.OS === 'ios';
       const { DENIED, BLOCKED } = getNotGrantedList(permissionResult as TRequestPermissionResultType);
       if (BLOCKED.length !== 0) {
         openSettingAlert({
-          //TODO: 문구요청
-          title: t('msg_storage_denied_msg'),
-          content: 'To enable access, go to Setting > Clutch and turn on photo library access',
+          title: isIOS ? t('msg_photos_denied_msg') : t('msg_file_and_media_denied_msg'),
+          content: isIOS ? t('msg_Photos_denied_msg') : t('android_msg_file_and_media_denied_message'),
         });
         return;
       }
