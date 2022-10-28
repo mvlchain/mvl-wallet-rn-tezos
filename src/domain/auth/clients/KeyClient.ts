@@ -7,6 +7,7 @@ import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRep
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/Clutch';
+import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
 import { KeyClientUtil } from './KeyClientUtil';
 interface PostboxKeyHolder {
@@ -19,6 +20,7 @@ interface PostboxKeyHolder {
 
 const serverShareRequiredError = new Error('servershare is required');
 
+//TODO: 에러처리
 export interface KeyClient {
   postboxKeyHolder: PostboxKeyHolder | null;
   serverShare: ShareStore | null;
@@ -29,6 +31,7 @@ export interface KeyClient {
   checkSignedUp: () => Promise<boolean>;
   checkServer: () => Promise<boolean>;
   checkSet: () => boolean;
+  checkPincode: () => Promise<boolean>;
   getPrivateKey: () => Promise<string>;
   setDevice: (pincode: string) => Promise<void>;
   setServer: () => Promise<void>;
@@ -101,8 +104,13 @@ export class KeyClientImpl implements KeyClient {
       case 3:
         return false;
       default:
+        //TODO: 어떤 에러를 뱉을 것인가?
         throw new Error('???오ㅐ때문에 없서');
     }
+  }
+  async checkPincode() {
+    const credentials = await SecureKeychain.getGenericPassword();
+    return !!credentials;
   }
   async getPrivateKey() {
     return this.torusShareRepository.getPrivateKey();
