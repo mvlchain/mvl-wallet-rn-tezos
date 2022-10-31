@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/baseBackground</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_img_clutch_post_v31</item>
+        <item name="android:windowSplashScreenBrandingImage">
+            @drawable/ic_img_powered_by_mvl_post_v31
+        </item>
+        <item name="colorPrimaryDark">@color/baseBackground</item>
+    </style>
+</resources>
