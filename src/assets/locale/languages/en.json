@@ -8,7 +8,7 @@
   "approve_wallet": "Approve Wallet",
   "approve_wallet_content": "In order to trade asset, you are required to allow smart contracts to access your assets. This process will be executed only once, per wallet, and will take you a small network fee.",
   "auth_lbl_description": "Manage your MVL more conveniently.",
-  "auth_lbl_title": "Cryptocurrency Wallet for Mobility Ecosystem",
+  "auth_lbl_title": "Cryptocurrency Wallet for\nMobility Ecosystem",
   "await_description_transfer_completed": "Thank you for your participation.",
   "await_title_transferring": "Transferring Token",
   "await_title_transfer_completed": "Transfer completed",

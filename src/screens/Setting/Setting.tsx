@@ -81,7 +81,6 @@ function Setting() {
           title={t('log_out')}
           isThickBorder={true}
           onPress={() => {
-            // TODO: Open Log Out Modal
             openModal(MODAL_TYPES.SETTING_LOG_OUT, undefined);
           }}
         />

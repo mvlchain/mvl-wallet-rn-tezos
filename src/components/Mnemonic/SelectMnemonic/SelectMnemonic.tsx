@@ -2,11 +2,10 @@ import React from 'react';
 
 import SelectChip from './SelectChip';
 import * as S from './SelectMnemonic.style';
-import { ISelectMnemonicProps } from './SelectMnemonic.type';
 import useSelectMnemonic from './useSelectMnemonic';
 
-function SelectMnemonic({ mnemonic }: ISelectMnemonicProps) {
-  const { mnemonicList, mnemonicArr, onPressSelectChip } = useSelectMnemonic({ mnemonic });
+function SelectMnemonic() {
+  const { mnemonicList, mnemonicArr, onPressSelectChip } = useSelectMnemonic();
 
   return (
     <S.SelectChipContainer>

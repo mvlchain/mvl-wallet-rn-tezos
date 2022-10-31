@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
-import styled from 'styled-components/native';
+import React from 'react';
 
 import { HideLight } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
@@ -11,8 +9,8 @@ import { IMnemonicProps } from './Mnemonic.type';
 import MnemonicChip from './MnemonicChip/MnemonicChip';
 import useMnemonic from './useMnemonic';
 
-function Mnemonic({ type, mnemonic }: IMnemonicProps) {
-  const { mnemonicArr } = useMnemonic({ mnemonic });
+function Mnemonic({ type, onPress }: IMnemonicProps) {
+  const { mnemonicArr } = useMnemonic();
 
   return (
     <S.MnemonicContainer>
@@ -20,14 +18,7 @@ function Mnemonic({ type, mnemonic }: IMnemonicProps) {
         <>
           <S.ShowMnemonicText>Make sure no one is watching your screen.</S.ShowMnemonicText>
           <HideLight />
-          <PrimaryButton
-            label='View Seed Phrase'
-            disabled={false}
-            onPress={() => {
-              console.log('hello');
-            }}
-            wrapperStyle={{ marginTop: height * 56 }}
-          />
+          <PrimaryButton label='View Seed Phrase' disabled={false} onPress={onPress} wrapperStyle={{ marginTop: height * 56 }} />
         </>
       ) : (
         <S.ChipContainer>

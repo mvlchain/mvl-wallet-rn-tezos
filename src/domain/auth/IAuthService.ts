@@ -27,12 +27,3 @@ export class DeviceShareHolder {
     this.providerToken = providerToken;
   }
 }
-
-export default interface IAuthService {
-  // best effort to get private key
-  signIn(provider: AuthProvider): Promise<string>;
-  logout(): Promise<void>;
-  test(): Promise<void>;
-  deleteAccount(): Promise<void>;
-  requirePassword(): Promise<string>;
-}

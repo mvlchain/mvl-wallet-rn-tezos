@@ -15,8 +15,8 @@ const devConfig: ClutchAppConfig = {
         [AUTH_PROVIDER.GOOGLE]: '***REMOVED***',
         [AUTH_PROVIDER.APPLE]: '***REMOVED***',
       },
-      network: 'testnet',
-      nativeNetwork: 'ropsten',
+      network: 'mainnet',
+      nativeNetwork: 'mainnet',
     },
   },
 };
