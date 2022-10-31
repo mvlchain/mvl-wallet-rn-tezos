@@ -56,15 +56,11 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SEED_PHRASE,
       component: SeedPhraseScreen,
-      options: {
-        headerShown: false,
-        title: t('seed_phrase_lbl_title'),
-      },
     },
     {
       name: ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM,
       component: ConfirmSeedPhraseScreen,
-      options: handleStackHeaderOption(t('confirm_seed_phrase_lbl_title')),
+      options: handleStackHeaderOption({ title: t('confirm_seed_phrase_lbl_title') }),
     },
     {
       name: ROOT_STACK_ROUTE.MAIN,
@@ -76,22 +72,22 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY,
       component: SettingPrivacyPolicy,
-      options: handleStackHeaderOption(t('privacy_policy')),
+      options: handleStackHeaderOption({ title: t('privacy_policy') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_SECURITY,
       component: SettingSecurity,
-      options: handleStackHeaderOption(t('security')),
+      options: handleStackHeaderOption({ title: t('security') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_TERMS_OF_SERVICE,
       component: SettingTermsOfService,
-      options: handleStackHeaderOption(t('terms_of_service')),
+      options: handleStackHeaderOption({ title: t('terms_of_service') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT,
       component: SettingDeleteAccount,
-      options: handleStackHeaderOption(t('delete_account')),
+      options: handleStackHeaderOption({ title: t('delete_account') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT_SUCCESS,
@@ -103,19 +99,20 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SETTING_APP_VERSION,
       component: SettingAppVersion,
-      options: handleStackHeaderOption(''),
+      options: handleStackHeaderOption({ title: '' }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVATE_KEY,
       component: SettingPrivateKey,
-      options: handleStackHeaderOption(t('private_key')),
+      options: handleStackHeaderOption({ title: t('private_key') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_FAQ,
       component: SettingFAQ,
-      options: handleStackHeaderOption(t('faq')),
+      options: handleStackHeaderOption({ title: t('faq') }),
     },
   ];
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer theme={routerTheme}>

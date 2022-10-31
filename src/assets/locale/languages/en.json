@@ -301,7 +301,7 @@
   "scan_qr_code": "Scan QR Code",
   "scan_qr_lbl_description": "Please fit the QR Code into the square area.",
   "security": "Security",
-  "seed_phrase_lbl_description": "Keep this Seed Phrase in a safe and secret place. DO NOT reveal this phrase to other people! Clutch team never request you to share this Seed Phrase.",
+  "seed_phrase_lbl_description": "Keep this Seed Phrase in a safe and secret place.\nDO NOT reveal this phrase to other people!\nClutch team never request you to share this Seed Phrase.",
   "seed_phrase_lbl_hint": "Make sure no one is watching your screen.",
   "seed_phrase_lbl_title": "Seed Phrase",
   "select_private_key_title": "Select Private Key",
