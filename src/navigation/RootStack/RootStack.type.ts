@@ -4,6 +4,8 @@ import { valueOf } from '@@types/etc';
 
 export type TRootStackParamList = {
   AUTH: undefined;
+  SEED_PHRASE: undefined;
+  SEED_PHRASE_CONFIRM: undefined;
   MAIN: undefined;
   SETTING_SECURITY: undefined;
   SETTING_PRIVACY_POLITY: undefined;
@@ -19,6 +21,8 @@ export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootSt
 
 export const ROOT_STACK_ROUTE: RootStackRouteType = {
   AUTH: 'AUTH',
+  SEED_PHRASE: 'SEED_PHRASE',
+  SEED_PHRASE_CONFIRM: 'SEED_PHRASE_CONFIRM',
   MAIN: 'MAIN',
   SETTING_SECURITY: 'SETTING_SECURITY',
   SETTING_PRIVACY_POLITY: 'SETTING_PRIVACY_POLITY',

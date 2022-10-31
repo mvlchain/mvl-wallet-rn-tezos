@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import FilesystemStorage from 'redux-persist-filesystem-storage';
-import createStore from 'zustand';
-import { persist } from 'zustand/middleware';
+import create from 'zustand';
+import { persist, devtools } from 'zustand/middleware';
 
 import createMigrate from './createMigration';
 import { migrations, version } from './migrations';
@@ -19,23 +20,25 @@ export class DeviceShareHolderDto {
   }
 }
 
-const useStore = createStore(
-  persist<{ isAuthenticated: boolean; toggle: () => void; deviceShare?: DeviceShareHolderDto }>(
-    (set) => ({
-      isAuthenticated: false,
-      toggle: () => set((state) => ({ isAuthenticated: !state.isAuthenticated })),
-      deviceShare: undefined,
-    }),
-    {
-      name: 'root',
-      getStorage: () => ({
-        setItem: (key, value) => FilesystemStorage.setItem(key, value),
-        getItem: (key) => FilesystemStorage.getItem(key).then((data) => data ?? null),
-        removeItem: (key) => FilesystemStorage.removeItem(key),
+type stateType = {
+  isAuthenticated: boolean;
+  deviceShare?: DeviceShareHolderDto;
+  toggle: () => void;
+};
+
+const useStore = create<stateType>()(
+  devtools(
+    persist(
+      (set) => ({
+        isAuthenticated: false,
+        deviceShare: undefined,
+        toggle: () => set((state) => ({ isAuthenticated: !state.isAuthenticated }), false, 'toggle'),
       }),
-      version,
-      migrate: createMigrate(migrations),
-    }
+      {
+        name: 'root',
+        getStorage: () => AsyncStorage,
+      }
+    )
   )
 );
 

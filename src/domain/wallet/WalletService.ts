@@ -1,10 +1,9 @@
 import { injectable, inject } from 'tsyringe';
 
+import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/WalletRepository';
-
-import ShareRepository from '../auth/ShareRepository';
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
@@ -17,14 +16,17 @@ export interface WalletService {
  */
 @injectable()
 export class WalletServiceImpl implements WalletService {
-  constructor(@inject('WalletRepository') private walletRepository: WalletRepository) {}
+  constructor(
+    @inject('WalletRepository') private walletRepository: WalletRepository,
+    @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository
+  ) {}
 
   /**
    * Get an extended public key by KeyChain credentials
    * @returns
    */
   async extendedPublicKeyByCredentials(): Promise<string> {
-    const rootKey = await ShareRepository.getRootKeyByCredentials();
+    const rootKey = await this.rootkeyRepository.getRootKeyByCredentials();
     return Clutch.extendedPublicKey(rootKey, CLUTCH_EXTENDED_KEY_PATH);
   }
 
@@ -37,13 +39,13 @@ export class WalletServiceImpl implements WalletService {
    * @returns
    */
   async signMessageByExtendedKey(data: any): Promise<string> {
-    const extendedKeyPair = await ShareRepository.getExtendedKeyPairByCredentials();
+    const extendedKeyPair = await this.rootkeyRepository.getExtendedKeyPairByCredentials();
     const timestampInMs = `${Date.now()}`;
     let message;
     if (typeof data === 'string') {
       message = data;
     } else {
-      message = JSON.stringify(data, null, 0);
+      message = JSON.stringify(data ?? {}, null, 0);
     }
 
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);
@@ -53,7 +55,7 @@ export class WalletServiceImpl implements WalletService {
    * @returns Get a list of wallets
    */
   async getWalletList(): Promise<WalletDto[]> {
-    const xpub = await ShareRepository.getExtendedPublicKey();
+    const xpub = await this.rootkeyRepository.getExtendedPublicKey();
     return this.walletRepository.getWallets(xpub);
   }
 }

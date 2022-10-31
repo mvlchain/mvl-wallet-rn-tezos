@@ -6,6 +6,8 @@ import { TMnemonic } from '@@types/MnemonicType';
 import { IAuth, IAuthState } from './autStore.type';
 
 const initState: IAuthState = {
+  pKey: null,
+  mnemonic: null,
   mnemonicList: [],
   focusedIndex: 0,
 };
@@ -13,8 +15,10 @@ const initState: IAuthState = {
 const authStore = create<IAuth>()(
   devtools((set) => ({
     ...initState,
+    setPKey: (pKey: string) => set(() => ({ pKey: pKey }), false, 'setPkey'),
+    setMnemonic: (mnemonic: string) => set(() => ({ mnemonic: mnemonic }), false, 'setMnemonic'),
     initMnemonic: (mnemonicArr: TMnemonic[]) => set(() => ({ mnemonicList: mnemonicArr }), false, 'initMnemonic'),
-    setMnemonic: (typedMnemonic: TMnemonic) =>
+    setMnemonicList: (typedMnemonic: TMnemonic) =>
       set(
         (state) => ({
           mnemonicList: state.mnemonicList.map((mnemonic) => {
@@ -27,7 +31,7 @@ const authStore = create<IAuth>()(
           focusedIndex: state.mnemonicList.filter((mnemonic) => mnemonic.word === '')[0]?.index ?? -1,
         }),
         false,
-        'setMnemonic'
+        'setMnemonicList'
       ),
     removeMnemonic: (selectedChipIndex: number) =>
       set(
