@@ -2,6 +2,7 @@ package com.wallet;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Build;
 
 import androidx.annotation.Nullable;
 import com.facebook.react.ReactActivity;
@@ -15,7 +16,11 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SplashScreen.show(this);
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+     SplashScreen.show(this);  
+    }
+
+
     super.onCreate(null);
   }
 
