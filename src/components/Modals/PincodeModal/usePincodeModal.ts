@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 
 import { BackHandler } from 'react-native';
 
+import { AUTH_STAGE } from '@@constants/authStage.constant';
+import { useDi } from '@@hooks/common/useDi';
+import authPersistStore from '@@store/auth/authPersistStore';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
 function usePincodeModal() {
+  const keyClient = useDi('KeyClient');
   const { isOpen, mode, close, success, fail } = pinStore();
-
+  const { stage, setStage } = authPersistStore();
   const [pin, setPin] = useState('');
 
   const initialSave = async (pin: string) => {
@@ -30,6 +34,16 @@ function usePincodeModal() {
 
   const whenMatch = async (pin: string | undefined) => {
     if (!pin) return;
+    /**
+     * TODO: postboxkey없을 때 예외처리
+     */
+    const _postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
+    if (!_postboxKey) {
+      throw new Error('postboxkey is required');
+    }
+    if (stage[_postboxKey] === AUTH_STAGE.PIN_SETUP_STAGE) {
+      setStage(_postboxKey, AUTH_STAGE.BACKUP_SEED_PHRASE_STAGE);
+    }
     success(pin);
     close();
   };

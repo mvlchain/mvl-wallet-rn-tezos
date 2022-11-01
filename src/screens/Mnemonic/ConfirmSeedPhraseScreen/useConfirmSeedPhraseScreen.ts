@@ -4,7 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import { useDi } from '@@hooks/common/useDi';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
@@ -12,6 +14,8 @@ const useConfirmSeedPhraseScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE_CONFIRM'>;
   const navigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
+  const keyClient = useDi('KeyClient');
+  const { removeStageByPostboxKey } = authPersistStore();
   const { mnemonic, mnemonicList } = authStore();
   const { openModal } = globalModalStore();
   const [disabled, setDisabled] = useState(true);
@@ -39,6 +43,14 @@ const useConfirmSeedPhraseScreen = () => {
 
   const onPressConfirmMnemonic = () => {
     if (checkMnemonic()) {
+      /**
+       * TODO: postboxkey 없을 때 예외처리
+       *  */
+      const _postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
+      if (!_postboxKey) {
+        throw new Error('postboxkey is required');
+      }
+      removeStageByPostboxKey(_postboxKey);
       navigation.navigate('MAIN');
     } else {
       // TODO: 다국어 요청
