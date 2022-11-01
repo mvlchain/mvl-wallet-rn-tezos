@@ -14,7 +14,7 @@ import useTermsOfServicesModal from './useTermsOfServicesModal';
 
 function TermsOfServicesModal() {
   const { t } = useTranslation();
-  const { isOpen, open, interruption } = useTermsOfServicesModal();
+  const { isOpen, onPressAgree, interruption } = useTermsOfServicesModal();
   const [isAgree, toggle] = useToggle();
 
   return (
@@ -27,14 +27,7 @@ function TermsOfServicesModal() {
             {/* TODO: 다국어 키값 추가 */}
             <S.ConfirmLabel>{t('I read the contents and I agree.')}</S.ConfirmLabel>
           </Check>
-          <PrimaryButton
-            onPress={() => {
-              open(AUTH_MODAL_NAME.GUIDE);
-            }}
-            disabled={!isAgree}
-            label={t('btn_confirm')}
-            wrapperStyle={S.inlineStyles.marginProvider}
-          />
+          <PrimaryButton onPress={onPressAgree} disabled={!isAgree} label={t('btn_confirm')} wrapperStyle={S.inlineStyles.marginProvider} />
         </S.ConfirmContainer>
       </DropShadow>
     </Modal>
