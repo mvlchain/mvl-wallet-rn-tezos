@@ -12,6 +12,7 @@ export const QRScanTopContainer = styled.View`
 export const QRScanTopText = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md}
   line-height: ${height * 24}px;
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
 export const QRScanGalleryButtonWrapper = styled.View`

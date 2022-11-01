@@ -13,7 +13,7 @@ export interface IModalComponentProps {
   confirmLabel?: string;
   isConfirmDisabled?: boolean;
   onClose?: Function;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export interface IBaseModalComponentProps extends IModalComponentProps {
