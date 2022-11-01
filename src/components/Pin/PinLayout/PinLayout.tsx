@@ -8,11 +8,12 @@ import NumPads from '../NumPads';
 import PinInstruction from '../PinInstruction';
 
 import * as S from './PinLayout.style';
+import { IPinLayoutStyleProps } from './PinLayout.type';
 
-function PinLayout() {
+function PinLayout({ isFull }: IPinLayoutStyleProps) {
   const { t } = useTranslation();
   return (
-    <S.PinContainer>
+    <S.PinContainer isFull={isFull}>
       <S.LayoutAssistant />
       <S.PinPasswordMonitorContainer>
         <S.PinMonitorInnerWrraper>

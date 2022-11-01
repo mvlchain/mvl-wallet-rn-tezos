@@ -1,11 +1,16 @@
 import styled from 'styled-components/native';
 
-import { height } from '@@utils/ui';
+import { height, width } from '@@utils/ui';
 
-export const PinContainer = styled.View`
+import { IPinLayoutStyleProps } from './PinLayout.type';
+
+export const PinContainer = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.color.whiteBlack};
+  padding-top: ${({ isFull }) => (isFull ? `${height * 100}px` : `${height * 44}px`)};
+  border-top-left-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
+  border-top-right-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
 `;
 
 export const LayoutAssistant = styled.View`
