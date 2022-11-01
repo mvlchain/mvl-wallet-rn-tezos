@@ -2,25 +2,28 @@ package com.wallet;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Build;
-
 import androidx.annotation.Nullable;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
-import org.devio.rn.splashscreen.SplashScreen;
-
 
 public class MainActivity extends ReactActivity {
   private static final String OPTION_FOX_CODE = "foxCode";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-     SplashScreen.show(this);  
+    switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+      case Configuration.UI_MODE_NIGHT_YES:
+        setTheme(R.style.DarkTheme);
+        break;
+
+      case Configuration.UI_MODE_NIGHT_NO:
+      default:
+        setTheme(R.style.LightTheme);
     }
 
-
+    //androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+    org.devio.rn.splashscreen.SplashScreen.show(this, true);
     super.onCreate(null);
   }
 
