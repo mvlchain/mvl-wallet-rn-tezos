@@ -80,6 +80,7 @@ function MainTab() {
   ];
   return (
     <Navigator
+      backBehavior='history'
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,

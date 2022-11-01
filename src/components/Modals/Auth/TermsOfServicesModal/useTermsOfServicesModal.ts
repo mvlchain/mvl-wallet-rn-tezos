@@ -18,7 +18,9 @@ const useTermsOfServicesModal = () => {
   };
 
   useEffect(() => {
-    if (!isOpen.tos) return;
+    if (!isOpen.tos) {
+      return;
+    }
     const backHandler = BackHandler.addEventListener('hardwareBackPress', interruption);
     return () => backHandler.remove();
   }, [isOpen.tos]);

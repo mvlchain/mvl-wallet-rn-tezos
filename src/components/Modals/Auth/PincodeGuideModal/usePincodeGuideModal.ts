@@ -14,7 +14,9 @@ const usePincodeGuideModal = () => {
   };
 
   useEffect(() => {
-    if (!isOpen.guide) return;
+    if (!isOpen.guide) {
+      return;
+    }
     close(AUTH_MODAL_NAME.TOS);
     const backHandler = BackHandler.addEventListener('hardwareBackPress', interruption);
     return () => backHandler.remove();

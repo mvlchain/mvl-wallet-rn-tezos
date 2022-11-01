@@ -7,6 +7,7 @@ export interface IAuth extends IAuthState {
   setMnemonicList: (typedMnemonic: TMnemonic) => void;
   removeMnemonic: (selectedChipIndex: number) => void;
   setFocusedIndex: (index: number) => void;
+  resetAuthStore: () => void;
 }
 
 export interface IAuthState {
