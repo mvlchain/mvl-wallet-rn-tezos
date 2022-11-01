@@ -45,7 +45,7 @@ export function BaseModal({
             {/* TODO: theme 스토어추가시 추가작업 */}
             {!!onClose && <CloseIcon onPress={() => onClose()} />}
           </S.ModalTopWrapper>
-          <S.ContentWrapper>{children}</S.ContentWrapper>
+          {children && <S.ContentWrapper>{children}</S.ContentWrapper>}
           {!!onConfirm && (
             <S.ButtonWrapper>
               {!!onCancel && (
