@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "clean": "rm -rf ./node_modules ./ios/Pods",
     "test": "jest",
     "test:transaction": "jest src/domain/transaction/TransactionService.test.ts",
     "test:keymanager": "jest --watch src/domain/blockchain/Clutch.test.ts",
