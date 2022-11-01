@@ -1,29 +1,68 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 
 import Clipboard from '@react-native-clipboard/clipboard';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BackHandler } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { useDi } from '@@hooks/common/useDi';
+import useHeader from '@@hooks/common/useHeader';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 
 const useSeedPhraseScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE'>;
   const navigation = useNavigation<rootStackProps>();
+  const isFocused = useIsFocused();
 
   const { t } = useTranslation();
 
   const auth = useDi('AuthService');
   const uiService = useDi('UIService');
+  const { handleStackHeaderOption } = useHeader();
   const { mnemonic, setMnemonic } = authStore();
   const [type, setType] = useState<'show' | 'hide'>('hide');
 
   useEffect(() => {
     setMnemonic(auth.getMnemonicByPkey());
   }, []);
+
+  useEffect(() => {
+    if (!isFocused) {
+      setType('hide');
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', interruption);
+    return () => backHandler.remove();
+  }, [type, isFocused]);
+
+  useLayoutEffect(() => {
+    const title = t('seed_phrase_lbl_title');
+    if (type === 'hide') {
+      navigation.setOptions({
+        title,
+        headerLeft: undefined,
+      });
+    } else {
+      navigation.setOptions(handleStackHeaderOption({ title, isDisableBack: true, onPressBack: () => setType('hide') }));
+    }
+  }, [type]);
+
+  const interruption = () => {
+    if (type === 'show') {
+      setType('hide');
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const onPressViewSeedPhrase = async () => {
     // TODO: pincode입력 안했을 때 정상적으로 진행 안되고 빠져나가는지 테스트 필요

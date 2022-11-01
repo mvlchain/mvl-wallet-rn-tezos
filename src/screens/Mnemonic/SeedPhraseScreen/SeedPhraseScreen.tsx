@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Mnemonic from '@@components/Mnemonic/Mnemonic';
@@ -10,14 +12,11 @@ import * as S from '../Mnemonic.style';
 import useSeedPhraseScreen from './useSeedPhraseScreen';
 
 function SeedPhraseScreen() {
+  const { t } = useTranslation();
   const { type, onPressViewSeedPhrase, onPressCopymnemonic, onPressNext } = useSeedPhraseScreen();
   return (
     <S.Container bounces={false}>
-      <S.Description>
-        {`Keep this Seed Phrase in a safe and secret place.\n
-        DO NOT reveal this phrase to other people!\n
-        Clutch team never request you to share this Seed Phrase.`}
-      </S.Description>
+      <S.Description>{t('seed_phrase_lbl_description')}</S.Description>
       <Mnemonic type={type} onPress={onPressViewSeedPhrase} />
       {type === 'show' && (
         <>
