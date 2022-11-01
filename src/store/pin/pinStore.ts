@@ -5,6 +5,7 @@ import { AuthModalStore, PinStore, TAuthModal } from './pinStore.type';
 
 export const pinStore = create<PinStore>()(
   devtools((set, get) => ({
+    pinMode: 'confirm',
     isOpen: false,
     mode: 'enter',
     pinModalResolver: () => {},
