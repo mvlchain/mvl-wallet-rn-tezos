@@ -48,6 +48,7 @@ const authStore = create<IAuth>()(
         'removeMnemonic'
       ),
     setFocusedIndex: (index: number) => set(() => ({ focusedIndex: index }), false, 'setFocusedIndex'),
+    resetAuthStore: () => set(() => ({ ...initState }), false, 'resetAuthStore'),
   }))
 );
 

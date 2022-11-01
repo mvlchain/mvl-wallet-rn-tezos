@@ -38,7 +38,7 @@ export const authModalStore = create<AuthModalStore>()(
           },
         },
         false,
-        'openAuthModal'
+        `openAuthModal-${type}`
       ),
     close: (type: keyof TAuthModal) =>
       set(
@@ -49,7 +49,7 @@ export const authModalStore = create<AuthModalStore>()(
           },
         },
         false,
-        'closeAuthModal'
+        `closeAuthModal-${type}`
       ),
   }))
 );
