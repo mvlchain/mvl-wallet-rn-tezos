@@ -7,12 +7,9 @@ import { AuthModalStore, PinStore, TAuthModal } from './pinStore.type';
 
 const INITIAL_PINSTORE_STATE = {
   pinMode: PIN_MODE.CONFIRM,
-  isError: false,
-  errorMessage: null,
+  error: null,
+  showError: false,
   stage: PIN_SETUP_STAGE.FIRST,
-  current: 0,
-  isOpen: false,
-  mode: 'enter' as const,
 };
 
 export const pinStore = create<PinStore>()(
@@ -32,15 +29,12 @@ export const pinStore = create<PinStore>()(
     },
     pinModalResolver: () => {},
     pinModalRejector: () => {},
-    open: () => set({ isOpen: true }, false, 'openPinModal'),
-    close: () => set({ isOpen: false }, false, 'closePinModal'),
     success: (pin: string) => {
       get().pinModalResolver?.(pin);
     },
     fail: (message: string) => {
       get().pinModalRejector?.(message);
     },
-    destroy: () => set({}),
   }))
 );
 

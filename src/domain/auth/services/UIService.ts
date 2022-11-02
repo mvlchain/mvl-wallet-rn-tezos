@@ -32,7 +32,7 @@ export class UIServiceImpl implements UIService {
 
     pinStore.getState().setState({ pinMode, pinModalResolver, pinModalRejector });
     // TODO: reset pin일 때 화면 처리 추가
-    if (pinMode === PIN_MODE.SETUP) {
+    if (pinMode === PIN_MODE.CONFIRM) {
       pinStore.getState().open();
     } else {
       /**

@@ -3,13 +3,11 @@ import { Pressable } from 'react-native';
 import { BiometricSmallDark, BiometricSmallLight, PasswordDeleteDark, PasswordDeleteLight } from '@@assets/image';
 import { NUMPAD } from '@@constants/pin.constant';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
-import usePin from '@@hooks/pin/usePin';
 
 import * as S from './NumPad.style';
 import { INumPadProps } from './NumPad.type';
 
-function NumPad({ type, text }: INumPadProps) {
-  const { backSpace, bioAuth, setPassword } = usePin();
+function NumPad({ type, text, backSpace, bioAuth, setPassword }: INumPadProps) {
   const BioIcon = useAssetFromTheme(BiometricSmallLight, BiometricSmallDark);
   const DeleteIcon = useAssetFromTheme(PasswordDeleteLight, PasswordDeleteDark);
 
@@ -38,7 +36,7 @@ function NumPad({ type, text }: INumPadProps) {
       return (
         <Pressable
           onPress={() => {
-            setPassword(text!);
+            setPassword && setPassword(text!);
           }}
         >
           {({ pressed }) => (
