@@ -10,7 +10,6 @@ const useSettingSignOutModall = () => {
   const auth = useDi('AuthService');
   const { modalType, closeModal } = globalModalStore();
 
-  // TODO: 로그아웃 기능 만들기
   const onPressSignOut = async () => {
     try {
       console.log('SignOut start');
