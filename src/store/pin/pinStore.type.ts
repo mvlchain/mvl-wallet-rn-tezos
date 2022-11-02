@@ -1,4 +1,4 @@
-import { PIN_MODE } from '@@constants/pin.constant';
+import { PIN_MODE, PIN_SETUP_STAGE } from '@@constants/pin.constant';
 
 export type Mode = 'choose' | 'enter' | 'locked';
 
@@ -7,16 +7,20 @@ export interface PinstoreInitialDTO {
   pinModalResolver: Function | undefined;
   pinModalRejector: Function | undefined;
   pinMode: PinMode;
+  isError: boolean;
+  errorMessage: string | null;
+  stage: PinSetupStage;
+  current: number;
 }
 
 export interface PinStore extends PinstoreInitialDTO {
+  setState: SetState<PinStore>;
   isOpen: boolean;
   open: Function;
   close: Function;
   success: (pin: string) => void;
   fail: (message: string) => void;
-  init: (init: PinstoreInitialDTO) => void;
-  destroy: Function;
+  resetStore: () => void;
 }
 
 export interface AuthModalStore {
@@ -31,3 +35,5 @@ export type TAuthModal = {
 };
 
 export type PinMode = typeof PIN_MODE[keyof typeof PIN_MODE];
+export type PinSetupStage = typeof PIN_SETUP_STAGE[keyof typeof PIN_SETUP_STAGE];
+export type SetState<T> = (newState: Partial<Omit<T, 'setState'>>) => void;

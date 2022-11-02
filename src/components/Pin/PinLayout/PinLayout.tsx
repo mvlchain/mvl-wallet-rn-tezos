@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { PIN_MODE } from '@@constants/pin.constant';
+import usePin from '@@hooks/pin/usePin';
 import { pinStore } from '@@store/pin/pinStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import Blurs from '../Blurs';
 import NumPads from '../NumPads';
@@ -13,8 +17,12 @@ import * as S from './PinLayout.style';
 import { IPinLayoutStyleProps } from './PinLayout.type';
 
 function PinLayout({ isFull }: IPinLayoutStyleProps) {
-  const { pinMode } = pinStore();
+  const { backSpace, bioAuth, setPassword } = usePin();
+  const { pinMode, fail, success } = pinStore();
   const { t } = useTranslation();
+
+  useEffect(() => {}, []);
+
   return (
     <S.PinContainer isFull={isFull}>
       <S.LayoutAssistant />
@@ -30,7 +38,7 @@ function PinLayout({ isFull }: IPinLayoutStyleProps) {
         </S.PinMonitorInnerWrraper>
       </S.PinPasswordMonitorContainer>
       <S.PinNumpadContainer>
-        <NumPads />
+        <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
       </S.PinNumpadContainer>
     </S.PinContainer>
   );

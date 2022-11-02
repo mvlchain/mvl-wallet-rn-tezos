@@ -12,6 +12,7 @@ function NumPad({ type, text }: INumPadProps) {
   const { backSpace, bioAuth, setPassword } = usePin();
   const BioIcon = useAssetFromTheme(BiometricSmallLight, BiometricSmallDark);
   const DeleteIcon = useAssetFromTheme(PasswordDeleteLight, PasswordDeleteDark);
+
   switch (type) {
     case NUMPAD.DELETE:
       return (
@@ -35,7 +36,11 @@ function NumPad({ type, text }: INumPadProps) {
       );
     default:
       return (
-        <Pressable onPress={setPassword}>
+        <Pressable
+          onPress={() => {
+            setPassword(text!);
+          }}
+        >
           {({ pressed }) => (
             <S.NumPadCircle pressed={pressed}>
               <S.NumText>{text}</S.NumText>
