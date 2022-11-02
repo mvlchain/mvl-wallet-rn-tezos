@@ -20,8 +20,13 @@ function PinLayout({ isFull }: IPinLayoutStyleProps) {
   const { backSpace, bioAuth, setPassword } = usePin();
   const { pinMode, fail, success } = pinStore();
   const { t } = useTranslation();
+  const { settedBioAuth } = settingPersistStore();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (settedBioAuth) {
+      bioAuth();
+    }
+  }, []);
 
   return (
     <S.PinContainer isFull={isFull}>

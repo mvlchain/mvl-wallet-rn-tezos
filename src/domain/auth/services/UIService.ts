@@ -1,7 +1,8 @@
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AUTH_STAGE } from '@@constants/authStage.constant';
+import { PIN_MODE } from '@@constants/pin.constant';
 import { pinStore, authModalStore } from '@@store/pin/pinStore';
-import { Mode } from '@@store/pin/pinStore.type';
+import { Mode, PinMode } from '@@store/pin/pinStore.type';
 
 export interface UIService {
   triggerGetPincode: () => Promise<string>;
@@ -15,22 +16,23 @@ export class UIServiceImpl implements UIService {
   constructor() {} //inject modalStore
 
   async triggerGetPincode() {
-    return await this._triggerPincode('enter');
+    return await this._triggerPincode(PIN_MODE.CONFIRM);
   }
 
   async triggerSetPincode(stage?: keyof typeof AUTH_STAGE) {
-    return await this._triggerPincode('choose', stage);
+    return await this._triggerPincode(PIN_MODE.SETUP, stage);
   }
 
-  private async _triggerPincode(mode: Mode, stage?: keyof typeof AUTH_STAGE) {
+  private async _triggerPincode(pinMode: PinMode, stage?: keyof typeof AUTH_STAGE) {
     let pinModalResolver, pinModalRejector;
     const pinModalObserver = new Promise((resolve, reject) => {
       pinModalResolver = resolve;
       pinModalRejector = reject;
     });
 
-    pinStore.getState().init({ mode, pinModalResolver, pinModalRejector });
-    if (mode === 'enter') {
+    pinStore.getState().setState({ pinMode, pinModalResolver, pinModalRejector });
+    // TODO: reset pin일 때 화면 처리 추가
+    if (pinMode === PIN_MODE.SETUP) {
       pinStore.getState().open();
     } else {
       /**
