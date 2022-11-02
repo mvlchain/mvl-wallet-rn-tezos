@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@color/backgroundColor" android:gravity="fill" />
+
+  <item android:gravity="center" android:bottom="96dp">
+    <bitmap android:src="@drawable/img_clutch_dark" android:gravity="center"/>
+  </item>
+
+  <item android:gravity="bottom" android:bottom="40dp">
+    <bitmap android:src="@drawable/img_powered_by_mvl" android:gravity="center"/>
+  </item>
+</layer-list>
