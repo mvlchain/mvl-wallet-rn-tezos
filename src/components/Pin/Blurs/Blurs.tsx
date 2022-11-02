@@ -1,14 +1,25 @@
+import { useEffect, useMemo, useState } from 'react';
+
 import { pinStore } from '@@store/pin/pinStore';
 
 import * as S from './Blurs.style';
+import { IBlursProps } from './Blurs.type';
 
-function Blurs() {
-  const { current } = pinStore();
+function Blurs({ current }: IBlursProps) {
+  const { showError } = pinStore();
+
   return (
     <S.BlursContainer>
-      {Array.from({ length: 6 }, (v, i) => {
-        return <S.BlurCircle isBlue={current > i} key={'blur' + i} />;
-      })}
+      <S.BlursCircleWrapper>
+        {Array.from({ length: 6 }, (v, i) => {
+          return <S.BlurCircle isBlue={current > i} key={'blur' + i} />;
+        })}
+      </S.BlursCircleWrapper>
+      <S.ErrorCircleWrapper>
+        {Array.from({ length: 6 }, (v, i) => {
+          return <S.ErrorCircle isBlue={current > i} key={'error' + i} />;
+        })}
+      </S.ErrorCircleWrapper>
     </S.BlursContainer>
   );
 }

@@ -17,8 +17,8 @@ import * as S from './PinLayout.style';
 import { IPinLayoutStyleProps } from './PinLayout.type';
 
 function PinLayout({ isFull }: IPinLayoutStyleProps) {
-  const { backSpace, bioAuth, setPassword } = usePin();
-  const { pinMode, fail, success } = pinStore();
+  const { backSpace, bioAuth, setPassword, current } = usePin();
+  const { pinMode } = pinStore();
   const { t } = useTranslation();
   const { settedBioAuth } = settingPersistStore();
 
@@ -36,7 +36,7 @@ function PinLayout({ isFull }: IPinLayoutStyleProps) {
           <PinInstruction />
         </S.PinMonitorInnerWrraper>
         <S.PinMonitorInnerWrraper>
-          <Blurs />
+          <Blurs current={current} />
         </S.PinMonitorInnerWrraper>
         <S.PinMonitorInnerWrraper>
           {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}

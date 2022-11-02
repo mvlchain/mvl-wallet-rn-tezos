@@ -10,15 +10,22 @@ import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 function usePin() {
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, stage, current, setState, success, resetStore } = pinStore();
+  const { pinMode, error, stage, setState, success, resetStore } = pinStore();
   const { t } = useTranslation();
-  const isSetupFirstStage = pinMode === PIN_MODE.SETUP && stage === PIN_SETUP_STAGE.FIRST;
 
   useEffect(() => {
-    setInputCheck(input);
-  }, [isSetupFirstStage && input.length === 6]);
+    check();
+  }, [input]);
 
-  const judge = async () => {
+  useEffect(() => {
+    setState({ showError: true });
+    setTimeout(() => {
+      setState({ showError: false });
+    }, 800);
+  }, [error]);
+
+  const check = async () => {
+    if (input.length < 6) return;
     switch (pinMode) {
       case PIN_MODE.CONFIRM:
         const credential = await SecureKeychain.getGenericPassword();
@@ -26,7 +33,7 @@ function usePin() {
           success(input);
           resetStore();
         } else {
-          setState({ isError: true, errorMessage: t('password_wrong_pin') });
+          setState({ error: { message: t('password_wrong_pin') } });
         }
         break;
       case PIN_MODE.SETUP:
@@ -38,7 +45,7 @@ function usePin() {
             success(input);
             resetStore();
           } else {
-            setState({ isError: true, errorMessage: t('password_pin_not_match') });
+            setState({ error: { message: t('password_pin_not_match') } });
           }
         }
         break;
@@ -48,46 +55,34 @@ function usePin() {
         break;
     }
     setInput('');
-    setState({ current: 0 });
   };
 
-  const backSpace = () => {
-    if (current === 0) return;
-    setInput(input.slice(0, -1));
-    setState({
-      current: current - 1,
-    });
-  };
-
-  const bioAuth = async () => {
+  const bioAuth = () => {
     if (!TouchID) return;
-    try {
-      const isSupported = await TouchID.isSupported();
-      if (!isSupported) {
-        console.log(t('biometric_not_available'));
-        return;
-      }
-      TouchID.authenticate(t('enable_touchid')).then(success(input));
-    } catch (err) {
-      console.log(err);
-    }
+    //TODO: setting 에서 바꿀때 TouchID.isSupported 묻기
+    TouchID.authenticate(t('enable_touchid'))
+      .then(() => success(input))
+      .catch(() => {});
   };
 
   const setPassword = async (num: string) => {
-    const isFinishInput = current === PIN_REQUIRE_LENGTH;
-    if (isFinishInput) {
-      await judge();
-    } else {
-      setInput(input + num);
-      setState({ current: current + 1 });
+    if (!(input.length < PIN_REQUIRE_LENGTH)) return;
+    if (input.length === PIN_REQUIRE_LENGTH - 1 && stage !== PIN_SETUP_STAGE.SECOND) {
+      setInputCheck(input + num);
     }
+    setInput(input + num);
+  };
+
+  const backSpace = () => {
+    if (input.length === 0) return;
+    setInput(input.slice(0, -1));
   };
 
   return {
-    input,
-    backSpace,
+    current: input.length,
     bioAuth,
     setPassword,
+    backSpace,
   };
 }
 
