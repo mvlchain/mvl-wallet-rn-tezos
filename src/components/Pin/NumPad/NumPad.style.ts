@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
 
-import { height } from '@@utils/ui';
+import { fontSize, height } from '@@utils/ui';
 
-export const NumPadCircle = styled.Pressable<{ pressed: boolean }>`
+export const NumPadCircle = styled.View<{ pressed: boolean }>`
   justify-content: center;
   align-items: center;
   width: ${height * 72}px;
@@ -17,4 +17,6 @@ export const NumPadCircle = styled.Pressable<{ pressed: boolean }>`
 export const NumText = styled.Text`
   ${({ theme }) => theme.font.Title.lg};
   color: ${({ theme }) => theme.color.blackWhite};
+  line-height: ${fontSize(40)}px;
+  text-align: center;
 `;
