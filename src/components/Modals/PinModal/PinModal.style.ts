@@ -4,11 +4,9 @@ import { height } from '@@utils/ui';
 
 export const inlineStyles = StyleSheet.create({
   fullScreen: {
-    flex: 1,
     margin: 0,
   },
   notFullScreen: {
-    flex: 1,
     margin: 0,
     paddingTop: 60 * height,
   },

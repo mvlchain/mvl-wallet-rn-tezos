@@ -1,14 +1,13 @@
-import usePin from '@@hooks/pin/usePin';
+import { pinStore } from '@@store/pin/pinStore';
 
 import * as S from './Blurs.style';
 
 function Blurs() {
-  const { length } = usePin();
+  const { current } = pinStore();
   return (
     <S.BlursContainer>
       {Array.from({ length: 6 }, (v, i) => {
-        const current = i + 1;
-        return current < length ? <S.BlurPrimaryCircle /> : <S.BlurGreyCircle />;
+        return <S.BlurCircle isBlue={current > i} key={'blur' + i} />;
       })}
     </S.BlursContainer>
   );
