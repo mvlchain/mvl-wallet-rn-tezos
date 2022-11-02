@@ -8,15 +8,13 @@ export const SignInContainer = styled.View`
   background-color: ${({ theme }) => theme.color.whiteBlack};
   align-items: center;
   justify-content: space-between;
-  /* padding-top: ${height * 44}px;
-  padding-bottom: ${height * 34}px; */
 `;
 
 export const SignInTitleWrapper = styled.View`
   justify-content: center;
   align-items: center;
   height: ${height * 120}px;
-  /* background-color: aliceblue; */
+  padding: ${height * 28}px;
 `;
 export const SignInTitle = styled.Text`
   text-align: center;
