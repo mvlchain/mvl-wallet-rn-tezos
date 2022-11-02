@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from 'react-native-permissions';
 import TouchID from 'react-native-touch-id';
 
 import { PIN_MODE, PIN_SETUP_STAGE, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
-import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
-import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
 
 function usePin() {
   const [input, setInput] = useState('');
@@ -63,71 +60,16 @@ function usePin() {
   };
 
   const bioAuth = async () => {
-    // triggerTouchID();
-    const optionalConfigObject = {
-      title: 'Authentication Required', // Android
-      color: '#e00606', // Android,
-      fallbackLabel: 'Show Passcode', // iOS (if empty, then label is hidden)
-    };
+    if (!TouchID) return;
     try {
-      // requestPermission({
-      //   ios: [PERMISSIONS.IOS.FACE_ID],
-      //   android: [PERMISSIONS.ANDROID.BODY_SENSORS, PERMISSIONS.ANDROID.BODY_SENSORS_BACKGROUND],
-      // }).then(async (res) => {
-      //   console.log('res', res);
-      //   const { DENIED, BLOCKED } = getNotGrantedList(res as TRequestPermissionResultType);
-      //   if (BLOCKED.length !== 0) {
-      //     openSettingAlert({
-      //       title: t('biometric_not_enrolled'),
-      //       content: t('biometric_not_enrolled'),
-      //     });
-      //   }
-      // });
-
-      if (!TouchID) {
-        return;
-      }
       const isSupported = await TouchID.isSupported();
-      console.log(isSupported, 'isSupported');
       if (!isSupported) {
         console.log(t('biometric_not_available'));
         return;
       }
-      console.log('>>>>>>>>>>>>>>>>>');
-      const result = await TouchID.authenticate(t('enable_touchid'), optionalConfigObject);
-      console.log('result,result', result);
+      TouchID.authenticate(t('enable_touchid')).then(success(input));
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const triggerTouchID = () => {
-    !!TouchID &&
-      TouchID.isSupported()
-        .then(() => {
-          setTimeout(() => {
-            launchTouchID();
-          });
-        })
-        .catch((error: any) => {
-          console.warn('TouchID error', error);
-        });
-  };
-
-  const launchTouchID = async () => {
-    const optionalConfigObject = {
-      imageColor: '#e00606',
-      imageErrorColor: '#ff0000',
-      sensorDescription: 'Touch sensor',
-      sensorErrorDescription: 'Failed',
-      fallbackLabel: 'Show Passcode',
-    };
-    try {
-      await TouchID.authenticate('MM', optionalConfigObject).then((success: any) => {
-        console.log('Y~');
-      });
-    } catch (e) {
-      console.log('TouchID error', e);
     }
   };
 
