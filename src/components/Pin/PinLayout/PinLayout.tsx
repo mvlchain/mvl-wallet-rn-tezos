@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import { PIN_MODE } from '@@constants/pin.constant';
+import { pinStore } from '@@store/pin/pinStore';
 
 import Blurs from '../Blurs';
 import NumPads from '../NumPads';
@@ -11,6 +13,7 @@ import * as S from './PinLayout.style';
 import { IPinLayoutStyleProps } from './PinLayout.type';
 
 function PinLayout({ isFull }: IPinLayoutStyleProps) {
+  const { pinMode } = pinStore();
   const { t } = useTranslation();
   return (
     <S.PinContainer isFull={isFull}>
@@ -23,7 +26,7 @@ function PinLayout({ isFull }: IPinLayoutStyleProps) {
           <Blurs />
         </S.PinMonitorInnerWrraper>
         <S.PinMonitorInnerWrraper>
-          <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />
+          {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}
         </S.PinMonitorInnerWrraper>
       </S.PinPasswordMonitorContainer>
       <S.PinNumpadContainer>
