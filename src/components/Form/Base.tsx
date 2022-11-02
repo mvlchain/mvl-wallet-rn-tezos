@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback } from 'react';
+import React, { PropsWithChildren, useCallback } from 'react';
 
 import { GestureResponderEvent, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 

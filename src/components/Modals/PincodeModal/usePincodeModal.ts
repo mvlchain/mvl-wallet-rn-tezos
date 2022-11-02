@@ -28,7 +28,7 @@ function usePincodeModal() {
       if (!credential) return;
       setPin(credential.password);
     } catch (err: any) {
-      console.log('keycahin get password error' + err.message);
+      console.error('keycahin get password error: ' + err.message, err);
     }
   };
 

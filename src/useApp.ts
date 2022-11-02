@@ -20,15 +20,16 @@ const useApp = () => {
   }, [appTheme]);
 
   const errorHandler = (error: Error) => {
-    if (!__DEV__) {
-      // TODO: Error 처리 추가 (ex: sentry, crashlytics)
-      Alert.alert('Service Error', 'An unknown problem has occurred.');
-    } else {
-      console.error(error);
+    if (__DEV__) {
+      // Alert.alert('Service Error', 'An unknown problem has occurred.');
+      return;
     }
+
+    // TODO: Error 처리 추가 (ex: sentry, crashlytics)
+    Alert.alert('Service Error', 'An unknown problem has occurred.');
   };
 
-  setJSExceptionHandler(errorHandler, !__DEV__);
+  setJSExceptionHandler(errorHandler, true);
 
   return {
     appTheme,

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import I18n from 'react-native-i18n';
 import I18n from 'i18n-js';
 
-import { LANGUAGE } from '../constants/storage';
+import { LANGUAGE } from '@@constants/storage';
 // Polyfill Intl & include fallback locale (en) for Hermes iOS
 // import 'intl';
 // import 'intl/locale-data/jsonp/en.js';
