@@ -24,11 +24,12 @@ const useApp = () => {
       // TODO: Error 처리 추가 (ex: sentry, crashlytics)
       Alert.alert('Service Error', 'An unknown problem has occurred.');
     } else {
+      // Alert.alert('Service Error', 'An unknown problem has occurred.');
       console.error(error);
     }
   };
 
-  setJSExceptionHandler(errorHandler, !__DEV__);
+  setJSExceptionHandler(errorHandler, true);
 
   return {
     appTheme,
