@@ -4,31 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/backgroundColor"
+    android:background="@drawable/bg_splash_background_light"
     >
-    <!-- body container -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/img_clutch" />
-    </FrameLayout>
-
-    <!-- bottom container -->
-    <FrameLayout
-        android:id="@+id/bannerGroup"
-        android:layout_width="match_parent"
-        android:layout_height="96dp"
-        >
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/img_powered_by_mvl" />
-    </FrameLayout>
 </LinearLayout>
