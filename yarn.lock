@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@adobe/css-tools@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.0.1.tgz#b38b444ad3aa5fedbb15f2f746dcd934226a12dd"
+  integrity sha512-+u76oB43nOHrF4DDWRLWDCtci7f3QJoEBigemIdIeTi1ODqjx6Tad9NCVnPRwewWlKkVab5PlK8DCtPTyX7S8g==
+
 "@airgap/sapling-wasm@0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@airgap/sapling-wasm/-/sapling-wasm-0.0.9.tgz#641b588822179a1659e248a84ad971e16461fc6b"
@@ -1913,6 +1918,13 @@
   dependencies:
     "@sinclair/typebox" "^0.24.1"
 
+"@jest/schemas@^29.0.0":
+  version "29.0.0"
+  resolved "https://registry.yarnpkg.com/@jest/schemas/-/schemas-29.0.0.tgz#5f47f5994dd4ef067fb7b4188ceac45f77fe952a"
+  integrity sha512-3Ab5HgYIIAnS0HjqJHQYZS+zXc4tUmTmBH3z83ajI6afXp8X3ZtdLX+nXx+I7LNkJD7uN9LAVhgnjDgZa2z0kA==
+  dependencies:
+    "@sinclair/typebox" "^0.24.1"
+
 "@jest/source-map@^28.1.2":
   version "28.1.2"
   resolved "https://registry.yarnpkg.com/@jest/source-map/-/source-map-28.1.2.tgz#7fe832b172b497d6663cdff6c13b0a920e139e24"
@@ -2756,6 +2768,24 @@
     elliptic "^6.5.4"
     typedarray-to-buffer "^4.0.0"
 
+"@testing-library/jest-native@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-native/-/jest-native-5.1.2.tgz#aefabc666f0f18b1ef3c0daf5c58d7cb1ffe41ea"
+  integrity sha512-OPpt4wxn/+rgE4yIyQpiNpSEyE67ggXaom3iv4ly0HM1YhH9rH5eNg8b8N47CuQArJrsjwvvaKor7MqznVSzjw==
+  dependencies:
+    chalk "^4.1.2"
+    jest-diff "^29.0.1"
+    jest-matcher-utils "^29.0.1"
+    pretty-format "^29.0.3"
+    redent "^3.0.0"
+
+"@testing-library/react-native@^11.3.0":
+  version "11.3.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-11.3.0.tgz#2fedc63ef3a01d80203471e54649c0192b56c965"
+  integrity sha512-wCbH7TJ2uVwtkQPRQTZbM3Y/mzwK5zxwkOPKfR2UdVdz/RtCC2UVyDnJMaBNwG/cNle5tc92sQDfp3Gn2oyftg==
+  dependencies:
+    pretty-format "^29.0.3"
+
 "@tezos-core-tools/crypto-utils@^0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@tezos-core-tools/crypto-utils/-/crypto-utils-0.0.7.tgz#71e6eab53e1bfd74d75784f3c63aaf9223841b69"
@@ -2768,70 +2798,71 @@
     tweetnacl "^1.0.3"
     tweetnacl-auth "^1.0.1"
 
-"@tkey/common-types@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/common-types/-/common-types-6.1.0.tgz#82d4a0e327309fb4ff11982761c2dfed64eb7f76"
-  integrity sha512-zdIfrdWzJ2/0KVmiyNzjLp+faI6fBS/+PwOXg2mmvM8RHqSeWPMZvmNhRe+J6XJ+s3bOSwb3zo0Tw2r5eU3q1A==
+"@tkey/common-types@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/common-types/-/common-types-7.0.0.tgz#9db701f2a09c574bca0f872a312a9469fb881c8d"
+  integrity sha512-ZbfbtCbQqYAUUGL5ZuiJzKbNfWNIo1KZFwoHO+05fVc3sqIEePQP0/10rXcZrQ78AQH87gxWtSI+RIQAB1xHtw==
   dependencies:
-    "@toruslabs/customauth" "^10.0.0"
+    "@toruslabs/customauth" "^10.1.0"
     "@toruslabs/eccrypto" "^1.1.8"
     bn.js "^5.2.1"
     elliptic "^6.5.4"
     ts-custom-error "^3.2.0"
     web3-utils "^1.7.4"
 
-"@tkey/core@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/core/-/core-6.1.0.tgz#2fa00cabe04adb1cf84ec4267be6bb9abf4056c6"
-  integrity sha512-pYrxf0Fxyp6rvRB4ovzU4X3TLc/AajNX1nL6vVWmQe9vI7x4Uf0eJZt1+tlt3ebKu/dOmQNoq2GXX3tYT7KFUw==
+"@tkey/core@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/core/-/core-7.0.0.tgz#61f59955819c6d803d6106838a4620247942e261"
+  integrity sha512-2l+fYZbqqpn2ELaV8McK2mR4hK1HND8j1NNXlD0C7DuC/Z6sYXBTaTTMxqQCnVG/7uF2CEJxo/k/7xW54OI0fQ==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
     "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/http-helpers" "^3.0.0"
+    "@toruslabs/http-helpers" "^3.1.0"
     bn.js "^5.2.1"
     elliptic "^6.5.4"
     json-stable-stringify "^1.0.1"
     web3-utils "^1.7.4"
 
-"@tkey/default@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/default/-/default-6.1.0.tgz#2fa07a99ca6fa1dffa6f87350eb1cf9f86014f74"
-  integrity sha512-tpArZ4w6S6M1CkgnuT6zzF6/zmdQ3utFN7JghFqKAitdaUKGzyIeM11Psn9gMjYYANGFNJaJETJUMU/qqX9yYA==
+"@tkey/default@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/default/-/default-7.0.0.tgz#6a37a2f1f962046cc83fc4990c7c8565ab0d6a2a"
+  integrity sha512-/Ty8VvNeLES6KZP2KXDSDekZCHyy00WMwAT0jsOCFwJrAME2dHEo3Jr39kkTjPj9zo4d5OKXJN49MxzMoybIFA==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
-    "@tkey/core" "^6.1.0"
-    "@tkey/security-questions" "^6.1.0"
-    "@tkey/service-provider-base" "^6.1.0"
-    "@tkey/service-provider-torus" "^6.1.0"
-    "@tkey/share-serialization" "^6.1.0"
-    "@tkey/share-transfer" "^6.1.0"
-    "@tkey/storage-layer-torus" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
+    "@tkey/core" "^7.0.0"
+    "@tkey/security-questions" "^7.0.0"
+    "@tkey/service-provider-base" "^7.0.0"
+    "@tkey/service-provider-torus" "^7.0.0"
+    "@tkey/share-serialization" "^7.0.0"
+    "@tkey/share-transfer" "^7.0.0"
+    "@tkey/storage-layer-torus" "^7.0.0"
     bn.js "^5.2.1"
 
-"@tkey/private-keys@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/private-keys/-/private-keys-6.1.0.tgz#3656d66f2ba038f73e286e3f5d04698668fee515"
-  integrity sha512-k1NV24JxeGRhqCQIPgolcGJWAAnhuUb0Nr/oKcQad2b7f9h+apRy4E+RGwxQ6S6KucYRIwNag2tP8CS2qR6AxA==
+"@tkey/private-keys@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/private-keys/-/private-keys-7.0.0.tgz#2db1a642e7b87a28efc474252fb7b17c1a5e8a6e"
+  integrity sha512-ACEnvuop41/qRJJ3+xHehRUZMIHIaZvEodNAEZY4yHb3FTna9Nsjs5DSoGVZs9azxq9Vx6LP53REnGkb5DUzlA==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
+    "@toruslabs/tweetnacl-js" "^1.0.3"
     bn.js "^5.2.1"
     randombytes "^2.1.0"
 
-"@tkey/security-questions@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/security-questions/-/security-questions-6.1.0.tgz#54b75eeeb94048552f568f7749230351361d89ce"
-  integrity sha512-rjcrQHf7JlUAmY5KI7Jukct+T5YBzHGpaFHkZKSfvZG6pge3ejB6BCqEyXdsGGr2fPgAdnN6nQJKBWZ7pGkuYw==
+"@tkey/security-questions@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/security-questions/-/security-questions-7.0.0.tgz#a56dd09ed84c8a88c40fdb34e74aa6fc561537d0"
+  integrity sha512-AkTzq7Syi12Wstni3Kh/tCFI7DYOMVbTf6kf3INX2iNLZ6QlBjPI8T/4jB0bICJIL+1JV/gGgzxiVRXZDAEGpw==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
     bn.js "^5.2.1"
     web3-utils "^1.7.4"
 
-"@tkey/seed-phrase@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/seed-phrase/-/seed-phrase-6.1.0.tgz#0f0fdcf8da452af63f73d819037659bb4b753ec2"
-  integrity sha512-KqLlQplM6c1PXCKWwxO/ydNEtgB4O9aFMCqquA8p6xPx11NJMdp+R6xKcbMZB/TrJP149Qm/F5woXU7l2Fy3vQ==
+"@tkey/seed-phrase@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/seed-phrase/-/seed-phrase-7.0.0.tgz#5ec3d4e80715c2aec630d6aebb2c6a1f8f438436"
+  integrity sha512-AxgmBzTpQ7Cs5rNCI4K0XsD0eAa7Ls4TFDij5TPxehmsdp04k/S98X/PqEQAymjXRMx8nEXGIk8Rp1aWoMe4SQ==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
     bip39 "^3.0.4"
     bn.js "^5.2.1"
     hdkey "^2.0.1"
@@ -2839,53 +2870,53 @@
     web3-eth "^1.7.4"
     web3-utils "^1.7.4"
 
-"@tkey/service-provider-base@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/service-provider-base/-/service-provider-base-6.1.0.tgz#5d5389540b79385490d5b4e857a156dadc048e31"
-  integrity sha512-lALnlep8/fHSSLGTIc/KQMyQNWgKuyzBLTynDnS5/iZTBaZfp9mgkgeDvTbi/SsA+ppz+lkQOsesBrPTp5JmJQ==
+"@tkey/service-provider-base@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/service-provider-base/-/service-provider-base-7.0.0.tgz#bdece171a611937f540189a448bdbdec4cc3a7f1"
+  integrity sha512-lDwvfVeVKiUrBm88MReLXSc5YOODrtcpFK6cFMIZNipbVby+KSqqQsX6RAyyLmuIdLLmwbIdlsFsL6NCI0q2UA==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
     bn.js "^5.2.1"
     elliptic "^6.5.4"
 
-"@tkey/service-provider-torus@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/service-provider-torus/-/service-provider-torus-6.1.0.tgz#6a5069b71baae46bfc64960d8ac99265b897fe24"
-  integrity sha512-W8Gc56TLISZCjPWB+G2B8o4ufzy+txKult78O/UyGS9ocEiWZfshmo1kH71iKYHiXc9+b3CAPlu+xUY2ddroCA==
+"@tkey/service-provider-torus@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/service-provider-torus/-/service-provider-torus-7.0.0.tgz#0a110ec43640603c5918c1f8655fd0c1a40e8afa"
+  integrity sha512-d6zH0XIalUG7HwOgK/evV2Ppqxskm3WImqJf8+CjbY3oJLp8l1V5E0K5cXz3/TbwzKoZnpA1VOsU418CjVyqMw==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
-    "@tkey/service-provider-base" "^6.1.0"
-    "@toruslabs/customauth" "^10.0.0"
+    "@tkey/common-types" "^7.0.0"
+    "@tkey/service-provider-base" "^7.0.0"
+    "@toruslabs/customauth" "^10.1.0"
     bn.js "^5.2.1"
     elliptic "^6.5.4"
 
-"@tkey/share-serialization@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/share-serialization/-/share-serialization-6.1.0.tgz#e4feab747575ce3c99b13f5f8e6621a036479982"
-  integrity sha512-uPKt06eBsynBOk306jTAwW7Tr7YrCjURmj92lO+4nf3G8/LN9bmDIW6w9KbzWwL/+Ine1INpY7dtIfeFUh2+hA==
+"@tkey/share-serialization@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/share-serialization/-/share-serialization-7.0.0.tgz#7e77e46e96cfaee5e3d642ed0dba05cd2431a73e"
+  integrity sha512-pC+wbhM1nHak2mNFU+JUTv+YfEp0BbfCk6QCppSoWiboAGtEYa8lzYOeZB45v5Sf8zjerg7G2z6o+zmNwr6Mlg==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
     "@types/create-hash" "1.2.2"
     bn.js "^5.2.1"
     create-hash "^1.2.0"
 
-"@tkey/share-transfer@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/share-transfer/-/share-transfer-6.1.0.tgz#0bed70ec1b77aece016469bc709f768597164268"
-  integrity sha512-s9K2Xw3XuotOBZaHzq6WmjrG9QOMBwse/tNuxxw7jVg7HaOHdjIYvnjnC8NqOAn4Y1DtyF3nqNh4SqcVt7lZAg==
+"@tkey/share-transfer@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/share-transfer/-/share-transfer-7.0.0.tgz#2d639c48f6dbae9e3433b7275fd84c3020fafe3d"
+  integrity sha512-eMArH8+WEdx3bWnbip6PXi+u/TfgbYkBdIy0eRdzwm4iOL2Xs/ReLd7D7POfSQ30XgryH9S4t4uvusUOQ7uWtA==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
+    "@tkey/common-types" "^7.0.0"
     "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/http-helpers" "^3.0.0"
+    "@toruslabs/http-helpers" "^3.1.0"
     bn.js "^5.2.1"
 
-"@tkey/storage-layer-torus@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@tkey/storage-layer-torus/-/storage-layer-torus-6.1.0.tgz#a6ed7ba1df52b4ec8ec8de8daf18a6e3bcaaf75d"
-  integrity sha512-zF1s6VIHjKTLT9hDGaS8TgUuuhDYTljVl3L3nGsZe700D+mj4ZCIKc7cy12qddw13Ic5vpUbbS4XAKS+DEhQAw==
+"@tkey/storage-layer-torus@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@tkey/storage-layer-torus/-/storage-layer-torus-7.0.0.tgz#25f440eea8a375fdc6b098b29a1f60b3dff6c3ef"
+  integrity sha512-xjLW4/8lpMDuLEHrqBBBKGVV5zokL4P2n+R90SPG/7KdHjlHGxexEWTwkRlqa4OEou/uc8U4BuI6NKkNpj1x8Q==
   dependencies:
-    "@tkey/common-types" "^6.1.0"
-    "@toruslabs/http-helpers" "^3.0.0"
+    "@tkey/common-types" "^7.0.0"
+    "@toruslabs/http-helpers" "^3.1.0"
     bn.js "^5.2.1"
     json-stable-stringify "^1.0.1"
     web3-utils "^1.7.4"
@@ -2909,26 +2940,7 @@
   version "3.1.0"
   resolved "git+https://github.com/mvlchain/customauth-react-native-sdk.git#2ebe6b8069c94564c02a49f5dc8687bfe5e5569f"
 
-"@toruslabs/customauth@^10.0.0":
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-10.1.0.tgz#d0f7a47e6c3d24fe2203f50eea3b0dbcf00d9d95"
-  integrity sha512-P2k3CeFizzrtLkuiaCt8rfeFfG980AOBYOKZg+YsiwwB9V9rxAWYDaTfEd89QglBGvdJiPq/N6MHf1ZoiV/Vxw==
-  dependencies:
-    "@chaitanyapotti/register-service-worker" "^1.7.3"
-    "@toruslabs/broadcast-channel" "^6.1.0"
-    "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/fetch-node-details" "^7.0.2"
-    "@toruslabs/http-helpers" "^3.1.0"
-    "@toruslabs/metadata-helpers" "^3.0.0"
-    "@toruslabs/torus.js" "^6.1.0"
-    bowser "^2.11.0"
-    events "^3.3.0"
-    jwt-decode "^3.1.2"
-    lodash.merge "^4.6.2"
-    loglevel "^1.8.0"
-    web3-utils "^1.7.4"
-
-"@toruslabs/customauth@^10.1.1":
+"@toruslabs/customauth@^10.1.0", "@toruslabs/customauth@^10.1.1":
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-10.1.1.tgz#66c96d29fc9e04fe9ff923ef5000769d9f58a377"
   integrity sha512-E6pfrOz6ZwgLK3w2nL8DIUiBUr/YU9V+lJ0S+qScb9fd04sRCTDmblvh0hmeM2kH3PCm7co9o4FxQ+7xp5vN+A==
@@ -2999,6 +3011,11 @@
     keccak "^3.0.2"
     loglevel "^1.8.0"
     web3-utils "^1.7.4"
+
+"@toruslabs/tweetnacl-js@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@toruslabs/tweetnacl-js/-/tweetnacl-js-1.0.3.tgz#52abbcd2a6b77959ef6a98afedce77764d87226d"
+  integrity sha512-WQJYMTR/bkqvpk3DWOqRt5e24RhwJp9PXUoSj4zSthd3+fDhKYCI56YVMPNDKah1fCffOe9F3m8iZ5SgDZ+Csw==
 
 "@tradle/react-native-http@^2.0.1":
   version "2.0.1"
@@ -4960,6 +4977,11 @@ diff-sequences@^28.1.1:
   version "28.1.1"
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-28.1.1.tgz#9989dc731266dc2903457a70e996f3a041913ac6"
   integrity sha512-FU0iFaH/E23a+a718l8Qa/19bF9p06kgE0KipMOMadwa3SjnaElKzPaUC0vnibs6/B/9ni97s61mcejk8W1fQw==
+
+diff-sequences@^29.2.0:
+  version "29.2.0"
+  resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-29.2.0.tgz#4c55b5b40706c7b5d2c5c75999a50c56d214e8f6"
+  integrity sha512-413SY5JpYeSBZxmenGEmCVQ8mCgtFJF0w9PROdaS6z987XC2Pd2GOKqOITLtMftmyFZqgtCOb/QA7/Z3ZXfzIw==
 
 diffie-hellman@^5.0.0:
   version "5.0.3"
@@ -7035,6 +7057,16 @@ jest-diff@^28.1.3:
     jest-get-type "^28.0.2"
     pretty-format "^28.1.3"
 
+jest-diff@^29.0.1, jest-diff@^29.2.1:
+  version "29.2.1"
+  resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.2.1.tgz#027e42f5a18b693fb2e88f81b0ccab533c08faee"
+  integrity sha512-gfh/SMNlQmP3MOUgdzxPOd4XETDJifADpT937fN1iUGz+9DgOu2eUPHH25JDkLVcLwwqxv3GzVyK4VBUr9fjfA==
+  dependencies:
+    chalk "^4.0.0"
+    diff-sequences "^29.2.0"
+    jest-get-type "^29.2.0"
+    pretty-format "^29.2.1"
+
 jest-docblock@^28.1.1:
   version "28.1.1"
   resolved "https://registry.yarnpkg.com/jest-docblock/-/jest-docblock-28.1.1.tgz#6f515c3bf841516d82ecd57a62eed9204c2f42a8"
@@ -7074,6 +7106,11 @@ jest-get-type@^28.0.2:
   version "28.0.2"
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-28.0.2.tgz#34622e628e4fdcd793d46db8a242227901fcf203"
   integrity sha512-ioj2w9/DxSYHfOm5lJKCdcAmPJzQXmbM/Url3rhlghrPvT3tt+7a/+oXc9azkKmLvoiXjtV83bEWqi+vs5nlPA==
+
+jest-get-type@^29.2.0:
+  version "29.2.0"
+  resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-29.2.0.tgz#726646f927ef61d583a3b3adb1ab13f3a5036408"
+  integrity sha512-uXNJlg8hKFEnDgFsrCjznB+sTxdkuqiCL6zMgA75qEbAJjJYTs9XPrvDctrEig2GDow22T/LvHgO57iJhXB/UA==
 
 jest-haste-map@^27.3.1:
   version "27.5.1"
@@ -7131,6 +7168,16 @@ jest-matcher-utils@^28.0.0, jest-matcher-utils@^28.1.3:
     jest-diff "^28.1.3"
     jest-get-type "^28.0.2"
     pretty-format "^28.1.3"
+
+jest-matcher-utils@^29.0.1:
+  version "29.2.2"
+  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-29.2.2.tgz#9202f8e8d3a54733266784ce7763e9a08688269c"
+  integrity sha512-4DkJ1sDPT+UX2MR7Y3od6KtvRi9Im1ZGLGgdLFLm4lPexbTaCgJW5NN3IOXlQHF7NSHY/VHhflQ+WoKtD/vyCw==
+  dependencies:
+    chalk "^4.0.0"
+    jest-diff "^29.2.1"
+    jest-get-type "^29.2.0"
+    pretty-format "^29.2.1"
 
 jest-message-util@^28.1.3:
   version "28.1.3"
@@ -7284,6 +7331,13 @@ jest-snapshot@^28.1.3:
     natural-compare "^1.4.0"
     pretty-format "^28.1.3"
     semver "^7.3.5"
+
+jest-styled-components@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/jest-styled-components/-/jest-styled-components-7.1.1.tgz#faf19c733e0de4bbef1f9151955b99e839b7df48"
+  integrity sha512-OUq31R5CivBF8oy81dnegNQrRW13TugMol/Dz6ZnFfEyo03exLASod7YGwyHGuayYlKmCstPtz0RQ1+NrAbIIA==
+  dependencies:
+    "@adobe/css-tools" "^4.0.1"
 
 jest-util@^27.5.1:
   version "27.5.1"
@@ -8290,6 +8344,11 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
+min-indent@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/min-indent/-/min-indent-1.0.1.tgz#a63f681673b30571fbe8bc25686ae746eefa9869"
+  integrity sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==
+
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
@@ -9051,6 +9110,15 @@ pretty-format@^28.0.0, pretty-format@^28.1.3:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
+pretty-format@^29.0.3, pretty-format@^29.2.1:
+  version "29.2.1"
+  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.2.1.tgz#86e7748fe8bbc96a6a4e04fa99172630907a9611"
+  integrity sha512-Y41Sa4aLCtKAXvwuIpTvcFBkyeYp2gdFWzXGA+ZNES3VwURIB165XO/z7CjETwzCCS53MjW/rLMyyqEnTtaOfA==
+  dependencies:
+    "@jest/schemas" "^29.0.0"
+    ansi-styles "^5.0.0"
+    react-is "^18.0.0"
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -9279,10 +9347,10 @@ react-native-crypto@^2.2.0:
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
 
-react-native-drop-shadow@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-0.0.5.tgz#7a0e8aee7f54224b198a284ee46400227f5e5a69"
-  integrity sha512-JK0LGYVrd8ARqutEk+bP4H/B3ZdjcGYnj/Q2gom1drBMRyKqCxAl8IImqcFuSO92diFpSicPXJSP2VvxO3iuUg==
+react-native-drop-shadow@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-0.0.6.tgz#390ce56af70a1aa29abd9e86c8ca883803f7c097"
+  integrity sha512-eIFZoU7yhr90xB0/Gfuolt/Eelk0F+ohy3piutuYFA+xJx1xtJ/t9xWaaTPwTGXK+56CTnp8mAX4VPDz464NZg==
   dependencies:
     logkitty "^0.7.1"
 
@@ -9448,10 +9516,10 @@ react-native-vector-icons@^7.0.0:
     prop-types "^15.7.2"
     yargs "^15.0.2"
 
-react-native-vision-camera@^2.14.1:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.14.1.tgz#6b9fecd5c5976167b8e8752455be24cd12c3d84f"
-  integrity sha512-zs8HAuD3pL+T/ngaDUxbvhoqR90b85ab3nm4tO4OCSBDUFhzgDoDXDm+BDhsyQaF0p05Kaskf+rkqCVBI0WEgg==
+react-native-vision-camera@^2.15.1:
+  version "2.15.1"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.15.1.tgz#2259cce3b4ff4ac6c8e9eb859a71a12731ceddf6"
+  integrity sha512-mvz9T6DRfHSee52dpwZxyIdhED8ebmMbVoIpAC2MwkAv1tAV2iZhScRNhpf3Pj9pbh9hpO7Kan0Kc+k7GQGhpw==
 
 react-native@0.69.1:
   version "0.69.1"
@@ -9580,6 +9648,14 @@ recast@^0.20.4:
     esprima "~4.0.0"
     source-map "~0.6.1"
     tslib "^2.0.1"
+
+redent@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/redent/-/redent-3.0.0.tgz#e557b7998316bb53c9f1f56fa626352c6963059f"
+  integrity sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==
+  dependencies:
+    indent-string "^4.0.0"
+    strip-indent "^3.0.0"
 
 redux-persist-filesystem-storage@^4.1.0:
   version "4.1.0"
@@ -10437,6 +10513,13 @@ strip-hex-prefix@1.0.0:
   dependencies:
     is-hex-prefixed "1.0.0"
 
+strip-indent@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/strip-indent/-/strip-indent-3.0.0.tgz#c32e1cee940b6b3432c771bc2c54bcce73cd3001"
+  integrity sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ==
+  dependencies:
+    min-indent "^1.0.0"
+
 strip-json-comments@^3.1.0, strip-json-comments@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
@@ -11187,9 +11270,9 @@ web3-utils@1.7.4, web3-utils@^1.7.4:
     utf8 "3.0.0"
 
 web3-utils@^1.7.5:
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.5.tgz#081a952ac6e0322e25ac97b37358a43c7372ef6a"
-  integrity sha512-9AqNOziQky4wNQadEwEfHiBdOZqopIHzQQVzmvvv6fJwDSMhP+khqmAZC7YTiGjs0MboyZ8tWNivqSO1699XQw==
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.8.0.tgz#0a506f8c6af9a2ad6ba79689892662769534fc03"
+  integrity sha512-7nUIl7UWpLVka2f09CMbKOSEvorvHnaugIabU4mj7zfMvm0tSByLcEu3eyV9qgS11qxxLuOkzBIwCstTflhmpQ==
   dependencies:
     bn.js "^5.2.1"
     ethereum-bloom-filters "^1.0.6"

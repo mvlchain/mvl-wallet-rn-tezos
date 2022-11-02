@@ -2,7 +2,7 @@
 const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
-  preset: 'react-native',
+  preset: '@testing-library/react-native',
   globals: {
     'ts-jest': {
       tsconfig: 'tsconfig.spec.json',
@@ -19,6 +19,7 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFiles: ['<rootDir>/jest/setup.js'],
+  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   moduleNameMapper: {
     '\\.(png|jpg|ico|jpeg|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/jest/ImageMock.js',
   },

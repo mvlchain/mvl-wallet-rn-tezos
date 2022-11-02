@@ -2,7 +2,6 @@ import { Method } from 'axios';
 import { container, inject, injectable } from 'tsyringe';
 
 import { WalletService } from '@@domain/wallet/WalletService';
-import { useDi } from '@@hooks/common/useDi';
 
 import { promiseRequest } from './req';
 import { RequestConfig, Response } from './type';
@@ -32,7 +31,6 @@ class AuthenticationConfiguration {
     return await this.walletService.signMessageByExtendedKey(data);
   }
 }
-const authenticationConfiguration = container.resolve(AuthenticationConfiguration);
 
 /**
  * API request factory that automatically adds xHmacAuthorization to http header
@@ -40,6 +38,7 @@ const authenticationConfiguration = container.resolve(AuthenticationConfiguratio
 const doAuthRequest =
   (method: Method) =>
   async <D = any>(endpoint: string, reqConfig: RequestConfig = {}): Promise<Response<D>> => {
+    const authenticationConfiguration = container.resolve(AuthenticationConfiguration);
     const xHmacAuthorization = await authenticationConfiguration.getAuthorization(reqConfig.data);
 
     reqConfig.headers = {
@@ -55,9 +54,7 @@ const doAuthRequest =
       if (refreshRes.ok) {
         reqConfig.headers[HEADER_X_HMAC_SIG] = await authenticationConfiguration.getAuthorization(reqConfig.data);
 
-        const refetch = await promiseRequest(method)(endpoint, reqConfig);
-
-        return refetch;
+        return await promiseRequest(method)(endpoint, reqConfig);
       } else {
         res.data = getUnauthorizedData();
 

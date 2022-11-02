@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { BaseModal } from '@@components/BasicComponents/Modals/BaseModal';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 import BackButton from '@@components/BasicComponents/Header/BackButton';

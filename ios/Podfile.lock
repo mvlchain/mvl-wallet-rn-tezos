@@ -15,7 +15,7 @@ PODS:
     - React-jsi (= 0.69.1)
     - ReactCommon/turbomodule/core (= 0.69.1)
   - fmt (6.2.1)
-  - GenericJSON (2.0.1)
+  - GenericJSON (2.0.2)
   - glog (0.3.5)
   - GoogleDataTransport (9.2.0):
     - GoogleUtilities/Environment (~> 7.7)
@@ -83,7 +83,7 @@ PODS:
   - PromiseKit/Foundation (6.18.1):
     - PromiseKit/CorePromise
   - PromisesObjC (2.1.1)
-  - Protobuf (3.21.8)
+  - Protobuf (3.21.9)
   - QrCode (1.0.0):
     - React
   - RCT-Folly (2021.06.28.00-v2):
@@ -442,7 +442,7 @@ PODS:
   - vision-camera-code-scanner (0.2.0):
     - GoogleMLKit/BarcodeScanning
     - React-Core
-  - VisionCamera (2.14.1):
+  - VisionCamera (2.15.1):
     - React
     - React-callinvoker
     - React-Core
@@ -671,7 +671,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 068141206af867f72854753423d0117c4bf53419
   FBReactNativeSpec: 546a637adc797fa436dd51d1c63c580f820de31c
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
+  GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
@@ -690,7 +690,7 @@ SPEC CHECKSUMS:
   Permission-PhotoLibrary: 5b34ca67279f7201ae109cef36f9806a6596002d
   PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  Protobuf: 0a11f3000cd10ffa17611bf96e66a66b25c956e4
+  Protobuf: 02524ec14183fe08fb259741659e79683788158b
   QrCode: 703276888a8e1e5a77606392f82ce758d895a450
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: ae07282b2ec9c90d7eb98251603bc3f82403d239
@@ -741,10 +741,10 @@ SPEC CHECKSUMS:
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   vision-camera-code-scanner: dda884a7f3ec8243a2a6d6489b91860648371bca
-  VisionCamera: cc788935bcfd2f7031d3295adedbc9786835f402
+  VisionCamera: 51e731cb8cb61740f6cbd06dd9e818e2042a3d0e
   web3.swift: c6c3bf1f853743f8a7a58d263e5f7e46545e22c7
   Yoga: 7ab6e3ee4ce47d7b789d1cb520163833e515f452
 
-PODFILE CHECKSUM: eac48ba343106c7c8b68d2a993c8b3f698a55db8
+PODFILE CHECKSUM: 876ef774f0d37460a2bf132456bb62cb635d731d
 
 COCOAPODS: 1.11.3

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import {
   ACCESS_CONTROL,
@@ -9,9 +10,8 @@ import {
   setGenericPassword,
 } from 'react-native-keychain';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BIOMETRY_CHOICE, BIOMETRY_CHOICE_DISABLED, PASSCODE_CHOICE, PASSCODE_DISABLED, TRUE } from '@@constants/storage';
 
-import { BIOMETRY_CHOICE, BIOMETRY_CHOICE_DISABLED, PASSCODE_CHOICE, PASSCODE_DISABLED, TRUE } from '../constants/storage';
 import { strings } from '../locales/i18n';
 
 import Encryptor from './Encryptor';
@@ -30,7 +30,7 @@ const defaultOptions = {
 
 class SecureKeychain {
   static instance?: SecureKeychain;
-  isAuthenticating = false;
+  public isAuthenticating = false;
 
   constructor(code: string) {
     if (!SecureKeychain.instance) {
@@ -61,9 +61,7 @@ export const SECURE_TYPES = {
 const secureKeychain = {
   init(salt: string) {
     instance = new SecureKeychain(salt);
-
     Object.freeze(instance);
-    return instance;
   },
 
   getInstance() {
@@ -83,6 +81,7 @@ const secureKeychain = {
 
   async getGenericPassword() {
     if (instance) {
+      console.log(instance);
       instance.isAuthenticating = true;
       const keychainObject = await getGenericPassword(defaultOptions);
       if (keychainObject !== false && keychainObject.password) {
