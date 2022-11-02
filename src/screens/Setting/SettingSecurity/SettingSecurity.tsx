@@ -35,7 +35,6 @@ function SettingSecurity() {
           });
         }}
       />
-      {/* TODO: toggle형태의 menu만들기 */}
       <SettingToggleMenu title={t('biometric_authentication')} isChecked={settedBioAuth} onPress={toggleBioAuth} />
       <SettingMenu
         title={t('private_key')}

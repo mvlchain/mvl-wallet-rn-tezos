@@ -3,7 +3,7 @@ import { devtools } from 'zustand/middleware';
 
 import { TMnemonic } from '@@types/MnemonicType';
 
-import { IAuth, IAuthState } from './autStore.type';
+import { IAuth, IAuthState } from './authStore.type';
 
 const initState: IAuthState = {
   pKey: null,
