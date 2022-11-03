@@ -3,7 +3,7 @@ import { devtools } from 'zustand/middleware';
 
 import { PIN_MODE, PIN_SETUP_STAGE } from '@@constants/pin.constant';
 
-import { AuthModalStore, PinStore, TAuthModal } from './pinStore.type';
+import { PinStore } from './pinStore.type';
 
 const INITIAL_PINSTORE_STATE = {
   pinMode: PIN_MODE.CONFIRM,
@@ -27,44 +27,13 @@ export const pinStore = create<PinStore>()(
         ...INITIAL_PINSTORE_STATE,
       }));
     },
-    pinModalResolver: () => {},
-    pinModalRejector: () => {},
+    pinModalResolver: null,
+    pinModalRejector: null,
     success: (pin: string) => {
       get().pinModalResolver?.(pin);
     },
     fail: (message: string) => {
       get().pinModalRejector?.(message);
     },
-  }))
-);
-
-export const authModalStore = create<AuthModalStore>()(
-  devtools((set, get) => ({
-    isOpen: {
-      tos: false,
-      guide: false,
-    },
-    open: (type: keyof TAuthModal) =>
-      set(
-        {
-          isOpen: {
-            ...get().isOpen,
-            [type]: true,
-          },
-        },
-        false,
-        `openAuthModal-${type}`
-      ),
-    close: (type: keyof TAuthModal) =>
-      set(
-        {
-          isOpen: {
-            ...get().isOpen,
-            [type]: false,
-          },
-        },
-        false,
-        `closeAuthModal-${type}`
-      ),
   }))
 );

@@ -5,8 +5,8 @@ import { BackHandler } from 'react-native';
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AUTH_STAGE } from '@@constants/authStage.constant';
 import { useDi } from '@@hooks/common/useDi';
+import { authModalStore } from '@@store/auth/authModalStore';
 import authPersistStore from '@@store/auth/authPersistStore';
-import { authModalStore } from '@@store/pin/pinStore';
 
 const useTermsOfServicesModal = () => {
   const keyClient = useDi('KeyClient');
