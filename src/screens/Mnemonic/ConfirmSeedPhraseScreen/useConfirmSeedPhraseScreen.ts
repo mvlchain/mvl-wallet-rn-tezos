@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import { useDi } from '@@hooks/common/useDi';
-import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -51,7 +51,10 @@ const useConfirmSeedPhraseScreen = () => {
         throw new Error('postboxkey is required');
       }
       removeStageByPostboxKey(_postboxKey);
-      navigation.navigate('MAIN');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
+      });
     } else {
       // TODO: 다국어 요청
       openModal(MODAL_TYPES.TEXT_MODAL, {

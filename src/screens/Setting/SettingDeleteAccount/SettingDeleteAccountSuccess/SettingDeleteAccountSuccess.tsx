@@ -13,13 +13,13 @@ function SettingDeleteAccountSuccess() {
   const { onPressConfirm } = useSettingDeleteAccountSuccess();
 
   return (
-    <>
+    <S.Container>
       <S.ImageContainer>
         <SuccessIcon />
         <S.SuccessText>{t('delete_account_successfully')}</S.SuccessText>
       </S.ImageContainer>
       <PrimaryButton label={t('btn_confirm')} onPress={onPressConfirm} wrapperStyle={S.inlineStyles.margin} />
-    </>
+    </S.Container>
   );
 }
 
