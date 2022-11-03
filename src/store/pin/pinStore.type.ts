@@ -1,8 +1,8 @@
 import { PIN_MODE, PIN_SETUP_STAGE } from '@@constants/pin.constant';
 
 export interface PinstoreInitialDTO {
-  pinModalResolver: Function | undefined;
-  pinModalRejector: Function | undefined;
+  pinModalResolver: Function | null;
+  pinModalRejector: Function | null;
   pinMode: TPinMode;
   error: TError | null;
   showError: boolean;
@@ -15,17 +15,6 @@ export interface PinStore extends PinstoreInitialDTO {
   fail: (message: string) => void;
   resetStore: () => void;
 }
-
-export interface AuthModalStore {
-  isOpen: TAuthModal;
-  open: (type: keyof TAuthModal) => void;
-  close: (type: keyof TAuthModal) => void;
-}
-
-export type TAuthModal = {
-  tos: boolean;
-  guide: boolean;
-};
 
 export type TError = {
   message: string;

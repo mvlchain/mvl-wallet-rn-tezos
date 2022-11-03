@@ -1,7 +1,8 @@
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AUTH_STAGE } from '@@constants/authStage.constant';
 import { PIN_MODE } from '@@constants/pin.constant';
-import { pinStore, authModalStore } from '@@store/pin/pinStore';
+import { authModalStore } from '@@store/auth/authModalStore';
+import { pinStore } from '@@store/pin/pinStore';
 import { TPinMode } from '@@store/pin/pinStore.type';
 
 export interface UIService {
@@ -32,8 +33,8 @@ export class UIServiceImpl implements UIService {
 
     pinStore.getState().setState({ pinMode, pinModalResolver, pinModalRejector });
     // TODO: reset pin일 때 화면 처리 추가
-    if (pinMode === PIN_MODE.CONFIRM) {
-      pinStore.getState().open();
+    if (!stage || pinMode === PIN_MODE.CONFIRM) {
+      authModalStore.getState().open(AUTH_MODAL_NAME.PIN);
     } else {
       /**
        * Auth Stage에 따른 분기처리
@@ -45,8 +46,6 @@ export class UIServiceImpl implements UIService {
         authModalStore.getState().open(AUTH_MODAL_NAME.TOS);
       } else if (stage === 'PIN_SETUP_STAGE') {
         authModalStore.getState().open(AUTH_MODAL_NAME.GUIDE);
-      } else if (!stage) {
-        pinStore.getState().open();
       }
     }
     const password = await pinModalObserver;
