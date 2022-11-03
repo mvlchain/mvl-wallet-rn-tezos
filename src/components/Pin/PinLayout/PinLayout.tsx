@@ -39,6 +39,7 @@ function PinLayout({ isFull }: IPinLayoutStyleProps) {
           <Blurs current={current} />
         </S.PinMonitorInnerWrraper>
         <S.PinMonitorInnerWrraper>
+          {/* TODO: reset기능 넣기 */}
           {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}
         </S.PinMonitorInnerWrraper>
       </S.PinPasswordMonitorContainer>

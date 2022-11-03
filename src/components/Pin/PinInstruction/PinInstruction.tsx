@@ -14,8 +14,7 @@ function PinInstruction() {
 
   return (
     <S.PinInstructionContainer>
-      <S.Instruction>{instruction}</S.Instruction>
-      <S.ErrorMessage>{error?.message}</S.ErrorMessage>
+      <S.Instruction showError={showError}>{showError ? error?.message : instruction}</S.Instruction>
     </S.PinInstructionContainer>
   );
 }

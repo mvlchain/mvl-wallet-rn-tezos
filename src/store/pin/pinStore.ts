@@ -18,10 +18,15 @@ export const pinStore = create<PinStore>()(
   devtools((set, get) => ({
     ...INITIAL_PINSTORE_STATE,
     setState: (newState) => {
-      set((prevState) => ({
-        ...prevState,
-        ...newState,
-      }));
+      set(
+        (prevState) => ({
+          ...prevState,
+          ...newState,
+        }),
+        false,
+        //@ts-ignore
+        `setState-${JSON.stringify(newState)}`
+      );
     },
     resetStore: () => {
       set((prevState) => ({
@@ -31,9 +36,19 @@ export const pinStore = create<PinStore>()(
     },
     success: (pin: string) => {
       get().pinModalResolver?.(pin);
+      set((prevState) => ({
+        ...prevState,
+        ...INITIAL_PINSTORE_STATE,
+        pinMode: PIN_MODE.SUCCESS,
+      }));
     },
     fail: (message: string) => {
       get().pinModalRejector?.(message);
+      set((prevState) => ({
+        ...prevState,
+        ...INITIAL_PINSTORE_STATE,
+        pinMode: PIN_MODE.FAIL,
+      }));
     },
   }))
 );

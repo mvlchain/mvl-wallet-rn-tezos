@@ -42,9 +42,9 @@ export class UIServiceImpl implements UIService {
        * PIN_SETUP_STAGE -> pincode guide 모달 띄우기
        * BACKUP_SEED_PHRASE_STAGE -> authPersistStore의 stage값 확인 후 useSignInScreen에서 분기처리
        */
-      if (stage === 'TERMS_OF_SERVICE_STAGE') {
+      if (stage === AUTH_STAGE.TERMS_OF_SERVICE_STAGE) {
         authModalStore.getState().open(AUTH_MODAL_NAME.TOS);
-      } else if (stage === 'PIN_SETUP_STAGE') {
+      } else if (stage === AUTH_STAGE.PIN_SETUP_STAGE) {
         authModalStore.getState().open(AUTH_MODAL_NAME.GUIDE);
       }
     }

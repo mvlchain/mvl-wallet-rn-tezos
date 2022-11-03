@@ -16,12 +16,17 @@ const usePinModal = () => {
   };
 
   useEffect(() => {
-    if (isOpen.pin) return;
-    if (!(pinMode === PIN_MODE.SUCCESS || pinMode === PIN_MODE.FAIL)) return;
-    close(AUTH_MODAL_NAME.PIN);
+    if (!isOpen.pin) return;
+    close(AUTH_MODAL_NAME.GUIDE);
     const backHandler = BackHandler.addEventListener('hardwareBackPress', interruption);
     return () => backHandler.remove();
-  }, [!isOpen.pin, pinMode]);
+  }, [isOpen.pin]);
+
+  useEffect(() => {
+    const isFinish = pinMode === PIN_MODE.SUCCESS || pinMode === PIN_MODE.FAIL;
+    if (!isFinish) return;
+    close(AUTH_MODAL_NAME.PIN);
+  }, [pinMode]);
 
   return {
     isOpen,

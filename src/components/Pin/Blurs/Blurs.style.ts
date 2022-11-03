@@ -21,14 +21,5 @@ export const BlurCircle = styled.View<IBlursStyleProps>`
   height: ${height * 12}px;
   border-radius: ${height * 6}px;
   margin: ${height * 4}px;
-  background-color: ${({ theme, isBlue }) => (isBlue ? theme.color.primary : theme.color.grey200Grey800)};
-`;
-
-export const ErrorCircleWrapper = styled(BlursCircleWrapper)`
-  position: absolute;
-  top: 0;
-`;
-
-export const ErrorCircle = styled(BlurCircle)`
-  background-color: ${({ theme }) => theme.color.red};
+  background-color: ${({ theme, isBlue, showError }) => (showError ? theme.color.red : isBlue ? theme.color.primary : theme.color.grey200Grey800)};
 `;
