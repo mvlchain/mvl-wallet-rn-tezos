@@ -10,7 +10,7 @@ import * as S from './PinModal.style';
 import usePinModal from './usePinModal';
 
 function PinModal({ isFull }: { isFull: boolean }) {
-  const { isOpen, close } = usePinModal();
+  const { isOpen } = usePinModal();
   const { appTheme } = settingPersistStore();
 
   return (
