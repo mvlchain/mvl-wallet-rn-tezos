@@ -10,6 +10,8 @@ const INITIAL_PINSTORE_STATE = {
   error: null,
   showError: false,
   stage: PIN_SETUP_STAGE.FIRST,
+  pinModalResolver: null,
+  pinModalRejector: null,
 };
 
 export const pinStore = create<PinStore>()(
@@ -27,8 +29,6 @@ export const pinStore = create<PinStore>()(
         ...INITIAL_PINSTORE_STATE,
       }));
     },
-    pinModalResolver: null,
-    pinModalRejector: null,
     success: (pin: string) => {
       get().pinModalResolver?.(pin);
     },
