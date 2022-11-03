@@ -36,7 +36,7 @@ function MainTab() {
   type ScreenProps = Parameters<typeof Screen>[0];
 
   const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.label].color;
+  const color = theme[appTheme.value].color;
   const backgorundColor = color.whiteBlack;
 
   const HomeNormal = useAssetFromTheme(HomeNormalLight, HomeNormalDark);

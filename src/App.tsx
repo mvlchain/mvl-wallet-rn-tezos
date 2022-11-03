@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Appearance } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,7 +16,7 @@ import useApp from 'useApp';
 import { THEME } from '@@constants/setting.constant';
 import RootStack from '@@navigation/RootStack';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
-import settingStore from '@@store/setting/settingPersistStore';
+//import settingStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
@@ -25,38 +25,40 @@ const queryClient = new QueryClient();
 
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
-  //const { appTheme } = useApp();
-  const { appTheme, setAppTheme } = settingStore();
+
+  const { appTheme, setAppTheme } = useApp();
+  //const { appTheme, setAppTheme } = settingStore();
 
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-  // listen to theme change events
+  // appearance change events(Theme)
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      if (appTheme.value === THEME.DEFAULT) {
+      if (appTheme.displayName === THEME.DEFAULT) {
         const theme = Appearance.getColorScheme() ?? 'light';
         setAppTheme({
-          value: THEME.DEFAULT,
-          label: theme,
+          displayName: THEME.DEFAULT,
+          value: theme,
         });
-      } else if (appTheme.value === THEME.LIGHT) {
+      } else if (appTheme.displayName === THEME.LIGHT) {
         setAppTheme({
+          displayName: THEME.LIGHT,
           value: THEME.LIGHT,
-          label: THEME.LIGHT,
         });
-      } else if (appTheme.value === THEME.DARK) {
+      } else if (appTheme.displayName === THEME.DARK) {
         setAppTheme({
+          displayName: THEME.DARK,
           value: THEME.DARK,
-          label: THEME.DARK,
         });
       }
     });
+
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [appTheme]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
