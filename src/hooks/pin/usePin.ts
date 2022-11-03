@@ -10,7 +10,7 @@ import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 function usePin() {
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, showError, error, stage, setState, success, resetStore } = pinStore();
+  const { pinMode, showError, error, stage, setState, success } = pinStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -18,6 +18,7 @@ function usePin() {
   }, [input]);
 
   useEffect(() => {
+    if (!error) return;
     setState({ showError: true });
     setTimeout(() => {
       setState({ showError: false });
@@ -31,7 +32,7 @@ function usePin() {
         const credential = await SecureKeychain.getGenericPassword();
         if (input === credential?.password) {
           success(input);
-          resetStore();
+          setState({ pinMode: PIN_MODE.SUCCESS });
         } else {
           setState({ error: { message: t('password_wrong_pin') } });
         }
@@ -43,7 +44,7 @@ function usePin() {
           if (input === inputCheck) {
             await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
             success(input);
-            resetStore();
+            setState({ pinMode: PIN_MODE.SUCCESS });
           } else {
             setState({ error: { message: t('password_pin_not_match') } });
           }
@@ -61,7 +62,10 @@ function usePin() {
     if (!TouchID) return;
     //TODO: setting 에서 바꿀때 TouchID.isSupported 묻기
     TouchID.authenticate(t('enable_touchid'))
-      .then(() => success(input))
+      .then(() => {
+        success(input);
+        setState({ pinMode: PIN_MODE.SUCCESS });
+      })
       .catch(() => {});
   };
 

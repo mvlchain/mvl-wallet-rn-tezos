@@ -12,7 +12,7 @@ import usePincodeGuideModal from './usePincodeGuideModal';
 
 function PincodeGuideModal() {
   const { t } = useTranslation();
-  const { isOpen, close, open, interruption } = usePincodeGuideModal();
+  const { isOpen, open, interruption } = usePincodeGuideModal();
 
   return (
     <Modal visible={isOpen.guide} onRequestClose={interruption}>
@@ -26,7 +26,6 @@ function PincodeGuideModal() {
           <PrimaryButton
             label={t('set_pin_number')}
             onPress={() => {
-              close(AUTH_MODAL_NAME.GUIDE);
               open(AUTH_MODAL_NAME.PIN);
             }}
           />
