@@ -17,7 +17,7 @@ function Toggle({ checked, style, ...props }: BaseProps) {
   const prevChecked = usePrevious(checked);
   const { appTheme } = settingPersistStore();
 
-  const myTheme: Theme = theme[appTheme.label];
+  const myTheme: Theme = theme[appTheme.value];
 
   useEffect(() => {
     if (prevChecked !== checked) {

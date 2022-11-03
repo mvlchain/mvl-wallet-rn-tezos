@@ -9,14 +9,14 @@ import settingPersistStore from '@@store/setting/settingPersistStore';
 
 const useApp = () => {
   const { i18n } = useTranslation();
-  const { settedLanguage, appTheme } = settingPersistStore();
+  const { settedLanguage, appTheme, setAppTheme } = settingPersistStore();
 
   useEffect(() => {
     i18n.changeLanguage(settedLanguage);
   }, [settedLanguage]);
 
   useEffect(() => {
-    StatusBar.setBarStyle(STATUSBAR_THEME[appTheme.value]);
+    StatusBar.setBarStyle(STATUSBAR_THEME[appTheme.displayName]);
   }, [appTheme]);
 
   const errorHandler = (error: Error) => {
@@ -33,6 +33,7 @@ const useApp = () => {
 
   return {
     appTheme,
+    setAppTheme,
   };
 };
 

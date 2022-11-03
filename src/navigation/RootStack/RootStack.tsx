@@ -50,7 +50,7 @@ function RootStack() {
   const { t } = useTranslation();
   const { appTheme } = settingPersistStore();
   const { handleStackHeaderOption } = useHeader();
-  const color = theme[appTheme.label].color;
+  const color = theme[appTheme.value].color;
   const screens: Array<ScreenProps> = [
     {
       name: ROOT_STACK_ROUTE.AUTH,

@@ -8,8 +8,8 @@ const initState: ISettingPersistState = {
   settedCurrency: 'USD',
   settedLanguage: 'en',
   appTheme: {
+    displayName: 'dark',
     value: 'dark',
-    label: 'dark',
   },
   settedBioAuth: false,
 };
