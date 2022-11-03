@@ -38,7 +38,10 @@ const useSignInScreen = () => {
       if (stage[_postboxKey] === 'BACKUP_SEED_PHRASE_STAGE') {
         navigation.navigate(ROOT_STACK_ROUTE.SEED_PHRASE);
       } else {
-        navigation.navigate(ROOT_STACK_ROUTE.MAIN);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
+        });
       }
     }
   }, [pKey]);

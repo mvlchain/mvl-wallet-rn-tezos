@@ -1,7 +1,8 @@
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 const useSettingSignOutModall = () => {
@@ -9,6 +10,7 @@ const useSettingSignOutModall = () => {
   const rootNavigation = useNavigation<rootStackProps>();
   const auth = useDi('AuthService');
   const { modalType, closeModal } = globalModalStore();
+  const { resetAuthStore } = authStore();
 
   const onPressSignOut = async () => {
     try {
@@ -21,13 +23,16 @@ const useSettingSignOutModall = () => {
     }
   };
 
+  const resetState = () => {
+    resetAuthStore();
+  };
+
   const onSuccessSignOut = () => {
-    rootNavigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: ROOT_STACK_ROUTE.AUTH }],
-      })
-    );
+    resetState();
+    rootNavigation.reset({
+      index: 0,
+      routes: [{ name: ROOT_STACK_ROUTE.AUTH }],
+    });
     closeModal();
   };
 

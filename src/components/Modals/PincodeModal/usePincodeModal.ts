@@ -55,9 +55,12 @@ function usePincodeModal() {
   };
 
   useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
     const backHandler = BackHandler.addEventListener('hardwareBackPress', interruption);
     return () => backHandler.remove();
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     getStoredPin();
