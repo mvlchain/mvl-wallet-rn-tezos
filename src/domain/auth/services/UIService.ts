@@ -2,7 +2,7 @@ import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AUTH_STAGE } from '@@constants/authStage.constant';
 import { PIN_MODE } from '@@constants/pin.constant';
 import { pinStore, authModalStore } from '@@store/pin/pinStore';
-import { Mode, PinMode } from '@@store/pin/pinStore.type';
+import { TPinMode } from '@@store/pin/pinStore.type';
 
 export interface UIService {
   triggerGetPincode: () => Promise<string>;
@@ -23,7 +23,7 @@ export class UIServiceImpl implements UIService {
     return await this._triggerPincode(PIN_MODE.SETUP, stage);
   }
 
-  private async _triggerPincode(pinMode: PinMode, stage?: keyof typeof AUTH_STAGE) {
+  private async _triggerPincode(pinMode: TPinMode, stage?: keyof typeof AUTH_STAGE) {
     let pinModalResolver, pinModalRejector;
     const pinModalObserver = new Promise((resolve, reject) => {
       pinModalResolver = resolve;

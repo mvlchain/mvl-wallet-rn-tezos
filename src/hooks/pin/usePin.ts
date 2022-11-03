@@ -10,7 +10,7 @@ import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 function usePin() {
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, error, stage, setState, success, resetStore } = pinStore();
+  const { pinMode, showError, error, stage, setState, success, resetStore } = pinStore();
   const { t } = useTranslation();
 
   useEffect(() => {
