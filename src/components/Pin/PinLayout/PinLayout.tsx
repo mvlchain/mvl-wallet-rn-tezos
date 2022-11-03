@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { PIN_MODE } from '@@constants/pin.constant';
