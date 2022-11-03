@@ -34,7 +34,6 @@ export const SignInSubTitle = styled.Text`
 export const SignInButtonWrapper = styled.View`
   padding: ${height * 24}px;
   width: 100%;
-  height: ${height * 184}px;
 `;
 
 export const PrimaryButtonWrapper = styled(SignInButtonWrapper)`
