@@ -8,6 +8,8 @@ export const PIN_MODE = {
   SETUP: 'setup',
   CONFIRM: 'confirm',
   RESET: 'reset',
+  SUCCESS: 'success',
+  FAIL: 'fail',
 } as const;
 
 export const PIN_SETUP_STAGE = {
