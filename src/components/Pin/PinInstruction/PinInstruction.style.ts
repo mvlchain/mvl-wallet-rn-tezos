@@ -8,7 +8,7 @@ export const PinInstructionContainer = styled.View``;
 
 export const Instruction = styled.Text<IPinInstructionStyleProps>`
   ${({ theme }) => theme.font.Label.lg};
-  line-height: ${fontSize(24)};
+  line-height: ${fontSize(24)}px;
   color: ${({ theme, showError }) => (showError ? theme.color.red : theme.color.blackWhite)};
   flex: 1;
 `;

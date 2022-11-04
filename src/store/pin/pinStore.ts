@@ -1,15 +1,16 @@
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { PIN_MODE, PIN_SETUP_STAGE } from '@@constants/pin.constant';
+import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 
 import { PinStore } from './pinStore.type';
 
 const INITIAL_PINSTORE_STATE = {
-  pinMode: PIN_MODE.CONFIRM,
+  pinMode: null,
+  step: PIN_STEP.ENTER,
+  layout: PIN_LAYOUT.FULLSCREEN,
   error: null,
   showError: false,
-  stage: PIN_SETUP_STAGE.FIRST,
   pinModalResolver: null,
   pinModalRejector: null,
 };
@@ -36,19 +37,9 @@ export const pinStore = create<PinStore>()(
     },
     success: (pin: string) => {
       get().pinModalResolver?.(pin);
-      set((prevState) => ({
-        ...prevState,
-        ...INITIAL_PINSTORE_STATE,
-        pinMode: PIN_MODE.SUCCESS,
-      }));
     },
     fail: (message: string) => {
       get().pinModalRejector?.(message);
-      set((prevState) => ({
-        ...prevState,
-        ...INITIAL_PINSTORE_STATE,
-        pinMode: PIN_MODE.FAIL,
-      }));
     },
   }))
 );

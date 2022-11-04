@@ -8,13 +8,17 @@ export const PIN_MODE = {
   SETUP: 'setup',
   CONFIRM: 'confirm',
   RESET: 'reset',
-  SUCCESS: 'success',
-  FAIL: 'fail',
 } as const;
 
-export const PIN_SETUP_STAGE = {
-  FIRST: 1,
-  SECOND: 2,
+export const PIN_STEP = {
+  ENTER: 1,
+  REENTER: 2,
+  FINISH: 3,
 } as const;
 
 export const PIN_REQUIRE_LENGTH: number = 6;
+
+export const PIN_LAYOUT = {
+  FULLSCREEN: 'fullscreen',
+  MODAL: 'modal',
+} as const;

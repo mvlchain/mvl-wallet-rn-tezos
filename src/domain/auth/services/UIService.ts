@@ -1,6 +1,6 @@
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AUTH_STAGE } from '@@constants/authStage.constant';
-import { PIN_MODE } from '@@constants/pin.constant';
+import { PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 import { authModalStore } from '@@store/auth/authModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { TPinMode } from '@@store/pin/pinStore.type';

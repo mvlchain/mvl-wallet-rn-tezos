@@ -19,6 +19,6 @@ export const BackdropColor = {
 
 export const PinLayoutWrapper = styled.View<{ isFull: boolean }>`
   flex: 1;
-  justify-content: 'flex-end';
+  justify-content: flex-end;
   padding-top: ${({ isFull }) => (isFull ? `0px` : `${height * 60}px`)};
 `;
