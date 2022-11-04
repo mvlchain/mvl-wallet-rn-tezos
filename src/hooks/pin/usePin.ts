@@ -42,6 +42,7 @@ function usePin() {
       case PIN_MODE.SETUP:
         if (step === PIN_STEP.ENTER) {
           setState({ step: PIN_STEP.REENTER });
+          setInput('');
         } else {
           if (input === inputCheck) {
             await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
