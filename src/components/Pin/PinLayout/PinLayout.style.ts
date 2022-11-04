@@ -19,7 +19,7 @@ export const PinBackButtonHeaderWrapper = styled.Pressable`
 `;
 
 export const PinLayoutAssistant = styled.View`
-  height: ${height * 64}px;
+  height: ${height * 24}px;
 `;
 
 export const PinPasswordMonitorContainer = styled.View`
