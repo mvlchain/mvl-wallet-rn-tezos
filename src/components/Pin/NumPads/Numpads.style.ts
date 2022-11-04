@@ -9,9 +9,9 @@ export const NumpadsContainer = styled.View`
 
 export const NumpadsRow = styled.View`
   flex: 1;
-  height: ${height * 120}px;
   flex-direction: row;
   justify-content: space-between;
+  height: ${height * 120}px;
 `;
 
 export const EmptyPad = styled.View`

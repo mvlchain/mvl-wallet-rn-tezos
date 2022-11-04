@@ -6,17 +6,17 @@ import { IPinLayoutStyleProps } from './PinLayout.type';
 
 export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
   flex: 1;
-  /* justify-content: flex-end; */
+  justify-content: flex-end;
   padding-top: ${({ isFull }) => (isFull ? `0px` : `${height * 60}px`)};
 `;
 
 export const PinContainer = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.color.whiteBlack};
   padding-top: ${height * 44}px;
   border-top-left-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
   border-top-right-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
 export const PinBackButtonHeaderWrapper = styled.Pressable`
@@ -35,9 +35,9 @@ export const PinPasswordMonitorContainer = styled.View`
 `;
 
 export const PinNumpadContainer = styled.View`
+  align-items: center;
   width: 100%;
   height: ${height * 434}px;
-  align-items: center;
 `;
 
 export const PinMonitorInnerWrraper = styled.View`
