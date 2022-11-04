@@ -1,13 +1,13 @@
 import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 
 export interface PinstoreInitialDTO {
-  pinModalResolver: Function | null;
-  pinModalRejector: Function | null;
   pinMode: TPinMode | null;
+  step: TPinStep | null;
+  layout: TPinLayout | null;
   error: TError | null;
   showError: boolean;
-  step: TPinStep;
-  layout: TPinLayout;
+  pinModalResolver: Function | null;
+  pinModalRejector: Function | null;
 }
 
 export interface PinStore extends PinstoreInitialDTO {
