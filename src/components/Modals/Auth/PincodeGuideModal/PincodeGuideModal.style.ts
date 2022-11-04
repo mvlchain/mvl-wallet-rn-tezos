@@ -13,6 +13,8 @@ export const PincodeContainer = styled.View`
 
 export const PincodeTitleWrapper = styled.View`
   align-items: center;
+  width: 100%;
+  padding: 0 ${width * 24}px;
 `;
 export const PincodeTitle = styled.Text`
   ${({ theme }) => theme.font.Title.md};
