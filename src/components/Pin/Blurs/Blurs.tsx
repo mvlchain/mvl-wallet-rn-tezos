@@ -8,11 +8,9 @@ function Blurs({ current }: IBlursProps) {
 
   return (
     <S.BlursContainer>
-      <S.BlursCircleWrapper>
-        {Array.from({ length: 6 }, (v, i) => {
-          return <S.BlurCircle isBlue={current > i} key={'blur' + i} showError={showError} />;
-        })}
-      </S.BlursCircleWrapper>
+      {Array.from({ length: 6 }, (v, i) => {
+        return <S.BlurCircle isBlue={current > i} key={'blur' + i} showError={showError} />;
+      })}
     </S.BlursContainer>
   );
 }

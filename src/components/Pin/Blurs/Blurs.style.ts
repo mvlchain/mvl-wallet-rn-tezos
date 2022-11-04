@@ -5,15 +5,9 @@ import { height } from '@@utils/ui';
 import { IBlursStyleProps } from './Blurs.type';
 
 export const BlursContainer = styled.View`
-  width: 100%;
-  flex-direction: row;
   justify-content: center;
-`;
-
-export const BlursCircleWrapper = styled.View`
-  width: 100%;
   flex-direction: row;
-  justify-content: center;
+  width: 100%;
 `;
 
 export const BlurCircle = styled.View<IBlursStyleProps>`

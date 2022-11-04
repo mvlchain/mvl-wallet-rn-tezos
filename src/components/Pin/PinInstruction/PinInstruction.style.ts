@@ -7,10 +7,10 @@ import { IPinInstructionStyleProps } from './PinInstruction.type';
 export const PinInstructionContainer = styled.View``;
 
 export const Instruction = styled.Text<IPinInstructionStyleProps>`
+  flex: 1;
   ${({ theme }) => theme.font.Label.lg};
   line-height: ${fontSize(24)}px;
   color: ${({ theme, showError }) => (showError ? theme.color.red : theme.color.blackWhite)};
-  flex: 1;
 `;
 
 export const ErrorMessage = styled.Text`

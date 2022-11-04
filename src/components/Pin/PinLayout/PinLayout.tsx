@@ -15,9 +15,9 @@ import NumPads from '../NumPads';
 import PinInstruction from '../PinInstruction';
 
 import * as S from './PinLayout.style';
-import { IPinLayoutStyleProps } from './PinLayout.type';
+import { IPinLayoutProps } from './PinLayout.type';
 
-function PinLayout({ back }: IPinLayoutStyleProps) {
+function PinLayout({ back }: IPinLayoutProps) {
   const { backSpace, bioAuth, setPassword, current } = usePin();
   const { pinMode, layout } = pinStore();
   const { t } = useTranslation();
