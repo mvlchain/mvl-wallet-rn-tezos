@@ -7,8 +7,8 @@ import { PinStore } from './pinStore.type';
 
 const INITIAL_PINSTORE_STATE = {
   pinMode: null,
-  step: PIN_STEP.ENTER,
-  layout: PIN_LAYOUT.FULLSCREEN,
+  step: null,
+  layout: null,
   error: null,
   showError: false,
   pinModalResolver: null,

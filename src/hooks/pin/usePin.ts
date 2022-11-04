@@ -36,6 +36,7 @@ function usePin() {
           setState({ step: PIN_STEP.FINISH });
         } else {
           setState({ error: { message: t('password_wrong_pin') } });
+          setInput('');
         }
         break;
       case PIN_MODE.SETUP:
@@ -48,6 +49,7 @@ function usePin() {
             setState({ step: PIN_STEP.FINISH });
           } else {
             setState({ error: { message: t('password_pin_not_match') } });
+            setInput('');
           }
         }
         break;
@@ -56,7 +58,6 @@ function usePin() {
       default:
         break;
     }
-    setInput('');
   };
 
   const bioAuth = () => {

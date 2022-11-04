@@ -4,6 +4,12 @@ import { height, width } from '@@utils/ui';
 
 import { IPinLayoutStyleProps } from './PinLayout.type';
 
+export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
+  flex: 1;
+  /* justify-content: flex-end; */
+  padding-top: ${({ isFull }) => (isFull ? `0px` : `${height * 60}px`)};
+`;
+
 export const PinContainer = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: space-between;

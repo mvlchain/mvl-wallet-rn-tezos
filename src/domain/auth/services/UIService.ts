@@ -1,6 +1,6 @@
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AUTH_STAGE } from '@@constants/authStage.constant';
-import { PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
+import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 import { authModalStore } from '@@store/auth/authModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { TPinMode } from '@@store/pin/pinStore.type';
@@ -31,7 +31,7 @@ export class UIServiceImpl implements UIService {
       pinModalRejector = reject;
     });
 
-    pinStore.getState().setState({ pinMode, pinModalResolver, pinModalRejector });
+    pinStore.getState().setState({ pinMode, pinModalResolver, pinModalRejector, layout: PIN_LAYOUT.FULLSCREEN, step: PIN_STEP.ENTER });
     // TODO: reset pin일 때 화면 처리 추가
     if (!stage || pinMode === PIN_MODE.CONFIRM) {
       authModalStore.getState().open(AUTH_MODAL_NAME.PIN);

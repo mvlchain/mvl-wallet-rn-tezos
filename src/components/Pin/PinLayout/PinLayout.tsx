@@ -32,31 +32,33 @@ function PinLayout({ back }: IPinLayoutStyleProps) {
   }, []);
 
   return (
-    <S.PinContainer isFull={isFull}>
-      {isFull ? (
-        //TODO: back버튼 추가
-        <S.PinBackButtonHeaderWrapper onPress={back}>
-          <BackIcon />
-        </S.PinBackButtonHeaderWrapper>
-      ) : (
-        <S.PinLayoutAssistant />
-      )}
-      <S.PinPasswordMonitorContainer>
-        <S.PinMonitorInnerWrraper>
-          <PinInstruction />
-        </S.PinMonitorInnerWrraper>
-        <S.PinMonitorInnerWrraper>
-          <Blurs current={current} />
-        </S.PinMonitorInnerWrraper>
-        <S.PinMonitorInnerWrraper>
-          {/* TODO: reset기능 넣기 */}
-          {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}
-        </S.PinMonitorInnerWrraper>
-      </S.PinPasswordMonitorContainer>
-      <S.PinNumpadContainer>
-        <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
-      </S.PinNumpadContainer>
-    </S.PinContainer>
+    <S.PinLayoutWrapper isFull={isFull}>
+      <S.PinContainer isFull={isFull}>
+        {isFull ? (
+          //TODO: back버튼 추가
+          <S.PinBackButtonHeaderWrapper onPress={back}>
+            <BackIcon />
+          </S.PinBackButtonHeaderWrapper>
+        ) : (
+          <S.PinLayoutAssistant />
+        )}
+        <S.PinPasswordMonitorContainer>
+          <S.PinMonitorInnerWrraper>
+            <PinInstruction />
+          </S.PinMonitorInnerWrraper>
+          <S.PinMonitorInnerWrraper>
+            <Blurs current={current} />
+          </S.PinMonitorInnerWrraper>
+          <S.PinMonitorInnerWrraper>
+            {/* TODO: reset기능 넣기 */}
+            {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}
+          </S.PinMonitorInnerWrraper>
+        </S.PinPasswordMonitorContainer>
+        <S.PinNumpadContainer>
+          <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
+        </S.PinNumpadContainer>
+      </S.PinContainer>
+    </S.PinLayoutWrapper>
   );
 }
 
