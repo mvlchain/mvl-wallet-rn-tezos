@@ -10,7 +10,7 @@ import { INumPadsProps } from './NumPads.type';
 import * as S from './Numpads.style';
 
 function NumPads({ backSpace, bioAuth, setPassword }: INumPadsProps) {
-  const { pinMode, stage } = pinStore();
+  const { pinMode, step } = pinStore();
   const { settedBioAuth } = settingPersistStore();
   const showBio = pinMode === PIN_MODE.CONFIRM && settedBioAuth;
 
@@ -18,7 +18,7 @@ function NumPads({ backSpace, bioAuth, setPassword }: INumPadsProps) {
     const numpads = Array.from({ length: 10 }, (v, i) => i.toString()).sort(() => Math.random() - 0.5);
     const randomNum = numpads.pop();
     return { rows: [numpads.slice(0, 3), numpads.slice(3, 6), numpads.slice(6)], leftOver: randomNum };
-  }, [stage]);
+  }, [step]);
 
   return (
     <S.NumpadsContainer>

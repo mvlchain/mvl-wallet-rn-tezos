@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { BackIconDark, BackIconLight } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import { PIN_MODE } from '@@constants/pin.constant';
+import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import usePin from '@@hooks/pin/usePin';
 import { pinStore } from '@@store/pin/pinStore';
@@ -17,12 +17,13 @@ import PinInstruction from '../PinInstruction';
 import * as S from './PinLayout.style';
 import { IPinLayoutStyleProps } from './PinLayout.type';
 
-function PinLayout({ isFull, back }: IPinLayoutStyleProps) {
+function PinLayout({ back }: IPinLayoutStyleProps) {
   const { backSpace, bioAuth, setPassword, current } = usePin();
-  const { pinMode } = pinStore();
+  const { pinMode, layout } = pinStore();
   const { t } = useTranslation();
   const { settedBioAuth } = settingPersistStore();
   const BackIcon = useAssetFromTheme(BackIconLight, BackIconDark);
+  const isFull = layout === PIN_LAYOUT.FULLSCREEN;
 
   useEffect(() => {
     if (settedBioAuth) {

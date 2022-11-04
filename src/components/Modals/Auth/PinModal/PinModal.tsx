@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import Modal from 'react-native-modal';
 
 import PinLayout from '@@components/Pin/PinLayout/PinLayout';
+import { PIN_LAYOUT } from '@@constants/pin.constant';
 import { THEME } from '@@constants/setting.constant';
 import { pinStore } from '@@store/pin/pinStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
@@ -9,9 +10,11 @@ import settingPersistStore from '@@store/setting/settingPersistStore';
 import * as S from './PinModal.style';
 import usePinModal from './usePinModal';
 
-function PinModal({ isFull }: { isFull: boolean }) {
+function PinModal() {
   const { isOpen, interruption } = usePinModal();
+  const { layout } = pinStore();
   const { appTheme } = settingPersistStore();
+  const isFull = layout === PIN_LAYOUT.FULLSCREEN;
 
   return (
     <Modal

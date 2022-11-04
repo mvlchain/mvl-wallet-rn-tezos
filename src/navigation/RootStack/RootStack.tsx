@@ -137,7 +137,7 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
         </Navigator>
-        <PinModal isFull={true} />
+        <PinModal />
         <TermsOfServicesModal />
         <PincodeGuideModal />
         <GlobalModal />

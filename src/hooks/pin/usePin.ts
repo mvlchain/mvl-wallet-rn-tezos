@@ -3,22 +3,24 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TouchID from 'react-native-touch-id';
 
-import { PIN_MODE, PIN_SETUP_STAGE, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
+import { PIN_MODE, PIN_STEP, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
 function usePin() {
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, error, stage, setState, success } = pinStore();
+  const { pinMode, error, step, setState, success } = pinStore();
   const { t } = useTranslation();
 
   useEffect(() => {
+    if (input.length < 6) return;
     check();
   }, [input]);
 
   useEffect(() => {
-    if (!error) return;
+    const isFinish = step === PIN_STEP.FINISH;
+    if (!error || isFinish) return;
     setState({ showError: true });
     setTimeout(() => {
       setState({ showError: false });
@@ -26,25 +28,24 @@ function usePin() {
   }, [error]);
 
   const check = async () => {
-    if (input.length < 6) return;
     switch (pinMode) {
       case PIN_MODE.CONFIRM:
         const credential = await SecureKeychain.getGenericPassword();
         if (input === credential?.password) {
           success(input);
-          setState({ pinMode: PIN_MODE.SUCCESS });
+          setState({ step: PIN_STEP.FINISH });
         } else {
           setState({ error: { message: t('password_wrong_pin') } });
         }
         break;
       case PIN_MODE.SETUP:
-        if (stage === PIN_SETUP_STAGE.FIRST) {
-          setState({ stage: PIN_SETUP_STAGE.SECOND });
+        if (step === PIN_STEP.ENTER) {
+          setState({ step: PIN_STEP.REENTER });
         } else {
           if (input === inputCheck) {
             await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
             success(input);
-            setState({ pinMode: PIN_MODE.SUCCESS });
+            setState({ step: PIN_STEP.FINISH });
           } else {
             setState({ error: { message: t('password_pin_not_match') } });
           }
@@ -64,14 +65,13 @@ function usePin() {
     TouchID.authenticate(t('enable_touchid'))
       .then(() => {
         success(input);
-        setState({ pinMode: PIN_MODE.SUCCESS });
       })
       .catch(() => {});
   };
 
   const setPassword = async (num: string) => {
     if (!(input.length < PIN_REQUIRE_LENGTH)) return;
-    if (input.length === PIN_REQUIRE_LENGTH - 1 && stage !== PIN_SETUP_STAGE.SECOND) {
+    if (input.length === PIN_REQUIRE_LENGTH - 1 && step !== PIN_STEP.REENTER) {
       setInputCheck(input + num);
     }
     setInput(input + num);

@@ -1,12 +1,13 @@
-import { PIN_MODE, PIN_SETUP_STAGE } from '@@constants/pin.constant';
+import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 
 export interface PinstoreInitialDTO {
   pinModalResolver: Function | null;
   pinModalRejector: Function | null;
-  pinMode: TPinMode;
+  pinMode: TPinMode | null;
   error: TError | null;
   showError: boolean;
-  stage: TPinSetupStage;
+  step: TPinStep;
+  layout: TPinLayout;
 }
 
 export interface PinStore extends PinstoreInitialDTO {
@@ -21,5 +22,6 @@ export type TError = {
 };
 
 export type TPinMode = typeof PIN_MODE[keyof typeof PIN_MODE];
-export type TPinSetupStage = typeof PIN_SETUP_STAGE[keyof typeof PIN_SETUP_STAGE];
+export type TPinStep = typeof PIN_STEP[keyof typeof PIN_STEP];
+export type TPinLayout = typeof PIN_LAYOUT[keyof typeof PIN_LAYOUT];
 export type TSetState<T> = (newState: Partial<Omit<T, 'setState'>>) => void;
