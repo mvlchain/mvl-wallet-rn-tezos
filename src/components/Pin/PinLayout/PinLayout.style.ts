@@ -8,12 +8,17 @@ export const PinContainer = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.color.whiteBlack};
-  padding-top: ${({ isFull }) => (isFull ? `${height * 100}px` : `${height * 44}px`)};
+  padding-top: ${height * 44}px;
   border-top-left-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
   border-top-right-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
 `;
 
-export const LayoutAssistant = styled.View`
+export const PinBackButtonHeaderWrapper = styled.Pressable`
+  height: ${height * 56}px;
+  padding: ${height * 24}px;
+`;
+
+export const PinLayoutAssistant = styled.View`
   height: ${height * 64}px;
 `;
 

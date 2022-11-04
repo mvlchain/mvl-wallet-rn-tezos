@@ -10,6 +10,7 @@ import { pinStore } from '@@store/pin/pinStore';
 const usePinModal = () => {
   const { isOpen, close } = authModalStore();
   const { pinMode } = pinStore();
+
   const interruption = () => {
     close(AUTH_MODAL_NAME.PIN);
     return true; //for backhandler function type
