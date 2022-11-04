@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { BackIconDark, BackIconLight } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { PIN_MODE } from '@@constants/pin.constant';
+import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import usePin from '@@hooks/pin/usePin';
 import { pinStore } from '@@store/pin/pinStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
@@ -15,11 +17,12 @@ import PinInstruction from '../PinInstruction';
 import * as S from './PinLayout.style';
 import { IPinLayoutStyleProps } from './PinLayout.type';
 
-function PinLayout({ isFull }: IPinLayoutStyleProps) {
+function PinLayout({ isFull, back }: IPinLayoutStyleProps) {
   const { backSpace, bioAuth, setPassword, current } = usePin();
   const { pinMode } = pinStore();
   const { t } = useTranslation();
   const { settedBioAuth } = settingPersistStore();
+  const BackIcon = useAssetFromTheme(BackIconLight, BackIconDark);
 
   useEffect(() => {
     if (settedBioAuth) {
@@ -29,7 +32,14 @@ function PinLayout({ isFull }: IPinLayoutStyleProps) {
 
   return (
     <S.PinContainer isFull={isFull}>
-      <S.LayoutAssistant />
+      {isFull ? (
+        //TODO: back버튼 추가
+        <S.PinBackButtonHeaderWrapper onPress={back}>
+          <BackIcon />
+        </S.PinBackButtonHeaderWrapper>
+      ) : (
+        <S.PinLayoutAssistant />
+      )}
       <S.PinPasswordMonitorContainer>
         <S.PinMonitorInnerWrraper>
           <PinInstruction />

@@ -10,7 +10,7 @@ import * as S from './PinModal.style';
 import usePinModal from './usePinModal';
 
 function PinModal({ isFull }: { isFull: boolean }) {
-  const { isOpen } = usePinModal();
+  const { isOpen, interruption } = usePinModal();
   const { appTheme } = settingPersistStore();
 
   return (
@@ -22,7 +22,7 @@ function PinModal({ isFull }: { isFull: boolean }) {
       backdropColor={S.BackdropColor[appTheme.label]}
       backdropOpacity={appTheme.value === THEME.LIGHT || appTheme.value === THEME.DEFAULT ? 0.25 : 1}
     >
-      <PinLayout isFull={isFull} />
+      <PinLayout isFull={isFull} back={interruption} />
     </Modal>
   );
 }
