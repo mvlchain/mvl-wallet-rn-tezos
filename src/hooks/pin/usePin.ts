@@ -67,6 +67,7 @@ function usePin() {
     TouchID.authenticate(t('enable_touchid'))
       .then(() => {
         success(input);
+        setState({ step: PIN_STEP.FINISH });
       })
       .catch(() => {});
   };
