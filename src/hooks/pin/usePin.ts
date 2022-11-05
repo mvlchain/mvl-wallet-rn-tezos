@@ -10,8 +10,12 @@ import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 function usePin() {
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, error, step, setState, success } = pinStore();
+  const { pinMode, error, step, setState, success, resetStore } = pinStore();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    return () => resetStore();
+  }, []);
 
   useEffect(() => {
     if (input.length < 6) return;
