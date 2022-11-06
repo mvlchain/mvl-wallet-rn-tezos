@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
 
 import Clipboard from '@react-native-clipboard/clipboard';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation, useIsFocused, RouteProp, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { BackHandler } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -9,11 +9,13 @@ import Toast from 'react-native-toast-message';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { useDi } from '@@hooks/common/useDi';
 import useHeader from '@@hooks/common/useHeader';
-import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 
 const useSeedPhraseScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE'>;
+  type SeedPhraseScreenRouteProp = RouteProp<TRootStackParamList, 'SEED_PHRASE'>;
+  const { params } = useRoute<SeedPhraseScreenRouteProp>();
   const navigation = useNavigation<rootStackProps>();
   const isFocused = useIsFocused();
 
@@ -23,6 +25,7 @@ const useSeedPhraseScreen = () => {
   const uiService = useDi('UIService');
   const { handleStackHeaderOption } = useHeader();
   const { mnemonic, setMnemonic } = authStore();
+
   const [type, setType] = useState<'show' | 'hide'>('hide');
 
   useEffect(() => {
@@ -45,14 +48,18 @@ const useSeedPhraseScreen = () => {
 
   useLayoutEffect(() => {
     const title = t('seed_phrase_lbl_title');
-    if (type === 'hide') {
-      navigation.setOptions({
-        title,
-        headerLeft: undefined,
-      });
-    } else {
-      navigation.setOptions(handleStackHeaderOption({ title, isDisableBack: true, onPressBack: () => setType('hide') }));
+    let headerOption = handleStackHeaderOption({ title });
+    if (!params?.onlyCopy) {
+      if (type === 'hide') {
+        headerOption = {
+          title,
+          headerLeft: () => null,
+        };
+      } else {
+        headerOption = handleStackHeaderOption({ title, isDisableBack: true, onPressBack: () => setType('hide') });
+      }
     }
+    navigation.setOptions(headerOption);
   }, [type]);
 
   const interruption = () => {
@@ -70,8 +77,8 @@ const useSeedPhraseScreen = () => {
     setType('show');
   };
 
-  const onPressCopymnemonic = () => {
-    // mnemonic 없을 때 예외처리(에러처리)추가
+  const onPressCopyMnemonic = () => {
+    // TODO: mnemonic 없을 때 예외처리(에러처리)추가
     if (!mnemonic) return;
     Clipboard.setString(mnemonic);
     Toast.show({
@@ -85,7 +92,7 @@ const useSeedPhraseScreen = () => {
     navigation.navigate(ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM);
   };
 
-  return { type, onPressViewSeedPhrase, onPressCopymnemonic, onPressNext };
+  return { type, onlyCopy: params?.onlyCopy, onPressViewSeedPhrase, onPressCopyMnemonic, onPressNext };
 };
 
 export default useSeedPhraseScreen;

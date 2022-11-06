@@ -26,7 +26,7 @@ export interface KeyClient {
   serverShare: ShareStore | null;
   deviceShare: ShareStore | null;
   deviceShareIndex: string | null;
-  triggerSocialSignIn: (provider: AuthProvider) => Promise<void>;
+  triggerSocialSignIn: (provider: AuthProvider, isTemp?: boolean) => Promise<PostboxKeyHolder>;
   checkDevice: () => boolean;
   checkSignedUp: () => Promise<boolean>;
   checkServer: () => Promise<boolean>;
@@ -65,9 +65,13 @@ export class KeyClientImpl implements KeyClient {
     this.serverShare = null;
     this.deviceShareIndex = null;
   }
-  async triggerSocialSignIn(provider: AuthProvider) {
+  async triggerSocialSignIn(provider: AuthProvider, isTemp?: boolean) {
     const postboxKeyHolder = await this.torusShareRepository.triggerSocialByTorusCustomAuth(provider);
-    this.postboxKeyHolder = { ...postboxKeyHolder, provider };
+    const resultPostboxKeyHolder = { ...postboxKeyHolder, provider };
+    if (!isTemp) {
+      this.postboxKeyHolder = resultPostboxKeyHolder;
+    }
+    return resultPostboxKeyHolder;
   }
   checkDevice() {
     return this.deviceShareRepository.checkDeviceShare();
