@@ -4,7 +4,9 @@ import { valueOf } from '@@types/etc';
 
 export type TRootStackParamList = {
   AUTH: undefined;
-  SEED_PHRASE: undefined;
+  SEED_PHRASE: {
+    onlyCopy?: boolean;
+  };
   SEED_PHRASE_CONFIRM: undefined;
   MAIN: undefined;
   SETTING_SECURITY: undefined;

@@ -2,44 +2,49 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import HideContentSection from '@@components/HideContentSection';
-import Mnemonic from '@@components/Mnemonic/Mnemonic';
 import { height } from '@@utils/ui';
 
-import * as S from '../Mnemonic.style';
+import * as S from './SettingPrivateKeyScreen.style';
+import useSettingPrivateKeyScreen from './useSettingPrivateKeyScreen';
 
-import useSeedPhraseScreen from './useSeedPhraseScreen';
-
-function SeedPhraseScreen() {
+function SettingPrivateKeyScreen() {
   const { t } = useTranslation();
-  const { type, onlyCopy, onPressViewSeedPhrase, onPressCopyMnemonic, onPressNext } = useSeedPhraseScreen();
+  const { type, pkey, onPressViewPrivatekey, onPressCopyPrivateKey } = useSettingPrivateKeyScreen();
+
   return (
     <S.Container bounces={false}>
-      <S.Description>{t('seed_phrase_lbl_description')}</S.Description>
+      <S.Description>{t('private_key_lbl_description')}</S.Description>
+      <S.WalletContainer>
+        <S.WalletWrapper>
+          {/* TODO: wallet name과 연동 필요 */}
+          <S.WalletText>Ethereum Wallet</S.WalletText>
+        </S.WalletWrapper>
+      </S.WalletContainer>
       <HideContentSection
         isHide={type === 'hide'}
-        onPress={onPressViewSeedPhrase}
+        onPress={onPressViewPrivatekey}
         btnLabel={t('btn_view_seed_phrase')}
         description={t('seed_phrase_lbl_hint')}
       >
-        <Mnemonic />
+        <S.PKeyContainer>
+          <S.PKeyText>{pkey}</S.PKeyText>
+        </S.PKeyContainer>
       </HideContentSection>
       {type === 'show' && (
         <>
           {/* TODO: image text button 만들기 */}
           <TextButton
             label='Copy to Clipboard'
-            onPress={onPressCopyMnemonic}
+            onPress={onPressCopyPrivateKey}
             disabled={false}
             wrapperStyle={{ marginTop: height * 30, marginBottom: height * 18 }}
           />
-          {!onlyCopy && <PrimaryButton label='Next' onPress={onPressNext} disabled={false} wrapperStyle={{ marginBottom: height * 30 }} />}
         </>
       )}
     </S.Container>
   );
 }
 
-export default SeedPhraseScreen;
+export default SettingPrivateKeyScreen;

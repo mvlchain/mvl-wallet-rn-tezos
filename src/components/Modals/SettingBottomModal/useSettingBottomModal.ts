@@ -2,14 +2,14 @@ import { useTranslation } from 'react-i18next';
 import { Appearance } from 'react-native';
 
 import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
-import settingStore from '@@store/setting/settingPersistStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import { ISettingBottomMenuProps } from './SettingBottomMenu/SettingBottomMenu.type';
 
 const useSettingBottomModal = () => {
   const { t } = useTranslation();
 
-  const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingStore();
+  const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingPersistStore();
   const currencyMenu: ISettingBottomMenuProps[] = [
     {
       title: 'USD',

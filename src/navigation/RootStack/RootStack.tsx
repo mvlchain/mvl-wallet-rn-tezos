@@ -15,14 +15,14 @@ import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
-import SettingAppVersion from '@@screens/Setting/SettingAppVersion';
-import SettingDeleteAccount from '@@screens/Setting/SettingDeleteAccount';
-import SettingDeleteAccountSuccess from '@@screens/Setting/SettingDeleteAccount/SettingDeleteAccountSuccess';
-import SettingFAQ from '@@screens/Setting/SettingFAQ';
-import SettingPrivacyPolicy from '@@screens/Setting/SettingPrivacyPolicy';
-import SettingSecurity from '@@screens/Setting/SettingSecurity';
-import SettingPrivateKey from '@@screens/Setting/SettingSecurity/SettingPrivateKey';
-import SettingTermsOfService from '@@screens/Setting/SettingTermsOfService';
+import SettingAppVersionScreen from '@@screens/SettingScreen/SettingAppVersionScreen';
+import SettingDeleteAccountScreen from '@@screens/SettingScreen/SettingDeleteAccountScreen';
+import SettingDeleteAccountSuccessScreen from '@@screens/SettingScreen/SettingDeleteAccountScreen/SettingDeleteAccountSuccessScreen';
+import SettingFAQScreen from '@@screens/SettingScreen/SettingFAQScreen';
+import SettingPrivacyPolicyScreen from '@@screens/SettingScreen/SettingPrivacyPolicyScreen';
+import SettingSecurityScreen from '@@screens/SettingScreen/SettingSecurityScreen';
+import SettingPrivateKeyScreen from '@@screens/SettingScreen/SettingSecurityScreen/SettingPrivateKeyScreen';
+import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfServiceScreen';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -71,44 +71,44 @@ function RootStack() {
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY,
-      component: SettingPrivacyPolicy,
+      component: SettingPrivacyPolicyScreen,
       options: handleStackHeaderOption({ title: t('privacy_policy') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_SECURITY,
-      component: SettingSecurity,
+      component: SettingSecurityScreen,
       options: handleStackHeaderOption({ title: t('security') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_TERMS_OF_SERVICE,
-      component: SettingTermsOfService,
+      component: SettingTermsOfServiceScreen,
       options: handleStackHeaderOption({ title: t('terms_of_service') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT,
-      component: SettingDeleteAccount,
+      component: SettingDeleteAccountScreen,
       options: handleStackHeaderOption({ title: t('delete_account') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT_SUCCESS,
-      component: SettingDeleteAccountSuccess,
+      component: SettingDeleteAccountSuccessScreen,
       options: {
         headerShown: false,
       },
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_APP_VERSION,
-      component: SettingAppVersion,
+      component: SettingAppVersionScreen,
       options: handleStackHeaderOption({ title: '' }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVATE_KEY,
-      component: SettingPrivateKey,
+      component: SettingPrivateKeyScreen,
       options: handleStackHeaderOption({ title: t('private_key') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_FAQ,
-      component: SettingFAQ,
+      component: SettingFAQScreen,
       options: handleStackHeaderOption({ title: t('faq') }),
     },
   ];

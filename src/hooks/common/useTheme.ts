@@ -1,6 +1,6 @@
 import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
 
-import settingStore from '@@store/setting/settingPersistStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 export const getAssetFromTheme = (appTheme: string, light: React.FC<SvgProps>, dark: React.FC<SvgProps>) => {
   let asset = light;
@@ -18,7 +18,7 @@ export const getAssetFromTheme = (appTheme: string, light: React.FC<SvgProps>, d
 };
 
 export const useAssetFromTheme = (light: any, dark: any) => {
-  const { appTheme } = settingStore();
+  const { appTheme } = settingPersistStore();
   const asset = getAssetFromTheme(appTheme.label, light, dark);
 
   return asset;
