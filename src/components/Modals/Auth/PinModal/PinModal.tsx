@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Modal } from 'react-native';
 
 import PinLayout from '@@components/Pin/PinLayout/PinLayout';
