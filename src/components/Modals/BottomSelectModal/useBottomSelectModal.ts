@@ -4,13 +4,13 @@ import { Appearance } from 'react-native';
 import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
-import { ISettingBottomMenuProps } from './SettingBottomMenu/SettingBottomMenu.type';
+import { IBottomSelectMenuProps } from './BottomSelectMenu/BottomSelectMenu.type';
 
-const useSettingBottomModal = () => {
+const BottomSelectModal = () => {
   const { t } = useTranslation();
 
   const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingPersistStore();
-  const currencyMenu: ISettingBottomMenuProps[] = [
+  const currencyMenu: IBottomSelectMenuProps[] = [
     {
       title: 'USD',
       isSelected: settedCurrency === CURRENCY.USD,
@@ -34,7 +34,7 @@ const useSettingBottomModal = () => {
     },
   ];
 
-  const languageMenu: ISettingBottomMenuProps[] = [
+  const languageMenu: IBottomSelectMenuProps[] = [
     {
       title: 'English',
       isSelected: settedLanguage === LANGUAGE_CODE.EN,
@@ -58,7 +58,7 @@ const useSettingBottomModal = () => {
     },
   ];
 
-  const themeMenu: ISettingBottomMenuProps[] = [
+  const themeMenu: IBottomSelectMenuProps[] = [
     {
       title: t(THEME_NAME[THEME.DEFAULT]),
       isSelected: appTheme.value === THEME.DEFAULT,
@@ -99,4 +99,4 @@ const useSettingBottomModal = () => {
   };
 };
 
-export default useSettingBottomModal;
+export default BottomSelectModal;

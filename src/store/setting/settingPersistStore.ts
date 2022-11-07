@@ -28,7 +28,8 @@ const settingPersistStore = create<ISettingPersist>()(
         name: 'setting',
         getStorage: () => AsyncStorage,
       }
-    )
+    ),
+    { name: 'settingPersistStore', enabled: __DEV__ }
   )
 );
 

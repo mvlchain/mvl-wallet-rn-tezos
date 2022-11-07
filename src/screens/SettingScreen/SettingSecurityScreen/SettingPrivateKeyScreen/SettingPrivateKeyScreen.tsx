@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import Chip from '@@components/Chip';
 import HideContentSection from '@@components/HideContentSection';
 import { height } from '@@utils/ui';
 
@@ -11,17 +12,13 @@ import useSettingPrivateKeyScreen from './useSettingPrivateKeyScreen';
 
 function SettingPrivateKeyScreen() {
   const { t } = useTranslation();
-  const { type, pkey, onPressViewPrivatekey, onPressCopyPrivateKey } = useSettingPrivateKeyScreen();
 
+  // TODO: 실제 데이터와 연동 필요
+  const { type, pkey, wallet_length, onPressViewPrivatekey, onPressCopyPrivateKey, onPressWalletList } = useSettingPrivateKeyScreen();
   return (
     <S.Container bounces={false}>
       <S.Description>{t('private_key_lbl_description')}</S.Description>
-      <S.WalletContainer>
-        <S.WalletWrapper>
-          {/* TODO: wallet name과 연동 필요 */}
-          <S.WalletText>Ethereum Wallet</S.WalletText>
-        </S.WalletWrapper>
-      </S.WalletContainer>
+      <Chip isMultiple={wallet_length > 1} label='Ethereum Wallet' onPress={onPressWalletList} />
       <HideContentSection
         isHide={type === 'hide'}
         onPress={onPressViewPrivatekey}

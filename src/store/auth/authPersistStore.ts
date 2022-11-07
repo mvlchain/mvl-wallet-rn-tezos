@@ -43,7 +43,8 @@ const authPersistStore = create<Type.IAuthPersist>()(
         name: 'auth',
         getStorage: () => AsyncStorage,
       }
-    )
+    ),
+    { name: 'authPersistStore', enabled: __DEV__ }
   )
 );
 

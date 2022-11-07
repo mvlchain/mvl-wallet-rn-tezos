@@ -1,4 +1,4 @@
-export interface ISettingBottomMenuProps {
+export interface IBottomSelectMenuProps {
   title: string;
   isSelected: boolean;
   onPress: () => void;
