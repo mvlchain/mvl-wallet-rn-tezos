@@ -11,7 +11,6 @@ import mockSecureKeychain from '../__mocks__/@@utils/SecureKeychain';
 jest.mock('@@utils/SecureKeychain', () => mockSecureKeychain);
 
 jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
-jest.mock('@haskkor/react-native-pincode', () => () => jest.fn());
 jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
 jest.mock('@react-native-clipboard/clipboard', () => () => jest.fn());
 
