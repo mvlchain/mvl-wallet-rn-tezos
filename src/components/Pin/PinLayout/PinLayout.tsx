@@ -42,17 +42,11 @@ function PinLayout({ back }: IPinLayoutProps) {
         ) : (
           <S.PinLayoutAssistant />
         )}
-        <S.PinPasswordMonitorContainer>
-          <S.PinMonitorInnerWrraper>
-            <PinInstruction />
-          </S.PinMonitorInnerWrraper>
-          <S.PinMonitorInnerWrraper>
-            <Blurs current={current} />
-          </S.PinMonitorInnerWrraper>
-          <S.PinMonitorInnerWrraper>
-            {/* TODO: reset기능 넣기 */}
-            {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}
-          </S.PinMonitorInnerWrraper>
+        <S.PinPasswordMonitorContainer isSetup={pinMode === PIN_MODE.SETUP}>
+          <PinInstruction />
+          <Blurs current={current} />
+          {/* TODO: reset기능 넣기 */}
+          {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={() => {}} disabled={false} />}
         </S.PinPasswordMonitorContainer>
         <S.PinNumpadContainer>
           <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />

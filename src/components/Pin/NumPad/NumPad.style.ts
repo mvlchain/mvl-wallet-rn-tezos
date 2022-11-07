@@ -17,6 +17,7 @@ export const NumPadCircle = styled.View<{ pressed: boolean }>`
 export const NumText = styled.Text`
   ${({ theme }) => theme.font.Title.lg};
   color: ${({ theme }) => theme.color.blackWhite};
+  font-family: ${({ theme }) => theme.fmBold};
   line-height: ${fontSize(40)}px;
   text-align: center;
 `;

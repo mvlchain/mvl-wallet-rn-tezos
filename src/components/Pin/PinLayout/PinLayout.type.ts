@@ -5,3 +5,7 @@ export interface IPinLayoutStyleProps {
 export interface IPinLayoutProps {
   back?: () => boolean;
 }
+
+export interface IPinPasswordMonitorStyleProps {
+  isSetup: boolean;
+}

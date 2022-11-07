@@ -1,8 +1,9 @@
+import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 import { height, width } from '@@utils/ui';
 
-import { IPinLayoutStyleProps } from './PinLayout.type';
+import { IPinLayoutStyleProps, IPinPasswordMonitorStyleProps } from './PinLayout.type';
 
 export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
   flex: 1;
@@ -13,7 +14,7 @@ export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
 export const PinContainer = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: space-between;
-  padding-top: ${height * 44}px;
+  padding-top: ${Platform.OS === 'android' ? 0 : `${height * 44}px`};
   border-top-left-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
   border-top-right-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
   background-color: ${({ theme }) => theme.color.whiteBlack};
@@ -22,26 +23,25 @@ export const PinContainer = styled.View<IPinLayoutStyleProps>`
 export const PinBackButtonHeaderWrapper = styled.Pressable`
   height: ${height * 56}px;
   padding: ${height * 24}px;
+  justify-content: center;
 `;
 
 export const PinLayoutAssistant = styled.View`
   height: ${height * 24}px;
 `;
 
-export const PinPasswordMonitorContainer = styled.View`
+export const PinPasswordMonitorContainer = styled.View<IPinPasswordMonitorStyleProps>`
   width: 100%;
+  align-items: center;
+  justify-content: ${({ isSetup }) => (isSetup ? 'center' : 'space-between')};
   height: ${height * 168}px;
   padding: ${height * 24}px;
+  padding-bottom: ${height * 24}px;
+  padding-top: ${height * 24}px;
 `;
 
 export const PinNumpadContainer = styled.View`
   align-items: center;
   width: 100%;
-  height: ${height * 434}px;
-`;
-
-export const PinMonitorInnerWrraper = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  height: ${Platform.OS === 'android' ? `${height * 400}px` : `${height * 434}px`};
 `;
