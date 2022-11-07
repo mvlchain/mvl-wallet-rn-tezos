@@ -26,8 +26,7 @@ const usePinModal = () => {
   }, [isOpen.pin]);
 
   useEffect(() => {
-    const isFinish = step === PIN_STEP.FINISH;
-    if (!isFinish) return;
+    if (step !== PIN_STEP.FINISH) return;
     close(AUTH_MODAL_NAME.PIN);
   }, [step]);
 
