@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Pressable } from 'react-native';
 
 import { BiometricSmallDark, BiometricSmallLight, PasswordDeleteDark, PasswordDeleteLight } from '@@assets/image';
