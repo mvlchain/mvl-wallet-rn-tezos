@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { pinStore } from '@@store/pin/pinStore';
 
 import * as S from './Blurs.style';

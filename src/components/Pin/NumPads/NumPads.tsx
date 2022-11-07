@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { NUMPAD, PIN_MODE } from '@@constants/pin.constant';
 import { pinStore } from '@@store/pin/pinStore';
