@@ -85,7 +85,7 @@
     "react-native-svg": "^12.4.1",
     "react-native-toast-message": "^2.1.5",
     "react-native-touch-id": "^4.4.1",
-    "react-native-vision-camera": "^2.15.1",
+    "react-native-vision-camera": "2.15.1",
     "react-qr-code": "^2.0.8",
     "readable-stream": "^4.1.0",
     "redux-persist-filesystem-storage": "^4.1.0",
