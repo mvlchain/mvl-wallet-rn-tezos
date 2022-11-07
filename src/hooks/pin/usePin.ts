@@ -34,34 +34,43 @@ function usePin() {
   const check = async () => {
     switch (pinMode) {
       case PIN_MODE.CONFIRM:
-        const credential = await SecureKeychain.getGenericPassword();
-        if (input === credential?.password) {
-          success(input);
-          setState({ step: PIN_STEP.FINISH });
-        } else {
-          setState({ error: { message: t('password_wrong_pin') } });
-          setInput('');
-        }
+        await checkConfirm();
         break;
       case PIN_MODE.SETUP:
-        if (step === PIN_STEP.ENTER) {
-          setState({ step: PIN_STEP.REENTER });
-          setInput('');
-        } else {
-          if (input === inputCheck) {
-            await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
-            success(input);
-            setState({ step: PIN_STEP.FINISH });
-          } else {
-            setState({ error: { message: t('password_pin_not_match') } });
-            setInput('');
-          }
-        }
+        await checkSetUp();
         break;
       case PIN_MODE.RESET:
+        await checkSetUp();
         break;
       default:
         break;
+    }
+  };
+
+  const checkConfirm = async () => {
+    const credential = await SecureKeychain.getGenericPassword();
+    if (input === credential?.password) {
+      success(input);
+      setState({ step: PIN_STEP.FINISH });
+    } else {
+      setState({ error: { message: t('password_wrong_pin') } });
+      setInput('');
+    }
+  };
+
+  const checkSetUp = async () => {
+    if (step === PIN_STEP.ENTER) {
+      setState({ step: PIN_STEP.REENTER });
+      setInput('');
+    } else {
+      if (input === inputCheck) {
+        await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
+        success(input);
+        setState({ step: PIN_STEP.FINISH });
+      } else {
+        setState({ error: { message: t('password_pin_not_match') } });
+        setInput('');
+      }
     }
   };
 

@@ -7,8 +7,9 @@ import * as S from './PinInstruction.style';
 
 function PinInstruction() {
   const { t } = useTranslation();
-  const { showError, error, step } = pinStore();
-  const instruction = step === PIN_STEP.REENTER ? t('password_reenter_pin') : t('password_enter_pin');
+  const { pinMode, showError, error, step } = pinStore();
+  const additionalLanKey = pinMode === PIN_MODE.RESET ? '_change' : null;
+  const instruction = step === PIN_STEP.REENTER ? t(`password_reenter_pin${additionalLanKey}`) : t(`password_enter_pin${additionalLanKey}`);
 
   return (
     <S.PinInstructionContainer>
