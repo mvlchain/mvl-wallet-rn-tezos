@@ -1,20 +1,20 @@
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
-import SettingBottomModal from './SettingBottomModal';
+import BottomSelectModal from './BottomSelectModal';
 import SettingSignOutModal from './SettingSignOutModal';
 import TextModal from './TextModal';
 import TitleOnlyModal from './TitleOnlyModal/TitleOnlyModal';
 
 export const MODAL_TYPES = {
   TEXT_MODAL: 'TEXT_MODAL',
-  SETTING_BOTTOM: 'SETTING_BOTTOM',
+  BOTTOM_SELECT: 'BOTTOM_SELECT',
   SETTING_LOG_OUT: 'SETTING_LOG_OUT',
   TITLE_ONLY: 'TITLE_ONLY',
 } as const;
 
 export const MODAL_COMPONENTS = {
   [MODAL_TYPES.TEXT_MODAL]: TextModal,
-  [MODAL_TYPES.SETTING_BOTTOM]: SettingBottomModal,
+  [MODAL_TYPES.BOTTOM_SELECT]: BottomSelectModal,
   [MODAL_TYPES.SETTING_LOG_OUT]: SettingSignOutModal,
   [MODAL_TYPES.TITLE_ONLY]: TitleOnlyModal,
 };

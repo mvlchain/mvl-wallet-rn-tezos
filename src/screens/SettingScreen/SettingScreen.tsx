@@ -2,8 +2,8 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import useBottomSelectModal from '@@components/Modals/BottomSelectModal/useBottomSelectModal';
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
-import useSettingBottomModal from '@@components/Modals/SettingBottomModal/useSettingBottomModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
 import { LANGUAGE_NAME, THEME_NAME } from '@@constants/setting.constant';
 import useCommonSetting from '@@hooks/setting/useCommonSetting';
@@ -17,7 +17,7 @@ function SettingScreen() {
   const { t } = useTranslation();
   const { onPressSettingMenu } = useCommonSetting();
   const { settedCurrency, settedLanguage, appTheme } = settingPersistStore();
-  const { currencyMenu, languageMenu, themeMenu } = useSettingBottomModal();
+  const { currencyMenu, languageMenu, themeMenu } = useBottomSelectModal();
   const { openModal } = globalModalStore();
 
   return (
@@ -28,21 +28,21 @@ function SettingScreen() {
           title={t('currency')}
           subTitle={settedCurrency}
           onPress={() => {
-            openModal(MODAL_TYPES.SETTING_BOTTOM, { modalTitle: t('currency'), menuList: currencyMenu });
+            openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('currency'), menuList: currencyMenu });
           }}
         />
         <SettingMenu
           title={t('language')}
           subTitle={LANGUAGE_NAME[settedLanguage]}
           onPress={() => {
-            openModal(MODAL_TYPES.SETTING_BOTTOM, { modalTitle: t('language'), menuList: languageMenu });
+            openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('language'), menuList: languageMenu });
           }}
         />
         <SettingMenu
           title={t('theme')}
           subTitle={t(THEME_NAME[appTheme.value])}
           onPress={() => {
-            openModal(MODAL_TYPES.SETTING_BOTTOM, { modalTitle: t('theme'), menuList: themeMenu });
+            openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('theme'), menuList: themeMenu });
           }}
         />
         <SettingMenu

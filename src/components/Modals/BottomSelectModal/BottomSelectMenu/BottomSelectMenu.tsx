@@ -4,10 +4,10 @@ import { Pressable } from 'react-native';
 
 import { SelectIcon } from '@@assets/image';
 
-import * as S from './SettingBottomMenu.style';
-import { ISettingBottomMenuProps } from './SettingBottomMenu.type';
+import * as S from './BottomSelectMenu.style';
+import { IBottomSelectMenuProps } from './BottomSelectMenu.type';
 
-function SettingBottomMenu({ title, isSelected, onPress }: ISettingBottomMenuProps) {
+function BottomSelectMenu({ title, isSelected, onPress }: IBottomSelectMenuProps) {
   return (
     <Pressable onPress={onPress}>
       <S.MenuContainer>
@@ -18,4 +18,4 @@ function SettingBottomMenu({ title, isSelected, onPress }: ISettingBottomMenuPro
   );
 }
 
-export default SettingBottomMenu;
+export default BottomSelectMenu;
