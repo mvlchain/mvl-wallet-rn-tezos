@@ -8,6 +8,8 @@ export const BlursContainer = styled.View`
   justify-content: center;
   flex-direction: row;
   width: 100%;
+  padding-top: ${height * 16}px;
+  padding-bottom: ${height * 16}px;
 `;
 
 export const BlurCircle = styled.View<IBlursStyleProps>`
