@@ -37,8 +37,8 @@ export { default as PasswordDeleteLight } from './ic-password-delete-black-light
 export { default as CloseBlackIconDark } from './ic-close-black-dark.svg';
 export { default as CloseBlackIconLight } from './ic-close-black-light.svg';
 
-export { default as BiometricSmallDark } from './img-biometirc-s-light.svg';
-export { default as BiometricSmallLight } from './img-biometirc-s-light.svg';
+export { default as BiometricSmallDark } from './img-biometric-s-dark.svg';
+export { default as BiometricSmallLight } from './img-biometric-s-light.svg';
 export { default as Biometric } from './img-biometric.svg';
 export { default as Protect } from './img-protect.svg';
 export { default as Simple } from './img-simple.svg';

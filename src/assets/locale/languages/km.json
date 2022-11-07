@@ -1,9 +1,9 @@
 {
-  "earn_event.period.event": "ព្រឹត្តិការណ៍",
   "earn_event.period.claim": "រយៈពេលទាមទារ",
+  "earn_event.period.event": "ព្រឹត្តិការណ៍",
   "earn_event.time_unit.day": "ថ្ងៃ",
   "earn_event.time_unit.hour": "ម៉ោង",
   "earn_event.time_unit.minute": "នាទី",
-  "earn_event.to_start_time_message": "នៅសល់{value}{time_unit}ទៀត រហូតដល់ {period} ។ឧទាហរណ៍៖) នៅសល់ 1 ថ្ងៃទៀតរហូតដល់រយៈពេលទាមទារ។\"",
-  "earn_event.to_end_time_message": "នៅសល់{value}{time_unit}ទៀត​ រហូតដល់ {period}បញ្ចប់។ឧទាហរណ៍៖) នៅសល់ 1 ថ្ងៃទៀតរហូតដល់ព្រឹត្តិការណ៍បញ្ចប់។\""
+  "earn_event.to_end_time_message": "នៅសល់{value}{time_unit}ទៀត​ រហូតដល់ {period}បញ្ចប់។ឧទាហរណ៍៖) នៅសល់ 1 ថ្ងៃទៀតរហូតដល់ព្រឹត្តិការណ៍បញ្ចប់។\"",
+  "earn_event.to_start_time_message": "នៅសល់{value}{time_unit}ទៀត រហូតដល់ {period} ។ឧទាហរណ៍៖) នៅសល់ 1 ថ្ងៃទៀតរហូតដល់រយៈពេលទាមទារ។\""
 }

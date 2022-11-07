@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
 import { ToastPopup } from '@@components/BasicComponents/Modals/ToastPopup';
+import PinModal from '@@components/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/Modals/Auth/TermsOfServicesModal';
 import { GlobalModal } from '@@components/Modals/GlobalModal';
-import PincodeModal from '@@components/Modals/PincodeModal';
 import useHeader from '@@hooks/common/useHeader';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
@@ -137,7 +137,7 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
         </Navigator>
-        <PincodeModal />
+        <PinModal />
         <TermsOfServicesModal />
         <PincodeGuideModal />
         <GlobalModal />

@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 import { Simple } from '@@assets/image';
 import { AppleButton, GoogleButton } from '@@components/BasicComponents/Buttons/SocialButton';
 import { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
+import { height } from '@@utils/ui';
 
 import * as S from './SignInScreen.style';
 import useSignInScreen from './useSignInScreen';
@@ -16,7 +17,7 @@ function SignInScreen() {
   return (
     <S.SignInContainer>
       <S.SignInTitleWrapper>
-        <S.SignInTitle>{t('auth_lbl_title')}</S.SignInTitle>
+        <S.SignInTitle>{t('auth_lbl_title_simple')}</S.SignInTitle>
         <S.SignInSubTitle>{t('auth_lbl_description')}</S.SignInSubTitle>
       </S.SignInTitleWrapper>
       <Simple />

@@ -8,17 +8,19 @@ export const SignInContainer = styled.View`
   background-color: ${({ theme }) => theme.color.whiteBlack};
   align-items: center;
   justify-content: space-between;
-  padding-top: ${height * 68}px;
-  padding-bottom: ${height * 58}px;
 `;
 
 export const SignInTitleWrapper = styled.View`
+  justify-content: center;
   align-items: center;
+  height: ${height * 120}px;
+  padding: ${height * 28}px;
 `;
 export const SignInTitle = styled.Text`
   text-align: center;
   ${({ theme }) => theme.font.Title.md};
   color: ${({ theme }) => theme.color.blackWhite};
+  font-family: ${({ theme }) => theme.fmExBold};
   line-height: ${fontSize(36)}px;
 `;
 
@@ -30,7 +32,7 @@ export const SignInSubTitle = styled.Text`
 `;
 
 export const SignInButtonWrapper = styled.View`
-  padding: 0 ${width * 24}px;
+  padding: ${height * 24}px;
   width: 100%;
 `;
 

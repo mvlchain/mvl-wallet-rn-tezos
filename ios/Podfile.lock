@@ -83,7 +83,7 @@ PODS:
   - PromiseKit/Foundation (6.18.1):
     - PromiseKit/CorePromise
   - PromisesObjC (2.1.1)
-  - Protobuf (3.21.9)
+  - Protobuf (3.21.8)
   - QrCode (1.0.0):
     - React
   - RCT-Folly (2021.06.28.00-v2):
@@ -394,7 +394,7 @@ PODS:
     - React-Core
   - RNPermissions (3.6.1):
     - React-Core
-  - RNReanimated (2.10.0):
+  - RNReanimated (2.12.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -690,7 +690,7 @@ SPEC CHECKSUMS:
   Permission-PhotoLibrary: 5b34ca67279f7201ae109cef36f9806a6596002d
   PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  Protobuf: 02524ec14183fe08fb259741659e79683788158b
+  Protobuf: 0a11f3000cd10ffa17611bf96e66a66b25c956e4
   QrCode: 703276888a8e1e5a77606392f82ce758d895a450
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: ae07282b2ec9c90d7eb98251603bc3f82403d239
@@ -732,7 +732,7 @@ SPEC CHECKSUMS:
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: 95a43f85e41a966be7bc9cff2437128911c52da0
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
-  RNReanimated: 7faa787e8d4493fbc95fab2ad331fa7625828cfa
+  RNReanimated: c3e58924b9418883b0bde9e78c4c957302f02435
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: f2bbcdece1e7d8e5f2f94536ed2a2dcf8f95ea4f
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
@@ -745,6 +745,6 @@ SPEC CHECKSUMS:
   web3.swift: c6c3bf1f853743f8a7a58d263e5f7e46545e22c7
   Yoga: 7ab6e3ee4ce47d7b789d1cb520163833e515f452
 
-PODFILE CHECKSUM: 876ef774f0d37460a2bf132456bb62cb635d731d
+PODFILE CHECKSUM: eac48ba343106c7c8b68d2a993c8b3f698a55db8
 
 COCOAPODS: 1.11.3
