@@ -16,7 +16,6 @@ import useApp from 'useApp';
 import { THEME } from '@@constants/setting.constant';
 import RootStack from '@@navigation/RootStack';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
-//import settingStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
@@ -27,8 +26,18 @@ function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
 
   const { appTheme, setAppTheme } = useApp();
-  //const { appTheme, setAppTheme } = settingStore();
 
+  /**
+   * Rn's splash screen poliy for Android has different policy as of Android 12(api 31)
+   * if (android.version < 31) {
+   *   legacy splash screen
+   * } else {
+   *   android native splash screen
+   * }
+   *
+   * Platform: Platform.OS> ios, android
+   * Detecting versions: Platform.Version
+   */
   useEffect(() => {
     SplashScreen.hide();
   }, []);
