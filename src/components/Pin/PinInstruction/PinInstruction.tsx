@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { PIN_STEP } from '@@constants/pin.constant';
+import { PIN_STEP, PIN_MODE } from '@@constants/pin.constant';
 import { pinStore } from '@@store/pin/pinStore';
 
 import * as S from './PinInstruction.style';
@@ -8,7 +8,7 @@ import * as S from './PinInstruction.style';
 function PinInstruction() {
   const { t } = useTranslation();
   const { pinMode, showError, error, step } = pinStore();
-  const additionalLanKey = pinMode === PIN_MODE.RESET ? '_change' : null;
+  const additionalLanKey = pinMode === PIN_MODE.RESET ? '_change' : '';
   const instruction = step === PIN_STEP.REENTER ? t(`password_reenter_pin${additionalLanKey}`) : t(`password_enter_pin${additionalLanKey}`);
 
   return (
