@@ -22,7 +22,7 @@ import {
 } from '@@assets/image';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import Browser from '@@screens/Browser';
-import Setting from '@@screens/Setting';
+import SettingScreen from '@@screens/SettingScreen';
 import Trade from '@@screens/Trade';
 import Wallet from '@@screens/Wallet';
 import settingPersistStore from '@@store/setting/settingPersistStore';
@@ -72,7 +72,7 @@ function MainTab() {
     },
     {
       name: MAIN_TAB_ROUTE.SETTING_MAIN,
-      component: Setting,
+      component: SettingScreen,
       options: {
         tabBarIcon: ({ size, focused }) => (focused ? <SettingSelected width={size} height={size} /> : <SettingNormal width={size} height={size} />),
       },
