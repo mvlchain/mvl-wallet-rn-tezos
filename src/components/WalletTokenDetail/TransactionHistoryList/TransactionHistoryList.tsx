@@ -21,7 +21,7 @@ function TransactionHistoryList() {
   return (
     <S.TransactionHistoryContainer>
       <S.TransactionHistoryLabelWrapper>
-        <S.TransactionHistoryLabel>Transaction History</S.TransactionHistoryLabel>
+        <S.TransactionHistoryLabel>{t('transaction_history')}</S.TransactionHistoryLabel>
         <TextButton
           label={'All'}
           onPress={() => {
@@ -30,7 +30,7 @@ function TransactionHistoryList() {
           disabled={false}
         />
       </S.TransactionHistoryLabelWrapper>
-      {false ? (
+      {filteredData ? (
         <FlatList
           data={filteredData}
           renderItem={({ item }) => (
@@ -40,7 +40,7 @@ function TransactionHistoryList() {
               amount={item.amount}
               baseCurrencyAmount={item.baseCurrencyAmount}
               baseCurrencySymbol={item.baseCurrencySymbol}
-              address={item.address}
+              txHash={item.txHash}
               date={item.date}
             />
           )}

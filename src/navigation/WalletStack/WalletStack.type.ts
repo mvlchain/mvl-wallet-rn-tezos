@@ -5,13 +5,17 @@ import { valueOf } from '@@types/etc';
 export type TWalletStackParamList = {
   WALLET: undefined;
   WALLET_EDIT_TOKEN_LIST: undefined;
-  WALLET_TOKEN_DETAIL: undefined;
+  WALLET_TOKEN_DETAIL: {
+    symbol: string;
+  };
   WALLET_TOKEN_RECEIVE: undefined;
   WALLET_TOKEN_RECEIVE_SELECT: undefined;
   WALLET_TOKEN_SEND: undefined;
   WALLET_SCAN_QR: undefined;
   WALLET_TRANSACTION_RESULT: undefined;
-  WALLET_TRANSACTION_HISTORY: undefined;
+  WALLET_TRANSACTION_HISTORY: {
+    txHash: string;
+  };
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
 };

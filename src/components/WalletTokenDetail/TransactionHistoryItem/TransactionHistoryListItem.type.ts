@@ -12,7 +12,7 @@ export interface ITransactionHistoryListItemProps {
   baseCurrencyAmount: number;
   baseCurrencySymbol: string;
   //TODO: data 보고 변경필요
-  address: string;
+  txHash: string;
 }
 
 export interface IAmountStyleProps {

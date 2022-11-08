@@ -1,13 +1,14 @@
 import React from 'react';
 
+import { useRoute, RouteProp } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import { TokenMVL32Icon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import { TWalletStackParamList } from '@@navigation/WalletStack/WalletStack.type';
 import { fontSize, width, height } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';
-import { ITokenDetailBoardProps } from './TokenDetailBoard.type';
 
 function TokenDetailBoard() {
   //TODO: 데이터 들어오면 바꾸기
@@ -18,13 +19,15 @@ function TokenDetailBoard() {
     baseCurrencySymbol: 'USD',
     icon: () => <TokenMVL32Icon width={width * 40} height={height * 40} />,
   };
+  type TokenDetailRouteProps = RouteProp<TWalletStackParamList, 'WALLET_TOKEN_DETAIL'>;
+  const { params } = useRoute<TokenDetailRouteProps>();
 
   return (
     <View>
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
           {icon()}
-          <S.TokenName>{symbol}</S.TokenName>
+          <S.TokenName>{params.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>
           <S.TokenAmount>{balance}</S.TokenAmount>
