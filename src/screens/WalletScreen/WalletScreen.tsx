@@ -2,8 +2,8 @@ import React from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
-import Account from '@@components/Home/Account';
-import TokenList from '@@components/Home/TokenList';
+import Account from '@@components/Wallet/Account';
+import TokenList from '@@components/Wallet/TokenList';
 
 function WalletScreen() {
   return (

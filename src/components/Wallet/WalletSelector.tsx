@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { ChevronDownBlackIcon } from '@@assets/image';
