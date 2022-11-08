@@ -3,12 +3,12 @@ import React, { useLayoutEffect } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
+import Devider from '@@components/BasicComponents/Devider';
+import { DEVIDER_THICKNESS } from '@@components/BasicComponents/Devider/Devider.type';
 import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import TransactionHistoryList from '@@components/WalletTokenDetail/TransactionHistoryList';
 import useHeader from '@@hooks/common/useHeader';
 import { TWalletStackNavigationProps, TWalletStackParamList } from '@@navigation/WalletStack/WalletStack.type';
-
-import * as S from './WalletTokenDetail.style';
 
 function WalletTokenDetail() {
   type WalletStackProps = TWalletStackNavigationProps<'WALLET_TOKEN_DETAIL'>;
@@ -26,7 +26,7 @@ function WalletTokenDetail() {
   return (
     <View>
       <TokenDetailBoard />
-      <S.EmptyDeviderThick />
+      <Devider thickness={DEVIDER_THICKNESS.THICK} />
       <TransactionHistoryList />
     </View>
   );
