@@ -13,10 +13,11 @@ export const mono = {
 } as const;
 
 export const primary = {
-  lightest: '#E6F3FD',
+  lightest: '#CCE7FA',
   primary: '#0089E7',
   darkest: '#001B2E',
   medium: '#0060A2',
+  highlight: '#7AB6EB',
   // figma에 스타일가이드 텍스트는 #000E17이라고 쓰여있으나 실제로 찍어보면 이 색임
 } as const;
 
