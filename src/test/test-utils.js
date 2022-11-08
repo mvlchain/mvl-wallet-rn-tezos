@@ -6,8 +6,7 @@ import { theme } from '@@style/theme';
 import useApp from '../useApp';
 
 const AllTheProviders = ({ children }) => {
-  const { appTheme } = useApp();
-  return <ThemeProvider theme={theme[appTheme.label]}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={theme.light}>{children}</ThemeProvider>;
 };
 
 const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options });

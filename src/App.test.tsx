@@ -12,6 +12,14 @@ jest.useFakeTimers();
 
 afterEach(cleanup);
 
+// mock splash screen
+jest.mock('react-native-splash-screen', () => {
+  return {
+    hide: jest.fn(),
+    show: jest.fn(),
+  };
+});
+
 test('renders correctly', async () => {
   render(<App />);
 });
