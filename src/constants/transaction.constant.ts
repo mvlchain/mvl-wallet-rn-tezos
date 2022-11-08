@@ -6,5 +6,5 @@ export const TRANSACTION_TYPE = {
 export const TRANSACTION_STATUS = {
   CONFIRMED: 'Confirmed',
   PENDING: 'Pending',
-  canceled: 'Canceled',
+  CANCELED: 'Canceled',
 } as const;
