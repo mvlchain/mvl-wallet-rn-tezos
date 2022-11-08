@@ -70,7 +70,7 @@ const mockData = {
       amount: 1000,
       baseCurrencyAmount: 0.5,
       baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
+      txHash: 'sdgsgsdgdahgjagsk',
       date: '21.10.31 10:30',
     },
     {
@@ -79,7 +79,7 @@ const mockData = {
       amount: 1000,
       baseCurrencyAmount: 0.5,
       baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
+      txHash: 'sdgsgsdgdahgjagsk',
       date: '21.10.31 10:30',
     },
     {
@@ -88,7 +88,7 @@ const mockData = {
       amount: 1000,
       baseCurrencyAmount: 0.5,
       baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
+      txHash: 'sdgsgsdgdahgjagsk',
       date: '21.10.31 10:30',
     },
     {
@@ -97,7 +97,7 @@ const mockData = {
       amount: 1000,
       baseCurrencyAmount: 0.5,
       baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
+      txHash: 'sdgsgsdgdahgjagsk',
       date: '21.10.31 10:30',
     },
     {
@@ -106,7 +106,7 @@ const mockData = {
       amount: 1000,
       baseCurrencyAmount: 0.5,
       baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
+      txHash: 'sdgsgsdgdahgjagsk',
       date: '21.10.31 10:30',
     },
   ],
