@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import Account from '@@components/Home/Account';
 import TokenList from '@@components/Home/TokenList';
 
-function HomeMain() {
+function WalletScreen() {
   return (
     <View style={styles.container}>
       <Account />
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeMain;
+export default WalletScreen;
