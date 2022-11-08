@@ -5,7 +5,6 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import TempIcon from '@@components/TempIcon';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
-import { WALLET_STACK_ROUTE } from '@@navigation/WalletStack/WalletStack.type';
 import { fontSize, width, height } from '@@utils/ui';
 
 function TokenListItem({
