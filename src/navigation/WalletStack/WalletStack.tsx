@@ -31,6 +31,9 @@ function WalletStack() {
     {
       name: WALLET_STACK_ROUTE.WALLET,
       component: WalletScreen,
+      options: {
+        headerShown: false,
+      },
     },
     {
       name: WALLET_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST,

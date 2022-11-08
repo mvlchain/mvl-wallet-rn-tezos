@@ -3,13 +3,13 @@ export const useTokenBalanceList = () => {
 
   const tokenList = [
     {
-      icon: '',
+      icon: 'Mvl',
       name: 'MVL',
       amount: 0,
       amountUSD: 0,
     },
     {
-      icon: '',
+      icon: 'Eth',
       name: 'ETH',
       amount: 0,
       amountUSD: 0,
