@@ -1,11 +1,15 @@
 import React from 'react';
 
 import { t } from 'i18next';
-import { View, Text } from 'react-native';
+import { Pressable } from 'react-native';
 
-import { WhiteQrIcon, WhiteScanIcon } from '@@assets/image';
+import { MoreIcon, WhiteQrIcon, WhiteScanIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
+import Chip from '@@components/Chip';
+import Jdenticon from '@@components/Jdenticon';
+import Address from '@@components/Wallet/Address';
+import WalletSelector from '@@components/Wallet/WalletSelector';
 
 import * as S from './Account.style';
 import { IAccountProps } from './Account.type';
@@ -14,14 +18,18 @@ function Account(props: IAccountProps) {
   return (
     <S.Container>
       <S.Header>
-        {/* Jdenticon */}
-        {/* more icon */}
+        <Jdenticon value='sample data' />
+        <Pressable>
+          <MoreIcon />
+        </Pressable>
       </S.Header>
       <S.Section>
-        {/* wallet Selector */}
-        {/* Chip */}
+        <WalletSelector />
+        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={() => console.log('open select network modal')} />
       </S.Section>
-      <S.Section>{/* adress */}</S.Section>
+      <S.Section>
+        <Address />
+      </S.Section>
       <S.ButtonContainer>
         <PrimaryButton
           onPress={() => {

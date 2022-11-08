@@ -22,6 +22,7 @@ export const BaseButton = styled.View<Type.IBaseButtonProps>`
   padding: ${({ size }) => (size === Type.BUTTON_SIZE.SMALL ? `${width * 12}` : `${width * 18}`)}px ${width * 16}px;
   background-color: ${({ theme, pressed, disabled, bgColor, bgColorPressed, bgColorDisabled }) =>
     disabled ? theme.color[bgColorDisabled] : !disabled && pressed ? theme.color[bgColorPressed] : theme.color[bgColor]};
+  opacity: ${({ pressed }) => (pressed ? 0.7 : 1)};
   border-color: ${({ theme, lcColor }) => (lcColor ? theme.color[lcColor] : 'transparent')};
   border-style: solid;
   border-width: ${width * 1}px;
@@ -41,7 +42,7 @@ export const baseButtonStyleObj: Type.IBaseButtonStyleObj = {
   primary: {
     bg: {
       bgColor: 'primary',
-      bgColorPressed: 'medium',
+      bgColorPressed: 'primary',
       bgColorDisabled: 'lightestDarkest',
     },
     tx: {
