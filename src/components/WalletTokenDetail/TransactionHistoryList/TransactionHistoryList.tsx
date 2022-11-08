@@ -1,108 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { FlatList } from 'react-native';
 
-import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
+import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import useTransactionHistoryFilter from '@@hooks/transactionHistory/useTransactionHistoryFilter';
+import useTransactionHistoryList from '@@hooks/transactionHistory/useTransactionHistoryList';
+import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import TransactionHistoryListItem from '../TransactionHistoryItem';
-import { ITransactionHistoryListItemProps } from '../TransactionHistoryItem/TransactionHistoryListItem.type';
+
+import * as S from './TransactionHistoryList.style';
 
 function TransactionHistoryList() {
-  const LIMIT = 5;
-  const [data, setData] = useState<ITransactionHistoryListItemProps[]>([]);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  const getData = () => {
-    setLoading(true);
-    setData([...data, ...mockData.transactionHistory]);
-    setOffset(offset + 5);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const onEndReached = () => {
-    if (loading) {
-      return;
-    } else {
-      getData();
-    }
-  };
+  const { openModal } = globalModalStore();
+  const { filterCriterias } = useTransactionHistoryFilter();
+  const { filteredData, onEndReached } = useTransactionHistoryList();
 
   return (
-    <FlatList
-      data={data}
-      renderItem={({ item }) => (
-        <TransactionHistoryListItem
-          type={item.type}
-          status={item.status}
-          amount={item.amount}
-          baseCurrencyAmount={item.baseCurrencyAmount}
-          baseCurrencySymbol={item.baseCurrencySymbol}
-          address={item.address}
-          date={item.date}
+    <S.TransactionHistoryContainer>
+      <S.TransactionHistoryLabelWrapper>
+        <S.TransactionHistoryLabel>Transaction History</S.TransactionHistoryLabel>
+        <TextButton
+          label={'All'}
+          onPress={() => {
+            openModal('BOTTOM_SELECT', { modalTitle: 'Filter', menuList: filterCriterias });
+          }}
+          disabled={false}
         />
-      )}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.8}
-    />
+      </S.TransactionHistoryLabelWrapper>
+      <FlatList
+        data={filteredData}
+        renderItem={({ item }) => (
+          <TransactionHistoryListItem
+            type={item.type}
+            status={item.status}
+            amount={item.amount}
+            baseCurrencyAmount={item.baseCurrencyAmount}
+            baseCurrencySymbol={item.baseCurrencySymbol}
+            address={item.address}
+            date={item.date}
+          />
+        )}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.8}
+      />
+    </S.TransactionHistoryContainer>
   );
 }
 
 export default TransactionHistoryList;
-
-//TODO: 데이터타입 확정 후 수정 필요
-const mockData = {
-  symbol: 'MVL',
-  base: 'USD',
-  transactionHistory: [
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CANCELED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.RECEIVE,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.PENDING,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      address: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-  ],
-};
