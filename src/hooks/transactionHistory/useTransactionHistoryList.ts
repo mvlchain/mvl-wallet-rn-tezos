@@ -31,7 +31,7 @@ const useTransactionHistoryList = () => {
         return data;
     }
     return data.filter((v, i) => v.type === type);
-  }, [currentCriteria]);
+  }, [currentCriteria, data]);
 
   const getData = () => {
     setLoading(true);

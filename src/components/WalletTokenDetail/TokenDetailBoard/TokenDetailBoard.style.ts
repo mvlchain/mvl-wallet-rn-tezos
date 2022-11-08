@@ -32,7 +32,6 @@ export const TokenBaseCurrency = styled(TokenName)`
   color: ${({ theme }) => theme.color.grey500};
   text-align: right;
 `;
-/////////
 
 export const ReceiveSendContainer = styled.View`
   flex-direction: row;
