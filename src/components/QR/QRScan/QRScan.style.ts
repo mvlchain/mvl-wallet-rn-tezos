@@ -5,7 +5,7 @@ import { height, width } from '@@utils/ui';
 export const QRScanTopContainer = styled.View`
   justify-content: flex-end;
   align-items: center;
-  height: ${height * 172}px;
+  height: ${height * 72}px;
   padding-bottom: ${width * 24}px;
   background-color: ${({ theme }) => theme.color.whiteBlack};
 `;

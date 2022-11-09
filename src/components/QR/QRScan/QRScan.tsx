@@ -35,9 +35,9 @@ function QRScan() {
       <S.QRScanTopContainer>
         <S.QRScanTopText>{t('scan_qr_lbl_description')}</S.QRScanTopText>
       </S.QRScanTopContainer>
-      <S.QRScanOverlayWrapper>
+      {/* <S.QRScanOverlayWrapper>
         <QRScanOverlay />
-      </S.QRScanOverlayWrapper>
+      </S.QRScanOverlayWrapper> */}
       <S.QRScanCameraWrapper>
         {device && <Camera style={{ height: '100%' }} device={device} isActive={true} frameProcessor={frameProcessor} frameProcessorFps={5} />}
       </S.QRScanCameraWrapper>
