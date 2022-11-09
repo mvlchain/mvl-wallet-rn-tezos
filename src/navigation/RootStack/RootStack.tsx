@@ -23,6 +23,11 @@ import SettingPrivacyPolicyScreen from '@@screens/SettingScreen/SettingPrivacyPo
 import SettingSecurityScreen from '@@screens/SettingScreen/SettingSecurityScreen';
 import SettingPrivateKeyScreen from '@@screens/SettingScreen/SettingSecurityScreen/SettingPrivateKeyScreen';
 import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfServiceScreen';
+import WalletScanQR from '@@screens/Wallet/WalletScanQR';
+import WalletTokenDetail from '@@screens/Wallet/WalletTokenDetail';
+import WalletTransactionCancel from '@@screens/Wallet/WalletTransactionCancel';
+import WalletTransactionHistory from '@@screens/Wallet/WalletTransactionHistory';
+import WalletTransactionSpeedUp from '@@screens/Wallet/WalletTransactionSpeedUp';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -110,6 +115,26 @@ function RootStack() {
       name: ROOT_STACK_ROUTE.SETTING_FAQ,
       component: SettingFAQScreen,
       options: handleStackHeaderOption({ title: t('faq') }),
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL,
+      component: WalletTokenDetail,
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY,
+      component: WalletTransactionHistory,
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP,
+      component: WalletTransactionSpeedUp,
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL,
+      component: WalletTransactionCancel,
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_SCAN_QR,
+      component: WalletScanQR,
     },
   ];
 
