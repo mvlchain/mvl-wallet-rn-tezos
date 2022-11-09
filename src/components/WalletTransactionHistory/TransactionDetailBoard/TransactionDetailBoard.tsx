@@ -18,32 +18,35 @@ function TransactionDetailBoard() {
     receiver: 'DFGSHSHSDHSDHSDHSDHFDSHDFHdgsgdsgdgsgsdgsglighlks422124124242421352135ngvaln436543.21.3SDHDFHDFH',
   };
   return (
-    <S.TransactionDetailBoardContainer>
-      <S.TransactionType>{type}</S.TransactionType>
-      <S.TransactionAmount>
-        {'sign'}
-        {amount}
-        {symbol}
-      </S.TransactionAmount>
-      <S.TransactionBaseCurrencyAmount>
-        {'≈'} {baseCurrencyAmount} {baseCurrencySymbol}
-      </S.TransactionBaseCurrencyAmount>
-
-      <S.Row>
-        <S.Label>{t('date')}</S.Label>
-        <S.Value>{date}</S.Value>
-      </S.Row>
-
-      <S.Row>
-        <S.Label>{t('status')}</S.Label>
-        <S.Value>{status}</S.Value>
-      </S.Row>
-
-      <S.Row>
-        <S.Label>{t('receiver')}</S.Label>
-        <S.Value>{receiver}</S.Value>
-      </S.Row>
-    </S.TransactionDetailBoardContainer>
+    <>
+      <S.TransactionDetailBoardContainer>
+        <S.TransactionType>{type}</S.TransactionType>
+        <S.TransactionAmount>
+          {'sign'}
+          {amount}
+          {symbol}
+        </S.TransactionAmount>
+        <S.TransactionBaseCurrencyAmount>
+          {'≈'} {baseCurrencyAmount} {baseCurrencySymbol}
+        </S.TransactionBaseCurrencyAmount>
+      </S.TransactionDetailBoardContainer>
+      <S.TransactionDetailBoardContainer>
+        <S.Row>
+          <S.Label>{t('date')}</S.Label>
+          <S.Value>{date}</S.Value>
+        </S.Row>
+        <S.Row isMiddle={true}>
+          <S.Label>{t('status')}</S.Label>
+          <S.Value>{status}</S.Value>
+        </S.Row>
+        <S.Row>
+          <S.Label>{t('receiver')}</S.Label>
+          <S.ReceiverWrapper>
+            <S.Value>{receiver}</S.Value>
+          </S.ReceiverWrapper>
+        </S.Row>
+      </S.TransactionDetailBoardContainer>
+    </>
   );
 }
 

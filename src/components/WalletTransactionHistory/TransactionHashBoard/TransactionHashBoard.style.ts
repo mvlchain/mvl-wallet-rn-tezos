@@ -19,4 +19,7 @@ export const TransactionHashLabel = styled.Text`
 `;
 export const TransactionHash = styled.Text`
   margin-top: ${height * 8}px;
+  ${({ theme }) => theme.font.Label.md};
+  font-family: ${({ theme }) => theme.fmRegular};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
