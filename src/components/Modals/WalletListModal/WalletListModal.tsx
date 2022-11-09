@@ -6,6 +6,7 @@ import { FlatList, ScrollView } from 'react-native';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { BaseModal } from '@@components/BasicComponents/Modals/BaseModal';
+import { useDi } from '@@hooks/common/useDi';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
@@ -32,15 +33,10 @@ const RenderItem = ({ data }: { data: IWalletListMenuProps }) => {
 
 function WalletListModal({ menuList }: IWalletListModalProps) {
   const { t } = useTranslation();
+  const keyClient = useDi('KeyClient');
+  const postboxkey = keyClient.postboxKeyHolder?.postboxKey;
   const { modalType, closeModal } = globalModalStore();
   const { createWallet } = walletPersistStore();
-  //   <WalletListMenu
-  //   {...props}
-  //   onPress={() => {
-  //     props.onPress();
-  //     closeModal();
-  //   }}
-  // />
 
   return (
     <BaseModal
@@ -63,7 +59,8 @@ function WalletListModal({ menuList }: IWalletListModalProps) {
         <S.ButtonContainer>
           <PrimaryButton
             onPress={() => {
-              createWallet();
+              if (!postboxkey) return;
+              createWallet(postboxkey);
               closeModal();
             }}
             label={t('create_wallet')}
