@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { ScrollView } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
@@ -12,13 +12,36 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { MODAL_TYPES } from '../GlobalModal';
 
 import WalletListMenu from './WalletListMenu';
+import { IWalletListMenuProps } from './WalletListMenu/WalletListMenu.type';
 import * as S from './WalletListModal.style';
 import { IWalletListModalProps } from './WalletListModal.type';
+
+const RenderItem = ({ data }: { data: IWalletListMenuProps }) => {
+  const { closeModal } = globalModalStore();
+
+  return (
+    <WalletListMenu
+      {...data}
+      onPress={() => {
+        data.onPress();
+        closeModal();
+      }}
+    />
+  );
+};
 
 function WalletListModal({ menuList }: IWalletListModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
   const { createWallet } = walletPersistStore();
+  //   <WalletListMenu
+  //   {...props}
+  //   onPress={() => {
+  //     props.onPress();
+  //     closeModal();
+  //   }}
+  // />
+
   return (
     <BaseModal
       title={t('wallet_list')}
@@ -30,24 +53,20 @@ function WalletListModal({ menuList }: IWalletListModalProps) {
       }}
     >
       <S.Container>
-        <S.ModalWrapper bounces={false} showsVerticalScrollIndicator={false}>
-          {menuList.map((props) => (
-            <WalletListMenu
-              {...props}
-              onPress={() => {
-                props.onPress();
-                closeModal();
-              }}
-            />
-          ))}
-        </S.ModalWrapper>
+        <S.ModalWrapper
+          data={menuList}
+          keyExtractor={(item: IWalletListMenuProps) => item.address}
+          renderItem={({ item }) => <RenderItem data={item} />}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+        />
         <S.ButtonContainer>
           <PrimaryButton
             onPress={() => {
               createWallet();
               closeModal();
             }}
-            label={'Create Wallet'}
+            label={t('create_wallet')}
             size={BUTTON_SIZE.SMALL}
           />
         </S.ButtonContainer>
