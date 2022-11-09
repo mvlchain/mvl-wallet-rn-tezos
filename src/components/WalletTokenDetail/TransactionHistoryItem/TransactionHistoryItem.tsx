@@ -8,7 +8,9 @@ import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/But
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import { TWalletStackNavigationProps, WALLET_STACK_ROUTE } from '@@navigation/WalletStack/WalletStack.type';
+import { TTransactionHistoryRootStackProps } from '@@screens/Wallet/WalletTransactionHistory/WalletTransactionHistory.type';
 import { fontSize } from '@@utils/ui';
 
 import * as S from './TransactionHistoryListItem.style';
@@ -23,16 +25,15 @@ function TransactionHistoryListItem({
   baseCurrencySymbol,
   txHash,
 }: ITransactionHistoryListItemProps) {
-  type WalletStackProps = TWalletStackNavigationProps<'WALLET_TRANSACTION_HISTORY'>;
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TRANSACTION_STATUS.CANCELED;
   const amountSign = type === TRANSACTION_TYPE.SEND ? '-' : null;
-  const navigation = useNavigation<WalletStackProps>();
+  const navigation = useNavigation<TTransactionHistoryRootStackProps>();
 
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(WALLET_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, { txHash });
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, { txHash });
       }}
     >
       <S.TransactionHistoryListItem>
