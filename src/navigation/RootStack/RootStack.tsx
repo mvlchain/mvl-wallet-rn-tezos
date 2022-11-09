@@ -142,7 +142,7 @@ function RootStack() {
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer theme={routerTheme}>
         <Navigator
-          initialRouteName={ROOT_STACK_ROUTE.MAIN}
+          initialRouteName={ROOT_STACK_ROUTE.AUTH}
           screenOptions={() => ({
             headerTitleAlign: 'center',
             headerTitleStyle: {

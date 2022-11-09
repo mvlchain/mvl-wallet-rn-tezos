@@ -1,9 +1,20 @@
 import { useState } from 'react';
 
+import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import useWalletListModal from '@@components/Modals/WalletListModal/useWalletListModal';
+import globalModalStore from '@@store/globalModal/globalModalStore';
+
 const useWalletSelector = () => {
-  const [sample, setSample] = useState('');
+  const { wallet } = useWalletListModal();
+  const { openModal } = globalModalStore();
+
+  const onPressWalletList = () => {
+    if (!wallet) return;
+    openModal(MODAL_TYPES.WALLET_LIST, { menuList: wallet });
+  };
+
   return {
-    sample,
+    onPressWalletList,
   };
 };
 

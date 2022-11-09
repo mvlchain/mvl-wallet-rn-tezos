@@ -10,11 +10,13 @@ import Chip from '@@components/Chip';
 import Jdenticon from '@@components/Jdenticon';
 import Address from '@@components/Wallet/Address';
 import WalletSelector from '@@components/Wallet/WalletSelector';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './Account.style';
 import { IAccountProps } from './Account.type';
 
 function Account(props: IAccountProps) {
+  const { removeWallet } = walletPersistStore();
   return (
     <S.Container>
       <S.Header>
@@ -25,7 +27,7 @@ function Account(props: IAccountProps) {
       </S.Header>
       <S.Section>
         <WalletSelector />
-        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={() => console.log('open select network modal')} />
+        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={() => removeWallet()} />
       </S.Section>
       <S.Section>
         <Address />

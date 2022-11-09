@@ -1,19 +1,25 @@
 import React from 'react';
 
-import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Pressable, View } from 'react-native';
 
 import { CopyIcon } from '@@assets/image';
 
 import * as S from './Address.style';
-import { IAddressProps } from './Address.type';
+import useAddress from './useAddress';
 
-function Address(props: IAddressProps) {
+function Address() {
+  const { t } = useTranslation();
+  const { address, onPressCopyAddress } = useAddress();
+
   return (
     <View>
-      <S.Label>Address</S.Label>
+      <S.Label>{t('address')}</S.Label>
       <S.AddressContainer>
-        <S.AddressText>0xE4de5635351F5fa0e1e8b85642B25605</S.AddressText>
-        <CopyIcon style={S.styles.copyIcon} />
+        <S.AddressText>{address}</S.AddressText>
+        <Pressable onPress={onPressCopyAddress}>
+          <CopyIcon style={S.styles.copyIcon} />
+        </Pressable>
       </S.AddressContainer>
     </View>
   );
