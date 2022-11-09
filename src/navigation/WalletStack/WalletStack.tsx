@@ -4,15 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Wallet from '@@screens/Wallet';
 import WalletEditTokenList from '@@screens/Wallet/WalletEditTokenList';
-import WalletScanQR from '@@screens/Wallet/WalletScanQR';
-import WalletTokenDetail from '@@screens/Wallet/WalletTokenDetail';
 import WalletTokenReceive from '@@screens/Wallet/WalletTokenReceive';
 import WalletTokenReceiveSelect from '@@screens/Wallet/WalletTokenReceiveSelect';
 import WalletTokenSend from '@@screens/Wallet/WalletTokenSend';
-import WalletTransactionCancel from '@@screens/Wallet/WalletTransactionCancel';
-import WalletTransactionHistory from '@@screens/Wallet/WalletTransactionHistory';
 import WalletTransactionResult from '@@screens/Wallet/WalletTransactionResult';
-import WalletTransactionSpeedUp from '@@screens/Wallet/WalletTransactionSpeedUp';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -36,10 +31,7 @@ function WalletStack() {
       name: WALLET_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST,
       component: WalletEditTokenList,
     },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TOKEN_DETAIL,
-      component: WalletTokenDetail,
-    },
+
     {
       name: WALLET_STACK_ROUTE.WALLET_TOKEN_RECEIVE,
       component: WalletTokenReceive,
@@ -52,25 +44,10 @@ function WalletStack() {
       name: WALLET_STACK_ROUTE.WALLET_TOKEN_SEND,
       component: WalletTokenSend,
     },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_SCAN_QR,
-      component: WalletScanQR,
-    },
+
     {
       name: WALLET_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
       component: WalletTransactionResult,
-    },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TRANSACTION_HISTORY,
-      component: WalletTransactionHistory,
-    },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP,
-      component: WalletTransactionSpeedUp,
-    },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TRANSACTION_CANCEL,
-      component: WalletTransactionCancel,
     },
   ];
 
