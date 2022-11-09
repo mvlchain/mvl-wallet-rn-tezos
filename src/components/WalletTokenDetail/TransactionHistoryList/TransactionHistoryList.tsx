@@ -14,8 +14,7 @@ import * as S from './TransactionHistoryList.style';
 
 function TransactionHistoryList() {
   const { openModal } = globalModalStore();
-  const { filterCriterias } = useTransactionHistoryFilter();
-  const { filteredData, onEndReached } = useTransactionHistoryList();
+  const { filteredData, onEndReached, filterCriterias } = useTransactionHistoryList();
   const { t } = useTranslation();
 
   return (
