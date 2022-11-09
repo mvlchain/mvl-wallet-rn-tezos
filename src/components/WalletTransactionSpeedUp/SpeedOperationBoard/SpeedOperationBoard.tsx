@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
+import { WarningIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Devider from '@@components/BasicComponents/Devider';
 import { DEVIDER_THICKNESS } from '@@components/BasicComponents/Devider/Devider.type';
@@ -47,6 +48,12 @@ function SpeedOperationBoard() {
             <S.Value>{'0.04 ETH'}</S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{'6.30 USD'}</S.BaseCurrency>
+          <S.Warning>
+            <S.WarningIconWrapper>
+              <WarningIcon />
+            </S.WarningIconWrapper>
+            <S.WarningText>{'Please sest your~~~'}</S.WarningText>
+          </S.Warning>
         </S.InnerContainer>
       </View>
       <S.ConfirmWrapper>

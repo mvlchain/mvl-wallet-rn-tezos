@@ -15,7 +15,6 @@ export const ButtonWrapper = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: ${height * 8}px;
 `;
 
 export const Label = styled.Text`

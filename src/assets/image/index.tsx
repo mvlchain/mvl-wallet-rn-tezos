@@ -58,3 +58,4 @@ export { default as BackIconLight } from './ic-back-light.svg';
 export { default as BackIconDark } from './ic-back-dark.svg';
 
 export { default as SuccessIcon } from './ic-success.svg';
+export { default as WarningIcon } from './ic-warning.svg';
