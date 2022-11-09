@@ -23,7 +23,7 @@ function WalletTransactionSpeedUp() {
     navigation.setOptions(headerOption);
   }, []);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <OldTransactionBoard />
       <Devider thickness={DEVIDER_THICKNESS.THICK} />
       <SpeedOperationBoard />
