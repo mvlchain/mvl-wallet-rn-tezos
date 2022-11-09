@@ -5,7 +5,11 @@ import { StyleSheet, View } from 'react-native';
 import Account from '@@components/Wallet/Account';
 import TokenList from '@@components/Wallet/TokenList';
 
+import useWalletScreen from './useWalletScreen';
+
 function WalletScreen() {
+  useWalletScreen();
+
   return (
     <View style={styles.container}>
       <Account />

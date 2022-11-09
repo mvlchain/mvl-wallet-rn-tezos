@@ -4,19 +4,21 @@ import { Pressable } from 'react-native';
 
 import { ChevronDownBlackIcon } from '@@assets/image';
 import { useCurrentAccount } from '@@hooks/useAccount';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './WalletSelector.style';
 import { IWalletSelectorProps } from './WalletSelector.type';
+import useWalletSelector from './useWalletSelector';
 
 function WalletSelector(props: IWalletSelectorProps) {
-  const { name } = useCurrentAccount();
-
+  const { onPressWalletList } = useWalletSelector();
+  const { walletList, selectedWalletIndex } = walletPersistStore();
   return (
     <S.Container>
-      <Pressable onPress={() => console.log('open wallet list modal')}>
+      <Pressable onPress={onPressWalletList}>
         {({ pressed }) => (
           <S.Wrapper pressed={pressed}>
-            <S.Label>{name}</S.Label>
+            <S.Label>{walletList.length !== 0 && walletList[selectedWalletIndex]?.name}</S.Label>
             <ChevronDownBlackIcon />
           </S.Wrapper>
         )}
