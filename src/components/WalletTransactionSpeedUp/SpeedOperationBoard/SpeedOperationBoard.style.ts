@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import { fontSize, height } from '@@utils/ui';
+import { fontSize, height, width } from '@@utils/ui';
 
 export const Container = styled.View`
   flex: 1;
@@ -47,4 +47,19 @@ export const ToggleWrapper = styled.View`
 `;
 export const ConfirmWrapper = styled.View`
   padding: ${height * 24}px;
+`;
+
+export const Warning = styled.View`
+  flex-direction: row;
+  margin-top: ${height * 10}px;
+`;
+
+export const WarningIconWrapper = styled.View`
+  margin-right: ${width * 8}px;
+`;
+
+export const WarningText = styled.Text`
+  ${({ theme }) => theme.font.Label.sm}
+  line-height: ${fontSize(16)}px;
+  color: ${({ theme }) => theme.color.red};
 `;
