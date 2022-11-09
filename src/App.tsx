@@ -16,6 +16,7 @@ import useApp from 'useApp';
 import { THEME } from '@@constants/setting.constant';
 import RootStack from '@@navigation/RootStack';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
+import RTNSettings from '@@store/RTNSetting';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
@@ -44,12 +45,21 @@ function App(props: { foxCode?: string }) {
 
   // appearance change events(Theme)
   useEffect(() => {
+    (async () => {
+      try {
+        const themeType = await RTNSettings.getThemeType();
+        console.log(`Darby> fetching native theme settings: ${themeType}`);
+      } catch (e) {
+        console.error(`Darby> settigns: ${e}`);
+      }
+    })();
+
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
       if (appTheme.displayName === THEME.DEFAULT) {
-        const theme = Appearance.getColorScheme() ?? 'light';
+        //const theme = Appearance.getColorScheme() ?? 'light';
         setAppTheme({
           displayName: THEME.DEFAULT,
-          value: theme,
+          value: colorScheme,
         });
       } else if (appTheme.displayName === THEME.LIGHT) {
         setAppTheme({
