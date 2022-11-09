@@ -1,4 +1,4 @@
-import { ChevronDownBlackIcon, TextFieldDelete, TokenMVL32Icon } from '@@assets/image';
+import { ChevronDownLightIcon, TextFieldDelete, TokenMVL32Icon } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { theme } from '@@style/theme';
 
@@ -31,7 +31,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
         <S.SymbolWrapper>
           <TokenMVL32Icon />
           <S.Token>bMVL</S.Token>
-          {!!onSelect && <ChevronDownBlackIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
+          {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
       {hint && <S.Hint>{hint}</S.Hint>}

@@ -5,11 +5,8 @@ import { devtools, persist } from 'zustand/middleware';
 import * as Type from './walletPersistStore.type';
 
 const initState: Type.IWalletPersistState = {
-  walletList: [
-    { index: 0, name: 'Wallet 1' },
-    { index: 1, name: 'Wallet 2' },
-  ],
-  selectedWalletIndex: 0,
+  walletList: {},
+  selectedWalletIndex: {},
 };
 
 const walletPersistStore = create<Type.IWalletPersist>()(
@@ -17,22 +14,34 @@ const walletPersistStore = create<Type.IWalletPersist>()(
     persist(
       (set) => ({
         ...initState,
-        createWallet: () =>
+        initWallet: (postboxKey: string) =>
+          set((state) => ({
+            walletList: { ...state?.walletList, [postboxKey]: [{ index: 0, name: 'Wallet 1' }] },
+            selectedWalletIndex: {
+              ...state.selectedWalletIndex,
+              [postboxKey]: 0,
+            },
+          })),
+        createWallet: (postboxKey: string) =>
           set(
             (state) => ({
-              walletList: [
-                ...state.walletList,
-                {
-                  index: state.walletList.length,
-                  name: `Wallet ${state.walletList.length + 1}`,
-                },
-              ],
+              walletList: {
+                ...state?.walletList,
+                [postboxKey]: [
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  ...state?.walletList[postboxKey],
+                  {
+                    index: state.walletList[postboxKey]?.length,
+                    name: `Wallet ${state.walletList[postboxKey].length + 1}`,
+                  },
+                ],
+              },
             }),
             false,
             'createWallet'
           ),
-        selectWallet: (index: number) => set(() => ({ selectedWalletIndex: index }), false, 'selectWallet'),
-        removeWallet: () => set(() => ({ walletList: [{ index: 0, name: 'Wallet 1' }] }), false, 'removeWallet'),
+        selectWallet: (postboxkey: string, index: number) =>
+          set((state) => ({ selectedWalletIndex: { ...state.selectedWalletIndex, [postboxkey]: index } }), false, 'selectWallet'),
       }),
       {
         name: 'walletPersist',

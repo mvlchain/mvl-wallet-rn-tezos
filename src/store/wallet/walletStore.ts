@@ -12,7 +12,7 @@ export const walletStore = create<Type.IWallet>()(
     (set) => ({
       ...INITIAL_WALLET_STATE,
       setWalletData: (wallets: Type.IWalletData[]) => {
-        set(() => ({ walletData: wallets }), false, `setWalletData}`);
+        set(() => ({ walletData: wallets }), false, `setWalletData`);
       },
     }),
     { name: 'walletStore', enabled: __DEV__ }
