@@ -18,7 +18,7 @@ function WalletSelector(props: IWalletSelectorProps) {
       <Pressable onPress={onPressWalletList}>
         {({ pressed }) => (
           <S.Wrapper pressed={pressed}>
-            <S.Label>{walletList.length !== 0 && walletList[selectedWalletIndex]?.name}</S.Label>
+            <S.Label>{walletList[selectedWalletIndex]?.name}</S.Label>
             <ChevronDownBlackIcon />
           </S.Wrapper>
         )}

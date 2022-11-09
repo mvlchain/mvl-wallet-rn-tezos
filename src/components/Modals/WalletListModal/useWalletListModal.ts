@@ -16,7 +16,6 @@ const useWalletListModal = () => {
 
   useEffect(() => {
     if (!pKey) return;
-    console.log('walletData:  ', walletData);
     const walletArr: IWalletListMenuProps[] = walletData.map((walletItem) => {
       const { index, name, address } = walletItem;
 

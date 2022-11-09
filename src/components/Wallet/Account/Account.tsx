@@ -16,7 +16,6 @@ import * as S from './Account.style';
 import { IAccountProps } from './Account.type';
 
 function Account(props: IAccountProps) {
-  const { removeWallet } = walletPersistStore();
   return (
     <S.Container>
       <S.Header>
@@ -27,7 +26,8 @@ function Account(props: IAccountProps) {
       </S.Header>
       <S.Section>
         <WalletSelector />
-        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={() => removeWallet()} />
+        {/* TODO: 실제 네트워크 데이터와 연동하기 */}
+        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={() => console.log('select network modal')} />
       </S.Section>
       <S.Section>
         <Address />
