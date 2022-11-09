@@ -70,7 +70,7 @@ const mockData = {
       amount: 1000,
       baseCurrencyAmount: 0.5,
       baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
+      txHash: 'sdgsgsdgdahgjagdsfsdfsfdfsfsfsdfsdfsdfsfsfsfsfsfsfsfdsfsfsdsk',
       date: '21.10.31 10:30',
     },
     {

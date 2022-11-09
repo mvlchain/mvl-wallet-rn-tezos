@@ -6,16 +6,17 @@ import { Text, View } from 'react-native';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import useHeader from '@@hooks/common/useHeader';
-import { TWalletStackNavigationProps, TWalletStackParamList } from '@@navigation/WalletStack/WalletStack.type';
+import {
+  TTransactionHistoryRootStackProps,
+  TTransactionHistoryRouteProps,
+} from '@@screens/Wallet/WalletTransactionHistory/WalletTransactionHistory.type';
 
 import * as S from './TransactionHashBoard.style';
 
 function TransactionHashBoard() {
-  type WalletStackProps = TWalletStackNavigationProps<'WALLET_TRANSACTION_HISTORY'>;
-  type TokenDetailRouteProps = RouteProp<TWalletStackParamList, 'WALLET_TRANSACTION_HISTORY'>;
-  const { params } = useRoute<TokenDetailRouteProps>();
+  const { params } = useRoute<TTransactionHistoryRouteProps>();
   const { handleStackHeaderOption } = useHeader();
-  const navigation = useNavigation<WalletStackProps>();
+  const navigation = useNavigation<TTransactionHistoryRootStackProps>();
   const { t } = useTranslation();
 
   return (
