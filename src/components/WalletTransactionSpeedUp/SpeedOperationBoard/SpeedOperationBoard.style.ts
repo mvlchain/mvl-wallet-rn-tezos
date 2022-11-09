@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { fontSize, height } from '@@utils/ui';
 
 export const Container = styled.View`
+  flex: 1;
   justify-content: space-between;
 `;
 
@@ -40,7 +41,10 @@ export const BaseCurrency = styled(Text)`
   color: ${({ theme }) => theme.color.grey500};
 `;
 
-export const ToggleWrapper = styled.View``;
+export const ToggleWrapper = styled.View`
+  flex-direction: row;
+  margin-bottom: ${height * 16}px;
+`;
 export const ConfirmWrapper = styled.View`
   padding: ${height * 24}px;
 `;
