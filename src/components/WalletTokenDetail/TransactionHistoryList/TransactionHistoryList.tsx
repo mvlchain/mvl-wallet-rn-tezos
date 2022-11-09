@@ -45,6 +45,8 @@ function TransactionHistoryList() {
           )}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.8}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
         />
       ) : (
         <S.EmptyHistoryLabelWrapper>
