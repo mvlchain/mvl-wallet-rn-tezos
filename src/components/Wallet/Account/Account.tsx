@@ -10,12 +10,10 @@ import Chip from '@@components/Chip';
 import Jdenticon from '@@components/Jdenticon';
 import Address from '@@components/Wallet/Address';
 import WalletSelector from '@@components/Wallet/WalletSelector';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './Account.style';
-import { IAccountProps } from './Account.type';
 
-function Account(props: IAccountProps) {
+function Account() {
   return (
     <S.Container>
       <S.Header>

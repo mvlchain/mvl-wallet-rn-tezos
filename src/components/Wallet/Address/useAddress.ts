@@ -10,6 +10,7 @@ import { walletStore } from '@@store/wallet/walletStore';
 const useAddress = () => {
   const { t } = useTranslation();
   const keyClient = useDi('KeyClient');
+
   const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
   const { selectedWalletIndex } = walletPersistStore();
   const { walletData } = walletStore();
