@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useTokenBalanceList } from '@@hooks/useTokenBalanceList';
@@ -15,8 +16,8 @@ function TokenList() {
         <Text style={styles.title}>Token</Text>
       </View>
       <View>
-        {tokenList.map((props) => (
-          <TokenListItem {...props} />
+        {tokenList.map((props, i) => (
+          <TokenListItem {...props} key={'token' + i} />
         ))}
       </View>
     </View>

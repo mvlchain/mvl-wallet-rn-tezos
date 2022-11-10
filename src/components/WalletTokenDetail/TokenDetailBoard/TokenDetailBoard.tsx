@@ -5,7 +5,7 @@ import { View } from 'react-native';
 
 import { TokenMVL32Icon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { TWalletStackParamList } from '@@navigation/WalletStack/WalletStack.type';
+import { TTokenDetailRouteProps } from '@@screens/Wallet/WalletTokenDetail/WalletTokenDetail.type';
 import { fontSize, width, height } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';
@@ -19,8 +19,8 @@ function TokenDetailBoard() {
     baseCurrencySymbol: 'USD',
     icon: () => <TokenMVL32Icon width={width * 40} height={height * 40} />,
   };
-  type TokenDetailRouteProps = RouteProp<TWalletStackParamList, 'WALLET_TOKEN_DETAIL'>;
-  const { params } = useRoute<TokenDetailRouteProps>();
+
+  const { params } = useRoute<TTokenDetailRouteProps>();
 
   return (
     <View>
