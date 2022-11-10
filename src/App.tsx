@@ -40,44 +40,29 @@ function App(props: { foxCode?: string }) {
    * Detecting versions: Platform.Version
    */
   useEffect(() => {
+    const themeType = RTNSettings.getThemeType();
+    console.log(`Darby> fetching native theme settings: ${themeType}`);
+
+    if (themeType === THEME.DEFAULT) {
+      const theme = Appearance.getColorScheme() ?? 'light';
+      setAppTheme({
+        displayName: THEME.DEFAULT,
+        value: theme,
+      });
+    } else if (themeType === THEME.LIGHT) {
+      setAppTheme({
+        displayName: THEME.LIGHT,
+        value: THEME.LIGHT,
+      });
+    } else if (themeType === THEME.DARK) {
+      setAppTheme({
+        displayName: THEME.DARK,
+        value: THEME.DARK,
+      });
+    }
+
     SplashScreen.hide();
   }, []);
-
-  // appearance change events(Theme)
-  useEffect(() => {
-    (async () => {
-      try {
-        const themeType = await RTNSettings.getThemeType();
-        console.log(`Darby> fetching native theme settings: ${themeType}`);
-      } catch (e) {
-        console.error(`Darby> settigns: ${e}`);
-      }
-    })();
-
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      if (appTheme.displayName === THEME.DEFAULT) {
-        //const theme = Appearance.getColorScheme() ?? 'light';
-        setAppTheme({
-          displayName: THEME.DEFAULT,
-          value: colorScheme,
-        });
-      } else if (appTheme.displayName === THEME.LIGHT) {
-        setAppTheme({
-          displayName: THEME.LIGHT,
-          value: THEME.LIGHT,
-        });
-      } else if (appTheme.displayName === THEME.DARK) {
-        setAppTheme({
-          displayName: THEME.DARK,
-          value: THEME.DARK,
-        });
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, [appTheme]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
