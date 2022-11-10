@@ -6,8 +6,8 @@ import { Text, View } from 'react-native';
 
 import Devider from '@@components/BasicComponents/Devider';
 import { DEVIDER_THICKNESS } from '@@components/BasicComponents/Devider/Devider.type';
-import OldTransactionBoard from '@@components/WalletTransactionSpeedUp/OldTransactionBoard';
-import SpeedOperationBoard from '@@components/WalletTransactionSpeedUp/SpeedOperationBoard';
+import OldTransactionBoard from '@@components/WalletTransactionSpeedUpCancel/OldTransactionBoard';
+import SpeedOperationBoard from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard';
 import useHeader from '@@hooks/common/useHeader';
 
 import { TSpeedUpRootStackProps, TSpeedUpRouteProps } from './WalletTransactionSpeedUp.type';

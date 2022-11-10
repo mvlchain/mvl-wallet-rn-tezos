@@ -21,7 +21,6 @@ function TokenDetailBoard() {
   };
 
   const { params } = useRoute<TTokenDetailRouteProps>();
-
   return (
     <View>
       <S.TokenInfoContainer>
