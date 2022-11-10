@@ -20,6 +20,18 @@ const useQR = (targetToken?: string) => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    requestPermission({ ios: [PERMISSIONS.IOS.CAMERA], android: [PERMISSIONS.ANDROID.CAMERA] }).then(async (res) => {
+      const { DENIED, BLOCKED } = getNotGrantedList(res as TRequestPermissionResultType);
+      if (BLOCKED.length !== 0) {
+        openSettingAlert({
+          title: t('msg_camera_denied_msg'),
+          content: t('ios_msg_camera_denied_message'),
+        });
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     goSendPage(scanResult);
   }, [scanResult]);
 
@@ -68,10 +80,11 @@ const useQR = (targetToken?: string) => {
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
     const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
+    if (!detectedBarcodes) return;
     //Scan area limit to inside overlay area
-    if (!detectedBarcodes || !detectedBarcodes[0] || !detectedBarcodes[0].cornerPoints) return;
-    const [topL, bottomL, bottomR, topR] = detectedBarcodes[0].cornerPoints;
-    if (topL.x < frame.width * 0.1 || topL.y < frame.height * 0.12 || bottomR.x > frame.width * 0.9 || bottomR.y > frame.width * 0.6) return;
+    // if (!detectedBarcodes || !detectedBarcodes[0] || !detectedBarcodes[0].cornerPoints) return;
+    // const [topL, bottomL, bottomR, topR] = detectedBarcodes[0].cornerPoints;
+    // if (topL.x < frame.width * 0.1 || topL.y < frame.height * 0.12 || bottomR.x > frame.width * 0.9 || bottomR.y > frame.width * 0.6) return;
     runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
   }, []);
 

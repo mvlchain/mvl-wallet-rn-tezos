@@ -17,6 +17,15 @@ export type TRootStackParamList = {
   SETTING_APP_VERSION: undefined;
   SETTING_PRIVATE_KEY: undefined;
   SETTING_FAQ: undefined;
+  WALLET_TOKEN_DETAIL: {
+    symbol: string;
+  };
+  WALLET_TRANSACTION_HISTORY: {
+    txHash: string;
+  };
+  WALLET_TRANSACTION_SPEED_UP: undefined;
+  WALLET_TRANSACTION_CANCEL: undefined;
+  WALLET_SCAN_QR: undefined;
 };
 
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
@@ -34,6 +43,11 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   SETTING_APP_VERSION: 'SETTING_APP_VERSION',
   SETTING_PRIVATE_KEY: 'SETTING_PRIVATE_KEY',
   SETTING_FAQ: 'SETTING_FAQ',
+  WALLET_TOKEN_DETAIL: 'WALLET_TOKEN_DETAIL',
+  WALLET_TRANSACTION_HISTORY: 'WALLET_TRANSACTION_HISTORY',
+  WALLET_TRANSACTION_SPEED_UP: 'WALLET_TRANSACTION_SPEED_UP',
+  WALLET_TRANSACTION_CANCEL: 'WALLET_TRANSACTION_CANCEL',
+  WALLET_SCAN_QR: 'WALLET_SCAN_QR',
 } as const;
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;

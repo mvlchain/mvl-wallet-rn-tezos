@@ -205,3 +205,60 @@ jest.mock('react-native-reanimated', () => {
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
+jest.mock('react-native-permissions', () => {
+  const PERMISSIONS = {
+    IOS: {
+      CAMERA: 'ios.permission.CAMERA',
+      PHOTO_LIBRARY: 'ios.permission.PHOTO_LIBRARY',
+    },
+    ADROID: {
+      CAMERA: 'android.permission.CAMERA',
+      READ_EXTERNAL_STORAGE: 'android.permission.READ_EXTERNAL_STORAGE]',
+    },
+  };
+
+  return {
+    PERMISSIONS,
+  };
+});
+
+jest.mock('react-native-image-picker', () => {
+  const launchImageLibrary = (options, callback) => {
+    return {
+      didCancel: false,
+      assets: [
+        {
+          base64: 'string',
+          uri: 'string',
+          width: 0,
+          height: 0,
+          fileSize: 0,
+          type: 'string',
+          fileName: 'string',
+          duration: 0,
+          bitrate: 0,
+          timestamp: 'string',
+          id: 'string',
+        },
+      ],
+    };
+  };
+
+  return {
+    launchImageLibrary,
+  };
+});
+
+jest.mock('react-native-vision-camera', () => {
+  const React = require('react');
+  const { View, Text, Image, Animated, Platform, processColor } = require('react-native');
+  const useFrameProcessor = () => {};
+  const Camera = () => {
+    return <View />;
+  };
+  return {
+    useFrameProcessor,
+    Camera,
+  };
+});
