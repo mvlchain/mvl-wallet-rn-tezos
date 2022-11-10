@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
+import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import useTransactionHistoryFilter from '@@hooks/transactionHistory/useTransactionHistoryFilter';
@@ -22,7 +23,7 @@ function TransactionHistoryList() {
       <S.TransactionHistoryLabelWrapper>
         <S.TransactionHistoryLabel>{t('transaction_history')}</S.TransactionHistoryLabel>
         <TextButton
-          label={'All'}
+          label={t('all')}
           onPress={() => {
             openModal('BOTTOM_SELECT', { modalTitle: t('filter'), menuList: filterCriterias });
           }}
@@ -43,6 +44,8 @@ function TransactionHistoryList() {
               date={item.date}
             />
           )}
+          //TODO: 키나중에 할당
+          // keyExtractor={item.txHash}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}

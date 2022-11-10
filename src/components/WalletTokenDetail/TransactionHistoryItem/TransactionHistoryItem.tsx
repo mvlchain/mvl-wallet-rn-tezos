@@ -5,6 +5,7 @@ import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
@@ -67,12 +68,18 @@ function TransactionHistoryListItem({
         </S.HistoryItemTopContent>
         {status === TRANSACTION_STATUS.PENDING && (
           <S.HistoryItemBottomContent>
-            <SecondaryButton label='Cancel' onPress={goToCancel} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+            <SecondaryButton
+              label={t('cancel')}
+              onPress={goToCancel}
+              size={BUTTON_SIZE.SMALL}
+              wrapperStyle={{ flex: 1 }}
+              textStyle={{ lineHeight: fontSize(14) }}
+            />
             <S.ButtonGap />
             <PrimaryButton
-              label='Speed Up'
+              label={t('speedup')}
               onPress={goToSpeedUp}
-              size={'small'}
+              size={BUTTON_SIZE.SMALL}
               wrapperStyle={{ flex: 1 }}
               textStyle={{ lineHeight: fontSize(14) }}
             />

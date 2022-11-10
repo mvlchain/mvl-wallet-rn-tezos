@@ -3,8 +3,8 @@ import React, { useLayoutEffect } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
-import Devider from '@@components/BasicComponents/Devider';
-import { DEVIDER_THICKNESS } from '@@components/BasicComponents/Devider/Devider.type';
+import Divider from '@@components/BasicComponents/Divider';
+import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import TransactionHistoryList from '@@components/WalletTokenDetail/TransactionHistoryList';
 import useHeader from '@@hooks/common/useHeader';
@@ -25,7 +25,7 @@ function WalletTokenDetail() {
   return (
     <View>
       <TokenDetailBoard />
-      <Devider thickness={DEVIDER_THICKNESS.THICK} />
+      <Divider thickness={DIVIDER_THICKNESS.THICK} />
       <TransactionHistoryList />
     </View>
   );

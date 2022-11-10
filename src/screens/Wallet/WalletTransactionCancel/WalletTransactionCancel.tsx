@@ -4,8 +4,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
-import Devider from '@@components/BasicComponents/Devider';
-import { DEVIDER_THICKNESS } from '@@components/BasicComponents/Devider/Devider.type';
+import Divider from '@@components/BasicComponents/Divider';
+import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import OldTransactionBoard from '@@components/WalletTransactionSpeedUpCancel/OldTransactionBoard';
 import SpeedOperationBoard from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard';
 import useHeader from '@@hooks/common/useHeader';
@@ -25,7 +25,7 @@ function WalletTransactionCancel() {
   return (
     <View style={{ flex: 1 }}>
       <OldTransactionBoard />
-      <Devider thickness={DEVIDER_THICKNESS.THICK} />
+      <Divider thickness={DIVIDER_THICKNESS.THICK} />
       <SpeedOperationBoard />
     </View>
   );
