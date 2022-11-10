@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appearance } from 'react-native';
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+
+import { THEME } from '@@constants/setting.constant';
 
 import { ISettedTheme, ISettingPersist, ISettingPersistState, TCurrency, TLanguage } from './settingPersistStore.type';
 
@@ -8,8 +11,8 @@ const initState: ISettingPersistState = {
   settedCurrency: 'USD',
   settedLanguage: 'en',
   appTheme: {
-    displayName: 'dark',
-    value: 'dark',
+    displayName: THEME.DEFAULT,
+    value: Appearance.getColorScheme() ?? 'light',
   },
   settedBioAuth: false,
 };

@@ -1,6 +1,6 @@
 package com.wallet.settings
 
-import com.facebook.react.bridge.ReactApplicationContext
+import android.content.Context
 
 interface PreferenceStorage {
     @ThemeType
@@ -8,7 +8,7 @@ interface PreferenceStorage {
 }
 
 class SharedPreferenceStorage constructor(
-    context: ReactApplicationContext
+    context: Context
 ) : PreferenceStorage {
 
     private val preferences = context.preferences
@@ -16,7 +16,8 @@ class SharedPreferenceStorage constructor(
     @ThemeType
     override var themeType: String
         get() {
-            return preferences.getString(PREFS_THEME, THEME_TYPE_LIGHT) ?: throw NoSuchElementException()
+            return preferences.getString(PREFS_THEME, THEME_TYPE_DEFAULT)
+                ?: throw NoSuchElementException()
         }
         set(value) {
             with (preferences.edit()) {
