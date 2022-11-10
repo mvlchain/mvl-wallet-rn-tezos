@@ -15,7 +15,7 @@ import * as S from './TransactionHistoryList.style';
 
 function TransactionHistoryList() {
   const { openModal } = globalModalStore();
-  const { filteredData, onEndReached, filterCriterias } = useTransactionHistoryList();
+  const { filteredData, onEndReached, filterCriteria } = useTransactionHistoryList();
   const { t } = useTranslation();
 
   return (
@@ -23,9 +23,9 @@ function TransactionHistoryList() {
       <S.TransactionHistoryLabelWrapper>
         <S.TransactionHistoryLabel>{t('transaction_history')}</S.TransactionHistoryLabel>
         <TextButton
-          label={t('all')}
+          label={t('filter_all')}
           onPress={() => {
-            openModal('BOTTOM_SELECT', { modalTitle: t('filter'), menuList: filterCriterias });
+            openModal('BOTTOM_SELECT', { modalTitle: t('filter'), menuList: filterCriteria });
           }}
           disabled={false}
         />

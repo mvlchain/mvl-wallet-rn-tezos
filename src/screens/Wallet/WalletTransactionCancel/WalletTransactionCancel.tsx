@@ -19,7 +19,7 @@ function WalletTransactionCancel() {
   const { t } = useTranslation();
 
   useLayoutEffect(() => {
-    const headerOption = handleStackHeaderOption({ title: t('cancel_trnascation') });
+    const headerOption = handleStackHeaderOption({ title: t('cancel_transaction') });
     navigation.setOptions(headerOption);
   }, []);
   return (
