@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { FlatList, ScrollView } from 'react-native';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { BaseModal } from '@@components/BasicComponents/Modals/BaseModal';
+import { BINANCE, ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { useDi } from '@@hooks/common/useDi';
+import { useCurrentWallet } from '@@hooks/wallet/useCurrentWallet';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
@@ -34,9 +34,10 @@ const RenderItem = ({ data }: { data: IWalletListMenuProps }) => {
 function WalletListModal({ menuList }: IWalletListModalProps) {
   const { t } = useTranslation();
   const keyClient = useDi('KeyClient');
+  const walletService = useDi('WalletService');
   const postboxkey = keyClient.postboxKeyHolder?.postboxKey;
   const { modalType, closeModal } = globalModalStore();
-  const { createWallet } = walletPersistStore();
+  const { walletData, createWallet } = useCurrentWallet(walletService);
 
   return (
     <BaseModal
@@ -60,7 +61,9 @@ function WalletListModal({ menuList }: IWalletListModalProps) {
           <PrimaryButton
             onPress={() => {
               if (!postboxkey) return;
-              createWallet(postboxkey);
+              const index = walletData.length;
+              createWallet(index, ETHEREUM);
+              // createWallet(index, BINANCE);
               closeModal();
             }}
             label={t('create_wallet')}
