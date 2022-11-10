@@ -5,8 +5,8 @@ import { View } from 'react-native';
 
 import { WarningIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import Devider from '@@components/BasicComponents/Devider';
-import { DEVIDER_THICKNESS } from '@@components/BasicComponents/Devider/Devider.type';
+import Divider from '@@components/BasicComponents/Divider';
+import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/Form/Toggle';
 import { width } from '@@utils/ui';
 
@@ -37,7 +37,7 @@ function SpeedOperationBoard() {
 
           {advanced ? <SpeedInputs /> : <SpeedRadioButtons />}
         </S.InnerContainer>
-        <Devider thickness={DEVIDER_THICKNESS.THIN} />
+        <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>
           <S.Row>
             <S.Label>{t('estimated_time')}</S.Label>
