@@ -10,7 +10,7 @@ function OldTransactionBoard() {
     <S.Container>
       <S.Row>
         {/* TODO: 문구 추가 필요 */}
-        <S.Label>{'Old Transaction Fee'}</S.Label>
+        <S.Label>{t('old_transaction_fee')}</S.Label>
         <S.Value>{'1000 ETH'}</S.Value>
       </S.Row>
       <S.BaseCurrency>{'500 USD'}</S.BaseCurrency>

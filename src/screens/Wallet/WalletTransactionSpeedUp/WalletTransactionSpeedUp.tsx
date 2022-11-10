@@ -19,7 +19,7 @@ function WalletTransactionSpeedUp() {
   const { t } = useTranslation();
 
   useLayoutEffect(() => {
-    const headerOption = handleStackHeaderOption({ title: t('speedup') });
+    const headerOption = handleStackHeaderOption({ title: t('speed_up') });
     navigation.setOptions(headerOption);
   }, []);
   return (

@@ -9,7 +9,7 @@ const useTransactionHistoryFilter = () => {
   const [currentCriteria, setCurrentCriteria] = useState<TTransactionHistroryFilter>(TRANSACTION_HISTORY_FILTER_CRITERIA.ALL);
   const { ALL, SENT_ONLY, RECEIVED_ONLY } = TRANSACTION_HISTORY_FILTER_CRITERIA;
 
-  const filterCriterias: IBottomSelectMenuProps[] = [
+  const filterCriteria: IBottomSelectMenuProps[] = [
     {
       title: ALL,
       isSelected: currentCriteria === ALL,
@@ -34,7 +34,7 @@ const useTransactionHistoryFilter = () => {
   ];
   return {
     currentCriteria,
-    filterCriterias,
+    filterCriteria,
   };
 };
 

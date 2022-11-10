@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
@@ -26,6 +27,7 @@ function TransactionHistoryListItem({
   baseCurrencySymbol,
   txHash,
 }: ITransactionHistoryListItemProps) {
+  const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TRANSACTION_STATUS.CANCELED;
   const amountSign = type === TRANSACTION_TYPE.SEND ? '-' : null;
@@ -77,7 +79,7 @@ function TransactionHistoryListItem({
             />
             <S.ButtonGap />
             <PrimaryButton
-              label={t('speedup')}
+              label={t('speed_up')}
               onPress={goToSpeedUp}
               size={BUTTON_SIZE.SMALL}
               wrapperStyle={{ flex: 1 }}

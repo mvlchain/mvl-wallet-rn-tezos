@@ -14,7 +14,7 @@ const useTransactionHistoryList = () => {
   const [data, setData] = useState<ITransactionHistoryListItemProps[]>([]);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { currentCriteria, filterCriterias } = useTransactionHistoryFilter();
+  const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
 
   const filteredData = useMemo(() => {
     let type: TTranscationType;
@@ -55,7 +55,7 @@ const useTransactionHistoryList = () => {
   return {
     filteredData,
     onEndReached,
-    filterCriterias,
+    filterCriteria,
   };
 };
 

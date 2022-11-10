@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useRoute, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { TokenMVL32Icon } from '@@assets/image';
@@ -11,6 +12,7 @@ import { fontSize, width, height } from '@@utils/ui';
 import * as S from './TokenDetailBoard.style';
 
 function TokenDetailBoard() {
+  const { t } = useTranslation();
   //TODO: 데이터 들어오면 바꾸기
   const { symbol, balance, baseCurrencyBalance, baseCurrencySymbol, icon } = {
     symbol: 'MVL',
@@ -36,9 +38,9 @@ function TokenDetailBoard() {
         </S.TokenAmountWrapper>
       </S.TokenInfoContainer>
       <S.ReceiveSendContainer>
-        <PrimaryButton label='Receive' onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+        <PrimaryButton label={t('receive')} onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
         <S.Gap />
-        <PrimaryButton label='Send' onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+        <PrimaryButton label={t('send')} onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
       </S.ReceiveSendContainer>
     </View>
   );

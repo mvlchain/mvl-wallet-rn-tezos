@@ -27,7 +27,7 @@ function PendingTransactionButtons() {
     <S.Container>
       <SecondaryButton label={t('btn_cancel')} onPress={goToCancel} wrapperStyle={{ flex: 1 }} />
       <S.Gap />
-      <PrimaryButton label={t('speedup')} onPress={goToSpeedUp} wrapperStyle={{ flex: 1 }} />
+      <PrimaryButton label={t('speed_up')} onPress={goToSpeedUp} wrapperStyle={{ flex: 1 }} />
     </S.Container>
   );
 }
