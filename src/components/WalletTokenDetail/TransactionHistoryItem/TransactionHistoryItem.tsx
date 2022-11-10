@@ -5,12 +5,12 @@ import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
-import { TWalletStackNavigationProps, WALLET_STACK_ROUTE } from '@@navigation/WalletStack/WalletStack.type';
+import { TCancelRootStackProps } from '@@screens/Wallet/WalletTransactionCancel/WalletTransactionCancel.type';
 import { TTransactionHistoryRootStackProps } from '@@screens/Wallet/WalletTransactionHistory/WalletTransactionHistory.type';
+import { TSpeedUpRootStackProps } from '@@screens/Wallet/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
 import { fontSize } from '@@utils/ui';
 
 import * as S from './TransactionHistoryListItem.style';
@@ -28,7 +28,15 @@ function TransactionHistoryListItem({
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TRANSACTION_STATUS.CANCELED;
   const amountSign = type === TRANSACTION_TYPE.SEND ? '-' : null;
-  const navigation = useNavigation<TTransactionHistoryRootStackProps>();
+  const navigation = useNavigation<TTransactionHistoryRootStackProps | TCancelRootStackProps | TSpeedUpRootStackProps>();
+
+  const goToSpeedUp = () => {
+    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP);
+  };
+
+  const goToCancel = () => {
+    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL);
+  };
 
   return (
     <Pressable
@@ -59,9 +67,15 @@ function TransactionHistoryListItem({
         </S.HistoryItemTopContent>
         {status === TRANSACTION_STATUS.PENDING && (
           <S.HistoryItemBottomContent>
-            <SecondaryButton label='Cancel' onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+            <SecondaryButton label='Cancel' onPress={goToCancel} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
             <S.ButtonGap />
-            <PrimaryButton label='Speed Up' onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+            <PrimaryButton
+              label='Speed Up'
+              onPress={goToSpeedUp}
+              size={'small'}
+              wrapperStyle={{ flex: 1 }}
+              textStyle={{ lineHeight: fontSize(14) }}
+            />
           </S.HistoryItemBottomContent>
         )}
       </S.TransactionHistoryListItem>
