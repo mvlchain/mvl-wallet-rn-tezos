@@ -12,6 +12,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		47C2EF15291DCE93009FC5F5 /* RTNSettingsModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 47C2EF14291DCE93009FC5F5 /* RTNSettingsModule.m */; };
+		47C2EF22291DF3CF009FC5F5 /* SettingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2EF21291DF3CF009FC5F5 /* SettingsStorage.swift */; };
+		47C2EF24291DF481009FC5F5 /* StorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2EF23291DF481009FC5F5 /* StorageKey.swift */; };
 		7699B88040F8A987B510C191 /* libPods-Wallet-WalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Wallet-WalletTests.a */; };
 		77CB09582897A6BA00C80D81 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 77CB09572897A6BA00C80D81 /* Fonts */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -40,6 +43,12 @@
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-Wallet-WalletTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Wallet-WalletTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		335E7C3A28B3713D001A43E1 /* Wallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Wallet.entitlements; path = Wallet/Wallet.entitlements; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-Wallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wallet.debug.xcconfig"; path = "Target Support Files/Pods-Wallet/Pods-Wallet.debug.xcconfig"; sourceTree = "<group>"; };
+		47C2EF11291DC8CA009FC5F5 /* Wallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Wallet-Bridging-Header.h"; sourceTree = "<group>"; };
+		47C2EF14291DCE93009FC5F5 /* RTNSettingsModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTNSettingsModule.m; sourceTree = "<group>"; };
+		47C2EF1C291DE34D009FC5F5 /* RTNSettingsModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTNSettingsModule.h; sourceTree = "<group>"; };
+		47C2EF21291DF3CF009FC5F5 /* SettingsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStorage.swift; sourceTree = "<group>"; };
+		47C2EF23291DF481009FC5F5 /* StorageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKey.swift; sourceTree = "<group>"; };
+		47C2EF26291E1536009FC5F5 /* ThemeType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemeType.h; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-Wallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wallet.release.xcconfig"; path = "Target Support Files/Pods-Wallet/Pods-Wallet.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-Wallet-WalletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wallet-WalletTests.debug.xcconfig"; path = "Target Support Files/Pods-Wallet-WalletTests/Pods-Wallet-WalletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-Wallet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Wallet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +105,12 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				47C2EF1C291DE34D009FC5F5 /* RTNSettingsModule.h */,
+				47C2EF14291DCE93009FC5F5 /* RTNSettingsModule.m */,
+				47C2EF21291DF3CF009FC5F5 /* SettingsStorage.swift */,
+				47C2EF26291E1536009FC5F5 /* ThemeType.h */,
+				47C2EF23291DF481009FC5F5 /* StorageKey.swift */,
+				47C2EF11291DC8CA009FC5F5 /* Wallet-Bridging-Header.h */,
 			);
 			name = Wallet;
 			sourceTree = "<group>";
@@ -212,7 +227,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1400;
+						LastSwiftMigration = 1410;
 					};
 				};
 			};
@@ -419,7 +434,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				47C2EF24291DF481009FC5F5 /* StorageKey.swift in Sources */,
+				47C2EF15291DCE93009FC5F5 /* RTNSettingsModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				47C2EF22291DF3CF009FC5F5 /* SettingsStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +456,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-Wallet-WalletTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -465,6 +484,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-Wallet-WalletTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = WalletTests/Info.plist;
@@ -510,6 +530,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.mvlchain.wallet;
 				PRODUCT_NAME = Wallet;
 				PROVISIONING_PROFILE_SPECIFIER = "***REMOVED***";
+				SWIFT_OBJC_BRIDGING_HEADER = "Wallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.2;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -541,6 +562,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.mvlchain.wallet;
 				PRODUCT_NAME = Wallet;
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.mvlchain.wallet";
+				SWIFT_OBJC_BRIDGING_HEADER = "Wallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
