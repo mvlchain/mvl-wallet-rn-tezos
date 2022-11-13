@@ -5,7 +5,7 @@
  */
 
 export type BlockChain = {
-  name: string;
+  name: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
   coinType: number;
 };
 

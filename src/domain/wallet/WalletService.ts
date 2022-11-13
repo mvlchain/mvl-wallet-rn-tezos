@@ -4,11 +4,15 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/WalletRepository';
+import { WalletResponseDto } from '@@generated/generated-scheme';
+
+import { ICreateWalletBody } from './WalletService.type';
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
   getWalletList(): Promise<WalletDto[]>;
+  createWallet(body: ICreateWalletBody): Promise<WalletResponseDto>;
 }
 
 /**
@@ -58,4 +62,15 @@ export class WalletServiceImpl implements WalletService {
     const xpub = await this.rootkeyRepository.getExtendedPublicKey();
     return this.walletRepository.getWallets(xpub);
   }
+
+  createWallet = async (body: ICreateWalletBody): Promise<WalletResponseDto> => {
+    const { pKey, index, blockchain } = body;
+    const wallet = Clutch.createWalletWithEntropy(pKey, `m/44'/${blockchain.coinType}'/0'/0/${index}`);
+    return this.walletRepository.registerWallet({
+      network: blockchain.name,
+      address: wallet.address,
+      index,
+      name: `Wallet ${index + 1}`,
+    });
+  };
 }
