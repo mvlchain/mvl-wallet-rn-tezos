@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorBoundary from 'react-native-error-boundary';
 import { ThemeProvider } from 'styled-components/native';
 import 'reflect-metadata';
@@ -15,14 +16,18 @@ import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
+const queryClient = new QueryClient();
+
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
   const { appTheme } = useApp();
   return (
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
-      <ThemeProvider theme={theme[appTheme.label]}>
-        <RootStack />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme[appTheme.label]}>
+          <RootStack />
+        </ThemeProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
