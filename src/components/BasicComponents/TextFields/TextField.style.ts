@@ -8,6 +8,8 @@ import * as Type from './TextField.type';
 //Base
 export const BaseInput = styled.TextInput<Type.IBaseTextFieldProps>`
   flex: 9;
+  ${({ theme }) => theme.font.Label.md}
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 export const BaseTextFieldInputWrapper = styled.View<Type.ITextFieldContainerProps>`
   width: 100%;

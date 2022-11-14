@@ -1,13 +1,25 @@
+import { useEffect, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 
 import { IBottomSelectMenuProps } from '@@components/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
-import { IBottomSelectModalProps } from '@@components/Modals/BottomSelectModal/BottomSelectModal.type';
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
+import { useDi } from '@@hooks/common/useDi';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { walletStore } from '@@store/wallet/walletStore';
 import { formatNetwork } from '@@utils/format';
 
 const useAccount = () => {
+  const { t } = useTranslation();
+  const keyClient = useDi('KeyClient');
+  const { openModal, closeModal } = globalModalStore();
+  const { walletData } = walletStore();
+  const { selectedWalletIndex } = walletPersistStore();
+  const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
+
+  // TODO: 실제 데이터 연동 및 onPress시 해당 network데이터 불러오기 작업
   const dummyNetwork: IBottomSelectMenuProps[] = [
     {
       title: formatNetwork(NETWORK.ETHEREUM),
@@ -20,15 +32,42 @@ const useAccount = () => {
       onPress: () => console.log('select binance'),
     },
   ];
-  const { t } = useTranslation();
-  const { openModal } = globalModalStore();
+
+  const onChangeWalletInput = (value: string) => {
+    console.log('input value:  ', value);
+    // TODO: call wallet name change method
+    closeModal();
+  };
+
+  const moreEditList = [
+    {
+      title: t('edit_wallet_name'),
+      isSelected: false,
+      onPress: () =>
+        openModal(MODAL_TYPES.TEXT_INPUT, {
+          title: t('edit_wallet_name'),
+          defaultValue: walletData[selectedWalletIndex[postboxkey]]?.name,
+          onConfirm: onChangeWalletInput,
+        }),
+    },
+    {
+      title: t('edit_token_list'),
+      isSelected: false,
+      onPress: () => console.log('move edit token list screen'),
+    },
+  ];
 
   const onPressSwitchNetwork = () => {
     openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('dialog_network_switch_lbl_title'), menuList: dummyNetwork });
   };
 
+  const onPressMore = () => {
+    openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: '', menuList: moreEditList });
+  };
+
   return {
     onPressSwitchNetwork,
+    onPressMore,
   };
 };
 
