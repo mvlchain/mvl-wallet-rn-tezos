@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { StyleSheet, View } from 'react-native';
-
 import Account from '@@components/Wallet/Account';
 import TokenList from '@@components/Wallet/TokenList';
 import { useDi } from '@@hooks/common/useDi';
