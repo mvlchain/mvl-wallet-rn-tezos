@@ -1,17 +1,19 @@
-import { useEffect, useState } from 'react';
-
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { IBottomSelectMenuProps } from '@@components/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
 import { useDi } from '@@hooks/common/useDi';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { walletStore } from '@@store/wallet/walletStore';
 import { formatNetwork } from '@@utils/format';
 
 const useAccount = () => {
+  type rootStackProps = TRootStackNavigationProps<'MAIN'>;
+  const rootNavigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
   const keyClient = useDi('KeyClient');
   const { openModal, closeModal } = globalModalStore();
@@ -53,7 +55,7 @@ const useAccount = () => {
     {
       title: t('edit_token_list'),
       isSelected: false,
-      onPress: () => console.log('move edit token list screen'),
+      onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
     },
   ];
 
