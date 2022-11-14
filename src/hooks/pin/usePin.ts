@@ -3,11 +3,16 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TouchID from 'react-native-touch-id';
 
+import { AUTH_STAGE } from '@@constants/authStage.constant';
 import { PIN_MODE, PIN_STEP, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
+import { useDi } from '@@hooks/common/useDi';
+import authPersistStore from '@@store/auth/authPersistStore';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
 function usePin() {
+  const keyClient = useDi('KeyClient');
+  const { stage, setStage } = authPersistStore();
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
   const { pinMode, error, step, setState, success, resetStore } = pinStore();
@@ -65,6 +70,13 @@ function usePin() {
     } else {
       if (input === inputCheck) {
         await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
+        const _postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
+        if (!_postboxKey) {
+          throw new Error('postboxkey is required');
+        }
+        if (stage[_postboxKey] === AUTH_STAGE.PIN_SETUP_STAGE) {
+          setStage(_postboxKey, AUTH_STAGE.BACKUP_SEED_PHRASE_STAGE);
+        }
         success(input);
         setState({ step: PIN_STEP.FINISH });
       } else {

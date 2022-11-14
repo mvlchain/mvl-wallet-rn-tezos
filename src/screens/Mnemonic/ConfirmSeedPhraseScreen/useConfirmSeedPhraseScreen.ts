@@ -4,19 +4,23 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useConfirmSeedPhraseScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE_CONFIRM'>;
   const navigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
   const keyClient = useDi('KeyClient');
+  const wallet = useDi('WalletService');
   const { removeStageByPostboxKey } = authPersistStore();
-  const { mnemonic, mnemonicList } = authStore();
+  const { initWallet } = walletPersistStore();
+  const { mnemonic, mnemonicList, pKey } = authStore();
   const { openModal } = globalModalStore();
   const [disabled, setDisabled] = useState(true);
 
@@ -47,10 +51,12 @@ const useConfirmSeedPhraseScreen = () => {
        * TODO: postboxkey 없을 때 예외처리
        *  */
       const _postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
-      if (!_postboxKey) {
-        throw new Error('postboxkey is required');
+      if (!_postboxKey || !pKey) {
+        throw new Error('postboxkey and pKey is required');
       }
       removeStageByPostboxKey(_postboxKey);
+      initWallet(_postboxKey);
+      wallet.createWallet(pKey, 0, ETHEREUM);
       navigation.reset({
         index: 0,
         routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
