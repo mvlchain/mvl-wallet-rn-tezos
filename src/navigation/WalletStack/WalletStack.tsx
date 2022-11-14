@@ -3,7 +3,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import WalletScreen from '@@screens/WalletScreen';
-import WalletEditTokenList from '@@screens/WalletScreen/WalletEditTokenList';
 import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
 import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
 import WalletTokenReceive from '@@screens/WalletScreen/WalletTokenReceive';
@@ -35,11 +34,6 @@ function WalletStack() {
         headerShown: false,
       },
     },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST,
-      component: WalletEditTokenList,
-    },
-
     {
       name: WALLET_STACK_ROUTE.WALLET_TOKEN_RECEIVE,
       component: WalletTokenReceive,

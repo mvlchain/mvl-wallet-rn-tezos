@@ -61,3 +61,4 @@ export { default as BackIconDark } from './ic-back-dark.svg';
 
 export { default as SuccessIcon } from './ic-success.svg';
 export { default as WarningIcon } from './ic-warning.svg';
+export { default as ArrangeIcon } from './ic-arrange-black.svg';
