@@ -12,8 +12,10 @@ import Address from '@@components/Wallet/Address';
 import WalletSelector from '@@components/Wallet/WalletSelector';
 
 import * as S from './Account.style';
+import useAccount from './useAccount';
 
 function Account() {
+  const { onPressSwitchNetwork } = useAccount();
   return (
     <S.Container>
       <S.Header>
@@ -25,7 +27,7 @@ function Account() {
       <S.Section>
         <WalletSelector />
         {/* TODO: 실제 네트워크 데이터와 연동하기 */}
-        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={() => console.log('select network modal')} />
+        <Chip label='Ethereum Mainnet' chipPosition='left' isMultiple={true} onPress={onPressSwitchNetwork} />
       </S.Section>
       <S.Section>
         <Address />
