@@ -10,9 +10,9 @@ import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
-import { TCancelRootStackProps } from '@@screens/Wallet/WalletTransactionCancel/WalletTransactionCancel.type';
-import { TTransactionHistoryRootStackProps } from '@@screens/Wallet/WalletTransactionHistory/WalletTransactionHistory.type';
-import { TSpeedUpRootStackProps } from '@@screens/Wallet/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
+import { TCancelRootStackProps } from '@@screens/WalletScreen/WalletTransactionCancel/WalletTransactionCancel.type';
+import { TTransactionHistoryRootStackProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
+import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
 import { fontSize } from '@@utils/ui';
 
 import * as S from './TransactionHistoryListItem.style';
