@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /**
  * HDWallet implementation that creates multiple wallets
  *
@@ -39,6 +38,10 @@ export class Clutch {
 
   get publicKey(): string {
     return this.wallet.publicKey;
+  }
+
+  get privateKey(): string {
+    return this.wallet.privateKey;
   }
 
   static createWalletWithEntropy(entropy: string | Uint8Array, derivePath?: string): Clutch {

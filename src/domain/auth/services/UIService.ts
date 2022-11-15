@@ -8,23 +8,20 @@ import { TPinMode } from '@@store/pin/pinStore.type';
 export interface UIService {
   triggerGetPincode: () => Promise<string>;
   triggerSetPincode: (stage?: keyof typeof AUTH_STAGE) => Promise<string>;
-  triggerGetMnemonic: () => Promise<string>;
-  triggerSetMnemonic: () => Promise<string>;
-  triggerConfirmMnemonic: (mnemonic: string) => Promise<boolean>;
 }
 
 export class UIServiceImpl implements UIService {
   constructor() {} //inject modalStore
 
-  async triggerGetPincode() {
+  triggerGetPincode = async () => {
     return await this._triggerPincode(PIN_MODE.CONFIRM);
-  }
+  };
 
-  async triggerSetPincode(stage?: keyof typeof AUTH_STAGE) {
+  triggerSetPincode = async (stage?: keyof typeof AUTH_STAGE) => {
     return await this._triggerPincode(PIN_MODE.SETUP, stage);
-  }
+  };
 
-  private async _triggerPincode(pinMode: TPinMode, stage?: keyof typeof AUTH_STAGE) {
+  private _triggerPincode = async (pinMode: TPinMode, stage?: keyof typeof AUTH_STAGE) => {
     let pinModalResolver, pinModalRejector;
     const pinModalObserver = new Promise((resolve, reject) => {
       pinModalResolver = resolve;
@@ -50,18 +47,5 @@ export class UIServiceImpl implements UIService {
     }
     const password = await pinModalObserver;
     return password as string;
-  }
-
-  async triggerGetMnemonic() {
-    return 'AGDFSHFSJSJFGJSGFJSGJSJGSJ';
-  }
-  async triggerSetMnemonic() {
-    return 'AGDFSHFSJSJFGJSGFJSGJSJGSJ';
-  }
-  async triggerConfirmMnemonic(mnemonic: string) {
-    return true;
-  }
-  async _triggerMnemonic() {
-    return 'AGDFSHFSJSJFGJSGFJSGJSJGSJ';
-  }
+  };
 }

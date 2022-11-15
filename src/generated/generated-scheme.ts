@@ -11,10 +11,22 @@ export interface paths {
     get: operations["HealthController_getHealth"];
   };
   "/auth/deferred/validate": {
-    post: operations["DeferredOauthController_authVerification"];
+    post: operations["AuthController_authVerification"];
   };
   "/auth/deferred": {
-    post: operations["DeferredOauthController_createDeferredAuth"];
+    post: operations["AuthController_createDeferredAuth"];
+  };
+  "/auth/sessions": {
+    get: operations["AuthController_activeAuthSessions"];
+  };
+  "/auth/sessions/refresh": {
+    post: operations["AuthController_refresh"];
+  };
+  "/auth/sessions/{id}": {
+    delete: operations["AuthController_invalidate"];
+  };
+  "/.well-known/jwks.json": {
+    get: operations["AuthController_jwks"];
   };
   "/users/current/wallet": {
     post: operations["WalletsController_connectWallet"];
@@ -22,15 +34,17 @@ export interface paths {
   "/users/current/wallet/sign": {
     post: operations["WalletsController_verifyWallet"];
   };
+  "/auth/google": {
+    get: operations["GoogleOauthController_discordAuth"];
+  };
   "/auth/discord": {
     get: operations["DiscordOauthController_discordAuth"];
   };
-  "/auth/discord/validate": {
-    /** @deprecated use POST /auth/deferred/validate */
-    post: operations["DiscordOauthController_discordAuthVerification"];
-  };
   "/auth/twitter": {
     get: operations["TwitterOauthController_twitterAuth"];
+  };
+  "/auth/facebook": {
+    get: operations["FacebookOauthController_facebookAuth"];
   };
   "/auth/web3/request": {
     post: operations["Web3OauthController_requestSignMessage"];
@@ -68,6 +82,70 @@ export interface paths {
     /** HMAC Secured */
     put: operations["ClutchUserController_updateServerShare"];
   };
+  "/v1/accounts/delete": {
+    /** Delete Clutch Account. */
+    post: operations["ClutchUserController_deleteAccounts"];
+  };
+  "/v1/third-party/{appId}/connection/status": {
+    /** Get Third Party connection Status */
+    get: operations["ThirdPartyController_connectionCheck"];
+  };
+  "/v1/third-party/{appId}/user/balance/earn": {
+    /** Earn Servered balance third party user */
+    post: operations["ThirdPartyController_balanceEarn"];
+  };
+  "/v1/third-party/{appId}/user/balance": {
+    /** Get Serverd Balance amount */
+    get: operations["ThirdPartyController_balance"];
+  };
+  "/v1/third-party/{appId}/balance/current": {
+    /**
+     * GET The Amount of Serverd Balance held by a Third party App.
+     * Earn Servered Balances by Third party app is possible within this amount.
+     */
+    get: operations["ThirdPartyController_balanceCurrent"];
+  };
+  "/v1/third-party/{appId}/noti-response-sample": {
+    /** Sample API that response of connect and disconnect notification. */
+    post: operations["ThirdPartyController_notiApiSample"];
+  };
+  "/v1/third-party/{appId}/earn-event": {
+    get: operations["ThirdPartyController_thirdPartyGetEarnEvent"];
+  };
+  "/v1/third-party/{appId}/earn-event/{eventAlias}/participation/current-point": {
+    /** GET Current Earn Event Participation Point Information by Third Party Identifier. */
+    get: operations["ThirdPartyController_thirdPartyGetEventParticipationCurrentPoint"];
+  };
+  "/v1/third-party/{appId}/earn-event/{eventAlias}/participation-for-clutch": {
+    /** Participate Earn event.( only for clutch server ) */
+    post: operations["ThirdPartyController_thirdPartyClutchEventParticipation"];
+  };
+  "/v1/third-party/{appId}/earn-event/{eventAlias}/participation": {
+    /** GET Earn Event Participation Log List. */
+    get: operations["ThirdPartyController_thirdPartyGetEventParticipationList"];
+    /** Participate Earn event. */
+    post: operations["ThirdPartyController_thirdPartyEventParticipation"];
+  };
+  "/v1/third-party/{appId}/earn-event/{eventAlias}/participation/cancel": {
+    /** Cancel Earn event Participation. */
+    post: operations["ThirdPartyController_thirdPartyEventParticipationCancel"];
+  };
+  "/v1/third-party/{appId}/earn-event/{eventAlias}/participation/filtered": {
+    /** GET One Earn Event Participation Log by request id. */
+    get: operations["ThirdPartyController_thirdPartyGetEventParticipationFiltered"];
+  };
+  "/v1/third-party/{appId}/connect/check": {
+    /** Get Third Party connection Status for Clutch */
+    post: operations["ThirdPartyForClutchController_connectCheck"];
+  };
+  "/v1/third-party/{appId}/connect": {
+    /** Connecting to third party user (for now just TADA) */
+    post: operations["ThirdPartyForClutchController_connect"];
+  };
+  "/v1/third-party/{appId}/disconnect": {
+    /** Disconnecting to third party user (for now just TADA) */
+    post: operations["ThirdPartyForClutchController_disconnect"];
+  };
   "/currencies/{id}": {
     get: operations["CurrenciesController_getCurrency"];
   };
@@ -83,6 +161,30 @@ export interface paths {
   };
   "/balance/withdrawals": {
     post: operations["BalanceWithdrawalRequestsController_createWithdrawalRequest"];
+  };
+  "/v1/earn-event/list": {
+    /** Event Lists. */
+    post: operations["EarnEventController_listPost"];
+  };
+  "/v1/earn-event/{id}/participation/current": {
+    /** User's Current point from this event. */
+    post: operations["EarnEventController_participationCurrentPost"];
+  };
+  "/v1/earn-event/{id}/claim/request": {
+    /** Request Claim this event. */
+    post: operations["EarnEventController_claimRequestPost"];
+  };
+  "/v1/earn-event/{id}/claim/status": {
+    /** Check Claim processing status. */
+    post: operations["EarnEventController_claimStatusPost"];
+  };
+  "/v1/earn-event/{id}/claim/information": {
+    /** Claim informations to show claim modal. */
+    post: operations["EarnEventController_claimInformationPost"];
+  };
+  "/v1/earn-event/{id}": {
+    /** Get one Earn Event. */
+    post: operations["EarnEventController_post"];
   };
   "/payments": {
     post: operations["PaymentsController_createPayment"];
@@ -126,6 +228,9 @@ export interface paths {
   "/games/democopter/active": {
     get: operations["DemocopterController_getActiveDemocopterGame"];
   };
+  "/games/democopter/pastResults": {
+    get: operations["DemocopterController_getPastResults"];
+  };
   "/games/democopter/{id}": {
     get: operations["DemocopterController_getDemocopterGame"];
   };
@@ -135,8 +240,20 @@ export interface paths {
   "/games/democopter/{id}/leaderboard": {
     get: operations["DemocopterController_getDemocopterLeaderboard"];
   };
+  "/games/democopter/results/{gameResultId}/twitter/share/validate": {
+    post: operations["DemocopterController_validateTwitterResultShare"];
+  };
+  "/games/democopter/missions/{missionSlug}/twitter/retweet/validate": {
+    post: operations["DemocopterController_validateTwitterRetweetMission"];
+  };
   "/admin/games/democopter/{gameId}/schedule": {
     post: operations["DemocopterAdminController_createSchedule"];
+  };
+  "/missions/{group}": {
+    get: operations["MissionsController_getMissions"];
+  };
+  "/missions/{id}/claim": {
+    post: operations["MissionsController_claimMission"];
   };
   "/admin/discord-bot/commands": {
     post: operations["DiscordBotController_register"];
@@ -150,11 +267,14 @@ export interface paths {
   "/users/current/wallet/bidSignature": {
     post: operations["NftSalesController_createBidSignature"];
   };
-  "/missions/{group}": {
-    get: operations["MissionsController_getMissions"];
+  "/admin-api/images": {
+    put: operations["AdminUiController_uploadImage"];
   };
-  "/missions/{id}/claim": {
-    post: operations["MissionsController_claimMission"];
+  "/admin-api/user/password": {
+    post: operations["AdminUiController_setPassword"];
+  };
+  "/admin-api/withdrawal-request/{id}/retry": {
+    post: operations["AdminUiController_retryWithdrawalRequest"];
   };
   "/forms/{id}": {
     get: operations["FormsController_getForm"];
@@ -169,12 +289,6 @@ export interface paths {
   "/v1/mobiles/current": {
     post: operations["MobileController_checkCurrent"];
   };
-  "/v1.1/wallets/balance": {
-    get: operations["VerifiedWalletV11Controller_balance"];
-  };
-  "/v1.1/wallets/simple/price": {
-    get: operations["VerifiedWalletV11Controller_simplePrice"];
-  };
   "/v1/wallets": {
     get: operations["VerifiedWalletV10Controller_list"];
     /** Register client-side created wallet */
@@ -183,54 +297,22 @@ export interface paths {
   "/v1/wallets/balance": {
     get: operations["VerifiedWalletV10Controller_balance"];
   };
-  "/v1/third-party/{appId}/user/balance/earn": {
-    /** Earn Servered balance third party user */
-    post: operations["ThirdPartyController_balanceEarn"];
+  "/v1.1/wallets/balance": {
+    /**
+     * Get balance of a wallet<BR/>
+     * Response only 2 Tokens.
+     */
+    get: operations["VerifiedWalletV11Controller_balance"];
   };
-  "/v1/third-party/{appId}/user/balance": {
-    /** Get Serverd Balance amount */
-    get: operations["ThirdPartyController_balance"];
+  "/v1.1/wallets/simple/price": {
+    get: operations["VerifiedWalletV11Controller_simplePrice"];
   };
-  "/v1/third-party/{appId}/balance/current": {
-    get: operations["ThirdPartyController_balanceCurrent"];
-  };
-  "/v1/third-party/{appId}/noti-response-sample": {
-    post: operations["ThirdPartyController_notiApiSample"];
-  };
-  "/v1/third-party/{appId}/earn-event/{eventAlias}/participation": {
-    get: operations["ThirdPartyController_thirdPartyGetEventParticipationList"];
-    post: operations["ThirdPartyController_thirdPartyEventParticipation"];
-  };
-  "/v1/third-party/{appId}/connect/check": {
-    post: operations["ThirdPartyForClutchController_connectCheck"];
-  };
-  "/v1/third-party/{appId}/connect": {
-    /** Connecting to third party user (for now just TADA) */
-    post: operations["ThirdPartyForClutchController_connect"];
-  };
-  "/v1/third-party/{appId}/disconnect": {
-    /** Disconnecting to third party user (for now just TADA) */
-    post: operations["ThirdPartyForClutchController_disconnect"];
-  };
-  "/v1/earn-event/list": {
-    /** Event Lists. */
-    post: operations["EarnEventController_earnEventGet"];
-  };
-  "/v1/earn-event/{id}/participation/current": {
-    /** User's Current point from this event. */
-    post: operations["EarnEventController_earnEventPariticipationCurrent"];
-  };
-  "/v1/earn-event/{id}/claim/request": {
-    /** Request Claim this event. */
-    post: operations["EarnEventController_earhEventClaimRequest"];
-  };
-  "/v1/earn-event/{id}/claim/check": {
-    /** Check Claim processing status. */
-    post: operations["EarnEventController_earhEventClaimCheck"];
-  };
-  "/v1/earn-event/{id}/claim/information": {
-    /** Claim informations to show claim modal. */
-    post: operations["EarnEventController_earnEventGetClaim"];
+  "/v1.2/wallets/balance": {
+    /**
+     * Get balance of a wallet<BR/>
+     * Response Multiple Tokens.
+     */
+    get: operations["VerifiedWalletV12Controller_balance"];
   };
   "/v1/balance-clutch/current": {
     post: operations["BalanceClutchController_currentGet"];
@@ -278,99 +360,6 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
-    ThirdPartyUserEntity: {
-      id: string;
-      userId: string;
-      user?: components["schemas"]["UserEntity"];
-      appId: string;
-      displayName: string | null;
-      identifier: string;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-    /** @enum {string} */
-    EarnEventClaimType: "CONSTANT" | "RATIO_DIVISION";
-    /** @enum {string} */
-    BlockchainNetwork:
-      | "ETHEREUM"
-      | "ETHEREUM_ROPSTEN"
-      | "ETHEREUM_KOVAN"
-      | "ETHEREUM_RINKEBY"
-      | "ETHEREUM_GOERLI"
-      | "ETHEREUM_LOCAL"
-      | "BSC"
-      | "BSC_TEST"
-      | "POLYGON"
-      | "POLYGON_TEST"
-      | "SOLANA"
-      | "BITCOIN"
-      | "XTZ"
-      | "IN_MIGRATION";
-    CurrencyEntity: {
-      network: components["schemas"]["BlockchainNetwork"] | null;
-      id: string;
-      name: string;
-      alias: string | null;
-      data: { [key: string]: unknown };
-      icon: string | null;
-      contractAddress: string | null;
-      withdrawalFee: number | null;
-      balanceTransferable: boolean;
-      balanceWithdrawable: boolean;
-      tokenDecimal: number;
-      withdrawalDelegateUserId: string | null;
-      EarnEvent?: components["schemas"]["EarnEventEntity"][];
-    };
-    EarnEventParticipationLogEntity: {
-      id: string;
-      value: number;
-      earnEventId: string;
-      earnEvent?: components["schemas"]["EarnEventEntity"];
-      userId: string;
-      user?: components["schemas"]["UserEntity"];
-      description: string | null;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-    EarnEventEntity: {
-      claimType: components["schemas"]["EarnEventClaimType"];
-      id: string;
-      alias: string;
-      /** Format: date-time */
-      eventStartAt: string;
-      /** Format: date-time */
-      eventEndAt: string;
-      /** Format: date-time */
-      claimStartAt: string;
-      /** Format: date-time */
-      claimEndAt: string;
-      iconUrl: string;
-      title: { [key: string]: unknown };
-      subTitle: { [key: string]: unknown };
-      detailPageUrl: { [key: string]: unknown };
-      calcInfoPageUrl: { [key: string]: unknown };
-      pointCurrency: string;
-      pointIconUrl: string;
-      eventActionTitle: { [key: string]: unknown };
-      eventActionButtonTitle: { [key: string]: unknown };
-      eventActionScheme: string;
-      currencyId: string;
-      maxReward: number;
-      rewardPerValue: number | null;
-      currency?: components["schemas"]["CurrencyEntity"];
-      appId: string | null;
-      app?: components["schemas"]["UserEntity"] | null;
-      description: string | null;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-      earnEventParticipationLog?: components["schemas"]["EarnEventParticipationLogEntity"][];
-    };
     UserEntity: {
       id: string;
       email: string | null;
@@ -381,12 +370,12 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+      country: string | null;
       data: { [key: string]: unknown } | null;
+      /** Format: date-time */
+      deletedAt: string | null;
       identifiers?: components["schemas"]["UserIdentifierEntity"][];
       wallet?: components["schemas"]["WalletEntity"] | null;
-      thirdPartyUser?: components["schemas"]["ThirdPartyUserEntity"][];
-      earnEvent?: components["schemas"]["EarnEventEntity"][];
-      earnEventParticipationLog?: components["schemas"]["EarnEventParticipationLogEntity"][];
     };
     UserIdentifierEntity: {
       type: components["schemas"]["UserIdentifierType"];
@@ -412,12 +401,36 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+      country: string | null;
       data: { [key: string]: unknown } | null;
+      /** Format: date-time */
+      deletedAt: string | null;
       identifiers?: components["schemas"]["UserIdentifierEntity"][];
       wallet: components["schemas"]["WalletEntity"] | null;
-      thirdPartyUser?: components["schemas"]["ThirdPartyUserEntity"][];
-      earnEvent?: components["schemas"]["EarnEventEntity"][];
-      earnEventParticipationLog?: components["schemas"]["EarnEventParticipationLogEntity"][];
+    };
+    AuthSessionDtoWithRefreshToken: {
+      id: string;
+      authNonce: string;
+      userIdentifierId: string;
+      userId: string;
+      country: string | null;
+      tokenRefreshable: boolean;
+      issuedIpAddress: string | null;
+      /** Format: date-time */
+      issuedAt: string;
+      /** Format: date-time */
+      validUntil: string;
+      /** Format: date-time */
+      lastRefreshedAt: string | null;
+      /** Format: date-time */
+      deletedAt: string | null;
+      authClientId: string;
+      refreshToken?: string;
+      authClient: {
+        id?: string;
+        name?: string;
+        tokenRefreshableDurationMs?: string | null;
+      };
     };
     SignedUserIdentifierWithAccessTokenDto: {
       type: components["schemas"]["UserIdentifierType"];
@@ -433,6 +446,39 @@ export interface components {
       updatedAt: string;
       user: components["schemas"]["UserWithWalletDto"];
       accessToken: string;
+      authSession?: components["schemas"]["AuthSessionDtoWithRefreshToken"];
+    };
+    AuthClientEntity: {
+      id: string;
+      name: string;
+      tokenRefreshable: boolean;
+      tokenRefreshableDurationMs: string | null;
+      minimumVersion: number | null;
+    };
+    AuthSessionEntity: {
+      id: string;
+      authNonce: string;
+      userIdentifierId: string;
+      userIdentifier?: components["schemas"]["UserIdentifierEntity"];
+      userId: string;
+      user?: components["schemas"]["UserEntity"];
+      country: string | null;
+      tokenRefreshable: boolean;
+      issuedIpAddress: string | null;
+      /** Format: date-time */
+      issuedAt: string;
+      /** Format: date-time */
+      validUntil: string;
+      /** Format: date-time */
+      lastRefreshedAt: string | null;
+      /** Format: date-time */
+      deletedAt: string | null;
+      authClientId: string;
+      authClient?: components["schemas"]["AuthClientEntity"];
+    };
+    JwtAccessToken: {
+      accessToken: string;
+      authSession?: components["schemas"]["AuthSessionDtoWithRefreshToken"];
     };
     WalletAddressDto: {
       address: string;
@@ -444,9 +490,6 @@ export interface components {
     };
     VerifyWalletAddressDto: {
       signature: string;
-    };
-    DeprecatedDeferredAuthValidateDto: {
-      code: string;
     };
     Web3AuthRequestDto: {
       walletAddress: string;
@@ -492,6 +535,17 @@ export interface components {
     RegisterReferrerDto: {
       userId: string;
       via: string;
+    };
+    UserReferrerEntity: {
+      id: string;
+      userId: string;
+      inviterId: string;
+      user?: components["schemas"]["UserEntity"];
+      inviter?: components["schemas"]["UserEntity"];
+      data: { [key: string]: unknown } | null;
+      earned: boolean | null;
+      /** Format: date-time */
+      createdAt: string;
     };
     /** @enum {string} */
     ForClutchUserIdentifierType: "GOOGLE" | "APPLE";
@@ -548,6 +602,7 @@ export interface components {
       share: string;
       /** @description root public key in form of xpub */
       pubKey: string;
+      /** @description Wallet 0 address for setting */
       walletAddress0: string;
     };
     SimpleResponseDto: {
@@ -571,15 +626,363 @@ export interface components {
       /** @default Invalid Hmac sig! */
       message: string;
     };
+    ThirdPartyConnectionCheckResponseDto: {
+      /** @description Flag for connection information for third party app is exists. */
+      isConnected: boolean;
+      /**
+       * Format: date-time
+       * @description Connected Date
+       * @default null
+       */
+      connectedAt: string | null;
+    };
+    ThirdPartyEarnDto: {
+      /** @enum {string} */
+      currency: "MVL" | "bMVL" | "XTZ" | "BNB";
+      amount: number;
+      description?: string;
+      /** @description User Identifier of Third party app. */
+      identifier: string;
+      /** @description Timestamp sent request. */
+      timestamp: string;
+    };
+    ThirdPartyBalanceResponseDto: {
+      amount: number;
+    };
+    S2SDefaultDto: {
+      /** @description Timestamp sent request. */
+      timestamp: string;
+    };
+    EarnEventPointInfoDto: {
+      /** @description Id key for point */
+      key: string;
+      /** @description Unit of this point ex) P */
+      currency: string;
+      /** @description Title of this point ex) 나의 Trading Point */
+      title: string;
+    };
+    ThirdPartyApp: {
+      /** @description Third party app id. */
+      id: string;
+      /** @description Third party app name. */
+      name: string;
+      /** @description Deep link for connect to third party app. */
+      connectionDeepLink: string | null;
+    };
+    EarnEventDto: {
+      /** @enum {string} */
+      claimType: "CONSTANT" | "RATIO_DIVISION";
+      /** @description event id */
+      id: string;
+      /** Format: date-time */
+      eventStartAt: string;
+      /** Format: date-time */
+      eventEndAt: string;
+      /** Format: date-time */
+      claimStartAt: string;
+      /** Format: date-time */
+      claimEndAt: string;
+      /** @description event icon image url */
+      iconUrl: string;
+      title: string;
+      subTitle: string;
+      detailPageUrl: string;
+      /** @description Information of point array */
+      pointInfoArr: components["schemas"]["EarnEventPointInfoDto"][];
+      /** @description currency icon image url for point */
+      pointIconUrl: string;
+      /**
+       * @description button text for earn
+       * ex) Trade 바로가기
+       * @default null
+       */
+      eventActionButtonTitle: string | null;
+      /**
+       * @description scheme for execute when earn button clicked
+       * @default null
+       */
+      eventActionScheme: string | null;
+      /**
+       * @description Unit text for claim
+       * ex) bMVL
+       */
+      currency: string;
+      /** @description currency icon for claim */
+      currencyIconUrl: string;
+      /** @description Web page url to show point and token information for claim. */
+      calcInfoPageUrl: string;
+      /**
+       * @description Third party app information.
+       * This is nullable property.
+       * @default null
+       */
+      app: components["schemas"]["ThirdPartyApp"] | null;
+      /** @description Alias of Earn Event. */
+      alias: string;
+    };
+    EarnEventCurrentResponseDto: {
+      /** @description current amount */
+      amount: string;
+      /** @description key of point */
+      key: string;
+      /** @description title of point */
+      title: string;
+      /** @description Unit of this point. */
+      currency: string;
+    };
+    ThirdPartyEarnEventParticipationForClutchDto: {
+      /** @description User Identifier of Third party app. */
+      identifier: string;
+      /** @description Timestamp sent request. */
+      timestamp: string;
+      /** @description Earn event participation value. */
+      value: string;
+      /** @description Earn Event point key. */
+      key: string;
+      /** @description Description. */
+      description?: string;
+      /** @description Request id for prevent redundency */
+      requestId: string;
+      network: { [key: string]: unknown };
+    };
+    ThirdPartyEarnEventParticipationDto: {
+      /** @description User Identifier of Third party app. */
+      identifier: string;
+      /** @description Timestamp sent request. */
+      timestamp: string;
+      /** @description Earn event participation value. number string */
+      value: string;
+      /** @description Earn Event point key. */
+      key: string;
+      /** @description Description. */
+      description?: string;
+      /** @description Request id for prevent redundency */
+      requestId: string;
+    };
+    ThirdPartyEarnEventParticipationCancelDto: {
+      /** @description User Identifier of Third party app. */
+      identifier: string;
+      /** @description Timestamp sent request. */
+      timestamp: string;
+      /** @description Description. */
+      description?: string;
+      /** @description Request id for prevent redundency */
+      requestId: string;
+    };
+    ThirdPartyEarnEventParticipationResponseDto: {
+      /**
+       * @description Status of Event Participation Log
+       * @enum {string}
+       */
+      status: "COMPLETED" | "CANCELED" | "CLAIMED";
+      /** @description Earn Event Participation Id */
+      id: string;
+      /** @description Earn Event Point Key */
+      key: string;
+      /** @description Earn Event participation value */
+      value: string;
+      /** @description Earn Event id */
+      earnEventId: string;
+      /** @description user id */
+      userId: string | null;
+      /** @description description */
+      description: string | null;
+      /** @description Request Id that received from Third Party App */
+      requestId: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    ThirdPartyEarnEventParticipationWithCountResponseDto: {
+      /** @description Count of all list. */
+      totalCount: number;
+      /** @description Earn Event Log Participation Log Lists. */
+      list: components["schemas"]["ThirdPartyEarnEventParticipationResponseDto"][];
+    };
+    ThirdPartyConnectCheckDto: {
+      /** @description JWT Token from third party app(ex: TADA) */
+      token: string | null;
+    };
+    ThirdPartyConnectCheckResponseDto: {
+      /** @description Flag for connection information for third party app is exists. */
+      exists: boolean;
+      /**
+       * @description Identifier for display received from third party app.
+       * @default null
+       */
+      displayName: string | null;
+    };
+    ThirdPartyConnectDto: {
+      /** @description JWT Token from third party app(ex: TADA) */
+      token: string;
+    };
+    /** @enum {string} */
+    BlockchainNetwork:
+      | "ETHEREUM"
+      | "ETHEREUM_ROPSTEN"
+      | "ETHEREUM_KOVAN"
+      | "ETHEREUM_RINKEBY"
+      | "ETHEREUM_GOERLI"
+      | "ETHEREUM_LOCAL"
+      | "BSC"
+      | "BSC_TEST"
+      | "POLYGON"
+      | "POLYGON_TEST"
+      | "SOLANA"
+      | "BITCOIN"
+      | "XTZ"
+      | "XTZ_GHOST"
+      | "IN_MIGRATION";
+    /** @enum {string} */
+    Region: "SG" | "VN" | "KH";
+    /** @enum {string} */
+    EarnEventClaimType: "CONSTANT" | "RATIO_DIVISION";
+    Decimal: { [key: string]: unknown };
+    CurrencyExchangeRateEntity: {
+      id: string;
+      fromCurrencyId: string;
+      toCurrencyId: string;
+      fromCurrency?: components["schemas"]["CurrencyEntity"];
+      toCurrency?: components["schemas"]["CurrencyEntity"];
+      from: components["schemas"]["Decimal"];
+      to: components["schemas"]["Decimal"];
+    };
+    CurrencyEntity: {
+      network: components["schemas"]["BlockchainNetwork"] | null;
+      /** @example 123.456789 */
+      withdrawalFee: string | null;
+      id: string;
+      name: string;
+      alias: string | null;
+      data: { [key: string]: unknown };
+      icon: string | null;
+      contractAddress: string | null;
+      balanceTransferable: boolean;
+      balanceWithdrawable: boolean;
+      tokenDecimal: number;
+      withdrawalDelegateUserId: string | null;
+      earnEvents?: components["schemas"]["EarnEventEntity"][];
+      earnEventsAsSubCurrency?: components["schemas"]["EarnEventEntity"][];
+      fromCurrencyExchangeRate?: components["schemas"]["CurrencyExchangeRateEntity"][];
+      toCurrencyExchangeRate?: components["schemas"]["CurrencyExchangeRateEntity"][];
+    };
+    /** @enum {string} */
+    EarnEventParticipationLogStatus: "COMPLETED" | "CANCELED" | "CLAIMED";
+    /** @enum {string} */
+    ThirdPartyUserStatus: "CONNECTED" | "DISCONNECTED";
+    /** @enum {string} */
+    EarnEventClaimStatus:
+      | "INCOMING"
+      | "COMPLETED_TRANSFER"
+      | "FAILED_TRANSFER"
+      | "FAILED_WITHDRAW"
+      | "COMPLETED"
+      | "CANCELED";
+    EarnEventClaimEntity: {
+      status: components["schemas"]["EarnEventClaimStatus"];
+      id: string;
+      earnEventId: string;
+      earnEvent?: components["schemas"]["EarnEventEntity"];
+      userId: string;
+      user?: components["schemas"]["UserEntity"];
+      thirdPartyUserId: string | null;
+      thirdPartyUser?: components["schemas"]["ThirdPartyUserEntity"] | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    ThirdPartyUserEntity: {
+      status: components["schemas"]["ThirdPartyUserStatus"];
+      id: string;
+      userId: string;
+      user?: components["schemas"]["UserEntity"];
+      appId: string;
+      app?: components["schemas"]["UserEntity"];
+      displayName: string | null;
+      identifier: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      earnEventParticipationLogs?: components["schemas"]["EarnEventParticipationLogEntity"][];
+      earnEventClaims?: components["schemas"]["EarnEventClaimEntity"][];
+    };
+    EarnEventParticipationLogEntity: {
+      status: components["schemas"]["EarnEventParticipationLogStatus"];
+      id: string;
+      key: string;
+      value: components["schemas"]["Decimal"];
+      earnEventId: string;
+      userId: string | null;
+      requestId: string;
+      thirdPartyUserId: string | null;
+      description: string | null;
+      thirdPartyIdentifier: string | null;
+      earnEvent?: components["schemas"]["EarnEventEntity"];
+      thirdPartyUser?: components["schemas"]["ThirdPartyUserEntity"] | null;
+      user?: components["schemas"]["UserEntity"] | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    EarnEventEntity: {
+      region: components["schemas"]["Region"] | null;
+      claimType: components["schemas"]["EarnEventClaimType"];
+      id: string;
+      alias: string;
+      /** Format: date-time */
+      eventStartAt: string;
+      /** Format: date-time */
+      eventEndAt: string;
+      /** Format: date-time */
+      claimStartAt: string;
+      /** Format: date-time */
+      claimEndAt: string;
+      iconUrl: string;
+      title: { [key: string]: unknown };
+      subTitle: { [key: string]: unknown };
+      detailPageHtml: { [key: string]: unknown };
+      pointArr: { [key: string]: unknown };
+      pointIconUrl: string;
+      eventActionButtonTitle: { [key: string]: unknown } | null;
+      allowTimeRange: { [key: string]: unknown } | null;
+      eventActionScheme: string | null;
+      currencyId: string;
+      subCurrencyId: string | null;
+      subCurrencyReward: components["schemas"]["Decimal"] | null;
+      maxReward: components["schemas"]["Decimal"];
+      lowerLimitReward: components["schemas"]["Decimal"] | null;
+      maxParticipationUserCount: number | null;
+      maxParticipationSumPerDay: components["schemas"]["Decimal"] | null;
+      rewardPerValue: components["schemas"]["Decimal"] | null;
+      currency?: components["schemas"]["CurrencyEntity"];
+      subCurrency?: components["schemas"]["CurrencyEntity"] | null;
+      appId: string | null;
+      app?: components["schemas"]["UserEntity"] | null;
+      description: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      isAllowParticipationInClaim: boolean;
+      participationLogs?: components["schemas"]["EarnEventParticipationLogEntity"][];
+      claims?: components["schemas"]["EarnEventClaimEntity"][];
+      data: { [key: string]: unknown } | null;
+    };
     BalanceAccountEntity: {
+      /** @example 123.456789 */
+      amount: string;
+      /** @example 123.456789 */
+      dailyMaxTransferAmount: string | null;
       id: string;
       title: string;
-      amount: number;
       currencyId: string;
       currency?: components["schemas"]["CurrencyEntity"];
       userId: string;
       user?: components["schemas"]["UserEntity"];
-      dailyMaxTransferAmount: number | null;
       blockchainAddress: string | null;
       /** Format: date-time */
       createdAt: string;
@@ -617,13 +1020,16 @@ export interface components {
     PurchasableEntity: {
       type: components["schemas"]["PurchasableType"];
       payMethod: components["schemas"]["PurchasablePayMethod"];
+      /** @example 123.456789 */
+      minimumBuyQuantity: string;
+      /** @example 123.456789 */
+      maximumBuyQuantity: string | null;
+      /** @example 123.456789 */
+      price: string;
       id: string;
       title: string;
       order: number | null;
       quantityIsInteger: boolean;
-      minimumBuyQuantity: number;
-      maximumBuyQuantity: number | null;
-      price: number;
       currencyId: string;
       currency?: components["schemas"]["CurrencyEntity"];
       /** Format: date-time */
@@ -663,6 +1069,8 @@ export interface components {
       purchasable?: components["schemas"]["PurchasableEntity"];
       purchasableGroupId: string | null;
       purchasableGroup?: components["schemas"]["PurchasableGroupEntity"] | null;
+      /** Format: date-time */
+      consumedAt: string | null;
       data: { [key: string]: unknown };
       itemNo: number;
       userId: string;
@@ -682,10 +1090,12 @@ export interface components {
     };
     PaymentEntity: {
       status: components["schemas"]["PaymentStatus"];
+      /** @example 123.456789 */
+      quantity: string;
+      /** @example 123.456789 */
+      price: string;
       id: string;
       description: string;
-      quantity: number;
-      price: number;
       currencyId: string | null;
       currency?: components["schemas"]["CurrencyEntity"] | null;
       purchasableId: string;
@@ -712,8 +1122,9 @@ export interface components {
     };
     TokenTransactionLogEntity: {
       network: components["schemas"]["BlockchainNetwork"];
+      /** @example 123.456789 */
+      amount: string;
       id: string;
-      amount: number;
       currencyId: string | null;
       currency?: components["schemas"]["CurrencyEntity"] | null;
       contractAddress: string;
@@ -727,6 +1138,7 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       capturedAt: string;
+      isSuccess: boolean;
       balanceAccountId: string;
       balanceAccount?: components["schemas"]["BalanceAccountEntity"];
       depositRequestId: string | null;
@@ -740,9 +1152,11 @@ export interface components {
     };
     BalanceDepositRequestEntity: {
       status: components["schemas"]["BalanceRequestStatus"];
+      /** @example 123.456789 */
+      goalAmount: string;
+      /** @example 123.456789 */
+      processedAmount: string | null;
       id: string;
-      goalAmount: number;
-      processedAmount: number | null;
       address: string;
       currencyId: string;
       currency?: components["schemas"]["CurrencyEntity"];
@@ -768,6 +1182,7 @@ export interface components {
       game?: components["schemas"]["GameEntity"];
       score: number;
       data: { [key: string]: unknown };
+      metadata: { [key: string]: unknown } | null;
       username: string | null;
       userId: string | null;
       user?: components["schemas"]["UserEntity"] | null;
@@ -777,32 +1192,6 @@ export interface components {
       tried: number;
       /** Format: date-time */
       createdAt: string;
-    };
-    GameEntity: {
-      id: string;
-      type: string;
-      totalEntries: number;
-      totalUserEntries: number;
-      entryFeeAmount: number | null;
-      entryFeeCurrencyId: string | null;
-      currency?: components["schemas"]["CurrencyEntity"] | null;
-      entryFeeUserId: string | null;
-      entryFeeUser?: components["schemas"]["UserEntity"] | null;
-      title: string | null;
-      description: string | null;
-      data: { [key: string]: unknown };
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      closedAt: string | null;
-      /** Format: date-time */
-      nextGameStartsAt: string | null;
-      gameDurationMs: string | null;
-      gamePauseMs: string | null;
-      raffleCriteria: string | null;
-      loginRequired: boolean;
-      gameResults?: components["schemas"]["GameResultEntity"][];
-      balanceTransactions?: components["schemas"]["BalanceTransactionEntity"][];
     };
     /** @enum {string} */
     MissionType: "MY_ACTIVITIES_COUNT" | "REFEREE_ACTIVITIES_COUNT";
@@ -830,39 +1219,6 @@ export interface components {
       activityId: string;
       activity?: components["schemas"]["UserActivityEntity"];
     };
-    MissionEntity: {
-      type: components["schemas"]["MissionType"];
-      rewardType: components["schemas"]["MissionRewardType"];
-      id: string;
-      group: string;
-      /** Format: date-time */
-      startsAt: string;
-      /** Format: date-time */
-      endsAt: string | null;
-      name: string;
-      relatedActivityTypes: string[];
-      accomplishCondition: string;
-      accomplishStatus: string;
-      accomplishCount: number;
-      claimCount: number;
-      maxAccomplishCountPerUser: number | null;
-      maxAccomplishCount: number | null;
-      maxClaimCountPerUser: number | null;
-      maxClaimCount: number | null;
-      rewarderUserId: string;
-      rewarder?: components["schemas"]["UserEntity"];
-      rewardPurchasableId: string | null;
-      rewardPurchasable?: components["schemas"]["PurchasableEntity"] | null;
-      rewardAmount: number;
-      rewardCurrencyId: string | null;
-      rewardCurrency?: components["schemas"]["CurrencyEntity"] | null;
-      /** Format: date-time */
-      createdAt: string;
-      data: { [key: string]: unknown };
-      translation: { [key: string]: unknown };
-      accomplishments?: components["schemas"]["MissionAccomplishmentEntity"][];
-      accomplishedActivities?: components["schemas"]["MissionAccomplishedActivityEntity"][];
-    };
     MissionAccomplishmentEntity: {
       id: string;
       missionId: string;
@@ -876,13 +1232,83 @@ export interface components {
       activities?: components["schemas"]["MissionAccomplishedActivityEntity"][];
       balanceTransactions?: components["schemas"]["BalanceTransactionEntity"][];
     };
-    BalanceTransactionEntity: {
+    MissionEntity: {
+      type: components["schemas"]["MissionType"];
+      rewardType: components["schemas"]["MissionRewardType"];
+      /** @example 123.456789 */
+      rewardAmount: string;
       id: string;
-      amount: number;
+      slug: string | null;
+      group: string;
+      /** Format: date-time */
+      startsAt: string;
+      /** Format: date-time */
+      endsAt: string | null;
+      name: string;
+      order: number | null;
+      relatedActivityTypes: string[];
+      accomplishCondition: string;
+      accomplishStatus: string;
+      accomplishCount: number;
+      claimCount: number;
+      maxAccomplishCountPerUser: number | null;
+      maxAccomplishCount: number | null;
+      maxClaimCountPerUser: number | null;
+      maxClaimCount: number | null;
+      rewarderUserId: string;
+      rewarder?: components["schemas"]["UserEntity"];
+      rewardPurchasableId: string | null;
+      rewardPurchasable?: components["schemas"]["PurchasableEntity"] | null;
+      rewardCurrencyId: string | null;
+      rewardCurrency?: components["schemas"]["CurrencyEntity"] | null;
+      rewardBalanceTxCode: string | null;
+      rewardDescription: string | null;
+      gameId: string | null;
+      game?: components["schemas"]["GameEntity"] | null;
+      /** Format: date-time */
+      createdAt: string;
+      data: { [key: string]: unknown };
+      translation: { [key: string]: unknown };
+      accomplishments?: components["schemas"]["MissionAccomplishmentEntity"][];
+      accomplishedActivities?: components["schemas"]["MissionAccomplishedActivityEntity"][];
+    };
+    GameEntity: {
+      /** @example 123.456789 */
+      entryFeeAmount: string | null;
+      id: string;
+      type: string;
+      totalEntries: number;
+      totalUserEntries: number;
+      entryFeeCurrencyId: string | null;
+      currency?: components["schemas"]["CurrencyEntity"] | null;
+      entryFeeUserId: string | null;
+      entryFeeUser?: components["schemas"]["UserEntity"] | null;
+      title: string | null;
+      description: string | null;
+      data: { [key: string]: unknown };
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      closedAt: string | null;
+      /** Format: date-time */
+      nextGameStartsAt: string | null;
+      gameDurationMs: string | null;
+      gamePauseMs: string | null;
+      raffleCriteria: string | null;
+      loginRequired: boolean;
+      gameResults?: components["schemas"]["GameResultEntity"][];
+      balanceTransactions?: components["schemas"]["BalanceTransactionEntity"][];
+      missions?: components["schemas"]["MissionEntity"][];
+    };
+    BalanceTransactionEntity: {
+      /** @example 123.456789 */
+      amount: string;
+      /** @example 123.456789 */
+      feeAmount: string;
+      id: string;
       currencyId: string;
       currency?: components["schemas"]["CurrencyEntity"];
       description: string | null;
-      feeAmount: number;
       code: string | null;
       executerId: string | null;
       executer?: components["schemas"]["UserEntity"] | null;
@@ -912,12 +1338,14 @@ export interface components {
     };
     BalanceWithdrawalRequestEntity: {
       status: components["schemas"]["BalanceRequestStatus"];
+      /** @example 123.456789 */
+      amount: string;
+      /** @example 123.456789 */
+      feeAmount: string;
       id: string;
-      amount: number;
       address: string;
       currencyId: string;
       currency?: components["schemas"]["CurrencyEntity"];
-      feeAmount: number;
       description: string | null;
       balanceAccountId: string;
       balanceAccount?: components["schemas"]["BalanceAccountEntity"];
@@ -945,9 +1373,48 @@ export interface components {
       request: components["schemas"]["BalanceWithdrawalRequestEntity"];
     };
     CreateBalanceWithdrawalRequestDto: {
-      amount: number;
+      /** @example 123.456789 */
+      amount: string;
       currencyId: string;
       toAddress: string;
+    };
+    EarnEventClaimRequestDto: {
+      /** @description Wallet address to receive token */
+      address: string;
+    };
+    EarnEventClaimCheckResponseDto: {
+      /** @enum {string|null} */
+      status:
+        | (
+            | "INCOMING"
+            | "COMPLETED_TRANSFER"
+            | "FAILED_TRANSFER"
+            | "FAILED_WITHDRAW"
+            | "COMPLETED"
+            | "CANCELED"
+          )
+        | null;
+    };
+    EarnEventGetClaimResponseDto: {
+      /** @enum {string} */
+      claimType: "CONSTANT" | "RATIO_DIVISION";
+      currency: string;
+      /** @description currency icon for claim. */
+      currencyIconUrl: string;
+      calcInfoPageUrl: string;
+      /** @description user's current point */
+      currentPoint: string;
+      /** @description lower point limit that can be claim. */
+      lowerLimitPoint: string;
+      /** @description Total amount to claim. */
+      amount: string;
+      /** @description Fee. */
+      fee: string;
+      subCurrency: string | null;
+      /** @description currency icon for claim. */
+      subCurrencyIconUrl: string | null;
+      /** @description Total amount to claim. */
+      subCurrencyAmount: string | null;
     };
     PaymentOptions: {
       /**
@@ -1003,6 +1470,12 @@ export interface components {
     TPurchasableEntity: {
       type: components["schemas"]["PurchasableType"];
       payMethod: components["schemas"]["PurchasablePayMethod"];
+      /** @example 123.456789 */
+      minimumBuyQuantity: string;
+      /** @example 123.456789 */
+      maximumBuyQuantity: string | null;
+      /** @example 123.456789 */
+      price: string;
       supportedUserIdentifierTypes:
         | components["schemas"]["UserIdentifierType"][]
         | null;
@@ -1010,9 +1483,6 @@ export interface components {
       title: string;
       order: number | null;
       quantityIsInteger: boolean;
-      minimumBuyQuantity: number;
-      maximumBuyQuantity: number | null;
-      price: number;
       currencyId: string;
       currency?: components["schemas"]["CurrencyEntity"];
       /** Format: date-time */
@@ -1054,6 +1524,8 @@ export interface components {
       targetWalletAddressTitle: string;
     };
     PurchasableGroupDto: {
+      /** @example 123.456789 */
+      currentBalance: string;
       id: string;
       slug: string;
       unitIcon: string | null;
@@ -1063,7 +1535,6 @@ export interface components {
       maxPaymentCount: number | null;
       purchasables: components["schemas"]["TPurchasableEntity"][];
       pageSettings: components["schemas"]["PurchasableGroupPageSettingsDto"];
-      currentBalance: number;
     };
     GameResultDto: {
       gameId: string;
@@ -1099,6 +1570,33 @@ export interface components {
       identifier: string;
       name: string | null;
       avatar: string | null;
+      user: {
+        country?: string | null;
+      };
+    };
+    PastGameResultDto: {
+      id: string;
+      winner: boolean | null;
+      gameId: string;
+      score: number;
+      data: { [key: string]: unknown };
+      metadata: { [key: string]: unknown } | null;
+      username: string | null;
+      userId: string | null;
+      user?: components["schemas"]["UserEntity"] | null;
+      userIdentifierId: string | null;
+      thumbnail: string | null;
+      tried: number;
+      /** Format: date-time */
+      createdAt: string;
+      game: {
+        title?: string | null;
+        /** Format: date-time */
+        createdAt?: string;
+        raffleCriteria?: string | null;
+        entryFeeCurrencyId?: string | null;
+      };
+      userIdentifier: components["schemas"]["AbstractUserIdentifierDto"] | null;
     };
     LotteryGameResultDto: {
       id: string;
@@ -1113,25 +1611,74 @@ export interface components {
       tried: number;
       possibility: number;
       ticket: number;
+      prize: string | null;
     };
     LotteryPossibleResultDto: {
       ticket: number;
       possibility: number;
     };
     DemocopterV2Dto: {
+      /** @example 123.456789 */
+      currentBalance: string;
+      /** @example 123.456789 */
+      entryFeeAmount: string;
+      /** @example 123.456789 */
+      feeDeductedPrizeAmount: string;
+      /** @example 123.456789 */
+      totalPrizeAmount: string;
       game: components["schemas"]["GameEntity"];
       gameResults: components["schemas"]["LotteryGameResultDto"][];
       topGameResults?: components["schemas"]["GameResultEntity"][];
       currentPossibleResult: components["schemas"]["LotteryPossibleResultDto"];
       nextPossibleResult: components["schemas"]["LotteryPossibleResultDto"];
-      feeDeductedPrizeAmount: number;
-      totalPrizeAmount: number;
       totalTickets: number;
-      entryFeeAmount: number;
-      currentBalance: number;
       currencyId: string;
       paymentFulfilled: boolean;
       winnerSelected: boolean;
+    };
+    ValidateTwitterShareDto: {
+      screenName?: string;
+    };
+    ArchivedTweetResultDto: {
+      screenName: string;
+      twitterUserId: string;
+      archivedTweetIds: string[];
+    };
+    MissionData: {
+      description?: string;
+    };
+    AbstractCurrencyDto: {
+      name: string;
+      icon: string | null;
+    };
+    MissionDto: {
+      /** Format: uuid */
+      id: string;
+      slug: string | null;
+      type: components["schemas"]["MissionType"];
+      name: string;
+      data: components["schemas"]["MissionData"];
+      rewardType: components["schemas"]["MissionRewardType"];
+      /** @example 123.456789 */
+      rewardAmount: string;
+      rewardCurrency: components["schemas"]["AbstractCurrencyDto"] | null;
+      /** Format: date-time */
+      startsAt: string;
+      /** Format: date-time */
+      endsAt: string | null;
+      claimCount: number;
+      accomplishCount: number;
+      maxClaimCount: number | null;
+      maxClaimCountPerUser: number | null;
+      maxAccomplishCount: number | null;
+      maxAccomplishCountPerUser: number | null;
+      accomplishable: boolean;
+      claimable: boolean;
+      userClaimedCount: number;
+      userAccomplishedCount: number;
+      userClaimableAccomplishmentsCount: number;
+      rewardDescription: string | null;
+      accomplishProgress: string | null;
     };
     CreateWaitinglistSignatureDto: {
       wallet: string;
@@ -1154,38 +1701,14 @@ export interface components {
     BidSignatureResponseDto: {
       signature: string;
     };
-    MissionData: {
-      description?: string;
+    UploadImagesDto: {
+      /** @enum {string} */
+      target: "EarnEvent";
     };
-    AbstractCurrencyDto: {
-      name: string;
-      icon: string | null;
-    };
-    MissionDto: {
-      /** Format: uuid */
-      id: string;
-      type: components["schemas"]["MissionType"];
-      name: string;
-      data: components["schemas"]["MissionData"];
-      rewardType: components["schemas"]["MissionRewardType"];
-      rewardAmount: number;
-      rewardCurrency: components["schemas"]["AbstractCurrencyDto"] | null;
-      /** Format: date-time */
-      startsAt: string;
-      /** Format: date-time */
-      endsAt: string | null;
-      claimCount: number;
-      accomplishCount: number;
-      maxClaimCount: number | null;
-      maxClaimCountPerUser: number | null;
-      maxAccomplishCount: number | null;
-      maxAccomplishCountPerUser: number | null;
-      accomplishable: boolean;
-      claimable: boolean;
-      userClaimedCount: number;
-      userAccomplishedCount: number;
-      userClaimableAccomplishmentsCount: number;
-      accomplishProgress: string | null;
+    UserSetPasswordDto: {
+      password: string;
+      userId: string;
+      loginId: string;
     };
     FormSchema: {
       /** @description http://json-schema.org */
@@ -1297,6 +1820,31 @@ export interface components {
     MobileCheckResponseDto: {
       current: boolean;
     };
+    RegisterWalletDto: {
+      /**
+       * @description Only BITCOIN, ETHEREUM, BSC, XTZ
+       * @enum {string}
+       */
+      network: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
+      address: string;
+      index: number;
+      name: string;
+    };
+    WalletResponseDto: {
+      /** @description Registered wallet's unique id */
+      id: string;
+      /** @description Registered wallet's address */
+      address: string;
+      /**
+       * @description Registered wallet's blockchain network
+       * @enum {string}
+       */
+      network: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
+      /** @description Wallet's registered index */
+      index: number;
+      /** @description Wallet's nickname */
+      name: string;
+    };
     Asset: {
       ticker: string;
       name: string;
@@ -1309,152 +1857,26 @@ export interface components {
       valuatedAmount: string;
       valuatedCurrency: string;
     };
-    RegisterWalletDto: {
-      /** @description Only BITCOIN, ETHEREUM, BSC, XTZ */
-      network: { [key: string]: unknown };
-      address: string;
-      index: number;
-      name: string;
-    };
-    WalletResponseDto: {
-      /** @description Registered wallet's unique id */
-      id: string;
-      /** @description Registered wallet's address */
-      address: string;
-      /** @description Registered wallet's blockchain network */
-      network: { [key: string]: unknown };
-      /** @description Wallet's registered index */
-      index: number;
-      /** @description Wallet's nickname */
-      name: string;
-    };
-    ThirdPartyEarnDto: {
-      /** @enum {string} */
-      currency: "MVL" | "bMVL";
-      amount: number;
-      description?: string;
-      identifier: string;
-      timestamp: string;
-    };
-    ThirdPartyBalanceResponseDto: {
-      amount: number;
-    };
-    S2sHmacErrorDTO: {
-      /** @default Authorization is empty! */
-      message: string;
-    };
-    S2SDefaultDto: {
-      timestamp: string;
-    };
-    ThirdPartyEarnEventParticipationDto: {
-      timestamp: string;
-      value: number;
-      description?: string;
-      identifier: string;
-    };
-    ThirdPartyConnectDto: {
-      /** @description JWT Token from third party app(ex: TADA) */
-      token: string;
-    };
-    ThirdPartyConnectCheckResponseDto: {
-      /** @description Flag for connection information for third party app is exists. */
-      exists: boolean;
-      /** @description Identifier for display received from third party app. */
-      displayName: string | null;
-    };
-    EarnEventDto: {
-      /** @enum {string} */
-      claimType: "CONSTANT" | "RATIO_DIVISION";
-      app: {
-        id?: string;
-        name?: string;
-      };
-      /** @description event id */
-      id: string;
-      /** Format: date-time */
-      eventStartAt: string;
-      /** Format: date-time */
-      eventEndAt: string;
-      /** Format: date-time */
-      claimStartAt: string;
-      /** Format: date-time */
-      claimEndAt: string;
-      /** @description event icon image url */
-      iconUrl: string;
-      title: string;
-      subTitle: string;
-      detailPageUrl: string;
-      /**
-       * @description currency text for point
-       * ex) P
-       */
-      pointCurrency: string;
-      /** @description currency icon image url for point */
-      pointIconUrl: string;
-      /**
-       * @description button text for earn
-       * ex) 나의 Trading Point
-       */
-      eventActionTitle: string;
-      /**
-       * @description button text for earn
-       * ex) Trade 바로가기
-       */
-      eventActionButtonTitle: string;
-      /** @description scheme for execute when earn button clicked */
-      eventActionScheme: string;
-      /**
-       * @description currency text for claim
-       * ex) bMVL
-       */
-      currency: string;
-      /** @description currency icon for claim */
-      currencyIconUrl: string;
-      calcInfoPageUrl: string;
-    };
-    EarnEventCurrentResponseDto: {
-      /** @description current amount */
-      amount: number;
-    };
-    EarnEventClaimRequestDto: {
-      /** @description Wallet address to receive token */
-      address: string;
-    };
-    EarnEventClaimCheckResponseDto: {
-      /** @enum {string} */
-      status:
-        | "INCOMING"
-        | "CONFIRMING"
-        | "COMPLETED"
-        | "CANCELED"
-        | "FAILED"
-        | "IN_MIGRATION";
-    };
-    EarnEventGetClaimResponseDto: {
-      /** @enum {string} */
-      claimType: "CONSTANT" | "RATIO_DIVISION";
-      currency: string;
-      /** @description currency icon for claim. */
-      currencyIconUrl: string;
-      calcInfoPageUrl: string;
-      /** @description Total amount to claim. */
-      amount: number;
-    };
     BalanceClutchCurrentDto: {
       /** @enum {string} */
-      currencyId: "MVL" | "bMVL";
+      currencyId: "MVL" | "bMVL" | "XTZ" | "BNB";
+    };
+    BalanceClutchCurrentResponseDto: {
+      id: string;
+      amount: string;
+      currencyId: string;
     };
     BalanceClutchWithdrawRequestDto: {
       /** @enum {string} */
-      currencyId: "MVL" | "bMVL";
-      amount: number;
+      currencyId: "MVL" | "bMVL" | "XTZ" | "BNB";
+      amount: string;
       address: string;
     };
     BalanceClutchDepositRequestDto: {
       /** @enum {string} */
-      currencyId: "MVL" | "bMVL";
+      currencyId: "MVL" | "bMVL" | "XTZ" | "BNB";
       address: string;
-      amount: number;
+      amount: string;
     };
     BalanceClutchDepositRequestResponseDto: {
       balanceDepositRequest: components["schemas"]["BalanceDepositRequestEntity"];
@@ -1484,14 +1906,27 @@ export interface operations {
       };
     };
   };
-  DeferredOauthController_authVerification: {
-    parameters: {};
+  AuthController_authVerification: {
+    parameters: {
+      header: {
+        "X-Auth-Client-Id": string;
+        "X-Auth-Client-Version": string;
+      };
+    };
     responses: {
       201: {
         content: {
           "application/json": components["schemas"]["SignedUserIdentifierWithAccessTokenDto"];
         };
       };
+      /** Invalid auth code, or expired */
+      401: unknown;
+      /** Unknown auth client */
+      404: unknown;
+      /** User not signed up */
+      422: unknown;
+      /** Client not given or version out-dated */
+      426: unknown;
     };
     requestBody: {
       content: {
@@ -1499,14 +1934,62 @@ export interface operations {
       };
     };
   };
-  DeferredOauthController_createDeferredAuth: {
-    parameters: {};
+  AuthController_createDeferredAuth: {
+    parameters: {
+      header: {
+        "X-Auth-Client-Id": string;
+      };
+    };
     responses: {
       201: {
         content: {
           "application/json": components["schemas"]["DeferredAuthValidateDto"];
         };
       };
+    };
+  };
+  AuthController_activeAuthSessions: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AuthSessionEntity"][];
+        };
+      };
+    };
+  };
+  AuthController_refresh: {
+    parameters: {
+      header: {
+        "X-Auth-Client-Id": string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["JwtAccessToken"];
+        };
+      };
+      /** Invalid refresh token or expired */
+      401: unknown;
+      /** Different auth client from issued at */
+      403: unknown;
+    };
+  };
+  AuthController_invalidate: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AuthSessionEntity"][];
+        };
+      };
+    };
+  };
+  AuthController_jwks: {
+    parameters: {};
+    responses: {
+      200: unknown;
     };
   };
   WalletsController_connectWallet: {
@@ -1539,6 +2022,16 @@ export interface operations {
       };
     };
   };
+  GoogleOauthController_discordAuth: {
+    parameters: {
+      query: {
+        redirectUrl: string;
+      };
+    };
+    responses: {
+      200: unknown;
+    };
+  };
   DiscordOauthController_discordAuth: {
     parameters: {
       query: {
@@ -1549,23 +2042,17 @@ export interface operations {
       200: unknown;
     };
   };
-  /** @deprecated use POST /auth/deferred/validate */
-  DiscordOauthController_discordAuthVerification: {
-    parameters: {};
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["SignedUserIdentifierWithAccessTokenDto"];
-        };
+  TwitterOauthController_twitterAuth: {
+    parameters: {
+      query: {
+        redirectUrl: string;
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DeprecatedDeferredAuthValidateDto"];
-      };
+    responses: {
+      200: unknown;
     };
   };
-  TwitterOauthController_twitterAuth: {
+  FacebookOauthController_facebookAuth: {
     parameters: {
       query: {
         redirectUrl: string;
@@ -1644,7 +2131,7 @@ export interface operations {
     responses: {
       201: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["UserReferrerEntity"];
         };
       };
     };
@@ -1706,6 +2193,8 @@ export interface operations {
   ClutchUserController_getServerShare: {
     parameters: {
       query: {
+        /** Only GOOGLE, APPLE */
+        provider: "GOOGLE" | "APPLE";
         /** required if type = GOOGLE */
         idtoken?: string;
         /** required if type = APPLE */
@@ -1750,6 +2239,616 @@ export interface operations {
       content: {
         "application/json": components["schemas"]["UpdateServerShareDto"];
       };
+    };
+  };
+  /** Delete Clutch Account. */
+  ClutchUserController_deleteAccounts: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      default: {
+        content: {
+          "application/json": components["schemas"]["ShareResponseDto"];
+        };
+      };
+    };
+  };
+  /** Get Third Party connection Status */
+  ThirdPartyController_connectionCheck: {
+    parameters: {
+      query: {
+        /** User Identifier of Third party app. */
+        identifier: string;
+        /** Timestamp sent request. */
+        timestamp: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyConnectionCheckResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Earn Servered balance third party user */
+  ThirdPartyController_balanceEarn: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyBalanceResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+      422: {
+        content: {
+          "application/json": {
+            /** @default Insufficient balance to transfer! */
+            message?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyEarnDto"];
+      };
+    };
+  };
+  /** Get Serverd Balance amount */
+  ThirdPartyController_balance: {
+    parameters: {
+      query: {
+        currency: "MVL" | "bMVL" | "XTZ" | "BNB";
+        /** User Identifier of Third party app. */
+        identifier: string;
+        /** Timestamp sent request. */
+        timestamp: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyBalanceResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * GET The Amount of Serverd Balance held by a Third party App.
+   * Earn Servered Balances by Third party app is possible within this amount.
+   */
+  ThirdPartyController_balanceCurrent: {
+    parameters: {
+      query: {
+        /** Unit of Servered balanced */
+        currency: "MVL" | "bMVL" | "XTZ" | "BNB";
+        /** Timestamp sent request. */
+        timestamp: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyBalanceResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Sample API that response of connect and disconnect notification. */
+  ThirdPartyController_notiApiSample: {
+    parameters: {};
+    responses: {
+      201: unknown;
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["S2SDefaultDto"];
+      };
+    };
+  };
+  ThirdPartyController_thirdPartyGetEarnEvent: {
+    parameters: {
+      query: {
+        page: string;
+        /** Timestamp sent request. */
+        timestamp: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** GET Current Earn Event Participation Point Information by Third Party Identifier. */
+  ThirdPartyController_thirdPartyGetEventParticipationCurrentPoint: {
+    parameters: {
+      path: {
+        eventAlias: string;
+      };
+      query: {
+        /** User Identifier of Third party app. */
+        identifier: string;
+        /** Timestamp sent request. */
+        timestamp: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventCurrentResponseDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by app appId and earn event alias earnEventAlias */
+            message?: string;
+            /** @default NOT_FOUND_EVENT */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Participate Earn event.( only for clutch server ) */
+  ThirdPartyController_thirdPartyClutchEventParticipation: {
+    parameters: {
+      path: {
+        eventAlias: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      400: {
+        content: {
+          "application/json": {
+            /** @default Exceeded the maximum number of Event earnEventAlias participants */
+            message?: string;
+            /** @default EXCEEDED_MAXIMUM_PARTICIPATION */
+            code?: string;
+          };
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default Not Event Period Earn Event: earnEventAlias */
+            message?: string;
+            /** @default NOT_EVENT_PERIOD */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by app appId and earn event alias earnEventAlias */
+            message?: string;
+            /** @default NOT_FOUND_EVENT */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyEarnEventParticipationForClutchDto"];
+      };
+    };
+  };
+  /** GET Earn Event Participation Log List. */
+  ThirdPartyController_thirdPartyGetEventParticipationList: {
+    parameters: {
+      path: {
+        eventAlias: string;
+      };
+      query: {
+        page: string;
+        /** A flag to decide whether to send including CANCELED or not. (true or false) */
+        isContainCanceled: string;
+        /** User Identifier of Third party app. */
+        identifier: string;
+        /** Timestamp sent request. */
+        timestamp: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyEarnEventParticipationWithCountResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Participate Earn event. */
+  ThirdPartyController_thirdPartyEventParticipation: {
+    parameters: {
+      path: {
+        eventAlias: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      400: {
+        content: {
+          "application/json": {
+            /** @default Exceeded the maximum number of Event earnEventAlias participants */
+            message?: string;
+            /** @default EXCEEDED_MAXIMUM_PARTICIPATION */
+            code?: string;
+          };
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default Not Event Period Earn Event: earnEventAlias */
+            message?: string;
+            /** @default NOT_EVENT_PERIOD */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by app appId and earn event alias earnEventAlias */
+            message?: string;
+            /** @default NOT_FOUND_EVENT */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyEarnEventParticipationDto"];
+      };
+    };
+  };
+  /** Cancel Earn event Participation. */
+  ThirdPartyController_thirdPartyEventParticipationCancel: {
+    parameters: {
+      path: {
+        eventAlias: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by app appId and earn event alias earnEventAlias */
+            message?: string;
+            /** @default NOT_FOUND_EVENT */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyEarnEventParticipationCancelDto"];
+      };
+    };
+  };
+  /** GET One Earn Event Participation Log by request id. */
+  ThirdPartyController_thirdPartyGetEventParticipationFiltered: {
+    parameters: {
+      path: {
+        eventAlias: string;
+      };
+      query: {
+        /** Timestamp sent request. */
+        timestamp: string;
+        /** Request id for prevent redundency */
+        requestId: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyEarnEventParticipationResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default timestamp is empty! */
+            message?: string;
+            /** @default EMPTY_TIMESTAMP */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event Participation Log by app alias appAlias and request id requestId */
+            message?: string;
+            /** @default NOT_FOUND_EVENT_PARTICIPATION_LOG */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Get Third Party connection Status for Clutch */
+  ThirdPartyForClutchController_connectCheck: {
+    parameters: {
+      path: {
+        appId: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyConnectCheckResponseDto"];
+        };
+      };
+      /**
+       * Invalied JWT token: "${jwtToken}" for ${appId},
+       * Not Matched UserId: ${userId} and identifier: ${thirdPartyUserIdentifier} In Third Party App: ${appId}
+       */
+      400: unknown;
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      /** Not Found App: by ${appId} */
+      404: unknown;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyConnectCheckDto"];
+      };
+    };
+  };
+  /** Connecting to third party user (for now just TADA) */
+  ThirdPartyForClutchController_connect: {
+    parameters: {
+      path: {
+        appId: string;
+      };
+    };
+    responses: {
+      /**
+       * Will post result of connection.
+       *
+       *     curl --request POST '{{notiURL}}' \
+       *
+       *     --header 'Authorization: {{hmacSig}}' \
+       *
+       *     --header 'Content-Type: application/json' \
+       *
+       *     --data-raw '{
+       *
+       *         "timestamp": "{{now}}",
+       *
+       *         "method": "connect",
+       *
+       *         "identifier": "connected third party user identifer"
+       *
+       *     }'
+       *
+       * This POST require Response like
+       *
+       *     {
+       *
+       *       "displayName": "will display connected third party user name" // optional
+       *
+       *     }
+       */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      /** Already connected to ${appId} by identifier ${thirdParyUserIdentifier} */
+      400: unknown;
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyConnectDto"];
+      };
+    };
+  };
+  /** Disconnecting to third party user (for now just TADA) */
+  ThirdPartyForClutchController_disconnect: {
+    parameters: {
+      path: {
+        appId: string;
+      };
+    };
+    responses: {
+      /**
+       * Will post result of connection.
+       *
+       *     curl --request POST '{{notiURL}}' \
+       *
+       *     --header 'Authorization: {{hmacSig}}' \
+       *
+       *     --header 'Content-Type: application/json' \
+       *
+       *     --data-raw '{
+       *
+       *         "timestamp": "{{now}}",
+       *
+       *         "method": "connect",
+       *
+       *         "identifier": "connected third party user identifer"
+       *
+       *     }'
+       *
+       * This POST require Response like
+       *
+       *     {
+       *
+       *     }
+       */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      /** Not Found connection info by appId: ${appId} and identifer: ${identifier} */
+      404: unknown;
     };
   };
   CurrenciesController_getCurrency: {
@@ -1844,6 +2943,175 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateBalanceWithdrawalRequestDto"];
+      };
+    };
+  };
+  /** Event Lists. */
+  EarnEventController_listPost: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["EarnEventDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+    };
+  };
+  /** User's Current point from this event. */
+  EarnEventController_participationCurrentPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["EarnEventCurrentResponseDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Request Claim this event. */
+  EarnEventController_claimRequestPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      400: {
+        content: {
+          "application/json": {
+            /** @default Already Claimed Earn Event earnEventId by user userId */
+            message?: string;
+          };
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default Not Claimable Period Earn Event: earnEventId */
+            message?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EarnEventClaimRequestDto"];
+      };
+    };
+  };
+  /** Check Claim processing status. */
+  EarnEventController_claimStatusPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["EarnEventClaimCheckResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+    };
+  };
+  /** Claim informations to show claim modal. */
+  EarnEventController_claimInformationPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["EarnEventGetClaimResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      500: {
+        content: {
+          "application/json": {
+            /** @default Not Found Exchange Rate currencyId0, currencyId1 for Earn Event earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Get one Earn Event. */
+  EarnEventController_post: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["EarnEventDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by earnEventId */
+            message?: string;
+          };
+        };
       };
     };
   };
@@ -2037,6 +3305,16 @@ export interface operations {
       };
     };
   };
+  DemocopterController_getPastResults: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["PastGameResultDto"][];
+        };
+      };
+    };
+  };
   DemocopterController_getDemocopterGame: {
     parameters: {
       path: {
@@ -2079,10 +3357,78 @@ export interface operations {
       };
     };
   };
+  DemocopterController_validateTwitterResultShare: {
+    parameters: {
+      path: {
+        gameResultId: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ArchivedTweetResultDto"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ValidateTwitterShareDto"];
+      };
+    };
+  };
+  DemocopterController_validateTwitterRetweetMission: {
+    parameters: {
+      path: {
+        missionSlug: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ArchivedTweetResultDto"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ValidateTwitterShareDto"];
+      };
+    };
+  };
   DemocopterAdminController_createSchedule: {
     parameters: {
       path: {
         gameId: string;
+      };
+    };
+    responses: {
+      201: unknown;
+    };
+  };
+  MissionsController_getMissions: {
+    parameters: {
+      path: {
+        group: string;
+      };
+      query: {
+        type?: components["schemas"]["MissionType"];
+        inviteeId?: string;
+        /** Find specific mission by slug name */
+        slug?: string[];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["MissionDto"][];
+        };
+      };
+    };
+  };
+  MissionsController_claimMission: {
+    parameters: {
+      path: {
+        id: string;
       };
     };
     responses: {
@@ -2145,25 +3491,33 @@ export interface operations {
       };
     };
   };
-  MissionsController_getMissions: {
-    parameters: {
-      path: {
-        group: string;
-      };
-      query: {
-        type?: components["schemas"]["MissionType"];
-        inviteeId?: string;
-      };
-    };
+  AdminUiController_uploadImage: {
+    parameters: {};
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["MissionDto"][];
+          "application/json": string[];
         };
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UploadImagesDto"];
+      };
+    };
   };
-  MissionsController_claimMission: {
+  AdminUiController_setPassword: {
+    parameters: {};
+    responses: {
+      201: unknown;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserSetPasswordDto"];
+      };
+    };
+  };
+  AdminUiController_retryWithdrawalRequest: {
     parameters: {
       path: {
         id: string;
@@ -2265,49 +3619,12 @@ export interface operations {
       };
     };
   };
-  VerifiedWalletV11Controller_balance: {
-    parameters: {
-      query: {
-        address: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["BalanceResponseDto"][];
-        };
-      };
-      default: {
-        content: {
-          "application/json": components["schemas"]["BalanceResponseDto"][];
-        };
-      };
-    };
-  };
-  VerifiedWalletV11Controller_simplePrice: {
-    parameters: {
-      query: {
-        ids: string;
-        vs_currencies: string;
-        include_market_cap?: boolean;
-        include_24hr_vol?: boolean;
-        include_24hr_change?: boolean;
-        include_last_updated_at?: boolean;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      default: unknown;
-    };
-  };
   VerifiedWalletV10Controller_list: {
     parameters: {
       query: {
         pubkey: string;
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network?: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
       };
     };
     responses: {
@@ -2344,6 +3661,8 @@ export interface operations {
     parameters: {
       query: {
         address: string;
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
       };
     };
     responses: {
@@ -2359,364 +3678,72 @@ export interface operations {
       };
     };
   };
-  /** Earn Servered balance third party user */
-  ThirdPartyController_balanceEarn: {
-    parameters: {};
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["ThirdPartyBalanceResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["S2sHmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ThirdPartyEarnDto"];
-      };
-    };
-  };
-  /** Get Serverd Balance amount */
-  ThirdPartyController_balance: {
+  /**
+   * Get balance of a wallet<BR/>
+   * Response only 2 Tokens.
+   */
+  VerifiedWalletV11Controller_balance: {
     parameters: {
       query: {
-        currency: "MVL" | "bMVL";
-        identifier: string;
-        timestamp: string;
+        address: string;
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["ThirdPartyBalanceResponseDto"];
+          "application/json": components["schemas"]["BalanceResponseDto"][];
         };
       };
-      401: {
+      default: {
         content: {
-          "application/json": components["schemas"]["S2sHmacErrorDTO"];
+          "application/json": components["schemas"]["BalanceResponseDto"][];
         };
       };
     };
   };
-  ThirdPartyController_balanceCurrent: {
+  VerifiedWalletV11Controller_simplePrice: {
     parameters: {
       query: {
-        currency: "MVL" | "bMVL";
+        ids: string;
+        vs_currencies: string;
+        include_market_cap?: boolean;
+        include_24hr_vol?: boolean;
+        include_24hr_change?: boolean;
+        include_last_updated_at?: boolean;
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["ThirdPartyBalanceResponseDto"];
+          "application/json": { [key: string]: unknown };
         };
       };
-      401: {
-        content: {
-          "application/json": components["schemas"]["S2sHmacErrorDTO"];
-        };
-      };
+      default: unknown;
     };
   };
-  ThirdPartyController_notiApiSample: {
-    parameters: {};
-    responses: {
-      201: unknown;
-      401: {
-        content: {
-          "application/json": components["schemas"]["S2sHmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["S2SDefaultDto"];
-      };
-    };
-  };
-  ThirdPartyController_thirdPartyGetEventParticipationList: {
+  /**
+   * Get balance of a wallet<BR/>
+   * Response Multiple Tokens.
+   */
+  VerifiedWalletV12Controller_balance: {
     parameters: {
-      path: {
-        eventAlias: string;
-      };
       query: {
-        timestamp: string;
-        identifier: string;
+        address: string;
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": { [key: string]: unknown }[];
+          "application/json": components["schemas"]["BalanceResponseDto"][];
         };
       };
-      401: {
+      default: {
         content: {
-          "application/json": components["schemas"]["S2sHmacErrorDTO"];
-        };
-      };
-    };
-  };
-  ThirdPartyController_thirdPartyEventParticipation: {
-    parameters: {
-      path: {
-        eventAlias: string;
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["SimpleResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["S2sHmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ThirdPartyEarnEventParticipationDto"];
-      };
-    };
-  };
-  ThirdPartyForClutchController_connectCheck: {
-    parameters: {
-      path: {
-        appId: string;
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["ThirdPartyConnectCheckResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ThirdPartyConnectDto"];
-      };
-    };
-  };
-  /** Connecting to third party user (for now just TADA) */
-  ThirdPartyForClutchController_connect: {
-    parameters: {
-      path: {
-        appId: string;
-      };
-    };
-    responses: {
-      /**
-       * Will post result of connection.
-       *
-       *     curl --request POST '{{notiURL}}' \
-       *
-       *     --header 'Authorization: {{hmacSig}}' \
-       *
-       *     --header 'Content-Type: application/json' \
-       *
-       *     --data-raw '{
-       *
-       *         "timestamp": "{{now}}",
-       *
-       *         "method": "connect",
-       *
-       *         "identifier": "connected third party user identifer"
-       *
-       *     }'
-       *
-       * This POST require Response like
-       *
-       *     {
-       *
-       *       "displayName": "will display connected third party user name" // optional
-       *
-       *     }
-       */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleResponseDto"];
-        };
-      };
-      201: {
-        content: {
-          "application/json": components["schemas"]["SimpleResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ThirdPartyConnectDto"];
-      };
-    };
-  };
-  /** Disconnecting to third party user (for now just TADA) */
-  ThirdPartyForClutchController_disconnect: {
-    parameters: {
-      path: {
-        appId: string;
-      };
-    };
-    responses: {
-      /**
-       * Will post result of connection.
-       *
-       *     curl --request POST '{{notiURL}}' \
-       *
-       *     --header 'Authorization: {{hmacSig}}' \
-       *
-       *     --header 'Content-Type: application/json' \
-       *
-       *     --data-raw '{
-       *
-       *         "timestamp": "{{now}}",
-       *
-       *         "method": "connect",
-       *
-       *         "identifier": "connected third party user identifer"
-       *
-       *     }'
-       *
-       * This POST require Response like
-       *
-       *     {
-       *
-       *     }
-       */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleResponseDto"];
-        };
-      };
-      201: {
-        content: {
-          "application/json": components["schemas"]["SimpleResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ThirdPartyConnectDto"];
-      };
-    };
-  };
-  /** Event Lists. */
-  EarnEventController_earnEventGet: {
-    parameters: {};
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["EarnEventDto"][];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-  };
-  /** User's Current point from this event. */
-  EarnEventController_earnEventPariticipationCurrent: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["EarnEventCurrentResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-  };
-  /** Request Claim this event. */
-  EarnEventController_earhEventClaimRequest: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["SimpleResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EarnEventClaimRequestDto"];
-      };
-    };
-  };
-  /** Check Claim processing status. */
-  EarnEventController_earhEventClaimCheck: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["EarnEventClaimCheckResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
-        };
-      };
-    };
-  };
-  /** Claim informations to show claim modal. */
-  EarnEventController_earnEventGetClaim: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["EarnEventGetClaimResponseDto"];
-        };
-      };
-      401: {
-        content: {
-          "application/json": components["schemas"]["HmacErrorDTO"];
+          "application/json": components["schemas"]["BalanceResponseDto"][];
         };
       };
     };
@@ -2726,7 +3753,7 @@ export interface operations {
     responses: {
       201: {
         content: {
-          "application/json": components["schemas"]["BalanceAccountEntity"];
+          "application/json": components["schemas"]["BalanceClutchCurrentResponseDto"];
         };
       };
       401: {
@@ -2808,20 +3835,17 @@ export interface external {}
 export type UserIdentifierType = components['schemas']['UserIdentifierType'];
 export type DeferredAuthValidateDto = components['schemas']['DeferredAuthValidateDto'];
 export type WalletEntity = components['schemas']['WalletEntity'];
-export type ThirdPartyUserEntity = components['schemas']['ThirdPartyUserEntity'];
-export type EarnEventClaimType = components['schemas']['EarnEventClaimType'];
-export type BlockchainNetwork = components['schemas']['BlockchainNetwork'];
-export type CurrencyEntity = components['schemas']['CurrencyEntity'];
-export type EarnEventParticipationLogEntity = components['schemas']['EarnEventParticipationLogEntity'];
-export type EarnEventEntity = components['schemas']['EarnEventEntity'];
 export type UserEntity = components['schemas']['UserEntity'];
 export type UserIdentifierEntity = components['schemas']['UserIdentifierEntity'];
 export type UserWithWalletDto = components['schemas']['UserWithWalletDto'];
+export type AuthSessionDtoWithRefreshToken = components['schemas']['AuthSessionDtoWithRefreshToken'];
 export type SignedUserIdentifierWithAccessTokenDto = components['schemas']['SignedUserIdentifierWithAccessTokenDto'];
+export type AuthClientEntity = components['schemas']['AuthClientEntity'];
+export type AuthSessionEntity = components['schemas']['AuthSessionEntity'];
+export type JwtAccessToken = components['schemas']['JwtAccessToken'];
 export type WalletAddressDto = components['schemas']['WalletAddressDto'];
 export type WalletAndNonceDto = components['schemas']['WalletAndNonceDto'];
 export type VerifyWalletAddressDto = components['schemas']['VerifyWalletAddressDto'];
-export type DeprecatedDeferredAuthValidateDto = components['schemas']['DeprecatedDeferredAuthValidateDto'];
 export type Web3AuthRequestDto = components['schemas']['Web3AuthRequestDto'];
 export type Web3AuthRequestResponseDto = components['schemas']['Web3AuthRequestResponseDto'];
 export type Web3AuthDto = components['schemas']['Web3AuthDto'];
@@ -2830,6 +3854,7 @@ export type AbstractUserDto = components['schemas']['AbstractUserDto'];
 export type Invitee = components['schemas']['Invitee'];
 export type GetInviteesDto = components['schemas']['GetInviteesDto'];
 export type RegisterReferrerDto = components['schemas']['RegisterReferrerDto'];
+export type UserReferrerEntity = components['schemas']['UserReferrerEntity'];
 export type ForClutchUserIdentifierType = components['schemas']['ForClutchUserIdentifierType'];
 export type SignupDto = components['schemas']['SignupDto'];
 export type ClutchUserResponseDto = components['schemas']['ClutchUserResponseDto'];
@@ -2840,6 +3865,35 @@ export type SimpleResponseDto = components['schemas']['SimpleResponseDto'];
 export type UpdateServerShareDto = components['schemas']['UpdateServerShareDto'];
 export type ShareResponseDto = components['schemas']['ShareResponseDto'];
 export type HmacErrorDTO = components['schemas']['HmacErrorDTO'];
+export type ThirdPartyConnectionCheckResponseDto = components['schemas']['ThirdPartyConnectionCheckResponseDto'];
+export type ThirdPartyEarnDto = components['schemas']['ThirdPartyEarnDto'];
+export type ThirdPartyBalanceResponseDto = components['schemas']['ThirdPartyBalanceResponseDto'];
+export type S2SDefaultDto = components['schemas']['S2SDefaultDto'];
+export type EarnEventPointInfoDto = components['schemas']['EarnEventPointInfoDto'];
+export type ThirdPartyApp = components['schemas']['ThirdPartyApp'];
+export type EarnEventDto = components['schemas']['EarnEventDto'];
+export type EarnEventCurrentResponseDto = components['schemas']['EarnEventCurrentResponseDto'];
+export type ThirdPartyEarnEventParticipationForClutchDto = components['schemas']['ThirdPartyEarnEventParticipationForClutchDto'];
+export type ThirdPartyEarnEventParticipationDto = components['schemas']['ThirdPartyEarnEventParticipationDto'];
+export type ThirdPartyEarnEventParticipationCancelDto = components['schemas']['ThirdPartyEarnEventParticipationCancelDto'];
+export type ThirdPartyEarnEventParticipationResponseDto = components['schemas']['ThirdPartyEarnEventParticipationResponseDto'];
+export type ThirdPartyEarnEventParticipationWithCountResponseDto = components['schemas']['ThirdPartyEarnEventParticipationWithCountResponseDto'];
+export type ThirdPartyConnectCheckDto = components['schemas']['ThirdPartyConnectCheckDto'];
+export type ThirdPartyConnectCheckResponseDto = components['schemas']['ThirdPartyConnectCheckResponseDto'];
+export type ThirdPartyConnectDto = components['schemas']['ThirdPartyConnectDto'];
+export type BlockchainNetwork = components['schemas']['BlockchainNetwork'];
+export type Region = components['schemas']['Region'];
+export type EarnEventClaimType = components['schemas']['EarnEventClaimType'];
+export type Decimal = components['schemas']['Decimal'];
+export type CurrencyExchangeRateEntity = components['schemas']['CurrencyExchangeRateEntity'];
+export type CurrencyEntity = components['schemas']['CurrencyEntity'];
+export type EarnEventParticipationLogStatus = components['schemas']['EarnEventParticipationLogStatus'];
+export type ThirdPartyUserStatus = components['schemas']['ThirdPartyUserStatus'];
+export type EarnEventClaimStatus = components['schemas']['EarnEventClaimStatus'];
+export type EarnEventClaimEntity = components['schemas']['EarnEventClaimEntity'];
+export type ThirdPartyUserEntity = components['schemas']['ThirdPartyUserEntity'];
+export type EarnEventParticipationLogEntity = components['schemas']['EarnEventParticipationLogEntity'];
+export type EarnEventEntity = components['schemas']['EarnEventEntity'];
 export type BalanceAccountEntity = components['schemas']['BalanceAccountEntity'];
 export type BalanceRequestStatus = components['schemas']['BalanceRequestStatus'];
 export type PaymentStatus = components['schemas']['PaymentStatus'];
@@ -2852,17 +3906,20 @@ export type PaymentEntity = components['schemas']['PaymentEntity'];
 export type TokenTransactionLogEntity = components['schemas']['TokenTransactionLogEntity'];
 export type BalanceDepositRequestEntity = components['schemas']['BalanceDepositRequestEntity'];
 export type GameResultEntity = components['schemas']['GameResultEntity'];
-export type GameEntity = components['schemas']['GameEntity'];
 export type MissionType = components['schemas']['MissionType'];
 export type MissionRewardType = components['schemas']['MissionRewardType'];
 export type UserActivityEntity = components['schemas']['UserActivityEntity'];
 export type MissionAccomplishedActivityEntity = components['schemas']['MissionAccomplishedActivityEntity'];
-export type MissionEntity = components['schemas']['MissionEntity'];
 export type MissionAccomplishmentEntity = components['schemas']['MissionAccomplishmentEntity'];
+export type MissionEntity = components['schemas']['MissionEntity'];
+export type GameEntity = components['schemas']['GameEntity'];
 export type BalanceTransactionEntity = components['schemas']['BalanceTransactionEntity'];
 export type BalanceWithdrawalRequestEntity = components['schemas']['BalanceWithdrawalRequestEntity'];
 export type BalanceWithdrawalRequestStatusDto = components['schemas']['BalanceWithdrawalRequestStatusDto'];
 export type CreateBalanceWithdrawalRequestDto = components['schemas']['CreateBalanceWithdrawalRequestDto'];
+export type EarnEventClaimRequestDto = components['schemas']['EarnEventClaimRequestDto'];
+export type EarnEventClaimCheckResponseDto = components['schemas']['EarnEventClaimCheckResponseDto'];
+export type EarnEventGetClaimResponseDto = components['schemas']['EarnEventGetClaimResponseDto'];
 export type PaymentOptions = components['schemas']['PaymentOptions'];
 export type CreatePaymentDto = components['schemas']['CreatePaymentDto'];
 export type PaymentStatusDto = components['schemas']['PaymentStatusDto'];
@@ -2875,17 +3932,22 @@ export type GameResultAbstractDto = components['schemas']['GameResultAbstractDto
 export type GameResultResponseDto = components['schemas']['GameResultResponseDto'];
 export type TadaArcadeDriverInfo = components['schemas']['TadaArcadeDriverInfo'];
 export type AbstractUserIdentifierDto = components['schemas']['AbstractUserIdentifierDto'];
+export type PastGameResultDto = components['schemas']['PastGameResultDto'];
 export type LotteryGameResultDto = components['schemas']['LotteryGameResultDto'];
 export type LotteryPossibleResultDto = components['schemas']['LotteryPossibleResultDto'];
 export type DemocopterV2Dto = components['schemas']['DemocopterV2Dto'];
+export type ValidateTwitterShareDto = components['schemas']['ValidateTwitterShareDto'];
+export type ArchivedTweetResultDto = components['schemas']['ArchivedTweetResultDto'];
+export type MissionData = components['schemas']['MissionData'];
+export type AbstractCurrencyDto = components['schemas']['AbstractCurrencyDto'];
+export type MissionDto = components['schemas']['MissionDto'];
 export type CreateWaitinglistSignatureDto = components['schemas']['CreateWaitinglistSignatureDto'];
 export type WaitingListSignatureResponseDto = components['schemas']['WaitingListSignatureResponseDto'];
 export type CreateWaitinglistSignatureErrorDto = components['schemas']['CreateWaitinglistSignatureErrorDto'];
 export type BidSignatureDto = components['schemas']['BidSignatureDto'];
 export type BidSignatureResponseDto = components['schemas']['BidSignatureResponseDto'];
-export type MissionData = components['schemas']['MissionData'];
-export type AbstractCurrencyDto = components['schemas']['AbstractCurrencyDto'];
-export type MissionDto = components['schemas']['MissionDto'];
+export type UploadImagesDto = components['schemas']['UploadImagesDto'];
+export type UserSetPasswordDto = components['schemas']['UserSetPasswordDto'];
 export type FormSchema = components['schemas']['FormSchema'];
 export type FormOption = components['schemas']['FormOption'];
 export type FormEntity = components['schemas']['FormEntity'];
@@ -2901,23 +3963,12 @@ export type MobileRegisterDto = components['schemas']['MobileRegisterDto'];
 export type MobileResponseDto = components['schemas']['MobileResponseDto'];
 export type MobileCheckDto = components['schemas']['MobileCheckDto'];
 export type MobileCheckResponseDto = components['schemas']['MobileCheckResponseDto'];
-export type Asset = components['schemas']['Asset'];
-export type BalanceResponseDto = components['schemas']['BalanceResponseDto'];
 export type RegisterWalletDto = components['schemas']['RegisterWalletDto'];
 export type WalletResponseDto = components['schemas']['WalletResponseDto'];
-export type ThirdPartyEarnDto = components['schemas']['ThirdPartyEarnDto'];
-export type ThirdPartyBalanceResponseDto = components['schemas']['ThirdPartyBalanceResponseDto'];
-export type S2sHmacErrorDTO = components['schemas']['S2sHmacErrorDTO'];
-export type S2SDefaultDto = components['schemas']['S2SDefaultDto'];
-export type ThirdPartyEarnEventParticipationDto = components['schemas']['ThirdPartyEarnEventParticipationDto'];
-export type ThirdPartyConnectDto = components['schemas']['ThirdPartyConnectDto'];
-export type ThirdPartyConnectCheckResponseDto = components['schemas']['ThirdPartyConnectCheckResponseDto'];
-export type EarnEventDto = components['schemas']['EarnEventDto'];
-export type EarnEventCurrentResponseDto = components['schemas']['EarnEventCurrentResponseDto'];
-export type EarnEventClaimRequestDto = components['schemas']['EarnEventClaimRequestDto'];
-export type EarnEventClaimCheckResponseDto = components['schemas']['EarnEventClaimCheckResponseDto'];
-export type EarnEventGetClaimResponseDto = components['schemas']['EarnEventGetClaimResponseDto'];
+export type Asset = components['schemas']['Asset'];
+export type BalanceResponseDto = components['schemas']['BalanceResponseDto'];
 export type BalanceClutchCurrentDto = components['schemas']['BalanceClutchCurrentDto'];
+export type BalanceClutchCurrentResponseDto = components['schemas']['BalanceClutchCurrentResponseDto'];
 export type BalanceClutchWithdrawRequestDto = components['schemas']['BalanceClutchWithdrawRequestDto'];
 export type BalanceClutchDepositRequestDto = components['schemas']['BalanceClutchDepositRequestDto'];
 export type BalanceClutchDepositRequestResponseDto = components['schemas']['BalanceClutchDepositRequestResponseDto'];
