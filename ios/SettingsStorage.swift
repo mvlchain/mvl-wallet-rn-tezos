@@ -7,7 +7,8 @@
 
 import Foundation
 
-protocol SettingsStorageProtocol {
+@objc(SettingsStorageProtocol)
+public protocol SettingsStorageProtocol {
   func getStringValue(for key: String) -> String?
   func setStringValue(for key: String, value: String)
 }

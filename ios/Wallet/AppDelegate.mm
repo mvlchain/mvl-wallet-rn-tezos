@@ -7,7 +7,11 @@
 
 #import <React/RCTAppSetupUtils.h>
 #import <React/RCTLinkingManager.h>
-#import "RNSplashScreen.h"  
+#import <Wallet-Swift.h>
+#import <React/RCTLog.h>
+#import "RNSplashScreen.h"
+#import "ThemeType.h"
+#import "IOSTheme.h"
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -47,7 +51,7 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
 #endif
-
+  
   NSDictionary *initProps = [self prepareInitialProps];
   UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"Wallet", initProps);
 
@@ -56,6 +60,8 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   } else {
     rootView.backgroundColor = [UIColor whiteColor];
   }
+  
+  NSLog(@"Darby> displaying rootView's background color: %@", [UIColor systemBackgroundColor]);
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
@@ -63,6 +69,10 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
+  // apply current theme to the RootView
+  [self applyThemeStyle];
+  
+  // pop up SplashScreen
   [RNSplashScreen show];
   
   return YES;
@@ -99,6 +109,12 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (void)applyThemeStyle
+{
+  UIUserInterfaceStyle style = [IOSTheme getThemeStyleByType];
+  [IOSTheme editThemeType:style];
 }
 
 #pragma mark - RCTLinkingManager

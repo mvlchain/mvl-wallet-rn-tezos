@@ -17,7 +17,9 @@ const useApp = () => {
   }, [settedLanguage]);
 
   useEffect(() => {
-    StatusBar.setBarStyle(STATUSBAR_THEME[appTheme.displayName]);
+    console.log(`Theme> updating StatusBar style ${STATUSBAR_THEME[appTheme.displayName]}`);
+    const statusBarThemeStyle = getStatusBarThemeStyle(appTheme.displayName);
+    StatusBar.setBarStyle(STATUSBAR_THEME[statusBarThemeStyle]);
   }, [appTheme]);
 
   // appearance change events(Theme)
@@ -46,6 +48,16 @@ const useApp = () => {
       subscription.remove();
     };
   }, [appTheme]);
+
+  const getStatusBarThemeStyle = (themeStyle: string) => {
+    if (appTheme.displayName === THEME.LIGHT) {
+      return THEME.DARK;
+    } else if (appTheme.displayName === THEME.DARK) {
+      return THEME.LIGHT;
+    } else {
+      return THEME.DEFAULT;
+    }
+  };
 
   const errorHandler = (error: Error) => {
     if (__DEV__) {
