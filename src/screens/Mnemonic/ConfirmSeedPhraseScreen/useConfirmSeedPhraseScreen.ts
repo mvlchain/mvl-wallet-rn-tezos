@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { useDi } from '@@hooks/common/useDi';
+import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
@@ -16,12 +17,12 @@ const useConfirmSeedPhraseScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE_CONFIRM'>;
   const navigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
-  const keyClient = useDi('KeyClient');
-  const wallet = useDi('WalletService');
   const { removeStageByPostboxKey } = authPersistStore();
   const { initWallet } = walletPersistStore();
   const { mnemonic, mnemonicList, pKey } = authStore();
   const { openModal } = globalModalStore();
+  const keyClient = useDi('KeyClient');
+  const { mutate } = useWalletMutation();
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const useConfirmSeedPhraseScreen = () => {
       }
       removeStageByPostboxKey(_postboxKey);
       initWallet(_postboxKey);
-      wallet.createWallet(pKey, 0, ETHEREUM);
+      mutate({ pKey, index: 0, blockchain: ETHEREUM });
       navigation.reset({
         index: 0,
         routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
