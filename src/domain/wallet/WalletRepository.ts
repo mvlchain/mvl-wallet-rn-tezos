@@ -21,15 +21,15 @@ export class WalletRepositoryImpl implements WalletRepository {
    * @throws {ApiError} when api failed.
    * @throws Error when unexpected error occured
    */
-  async getWallets(extendedPublicKey: string): Promise<WalletDto[]> {
+  getWallets = async (extendedPublicKey: string): Promise<WalletDto[]> => {
     const endpoint = `v1/wallets?${qs.stringify({
       pubkey: extendedPublicKey,
     })}`;
     const res = await authRequest.get<WalletDto[]>(endpoint);
     return res.data;
-  }
+  };
 
-  async registerWallet(body: RegisterWalletDto): Promise<WalletResponseDto> {
+  registerWallet = async (body: RegisterWalletDto): Promise<WalletResponseDto> => {
     const endpoint = 'v1/wallets';
     const basicCredential = `${this.authConfig.basic.username}:${this.authConfig.basic.password}`;
     const encoded = new Buffer(basicCredential, 'utf8').toString('base64');
@@ -40,5 +40,5 @@ export class WalletRepositoryImpl implements WalletRepository {
       data: body,
     });
     return res.data;
-  }
+  };
 }

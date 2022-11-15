@@ -29,10 +29,10 @@ export class WalletServiceImpl implements WalletService {
    * Get an extended public key by KeyChain credentials
    * @returns
    */
-  async extendedPublicKeyByCredentials(): Promise<string> {
+  extendedPublicKeyByCredentials = async (): Promise<string> => {
     const rootKey = await this.rootkeyRepository.getRootKeyByCredentials();
     return Clutch.extendedPublicKey(rootKey, CLUTCH_EXTENDED_KEY_PATH);
-  }
+  };
 
   /**
    * sign contents with extend key pair
@@ -42,7 +42,7 @@ export class WalletServiceImpl implements WalletService {
    * @param data
    * @returns
    */
-  async signMessageByExtendedKey(data: any): Promise<string> {
+  signMessageByExtendedKey = async (data: any): Promise<string> => {
     const extendedKeyPair = await this.rootkeyRepository.getExtendedKeyPairByCredentials();
     const timestampInMs = `${Date.now()}`;
     let message;
@@ -53,15 +53,15 @@ export class WalletServiceImpl implements WalletService {
     }
 
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);
-  }
+  };
 
   /**
    * @returns Get a list of wallets
    */
-  async getWalletList(): Promise<WalletDto[]> {
+  getWalletList = async (): Promise<WalletDto[]> => {
     const xpub = await this.rootkeyRepository.getExtendedPublicKey();
     return this.walletRepository.getWallets(xpub);
-  }
+  };
 
   createWallet = async (body: ICreateWalletBody): Promise<WalletResponseDto> => {
     const { pKey, index, blockchain } = body;
