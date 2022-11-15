@@ -65,24 +65,25 @@ export class KeyClientImpl implements KeyClient {
     this.serverShare = null;
     this.deviceShareIndex = null;
   }
-  async triggerSocialSignIn(provider: AuthProvider, isTemp?: boolean) {
+
+  triggerSocialSignIn = async (provider: AuthProvider, isTemp?: boolean) => {
     const postboxKeyHolder = await this.torusShareRepository.triggerSocialByTorusCustomAuth(provider);
     const resultPostboxKeyHolder = { ...postboxKeyHolder, provider };
     if (!isTemp) {
       this.postboxKeyHolder = resultPostboxKeyHolder;
     }
     return resultPostboxKeyHolder;
-  }
-  checkDevice() {
+  };
+  checkDevice = () => {
     return this.deviceShareRepository.checkDeviceShare();
-  }
-  async checkSignedUp() {
+  };
+  checkSignedUp = async () => {
     if (!this.postboxKeyHolder) {
       throw new Error('Please social signin first, postboxkey is required');
     }
     return await this.torusShareRepository.checkSignedUp(this.postboxKeyHolder.postboxKey);
-  }
-  async checkServer() {
+  };
+  checkServer = async () => {
     if (!this.postboxKeyHolder || !this.postboxKeyHolder.provider) {
       throw new Error('Please social signin first, postboxkey is required');
     }
@@ -96,8 +97,8 @@ export class KeyClientImpl implements KeyClient {
     const serverShare = ShareStore.fromJSON(JSON.parse(serverShareResponse.jsonString));
     this.serverShare = serverShare;
     return true;
-  }
-  checkSet() {
+  };
+  checkSet = () => {
     if (!this.serverShare) {
       throw serverShareRequiredError;
     }
@@ -111,15 +112,15 @@ export class KeyClientImpl implements KeyClient {
         //TODO: 어떤 에러를 뱉을 것인가?
         throw new Error('???오ㅐ때문에 없서');
     }
-  }
-  async checkPincode() {
+  };
+  checkPincode = async () => {
     const credentials = await SecureKeychain.getGenericPassword();
     return !!credentials;
-  }
-  async getPrivateKey() {
+  };
+  getPrivateKey = async () => {
     return this.torusShareRepository.getPrivateKey();
-  }
-  async setDevice(pincode: string) {
+  };
+  setDevice = async (pincode: string) => {
     if (!this.postboxKeyHolder || !this.deviceShare) {
       throw new Error('postboxKeyHolder, deviceShare is required');
     }
@@ -130,8 +131,8 @@ export class KeyClientImpl implements KeyClient {
       this.postboxKeyHolder.providerIdToken,
       this.postboxKeyHolder.providerAccessToken
     );
-  }
-  async setServer() {
+  };
+  setServer = async () => {
     if (!this.postboxKeyHolder || !this.serverShare || !this.postboxKeyHolder.provider) {
       throw new Error('postboxKeyHolder, serverShare is required');
     }
@@ -145,14 +146,14 @@ export class KeyClientImpl implements KeyClient {
       share: this.util.shareToShareJson(this.serverShare),
       pubKey,
     });
-  }
-  async setKeyFromDevice() {
+  };
+  setKeyFromDevice = async () => {
     const { postboxKey, share } = await this.deviceShareRepository.fetchDeviceShare();
     this.postboxKeyHolder = { postboxKey };
     await this.torusShareRepository.init(postboxKey, true);
     await this.torusShareRepository.assembleShares(share);
-  }
-  async setKeyByMnemonic(mnemonic: string) {
+  };
+  setKeyByMnemonic = async (mnemonic: string) => {
     if (!this.postboxKeyHolder || !this.postboxKeyHolder.provider) {
       throw new Error('postboxKey is required');
     }
@@ -160,14 +161,14 @@ export class KeyClientImpl implements KeyClient {
     const newShareInfo = await this.torusShareRepository.generateAdditionalShare();
     this.serverShare = newShareInfo.share;
     await this.torusShareRepository.assembleShares();
-  }
-  async setKeyByServer() {
+  };
+  setKeyByServer = async () => {
     if (!this.serverShare) {
       throw serverShareRequiredError;
     }
     await this.torusShareRepository.assembleShares(this.serverShare);
-  }
-  async generateMnemonic() {
+  };
+  generateMnemonic = async () => {
     if (!this.postboxKeyHolder || !this.postboxKeyHolder.provider) {
       throw new Error('postboxKey is required');
     }
@@ -177,16 +178,16 @@ export class KeyClientImpl implements KeyClient {
     const assembleRes = await this.torusShareRepository.assembleShares();
     const BNprivateKey = assembleRes.privKey;
     return this.util.pkeyToMnemonic(BNprivateKey);
-  }
+  };
 
-  getMnemonicByPkey() {
+  getMnemonicByPkey = () => {
     if (!this.torusShareRepository.tKey) {
       throw new Error('Tkey is required');
     }
     return this.util.pkeyToMnemonic(this.torusShareRepository.tKey.privKey);
-  }
+  };
 
-  async generateKey() {
+  generateKey = async () => {
     if (!this.postboxKeyHolder) {
       throw new Error('Please social signin first, postboxkey is required');
     }
@@ -197,15 +198,15 @@ export class KeyClientImpl implements KeyClient {
     this.serverShare = serverShareInfo.share;
     this.deviceShare = deviceShare;
     return;
-  }
-  async generateDevice() {
+  };
+  generateDevice = async () => {
     const res = await this.torusShareRepository.generateAdditionalShare();
     this.deviceShare = res.share;
     this.deviceShareIndex = res.index;
     const newPolynomialId = this.deviceShareIndex;
     return newPolynomialId;
-  }
-  async updateServer() {
+  };
+  updateServer = async () => {
     if (!this.serverShare || !this.deviceShare || !this.deviceShareIndex) {
       throw new Error('serverShare, deviceShare, deviceShareindex is required');
     }
@@ -216,8 +217,8 @@ export class KeyClientImpl implements KeyClient {
       this.serverShare.polynomialID,
       this.deviceShareIndex
     );
-  }
-  async restoreServer() {
+  };
+  restoreServer = async () => {
     if (!this.postboxKeyHolder || !this.postboxKeyHolder.provider || !this.serverShare) {
       throw new Error('postboxKey is required');
     }
@@ -238,8 +239,8 @@ export class KeyClientImpl implements KeyClient {
       delete restoreObj.identifier;
     }
     await this.serverShareRepository.restoreServerShare(restoreObj);
-  }
-  async delete() {
+  };
+  delete = async () => {
     try {
       const deviceShare = await this.deviceShareRepository.fetchDeviceShare();
       if (deviceShare === undefined) return;
@@ -250,16 +251,16 @@ export class KeyClientImpl implements KeyClient {
     } catch (error) {
       throw new Error(`delete account error:  ${error}`);
     }
-  }
+  };
 
-  signOut() {
+  signOut = () => {
     this.deviceShareRepository.clearDeviceShare();
-  }
+  };
 
-  async findDeviceShareByServerShare() {
+  findDeviceShareByServerShare = async () => {
     if (!this.serverShare) {
       throw serverShareRequiredError;
     }
     this.deviceShare = await this.torusShareRepository.findUknownShareByKnown(this.serverShare);
-  }
+  };
 }
