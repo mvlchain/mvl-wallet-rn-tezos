@@ -2,13 +2,15 @@ import qs from 'qs';
 import { injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
+import { Network } from '@@constants/network.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
-import { RegisterWalletDto, WalletResponseDto } from '@@generated/generated-scheme';
+import { BalanceResponseDto, RegisterWalletDto, WalletResponseDto } from '@@generated/generated-scheme';
 import { authRequest } from '@@utils/request';
 
 export interface WalletRepository {
-  getWallets(extendedPublicKey: string): Promise<WalletDto[]>;
-  registerWallet(body: RegisterWalletDto): Promise<WalletResponseDto>;
+  getWallets: (extendedPublicKey: string) => Promise<WalletDto[]>;
+  registerWallet: (body: RegisterWalletDto) => Promise<WalletResponseDto>;
+  getBalance: (address: string, network: Network) => Promise<BalanceResponseDto[]>;
 }
 
 @injectable()
@@ -39,6 +41,15 @@ export class WalletRepositoryImpl implements WalletRepository {
       },
       data: body,
     });
+    return res.data;
+  };
+
+  getBalance = async (address: string, network: Network): Promise<BalanceResponseDto[]> => {
+    const endpoint = `v1.2/wallets/balance?${qs.stringify({
+      address,
+      network,
+    })}`;
+    const res = await authRequest.get<BalanceResponseDto[]>(endpoint);
     return res.data;
   };
 }

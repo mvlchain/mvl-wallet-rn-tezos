@@ -1,25 +1,25 @@
 import React from 'react';
 
-import { View } from 'react-native';
-
 import { useTokenBalanceList } from '@@hooks/useTokenBalanceList';
 
 import * as S from './TokenList.style';
 import TokenListItem from './TokenListItem';
 
 function TokenList() {
-  const tokenList = useTokenBalanceList();
-
+  const { balanceData } = useTokenBalanceList();
   return (
     <S.Container>
       <S.TitleContainer>
         <S.Title>Token</S.Title>
       </S.TitleContainer>
-      <View>
-        {tokenList.map((props: any) => (
-          <TokenListItem {...props} key={'token' + props.name} />
-        ))}
-      </View>
+      <S.TokenFlatList
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <TokenListItem {...item} />}
+        data={balanceData}
+        extraData={balanceData}
+        keyExtractor={(data) => `token_${data?.asset?.ticker}`}
+      />
     </S.Container>
   );
 }

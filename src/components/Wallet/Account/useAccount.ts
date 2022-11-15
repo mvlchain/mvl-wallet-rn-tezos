@@ -20,22 +20,25 @@ const useAccount = () => {
   const keyClient = useDi('KeyClient');
   const { openModal, closeModal } = globalModalStore();
   const { data } = useWalletsQuery();
-  const { selectedWalletIndex } = walletPersistStore();
+  const { selectedWalletIndex, selectedNetwork, selectNetwork } = walletPersistStore();
   const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
 
-  // TODO: 실제 데이터 연동 및 onPress시 해당 network데이터 불러오기 작업
-  const dummyNetwork: IBottomSelectMenuProps[] = [
-    {
-      title: formatNetwork(NETWORK.ETHEREUM),
-      isSelected: true,
-      onPress: () => console.log('select ethereum'),
-    },
-    {
-      title: formatNetwork(NETWORK.BSC),
-      isSelected: false,
-      onPress: () => console.log('select binance'),
-    },
-  ];
+  // TODO: network를 서버에서 받아오는지 체크, 현재는 로컬에서 저장 중
+  const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
+    () => [
+      {
+        title: formatNetwork(NETWORK.ETHEREUM),
+        isSelected: selectedNetwork[postboxkey] === NETWORK.ETHEREUM,
+        onPress: () => selectNetwork(postboxkey, NETWORK.ETHEREUM),
+      },
+      {
+        title: formatNetwork(NETWORK.BSC),
+        isSelected: selectedNetwork[postboxkey] === NETWORK.BSC,
+        onPress: () => selectNetwork(postboxkey, NETWORK.BSC),
+      },
+    ],
+    [selectedNetwork[postboxkey]]
+  );
 
   const onChangeWalletInput = (value: string) => {
     console.log('input value:  ', value);
@@ -73,6 +76,7 @@ const useAccount = () => {
   };
 
   return {
+    networkName: formatNetwork(selectedNetwork[postboxkey]),
     onPressSwitchNetwork,
     onPressMore,
   };

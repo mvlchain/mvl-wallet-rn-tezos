@@ -9,12 +9,18 @@ export const Container = styled.View`
   padding: ${height * 16}px 0;
 `;
 
+export const IconWrapper = styled.View`
+  width: ${width * 36}px;
+  height: ${width * 36}px;
+`;
+
 export const LabelContainer = styled.View`
   flex-direction: row;
   align-items: center;
 `;
 
 export const Text = styled.Text`
+  text-align: right;
   ${({ theme }) => theme.font.Label.md};
   color: ${({ theme }) => theme.color.blackWhite};
 `;
