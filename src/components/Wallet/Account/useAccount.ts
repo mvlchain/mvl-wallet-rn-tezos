@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
@@ -5,10 +7,10 @@ import { IBottomSelectMenuProps } from '@@components/Modals/BottomSelectModal/Bo
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
 import { useDi } from '@@hooks/common/useDi';
+import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { walletStore } from '@@store/wallet/walletStore';
 import { formatNetwork } from '@@utils/format';
 
 const useAccount = () => {
@@ -17,7 +19,7 @@ const useAccount = () => {
   const { t } = useTranslation();
   const keyClient = useDi('KeyClient');
   const { openModal, closeModal } = globalModalStore();
-  const { walletData } = walletStore();
+  const { data } = useWalletsQuery();
   const { selectedWalletIndex } = walletPersistStore();
   const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
 
@@ -41,23 +43,26 @@ const useAccount = () => {
     closeModal();
   };
 
-  const moreEditList = [
-    {
-      title: t('edit_wallet_name'),
-      isSelected: false,
-      onPress: () =>
-        openModal(MODAL_TYPES.TEXT_INPUT, {
-          title: t('edit_wallet_name'),
-          defaultValue: walletData[selectedWalletIndex[postboxkey]]?.name,
-          onConfirm: onChangeWalletInput,
-        }),
-    },
-    {
-      title: t('edit_token_list'),
-      isSelected: false,
-      onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
-    },
-  ];
+  const moreEditList = useMemo(
+    () => [
+      {
+        title: t('edit_wallet_name'),
+        isSelected: false,
+        onPress: () =>
+          openModal(MODAL_TYPES.TEXT_INPUT, {
+            title: t('edit_wallet_name'),
+            defaultValue: data && data[selectedWalletIndex[postboxkey]]?.name,
+            onConfirm: onChangeWalletInput,
+          }),
+      },
+      {
+        title: t('edit_token_list'),
+        isSelected: false,
+        onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
+      },
+    ],
+    [data]
+  );
 
   const onPressSwitchNetwork = () => {
     openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('dialog_network_switch_lbl_title'), menuList: dummyNetwork });
