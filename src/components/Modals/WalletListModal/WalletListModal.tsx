@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { BaseModal } from '@@components/BasicComponents/Modals/BaseModal';
-import { BINANCE, ETHEREUM } from '@@domain/blockchain/BlockChain';
-import { useDi } from '@@hooks/common/useDi';
+import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { useCurrentWallet } from '@@hooks/wallet/useCurrentWallet';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
@@ -33,10 +32,8 @@ const RenderItem = ({ data }: { data: IWalletListMenuProps }) => {
 
 function WalletListModal({ menuList }: IWalletListModalProps) {
   const { t } = useTranslation();
-  const keyClient = useDi('KeyClient');
-  const postboxkey = keyClient.postboxKeyHolder?.postboxKey;
   const { modalType, closeModal } = globalModalStore();
-  const { walletData, createWallet } = useCurrentWallet();
+  const { createWallet } = useCurrentWallet();
 
   return (
     <BaseModal
@@ -59,9 +56,7 @@ function WalletListModal({ menuList }: IWalletListModalProps) {
         <S.ButtonContainer>
           <PrimaryButton
             onPress={() => {
-              if (!postboxkey) return;
-              const index = walletData.length;
-              createWallet(index, ETHEREUM);
+              createWallet(ETHEREUM);
               // createWallet(index, BINANCE);
               closeModal();
             }}
