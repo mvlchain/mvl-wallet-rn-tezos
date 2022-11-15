@@ -1,8 +1,13 @@
-import { WALLET_TOKEN } from '@@constants/token.constant';
-
 export interface ITokenListItemProps {
-  icon: keyof typeof WALLET_TOKEN;
+  asset: Asset;
+  amount: string;
+  valuatedAmount: string;
+  valuatedCurrency: string;
+}
+
+export interface Asset {
+  ticker: string;
   name: string;
-  amount: number;
-  amountUSD: number;
+  iconUrl: string;
+  tokenType: string | null;
 }

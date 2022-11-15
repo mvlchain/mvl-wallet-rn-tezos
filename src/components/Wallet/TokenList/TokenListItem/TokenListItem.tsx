@@ -2,33 +2,40 @@ import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, View } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 
-import * as TokenIcon from '@@assets/image/token';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { width } from '@@utils/ui';
 
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
 
-function TokenListItem({ amount, amountUSD, icon, name }: ITokenListItemProps) {
+function TokenListItem({ asset, amount, valuatedAmount, valuatedCurrency }: ITokenListItemProps) {
+  const { ticker, iconUrl } = asset;
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const navigation = useNavigation<rootStackProps>();
-  const TokenImage = TokenIcon[icon ?? 'Mvl'];
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL, { symbol: name });
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL, { symbol: ticker });
       }}
     >
       <S.Container>
         <S.LabelContainer>
-          <TokenImage />
-          <S.Name>{name}</S.Name>
+          {iconUrl && (
+            <S.IconWrapper>
+              <SvgUri uri={iconUrl} width={`${width * 36}`} height={`${width * 36}`} />
+            </S.IconWrapper>
+          )}
+          <S.Name>{ticker}</S.Name>
         </S.LabelContainer>
         <View>
           <S.Text>
-            {amount} {name}
+            {amount} {ticker}
           </S.Text>
-          <S.AmountUSD>{amountUSD} USD</S.AmountUSD>
+          <S.AmountUSD>
+            {valuatedAmount} {valuatedCurrency}
+          </S.AmountUSD>
         </View>
       </S.Container>
     </Pressable>
