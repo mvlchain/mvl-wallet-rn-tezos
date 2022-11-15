@@ -34,10 +34,9 @@ const RenderItem = ({ data }: { data: IWalletListMenuProps }) => {
 function WalletListModal({ menuList }: IWalletListModalProps) {
   const { t } = useTranslation();
   const keyClient = useDi('KeyClient');
-  const walletService = useDi('WalletService');
   const postboxkey = keyClient.postboxKeyHolder?.postboxKey;
   const { modalType, closeModal } = globalModalStore();
-  const { walletData, createWallet } = useCurrentWallet(walletService);
+  const { walletData, createWallet } = useCurrentWallet();
 
   return (
     <BaseModal

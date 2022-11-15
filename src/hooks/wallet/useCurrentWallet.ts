@@ -1,35 +1,19 @@
-import { useEffect } from 'react';
-
-import { BlockChain } from '@@domain/blockchain/BlockChain';
-import { WalletService } from '@@domain/wallet/WalletService';
+import { BlockChain, ETHEREUM } from '@@domain/blockchain/BlockChain';
+import useWalletMutation from '@@hooks/queries/useWalletMutation';
+import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import authStore from '@@store/auth/authStore';
-import { walletStore } from '@@store/wallet/walletStore';
 
 /**
  * UseCase: get current selected wallet from local storage
  */
-export const useCurrentWallet = (service: WalletService) => {
-  const { walletData, setWalletData } = walletStore();
+export const useCurrentWallet = () => {
   const { pKey } = authStore();
-
+  const { mutate } = useWalletMutation();
+  const { data } = useWalletsQuery();
   const createWallet = async (index: number, blockchain: BlockChain) => {
-    if (!pKey) return;
-    const data = await service.createWallet(pKey, index, blockchain);
-    fetchWalletList();
-    return data;
+    if (!pKey || !data) return;
+    mutate({ pKey: pKey ?? 'TODO: ERROR', index: data.length, blockchain: ETHEREUM });
   };
 
-  const fetchWalletList = async () => {
-    const result = await service.getWalletList();
-
-    // updates wallets state
-    // (WalletDto and WalletState have the same fields. just casting)
-    setWalletData(result);
-  };
-
-  useEffect(() => {
-    fetchWalletList();
-  }, []);
-
-  return { walletData, refetch: fetchWalletList, createWallet };
+  return { walletData: data ?? [], createWallet };
 };

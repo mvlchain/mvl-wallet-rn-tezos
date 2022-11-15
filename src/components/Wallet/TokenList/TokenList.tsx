@@ -5,10 +5,9 @@ import { View } from 'react-native';
 import { useTokenBalanceList } from '@@hooks/useTokenBalanceList';
 
 import * as S from './TokenList.style';
-import { ITokenListProps } from './TokenList.type';
 import TokenListItem from './TokenListItem';
 
-function TokenList(props: ITokenListProps) {
+function TokenList() {
   const tokenList = useTokenBalanceList();
 
   return (
@@ -18,7 +17,7 @@ function TokenList(props: ITokenListProps) {
       </S.TitleContainer>
       <View>
         {tokenList.map((props: any) => (
-          <TokenListItem {...props} />
+          <TokenListItem {...props} key={'token' + props.name} />
         ))}
       </View>
     </S.Container>
