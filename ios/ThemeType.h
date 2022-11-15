@@ -6,8 +6,10 @@
 #ifndef ThemeType_h
 #define ThemeType_h
 
-NSString *const kThemeTypeDefault = @"default";
-NSString *const kThemeTypeLight = @"light";
-NSString *const kThemeTypeDark = @"dark";
+#import <Foundation/Foundation.h>
+
+FOUNDATION_EXPORT NSString *const kThemeTypeDefault;
+FOUNDATION_EXPORT NSString *const kThemeTypeLight;
+FOUNDATION_EXPORT NSString *const kThemeTypeDark;
 
 #endif /* ThemeType_h */
