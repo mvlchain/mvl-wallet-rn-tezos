@@ -1,42 +1,52 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import {
-  TTranscationType,
-  ITransactionHistoryListItemProps,
-} from '@@components/WalletTokenDetail/TransactionHistoryItem/TransactionHistoryListItem.type';
 import { TRANSACTION_HISTORY_FILTER_CRITERIA, TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
+import { IFetchTransactionHistoryResponse, TTransactionType } from '@@domain/transaction/TransactionService.type';
+import { useDi } from '@@hooks/common/useDi';
+import transactionStore from '@@store/transaction/transactionStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 
 const useTransactionHistoryList = () => {
+  const transactionService = useDi('TransactionService');
   //TODO: 나중에 데이터 붙여야함 스토어랑ㅇㅇㅇㅇㅇㅇㅇㅇ t함수동!
-  const LIMIT = 5;
-  const [data, setData] = useState<ITransactionHistoryListItemProps[]>([]);
-  const [offset, setOffset] = useState(0);
+
   const [loading, setLoading] = useState(false);
+  const transactionStore = transactionStore();
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
+  const myPublicAddress = '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d';
+  const token = 'ETH';
 
   const filteredData = useMemo(() => {
-    let type: TTranscationType;
     switch (currentCriteria) {
       case TRANSACTION_HISTORY_FILTER_CRITERIA.ALL:
-        return data;
+        return transactionStore[token].history;
       case TRANSACTION_HISTORY_FILTER_CRITERIA.SENT_ONLY:
-        type = TRANSACTION_TYPE.SEND;
-        break;
+        return transactionStore[token].history.filter((v, i) => v.from === myPublicAddress);
       case TRANSACTION_HISTORY_FILTER_CRITERIA.RECEIVED_ONLY:
-        type = TRANSACTION_TYPE.RECEIVE;
-        break;
+        return transactionStore[token].history.filter((v, i) => v.to === myPublicAddress);
       default:
-        return data;
+        return transactionStore[token].history;
     }
-    return data.filter((v, i) => v.type === type);
-  }, [currentCriteria, data]);
+  }, [currentCriteria, transactionStore[token].history]);
 
-  const getData = () => {
+  const getData = async () => {
     setLoading(true);
-    setData([...data, ...mockData.transactionHistory]);
-    setOffset(offset + 5);
+    const params = {
+      network: 'ETHEREUM',
+      address: myPublicAddress,
+      ticker: 'ETH',
+      beforeblock: transactionStore[token].beforeblock ?? 2147483647,
+      beforeindex: transactionStore[token].beforeindex ?? 2147483647,
+      limit: 20,
+    };
+    const history = await transactionService.getHistory(params);
+    if (!history) {
+      setLoading(false);
+      return;
+    }
+    const lastIdx = history.length - 1;
+    transactionStore.setHistory(token, history, history[lastIdx].blockNumber, history[lastIdx].index);
     setLoading(false);
   };
 
@@ -60,55 +70,3 @@ const useTransactionHistoryList = () => {
 };
 
 export default useTransactionHistoryList;
-
-const mockData = {
-  symbol: 'MVL',
-  base: 'USD',
-  transactionHistory: [
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagdsfsdfsfdfsfsfsdfsdfsdfsfsfsfsfsfsfsfdsfsfsdsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CANCELED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.RECEIVE,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.PENDING,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-  ],
-};
