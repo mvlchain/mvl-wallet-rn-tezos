@@ -29,12 +29,14 @@ function App(props: { foxCode?: string }) {
   const { appTheme, setAppTheme } = useApp();
 
   /**
-   * Rn's splash screen poliy for Android has different policy as of Android 12(api 31)
+   * Rn's splash screen policy for Android need to be handled in a separate solutin as of Android 12(api 31)
    * if (android.version < 31) {
    *   legacy splash screen
    * } else {
    *   android native splash screen
    * }
+   *
+   * splash screenf for Android 12(api 31) will be updated in the coming version.
    *
    * Platform: Platform.OS> ios, android
    * Detecting versions: Platform.Version
