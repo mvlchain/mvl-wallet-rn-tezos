@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { Appearance } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Appearance } from 'react-native';
 import ErrorBoundary from 'react-native-error-boundary';
 import SplashScreen from 'react-native-splash-screen';
 import { ThemeProvider } from 'styled-components';
@@ -20,7 +20,6 @@ import RTNSettings from '@@store/RTNSetting';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
-import SplashScreen from 'react-native-splash-screen';
 const queryClient = new QueryClient();
 
 function App(props: { foxCode?: string }) {
@@ -69,7 +68,7 @@ function App(props: { foxCode?: string }) {
   return (
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme[appTheme.label]}>
+        <ThemeProvider theme={theme[appTheme.value]}>
           <RootStack />
         </ThemeProvider>
       </QueryClientProvider>
