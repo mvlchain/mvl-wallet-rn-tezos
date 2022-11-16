@@ -50,9 +50,9 @@ const useApp = () => {
   }, [appTheme]);
 
   const getStatusBarThemeStyle = (themeStyle: string) => {
-    if (appTheme.displayName === THEME.LIGHT) {
+    if (themeStyle === THEME.LIGHT) {
       return THEME.DARK;
-    } else if (appTheme.displayName === THEME.DARK) {
+    } else if (themeStyle === THEME.DARK) {
       return THEME.LIGHT;
     } else {
       return THEME.DEFAULT;
