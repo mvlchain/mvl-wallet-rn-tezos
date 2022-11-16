@@ -3,10 +3,11 @@ import { TezosToolkit } from '@taquito/taquito';
 import Decimal from 'decimal.js';
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
+import qs from 'qs';
 
-export interface TransactionService {
-  sendTransaction(from: string, to: string, value: string, data: string | undefined): Promise<string>;
-}
+import { request, authRequest } from '@@utils/request';
+
+import { ITransactionService, ITransaction, IFetchAllOptions } from './TransactionService.type';
 
 export class EvmNetworkInfo {
   constructor(readonly rpcUrl: string, readonly chainId: number) {}
@@ -20,7 +21,7 @@ export class GasFeeInfo {
   constructor(readonly gasPrice: string) {}
 }
 
-export class EthersTransactionImpl implements TransactionService {
+export class EthersTransactionImpl implements ITransactionService {
   constructor(
     private readonly selectedNetworkInfo: EvmNetworkInfo,
     private readonly selectedWalletPrivateKey: string,
@@ -43,9 +44,24 @@ export class EthersTransactionImpl implements TransactionService {
 
     return res.hash;
   }
+  async approveTransaction(txId: string) {
+    return 'good';
+  }
+  async cancelTransaction(txId: string) {
+    return 'good';
+  }
+  async speedUpTransaction(txId: string) {
+    return 'good';
+  }
+  async estimateGas(transaction: ITransaction) {
+    return 'good';
+  }
+  async getHistory(ticker: string, address: string) {
+    return 'good';
+  }
 }
 
-export class TezosTaquitoTransactionsImpl implements TransactionService {
+export class TezosTaquitoTransactionsImpl implements ITransactionService {
   constructor(
     private readonly selectedNetworkInfo: TezosNetworkInfo,
     private readonly selectedWalletPrivateKey: string,
@@ -79,5 +95,39 @@ export class TezosTaquitoTransactionsImpl implements TransactionService {
       .then((op) => op.confirmation(1).then(() => op.opHash));
     console.log(`txHash: ${txHash}`);
     return txHash;
+  }
+
+  async approveTransaction(txId: string) {
+    return 'good';
+  }
+  async cancelTransaction(txId: string) {
+    return 'good';
+  }
+  async speedUpTransaction(txId: string) {
+    return 'good';
+  }
+  async estimateGas(transaction: ITransaction) {
+    return 'good';
+  }
+  async getHistory(network: string, ticker: string, address: string, opt?: IFetchAllOptions | undefined) {
+    //TODO: v2에서는 auth header붙여야함
+    try {
+      const endpoint = `/v1/wallets/transactions?${qs.stringify({
+        network,
+        address,
+        beforeblock: opt?.beforeblock ?? 2147483647,
+        beforeindex: opt?.beforeindex ?? 2147483647,
+        limit: opt?.limit ?? 20,
+        ticker,
+      })}`;
+      const res = await request.get(endpoint);
+      if (res.status === 200) {
+        return res.data;
+      } else {
+        return undefined;
+      }
+    } catch (e) {
+      return undefined;
+    }
   }
 }

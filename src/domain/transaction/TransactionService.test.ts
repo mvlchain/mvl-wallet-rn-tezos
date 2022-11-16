@@ -1,8 +1,9 @@
 import { BigNumber, ethers } from 'ethers';
 
-import { EthersTransactionImpl, TransactionService } from './TransactionService';
+import { EthersTransactionImpl } from './TransactionService';
+import { ITransactionService } from './TransactionService.type';
 
-const transactionService: TransactionService = new EthersTransactionImpl(
+const transactionService: ITransactionService = new EthersTransactionImpl(
   { rpcUrl: 'http://localhost:3000', chainId: 1 },
   '0x0000000000000000000000000000000000000000000000000000000000000000',
   {
