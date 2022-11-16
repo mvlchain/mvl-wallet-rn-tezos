@@ -1,19 +1,23 @@
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { ITransactionService, ITransaction } from '@@domain/transaction/TransactionService.type';
+import { ITransactionService, ITransaction, IFetchTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 
 import { ITransactionStore, TTransactionStoreState } from './transactionStore.type';
 
 const transactionStore = create<ITransactionStore | TTransactionStoreState>()(
   devtools(
     (set, get) => ({
-      setHistory: (token: string, history: Array<ITransaction>) => {
+      setHistory: (token: string, history: Array<IFetchTransactionHistoryResponse>, beforeblock: number, beforeindex: number) => {
         //@ts-ignore
-        const old = get()[token] ? get()[toekn] : [];
+        const old = get()[token] ? get()[token].history : [];
         set(
           {
-            [token]: [...old, ...history],
+            [token]: {
+              beforeblock,
+              beforeindex,
+              history: [...old, ...history],
+            },
           },
           false,
           'setHistory'
