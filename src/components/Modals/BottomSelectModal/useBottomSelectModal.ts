@@ -3,7 +3,7 @@ import { Appearance } from 'react-native';
 
 import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
 import RTNSettings from '@@store/RTNSetting';
-import settingStore from '@@store/setting/settingPersistStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import { IBottomSelectMenuProps } from './BottomSelectMenu/BottomSelectMenu.type';
 
