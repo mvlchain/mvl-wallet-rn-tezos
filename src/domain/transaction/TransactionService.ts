@@ -5,9 +5,10 @@ import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import qs from 'qs';
 
+import { TRANSACTION_TYPE, TRANSACTION_STATUS } from '@@constants/transaction.constant';
 import { request, authRequest } from '@@utils/request';
 
-import { ITransactionService, ITransaction, IFetchAllOptions } from './TransactionService.type';
+import { ITransactionService, ITransaction, TTransactionStatus, TTransactionType, IFetchTransactionHistoryRequest } from './TransactionService.type';
 
 export class EvmNetworkInfo {
   constructor(readonly rpcUrl: string, readonly chainId: number) {}
@@ -56,8 +57,20 @@ export class EthersTransactionImpl implements ITransactionService {
   async estimateGas(transaction: ITransaction) {
     return 'good';
   }
-  async getHistory(ticker: string, address: string) {
-    return 'good';
+  async getHistory(params: IFetchTransactionHistoryRequest) {
+    //TODO: v2에서는 auth header붙여야함
+    try {
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      const res = await request.get(endpoint);
+      if (res.status === 200) {
+        return mockData;
+        // return res.data;
+      } else {
+        return undefined;
+      }
+    } catch (e) {
+      return undefined;
+    }
   }
 }
 
@@ -109,20 +122,14 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
   async estimateGas(transaction: ITransaction) {
     return 'good';
   }
-  async getHistory(network: string, ticker: string, address: string, opt?: IFetchAllOptions | undefined) {
+  async getHistory(params: IFetchTransactionHistoryRequest) {
     //TODO: v2에서는 auth header붙여야함
     try {
-      const endpoint = `/v1/wallets/transactions?${qs.stringify({
-        network,
-        address,
-        beforeblock: opt?.beforeblock ?? 2147483647,
-        beforeindex: opt?.beforeindex ?? 2147483647,
-        limit: opt?.limit ?? 20,
-        ticker,
-      })}`;
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
       const res = await request.get(endpoint);
       if (res.status === 200) {
-        return res.data;
+        return mockData;
+        // return res.data;
       } else {
         return undefined;
       }
@@ -131,3 +138,48 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
     }
   }
 }
+
+const mockData = [
+  {
+    type: TTransactionType.SEND_ETH,
+    status: TTransactionStatus.SUCCESS,
+    from: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
+    to: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
+    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e759f',
+    value: '15',
+    fee: '0.04',
+    updatedAt: '2022-01-20T12:01:30.543Z',
+    ticker: 'ETH',
+    blockNumber: 2147483647,
+    index: 2147483647,
+    nonce: 0,
+  },
+  {
+    type: TTransactionType.SEND_ETH,
+    status: TTransactionStatus.PENDING,
+    to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
+    from: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
+    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e759f',
+    value: '15',
+    fee: '0.04',
+    updatedAt: '2022-01-20T12:01:30.543Z',
+    ticker: 'ETH',
+    blockNumber: 2147483647,
+    index: 2147483647,
+    nonce: 0,
+  },
+  {
+    type: TTransactionType.SEND_ETH,
+    status: TTransactionStatus.FAIL,
+    to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
+    from: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
+    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e759f',
+    value: '15',
+    fee: '0.04',
+    updatedAt: '2022-01-20T12:01:30.543Z',
+    ticker: 'ETH',
+    blockNumber: 2147483647,
+    index: 2147483647,
+    nonce: 0,
+  },
+];
