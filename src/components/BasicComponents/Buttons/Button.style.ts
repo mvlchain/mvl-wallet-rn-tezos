@@ -42,7 +42,7 @@ export const baseButtonStyleObj: Type.IBaseButtonStyleObj = {
   primary: {
     bg: {
       bgColor: 'primary',
-      bgColorPressed: 'primary',
+      bgColorPressed: 'medium',
       bgColorDisabled: 'lightestDarkest',
     },
     tx: {
