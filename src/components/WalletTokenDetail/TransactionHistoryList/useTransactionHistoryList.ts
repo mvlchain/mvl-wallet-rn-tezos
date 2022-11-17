@@ -7,15 +7,20 @@ import transactionStore from '@@store/transaction/transactionStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 
+import 'reflect-metadata';
+
 const useTransactionHistoryList = () => {
-  const transactionService = useDi('TransactionService');
-  //TODO: 나중에 데이터 붙여야함 스토어랑ㅇㅇㅇㅇㅇㅇㅇㅇ t함수동!
+  //TDOO: mock => real
+  const myPublicAddress = '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d';
+  const token = 'ETH';
+  const network = 'ETHEREUM';
+
+  const ethersTransactionService = useDi('EtherTransactionService');
+  const tezosTransactionService = useDi('TezosTransactionService');
 
   const [loading, setLoading] = useState(false);
   const { tokens, setHistory } = transactionStore();
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
-  const myPublicAddress = '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d';
-  const token = 'ETH';
 
   const filteredData = useMemo(() => {
     if (!tokens[token]) return;
@@ -30,18 +35,21 @@ const useTransactionHistoryList = () => {
         return tokens[token].history;
     }
     //TODO: deps고민 해보기
-  }, [currentCriteria, tokens]);
+  }, [currentCriteria, tokens[token]?.history.length]);
 
   const getData = async () => {
     setLoading(true);
     const params = {
-      network: 'ETHEREUM',
+      network,
       address: myPublicAddress,
       ticker: token,
       beforeblock: tokens[token]?.beforeblock ?? 2147483647,
       beforeindex: tokens[token]?.beforeindex ?? 2147483647,
       limit: 20,
     };
+    //TODO: 나중에 고칠 부분
+    //@ts-ignore
+    const transactionService = network === 'TEZOS' ? tezosTransactionService : ethersTransactionService;
     const history = await transactionService.getHistory(params);
     if (!history) {
       setLoading(false);

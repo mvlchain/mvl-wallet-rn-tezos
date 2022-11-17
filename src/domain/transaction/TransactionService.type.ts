@@ -24,7 +24,31 @@ export enum TToken {
   XTZ = 'XTZ',
 }
 
-export interface IFetchTransactionHistoryRequest {
+export interface INetworkInfo {
+  rpcUrl: string;
+  chainId: number;
+}
+
+export interface IGasFeeInfo {
+  gasPrice: string;
+  gasPriceLevel?: string;
+}
+export interface ISendTransactionArguments {
+  networkInfo: INetworkInfo;
+  privateKey: string;
+  gasFeeInfo: IGasFeeInfo;
+  from: string;
+  to: string;
+  value: string;
+  data: string | undefined;
+}
+
+export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
+export interface ITezosSendTransactionArguments extends Omit<ISendTransactionArguments, 'networkInfo'> {
+  networkInfo: ITezosNetworkInfo;
+}
+
+export interface IGetHistoryArguments {
   network: string;
   ticker: string;
   address: string;
@@ -62,10 +86,10 @@ export interface ITransaction {
   estimateGasError?: string;
 }
 export interface ITransactionService {
-  sendTransaction(from: string, to: string, value: string, data: string | undefined): Promise<string>;
+  sendTransaction(args: ISendTransactionArguments): Promise<string>;
   approveTransaction(txId: string): Promise<string>;
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
   estimateGas(transaction: ITransaction): Promise<string>;
-  getHistory(reqBody: IFetchTransactionHistoryRequest): Promise<IFetchTransactionHistoryResponse[] | undefined>;
+  getHistory(args: IGetHistoryArguments): Promise<IFetchTransactionHistoryResponse[] | undefined>;
 }

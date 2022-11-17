@@ -3,13 +3,7 @@ import { BigNumber, ethers } from 'ethers';
 import { EthersTransactionImpl } from './TransactionService';
 import { ITransactionService } from './TransactionService.type';
 
-const transactionService: ITransactionService = new EthersTransactionImpl(
-  { rpcUrl: 'http://localhost:3000', chainId: 1 },
-  '0x0000000000000000000000000000000000000000000000000000000000000000',
-  {
-    gasPrice: ethers.utils.formatUnits(BigNumber.from('100'), 'gwei'),
-  }
-);
+const transactionService: ITransactionService = new EthersTransactionImpl();
 
 it('constructs correctly', () => {
   expect(transactionService).toBeDefined();
