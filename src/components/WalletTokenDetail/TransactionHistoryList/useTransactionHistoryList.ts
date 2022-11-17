@@ -12,32 +12,34 @@ const useTransactionHistoryList = () => {
   //TODO: 나중에 데이터 붙여야함 스토어랑ㅇㅇㅇㅇㅇㅇㅇㅇ t함수동!
 
   const [loading, setLoading] = useState(false);
-  const transactionStore = transactionStore();
+  const { tokens, setHistory } = transactionStore();
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
   const myPublicAddress = '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d';
   const token = 'ETH';
 
   const filteredData = useMemo(() => {
+    if (!tokens[token]) return;
     switch (currentCriteria) {
       case TRANSACTION_HISTORY_FILTER_CRITERIA.ALL:
-        return transactionStore[token].history;
+        return tokens[token].history;
       case TRANSACTION_HISTORY_FILTER_CRITERIA.SENT_ONLY:
-        return transactionStore[token].history.filter((v, i) => v.from === myPublicAddress);
+        return tokens[token].history.filter((v, i) => v.from === myPublicAddress);
       case TRANSACTION_HISTORY_FILTER_CRITERIA.RECEIVED_ONLY:
-        return transactionStore[token].history.filter((v, i) => v.to === myPublicAddress);
+        return tokens[token].history.filter((v, i) => v.to === myPublicAddress);
       default:
-        return transactionStore[token].history;
+        return tokens[token].history;
     }
-  }, [currentCriteria, transactionStore[token].history]);
+    //TODO: deps고민 해보기
+  }, [currentCriteria, tokens]);
 
   const getData = async () => {
     setLoading(true);
     const params = {
       network: 'ETHEREUM',
       address: myPublicAddress,
-      ticker: 'ETH',
-      beforeblock: transactionStore[token].beforeblock ?? 2147483647,
-      beforeindex: transactionStore[token].beforeindex ?? 2147483647,
+      ticker: token,
+      beforeblock: tokens[token]?.beforeblock ?? 2147483647,
+      beforeindex: tokens[token]?.beforeindex ?? 2147483647,
       limit: 20,
     };
     const history = await transactionService.getHistory(params);
@@ -46,7 +48,7 @@ const useTransactionHistoryList = () => {
       return;
     }
     const lastIdx = history.length - 1;
-    transactionStore.setHistory(token, history, history[lastIdx].blockNumber, history[lastIdx].index);
+    setHistory(token, history, history[lastIdx].blockNumber, history[lastIdx].index);
     setLoading(false);
   };
 

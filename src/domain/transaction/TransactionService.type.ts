@@ -14,6 +14,16 @@ export enum TTransactionType {
   SEND_XTZ = 'SEND_XTZ',
 }
 
+export enum TToken {
+  ETH = 'ETH',
+  ERC20 = 'ERC20',
+  ERC721 = 'ERC721',
+  BEP20 = 'BEP20',
+  BEP20_BTCB = 'BEP20_BTCB',
+  BNB = 'BNB',
+  XTZ = 'XTZ',
+}
+
 export interface IFetchTransactionHistoryRequest {
   network: string;
   ticker: string;
