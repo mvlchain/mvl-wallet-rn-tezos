@@ -17,8 +17,8 @@ function TransactionDetailBoard() {
   const navigation = useNavigation<TTransactionHistoryRootStackProps>();
   const { t } = useTranslation();
 
-  //TODO: 데이터정해지면 수정
   const { type, status, value, ticker, updatedAt, to, from } = params;
+  // TODO: 여러번 계산되는 것 같음, 서버 데이터에 구겨넣을까..?
   const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
   return (
     <>
