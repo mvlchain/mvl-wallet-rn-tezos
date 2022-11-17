@@ -15,7 +15,6 @@ import {
   TTransactionStatus,
   TTransactionType,
   IGetHistoryArguments,
-  IFetchTransactionHistoryResponse,
   ISendTransactionArguments,
   ITezosSendTransactionArguments,
 } from './TransactionService.type';
@@ -72,9 +71,10 @@ export class EthersTransactionImpl implements ITransactionService {
   async getHistory(params: IGetHistoryArguments) {
     //TODO: v2에서는 auth header붙여야함
     try {
-      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
-      const res = await request.get(endpoint);
-      console.log('resr', res);
+      // const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      // const res = await request.get(endpoint);
+      // console.log('resr', res);
+      const res = { status: 200 };
       if (res.status === 200) {
         return mockData;
         // return res.data;
@@ -135,9 +135,10 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
   async getHistory(args: IGetHistoryArguments) {
     //TODO: v2에서는 auth header붙여야함
     try {
-      const endpoint = `/v1/wallets/transactions?${qs.stringify({ ...params, address: this.selectedWalletPrivateKey })}`;
-      const res = await request.get(endpoint);
-      console.log('resr', res);
+      // const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      // const res = await request.get(endpoint);
+      // console.log('resr', res);
+      const res = { status: 200 };
       if (res.status === 200) {
         return mockData;
         // return res.data;

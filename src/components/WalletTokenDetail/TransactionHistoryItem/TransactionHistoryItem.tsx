@@ -7,8 +7,8 @@ import { Pressable } from 'react-native';
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
-import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
-import { useAssetFromTheme } from '@@hooks/useTheme';
+import { TTransactionStatus, TTransactionType, IFetchTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import { TCancelRootStackProps } from '@@screens/WalletScreen/WalletTransactionCancel/WalletTransactionCancel.type';
 import { TTransactionHistoryRootStackProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
@@ -16,21 +16,13 @@ import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransaction
 import { fontSize } from '@@utils/ui';
 
 import * as S from './TransactionHistoryListItem.style';
-import { ITransactionHistoryListItemProps } from './TransactionHistoryListItem.type';
 
-function TransactionHistoryListItem({
-  type,
-  status,
-  date,
-  amount,
-  baseCurrencyAmount,
-  baseCurrencySymbol,
-  txHash,
-}: ITransactionHistoryListItemProps) {
+function TransactionHistoryListItem(props: IFetchTransactionHistoryResponse) {
+  const { type, status, updatedAt, value, hash, from, to } = props;
   const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
-  const isCanceled = status === TRANSACTION_STATUS.CANCELED;
-  const amountSign = type === TRANSACTION_TYPE.SEND ? '-' : null;
+  const isCanceled = status === TTransactionStatus.FAIL;
+  const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
   const navigation = useNavigation<TTransactionHistoryRootStackProps | TCancelRootStackProps | TSpeedUpRootStackProps>();
 
   const goToSpeedUp = () => {
@@ -44,7 +36,7 @@ function TransactionHistoryListItem({
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, { txHash });
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, props);
       }}
     >
       <S.TransactionHistoryListItem>
@@ -52,23 +44,24 @@ function TransactionHistoryListItem({
           <S.TransactionHistoryContentInnerWrapper>
             <S.TransactionStatusWrapper>
               <S.TransactionStatus>{status}</S.TransactionStatus>
-              <S.TransactionDate>{date}</S.TransactionDate>
+              <S.TransactionDate>{updatedAt}</S.TransactionDate>
             </S.TransactionStatusWrapper>
             <S.TransactionAmountWrapper>
               <S.TransactionAmount isCanceled={isCanceled}>
-                {amountSign}
-                {amount}
+                {valueSign}
+                {value}
               </S.TransactionAmount>
               <S.TransactionBaseCurrency isCanceled={isCanceled}>
-                {amountSign}
-                {baseCurrencyAmount} {baseCurrencySymbol}
+                {valueSign}
+                {/* TODO: 계산 필요 */}
+                {10} {'USD'}
               </S.TransactionBaseCurrency>
             </S.TransactionAmountWrapper>
           </S.TransactionHistoryContentInnerWrapper>
 
           <RightIcon />
         </S.HistoryItemTopContent>
-        {status === TRANSACTION_STATUS.PENDING && (
+        {status === TTransactionStatus.PENDING && (
           <S.HistoryItemBottomContent>
             <SecondaryButton
               label={t('cancel')}

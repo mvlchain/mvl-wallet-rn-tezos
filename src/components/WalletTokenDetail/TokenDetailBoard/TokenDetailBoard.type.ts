@@ -4,6 +4,6 @@ export interface ITokenDetailBoardProps {
   icon: ReactNode;
   symbol: string;
   balance: number;
-  baseCurrencySymbol: string;
+  USD: string;
   baseCurrencyBalance: number;
 }
