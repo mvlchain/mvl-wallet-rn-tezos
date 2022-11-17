@@ -1,8 +1,5 @@
-import { useState } from 'react';
-
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import useWalletListModal from '@@components/Modals/WalletListModal/useWalletListModal';
-import { useDi } from '@@hooks/common/useDi';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -10,9 +7,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 const useWalletSelector = () => {
   const { wallet } = useWalletListModal();
   const { openModal } = globalModalStore();
-  const keyClient = useDi('KeyClient');
 
-  const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
   const { selectedWalletIndex } = walletPersistStore();
   const { data } = useWalletsQuery();
   const onPressWalletList = () => {
@@ -21,7 +16,7 @@ const useWalletSelector = () => {
   };
 
   return {
-    name: data ? data[selectedWalletIndex[postboxkey]]?.name : 'Wallet 1',
+    name: data ? data[selectedWalletIndex]?.name : 'Wallet 1',
     onPressWalletList,
   };
 };

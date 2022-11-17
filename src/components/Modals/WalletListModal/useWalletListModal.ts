@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { useDi } from '@@hooks/common/useDi';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import authStore from '@@store/auth/authStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -8,8 +7,6 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { IWalletListMenuProps } from './WalletListMenu/WalletListMenu.type';
 
 const useWalletListModal = () => {
-  const keyClient = useDi('KeyClient');
-  const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
   const { selectedWalletIndex, selectWallet } = walletPersistStore();
   const { data } = useWalletsQuery();
   const { pKey } = authStore();
@@ -24,8 +21,8 @@ const useWalletListModal = () => {
         index,
         name,
         address,
-        onPress: () => selectWallet(postboxkey, index),
-        isSelected: selectedWalletIndex[postboxkey] === index,
+        onPress: () => selectWallet(index),
+        isSelected: selectedWalletIndex === index,
       } as unknown as IWalletListMenuProps;
     });
     setWallet(walletArr);
@@ -37,7 +34,7 @@ const useWalletListModal = () => {
       wallet?.map((val) => {
         return {
           ...val,
-          isSelected: val.index === selectedWalletIndex[postboxkey],
+          isSelected: val.index === selectedWalletIndex,
         };
       })
     );

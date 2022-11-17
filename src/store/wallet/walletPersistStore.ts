@@ -7,8 +7,8 @@ import { Network, NETWORK } from '@@constants/network.constant';
 import * as Type from './walletPersistStore.type';
 
 const initState: Type.IWalletPersistState = {
-  selectedWalletIndex: {},
-  selectedNetwork: {},
+  selectedWalletIndex: 0,
+  selectedNetwork: NETWORK.ETHEREUM,
 };
 
 const walletPersistStore = create<Type.IWalletPersist>()(
@@ -16,26 +16,16 @@ const walletPersistStore = create<Type.IWalletPersist>()(
     persist(
       (set) => ({
         ...initState,
-        initWallet: (postboxKey: string) =>
-          set((state) => ({
-            selectedWalletIndex: {
-              ...state.selectedWalletIndex,
-              [postboxKey]: 0,
-            },
-            selectedNetwork: {
-              ...state.selectedNetwork,
-              [postboxKey]: NETWORK.ETHEREUM,
-            },
+        initWallet: () =>
+          set(() => ({
+            selectedWalletIndex: 0,
+            selectedNetwork: NETWORK.ETHEREUM,
           })),
-        selectWallet: (postboxKey: string, index: number) =>
-          set((state) => ({ selectedWalletIndex: { ...state.selectedWalletIndex, [postboxKey]: index } }), false, 'selectWallet'),
-        selectNetwork: (postboxKey: string, network: Network) =>
+        selectWallet: (index: number) => set(() => ({ selectedWalletIndex: index }), false, 'selectWallet'),
+        selectNetwork: (network: Network) =>
           set(
-            (state) => ({
-              selectedNetwork: {
-                ...state.selectedNetwork,
-                [postboxKey]: network,
-              },
+            () => ({
+              selectedNetwork: network,
             }),
             false,
             'selectNetwork'

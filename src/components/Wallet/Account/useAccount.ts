@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { IBottomSelectMenuProps } from '@@components/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
-import { useDi } from '@@hooks/common/useDi';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -17,27 +16,25 @@ const useAccount = () => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const rootNavigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
-  const keyClient = useDi('KeyClient');
   const { openModal, closeModal } = globalModalStore();
   const { data } = useWalletsQuery();
   const { selectedWalletIndex, selectedNetwork, selectNetwork } = walletPersistStore();
-  const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
 
   // TODO: network를 서버에서 받아오는지 체크, 현재는 로컬에서 저장 중
   const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
     () => [
       {
         title: formatNetwork(NETWORK.ETHEREUM),
-        isSelected: selectedNetwork[postboxkey] === NETWORK.ETHEREUM,
-        onPress: () => selectNetwork(postboxkey, NETWORK.ETHEREUM),
+        isSelected: selectedNetwork === NETWORK.ETHEREUM,
+        onPress: () => selectNetwork(NETWORK.ETHEREUM),
       },
       {
         title: formatNetwork(NETWORK.BSC),
-        isSelected: selectedNetwork[postboxkey] === NETWORK.BSC,
-        onPress: () => selectNetwork(postboxkey, NETWORK.BSC),
+        isSelected: selectedNetwork === NETWORK.BSC,
+        onPress: () => selectNetwork(NETWORK.BSC),
       },
     ],
-    [selectedNetwork[postboxkey]]
+    [selectedNetwork]
   );
 
   const onChangeWalletInput = (value: string) => {
@@ -54,7 +51,7 @@ const useAccount = () => {
         onPress: () =>
           openModal(MODAL_TYPES.TEXT_INPUT, {
             title: t('edit_wallet_name'),
-            defaultValue: data && data[selectedWalletIndex[postboxkey]]?.name,
+            defaultValue: data && data[selectedWalletIndex]?.name,
             onConfirm: onChangeWalletInput,
           }),
       },
@@ -76,7 +73,7 @@ const useAccount = () => {
   };
 
   return {
-    networkName: formatNetwork(selectedNetwork[postboxkey]),
+    networkName: formatNetwork(selectedNetwork),
     onPressSwitchNetwork,
     onPressMore,
   };
