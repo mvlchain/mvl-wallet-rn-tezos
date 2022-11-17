@@ -7,8 +7,8 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
-import { WalletRepository } from '@@domain/wallet/WalletRepository';
-import { WalletService } from '@@domain/wallet/WalletService';
+import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
+import { WalletService } from '@@domain/wallet/services/WalletService';
 
 /**
  * A map that holds instances registered by di container
