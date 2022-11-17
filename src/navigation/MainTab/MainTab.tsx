@@ -24,7 +24,7 @@ import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import Browser from '@@screens/Browser';
 import SettingScreen from '@@screens/SettingScreen';
 import Trade from '@@screens/Trade';
-import Wallet from '@@screens/Wallet';
+import WalletScreen from '@@screens/WalletScreen';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { height } from '@@utils/ui';
@@ -51,7 +51,7 @@ function MainTab() {
   const screens: Array<ScreenProps> = [
     {
       name: MAIN_TAB_ROUTE.WALLET,
-      component: Wallet,
+      component: WalletScreen,
       options: {
         tabBarIcon: ({ size, focused }) => (focused ? <HomeSelected width={size} height={size} /> : <HomeNormal width={size} height={size} />),
       },

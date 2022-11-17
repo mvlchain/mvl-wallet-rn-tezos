@@ -35,14 +35,15 @@ export const Gap = styled.View`
   width: ${width * 16}px;
 `;
 
-export const ModalContainer = styled.View<Type.IModalTypeProps>`
+export const ModalContainer = styled.View<Type.IModalTypeProps & { maxHeight?: string }>`
   background-color: ${({ theme }) => theme.color.whiteBlack};
-  ${({ modalPosition }) =>
+  ${({ modalPosition, maxHeight }) =>
     modalPosition === Type.Center
       ? css`
           border-radius: ${width * 24}px;
         `
       : css`
+          ${maxHeight && `max-height: ${maxHeight}`};
           border-top-left-radius: ${width * 24}px;
           border-top-right-radius: ${width * 24}px;
         `};

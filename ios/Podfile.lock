@@ -424,7 +424,7 @@ PODS:
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.4.1):
+  - RNSVG (13.5.0):
     - React-Core
   - secp256k1.swift (0.1.4)
   - Torus-fetchNodeDetails (3.0.0):
@@ -734,7 +734,7 @@ SPEC CHECKSUMS:
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNReanimated: c3e58924b9418883b0bde9e78c4c957302f02435
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
-  RNSVG: f2bbcdece1e7d8e5f2f94536ed2a2dcf8f95ea4f
+  RNSVG: 38ca962c970dbce1ca38991a5aebf26d163f9efb
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   Torus-fetchNodeDetails: 186d6bc852bfd943f8d25154f25b5cc5fd6a03b1
   Torus-utils: e3bbb4f884fce6290b43a86ee88544fbd5addb91

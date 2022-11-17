@@ -2,12 +2,16 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Wallet from '@@screens/Wallet';
-import WalletEditTokenList from '@@screens/Wallet/WalletEditTokenList';
-import WalletTokenReceive from '@@screens/Wallet/WalletTokenReceive';
-import WalletTokenReceiveSelect from '@@screens/Wallet/WalletTokenReceiveSelect';
-import WalletTokenSend from '@@screens/Wallet/WalletTokenSend';
-import WalletTransactionResult from '@@screens/Wallet/WalletTransactionResult';
+import WalletScreen from '@@screens/WalletScreen';
+import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
+import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
+import WalletTokenReceive from '@@screens/WalletScreen/WalletTokenReceive';
+import WalletTokenReceiveSelect from '@@screens/WalletScreen/WalletTokenReceiveSelect';
+import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
+import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
+import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
+import WalletTransactionResult from '@@screens/WalletScreen/WalletTransactionResult';
+import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -25,13 +29,11 @@ function WalletStack() {
   const screens: Array<ScreenProps> = [
     {
       name: WALLET_STACK_ROUTE.WALLET,
-      component: Wallet,
+      component: WalletScreen,
+      options: {
+        headerShown: false,
+      },
     },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST,
-      component: WalletEditTokenList,
-    },
-
     {
       name: WALLET_STACK_ROUTE.WALLET_TOKEN_RECEIVE,
       component: WalletTokenReceive,

@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
+import { BlockChain } from '@@domain/blockchain/BlockChain';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/WalletRepository';

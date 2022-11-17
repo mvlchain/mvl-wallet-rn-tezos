@@ -24,6 +24,7 @@ export function BaseModal({
   isVisible,
   isConfirmDisabled,
   modalPosition,
+  maxHeight,
 }: Type.IBaseModalComponentProps) {
   const { t } = useTranslation();
   const { closeModal } = globalModalStore();
@@ -39,7 +40,7 @@ export function BaseModal({
       onBackdropPress={closeModal}
     >
       <S.ModalBackDrop modalPosition={modalPosition}>
-        <S.ModalContainer modalPosition={modalPosition}>
+        <S.ModalContainer modalPosition={modalPosition} maxHeight={maxHeight}>
           <S.ModalTopWrapper>
             <S.ModalTitle>{title}</S.ModalTitle>
             {/* TODO: theme 스토어추가시 추가작업 */}

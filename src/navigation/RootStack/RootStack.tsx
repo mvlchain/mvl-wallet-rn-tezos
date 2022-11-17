@@ -23,11 +23,12 @@ import SettingPrivacyPolicyScreen from '@@screens/SettingScreen/SettingPrivacyPo
 import SettingSecurityScreen from '@@screens/SettingScreen/SettingSecurityScreen';
 import SettingPrivateKeyScreen from '@@screens/SettingScreen/SettingSecurityScreen/SettingPrivateKeyScreen';
 import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfServiceScreen';
-import WalletScanQR from '@@screens/Wallet/WalletScanQR';
-import WalletTokenDetail from '@@screens/Wallet/WalletTokenDetail';
-import WalletTransactionCancel from '@@screens/Wallet/WalletTransactionCancel';
-import WalletTransactionHistory from '@@screens/Wallet/WalletTransactionHistory';
-import WalletTransactionSpeedUp from '@@screens/Wallet/WalletTransactionSpeedUp';
+import WalletEditTokenListScreen from '@@screens/WalletScreen/WalletEditTokenListScreen';
+import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
+import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
+import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
+import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
+import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -73,6 +74,11 @@ function RootStack() {
       options: {
         headerShown: false,
       },
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST,
+      component: WalletEditTokenListScreen,
+      options: handleStackHeaderOption({ title: t('token_editor_title') }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY,

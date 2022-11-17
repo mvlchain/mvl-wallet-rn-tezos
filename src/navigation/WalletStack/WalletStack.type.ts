@@ -4,7 +4,6 @@ import { valueOf } from '@@types/etc';
 
 export type TWalletStackParamList = {
   WALLET: undefined;
-  WALLET_EDIT_TOKEN_LIST: undefined;
   WALLET_TOKEN_RECEIVE: undefined;
   WALLET_TOKEN_RECEIVE_SELECT: undefined;
   WALLET_TOKEN_SEND: undefined;
@@ -15,7 +14,6 @@ export type TWalletStackRouteType = Record<keyof TWalletStackParamList, keyof TW
 
 export const WALLET_STACK_ROUTE: TWalletStackRouteType = {
   WALLET: 'WALLET',
-  WALLET_EDIT_TOKEN_LIST: 'WALLET_EDIT_TOKEN_LIST',
   WALLET_TOKEN_RECEIVE: 'WALLET_TOKEN_RECEIVE',
   WALLET_TOKEN_RECEIVE_SELECT: 'WALLET_TOKEN_RECEIVE_SELECT',
   WALLET_TOKEN_SEND: 'WALLET_TOKEN_SEND',

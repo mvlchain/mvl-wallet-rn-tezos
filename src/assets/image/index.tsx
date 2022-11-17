@@ -18,10 +18,12 @@ export { default as TradeSelectedLight } from './bottom-tab-icon/trade-selected-
 export { default as TradeNormalDark } from './bottom-tab-icon/trade-normal-dark.svg';
 export { default as TradeSelectedDark } from './bottom-tab-icon/trade-selected-dark.svg';
 
-export { default as MoreIcon } from './ic-more.svg';
+export { default as MoreIconLight } from './ic-more-light.svg';
+export { default as MoreIconDark } from './ic-more-dark.svg';
 export { default as CopyIcon } from './ic-copy.svg';
 export { default as ChevronDownBlueIcon } from './ic-chevron-down-blue.svg';
-export { default as ChevronDownBlackIcon } from './ic-chevron-down-black.svg';
+export { default as ChevronDownLightIcon } from './ic-chevron-down-black-light.svg';
+export { default as ChevronDownDarkIcon } from './ic-chevron-down-black-dark.svg';
 export { default as ChevronRightBlackIcon } from './ic-chevron-right-black.svg';
 export { default as ChevronRightLightIcon } from './ic-chevron-right-light.svg';
 
@@ -59,3 +61,4 @@ export { default as BackIconDark } from './ic-back-dark.svg';
 
 export { default as SuccessIcon } from './ic-success.svg';
 export { default as WarningIcon } from './ic-warning.svg';
+export { default as ArrangeIcon } from './ic-arrange-black.svg';

@@ -2,14 +2,18 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import BottomSelectModal from './BottomSelectModal';
 import SettingSignOutModal from './SettingSignOutModal';
+import TextInputModal from './TextInputModal';
 import TextModal from './TextModal';
 import TitleOnlyModal from './TitleOnlyModal/TitleOnlyModal';
+import WalletListModal from './WalletListModal';
 
 export const MODAL_TYPES = {
   TEXT_MODAL: 'TEXT_MODAL',
+  TEXT_INPUT: 'TEXT_INPUT',
   BOTTOM_SELECT: 'BOTTOM_SELECT',
   SETTING_LOG_OUT: 'SETTING_LOG_OUT',
   TITLE_ONLY: 'TITLE_ONLY',
+  WALLET_LIST: 'WALLET_LIST',
 } as const;
 
 export const MODAL_COMPONENTS = {
@@ -17,6 +21,8 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.BOTTOM_SELECT]: BottomSelectModal,
   [MODAL_TYPES.SETTING_LOG_OUT]: SettingSignOutModal,
   [MODAL_TYPES.TITLE_ONLY]: TitleOnlyModal,
+  [MODAL_TYPES.WALLET_LIST]: WalletListModal,
+  [MODAL_TYPES.TEXT_INPUT]: TextInputModal,
 };
 
 export const GlobalModal = () => {

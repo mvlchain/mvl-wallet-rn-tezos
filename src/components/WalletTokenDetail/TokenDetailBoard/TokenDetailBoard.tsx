@@ -6,7 +6,7 @@ import { View } from 'react-native';
 
 import { TokenMVL32Icon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { TTokenDetailRouteProps } from '@@screens/Wallet/WalletTokenDetail/WalletTokenDetail.type';
+import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
 import { fontSize, width, height } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';

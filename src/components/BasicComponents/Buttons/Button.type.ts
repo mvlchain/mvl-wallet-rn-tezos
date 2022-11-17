@@ -1,4 +1,5 @@
 import { TextProps, ViewProps } from 'react-native';
+import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
 
 import { CommonColor, ThemeColor } from '@@style/theme';
 
@@ -45,6 +46,7 @@ export interface IBaseButtonComponentProps {
   buttonStyle?: ViewProps['style'];
   textStyle?: TextProps['style'];
   size?: TButtonSizeType;
+  Icon?: React.FC<SvgProps>;
   onPress: Function;
 }
 //Social

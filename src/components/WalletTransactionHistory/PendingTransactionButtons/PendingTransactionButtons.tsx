@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
-import { TCancelRootStackProps } from '@@screens/Wallet/WalletTransactionCancel/WalletTransactionCancel.type';
-import { TSpeedUpRootStackProps } from '@@screens/Wallet/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
+import { TCancelRootStackProps } from '@@screens/WalletScreen/WalletTransactionCancel/WalletTransactionCancel.type';
+import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
 
 import * as S from './PendingTransactionButtons.style';
 

@@ -3,11 +3,13 @@ import styled from 'styled-components/native';
 
 import { width, height } from '@@utils/ui';
 
-export const ChipContainer = styled.View`
+import { TChipPosition } from './Chip.type';
+
+export const ChipContainer = styled.View<{ chipPosition: TChipPosition }>`
   flex-wrap: wrap;
   flex-direction: row;
   align-items: baseline;
-  justify-content: center;
+  justify-content: ${({ chipPosition }) => (chipPosition === 'center' ? 'center' : chipPosition === 'left' ? 'flex-start' : 'flex-end')};
   margin-top: ${height * 16}px;
 `;
 

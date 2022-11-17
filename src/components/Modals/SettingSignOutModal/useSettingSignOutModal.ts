@@ -4,6 +4,8 @@ import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useSettingSignOutModall = () => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
@@ -11,6 +13,7 @@ const useSettingSignOutModall = () => {
   const auth = useDi('AuthService');
   const { modalType, closeModal } = globalModalStore();
   const { resetAuthStore } = authStore();
+  const { initWallet } = walletPersistStore();
 
   const onPressSignOut = async () => {
     try {
@@ -25,6 +28,7 @@ const useSettingSignOutModall = () => {
 
   const resetState = () => {
     resetAuthStore();
+    initWallet();
   };
 
   const onSuccessSignOut = () => {
