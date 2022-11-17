@@ -7,9 +7,9 @@ import { ChevronDownBlueIcon } from '@@assets/image';
 import * as S from './Chip.style';
 import { IChipProps } from './Chip.type';
 
-function Chip({ onPress, isMultiple, label }: IChipProps) {
+function Chip({ onPress, isMultiple, label, chipPosition = 'center' }: IChipProps) {
   return (
-    <S.ChipContainer>
+    <S.ChipContainer chipPosition={chipPosition}>
       <Pressable
         onPress={() => {
           if (!onPress) return;

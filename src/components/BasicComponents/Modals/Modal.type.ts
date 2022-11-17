@@ -14,6 +14,7 @@ export interface IModalComponentProps {
   isConfirmDisabled?: boolean;
   onClose?: Function;
   children?: React.ReactNode;
+  maxHeight?: string;
 }
 
 export interface IBaseModalComponentProps extends IModalComponentProps {

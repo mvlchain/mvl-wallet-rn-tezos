@@ -1,24 +1,19 @@
-import { useEffect } from 'react';
-
-import { WalletService } from '@@domain/wallet/WalletService';
-import { WalletState } from '@@store/WalletSlice';
-import { useWalletStore } from '@@store/useWalletStore';
+import { BlockChain } from '@@domain/blockchain/BlockChain';
+import useWalletMutation from '@@hooks/queries/useWalletMutation';
+import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
+import authStore from '@@store/auth/authStore';
 
 /**
  * UseCase: get current selected wallet from local storage
  */
-export const useCurrentWallet = (service: WalletService) => {
-  const [wallets, setWallets] = useWalletStore((state) => [state.wallets, state.setWallets]);
+export const useCurrentWallet = () => {
+  const { pKey } = authStore();
+  const { mutate } = useWalletMutation();
+  const { data } = useWalletsQuery();
+  const createWallet = async (blockchain: BlockChain) => {
+    if (!pKey || !data) return;
+    mutate({ pKey: pKey ?? 'TODO: ERROR', index: data.length, blockchain: blockchain });
+  };
 
-  useEffect(() => {
-    (async () => {
-      const result = await service.getWalletList();
-
-      // updates wallets state
-      // (WalletDto and WalletState have the same fields. just casting)
-      setWallets(result as WalletState[]);
-    })();
-  }, []);
-
-  return wallets;
+  return { walletData: data ?? [], createWallet };
 };

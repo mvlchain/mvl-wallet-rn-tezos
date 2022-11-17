@@ -23,8 +23,8 @@ function BottomSelectModal({ modalTitle, menuList }: IBottomSelectModalProps) {
         <BottomSelectMenu
           {...props}
           onPress={() => {
-            props.onPress();
             closeModal();
+            props.onPress();
           }}
         />
       ))}

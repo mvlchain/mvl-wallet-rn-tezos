@@ -6,7 +6,7 @@ import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import { IBottomSelectMenuProps } from './BottomSelectMenu/BottomSelectMenu.type';
 
-const BottomSelectModal = () => {
+const useBottomSelectModal = () => {
   const { t } = useTranslation();
 
   const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingPersistStore();
@@ -99,4 +99,4 @@ const BottomSelectModal = () => {
   };
 };
 
-export default BottomSelectModal;
+export default useBottomSelectModal;

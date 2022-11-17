@@ -15,17 +15,23 @@ export const BaseButtonContainer = styled.Pressable<Type.IBaseButtonWrapper>`
 `;
 export const BaseButton = styled.View<Type.IBaseButtonProps>`
   width: 100%;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   border-radius: ${width * 8}px;
-  height: ${({ size }) => (size === Type.BUTTON_SIZE.SMALL ? `${width * 40}px` : `${width * 60}px`)};
-  padding: ${width * 12}px ${width * 16}px;
+  padding: ${({ size }) => (size === Type.BUTTON_SIZE.SMALL ? `${width * 12}` : `${width * 18}`)}px ${width * 16}px;
   background-color: ${({ theme, pressed, disabled, bgColor, bgColorPressed, bgColorDisabled }) =>
     disabled ? theme.color[bgColorDisabled] : !disabled && pressed ? theme.color[bgColorPressed] : theme.color[bgColor]};
+  opacity: ${({ pressed }) => (pressed ? 0.7 : 1)};
   border-color: ${({ theme, lcColor }) => (lcColor ? theme.color[lcColor] : 'transparent')};
   border-style: solid;
   border-width: ${width * 1}px;
 `;
+
+export const BaseButtonIconWrapper = styled.View`
+  margin-right: ${width * 12}px;
+`;
+
 export const BaseButtonLabel = styled.Text<Type.IBaseButtonLabelProps>`
   ${({ theme, size }) => (size === Type.BUTTON_SIZE.SMALL ? theme.font.Label.sm : theme.font.Label.lg)};
   color: ${({ theme, disabled, txColor, txColorDisabled }) => (disabled ? theme.color[txColorDisabled] : theme.color[txColor])};

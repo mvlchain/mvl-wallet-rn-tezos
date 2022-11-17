@@ -3,15 +3,18 @@ import { useNavigation } from '@react-navigation/native';
 import { useDi } from '@@hooks/common/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useSettingDeleteAccountScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SETTING_DELETE_ACCOUNT'>;
   const rootNavigation = useNavigation<rootStackProps>();
   const auth = useDi('AuthService');
   const { resetAuthStore } = authStore();
+  const { initWallet } = walletPersistStore();
 
   const resetState = () => {
     resetAuthStore();
+    initWallet();
   };
 
   const onPressDeleteButton = async () => {

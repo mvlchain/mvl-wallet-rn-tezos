@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 import { commonColors } from '@@style/colors';
 import { theme } from '@@style/theme';
 
@@ -15,6 +16,9 @@ export const KeyboardTypeByInputType = {
 
 export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const { placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint } = props;
+  const { appTheme } = settingPersistStore();
+  const color = theme[appTheme.label].color;
+
   const [lcColor, setLcColor] = useState<string | null>(null);
 
   const clearTextField = () => {
@@ -35,13 +39,13 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           keyboardType={KeyboardTypeByInputType[type]}
           placeholder={placeholder}
           //TODO: 스토어에 theme 들어오면 수정필요
-          placeholderTextColor={theme.light.color.grey300Grey700}
+          placeholderTextColor={color.grey300Grey700}
           isValid={isValid}
           value={value}
           onChange={onChange}
           scanable={scanable}
           style={style}
-          selectionColor={theme.light.color.black}
+          selectionColor={color.black}
           onBlur={onBlur}
           onFocus={onFocus}
         />
