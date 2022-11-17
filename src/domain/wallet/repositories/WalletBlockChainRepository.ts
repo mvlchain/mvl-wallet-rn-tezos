@@ -1,28 +1,20 @@
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
+import { injectable } from 'tsyringe';
 
-import { IGetContractBalance } from './WalletBlockChaiRepository.type';
+import { IGetCoinBalance, IGetTokenBalance } from './WalletBlockChaiRepository.type';
 
 export interface ContractRepository {
-  getBalance: () => Promise<string>;
-  getContractBalance: ({ contractAddress, abi, address }: IGetContractBalance) => Promise<string>;
+  getBalance: ({ selectedWalletPrivateKey, rpcUrl }: IGetCoinBalance) => Promise<string>;
+  getContractBalance: ({ contractAddress, abi, address }: IGetTokenBalance) => Promise<string>;
 }
 
-export class EvmNetworkInfo {
-  constructor(readonly rpcUrl: string, readonly chainId: number) {}
-}
-
-export class TezosNetworkInfo {
-  constructor(readonly rpcUrl: string) {}
-}
-
+@injectable()
 export class EthersContractImpl implements ContractRepository {
-  constructor(private readonly selectedNetworkInfo: EvmNetworkInfo, private readonly selectedWalletPrivateKey: string) {}
-
-  getBalance = async () => {
+  getBalance = async ({ selectedWalletPrivateKey, rpcUrl }: IGetCoinBalance) => {
     try {
-      const provider = new ethers.providers.JsonRpcProvider(this.selectedNetworkInfo.rpcUrl);
-      const wallet = new ethers.Wallet(this.selectedWalletPrivateKey, provider);
+      const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+      const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
       const bigNumBalance = await wallet.getBalance();
       const balance = formatEther(bigNumBalance);
       return balance;
@@ -31,9 +23,9 @@ export class EthersContractImpl implements ContractRepository {
     }
   };
 
-  getContractBalance = async ({ contractAddress, abi, address }: IGetContractBalance) => {
+  getContractBalance = async ({ contractAddress, abi, address, rpcUrl }: IGetTokenBalance) => {
     try {
-      const provider = new ethers.providers.JsonRpcProvider(this.selectedNetworkInfo.rpcUrl);
+      const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
       const contract = new ethers.Contract(contractAddress, abi, provider);
       const bigNumBalance = await contract.balanceOf(address);
       const balance = formatEther(bigNumBalance);
@@ -45,9 +37,7 @@ export class EthersContractImpl implements ContractRepository {
 }
 
 export class TezosTaquitoContractsImpl implements ContractRepository {
-  constructor(private readonly selectedNetworkInfo: TezosNetworkInfo, private readonly selectedWalletPrivateKey: string) {}
-
-  getBalance = async () => {
+  getBalance = async ({ selectedWalletPrivateKey, rpcUrl }: IGetCoinBalance) => {
     try {
       return '0';
     } catch (e) {
@@ -55,7 +45,7 @@ export class TezosTaquitoContractsImpl implements ContractRepository {
     }
   };
 
-  getContractBalance = async ({ contractAddress, abi, address }: IGetContractBalance) => {
+  getContractBalance = async ({ contractAddress, abi, address }: IGetTokenBalance) => {
     try {
       return '0';
     } catch (e) {

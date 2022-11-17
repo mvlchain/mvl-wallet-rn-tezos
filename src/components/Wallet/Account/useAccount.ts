@@ -24,9 +24,9 @@ const useAccount = () => {
   const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
     () => [
       {
-        title: formatNetwork(NETWORK.ETHEREUM),
-        isSelected: selectedNetwork === NETWORK.ETHEREUM,
-        onPress: () => selectNetwork(NETWORK.ETHEREUM),
+        title: formatNetwork(NETWORK.ETH),
+        isSelected: selectedNetwork === NETWORK.ETH,
+        onPress: () => selectNetwork(NETWORK.ETH),
       },
       {
         title: formatNetwork(NETWORK.BSC),

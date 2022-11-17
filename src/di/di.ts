@@ -13,15 +13,22 @@ import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyReposit
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
+import { EthersContractImpl } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 container.register('WalletRepository', {
   useFactory: instancePerContainerCachingFactory<WalletRepositoryImpl>((container) => container.resolve(WalletRepositoryImpl)),
 });
+
 container.register('WalletService', {
   useFactory: instancePerContainerCachingFactory<WalletServiceImpl>((container) => container.resolve(WalletServiceImpl)),
 });
+
+container.register('EthersContractRepository', {
+  useFactory: instancePerContainerCachingFactory<EthersContractImpl>((container) => container.resolve(EthersContractImpl)),
+});
+
 container.register('AuthService', {
   useFactory: instancePerContainerCachingFactory<AuthServiceImpl>((container) => container.resolve(AuthServiceImpl)),
 });

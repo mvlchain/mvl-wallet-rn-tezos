@@ -8,7 +8,7 @@ import * as Type from './walletPersistStore.type';
 
 const initState: Type.IWalletPersistState = {
   selectedWalletIndex: 0,
-  selectedNetwork: NETWORK.ETHEREUM,
+  selectedNetwork: NETWORK.ETH,
   walletList: { ETHEREUM: [{ index: -1, name: 'default Wallet' }], BSC: [{ index: -1, name: 'default Wallet' }] },
 };
 
