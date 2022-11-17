@@ -5,22 +5,19 @@ import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { useDi } from '@@hooks/common/useDi';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useAddress = () => {
   const { t } = useTranslation();
-  const keyClient = useDi('KeyClient');
 
-  const postboxkey = keyClient.postboxKeyHolder?.postboxKey ?? 'default';
   const { selectedWalletIndex } = walletPersistStore();
 
   const { data } = useWalletsQuery();
 
   const onPressCopyAddress = useCallback(() => {
     if (!data) return;
-    Clipboard.setString(data[selectedWalletIndex[postboxkey]]?.address);
+    Clipboard.setString(data[selectedWalletIndex]?.address);
     Toast.show({
       ...TOAST_DEFAULT_OPTION,
       type: 'basic',
@@ -29,7 +26,7 @@ const useAddress = () => {
   }, [data]);
 
   return {
-    address: (data && data[selectedWalletIndex[postboxkey]]?.address) ?? 'Wallet 1',
+    address: (data && data[selectedWalletIndex]?.address) ?? 'Wallet 1',
     onPressCopyAddress,
   };
 };

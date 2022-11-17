@@ -1,9 +1,13 @@
-import { useDi } from '@@hooks/common/useDi';
-import { useCurrentWallet } from '@@hooks/wallet/useCurrentWallet';
+import { useEffect } from 'react';
+
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useWalletScreen = () => {
-  const walletService = useDi('WalletService');
-  useCurrentWallet(walletService);
+  const { selectedNetwork, selectedWalletIndex, initWallet } = walletPersistStore();
+  useEffect(() => {
+    if (typeof selectedNetwork === 'string' && typeof selectedWalletIndex === 'number') return;
+    initWallet();
+  }, []);
 };
 
 export default useWalletScreen;

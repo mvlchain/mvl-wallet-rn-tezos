@@ -56,7 +56,7 @@ const useConfirmSeedPhraseScreen = () => {
         throw new Error('postboxkey and pKey is required');
       }
       removeStageByPostboxKey(_postboxKey);
-      initWallet(_postboxKey);
+      initWallet();
       mutate({ pKey, index: 0, blockchain: ETHEREUM });
       navigation.reset({
         index: 0,
