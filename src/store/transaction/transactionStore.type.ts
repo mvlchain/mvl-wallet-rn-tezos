@@ -1,6 +1,15 @@
 import { IFetchTransactionHistoryResponse, ITransaction } from '@@domain/transaction/TransactionService.type';
-export type TTransactionStoreState = Record<string, Array<ITransaction>>;
 
+export interface ITokenHistory {
+  history: Array<IFetchTransactionHistoryResponse>;
+  beforeblock: number;
+  beforeindex: number;
+}
+
+export interface ITokens {
+  [prop: string]: ITokenHistory | undefined;
+}
 export interface ITransactionStore {
-  setHistory: (token: string, history: Array<IFetchTransactionHistoryResponse>, beforeblock: number, beforeindex: number) => void;
+  tokens: ITokens;
+  setHistory(token: string | symbol, history: Array<IFetchTransactionHistoryResponse>, beforeblock: number, beforeindex: number): void;
 }
