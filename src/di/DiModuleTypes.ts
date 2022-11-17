@@ -26,6 +26,8 @@ export interface DiModuleTypes {
   AuthService: AuthService;
   UIService: UIService;
   TransactionService: ITransactionService;
+  EtherTransactionService: ITransactionService;
+  TezosTransactionService: ITransactionService;
 
   // Repository
   WalletRepository: WalletRepository;
