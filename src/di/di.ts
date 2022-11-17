@@ -13,8 +13,8 @@ import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyReposit
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
-import { WalletRepositoryImpl } from '@@domain/wallet/WalletRepository';
-import { WalletServiceImpl } from '@@domain/wallet/WalletService';
+import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
+import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 container.register('WalletRepository', {
   useFactory: instancePerContainerCachingFactory<WalletRepositoryImpl>((container) => container.resolve(WalletRepositoryImpl)),

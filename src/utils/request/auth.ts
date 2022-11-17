@@ -1,7 +1,7 @@
 import { Method } from 'axios';
 import { container, inject, injectable } from 'tsyringe';
 
-import { WalletService } from '@@domain/wallet/WalletService';
+import { WalletService } from '@@domain/wallet/services/WalletService';
 
 import { promiseRequest } from './req';
 import { RequestConfig, Response } from './type';

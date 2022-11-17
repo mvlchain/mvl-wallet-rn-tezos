@@ -4,7 +4,7 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { BlockChain } from '@@domain/blockchain/BlockChain';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
 import { WalletDto } from '@@domain/model/WalletDto';
-import { WalletRepository } from '@@domain/wallet/WalletRepository';
+import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 
 import { ICreateWalletBody } from './WalletService.type';
