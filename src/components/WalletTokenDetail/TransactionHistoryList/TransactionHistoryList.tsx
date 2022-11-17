@@ -33,19 +33,8 @@ function TransactionHistoryList() {
       {filteredData ? (
         <FlatList
           data={filteredData}
-          renderItem={({ item }) => (
-            <TransactionHistoryListItem
-              type={item.type}
-              status={item.status}
-              amount={item.amount}
-              baseCurrencyAmount={item.baseCurrencyAmount}
-              baseCurrencySymbol={item.baseCurrencySymbol}
-              txHash={item.txHash}
-              date={item.date}
-            />
-          )}
-          //TODO: 키나중에 할당
-          // keyExtractor={item.txHash}
+          renderItem={({ item }) => <TransactionHistoryListItem {...item} />}
+          keyExtractor={(item, idx) => item.hash}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}

@@ -1,39 +1,43 @@
 import React from 'react';
 
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+
+import useHeader from '@@hooks/common/useHeader';
+import {
+  TTransactionHistoryRootStackProps,
+  TTransactionHistoryRouteProps,
+} from '@@screens/Wallet/WalletTransactionHistory/WalletTransactionHistory.type';
 
 import * as S from './TransactionDetailBoard.style';
 
 function TransactionDetailBoard() {
+  const { params } = useRoute<TTransactionHistoryRouteProps>();
+  const { handleStackHeaderOption } = useHeader();
+  const navigation = useNavigation<TTransactionHistoryRootStackProps>();
   const { t } = useTranslation();
+
   //TODO: 데이터정해지면 수정
-  const { type, status, amount, symbol, baseCurrencyAmount, baseCurrencySymbol, date, receiver } = {
-    type: 'Send',
-    amount: 10,
-    symbol: 'MVL',
-    baseCurrencyAmount: 10000,
-    baseCurrencySymbol: 'USD',
-    date: '2021.10.31 09:00 am',
-    status: 'Confirmed',
-    receiver: 'DFGSHSHSDHSDHSDHSDHFDSHDFHdgsgdsgdgsgsdgsglighlks422124124242421352135ngvaln436543.21.3SDHDFHDFH',
-  };
+  const { type, status, value, ticker, updatedAt, to, from } = params;
+  const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
   return (
     <>
       <S.TransactionDetailBoardContainer>
         <S.TransactionType>{type}</S.TransactionType>
         <S.TransactionAmount>
-          {'sign'}
-          {amount}
-          {symbol}
+          {valueSign}
+          {value}
+          {ticker}
         </S.TransactionAmount>
         <S.TransactionBaseCurrencyAmount>
-          {'≈'} {baseCurrencyAmount} {baseCurrencySymbol}
+          {/* TODO: 계산필요 */}
+          {'≈'} {1000} {'USD'}
         </S.TransactionBaseCurrencyAmount>
       </S.TransactionDetailBoardContainer>
       <S.TransactionDetailBoardContainer>
         <S.Row>
           <S.Label>{t('date')}</S.Label>
-          <S.Value>{date}</S.Value>
+          <S.Value>{updatedAt}</S.Value>
         </S.Row>
         <S.Row isMiddle={true}>
           <S.Label>{t('status')}</S.Label>
@@ -42,7 +46,7 @@ function TransactionDetailBoard() {
         <S.Row>
           <S.Label>{t('receiver')}</S.Label>
           <S.ReceiverWrapper>
-            <S.Value>{receiver}</S.Value>
+            <S.Value>{to}</S.Value>
           </S.ReceiverWrapper>
         </S.Row>
       </S.TransactionDetailBoardContainer>

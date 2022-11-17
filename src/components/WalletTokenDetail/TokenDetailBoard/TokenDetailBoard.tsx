@@ -14,11 +14,10 @@ import * as S from './TokenDetailBoard.style';
 function TokenDetailBoard() {
   const { t } = useTranslation();
   //TODO: 데이터 들어오면 바꾸기
-  const { symbol, balance, baseCurrencyBalance, baseCurrencySymbol, icon } = {
+  const { symbol, balance, baseCurrencyBalance, icon } = {
     symbol: 'MVL',
     balance: 5000,
     baseCurrencyBalance: 1000000000,
-    baseCurrencySymbol: 'USD',
     icon: () => <TokenMVL32Icon width={width * 40} height={height * 40} />,
   };
 
@@ -33,7 +32,7 @@ function TokenDetailBoard() {
         <S.TokenAmountWrapper>
           <S.TokenAmount>{balance}</S.TokenAmount>
           <S.TokenBaseCurrency>
-            {baseCurrencyBalance} {baseCurrencySymbol}
+            {baseCurrencyBalance} {'USD'}
           </S.TokenBaseCurrency>
         </S.TokenAmountWrapper>
       </S.TokenInfoContainer>
