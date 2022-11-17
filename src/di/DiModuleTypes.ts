@@ -7,6 +7,7 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
+import { ContractRepository } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 
@@ -19,7 +20,7 @@ export interface DiModuleTypes {
 
   // Repository
   WalletRepository: WalletRepository;
-
+  EthersContractRepository: ContractRepository;
   AuthService: AuthService;
   KeyClient: KeyClient;
   KeyClientUtil: KeyClientUtil;

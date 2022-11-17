@@ -38,5 +38,12 @@ module.exports = {
         globals: ['__scanCodes'],
       },
     ],
+    [
+      'module:react-native-dotenv',
+      {
+        moduleName: '@env',
+        path: '.env',
+      },
+    ],
   ],
 };

@@ -17,8 +17,8 @@ export const WALLET_TOKEN = {
   BNB: 'BNB',
   bMVL: 'bMVL',
   BTCB: 'BTCB',
-  Eth: 'Eth',
-  Mvl: 'Mvl',
+  ETH: 'ETH',
+  MVL: 'MVL',
 } as const;
 
 export const TRADE_TOKEN = {
