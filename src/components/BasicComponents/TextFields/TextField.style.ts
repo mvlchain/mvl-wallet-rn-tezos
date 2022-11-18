@@ -48,7 +48,7 @@ export const BaseTextFieldContainer = styled.View``;
 
 //TradeVolume
 export const TradeVolumeContainer = styled.View`
-  width: 295px;
+  width: 100%;
   background-color: ${({ theme }) => theme.color.white};
   border-style: solid;
   border-width: ${width * 1}px;
