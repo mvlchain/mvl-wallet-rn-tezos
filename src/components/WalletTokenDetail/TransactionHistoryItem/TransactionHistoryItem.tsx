@@ -7,7 +7,7 @@ import { Pressable } from 'react-native';
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
-import { TTransactionStatus, TTransactionType, IFetchTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { TTransactionStatus, TTransactionType, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { useAssetFromTheme } from '@@hooks/common/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import { TCancelRootStackProps } from '@@screens/WalletScreen/WalletTransactionCancel/WalletTransactionCancel.type';
@@ -17,7 +17,7 @@ import { fontSize } from '@@utils/ui';
 
 import * as S from './TransactionHistoryListItem.style';
 
-function TransactionHistoryListItem(props: IFetchTransactionHistoryResponse) {
+function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const { type, status, updatedAt, value, hash, from, to } = props;
   const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);

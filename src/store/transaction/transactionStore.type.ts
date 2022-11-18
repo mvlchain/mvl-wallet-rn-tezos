@@ -1,7 +1,7 @@
-import { IFetchTransactionHistoryResponse, ITransaction } from '@@domain/transaction/TransactionService.type';
+import { IGetTransactionHistoryResponse, ITransaction } from '@@domain/transaction/TransactionService.type';
 
 export interface ITokenHistory {
-  history: Array<IFetchTransactionHistoryResponse>;
+  history: Array<IGetTransactionHistoryResponse>;
   beforeblock: number;
   beforeindex: number;
 }
@@ -11,5 +11,5 @@ export interface ITokens {
 }
 export interface ITransactionStore {
   tokens: ITokens;
-  setHistory(token: string | symbol, history: Array<IFetchTransactionHistoryResponse>, beforeblock: number, beforeindex: number): void;
+  setHistory(token: string | symbol, history: Array<IGetTransactionHistoryResponse>, beforeblock: number, beforeindex: number): void;
 }
