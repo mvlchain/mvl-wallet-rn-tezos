@@ -1,6 +1,7 @@
 import { InMemorySigner } from '@taquito/signer';
 import { TezosToolkit } from '@taquito/taquito';
 import Decimal from 'decimal.js';
+import '@ethersproject/shims';
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import qs from 'qs';
@@ -42,9 +43,9 @@ export class EthersTransactionImpl implements ITransactionService {
   async sendTransaction(args: ISendTransactionArguments): Promise<string> {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    const network = provider.detectNetwork();
-    console.log('network ', network);
+    const network = provider.getNetwork();
     const wallet = new ethers.Wallet(privateKey, provider);
+
     const res = await wallet.sendTransaction({
       from,
       to,
@@ -54,7 +55,7 @@ export class EthersTransactionImpl implements ITransactionService {
       gasLimit: gasFeeInfo.gasLimit,
       chainId: networkInfo.chainId,
     });
-
+    console.log(res);
     return res.hash;
   }
   async approveTransaction(txId: string) {
