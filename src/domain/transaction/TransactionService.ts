@@ -42,6 +42,8 @@ export class EthersTransactionImpl implements ITransactionService {
   async sendTransaction(args: ISendTransactionArguments): Promise<string> {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const network = provider.detectNetwork();
+    console.log('network ', network);
     const wallet = new ethers.Wallet(privateKey, provider);
     const res = await wallet.sendTransaction({
       from,
@@ -49,6 +51,7 @@ export class EthersTransactionImpl implements ITransactionService {
       data,
       value,
       gasPrice: gasFeeInfo.gasPrice,
+      gasLimit: gasFeeInfo.gasLimit,
       chainId: networkInfo.chainId,
     });
 
