@@ -12,9 +12,10 @@ import { width } from '@@utils/ui';
 
 import SpeedInputs from './SpeedInputs';
 import * as S from './SpeedOperationBoard.style';
+import { ISpeedOperationBoardProps } from './SpeedOperationBoard.type';
 import SpeedRadioButtons from './SpeedRadioButtons';
 
-function SpeedOperationBoard() {
+function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
   const [advanced, setAdvanced] = useState(false);
   const { t } = useTranslation();
   return (
@@ -57,7 +58,7 @@ function SpeedOperationBoard() {
         </S.InnerContainer>
       </View>
       <S.ConfirmWrapper>
-        <PrimaryButton label={t('confirm')} onPress={() => {}} />
+        <PrimaryButton label={t('confirm')} onPress={onConfirm} />
       </S.ConfirmWrapper>
     </S.Container>
   );

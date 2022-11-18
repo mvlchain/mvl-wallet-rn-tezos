@@ -26,7 +26,7 @@ function WalletTransactionSpeedUp() {
     <View style={{ flex: 1 }}>
       <OldTransactionBoard />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <SpeedOperationBoard />
+      <SpeedOperationBoard onConfirm={() => {}} />
     </View>
   );
 }
