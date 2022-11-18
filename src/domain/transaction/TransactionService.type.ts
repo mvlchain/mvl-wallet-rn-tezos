@@ -40,7 +40,7 @@ export interface ISendTransactionArguments {
   from: string;
   to: string;
   value: string;
-  data: string | undefined;
+  data?: string | undefined;
 }
 
 export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}

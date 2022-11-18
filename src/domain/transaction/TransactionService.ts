@@ -42,9 +42,7 @@ export class EthersTransactionImpl implements ITransactionService {
   async sendTransaction(args: ISendTransactionArguments): Promise<string> {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-
     const wallet = new ethers.Wallet(privateKey, provider);
-
     const res = await wallet.sendTransaction({
       from,
       to,
@@ -171,7 +169,7 @@ const mockData = [
     status: TTransactionStatus.PENDING,
     to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
     from: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
-    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e759f',
+    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e',
     value: '15',
     fee: '0.04',
     updatedAt: '2022-01-20T12:01:30.543Z',
@@ -185,7 +183,7 @@ const mockData = [
     status: TTransactionStatus.FAIL,
     to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
     from: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
-    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e759f',
+    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb',
     value: '15',
     fee: '0.04',
     updatedAt: '2022-01-20T12:01:30.543Z',

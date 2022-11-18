@@ -7,7 +7,7 @@ import useHeader from '@@hooks/common/useHeader';
 import {
   TTransactionHistoryRootStackProps,
   TTransactionHistoryRouteProps,
-} from '@@screens/Wallet/WalletTransactionHistory/WalletTransactionHistory.type';
+} from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
 
 import * as S from './TransactionFeeBoard.style';
 

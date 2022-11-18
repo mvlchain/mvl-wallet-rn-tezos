@@ -7,8 +7,8 @@ import { View } from 'react-native';
 import { TokenMVL32Icon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
-import { TTokenDetailRouteProps } from '@@screens/Wallet/WalletTokenDetail/WalletTokenDetail.type';
-import { TTokenSendRootStackProps } from '@@screens/Wallet/WalletTokenSend/WalletTokenSend.type';
+import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
+import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import { fontSize, width, height } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';
