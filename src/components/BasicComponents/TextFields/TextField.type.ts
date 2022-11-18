@@ -1,4 +1,4 @@
-import { TextInputProps } from 'react-native';
+import { TextInputProps, TextInputChangeEventData } from 'react-native';
 
 import { KeyboardTypeByInputType } from './BaseTextField';
 
@@ -30,6 +30,7 @@ export interface ITradeVolumeComponentProps {
   label?: string;
   symbol?: string;
   value?: string;
-  onChange?: () => void;
-  hint: string;
+  //TODO: input에 맞는 타입뭐냐
+  onChange?: (amount: any) => void;
+  hint?: string;
 }
