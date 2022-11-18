@@ -1,6 +1,6 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
-import { IFetchTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { valueOf } from '@@types/etc';
 
 export type TRootStackParamList = {
@@ -22,7 +22,7 @@ export type TRootStackParamList = {
   WALLET_TOKEN_DETAIL: {
     symbol: string;
   };
-  WALLET_TRANSACTION_HISTORY: IFetchTransactionHistoryResponse;
+  WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse;
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
   WALLET_SCAN_QR: undefined;

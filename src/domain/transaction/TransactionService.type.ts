@@ -56,7 +56,7 @@ export interface IGetHistoryArguments {
   beforeindex?: number;
   limit?: number;
 }
-export interface IFetchTransactionHistoryResponse {
+export interface IGetTransactionHistoryResponse {
   type: TTransactionType;
   status: TTransactionStatus;
   from: string;
@@ -91,5 +91,5 @@ export interface ITransactionService {
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
   estimateGas(transaction: ITransaction): Promise<string>;
-  getHistory(args: IGetHistoryArguments): Promise<IFetchTransactionHistoryResponse[] | undefined>;
+  getHistory(args: IGetHistoryArguments): Promise<IGetTransactionHistoryResponse[] | undefined>;
 }

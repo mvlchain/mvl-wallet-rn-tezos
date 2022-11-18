@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import { TRANSACTION_HISTORY_FILTER_CRITERIA, TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
-import { IFetchTransactionHistoryResponse, TTransactionType } from '@@domain/transaction/TransactionService.type';
+import { IGetTransactionHistoryResponse, TTransactionType } from '@@domain/transaction/TransactionService.type';
 import { useDi } from '@@hooks/common/useDi';
 import transactionStore from '@@store/transaction/transactionStore';
 

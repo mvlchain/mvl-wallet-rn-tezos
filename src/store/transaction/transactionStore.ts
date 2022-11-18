@@ -2,7 +2,7 @@ import produce from 'immer';
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { ITransactionService, ITransaction, IFetchTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { ITransactionService, ITransaction, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 
 import { ITransactionStore } from './transactionStore.type';
 
@@ -10,7 +10,7 @@ const transactionStore = create<ITransactionStore>()(
   devtools(
     (set, get) => ({
       tokens: {},
-      setHistory: (token: string, history: Array<IFetchTransactionHistoryResponse>, beforeblock: number, beforeindex: number) => {
+      setHistory: (token: string, history: Array<IGetTransactionHistoryResponse>, beforeblock: number, beforeindex: number) => {
         set(
           produce((state) => {
             if (!state.tokens[token]) {
