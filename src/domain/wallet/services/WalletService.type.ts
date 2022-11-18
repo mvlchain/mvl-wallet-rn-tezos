@@ -1,7 +1,6 @@
 import { BlockChain } from '@@domain/blockchain/BlockChain';
 
 export interface IGetWalletInfoParam {
-  pKey: string;
   index: number;
   blockchain: BlockChain;
 }

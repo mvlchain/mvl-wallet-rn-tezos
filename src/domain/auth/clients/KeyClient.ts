@@ -10,7 +10,7 @@ import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/
 import SecureKeychain from '@@utils/SecureKeychain';
 
 import { KeyClientUtil } from './KeyClientUtil';
-interface PostboxKeyHolder {
+export interface PostboxKeyHolder {
   postboxKey: string;
   provider?: AuthProvider;
   providerIdToken?: string;

@@ -15,6 +15,7 @@ import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareR
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { EthersContractImpl } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
+import { EthersContractServiceImpl } from '@@domain/wallet/services/WalletBlockChainService';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 container.register('WalletRepository', {
@@ -27,6 +28,10 @@ container.register('WalletService', {
 
 container.register('EthersContractRepository', {
   useFactory: instancePerContainerCachingFactory<EthersContractImpl>((container) => container.resolve(EthersContractImpl)),
+});
+
+container.register('WalletBlockChainService', {
+  useFactory: instancePerContainerCachingFactory<EthersContractServiceImpl>((container) => container.resolve(EthersContractServiceImpl)),
 });
 
 container.register('AuthService', {
