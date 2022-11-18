@@ -24,6 +24,7 @@ import SettingPrivacyPolicyScreen from '@@screens/SettingScreen/SettingPrivacyPo
 import SettingSecurityScreen from '@@screens/SettingScreen/SettingSecurityScreen';
 import SettingPrivateKeyScreen from '@@screens/SettingScreen/SettingSecurityScreen/SettingPrivateKeyScreen';
 import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfServiceScreen';
+import WalletTokenSend from '@@screens/Wallet/WalletTokenSend';
 import WalletEditTokenListScreen from '@@screens/WalletScreen/WalletEditTokenListScreen';
 import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
 import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
@@ -35,7 +36,6 @@ import { fontSize, height } from '@@utils/ui';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from './RootStack.type';
 
 const { Navigator, Screen } = createStackNavigator<TRootStackParamList>();
-
 type ScreenProps = Parameters<typeof Screen>[0];
 const routerTheme = {
   ...DefaultTheme,
@@ -124,6 +124,10 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL,
       component: WalletTokenDetail,
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TOKEN_SEND,
+      component: WalletTokenSend,
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY,

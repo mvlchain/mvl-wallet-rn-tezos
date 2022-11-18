@@ -1,12 +1,14 @@
 import React from 'react';
 
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { TokenMVL32Icon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
+import { TTokenDetailRouteProps } from '@@screens/Wallet/WalletTokenDetail/WalletTokenDetail.type';
+import { TTokenSendRootStackProps } from '@@screens/Wallet/WalletTokenSend/WalletTokenSend.type';
 import { fontSize, width, height } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';
@@ -14,14 +16,18 @@ import * as S from './TokenDetailBoard.style';
 function TokenDetailBoard() {
   const { t } = useTranslation();
   //TODO: 데이터 들어오면 바꾸기
-  const { symbol, balance, baseCurrencyBalance, icon } = {
-    symbol: 'MVL',
+  const { balance, baseCurrencyBalance, icon } = {
     balance: 5000,
     baseCurrencyBalance: 1000000000,
     icon: () => <TokenMVL32Icon width={width * 40} height={height * 40} />,
   };
 
   const { params } = useRoute<TTokenDetailRouteProps>();
+  const navigation = useNavigation<TTokenSendRootStackProps>();
+  const gotoSend = () => {
+    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { symbol: params.symbol });
+  };
+
   return (
     <View>
       <S.TokenInfoContainer>
@@ -39,7 +45,7 @@ function TokenDetailBoard() {
       <S.ReceiveSendContainer>
         <PrimaryButton label={t('receive')} onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
         <S.Gap />
-        <PrimaryButton label={t('send')} onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+        <PrimaryButton label={t('send')} onPress={gotoSend} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
       </S.ReceiveSendContainer>
     </View>
   );
