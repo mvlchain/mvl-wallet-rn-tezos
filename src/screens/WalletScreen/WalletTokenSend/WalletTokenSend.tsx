@@ -10,6 +10,7 @@ import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.
 import SendInputBoard from '@@components/WalletTokenSend/SendInputBoard';
 import SpeedOperationBoard from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard';
 import useHeader from '@@hooks/common/useHeader';
+import useTokenSend from '@@hooks/useTokenSend';
 
 import { TTokenSendRootStackProps, TTokenSendRouteProps } from './WalletTokenSend.type';
 
@@ -24,13 +25,12 @@ function WalletTokenSend() {
     navigation.setOptions(headerOption);
   }, []);
 
-  const [amount, setAmount] = useState('0');
-  const [address, setAddress] = useState('');
+  const { amount, setAmount, address, setAddress, confirmSend } = useTokenSend();
   return (
     <View style={{ flex: 1 }}>
       <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <SpeedOperationBoard />
+      <SpeedOperationBoard onConfirm={confirmSend} />
     </View>
   );
 }
