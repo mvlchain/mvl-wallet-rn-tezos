@@ -9,7 +9,7 @@ export interface ITokenHistory {
 export interface ITokens {
   [prop: string]: ITokenHistory | undefined;
 }
-export interface ITransactionStore {
+export interface ITransactionHistoryStore {
   tokens: ITokens;
   setHistory(token: string | symbol, history: Array<IGetTransactionHistoryResponse>, beforeblock: number, beforeindex: number): void;
 }
