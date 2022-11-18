@@ -4,9 +4,9 @@ import { devtools } from 'zustand/middleware';
 
 import { ITransactionService, ITransaction, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 
-import { ITransactionStore } from './transactionStore.type';
+import { ITransactionHistoryStore } from './transactionHistoryStore.type';
 
-const transactionStore = create<ITransactionStore>()(
+const transactionHistoryStore = create<ITransactionHistoryStore>()(
   devtools(
     (set, get) => ({
       tokens: {},
@@ -29,7 +29,7 @@ const transactionStore = create<ITransactionStore>()(
         );
       },
     }),
-    { name: 'transactionStore', enabled: __DEV__ }
+    { name: 'transactionHistoryStore', enabled: __DEV__ }
   )
 );
-export default transactionStore;
+export default transactionHistoryStore;

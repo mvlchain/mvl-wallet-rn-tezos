@@ -1,9 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import { TRANSACTION_HISTORY_FILTER_CRITERIA, TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
-import { IGetTransactionHistoryResponse, TTransactionType } from '@@domain/transaction/TransactionService.type';
+import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
 import { useDi } from '@@hooks/common/useDi';
-import transactionStore from '@@store/transaction/transactionStore';
+import transactionHistoryStore from '@@store/transaction/transactionHistoryStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 
@@ -19,7 +18,7 @@ const useTransactionHistoryList = () => {
   const tezosTransactionService = useDi('TezosTransactionService');
 
   const [loading, setLoading] = useState(false);
-  const { tokens, setHistory } = transactionStore();
+  const { tokens, setHistory } = transactionHistoryStore();
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
 
   const filteredData = useMemo(() => {
