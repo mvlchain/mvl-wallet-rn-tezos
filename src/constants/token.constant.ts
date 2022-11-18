@@ -4,25 +4,22 @@ export interface ITOKEN {
   [key: string]: keyof typeof TokenIcon;
 }
 
-export const TOKEN_LIST = {
-  Binance: 'Binance',
-  Bitcoin: 'Bitcoin',
-  Busd: 'Busd',
-  Ethereum: 'Ethereum',
-  Mvl: 'Mvl',
-  Tezos: 'Tezos',
-} as const;
-
-export const WALLET_TOKEN = {
-  BNB: 'BNB',
-  bMVL: 'bMVL',
-  BTCB: 'BTCB',
+export const BASIC_ETH_TOKEN = {
   ETH: 'ETH',
   MVL: 'MVL',
 } as const;
 
-export const TRADE_TOKEN = {
+export const BASIC_BSC_TOKEN = {
   BNB: 'BNB',
   bMVL: 'bMVL',
   BTCB: 'BTCB',
+};
+
+export const WALLET_TOKEN = {
+  ...BASIC_ETH_TOKEN,
+  ...BASIC_BSC_TOKEN,
+} as const;
+
+export const TRADE_TOKEN = {
+  ...BASIC_BSC_TOKEN,
 } as const;

@@ -98,7 +98,7 @@ export const getToken = (isMainnet: boolean, ticker: keyof typeof WALLET_TOKEN):
       case WALLET_TOKEN.MVL:
         return MVL_GOERLI;
       case WALLET_TOKEN.BNB:
-        return B_MVL_STAGE;
+        return BNB;
       case WALLET_TOKEN.bMVL:
         return B_MVL_STAGE;
       case WALLET_TOKEN.BTCB:
