@@ -27,9 +27,9 @@ it('send transaction', () => {
   EthersTransactionImpl.sendTransaction({
     networkInfo: { rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545', chainId: 97 },
     privateKey,
-    gasFeeInfo: { gasPrice: '0.2' },
+    gasFeeInfo: { gasPrice: BigNumber.from('1'), gasLimit: BigNumber.from('1') },
     from: myAddress,
     to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
-    value: '0.2',
+    value: BigNumber.from('1'),
   });
 });

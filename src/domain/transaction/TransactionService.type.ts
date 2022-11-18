@@ -1,3 +1,5 @@
+import { BigNumberish, BytesLike } from 'ethers';
+
 //TODO: generatedscheme에 있는지 확인하기
 export enum TTransactionStatus {
   PENDING = 'PENDING',
@@ -30,8 +32,8 @@ export interface INetworkInfo {
 }
 
 export interface IGasFeeInfo {
-  gasPrice: string;
-  gasPriceLevel?: string;
+  gasPrice: BigNumberish;
+  gasLimit: BigNumberish;
 }
 export interface ISendTransactionArguments {
   networkInfo: INetworkInfo;
@@ -39,8 +41,8 @@ export interface ISendTransactionArguments {
   gasFeeInfo: IGasFeeInfo;
   from: string;
   to: string;
-  value: string;
-  data?: string | undefined;
+  value: BigNumberish;
+  data?: BytesLike;
 }
 
 export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
