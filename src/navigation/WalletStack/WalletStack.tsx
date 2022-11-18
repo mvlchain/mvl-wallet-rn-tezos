@@ -43,11 +43,6 @@ function WalletStack() {
       component: WalletTokenReceiveSelect,
     },
     {
-      name: WALLET_STACK_ROUTE.WALLET_TOKEN_SEND,
-      component: WalletTokenSend,
-    },
-
-    {
       name: WALLET_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
       component: WalletTransactionResult,
     },
