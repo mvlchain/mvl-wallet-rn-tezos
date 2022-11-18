@@ -24,10 +24,10 @@ import SettingPrivacyPolicyScreen from '@@screens/SettingScreen/SettingPrivacyPo
 import SettingSecurityScreen from '@@screens/SettingScreen/SettingSecurityScreen';
 import SettingPrivateKeyScreen from '@@screens/SettingScreen/SettingSecurityScreen/SettingPrivateKeyScreen';
 import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfServiceScreen';
-import WalletTokenSend from '@@screens/Wallet/WalletTokenSend';
 import WalletEditTokenListScreen from '@@screens/WalletScreen/WalletEditTokenListScreen';
 import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
 import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
+import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
 import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
 import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
