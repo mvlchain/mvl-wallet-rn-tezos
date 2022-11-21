@@ -3,6 +3,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { add } from 'react-native-reanimated';
 
 import Divider from '@@components/BasicComponents/Divider';
@@ -26,11 +27,11 @@ function WalletTokenSend() {
   }, []);
   const { amount, setAmount, address, setAddress, confirmSend } = useTokenSend();
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }}>
       <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
       <SpeedOperationBoard onConfirm={confirmSend} />
-    </View>
+    </ScrollView>
   );
 }
 
