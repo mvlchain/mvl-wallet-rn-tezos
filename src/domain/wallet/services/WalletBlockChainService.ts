@@ -13,7 +13,7 @@ import { ContractRepository } from '../repositories/WalletBlockChainRepository';
 
 import { IBalance } from './WalletBlockChainService.type';
 import { WalletService } from './WalletService';
-
+// TODO: change to env
 const TEST_ETH_RPC_URL = 'https://goerli.infura.io/v3/***REMOVED***';
 const TEST_BSC_RPC_URL = 'https://data-seed-prebsc-1-s1.binance.org:8545';
 
@@ -29,33 +29,39 @@ export class EthersContractServiceImpl implements ContractService {
   ) {}
 
   getBalanceFromNetwork = async (index: number, network: Network) => {
-    const { blockchain, rpcUrl, tokenList } = this._getSetting(network);
-    const keyOfCrypto = Object.keys(tokenList);
-    let balanceList: IBalance = {};
-    const wallet = await this.walletService.getWalletInfo({ index, blockchain });
-    const getBalancePromise = keyOfCrypto.map(async (crypto) => {
-      let balance;
-      const value = getToken(false, crypto as keyof typeof tokenList);
-      if (value.cryptoType === CryptoType.COIN) {
-        balance = await this.ethersContractRepository.getBalance({
-          selectedWalletPrivateKey: wallet.privateKey,
-          rpcUrl: rpcUrl,
-        });
-      } else {
-        balance = await this.ethersContractRepository.getContractBalance({
-          contractAddress: value.contractAddress,
-          rpcUrl: rpcUrl,
-          abi: getAbi(false, value.symbol as keyof typeof WALLET_TOKEN),
-          address: wallet.address,
-        });
-      }
-      balanceList = {
-        ...balanceList,
-        [value.symbol]: balance,
-      };
-    });
-    await Promise.all(getBalancePromise);
-    return balanceList;
+    try {
+      const { blockchain, rpcUrl, tokenList } = this._getSetting(network);
+      const keyOfCrypto = Object.keys(tokenList);
+      let balanceList: IBalance = {};
+      const wallet = await this.walletService.getWalletInfo({ index, blockchain });
+      const getBalancePromise = keyOfCrypto.map(async (crypto) => {
+        let balance;
+        // TODO: change to env
+        const value = getToken(false, crypto as keyof typeof tokenList);
+        if (value.cryptoType === CryptoType.COIN) {
+          balance = await this.ethersContractRepository.getBalance({
+            selectedWalletPrivateKey: wallet.privateKey,
+            rpcUrl: rpcUrl,
+          });
+        } else {
+          balance = await this.ethersContractRepository.getContractBalance({
+            contractAddress: value.contractAddress,
+            rpcUrl: rpcUrl,
+            // TODO: change to env
+            abi: getAbi(false, value.symbol as keyof typeof WALLET_TOKEN),
+            address: wallet.address,
+          });
+        }
+        balanceList = {
+          ...balanceList,
+          [value.symbol]: balance,
+        };
+      });
+      await Promise.all(getBalancePromise);
+      return balanceList;
+    } catch (e) {
+      console.log(`ERROR:  ${e}`);
+    }
   };
 
   _getSetting = (network: Network) => {

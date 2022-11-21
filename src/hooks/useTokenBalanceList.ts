@@ -59,12 +59,17 @@ export const useTokenBalanceList = () => {
   );
 
   const getBalance = async () => {
-    const balance = await ethService.getBalanceFromNetwork(selectedWalletIndex, selectedNetwork);
-    if (Object.keys(balance).length === 0) {
-      // TODO: balance를 서버에서 가져오기.
+    try {
+      const balance = await ethService.getBalanceFromNetwork(selectedWalletIndex, selectedNetwork);
+      if (balance && Object.keys(balance).length === 0) {
+        console.log('Data fetch from blockchain is fail -> Fetch from Server');
+        refetch();
+      }
+      setBalanceData(balance);
+    } catch (e) {
+      console.log('Data fetch from blockchain is fail -> Fetch from Server');
       refetch();
     }
-    setBalanceData(balance);
   };
 
   useEffect(() => {
