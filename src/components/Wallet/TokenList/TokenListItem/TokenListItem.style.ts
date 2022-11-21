@@ -25,6 +25,10 @@ export const Text = styled.Text`
   color: ${({ theme }) => theme.color.blackWhite};
 `;
 
+export const ValueContainer = styled.View`
+  flex: 1;
+`;
+
 export const Name = styled(Text)`
   margin-left: ${width * 18}px;
 `;
