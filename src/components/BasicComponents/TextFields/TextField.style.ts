@@ -78,10 +78,15 @@ export const Label = styled.Text`
 
 export const Hint = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md};
-  color: ${({ theme }) => theme.color.grey500};
+  color: ${({ theme }) => theme.color.red};
   line-height: ${height * 20}px;
   margin-top: ${height * 16}px;
 `;
+
+export const Balance = styled(Hint)`
+  color: ${({ theme }) => theme.color.grey500};
+`;
+
 export const Token = styled.Text`
   ${({ theme }) => theme.font.Label.md};
   margin-left: ${width * 8}px;

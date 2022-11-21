@@ -10,7 +10,7 @@ const useTokenSend = () => {
   const ethersTransactionService = useDi('EtherTransactionService');
   const tezosTransactionService = useDi('TezosTransactionService');
 
-  const [amount, setAmount] = useState('0');
+  const [amount, setAmount] = useState('');
   const [address, setAddress] = useState('');
 
   //TODO: wallet 기능 완성되면  새로붙임
