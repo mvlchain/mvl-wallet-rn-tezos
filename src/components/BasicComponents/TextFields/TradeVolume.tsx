@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { ChevronDownLightIcon, TextFieldDelete, TokenMVL32Icon } from '@@assets/image';
+import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
+import * as TokenIcon from '@@assets/image/token';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
+import { height } from '@@utils/ui';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const { useMax, onSelect, label, symbol, value, onChange, hint } = props;
-  const clearTextField = () => {};
+  const { appTheme } = settingPersistStore();
+  const color = theme[appTheme.label].color;
+
+  //TODO: 리스트에 없는 토큰일 결루 보여줄 심볼
+  const TokenImage = TokenIcon[symbol ?? 'Mvl'];
+  const [showDelete, setShowDelete] = useState(false);
+  const clearTextField = () => {
+    if (onChange && value) {
+      onChange('');
+      setShowDelete(false);
+    }
+  };
   return (
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
@@ -22,17 +36,15 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
             value={value}
             onChange={onChange}
             keyboardType={'numeric'}
-            selectionColor={theme.light.color.black}
+            selectionColor={color.black}
             placeholder={'0.00'}
-            //TODO: 스토어에 theme 들어오면 수정필요
-            placeholderTextColor={theme.light.color.grey300Grey700}
+            placeholderTextColor={color.grey300Grey700}
           />
-
-          <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
+          {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
-          <TokenMVL32Icon />
-          <S.Token>bMVL</S.Token>
+          <TokenImage width={height * 32} height={height * 32} />
+          <S.Token>{symbol}</S.Token>
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>

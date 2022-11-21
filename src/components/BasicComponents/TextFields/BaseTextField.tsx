@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { TextInput, Platform } from 'react-native';
+
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
 import { useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
@@ -18,15 +20,20 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const { color } = useColor();
 
   const [lcColor, setLcColor] = useState<string | null>(null);
+  const [showDelete, setShowDelete] = useState(false);
 
   const clearTextField = () => {
     onChange('');
+    setShowDelete(false);
   };
   const onBlur = () => {
     setLcColor(null);
   };
   const onFocus = () => {
     setLcColor(commonColors.primary);
+  };
+  const onKeyPress = () => {
+    setShowDelete(true);
   };
 
   return (
@@ -36,7 +43,6 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
         <S.BaseInput
           keyboardType={KeyboardTypeByInputType[type]}
           placeholder={placeholder}
-          //TODO: 스토어에 theme 들어오면 수정필요
           placeholderTextColor={color.grey300Grey700}
           isValid={isValid}
           value={value}
@@ -46,9 +52,10 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           selectionColor={color.black}
           onBlur={onBlur}
           onFocus={onFocus}
+          onKeyPress={onKeyPress}
         />
         {unit && <S.Unit>{unit}</S.Unit>}
-        <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
+        {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         {/* TODO: 스캔함수 작성되면 추가 필요*/}
         {scanable && <BlackScanIcon onPress={() => {}} style={S.inlineStyles.marginProvider} />}
       </S.BaseTextFieldInputWrapper>

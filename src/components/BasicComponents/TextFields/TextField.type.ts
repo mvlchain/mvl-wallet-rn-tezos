@@ -1,7 +1,11 @@
+import { ReactNode } from 'react';
+
 import { TextInputProps, TextInputChangeEventData } from 'react-native';
+import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
+
+import { WALLET_TOKEN } from '@@constants/token.constant';
 
 import { KeyboardTypeByInputType } from './BaseTextField';
-
 //Base
 export interface IBaseTextFieldComponentProps extends IBaseTextFieldProps {
   style?: TextInputProps['style'];
@@ -28,9 +32,8 @@ export interface ITradeVolumeComponentProps {
   useMax?: boolean;
   onSelect?: () => void;
   label?: string;
-  symbol?: string;
+  symbol?: keyof typeof WALLET_TOKEN;
   value?: string;
-  //TODO: input에 맞는 타입뭐냐
   onChange?: (amount: any) => void;
   hint?: string;
 }

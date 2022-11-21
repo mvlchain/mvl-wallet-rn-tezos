@@ -5,6 +5,7 @@ import { Button } from 'react-native';
 
 import Account from '@@components/Wallet/Account';
 import TokenList from '@@components/Wallet/TokenList';
+import { WALLET_TOKEN } from '@@constants/token.constant';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 
 import * as S from './WalletScreen.style';
@@ -20,7 +21,7 @@ function WalletScreen() {
       <Button
         title={'click '}
         onPress={() => {
-          navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { symbol: 'MVL' });
+          navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { symbol: WALLET_TOKEN.bMVL });
         }}
       />
       <TokenList />

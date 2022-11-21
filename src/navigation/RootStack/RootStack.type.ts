@@ -1,5 +1,6 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
+import { WALLET_TOKEN } from '@@constants/token.constant';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { valueOf } from '@@types/etc';
 
@@ -20,10 +21,10 @@ export type TRootStackParamList = {
   SETTING_PRIVATE_KEY: undefined;
   SETTING_FAQ: undefined;
   WALLET_TOKEN_DETAIL: {
-    symbol: string;
+    symbol: keyof typeof WALLET_TOKEN;
   };
   WALLET_TOKEN_SEND: {
-    symbol: string;
+    symbol: keyof typeof WALLET_TOKEN;
   };
   WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse;
   WALLET_TRANSACTION_SPEED_UP: undefined;
