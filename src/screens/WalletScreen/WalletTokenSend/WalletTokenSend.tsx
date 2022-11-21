@@ -24,7 +24,6 @@ function WalletTokenSend() {
     const headerOption = handleStackHeaderOption({ title: t('send') });
     navigation.setOptions(headerOption);
   }, []);
-
   const { amount, setAmount, address, setAddress, confirmSend } = useTokenSend();
   return (
     <View style={{ flex: 1 }}>

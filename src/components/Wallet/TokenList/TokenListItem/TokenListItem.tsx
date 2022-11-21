@@ -20,7 +20,7 @@ function TokenListItem({ ticker, balance, valuatedPrice, logoURI }: ITokenListIt
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL, { symbol: ticker });
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL, { symbol: ticker as keyof typeof WALLET_TOKEN });
       }}
     >
       <S.Container>

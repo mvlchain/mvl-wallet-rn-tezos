@@ -13,7 +13,6 @@ import { ISendInputBoardProps } from './SendInputBoard.type';
 
 function SendInputBoard({ amount, setAmount, address, setAddress }: ISendInputBoardProps) {
   const { params } = useRoute<TTokenSendRouteProps>();
-  const navigation = useNavigation<TTokenSendRootStackProps>();
   const { t } = useTranslation();
 
   return (
