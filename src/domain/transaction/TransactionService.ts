@@ -1,5 +1,5 @@
 import { InMemorySigner } from '@taquito/signer';
-import { TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import Decimal from 'decimal.js';
 import '@ethersproject/shims';
 import { ethers } from 'ethers';
@@ -18,6 +18,7 @@ import {
   IGetHistoryArguments,
   ISendTransactionArguments,
   ITezosSendTransactionArguments,
+  ITezosEstimateArguments,
 } from './TransactionService.type';
 
 export class EvmNetworkInfo {
@@ -43,7 +44,6 @@ export class EthersTransactionImpl implements ITransactionService {
   async sendTransaction(args: ISendTransactionArguments): Promise<string> {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    const network = provider.getNetwork();
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const res = await wallet.sendTransaction({
@@ -55,11 +55,25 @@ export class EthersTransactionImpl implements ITransactionService {
       gasLimit: gasFeeInfo.gasLimit,
       chainId: networkInfo.chainId,
     });
-    console.log(res);
+
     return res.hash;
   }
-  async approveTransaction(txId: string) {
-    return 'good';
+  async approveTransaction(args: ISendTransactionArguments) {
+    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
+    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const wallet = new ethers.Wallet(privateKey, provider);
+
+    const res = await wallet.signTransaction({
+      from,
+      to,
+      data,
+      value,
+      gasPrice: gasFeeInfo.gasPrice,
+      gasLimit: gasFeeInfo.gasLimit,
+      chainId: networkInfo.chainId,
+    });
+
+    return res;
   }
   async cancelTransaction(txId: string) {
     return 'good';
@@ -67,9 +81,24 @@ export class EthersTransactionImpl implements ITransactionService {
   async speedUpTransaction(txId: string) {
     return 'good';
   }
-  async estimateGas(transaction: ITransaction) {
-    return 'good';
+  async estimateGas(args: ISendTransactionArguments) {
+    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
+    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const wallet = new ethers.Wallet(privateKey, provider);
+
+    const res = await wallet.estimateGas({
+      from,
+      to,
+      data,
+      value,
+      gasPrice: gasFeeInfo.gasPrice,
+      gasLimit: gasFeeInfo.gasLimit,
+      chainId: networkInfo.chainId,
+    });
+    console.log(res);
+    return res;
   }
+
   async getHistory(params: IGetHistoryArguments) {
     //TODO: v2에서는 auth header붙여야함
     try {
@@ -122,8 +151,8 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
     return txHash;
   }
 
-  async approveTransaction(txId: string) {
-    return 'good';
+  async approveTransaction(args: ISendTransactionArguments) {
+    return 'approve';
   }
   async cancelTransaction(txId: string) {
     return 'good';
@@ -131,9 +160,17 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
   async speedUpTransaction(txId: string) {
     return 'good';
   }
-  async estimateGas(transaction: ITransaction) {
-    return 'good';
+  async estimateGas(args: ITezosEstimateArguments) {
+    const { networkInfo, privateKey, to, value } = args;
+    const Tezos = new TezosToolkit(networkInfo.rpcUrl);
+    Tezos.setProvider({
+      signer: new InMemorySigner(privateKey),
+    });
+    const estimation = await Tezos.estimate.transfer({ to, amount: value });
+
+    return estimation;
   }
+
   async getHistory(args: IGetHistoryArguments) {
     //TODO: v2에서는 auth header붙여야함
     try {
@@ -197,3 +234,8 @@ const mockData = [
     nonce: 0,
   },
 ];
+//환산겂 구하기
+// id: mass-vehicle-ledger / ethereum /binancecoin /binance-bitcoin
+//v1.1/wallets/simple/price
+//ids comma
+//vs_currencies

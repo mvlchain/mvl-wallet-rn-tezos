@@ -10,8 +10,8 @@ const useTokenSend = () => {
   const ethersTransactionService = useDi('EtherTransactionService');
   const tezosTransactionService = useDi('TezosTransactionService');
 
-  const [amount, setAmount] = useState('');
-  const [address, setAddress] = useState('');
+  const [amount, setAmount] = useState<BigNumber | null>(null);
+  const [address, setAddress] = useState<string | null>('');
 
   //TODO: wallet 기능 완성되면  새로붙임
   const privateKey = '0x8082bea335283b2ac437fb6a93530dcf8aea48db478f7b0df871568d17b0094e';

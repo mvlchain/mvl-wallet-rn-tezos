@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { TextInput, Platform } from 'react-native';
+import { TextInput, Platform, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
 import { useColor } from '@@hooks/useTheme';
@@ -36,6 +36,13 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
     setShowDelete(true);
   };
 
+  const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    onChange(data);
+    if (!data.nativeEvent.text) {
+      setShowDelete(false);
+    }
+  };
+
   return (
     <S.BaseTextFieldContainer>
       {label && <S.BaseTextFieldLabel>{label}</S.BaseTextFieldLabel>}
@@ -46,7 +53,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           placeholderTextColor={color.grey300Grey700}
           isValid={isValid}
           value={value}
-          onChange={onChange}
+          onChange={onSet}
           scanable={scanable}
           style={style}
           selectionColor={color.black}

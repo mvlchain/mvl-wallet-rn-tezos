@@ -1,3 +1,4 @@
+import { Estimate, TransferParams } from '@taquito/taquito';
 import { BigNumberish, BytesLike } from 'ethers';
 
 //TODO: generatedscheme에 있는지 확인하기
@@ -30,10 +31,17 @@ export interface INetworkInfo {
   rpcUrl: string;
   chainId: number;
 }
-
+export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
 export interface IGasFeeInfo {
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
+}
+
+export interface ITezosEstimateArguments extends TransferParams {
+  networkInfo: ITezosNetworkInfo;
+  privateKey: string;
+  to: string;
+  value: number;
 }
 export interface ISendTransactionArguments {
   networkInfo: INetworkInfo;
@@ -45,7 +53,6 @@ export interface ISendTransactionArguments {
   data?: BytesLike;
 }
 
-export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
 export interface ITezosSendTransactionArguments extends Omit<ISendTransactionArguments, 'networkInfo'> {
   networkInfo: ITezosNetworkInfo;
 }
@@ -89,9 +96,9 @@ export interface ITransaction {
 }
 export interface ITransactionService {
   sendTransaction(args: ISendTransactionArguments): Promise<string>;
-  approveTransaction(txId: string): Promise<string>;
+  approveTransaction(args: ISendTransactionArguments): Promise<string>;
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
-  estimateGas(transaction: ITransaction): Promise<string>;
+  estimateGas(args: ISendTransactionArguments | ITezosEstimateArguments): Promise<BigNumberish | Estimate>;
   getHistory(args: IGetHistoryArguments): Promise<IGetTransactionHistoryResponse[] | undefined>;
 }
