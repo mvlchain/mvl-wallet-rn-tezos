@@ -33,8 +33,8 @@ export function BaseModal({
   return (
     <Modal
       isVisible={isVisible}
-      backdropOpacity={appTheme.value === THEME.LIGHT || appTheme.value === THEME.DEFAULT ? 0.25 : 1}
-      backdropColor={S.BackdropColor[appTheme.label]}
+      backdropOpacity={appTheme.displayName === THEME.LIGHT || appTheme.displayName === THEME.DEFAULT ? 0.25 : 1}
+      backdropColor={S.BackdropColor[appTheme.value]}
       style={S.inlineStyles(modalPosition).modal}
       onBackButtonPress={closeModal}
       onBackdropPress={closeModal}

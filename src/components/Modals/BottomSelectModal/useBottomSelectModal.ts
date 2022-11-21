@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Appearance } from 'react-native';
 
 import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
+import RTNSettings from '@@store/RTNSetting';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import { IBottomSelectMenuProps } from './BottomSelectMenu/BottomSelectMenu.type';
@@ -61,32 +62,36 @@ const useBottomSelectModal = () => {
   const themeMenu: IBottomSelectMenuProps[] = [
     {
       title: t(THEME_NAME[THEME.DEFAULT]),
-      isSelected: appTheme.value === THEME.DEFAULT,
+      isSelected: appTheme.displayName === THEME.DEFAULT,
       onPress: () => {
-        const Theme = Appearance.getColorScheme() ?? 'light';
+        const theme = Appearance.getColorScheme() ?? 'light';
+
+        RTNSettings.putThemeType(THEME.DEFAULT);
         setAppTheme({
-          value: THEME.DEFAULT,
-          label: Theme,
+          displayName: THEME.DEFAULT,
+          value: theme,
         });
       },
     },
     {
       title: t(THEME_NAME[THEME.LIGHT]),
-      isSelected: appTheme.value === THEME.LIGHT,
+      isSelected: appTheme.displayName === THEME.LIGHT,
       onPress: () => {
+        RTNSettings.putThemeType(THEME.LIGHT);
         setAppTheme({
+          displayName: THEME.LIGHT,
           value: THEME.LIGHT,
-          label: THEME.LIGHT,
         });
       },
     },
     {
       title: t(THEME_NAME[THEME.DARK]),
-      isSelected: appTheme.value === THEME.DARK,
+      isSelected: appTheme.displayName === THEME.DARK,
       onPress: () => {
+        RTNSettings.putThemeType(THEME.DARK);
         setAppTheme({
+          displayName: THEME.DARK,
           value: THEME.DARK,
-          label: THEME.DARK,
         });
       },
     },

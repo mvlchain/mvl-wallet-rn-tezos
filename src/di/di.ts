@@ -8,6 +8,7 @@ import { AuthServiceImpl } from '@@domain/auth/AuthService';
 import { KeyClientImpl } from '@@domain/auth/clients/KeyClient';
 import { KeyClientUtilImpl } from '@@domain/auth/clients/KeyClientUtil';
 import { DeviceShareRepositoryImpl } from '@@domain/auth/repositories/DeviceShareRepository';
+import { RTNSettingsRepositoryImpl } from '@@domain/auth/repositories/RTNSettingsRepository';
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
@@ -44,4 +45,7 @@ container.register('TorusShareRepository', {
 });
 container.register('RootKeyRepository', {
   useFactory: instancePerContainerCachingFactory<RootKeyRepositoryImpl>((container) => container.resolve(RootKeyRepositoryImpl)),
+});
+container.register('RTNSettingsRepository', {
+  useFactory: instancePerContainerCachingFactory<RTNSettingsRepositoryImpl>((container) => container.resolve(RTNSettingsRepositoryImpl)),
 });
