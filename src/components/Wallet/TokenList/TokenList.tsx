@@ -6,7 +6,7 @@ import * as S from './TokenList.style';
 import TokenListItem from './TokenListItem';
 
 function TokenList() {
-  const { balanceData } = useTokenBalanceList();
+  const { formalizedBalance } = useTokenBalanceList();
   return (
     <S.Container>
       <S.TitleContainer>
@@ -16,9 +16,9 @@ function TokenList() {
         bounces={false}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <TokenListItem {...item} />}
-        data={balanceData}
-        extraData={balanceData}
-        keyExtractor={(data) => `token_${data?.asset?.ticker}`}
+        data={formalizedBalance}
+        extraData={formalizedBalance}
+        keyExtractor={(data) => `token_${data?.ticker}`}
       />
     </S.Container>
   );

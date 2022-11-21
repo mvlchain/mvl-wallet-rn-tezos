@@ -9,6 +9,7 @@ import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepos
 import { UIService } from '@@domain/auth/services/UIService';
 import { ContractRepository } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
+import { EthersContractServiceImpl } from '@@domain/wallet/services/WalletBlockChainService';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 
 /**
@@ -17,7 +18,7 @@ import { WalletService } from '@@domain/wallet/services/WalletService';
 export interface DiModuleTypes {
   // Service
   WalletService: WalletService;
-
+  WalletBlockChainService: EthersContractServiceImpl;
   // Repository
   WalletRepository: WalletRepository;
   EthersContractRepository: ContractRepository;
