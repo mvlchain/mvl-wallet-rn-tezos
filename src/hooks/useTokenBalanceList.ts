@@ -14,7 +14,6 @@ import useWalletsQuery from './queries/useWalletsQuery';
 export const useTokenBalanceList = () => {
   // @TODO 데이터 연결
   const ethService = useDi('WalletBlockChainService');
-  const wallet = useDi('WalletService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const priceIds = Object.values(PRICE_TYPE[selectedNetwork]).flat();
