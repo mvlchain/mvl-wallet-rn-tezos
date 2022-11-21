@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { BigNumber } from 'ethers';
 import { TextInputProps, TextInputChangeEventData } from 'react-native';
 import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
 
@@ -33,7 +34,7 @@ export interface ITradeVolumeComponentProps {
   onSelect?: () => void;
   label?: string;
   symbol?: keyof typeof WALLET_TOKEN;
-  value?: string;
-  onChange?: (amount: any) => void;
+  value: BigNumber | null;
+  onChange: (amount: any) => void;
   hint?: string;
 }

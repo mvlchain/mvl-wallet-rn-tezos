@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 
+import { BigNumber } from 'ethers';
+import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
+import { TextInput, Platform, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import * as TokenIcon from '@@assets/image/token';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
@@ -14,19 +18,29 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const { useMax, onSelect, label, symbol, value, onChange, hint } = props;
   const { appTheme } = settingPersistStore();
   const color = theme[appTheme.label].color;
-
   //TODO: 리스트에 없는 토큰일 결루 보여줄 심볼
   const TokenImage = TokenIcon[symbol ?? 'Mvl'];
   const [showDelete, setShowDelete] = useState(false);
+  const [displayValue, setDisplayValue] = useState<string>('');
+
   const clearTextField = () => {
-    if (onChange && value) {
-      onChange('');
-      setShowDelete(false);
-    }
+    onChange(null);
+    setShowDelete(false);
   };
   const onKeyPress = () => {
     setShowDelete(true);
   };
+
+  const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    const parsed = parseUnits(data.nativeEvent.text, 'ether');
+    if (parsed) {
+      onChange(parsed);
+    }
+    if (!data.nativeEvent.text) {
+      setShowDelete(false);
+    }
+  };
+
   return (
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
@@ -36,8 +50,8 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
           <S.TradeVolumeInput
-            value={value}
-            onChange={onChange}
+            value={displayValue}
+            onChange={onSet}
             keyboardType={'numeric'}
             selectionColor={color.black}
             placeholder={'0.00'}

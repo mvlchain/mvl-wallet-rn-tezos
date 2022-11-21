@@ -1,8 +1,8 @@
-import { TextInputChangeEventData } from 'react-native';
+import { BigNumber } from 'ethers';
 
 export interface ISendInputBoardProps {
-  amount: string;
-  setAmount: (amount: string) => void;
-  address: string;
+  amount: BigNumber | null;
+  setAmount: (amount: BigNumber) => void;
+  address: string | null;
   setAddress: (address: string) => void;
 }
