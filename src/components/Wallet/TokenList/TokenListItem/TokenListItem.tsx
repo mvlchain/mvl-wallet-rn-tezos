@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, View } from 'react-native';
+import { Pressable } from 'react-native';
 
 import * as TokenIcon from '@@assets/image/token';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';

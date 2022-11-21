@@ -1,8 +1,8 @@
 import { container, instanceCachingFactory } from 'tsyringe';
 
-import { testNetBTCBAbi } from '@@constants/contract/abi/testNet/testnetBTCBAbi';
-import { testNetMvlAbi } from '@@constants/contract/abi/testNet/testnetMvlAbi';
-import { testNetbMvlAbi } from '@@constants/contract/abi/testNet/testnetbMvlAbi';
+import { testNetBTCBAbi } from '@@constants/contract/abi/testNet/testNetBTCBAbi';
+import { testNetMvlAbi } from '@@constants/contract/abi/testNet/testNetMvlAbi';
+import { testNetbMvlAbi } from '@@constants/contract/abi/testNet/testNetbMvlAbi';
 import { MVL_GOERLI, B_MVL_STAGE, BTCB_STAGE } from '@@constants/contract/contract.constant';
 
 import { TestData } from './TestData';
