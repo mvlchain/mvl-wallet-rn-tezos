@@ -27,6 +27,10 @@ jest.useFakeTimers();
 
 // Note: test renderer must be required after react-native.
 afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  container.clearInstances();
+});
 
 beforeEach(() => {
   // mock splash screen
