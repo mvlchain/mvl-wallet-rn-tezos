@@ -7,10 +7,13 @@ import { WalletDto } from '@@domain/model/WalletDto';
 import { BalanceResponseDto, RegisterWalletDto, WalletResponseDto } from '@@generated/generated-scheme';
 import { authRequest } from '@@utils/request';
 
+import { IGetPriceDto, IGetPriceResponseDto } from './WalletRepository.type';
+
 export interface WalletRepository {
   getWallets: (extendedPublicKey: string) => Promise<WalletDto[]>;
   registerWallet: (body: RegisterWalletDto) => Promise<WalletResponseDto>;
   getBalance: (address: string, network: Network) => Promise<BalanceResponseDto[]>;
+  getPrice(param: IGetPriceDto): Promise<IGetPriceResponseDto>;
 }
 
 @injectable()
@@ -50,6 +53,27 @@ export class WalletRepositoryImpl implements WalletRepository {
       network,
     })}`;
     const res = await authRequest.get<BalanceResponseDto[]>(endpoint);
+    return res.data;
+  };
+
+  getPrice = async (param: IGetPriceDto): Promise<IGetPriceResponseDto> => {
+    const {
+      ids,
+      vsCurrencies,
+      include_market_cap = false,
+      include_24hr_vol = false,
+      include_24hr_change = false,
+      include_last_updated_at = false,
+    } = param;
+    const endpoint = `/v1.1/wallets/simple/price?${qs.stringify({
+      ids,
+      vs_currencies: vsCurrencies,
+      include_market_cap,
+      include_24hr_vol,
+      include_24hr_change,
+      include_last_updated_at,
+    })}`;
+    const res = await authRequest.get<IGetPriceResponseDto>(endpoint);
     return res.data;
   };
 }

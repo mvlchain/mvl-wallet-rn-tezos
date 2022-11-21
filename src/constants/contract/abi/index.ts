@@ -1,6 +1,6 @@
-import { testnetBTCBAbi } from '@@constants/contract/abi/testNet/testnetBTCBAbi';
-import { testnetMvlAbi } from '@@constants/contract/abi/testNet/testnetMvlAbi';
-import { testnetbMvlAbi } from '@@constants/contract/abi/testNet/testnetbMvlAbi';
+import { testNetBTCBAbi } from '@@constants/contract/abi/testNet/testNetBTCBAbi';
+import { testNetMvlAbi } from '@@constants/contract/abi/testNet/testNetMvlAbi';
+import { testNetbMvlAbi } from '@@constants/contract/abi/testNet/testNetbMvlAbi';
 import { WALLET_TOKEN } from '@@constants/token.constant';
 
 export const getAbi = (isMainnet: boolean, ticker: keyof typeof WALLET_TOKEN) => {
@@ -9,35 +9,35 @@ export const getAbi = (isMainnet: boolean, ticker: keyof typeof WALLET_TOKEN) =>
     // TODO: mainnet abi import
     switch (ticker) {
       case WALLET_TOKEN.MVL:
-        abi = testnetMvlAbi;
+        abi = testNetMvlAbi;
         break;
       case WALLET_TOKEN.bMVL:
-        abi = testnetbMvlAbi;
+        abi = testNetbMvlAbi;
         break;
       case WALLET_TOKEN.BTCB:
-        abi = testnetBTCBAbi;
+        abi = testNetBTCBAbi;
         break;
 
       default:
-        abi = testnetMvlAbi;
+        abi = testNetMvlAbi;
         break;
     }
   } else {
     switch (ticker) {
       case WALLET_TOKEN.MVL:
-        abi = testnetMvlAbi;
+        abi = testNetMvlAbi;
         break;
 
       case WALLET_TOKEN.bMVL:
-        abi = testnetbMvlAbi;
+        abi = testNetbMvlAbi;
         break;
 
       case WALLET_TOKEN.BTCB:
-        abi = testnetBTCBAbi;
+        abi = testNetBTCBAbi;
         break;
 
       default:
-        abi = testnetMvlAbi;
+        abi = testNetMvlAbi;
         break;
     }
   }
