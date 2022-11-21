@@ -24,6 +24,9 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
       setShowDelete(false);
     }
   };
+  const onKeyPress = () => {
+    setShowDelete(true);
+  };
   return (
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
@@ -39,6 +42,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
             selectionColor={color.black}
             placeholder={'0.00'}
             placeholderTextColor={color.grey300Grey700}
+            onKeyPress={onKeyPress}
           />
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
@@ -48,7 +52,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
-      {hint && <S.Hint>{hint}</S.Hint>}
+      {hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{'Balance: 2222222222222'}</S.Balance>}
     </S.TradeVolumeContainer>
   );
 }
