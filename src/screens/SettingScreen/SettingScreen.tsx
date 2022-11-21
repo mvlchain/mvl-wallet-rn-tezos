@@ -40,7 +40,7 @@ function SettingScreen() {
         />
         <SettingMenu
           title={t('theme')}
-          subTitle={t(THEME_NAME[appTheme.value])}
+          subTitle={t(THEME_NAME[appTheme.displayName])}
           onPress={() => {
             openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('theme'), menuList: themeMenu });
           }}

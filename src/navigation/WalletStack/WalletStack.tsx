@@ -20,7 +20,7 @@ import { WALLET_STACK_ROUTE, TWalletStackParamList } from './WalletStack.type';
 
 function WalletStack() {
   const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.label].color;
+  const color = theme[appTheme.value].color;
   const { Navigator, Screen } = createStackNavigator<TWalletStackParamList>();
 
   type ScreenProps = Parameters<typeof Screen>[0];

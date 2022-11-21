@@ -4,12 +4,11 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
     ext {
-        buildToolsVersion = "31.0.0"
         minSdkVersion = 24
         compileSdkVersion = 32
-        targetSdkVersion = 32
-        VisionCameraCodeScanner_targetSdkVersion = 32
+        targetSdkVersion = 31
         VisionCameraCodeScanner_compileSdkVersion = 32
+        VisionCameraCodeScanner_targetSdkVersion = 31
 
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64
@@ -24,7 +23,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.1")
+        classpath("com.android.tools.build:gradle:7.2.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:5.0.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")

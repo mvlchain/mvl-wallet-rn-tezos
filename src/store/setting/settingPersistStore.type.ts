@@ -21,6 +21,6 @@ export type TTheme = 'light' | 'dark' | 'default';
 export type TAppTheme = 'dark' | 'light';
 
 export interface ISettedTheme {
-  label: TAppTheme;
-  value: TTheme;
+  value: TAppTheme;
+  displayName: TTheme;
 }

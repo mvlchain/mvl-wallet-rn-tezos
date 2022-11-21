@@ -19,7 +19,7 @@ export const getAssetFromTheme = (appTheme: string, light: React.FC<SvgProps>, d
 
 export const useAssetFromTheme = (light: any, dark: any) => {
   const { appTheme } = settingPersistStore();
-  const asset = getAssetFromTheme(appTheme.label, light, dark);
+  const asset = getAssetFromTheme(appTheme.value, light, dark);
 
   return asset;
 };

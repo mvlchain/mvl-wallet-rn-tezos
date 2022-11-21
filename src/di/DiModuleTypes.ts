@@ -2,6 +2,7 @@ import { AuthService } from '@@domain/auth/AuthService';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { KeyClientUtil } from '@@domain/auth/clients/KeyClientUtil';
 import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
+import { RTNSettingsRepository } from '@@domain/auth/repositories/RTNSettingsRepository';
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
@@ -27,4 +28,5 @@ export interface DiModuleTypes {
   ServerShareRepository: ServerShareRepository;
   TorusShareRepository: TorusShareRepository;
   RootKeyRepository: RootKeyRepository;
+  RTNSettingsRepository: RTNSettingsRepository;
 }

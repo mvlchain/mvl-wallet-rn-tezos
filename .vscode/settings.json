@@ -13,5 +13,31 @@
   "editor.mouseWheelZoom": false,
   "window.title": "${activeEditorMedium}${separator}${rootName}",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "files.associations": {
+    "__bit_reference": "cpp",
+    "__hash_table": "cpp",
+    "__split_buffer": "cpp",
+    "__tree": "cpp",
+    "array": "cpp",
+    "deque": "cpp",
+    "hash_map": "cpp",
+    "hash_set": "cpp",
+    "filesystem": "cpp",
+    "forward_list": "cpp",
+    "initializer_list": "cpp",
+    "ios": "cpp",
+    "list": "cpp",
+    "map": "cpp",
+    "regex": "cpp",
+    "set": "cpp",
+    "span": "cpp",
+    "string": "cpp",
+    "string_view": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp",
+    "valarray": "cpp",
+    "vector": "cpp",
+    "*.ipp": "cpp"
+  }
 }
