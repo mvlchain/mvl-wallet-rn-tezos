@@ -14,9 +14,9 @@ import '@@assets/locale/i18n';
 import useApp from 'useApp';
 
 import { THEME } from '@@constants/setting.constant';
+import { useDi } from '@@hooks/common/useDi';
 import RootStack from '@@navigation/RootStack';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
-import RTNSettings from '@@store/RTNSetting';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
@@ -39,10 +39,14 @@ function App(props: { foxCode?: string }) {
    *
    * Platform: Platform.OS> ios, android
    * Detecting versions: Platform.Version
+   *
+   * NOTE!
+   * this useEffect is subject to refacotring task
    */
+  const settingsRepository = useDi('RTNSettingsRepository');
   useEffect(() => {
-    const themeType = RTNSettings.getThemeType();
-    console.log(`Darby> fetching native theme settings: ${themeType}`);
+    const themeType = settingsRepository.getThemeType();
+    console.log(`Theme> fetching native theme settings: ${themeType}`);
 
     if (themeType === THEME.DEFAULT) {
       const theme = Appearance.getColorScheme() ?? 'light';
