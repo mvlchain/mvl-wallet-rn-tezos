@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-import { BigNumber } from 'ethers';
-import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
-import { TextInput, Platform, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { parseUnits } from 'ethers/lib/utils';
+import { NativeSyntheticEvent, TextInputChangeEventData, TextInputEndEditingEventData } from 'react-native';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import * as TokenIcon from '@@assets/image/token';
@@ -21,25 +20,38 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   //TODO: 리스트에 없는 토큰일 결루 보여줄 심볼
   const TokenImage = TokenIcon[symbol ?? 'Mvl'];
   const [showDelete, setShowDelete] = useState(false);
-  const [displayValue, setDisplayValue] = useState<string>('');
+  const [displayValue, setDisplayValue] = useState<string | null>(null);
 
   const clearTextField = () => {
     onChange(null);
+    setDisplayValue(null);
     setShowDelete(false);
   };
+
   const onKeyPress = () => {
     setShowDelete(true);
   };
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const parsed = parseUnits(data.nativeEvent.text, 'ether');
-    if (parsed) {
-      onChange(parsed);
-    }
-    if (!data.nativeEvent.text) {
+    let value = data.nativeEvent.text;
+
+    if (!value) {
       setShowDelete(false);
     }
+
+    if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
+      value = value.slice(1);
+    }
+
+    if (value.indexOf('.') !== value.lastIndexOf('.')) {
+      return;
+    }
+
+    onChange(parseUnits(value, 'ether'));
+    setDisplayValue(value);
   };
+
+  const onEndEditing = (data: NativeSyntheticEvent<TextInputEndEditingEventData>) => {};
 
   return (
     <S.TradeVolumeContainer>
@@ -50,8 +62,9 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
           <S.TradeVolumeInput
-            value={displayValue}
+            value={displayValue ?? ''}
             onChange={onSet}
+            onEndEditing={onEndEditing}
             keyboardType={'numeric'}
             selectionColor={color.black}
             placeholder={'0.00'}
