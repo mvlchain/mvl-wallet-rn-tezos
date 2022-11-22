@@ -3,14 +3,18 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
-  BrowserNormalLight,
-  BrowserSelectedLight,
-  BrowserNormalDark,
-  BrowserSelectedDark,
   HomeNormalLight,
   HomeSelectedLight,
   HomeNormalDark,
   HomeSelectedDark,
+  BrowserNormalLight,
+  BrowserSelectedLight,
+  BrowserNormalDark,
+  BrowserSelectedDark,
+  EventNormalLight,
+  EventSelectedLight,
+  EventNormalDark,
+  EventSelectedDark,
   SettingNormalLight,
   SettingSelectedLight,
   SettingNormalDark,
@@ -22,6 +26,7 @@ import {
 } from '@@assets/image';
 import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
+import EarnEventScreen from '@@screens/EarnEventScreen';
 import SettingScreen from '@@screens/SettingScreen';
 import Trade from '@@screens/Trade';
 import WalletScreen from '@@screens/WalletScreen';
@@ -40,6 +45,8 @@ function MainTab() {
   const HomeSelected = useAssetFromTheme(HomeSelectedLight, HomeSelectedDark);
   const BrowserNormal = useAssetFromTheme(BrowserNormalLight, BrowserNormalDark);
   const BrowserSelected = useAssetFromTheme(BrowserSelectedLight, BrowserSelectedDark);
+  const EventNormal = useAssetFromTheme(EventNormalLight, EventNormalDark);
+  const EventSelected = useAssetFromTheme(EventSelectedLight, EventSelectedDark);
   const TradeNormal = useAssetFromTheme(TradeNormalLight, TradeNormalDark);
   const TradeSelected = useAssetFromTheme(TradeSelectedLight, TradeSelectedDark);
   const SettingNormal = useAssetFromTheme(SettingNormalLight, SettingNormalDark);
@@ -58,6 +65,13 @@ function MainTab() {
       component: Browser,
       options: {
         tabBarIcon: ({ size, focused }) => (focused ? <BrowserSelected width={size} height={size} /> : <BrowserNormal width={size} height={size} />),
+      },
+    },
+    {
+      name: MAIN_TAB_ROUTE.EVENT,
+      component: EarnEventScreen,
+      options: {
+        tabBarIcon: ({ size, focused }) => (focused ? <EventSelected width={size} height={size} /> : <EventNormal width={size} height={size} />),
       },
     },
     {
