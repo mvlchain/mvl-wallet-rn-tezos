@@ -9,6 +9,7 @@ import * as Type from './walletPersistStore.type';
 const initState: Type.IWalletPersistState = {
   selectedWalletIndex: 0,
   selectedNetwork: NETWORK.ETHEREUM,
+  walletList: [{ index: -1, name: 'default Wallet' }],
 };
 
 const walletPersistStore = create<Type.IWalletPersist>()(
@@ -20,6 +21,7 @@ const walletPersistStore = create<Type.IWalletPersist>()(
           set(() => ({
             selectedWalletIndex: 0,
             selectedNetwork: NETWORK.ETHEREUM,
+            walletList: [{ index: -1, name: 'default Wallet' }],
           })),
         selectWallet: (index: number) => set(() => ({ selectedWalletIndex: index }), false, 'selectWallet'),
         selectNetwork: (network: Network) =>
@@ -29,6 +31,26 @@ const walletPersistStore = create<Type.IWalletPersist>()(
             }),
             false,
             'selectNetwork'
+          ),
+        setWallets: (wallets: Type.IPersistWallet[]) => set(() => ({ walletList: wallets }), false, 'setWallet'),
+        editWalletName: (wallet: Type.IPersistWallet) =>
+          set(
+            (state) => ({
+              walletList: state.walletList.map((origin) => {
+                if (origin.index === wallet.index) {
+                  origin.name = wallet.name;
+                }
+                return origin;
+              }),
+            }),
+            false,
+            'editWalletName'
+          ),
+        createWallet: () =>
+          set(
+            (state) => ({ walletList: [...state.walletList, { index: state.walletList.length, name: `Wallet ${state.walletList.length + 1}` }] }),
+            false,
+            'createWallet'
           ),
       }),
       {
