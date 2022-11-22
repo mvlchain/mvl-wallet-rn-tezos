@@ -27,37 +27,33 @@ export class EthersContractServiceImpl implements ContractService {
   // TODO: 중요! 타입 형변환이 너무 무식하게 들어감 위험해보임.
   // 타입 캐스팅이 너무 많습니다. 해결방안이 있다면 수정해야할 것 같습니다.
   getBalanceFromNetwork = async (index: number, network: Network) => {
-    try {
-      const { blockchain, rpcUrl, tokenList } = this._getSetting(network);
-      const keyOfCrypto = Object.keys(tokenList);
-      let balanceList: IBalance = {};
-      const wallet = await this.walletService.getWalletInfo({ index, blockchain });
-      const getBalancePromise = keyOfCrypto.map(async (crypto) => {
-        let balance;
-        const value = getToken(IS_PRODUCT === 'TRUE', crypto as keyof typeof tokenList);
-        if (value.cryptoType === CryptoType.COIN) {
-          balance = await this.ethersContractRepository.getBalance({
-            selectedWalletPrivateKey: wallet.privateKey,
-            rpcUrl: rpcUrl,
-          });
-        } else {
-          balance = await this.ethersContractRepository.getContractBalance({
-            contractAddress: value.contractAddress,
-            rpcUrl: rpcUrl,
-            abi: getAbi(IS_PRODUCT === 'TRUE', value.symbol as keyof typeof WALLET_TOKEN),
-            address: wallet.address,
-          });
-        }
-        balanceList = {
-          ...balanceList,
-          [value.symbol]: balance,
-        };
-      });
-      await Promise.all(getBalancePromise);
-      return balanceList;
-    } catch (e) {
-      console.log(`ERROR:  ${e}`);
-    }
+    const { blockchain, rpcUrl, tokenList } = this._getSetting(network);
+    const keyOfCrypto = Object.keys(tokenList);
+    let balanceList: IBalance = {};
+    const wallet = await this.walletService.getWalletInfo({ index, blockchain });
+    const getBalancePromise = keyOfCrypto.map(async (crypto) => {
+      let balance;
+      const value = getToken(IS_PRODUCT === 'TRUE', crypto as keyof typeof tokenList);
+      if (value.cryptoType === CryptoType.COIN) {
+        balance = await this.ethersContractRepository.getBalance({
+          selectedWalletPrivateKey: wallet.privateKey,
+          rpcUrl: rpcUrl,
+        });
+      } else {
+        balance = await this.ethersContractRepository.getContractBalance({
+          contractAddress: value.contractAddress,
+          rpcUrl: rpcUrl,
+          abi: getAbi(IS_PRODUCT === 'TRUE', value.symbol as keyof typeof WALLET_TOKEN),
+          address: wallet.address,
+        });
+      }
+      balanceList = {
+        ...balanceList,
+        [value.symbol]: balance,
+      };
+    });
+    await Promise.all(getBalancePromise);
+    return balanceList;
   };
 
   _getSetting = (network: Network) => {
