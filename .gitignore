@@ -630,4 +630,3 @@ fabric.properties
 credentials
 .env
 .env.*
-env.d.ts
