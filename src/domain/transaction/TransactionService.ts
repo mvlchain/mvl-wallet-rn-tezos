@@ -7,7 +7,6 @@ import { formatEther } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
-import { TRANSACTION_TYPE, TRANSACTION_STATUS } from '@@constants/transaction.constant';
 import { request, authRequest } from '@@utils/request';
 
 import {

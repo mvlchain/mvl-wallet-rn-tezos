@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
+import Decimal from 'decimal.js';
+import { formatEther, parseUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
@@ -8,6 +10,7 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
+import useGas from '@@hooks/transaction/useGas';
 import { width } from '@@utils/ui';
 
 import SpeedInputs from './SpeedInputs';
@@ -16,8 +19,9 @@ import { ISpeedOperationBoardProps } from './SpeedOperationBoard.type';
 import SpeedRadioButtons from './SpeedRadioButtons';
 
 function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
-  const [advanced, setAdvanced] = useState(false);
   const { t } = useTranslation();
+  const { avgBlockGasPrice, gasLimit, gasPrice, gasLevel, totalGas, setGasLevel, advanced, setAdvanced, setGasPrice, setGasLimit } = useGas();
+
   return (
     <S.Container>
       <View>
@@ -35,8 +39,11 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
               />
             </S.ToggleWrapper>
           </S.Row>
-
-          {advanced ? <SpeedInputs /> : <SpeedRadioButtons />}
+          {advanced ? (
+            <SpeedInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
+          ) : (
+            <SpeedRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
+          )}
         </S.InnerContainer>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>
@@ -46,7 +53,10 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
           </S.Row>
           <S.MarginRow>
             <S.Label>{t('new_transaction_fee')}</S.Label>
-            <S.Value>{'0.04 ETH'}</S.Value>
+            <S.Value>
+              {totalGas}
+              {'BNB'}
+            </S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{'6.30 USD'}</S.BaseCurrency>
           <S.Warning>
