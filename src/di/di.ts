@@ -94,9 +94,3 @@ container.register('EhtersClient', {
 container.register('TezosClient', {
   useFactory: instancePerContainerCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),
 });
-container.register('EtherTransactionService', {
-  useFactory: instancePerContainerCachingFactory<EthersTransactionImpl>((container) => container.resolve(EthersTransactionImpl)),
-});
-container.register('TezosTransactionService', {
-  useFactory: instancePerContainerCachingFactory<TezosTaquitoTransactionsImpl>((container) => container.resolve(TezosTaquitoTransactionsImpl)),
-});
