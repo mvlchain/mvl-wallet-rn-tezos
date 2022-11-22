@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ const useAccount = () => {
   const { t } = useTranslation();
   const { openModal, closeModal } = globalModalStore();
   const { data } = useWalletsQuery();
-  const { selectedWalletIndex, selectedNetwork, selectNetwork } = walletPersistStore();
+  const { selectedWalletIndex, selectedNetwork, walletList, selectNetwork, editWalletName } = walletPersistStore();
 
   // TODO: network를 서버에서 받아오는지 체크, 현재는 로컬에서 저장 중
   const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
@@ -39,7 +39,7 @@ const useAccount = () => {
 
   const onChangeWalletInput = (value: string) => {
     console.log('input value:  ', value);
-    // TODO: call wallet name change method
+    editWalletName({ index: selectedWalletIndex, name: value });
     closeModal();
   };
 
@@ -51,7 +51,7 @@ const useAccount = () => {
         onPress: () =>
           openModal(MODAL_TYPES.TEXT_INPUT, {
             title: t('edit_wallet_name'),
-            defaultValue: data && data[selectedWalletIndex]?.name,
+            defaultValue: walletList[selectedWalletIndex]?.name,
             onConfirm: onChangeWalletInput,
           }),
       },
@@ -61,7 +61,7 @@ const useAccount = () => {
         onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
       },
     ],
-    [data]
+    [data, selectedWalletIndex, walletList]
   );
 
   const onPressSwitchNetwork = () => {
