@@ -1,5 +1,5 @@
 import { Estimate, TransferParams } from '@taquito/taquito';
-import { BigNumberish, BytesLike } from 'ethers';
+import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
 //TODO: generatedscheme에 있는지 확인하기
 export enum TTransactionStatus {
@@ -33,8 +33,8 @@ export interface INetworkInfo {
 }
 export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
 export interface IGasFeeInfo {
-  gasPrice: BigNumberish;
-  gasLimit: BigNumberish;
+  gasPrice: BigNumber;
+  gasLimit: BigNumber;
 }
 
 export interface ITezosEstimateArguments extends TransferParams {

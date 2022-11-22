@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 import { BigNumber } from 'ethers';
 import { TextInputProps, TextInputChangeEventData } from 'react-native';
@@ -22,6 +22,14 @@ export interface IBaseTextFieldProps {
   hint?: string;
   isValid?: boolean;
   scanable?: boolean;
+}
+
+export interface IGasTextFieldProps {
+  value: BigNumber | null;
+  setValue: Dispatch<SetStateAction<BigNumber | null>> | Dispatch<SetStateAction<BigNumber>>;
+  hint?: string;
+  style?: TextInputProps['style'];
+  unit?: 'gwei' | 'ether';
 }
 
 export interface ITextFieldContainerProps {
