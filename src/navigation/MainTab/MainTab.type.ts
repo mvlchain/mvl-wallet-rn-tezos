@@ -5,6 +5,7 @@ import { valueOf } from '@@utils/types';
 export type TMainTabParamList = {
   WALLET: undefined;
   BROWSER: undefined;
+  EVENT: undefined;
   SETTING_MAIN: undefined;
   TRADE: undefined;
 };
@@ -14,6 +15,7 @@ export type MainTabRouteType = Record<keyof TMainTabParamList, keyof TMainTabPar
 export const MAIN_TAB_ROUTE: MainTabRouteType = {
   WALLET: 'WALLET',
   BROWSER: 'BROWSER',
+  EVENT: 'EVENT',
   TRADE: 'TRADE',
   SETTING_MAIN: 'SETTING_MAIN',
 } as const;
