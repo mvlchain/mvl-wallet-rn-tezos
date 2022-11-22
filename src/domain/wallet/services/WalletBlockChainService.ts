@@ -24,6 +24,8 @@ export class EthersContractServiceImpl implements ContractService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
+  // TODO: 중요! 타입 형변환이 너무 무식하게 들어감 위험해보임.
+  // 타입 캐스팅이 너무 많습니다. 해결방안이 있다면 수정해야할 것 같습니다.
   getBalanceFromNetwork = async (index: number, network: Network) => {
     try {
       const { blockchain, rpcUrl, tokenList } = this._getSetting(network);

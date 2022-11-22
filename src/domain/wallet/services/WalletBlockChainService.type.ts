@@ -5,5 +5,5 @@ export interface IBalance {
 export interface IBalanceData {
   ticker: string;
   balance: number;
-  valuatedAmount: number;
+  valuatedPrice: number;
 }
