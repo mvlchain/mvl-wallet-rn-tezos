@@ -80,7 +80,8 @@ export const useTokenBalanceList = () => {
   useEffect(() => {
     if (!price || !balanceData) return;
     let formalizedArray: IBalanceData[] = [];
-    // TODO: 타입 형변환이 너무 무식하게 들어감 위험해보임.
+    // TODO: 중요! 타입 형변환이 너무 무식하게 들어감 위험해보임.
+    // 타입 캐스팅이 너무 많습니다. 해결방안이 있다면 수정해야할 것 같습니다.
     for (const [crypto, balance] of Object.entries(balanceData)) {
       const data = price[PRICE_NAME[crypto as keyof typeof PRICE_NAME]] as IGetPriceResponseDto;
       const currency = settedCurrency.toLocaleLowerCase();
@@ -91,7 +92,7 @@ export const useTokenBalanceList = () => {
           {
             ticker: crypto,
             balance: floatBalance,
-            valuatedAmount: (data[currency] as unknown as number) * floatBalance,
+            valuatedPrice: (data[currency] as unknown as number) * floatBalance,
           },
         ];
       }

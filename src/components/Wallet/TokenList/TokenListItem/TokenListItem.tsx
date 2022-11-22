@@ -11,7 +11,7 @@ import numberFormatter from '@@utils/numberFormatter';
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
 
-function TokenListItem({ ticker, balance, valuatedAmount }: ITokenListItemProps) {
+function TokenListItem({ ticker, balance, valuatedPrice }: ITokenListItemProps) {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const navigation = useNavigation<rootStackProps>();
   const TokenImage = TokenIcon[ticker as keyof typeof TokenIcon];
@@ -33,7 +33,7 @@ function TokenListItem({ ticker, balance, valuatedAmount }: ITokenListItemProps)
             {numberFormatter.setComma(balance)} {ticker}
           </S.Text>
           <S.AmountUSD>
-            {numberFormatter.setComma(valuatedAmount)} {settedCurrency}
+            {numberFormatter.setComma(valuatedPrice)} {settedCurrency}
           </S.AmountUSD>
         </S.ValueContainer>
       </S.Container>
