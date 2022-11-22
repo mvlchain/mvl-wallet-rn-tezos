@@ -1,25 +1,28 @@
 import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
-import { width, height } from '@@utils/ui';
+import { width, height, fontSize } from '@@utils/ui';
 
 import * as Type from './TextField.type';
 
 //Base
 export const BaseInput = styled.TextInput<Type.IBaseTextFieldProps>`
   flex: 9;
+  padding: 0;
   ${({ theme }) => theme.font.Label.md}
   color: ${({ theme }) => theme.color.blackWhite};
+  font-size: ${fontSize(16)}px;
+  line-height: ${fontSize(20)}px;
 `;
 export const BaseTextFieldInputWrapper = styled.View<Type.ITextFieldContainerProps>`
   width: 100%;
   flex-direction: row;
+  align-items: center;
   border-style: solid;
   border-width: ${width * 1}px;
   border-color: ${({ theme, lcColor }) => (lcColor ? lcColor : theme.color.grey100Grey900)};
   border-radius: ${width * 8}px;
   ${({ theme }) => theme.font.Paragraph.md};
-  height: ${width * 48}px;
   padding: ${height * 14}px ${width * 16}px;
   gap: ${width * 8}px;
   outline-color: ${({ theme }) => theme.color.primary};
@@ -73,7 +76,7 @@ export const TradeVolumeMiddle = styled.View`
 export const Label = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md};
   color: ${({ theme }) => theme.color.grey500};
-  line-height: ${height * 16}px;
+  line-height: ${fontSize(16)}px;
 `;
 
 export const Hint = styled.Text`
