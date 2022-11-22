@@ -1,4 +1,4 @@
-import { IS_PRODUCT } from '@env';
+import { IS_PRODUCT } from 'react-native-dotenv';
 
 import { Network, NETWORK_STRINGS } from '@@constants/network.constant';
 
