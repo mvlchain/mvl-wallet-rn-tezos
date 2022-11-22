@@ -21,22 +21,6 @@ import {
   ITezosEstimateArguments,
 } from './TransactionService.type';
 
-export class EvmNetworkInfo {
-  constructor(readonly rpcUrl: string, readonly chainId: number) {}
-}
-
-export class TezosNetworkInfo {
-  constructor(readonly rpcUrl: string) {}
-}
-
-//TODO: gas provider 만들기....
-export class GasFeeInfo {
-  constructor(readonly gasPrice: string) {}
-}
-
-// selectedNetworkInfo: TezosNetworkInfo,
-// selectedWalletPrivateKey: string,
-// selectedGasFeeInfo: GasFeeInfo
 @injectable()
 export class EthersTransactionImpl implements ITransactionService {
   constructor() {}
@@ -45,14 +29,13 @@ export class EthersTransactionImpl implements ITransactionService {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
-
     const res = await wallet.sendTransaction({
       from,
       to,
       data,
       value,
       gasPrice: gasFeeInfo.gasPrice,
-      gasLimit: gasFeeInfo.gasLimit,
+      gasLimit: gasFeeInfo.gasPrice,
       chainId: networkInfo.chainId,
     });
 
@@ -95,7 +78,7 @@ export class EthersTransactionImpl implements ITransactionService {
       gasLimit: gasFeeInfo.gasLimit,
       chainId: networkInfo.chainId,
     });
-    console.log(res);
+
     return res;
   }
 
