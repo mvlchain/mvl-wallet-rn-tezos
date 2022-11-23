@@ -7,7 +7,7 @@ import { INetworkInfo } from './TransactionService.type';
 
 @injectable()
 export class GasServiceImpl implements IGasService {
-  getGasInfo = async (networkInfo: INetworkInfo) => {
+  getGasFeeData = async (networkInfo: INetworkInfo) => {
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const block = await provider.getBlock('latest');
     const gasLimit = block.gasLimit;

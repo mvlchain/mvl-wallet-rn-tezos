@@ -34,7 +34,7 @@ it('constructs correctly', () => {
 it('send eth transaction', async () => {
   const EthersTransactionImpl = container.resolve<EthersTransactionImpl>('EthersTransactionImpl');
   const GasService = container.resolve<GasServiceImpl>('GasService');
-  const gasFeeInfo = await GasService.getGasInfo(networkInfo);
+  const gasFeeInfo = await GasService.getGasFeeData(networkInfo);
   await EthersTransactionImpl.sendTransaction({
     networkInfo,
     privateKey,
@@ -48,7 +48,7 @@ it('send eth transaction', async () => {
 it('approve eth transaction', async () => {
   const EthersTransactionImpl = container.resolve<EthersTransactionImpl>('EthersTransactionImpl');
   const GasService = container.resolve<GasServiceImpl>('GasService');
-  const gasFeeInfo = await GasService.getGasInfo(networkInfo);
+  const gasFeeInfo = await GasService.getGasFeeData(networkInfo);
   await EthersTransactionImpl.approveTransaction({
     networkInfo,
     privateKey,
@@ -62,7 +62,7 @@ it('approve eth transaction', async () => {
 it('estimate eth gas', async () => {
   const EthersTransactionImpl = container.resolve<EthersTransactionImpl>('EthersTransactionImpl');
   const GasService = container.resolve<GasServiceImpl>('GasService');
-  const gasFeeInfo = await GasService.getGasInfo(networkInfo);
+  const gasFeeInfo = await GasService.getGasFeeData(networkInfo);
   await EthersTransactionImpl.estimateGas({
     networkInfo,
     privateKey,
