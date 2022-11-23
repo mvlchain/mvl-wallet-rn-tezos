@@ -11,7 +11,7 @@ const useWalletSelector = () => {
   const { wallet } = useWalletListModal();
   const { openModal } = globalModalStore();
 
-  const { selectedWalletIndex, walletList, setWallets } = walletPersistStore();
+  const { selectedWalletIndex, selectedNetwork, walletList, setWallets } = walletPersistStore();
   const { pKey } = authStore();
   const { data } = useWalletsQuery();
 
@@ -21,13 +21,13 @@ const useWalletSelector = () => {
   };
 
   useEffect(() => {
-    if (walletList[0].index === -1 && data && pKey) {
+    if (walletList.ETHEREUM[0].index === -1 && walletList.BSC[0].index === -1 && data && pKey) {
       setWallets(data.map((wallet) => ({ index: wallet.index, name: wallet.name })));
     }
   }, [walletList, data, pKey]);
 
   return {
-    name: walletList[selectedWalletIndex]?.name,
+    name: walletList[selectedNetwork][selectedWalletIndex]?.name,
     onPressWalletList,
   };
 };

@@ -9,7 +9,7 @@ import * as Type from './walletPersistStore.type';
 const initState: Type.IWalletPersistState = {
   selectedWalletIndex: 0,
   selectedNetwork: NETWORK.ETHEREUM,
-  walletList: [{ index: -1, name: 'default Wallet' }],
+  walletList: { ETHEREUM: [{ index: -1, name: 'default Wallet' }], BSC: [{ index: -1, name: 'default Wallet' }] },
 };
 
 const walletPersistStore = create<Type.IWalletPersist>()(
@@ -19,9 +19,7 @@ const walletPersistStore = create<Type.IWalletPersist>()(
         ...initState,
         initWallet: () =>
           set(() => ({
-            selectedWalletIndex: 0,
-            selectedNetwork: NETWORK.ETHEREUM,
-            walletList: [{ index: -1, name: 'default Wallet' }],
+            ...initState,
           })),
         selectWallet: (index: number) => set(() => ({ selectedWalletIndex: index }), false, 'selectWallet'),
         selectNetwork: (network: Network) =>
@@ -32,23 +30,34 @@ const walletPersistStore = create<Type.IWalletPersist>()(
             false,
             'selectNetwork'
           ),
-        setWallets: (wallets: Type.IPersistWallet[]) => set(() => ({ walletList: wallets }), false, 'setWallet'),
-        editWalletName: (wallet: Type.IPersistWallet) =>
+        setWallets: (wallets: Type.IPersistWallet[]) => set(() => ({ walletList: { ETHEREUM: wallets, BSC: wallets } }), false, 'setWallet'),
+        editWalletName: (wallet: Type.IPersistWallet, network: Network) =>
           set(
             (state) => ({
-              walletList: state.walletList.map((origin) => {
-                if (origin.index === wallet.index) {
-                  origin.name = wallet.name;
-                }
-                return origin;
-              }),
+              walletList: {
+                ...state.walletList,
+                [network]: state.walletList[network].map((origin) => {
+                  if (origin.index === wallet.index) {
+                    origin.name = wallet.name;
+                  }
+                  return origin;
+                }),
+              },
             }),
             false,
             'editWalletName'
           ),
         createWallet: () =>
           set(
-            (state) => ({ walletList: [...state.walletList, { index: state.walletList.length, name: `Wallet ${state.walletList.length + 1}` }] }),
+            (state) => ({
+              walletList: {
+                ETHEREUM: [
+                  ...state.walletList.ETHEREUM,
+                  { index: state.walletList.ETHEREUM.length, name: `Wallet ${state.walletList.ETHEREUM.length + 1}` },
+                ],
+                BSC: [...state.walletList.BSC, { index: state.walletList.BSC.length, name: `Wallet ${state.walletList.BSC.length + 1}` }],
+              },
+            }),
             false,
             'createWallet'
           ),

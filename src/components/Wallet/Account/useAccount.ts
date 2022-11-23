@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -38,8 +38,7 @@ const useAccount = () => {
   );
 
   const onChangeWalletInput = (value: string) => {
-    console.log('input value:  ', value);
-    editWalletName({ index: selectedWalletIndex, name: value });
+    editWalletName({ index: selectedWalletIndex, name: value }, selectedNetwork);
     closeModal();
   };
 
@@ -51,7 +50,7 @@ const useAccount = () => {
         onPress: () =>
           openModal(MODAL_TYPES.TEXT_INPUT, {
             title: t('edit_wallet_name'),
-            defaultValue: walletList[selectedWalletIndex]?.name,
+            defaultValue: walletList[selectedNetwork][selectedWalletIndex]?.name,
             onConfirm: onChangeWalletInput,
           }),
       },
@@ -61,7 +60,7 @@ const useAccount = () => {
         onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
       },
     ],
-    [data, selectedWalletIndex, walletList]
+    [data, selectedWalletIndex, selectedNetwork, walletList]
   );
 
   const onPressSwitchNetwork = () => {
