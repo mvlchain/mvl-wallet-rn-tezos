@@ -118,3 +118,6 @@ export const getNetworkName = (isMainnet: boolean, network: Network) => {
 };
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
+//TODO: 네트워크 붙이기전 임시any타입
+export const EIP_1559_SUPPORT_NETWORK: any[] = [NETWORK.ETHEREUM];
+export const ESTIMATE_TIME_SUPPORT_NETWORK = [NETWORK.ETHEREUM];
