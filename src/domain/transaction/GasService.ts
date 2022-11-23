@@ -14,4 +14,11 @@ export class GasServiceImpl implements IGasService {
     const gasPrice = await provider.getGasPrice();
     return { gasLimit, gasPrice };
   };
+  getEIP1559GasFeeData = async (networkInfo: INetworkInfo) => {
+    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const block = await provider.getBlock('latest');
+    const gasLimit = block.gasLimit;
+    const gasPrice = await provider.getFeeData();
+    return { gasLimit, ...gasPrice };
+  };
 }
