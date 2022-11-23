@@ -5,14 +5,14 @@ export interface IWalletPersist extends IWalletPersistState {
   selectWallet: (index: number) => void;
   selectNetwork: (network: Network) => void;
   setWallets: (wallets: IPersistWallet[]) => void;
-  editWalletName: (wallet: IPersistWallet) => void;
+  editWalletName: (wallet: IPersistWallet, network: Network) => void;
   createWallet: () => void;
 }
 
 export interface IWalletPersistState {
   selectedWalletIndex: number;
   selectedNetwork: Network;
-  walletList: IPersistWallet[];
+  walletList: { ETHEREUM: IPersistWallet[]; BSC: IPersistWallet[] };
 }
 
 export interface IPersistWallet {

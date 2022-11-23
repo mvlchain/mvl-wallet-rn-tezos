@@ -7,7 +7,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { IWalletListMenuProps } from './WalletListMenu/WalletListMenu.type';
 
 const useWalletListModal = () => {
-  const { selectedWalletIndex, walletList, selectWallet } = walletPersistStore();
+  const { selectedWalletIndex, selectedNetwork, walletList, selectWallet } = walletPersistStore();
   const { data } = useWalletsQuery();
   const { pKey } = authStore();
   const [wallet, setWallet] = useState<IWalletListMenuProps[]>();
@@ -19,14 +19,14 @@ const useWalletListModal = () => {
 
       return {
         index,
-        name: walletList[index]?.name,
+        name: walletList[selectedNetwork][index]?.name,
         address,
         onPress: () => selectWallet(index),
         isSelected: selectedWalletIndex === index,
       } as unknown as IWalletListMenuProps;
     });
     setWallet(walletArr);
-  }, [data, walletList]);
+  }, [data, walletList, selectedNetwork, selectedWalletIndex]);
 
   useEffect(() => {
     if (!wallet) return;
