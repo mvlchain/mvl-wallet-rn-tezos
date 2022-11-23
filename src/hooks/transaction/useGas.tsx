@@ -24,7 +24,7 @@ const useGas = () => {
   //TODO: 나중에 입력받도록 수정 필요
   const networkInfo = { rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545', chainId: 97 };
   const setInitialGas = async () => {
-    const gasInfo = await gasService.getGasInfo(networkInfo);
+    const gasInfo = await gasService.getGasFeeData(networkInfo);
     setAvgBlockGasPrice(gasInfo.gasPrice);
     setMaxBlockGasLimit(gasInfo.gasLimit);
     setGasPrice(gasInfo.gasPrice);
