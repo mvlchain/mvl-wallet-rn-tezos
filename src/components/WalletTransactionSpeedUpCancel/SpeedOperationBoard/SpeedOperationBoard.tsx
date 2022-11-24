@@ -76,10 +76,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
           </S.Row>
           <S.MarginRow>
             <S.Label>{t('new_transaction_fee')}</S.Label>
-            <S.Value>
-              {totalGas}
-              {'BNB'}
-            </S.Value>
+            <S.Value>{`${totalGas} BNB`}</S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{'6.30 USD'}</S.BaseCurrency>
           <S.Warning>
