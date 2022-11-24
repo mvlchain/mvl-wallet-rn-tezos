@@ -1,14 +1,12 @@
 package com.wallet.settings
 
-import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.wallet.R
 
 internal annotation class RTNErrorCodes {
     companion object {
@@ -26,15 +24,19 @@ class RTNSettingsModule(
 
     override fun getName(): String = "RTNSettings"
 
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    fun getThemeType(): String {
-        return preferences.themeType
+    @ReactMethod
+    fun getThemeType(promise: Promise) {
+        try {
+            promise.resolve(preferences.themeType)
+        } catch (e: Throwable) {
+            promise.reject("getTheme err", e)
+        }
     }
 
     /**
      * @param themeType default, light, dark
      */
-    @ReactMethod(isBlockingSynchronousMethod = true)
+    @ReactMethod
     fun putThemeType(@ThemeType themeType: String) {
         Log.d("Theme", "Theme> putThemeType called with an argument: $themeType")
         preferences.themeType = themeType

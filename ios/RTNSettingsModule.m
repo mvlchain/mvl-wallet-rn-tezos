@@ -29,7 +29,9 @@
 
 RCT_EXPORT_MODULE(RTNSettings);
 
-RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString*, getThemeType) {
+RCT_EXPORT_METHOD(getThemeType:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
   NSString *themeType = [[[DiContainer shared] getSettingsStorage] getStringValueFor:StorageKey.themeType];
   if (themeType == nil) {
     [settings setStringValueFor:StorageKey.themeType value:kThemeTypeDefault];
@@ -38,10 +40,11 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString*, getThemeType) {
   }
   
   RCTLogInfo(@"Theme> RTNSettingsModule.getThemeType called to get themeType: %@", themeType);
-  return themeType;
+  resolve(themeType);
+//  reject(@"event_failure", @"no event id returned", nil);
 }
 
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(putThemeType:(NSString *)themeType) {
+RCT_EXPORT_METHOD(putThemeType:(NSString *)themeType) {
   NSString *themeTypeValue = kThemeTypeDefault;
   if ([themeType isEqualToString:kThemeTypeDefault] ||
       [themeType isEqualToString:kThemeTypeLight] ||
@@ -62,7 +65,6 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(putThemeType:(NSString *)themeType) {
   [IOSTheme editThemeType:style];
   
   RCTLogInfo(@"Theme> RTNSettingsModule.putThemeType args: %@, themeTypeValue: %@", themeType, themeTypeValue);
-  return self;
 }
 
 @end
