@@ -52,11 +52,20 @@ export interface ISendTransactionArguments {
   value: BigNumberish;
   data?: BytesLike;
 }
-
 export interface ITezosSendTransactionArguments extends Omit<ISendTransactionArguments, 'networkInfo'> {
   networkInfo: ITezosNetworkInfo;
 }
 
+export interface IEthersEstimateGasArguments {
+  networkInfo: INetworkInfo;
+  privateKey: string;
+  to: string;
+  value: BigNumberish;
+}
+
+export interface ITezosEstimateGasArguments extends Omit<IEthersEstimateGasArguments, 'networkInfo'> {
+  networkInfo: ITezosNetworkInfo;
+}
 export interface IGetHistoryArguments {
   network: string;
   ticker: string;
@@ -99,6 +108,6 @@ export interface ITransactionService {
   approveTransaction(args: ISendTransactionArguments): Promise<string>;
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
-  estimateGas(args: ISendTransactionArguments | ITezosEstimateArguments): Promise<BigNumberish | Estimate>;
+  estimateGas(args: IEthersEstimateGasArguments | ITezosEstimateGasArguments): Promise<BigNumber | Estimate>;
   getHistory(args: IGetHistoryArguments): Promise<IGetTransactionHistoryResponse[] | undefined>;
 }

@@ -64,7 +64,7 @@ export class EthersTransactionImpl implements ITransactionService {
     return 'good';
   }
   async estimateGas(args: ISendTransactionArguments) {
-    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
+    const { networkInfo, privateKey, from, to, value, data } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -73,8 +73,6 @@ export class EthersTransactionImpl implements ITransactionService {
       to,
       data,
       value,
-      gasPrice: gasFeeInfo.gasPrice,
-      gasLimit: gasFeeInfo.gasLimit,
       chainId: networkInfo.chainId,
     });
 
