@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
+import { ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
+
+import { useEarEventList } from '@@hooks/event/useEarnEventList';
 
 import { IEarnEventContentProps, EarnEventContent } from './EarnEventContent';
 import * as S from './EarnEventListScreen.style';
@@ -27,6 +30,15 @@ const DATA: IEarnEventContentProps[] = [
  */
 export const EarnEventListScreen = () => {
   const { t } = useTranslation();
+  //const { isLoading, error, data, refetch } = useEarEventList();
+
+  const renderEarnEventContents = useCallback(
+    ({ item }: ListRenderItemInfo<IEarnEventContentProps>) => {
+      return <EarnEventContent timeLabel={item.timeLabel} avatarUrl={item.avatarUrl} title={item.title} subtitle={item.subtitle} />;
+    },
+    //[data]
+    []
+  );
 
   return (
     <S.Container>
@@ -38,13 +50,7 @@ export const EarnEventListScreen = () => {
       </S.TopTitleBar>
 
       <S.BodyContainer>
-        <S.EventList
-          data={DATA}
-          renderItem={({ item }) => {
-            return <EarnEventContent timeLabel={item.timeLabel} avatarUrl={item.avatarUrl} title={item.title} subtitle={item.subtitle} />;
-          }}
-          estimatedItemSize={2}
-        />
+        <S.EventList data={DATA} renderItem={renderEarnEventContents} estimatedItemSize={2} />
       </S.BodyContainer>
     </S.Container>
   );

@@ -8,6 +8,7 @@ import { AuthServiceImpl } from '@@domain/auth/AuthService';
 import { KeyClientImpl } from '@@domain/auth/clients/KeyClient';
 import { KeyClientUtilImpl } from '@@domain/auth/clients/KeyClientUtil';
 import { DeviceShareRepositoryImpl } from '@@domain/auth/repositories/DeviceShareRepository';
+import { EarnEventRepositoryImpl } from '@@domain/auth/repositories/EarnEventRepository';
 import { RTNSettingsRepositoryImpl } from '@@domain/auth/repositories/RTNSettingsRepository';
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
@@ -69,6 +70,10 @@ container.register('RootKeyRepository', {
 
 container.register('RTNSettingsRepository', {
   useFactory: instancePerContainerCachingFactory<RTNSettingsRepositoryImpl>((container) => container.resolve(RTNSettingsRepositoryImpl)),
+});
+
+container.register('EarnEventRepository', {
+  useFactory: instancePerContainerCachingFactory<EarnEventRepositoryImpl>((container) => container.resolve(EarnEventRepositoryImpl)),
 });
 
 container.register('TokenRepository', {
