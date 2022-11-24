@@ -21,7 +21,7 @@ export interface IGetTotalGasFeeArguments {
 export interface IGetTotalGasFeeArgumentsEIP1559 {
   gasLevel?: TGasLevel;
   maxFeePerGas: BigNumber;
-  gasLimit: BigNumber;
+  estimatedGas: BigNumber;
   maxPriorityFeePerGas: BigNumber;
 }
 export interface IGasService {
