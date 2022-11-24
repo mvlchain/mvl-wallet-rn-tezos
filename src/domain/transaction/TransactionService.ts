@@ -11,7 +11,6 @@ import { request, authRequest } from '@@utils/request';
 
 import {
   ITransactionService,
-  ITransaction,
   TTransactionStatus,
   TTransactionType,
   IGetHistoryArguments,
@@ -25,11 +24,10 @@ export class EthersTransactionImpl implements ITransactionService {
   constructor() {}
 
   async sendTransaction(args: ISendTransactionArguments): Promise<string> {
-    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
+    const { networkInfo, privateKey, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
     const res = await wallet.sendTransaction({
-      from,
       to,
       data,
       value,
@@ -41,12 +39,11 @@ export class EthersTransactionImpl implements ITransactionService {
     return res.hash;
   }
   async approveTransaction(args: ISendTransactionArguments) {
-    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
+    const { networkInfo, privateKey, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const res = await wallet.signTransaction({
-      from,
       to,
       data,
       value,
@@ -64,16 +61,14 @@ export class EthersTransactionImpl implements ITransactionService {
     return 'good';
   }
   async estimateGas(args: ISendTransactionArguments) {
-    const { networkInfo, privateKey, from, to, value, data } = args;
+    const { networkInfo, privateKey, to, value, data } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const res = await wallet.estimateGas({
-      from,
       to,
       data,
       value,
-      chainId: networkInfo.chainId,
     });
 
     return res;
