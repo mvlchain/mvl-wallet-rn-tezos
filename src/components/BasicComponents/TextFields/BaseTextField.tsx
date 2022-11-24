@@ -17,7 +17,7 @@ export const KeyboardTypeByInputType = {
 export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const { placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint } = props;
   const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.label].color;
+  const color = theme[appTheme.value].color;
 
   const [lcColor, setLcColor] = useState<string | null>(null);
 
