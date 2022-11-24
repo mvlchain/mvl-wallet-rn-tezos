@@ -8,13 +8,14 @@ import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant'
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/transaction/GasService.type';
 import { useDi } from '@@hooks/common/useDi';
-import { transactionStore } from '@@store/transaction/transactionStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 
 const useGas = () => {
   const gasService = useDi('GasService');
 
   // advanced mean user direct input
   const [advanced, setAdvanced] = useState(false);
+
   const [avgBlockGasPrice, setAvgBlockGasPrice] = useState<BigNumber | null>(null);
   const [maxBlockGasLimit, setMaxBlockGasLimit] = useState<BigNumber | null>(null);
   const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
@@ -28,7 +29,7 @@ const useGas = () => {
   const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState<BigNumber | null>(GAS_LEVEL_SETTING[gasLevel].maxPriorityFeePerGas);
 
   //need estimated gas for EIP1559 total gas
-  const transaction = transactionStore();
+  const { to, value, data } = transactionRequestStore();
   const transactionService = useDi('EtherTransactionService');
 
   useEffect(() => {
@@ -56,10 +57,10 @@ const useGas = () => {
     if (EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name)) {
       if (advanced) {
         if (!maxFeePerGas || !maxPriorityFeePerGas) return '-';
+        if (!to || !value) return '-';
         const estimatedGas = await transactionService.estimateGas({
-          to: transaction.to,
-          value: transaction.value,
-          data: transaction.data,
+          to,
+          value,
           networkInfo,
           privateKey,
         });
@@ -67,14 +68,14 @@ const useGas = () => {
         return gasService.getTotalGasFee_EIP1559({
           maxFeePerGas,
           maxPriorityFeePerGas,
-          estimatedGas,
+          estimatedGas: estimatedGas as BigNumber,
         });
       } else {
         if (!blockMaxFeePerGas || !blockMaxPriorityFeePerGas) return '-';
+        if (!to || !value) return '-';
         const estimatedGas = await transactionService.estimateGas({
-          to: transaction.to,
-          value: transaction.value,
-          data: transaction.data,
+          to,
+          value,
           networkInfo,
           privateKey,
         });
@@ -82,7 +83,7 @@ const useGas = () => {
         return gasService.getTotalGasFee_EIP1559({
           maxFeePerGas: blockMaxFeePerGas,
           maxPriorityFeePerGas: blockMaxPriorityFeePerGas,
-          estimatedGas,
+          estimatedGas: estimatedGas as BigNumber,
           gasLevel,
         });
       }
@@ -113,6 +114,9 @@ const useGas = () => {
     maxPriorityFeePerGas,
     blockMaxFeePerGas,
     blockMaxPriorityFeePerGas,
+    to,
+    value,
+    data,
   ]);
 
   return {

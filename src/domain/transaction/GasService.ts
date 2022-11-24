@@ -38,7 +38,7 @@ export class GasServiceImpl implements IGasService {
   };
   //maxFeePerGas 자신이 최대로 허용할 수 있는 가스의 최대 가격, 사용한만큼 쓰고 돌려준다.
   //maxPriorityFeePerGas는 채굴자에게 줄 수 있는 팁의 최대값
-  //Total = ( maxFeePerGas + maxPriorityFeePerGas) * GasLimit
+  //Total = ( maxFeePerGas + maxPriorityFeePerGas) * usedGas
   getTotalGasFee_EIP1559 = ({ gasLevel, maxFeePerGas, estimatedGas, maxPriorityFeePerGas }: IGetTotalGasFeeArgumentsEIP1559) => {
     const gasWeight = gasLevel ? GAS_LEVEL_SETTING[gasLevel].eip1559Weight : '1';
     const maxFeePerGasInDecimal = new Decimal(maxFeePerGas.toString());

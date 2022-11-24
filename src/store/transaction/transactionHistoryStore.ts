@@ -25,7 +25,9 @@ const transactionHistoryStore = create<ITransactionHistoryStore>()(
               state.tokens[token].beforeindex = beforeindex;
             }
             return state;
-          })
+          }),
+          false,
+          'set transaction history'
         );
       },
     }),
