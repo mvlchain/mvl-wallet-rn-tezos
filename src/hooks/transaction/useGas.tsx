@@ -4,14 +4,16 @@ import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 
-import { EIP_1559_SUPPORT_NETWORK } from '@@constants/network.constant';
+import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/transaction/GasService.type';
 import { useDi } from '@@hooks/common/useDi';
+import { transactionStore } from '@@store/transaction/transactionStore';
 
 const useGas = () => {
   const gasService = useDi('GasService');
-  // advanced: user input
+
+  // advanced mean user direct input
   const [advanced, setAdvanced] = useState(false);
   const [avgBlockGasPrice, setAvgBlockGasPrice] = useState<BigNumber | null>(null);
   const [maxBlockGasLimit, setMaxBlockGasLimit] = useState<BigNumber | null>(null);
@@ -25,18 +27,22 @@ const useGas = () => {
   const [blockMaxPriorityFeePerGas, setBlockMaxPriorityFeePerGas] = useState<BigNumber | null>(null);
   const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState<BigNumber | null>(GAS_LEVEL_SETTING[gasLevel].maxPriorityFeePerGas);
 
+  //need estimated gas for EIP1559 total gas
+  const transaction = transactionStore();
+  const transactionService = useDi('EtherTransactionService');
+
   useEffect(() => {
     setInitialGas();
   }, []);
 
-  //TODO: 나중에 입력받도록 수정 필요
-  const networkInfo = { rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545', chainId: 97, name: 'Ethereum_testnet' };
+  const privateKey = '0x8082bea335283b2ac437fb6a93530dcf8aea48db478f7b0df871568d17b0094e';
   const setInitialGas = async () => {
     if (EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name)) {
       const gasFeeData = await gasService.getEIP1559GasFeeData(networkInfo);
       setMaxFeePerGas(gasFeeData.maxFeePerGas);
       setBlockMaxFeePerGas(gasFeeData.maxFeePerGas);
       setBlockMaxPriorityFeePerGas(gasFeeData.maxPriorityFeePerGas);
+      setMaxPriorityFeePerGas(gasFeeData.maxPriorityFeePerGas);
       setMaxBlockGasLimit(gasFeeData.gasLimit);
     } else {
       const gasFeeData = await gasService.getGasFeeData(networkInfo);
@@ -46,22 +52,38 @@ const useGas = () => {
     }
   };
 
-  const totalGas = useMemo(() => {
+  const totalGas = useMemo(async () => {
     if (EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name)) {
       if (advanced) {
         if (!maxFeePerGas || !maxPriorityFeePerGas) return '-';
+        const estimatedGas = await transactionService.estimateGas({
+          to: transaction.to,
+          value: transaction.value,
+          data: transaction.data,
+          networkInfo,
+          privateKey,
+        });
+        if (!estimatedGas) return '-';
         return gasService.getTotalGasFee_EIP1559({
           maxFeePerGas,
           maxPriorityFeePerGas,
-          gasLimit,
-          gasLevel,
+          estimatedGas,
         });
       } else {
         if (!blockMaxFeePerGas || !blockMaxPriorityFeePerGas) return '-';
+        const estimatedGas = await transactionService.estimateGas({
+          to: transaction.to,
+          value: transaction.value,
+          data: transaction.data,
+          networkInfo,
+          privateKey,
+        });
+        if (!estimatedGas) return '-';
         return gasService.getTotalGasFee_EIP1559({
           maxFeePerGas: blockMaxFeePerGas,
           maxPriorityFeePerGas: blockMaxPriorityFeePerGas,
-          gasLimit,
+          estimatedGas,
+          gasLevel,
         });
       }
     } else {
