@@ -75,6 +75,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
             <S.Value>{'~ 2 min 0 sec'}</S.Value>
           </S.Row>
           <S.MarginRow>
+            {/* TODO: 컴포넌트 타입으로 받게해서 new 붙일지 말지 */}
             <S.Label>{t('new_transaction_fee')}</S.Label>
             <S.Value>{`${totalGas} BNB`}</S.Value>
           </S.MarginRow>

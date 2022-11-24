@@ -1,6 +1,8 @@
 import { Estimate, TransferParams } from '@taquito/taquito';
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
+import { IEIP1559GasFeeInfo, IGasFeeInfo } from './GasService.type';
+
 //TODO: generatedscheme에 있는지 확인하기
 export enum TTransactionStatus {
   PENDING = 'PENDING',
@@ -32,10 +34,6 @@ export interface INetworkInfo {
   chainId: number;
 }
 export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
-export interface IGasFeeInfo {
-  gasPrice: BigNumber;
-  gasLimit: BigNumber;
-}
 
 export interface ITezosEstimateArguments extends TransferParams {
   networkInfo: ITezosNetworkInfo;
@@ -46,8 +44,7 @@ export interface ITezosEstimateArguments extends TransferParams {
 export interface ISendTransactionArguments {
   networkInfo: INetworkInfo;
   privateKey: string;
-  gasFeeInfo: IGasFeeInfo;
-  from: string;
+  gasFeeInfo: IGasFeeInfo | IEIP1559GasFeeInfo;
   to: string;
   value: BigNumberish;
   data?: BytesLike;

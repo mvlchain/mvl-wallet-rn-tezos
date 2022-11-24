@@ -2,7 +2,11 @@ import { BigNumber } from 'ethers';
 
 import { GAS_LEVEL } from '@@constants/transaction.constant';
 
-import { IGasFeeInfo, INetworkInfo } from './TransactionService.type';
+import { INetworkInfo } from './TransactionService.type';
+export interface IGasFeeInfo {
+  gasPrice: BigNumber;
+  gasLimit: BigNumber;
+}
 export interface IEIP1559GasFeeInfo {
   maxFeePerGas: BigNumber | null;
   maxPriorityFeePerGas: BigNumber | null;
