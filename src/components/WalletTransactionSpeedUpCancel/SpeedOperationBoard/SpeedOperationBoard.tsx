@@ -1,7 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 
-import Decimal from 'decimal.js';
-import { formatEther, parseUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
@@ -10,17 +8,33 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
+import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant';
 import useGas from '@@hooks/transaction/useGas';
 import { width } from '@@utils/ui';
 
 import SpeedInputs from './SpeedInputs';
+import SpeedInputsEIP1559 from './SpeedInputs/SpeedInputsEIP1559';
 import * as S from './SpeedOperationBoard.style';
 import { ISpeedOperationBoardProps } from './SpeedOperationBoard.type';
 import SpeedRadioButtons from './SpeedRadioButtons';
 
 function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
   const { t } = useTranslation();
-  const { avgBlockGasPrice, gasLimit, gasPrice, gasLevel, totalGas, setGasLevel, advanced, setAdvanced, setGasPrice, setGasLimit } = useGas();
+  const {
+    gasLimit,
+    gasPrice,
+    gasLevel,
+    totalGas,
+    maxFeePerGas,
+    maxPriorityFeePerGas,
+    advanced,
+    setGasLevel,
+    setAdvanced,
+    setGasPrice,
+    setGasLimit,
+    setMaxFeePerGas,
+    setMaxPriorityFeePerGas,
+  } = useGas();
 
   return (
     <S.Container>
@@ -39,11 +53,20 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
               />
             </S.ToggleWrapper>
           </S.Row>
-          {advanced ? (
-            <SpeedInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
-          ) : (
-            <SpeedRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
+          {advanced && EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name) && (
+            <SpeedInputsEIP1559
+              maxFeePerGas={maxFeePerGas}
+              maxPriorityFeePerGas={maxPriorityFeePerGas}
+              gasLimit={gasLimit}
+              setMaxFeePerGas={setMaxFeePerGas}
+              setMaxPriorityFeePerGas={setMaxPriorityFeePerGas}
+              setGasLimit={setGasLimit}
+            />
           )}
+          {advanced && !EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name) && (
+            <SpeedInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
+          )}
+          {!advanced && <SpeedRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />}
         </S.InnerContainer>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>
