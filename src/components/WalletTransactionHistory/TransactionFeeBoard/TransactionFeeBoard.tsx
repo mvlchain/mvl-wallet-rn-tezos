@@ -3,7 +3,7 @@ import React from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import useHeader from '@@hooks/common/useHeader';
+import useHeader from '@@hooks/useHeader';
 import {
   TTransactionHistoryRootStackProps,
   TTransactionHistoryRouteProps,

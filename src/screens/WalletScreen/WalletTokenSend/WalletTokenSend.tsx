@@ -10,10 +10,10 @@ import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import SendInputBoard from '@@components/WalletTokenSend/SendInputBoard';
 import SpeedOperationBoard from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard';
-import useHeader from '@@hooks/common/useHeader';
-import useTokenSend from '@@hooks/useTokenSend';
+import useHeader from '@@hooks/useHeader';
 
 import { TTokenSendRootStackProps, TTokenSendRouteProps } from './WalletTokenSend.type';
+import useTokenSend from './useTokenSend';
 
 function WalletTokenSend() {
   const { params } = useRoute<TTokenSendRouteProps>();

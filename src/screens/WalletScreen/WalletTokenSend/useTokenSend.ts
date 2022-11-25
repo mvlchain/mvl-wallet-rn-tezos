@@ -9,11 +9,13 @@ import { GestureResponderEvent } from 'react-native-modal';
 import { IEIP1559GasFeeInfo, IGasFeeInfo } from '@@domain/transaction/GasService.type';
 import { ISendTransactionGasFee } from '@@domain/transaction/TransactionService.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useTokenSend = () => {
   const ethersTransactionService = useDi('EtherTransactionService');
   const tezosTransactionService = useDi('TezosTransactionService');
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
+  const { selectedNetwork } = walletPersistStore();
 
   const [amount, setAmount] = useState<BigNumber | null>(null);
   const [address, setAddress] = useState<string | null>('');
