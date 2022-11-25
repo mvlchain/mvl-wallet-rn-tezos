@@ -13,19 +13,20 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 const useGas = () => {
   const gasService = useDi('GasService');
 
-  // advanced mean user direct input
+  // advanced mode means the value will from user direct input
   const [advanced, setAdvanced] = useState(false);
+  const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
 
+  //block means the value has from blockchain not from user input
   const [avgBlockGasPrice, setAvgBlockGasPrice] = useState<BigNumber | null>(null);
   const [maxBlockGasLimit, setMaxBlockGasLimit] = useState<BigNumber | null>(null);
-  const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
   const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber>(BigNumber.from(21000));
 
-  //additional info for EIP1559
-  const [maxFeePerGas, setMaxFeePerGas] = useState<BigNumber | null>(null);
+  //for EIP1559 (ETHEREUM network)
   const [blockMaxFeePerGas, setBlockMaxFeePerGas] = useState<BigNumber | null>(null);
   const [blockMaxPriorityFeePerGas, setBlockMaxPriorityFeePerGas] = useState<BigNumber | null>(null);
+  const [maxFeePerGas, setMaxFeePerGas] = useState<BigNumber | null>(null);
   const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState<BigNumber | null>(GAS_LEVEL_SETTING[gasLevel].maxPriorityFeePerGas);
 
   //need estimated gas for EIP1559 total gas
@@ -80,6 +81,7 @@ const useGas = () => {
           privateKey,
         });
         if (!estimatedGas) return '-';
+        //TODO: maxPriorityFeePerGas 가져온 값을 그냥 사용할지 아니면 셋팅대로 갈지 확인후 수정필요
         return gasService.getTotalGasFee_EIP1559({
           maxFeePerGas: blockMaxFeePerGas,
           maxPriorityFeePerGas: blockMaxPriorityFeePerGas,

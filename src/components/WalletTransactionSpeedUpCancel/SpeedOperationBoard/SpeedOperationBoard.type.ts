@@ -1,3 +1,5 @@
+import { IEIP1559GasFeeInfo, IGasFeeInfo } from '@@domain/transaction/GasService.type';
+
 export interface ISpeedOperationBoardProps {
-  onConfirm: (value: any) => void;
+  onConfirm: (gasFeeInfo: IGasFeeInfo | IEIP1559GasFeeInfo) => void;
 }
