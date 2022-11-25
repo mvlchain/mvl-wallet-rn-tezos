@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
-import QRScan from '@@components/QR/QRScan';
-import useHeader from '@@hooks/common/useHeader';
+import QRScan from '@@components/BasicComponents/QR/QRScan';
+import useHeader from '@@hooks/useHeader';
 
 function WalletScanQR() {
   const { t } = useTranslation();

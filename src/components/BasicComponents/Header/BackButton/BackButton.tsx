@@ -3,8 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { BackIconLight, BackIconDark } from '@@assets/image';
-import { IBackButtonProps } from '@@hooks/common/useHeader/useHeader.type';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { IBackButtonProps } from '@@hooks/useHeader/useHeader.type';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './BackButton.style';
 

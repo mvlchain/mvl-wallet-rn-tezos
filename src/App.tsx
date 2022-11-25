@@ -14,7 +14,7 @@ import '@@assets/locale/i18n';
 import useApp from 'useApp';
 
 import { THEME } from '@@constants/setting.constant';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import RootStack from '@@navigation/RootStack';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import { theme } from '@@style/theme';

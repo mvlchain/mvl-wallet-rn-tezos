@@ -2,8 +2,8 @@ import React from 'react';
 
 import { ArrangeIcon } from '@@assets/image';
 import * as TokenIcon from '@@assets/image/token';
-import Toggle from '@@components/Form/Toggle';
-import { useToggle } from '@@hooks/common/useToggle';
+import Toggle from '@@components/BasicComponents/Form/Toggle';
+import { useToggle } from '@@hooks/useToggle';
 
 import * as S from './EditTokenListItem.style';
 import { IEditTokenListItemProps } from './EditTokenListItem.type';

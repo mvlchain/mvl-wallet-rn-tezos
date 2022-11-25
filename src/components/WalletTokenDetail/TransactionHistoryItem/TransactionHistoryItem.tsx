@@ -8,7 +8,7 @@ import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import { TCancelRootStackProps } from '@@screens/WalletScreen/WalletTransactionCancel/WalletTransactionCancel.type';
 import { TTransactionHistoryRootStackProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';

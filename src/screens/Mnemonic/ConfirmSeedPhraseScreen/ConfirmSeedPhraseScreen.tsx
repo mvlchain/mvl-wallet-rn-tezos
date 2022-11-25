@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import SelectMnemonic from '@@components/Mnemonic/SelectMnemonic';
-import TypedMnemonic from '@@components/Mnemonic/TypedMnemonic/TypedMnemonic';
+import SelectMnemonic from '@@components/BasicComponents/Mnemonic/SelectMnemonic';
+import TypedMnemonic from '@@components/BasicComponents/Mnemonic/TypedMnemonic/TypedMnemonic';
 import { height } from '@@utils/ui';
 
 import * as S from '../Mnemonic.style';

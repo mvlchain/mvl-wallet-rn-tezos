@@ -9,7 +9,7 @@ import { runOnJS } from 'react-native-reanimated';
 import { useFrameProcessor } from 'react-native-vision-camera';
 import { BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
-import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
 import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';

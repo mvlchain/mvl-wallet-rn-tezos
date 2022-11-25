@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { IBottomSelectMenuProps } from '@@components/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
+import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
 
 import { TTransactionHistroryFilter } from './useTransactionHistoryFilter.type';

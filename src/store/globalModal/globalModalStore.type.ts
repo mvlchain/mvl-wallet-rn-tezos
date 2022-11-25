@@ -1,4 +1,4 @@
-import { MODAL_COMPONENTS, MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import { MODAL_COMPONENTS, MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 
 export type MODAL_TYPE = keyof typeof MODAL_TYPES;
 export type MODAL_PROPS<K extends MODAL_TYPE> = Parameters<typeof MODAL_COMPONENTS[K]>[0];

@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { TMnemonic } from '@@types/MnemonicType';
+import { TMnemonic } from '@@components/BasicComponents/Mnemonic/Mnemonic.type';
 
 import { IAuth, IAuthState } from './authStore.type';
 

@@ -7,7 +7,7 @@ import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import TransactionHistoryList from '@@components/WalletTokenDetail/TransactionHistoryList';
-import useHeader from '@@hooks/common/useHeader';
+import useHeader from '@@hooks/useHeader';
 
 import { TTokenDetailRouteProps, TTokenDetailRootStackProps } from './WalletTokenDetail.type';
 

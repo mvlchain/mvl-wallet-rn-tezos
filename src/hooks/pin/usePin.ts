@@ -5,7 +5,7 @@ import TouchID from 'react-native-touch-id';
 
 import { AUTH_STAGE } from '@@constants/authStage.constant';
 import { PIN_MODE, PIN_STEP, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import authPersistStore from '@@store/auth/authPersistStore';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
