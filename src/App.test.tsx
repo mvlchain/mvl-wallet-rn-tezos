@@ -17,8 +17,8 @@ import { TTheme } from '@@store/setting/settingPersistStore.type';
 class MockRTNSettingsRepository implements RTNSettingsRepository {
   constructor() {}
 
-  getThemeType(): TTheme {
-    return 'light';
+  getThemeType(): Promise<TTheme> {
+    return Promise.resolve('light');
   }
   putThemeType(themeType: TTheme): void {}
 }

@@ -10,8 +10,8 @@
 
 @interface RTNSettingsModule : NSObject <RCTBridgeModule>
 - (id)init;
-- (NSString *)getThemeType;
-- (id)putThemeType:(NSString *)themeType;
+- (void)getThemeType:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
+- (void)putThemeType:(NSString *)themeType;
 @end
 
 #endif /* RTNSettingsModule_h */

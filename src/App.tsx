@@ -45,28 +45,30 @@ function App(props: { foxCode?: string }) {
    */
   const settingsRepository = useDi('RTNSettingsRepository');
   useEffect(() => {
-    const themeType = settingsRepository.getThemeType();
-    console.log(`Theme> fetching native theme settings: ${themeType}`);
+    (async () => {
+      const themeType = await settingsRepository.getThemeType();
+      console.log(`Theme> fetching native theme settings: ${themeType}`);
 
-    if (themeType === THEME.DEFAULT) {
-      const theme = Appearance.getColorScheme() ?? 'light';
-      setAppTheme({
-        displayName: THEME.DEFAULT,
-        value: theme,
-      });
-    } else if (themeType === THEME.LIGHT) {
-      setAppTheme({
-        displayName: THEME.LIGHT,
-        value: THEME.LIGHT,
-      });
-    } else if (themeType === THEME.DARK) {
-      setAppTheme({
-        displayName: THEME.DARK,
-        value: THEME.DARK,
-      });
-    }
+      if (themeType === THEME.DEFAULT) {
+        const theme = Appearance.getColorScheme() ?? 'light';
+        setAppTheme({
+          displayName: THEME.DEFAULT,
+          value: theme,
+        });
+      } else if (themeType === THEME.LIGHT) {
+        setAppTheme({
+          displayName: THEME.LIGHT,
+          value: THEME.LIGHT,
+        });
+      } else if (themeType === THEME.DARK) {
+        setAppTheme({
+          displayName: THEME.DARK,
+          value: THEME.DARK,
+        });
+      }
 
-    SplashScreen.hide();
+      SplashScreen.hide();
+    })();
   }, []);
 
   return (
