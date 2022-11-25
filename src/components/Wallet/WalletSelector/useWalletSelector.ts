@@ -1,5 +1,5 @@
-import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
-import useWalletListModal from '@@components/Modals/WalletListModal/useWalletListModal';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import useWalletListModal from '@@components/BasicComponents/Modals/WalletListModal/useWalletListModal';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';

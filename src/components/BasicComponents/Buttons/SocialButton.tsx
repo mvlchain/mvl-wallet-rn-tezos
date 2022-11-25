@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { SocialAppleDark, SocialAppleLight, SocialGoogle } from '@@assets/image';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './Button.style';
 import * as Type from './Button.type';

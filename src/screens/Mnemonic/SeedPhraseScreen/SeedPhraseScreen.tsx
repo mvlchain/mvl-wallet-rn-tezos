@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import HideContentSection from '@@components/HideContentSection';
-import Mnemonic from '@@components/Mnemonic/Mnemonic';
+import HideContentSection from '@@components/BasicComponents/HideContentSection';
+import Mnemonic from '@@components/BasicComponents/Mnemonic/Mnemonic';
 import { height } from '@@utils/ui';
 
 import * as S from '../Mnemonic.style';

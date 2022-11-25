@@ -1,6 +1,6 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
-import { valueOf } from '@@types/etc';
+import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
   AUTH: undefined;

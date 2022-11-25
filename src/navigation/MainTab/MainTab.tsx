@@ -20,7 +20,7 @@ import {
   TradeNormalDark,
   TradeSelectedDark,
 } from '@@assets/image';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
 import SettingScreen from '@@screens/SettingScreen';
 import Trade from '@@screens/Trade';

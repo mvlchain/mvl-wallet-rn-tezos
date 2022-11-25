@@ -7,7 +7,7 @@ import { WarningIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
-import Toggle from '@@components/Form/Toggle';
+import Toggle from '@@components/BasicComponents/Form/Toggle';
 import { width } from '@@utils/ui';
 
 import SpeedInputs from './SpeedInputs';

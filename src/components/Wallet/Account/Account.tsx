@@ -6,11 +6,11 @@ import { Pressable } from 'react-native';
 import { MoreIconLight, MoreIconDark, WhiteQrIcon, WhiteScanIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
-import Chip from '@@components/Chip';
-import Jdenticon from '@@components/Jdenticon';
+import Chip from '@@components/BasicComponents/Chip';
+import Jdenticon from '@@components/BasicComponents/Jdenticon';
 import Address from '@@components/Wallet/Address';
 import WalletSelector from '@@components/Wallet/WalletSelector';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './Account.style';
 import useAccount from './useAccount';

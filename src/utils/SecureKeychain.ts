@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { t } from 'i18next';
 import { Platform } from 'react-native';
 import {
   ACCESS_CONTROL,
@@ -12,20 +13,20 @@ import {
 
 import { BIOMETRY_CHOICE, BIOMETRY_CHOICE_DISABLED, PASSCODE_CHOICE, PASSCODE_DISABLED, TRUE } from '@@constants/storage';
 
-import { strings } from '../locales/i18n';
-
 import Encryptor from './Encryptor';
 
 const privates = new WeakMap();
 const encryptor = new Encryptor();
+
+// TODO: 다국어가 메타마스크에 있는 값임. 확인 필요.
 const defaultOptions = {
   service: 'io.mvlchain.wallet',
-  authenticationPromptTitle: strings('authentication.auth_prompt_title'),
-  authenticationPrompt: { title: strings('authentication.auth_prompt_desc') },
-  authenticationPromptDesc: strings('authentication.auth_prompt_desc'),
-  fingerprintPromptTitle: strings('authentication.fingerprint_prompt_title'),
-  fingerprintPromptDesc: strings('authentication.fingerprint_prompt_desc'),
-  fingerprintPromptCancel: strings('authentication.fingerprint_prompt_cancel'),
+  authenticationPromptTitle: t('authentication.auth_prompt_title'),
+  authenticationPrompt: { title: t('authentication.auth_prompt_desc') },
+  authenticationPromptDesc: t('authentication.auth_prompt_desc'),
+  fingerprintPromptTitle: t('authentication.fingerprint_prompt_title'),
+  fingerprintPromptDesc: t('authentication.fingerprint_prompt_desc'),
+  fingerprintPromptCancel: t('authentication.fingerprint_prompt_cancel'),
 };
 
 class SecureKeychain {

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { valueOf } from '@@types/etc';
+import { valueOf } from '@@utils/types';
 
 export type TAuthStackParamList = {
   SIGN_IN: undefined;

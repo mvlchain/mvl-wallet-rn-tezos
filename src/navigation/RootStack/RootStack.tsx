@@ -5,12 +5,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
-import { ToastPopup } from '@@components/BasicComponents/Modals/ToastPopup';
-import PinModal from '@@components/Modals/Auth/PinModal';
-import PincodeGuideModal from '@@components/Modals/Auth/PincodeGuideModal';
-import TermsOfServicesModal from '@@components/Modals/Auth/TermsOfServicesModal';
-import { GlobalModal } from '@@components/Modals/GlobalModal';
-import useHeader from '@@hooks/common/useHeader';
+import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
+import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
+import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
+import { ToastPopup } from '@@components/BasicComponents/Modals/BaseModal/ToastPopup';
+import { GlobalModal } from '@@components/BasicComponents/Modals/GlobalModal';
+import useHeader from '@@hooks/useHeader';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';

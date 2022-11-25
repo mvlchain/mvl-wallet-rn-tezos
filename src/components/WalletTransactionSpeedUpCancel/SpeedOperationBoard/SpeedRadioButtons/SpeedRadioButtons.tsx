@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
-import CustomRadio from '@@components/Form/CustomRadio';
+import CustomRadio from '@@components/BasicComponents/Form/CustomRadio';
 
 import * as S from './SpeedRadioButtons.style';
 
