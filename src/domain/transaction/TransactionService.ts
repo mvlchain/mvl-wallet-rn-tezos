@@ -2,7 +2,7 @@ import { InMemorySigner } from '@taquito/signer';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import Decimal from 'decimal.js';
 import '@ethersproject/shims';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
@@ -24,32 +24,33 @@ export class EthersTransactionImpl implements ITransactionService {
   constructor() {}
 
   async sendTransaction(args: ISendTransactionArguments): Promise<string> {
-    const { networkInfo, privateKey, to, value, data, gasFeeInfo } = args;
+    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
+
     const res = await wallet.sendTransaction({
+      from,
       to,
       data,
       value,
-      gasPrice: gasFeeInfo.gasPrice,
-      gasLimit: gasFeeInfo.gasPrice,
       chainId: networkInfo.chainId,
+      ...gasFeeInfo,
     });
 
     return res.hash;
   }
   async approveTransaction(args: ISendTransactionArguments) {
-    const { networkInfo, privateKey, to, value, data, gasFeeInfo } = args;
+    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const res = await wallet.signTransaction({
+      from,
       to,
       data,
       value,
-      gasPrice: gasFeeInfo.gasPrice,
-      gasLimit: gasFeeInfo.gasLimit,
       chainId: networkInfo.chainId,
+      ...gasFeeInfo,
     });
 
     return res;

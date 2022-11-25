@@ -46,6 +46,7 @@ export interface ISendTransactionArguments {
   privateKey: string;
   gasFeeInfo: IGasFeeInfo | IEIP1559GasFeeInfo;
   to: string;
+  from: string;
   value: BigNumberish;
   data?: BytesLike;
 }
