@@ -1,4 +1,4 @@
-import { TBackspace, TBioAuth, TSetPassword } from '@@hooks/pin/usePin.type';
+import { TBackspace, TBioAuth, TSetPassword } from '@@components/BasicComponents/Pin/PinLayout/usePin.type';
 
 export interface INumPadsProps {
   backSpace: TBackspace;

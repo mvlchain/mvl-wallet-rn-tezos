@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useCameraDevices, Camera } from 'react-native-vision-camera';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import useQR from '@@hooks/qr/useQR';
+import useQRScan from '@@components/BasicComponents/QR/QRScan/useQRScan';
 
 import * as S from './QRScan.style';
 
 function QRScan() {
-  const { frameProcessor, getQRFromGallery } = useQR();
+  const { frameProcessor, getQRFromGallery } = useQRScan();
   const { t } = useTranslation();
   const devices = useCameraDevices();
   const device = devices.back;
