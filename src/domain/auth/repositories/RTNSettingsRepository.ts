@@ -4,7 +4,7 @@ import RTNSettings from '@@store/RTNSetting';
 import { TTheme } from '@@store/setting/settingPersistStore.type';
 
 export interface RTNSettingsRepository {
-  getThemeType(): TTheme;
+  getThemeType(): Promise<TTheme>;
   putThemeType(themeType: TTheme): void;
 }
 
@@ -20,7 +20,7 @@ export class RTNSettingsRepositoryImpl implements RTNSettingsRepository {
    * @returns Get current themeType value saved in preference. This will
    * return system-default value if not ever set before.
    */
-  getThemeType(): TTheme {
+  getThemeType(): Promise<TTheme> {
     return RTNSettings.getThemeType();
   }
 

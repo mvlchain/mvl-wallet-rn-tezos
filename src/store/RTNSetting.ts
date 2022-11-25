@@ -4,7 +4,7 @@ import { TTheme } from './setting/settingPersistStore.type';
 const { RTNSettings } = NativeModules;
 
 interface RTNSettingInterface {
-  getThemeType(): TTheme;
+  getThemeType(): Promise<TTheme>;
   putThemeType(themeType: TTheme): void;
 }
 
