@@ -5,13 +5,13 @@ import { FlatList } from 'react-native';
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import useTransactionHistoryFilter from '@@hooks/transactionHistory/useTransactionHistoryFilter';
-import useTransactionHistoryList from '@@hooks/transactionHistory/useTransactionHistoryList';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import TransactionHistoryListItem from '../TransactionHistoryItem';
 
 import * as S from './TransactionHistoryList.style';
+import useTransactionHistoryFilter from './useTransactionHistoryFilter';
+import useTransactionHistoryList from './useTransactionHistoryList';
 
 function TransactionHistoryList() {
   const { openModal } = globalModalStore();

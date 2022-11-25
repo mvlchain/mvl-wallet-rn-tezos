@@ -1,6 +1,6 @@
 import { BottomTabScreenProps, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
-import { valueOf } from '@@types/etc';
+import { valueOf } from '@@utils/types';
 
 export type TMainTabParamList = {
   WALLET: undefined;

@@ -3,11 +3,11 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
 import SettingToggleMenu from '@@components/Setting/SettingToggleMenu';
-import { useDi } from '@@hooks/common/useDi';
-import useCommonSetting from '@@hooks/setting/useCommonSetting';
+import useCommonSetting from '@@hooks/useCommonSetting';
+import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';

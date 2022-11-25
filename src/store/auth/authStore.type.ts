@@ -1,4 +1,4 @@
-import { TMnemonic } from '@@types/MnemonicType';
+import { TMnemonic } from '@@components/BasicComponents/Mnemonic/Mnemonic.type';
 
 export interface IAuth extends IAuthState {
   setPKey: (pKey: string) => void;

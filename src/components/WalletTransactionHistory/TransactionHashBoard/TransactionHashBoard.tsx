@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import useHeader from '@@hooks/common/useHeader';
+import useHeader from '@@hooks/useHeader';
 import {
   TTransactionHistoryRootStackProps,
   TTransactionHistoryRouteProps,

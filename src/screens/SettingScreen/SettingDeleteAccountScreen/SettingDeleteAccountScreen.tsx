@@ -3,8 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import Check from '@@components/Form/Check';
-import { useToggle } from '@@hooks/common/useToggle';
+import Check from '@@components/BasicComponents/Form/Check';
+import { useToggle } from '@@hooks/useToggle';
 
 import * as S from './SettingDeleteAccountScreen.style';
 import useSettingDeleteAccountScreen from './useSettingDeleteAccountScreen';

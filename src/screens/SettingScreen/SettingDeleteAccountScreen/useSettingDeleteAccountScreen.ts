@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';

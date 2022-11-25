@@ -4,10 +4,10 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
-import { IBottomSelectMenuProps } from '@@components/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
-import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 const useSettingPrivateKeyScreen = () => {

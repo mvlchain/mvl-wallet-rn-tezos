@@ -3,7 +3,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './SettingMenu.style';
 import { ISettingMenuProps } from './SettingMenu.type';
