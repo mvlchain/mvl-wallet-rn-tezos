@@ -54,7 +54,7 @@ const useGas = () => {
     }
   };
 
-  const totalGas = useMemo(async () => {
+  const transactionFee = useMemo(async () => {
     if (EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name)) {
       if (advanced) {
         if (!maxFeePerGas || !maxPriorityFeePerGas) return '-';
@@ -126,7 +126,7 @@ const useGas = () => {
     maxBlockGasLimit,
     gasPrice,
     gasLimit,
-    totalGas,
+    transactionFee,
     advanced,
     gasLevel,
     maxFeePerGas,

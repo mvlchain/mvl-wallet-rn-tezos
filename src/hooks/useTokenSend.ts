@@ -7,6 +7,7 @@ import { BigNumber } from 'ethers';
 import { GestureResponderEvent } from 'react-native-modal';
 
 import { IEIP1559GasFeeInfo, IGasFeeInfo } from '@@domain/transaction/GasService.type';
+import { ISendTransactionGasFee } from '@@domain/transaction/TransactionService.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 
 const useTokenSend = () => {
@@ -23,7 +24,7 @@ const useTokenSend = () => {
   const from = '0x1278699a3a2f9E9FDB969daaC0BCF23aB26fd82F';
   const networkInfo = { rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545', chainId: 97 };
 
-  const confirmSend = async (gasFeeInfo: IGasFeeInfo | IEIP1559GasFeeInfo) => {
+  const confirmSend = async (gasFeeInfo: IGasFeeInfo | ISendTransactionGasFee) => {
     if (!to || !value) return;
     try {
       const res = await ethersTransactionService.sendTransaction({

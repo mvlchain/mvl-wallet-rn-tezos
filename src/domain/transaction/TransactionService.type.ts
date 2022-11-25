@@ -57,8 +57,14 @@ export interface ISendTransactionArguments {
   value: BigNumberish;
   data?: BytesLike;
 }
-export interface ITezosSendTransactionArguments extends Omit<ISendTransactionArguments, 'networkInfo'> {
+export interface ITezosSendTransactionArguments {
   networkInfo: ITezosNetworkInfo;
+  privateKey: string;
+  gasFeeInfo: IGasFeeInfo;
+  to: string;
+  from: string;
+  value: BigNumberish;
+  data?: BytesLike;
 }
 
 export interface IEthersEstimateGasArguments {
@@ -109,7 +115,7 @@ export interface ITransaction {
   estimateGasError?: string;
 }
 export interface ITransactionService {
-  sendTransaction(args: ISendTransactionArguments): Promise<string>;
+  sendTransaction(args: ISendTransactionArguments | ITezosSendTransactionArguments): Promise<string>;
   approveTransaction(args: ISendTransactionArguments): Promise<string>;
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
