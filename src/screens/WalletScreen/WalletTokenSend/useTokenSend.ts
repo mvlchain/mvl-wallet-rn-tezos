@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useDi } from './common/useDi';
+import { useDi } from '@@hooks/useDi';
 
 import 'reflect-metadata';
 import { BigNumber } from 'ethers';

@@ -2,7 +2,7 @@ import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
 import { WALLET_TOKEN } from '@@constants/token.constant';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
-import { valueOf } from '@@types/etc';
+import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
   AUTH: undefined;

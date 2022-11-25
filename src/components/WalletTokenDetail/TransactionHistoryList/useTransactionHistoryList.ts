@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import transactionHistoryStore from '@@store/transaction/transactionHistoryStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';

@@ -8,8 +8,8 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
+import useGas from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard/useGas';
 import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant';
-import useGas from '@@hooks/transaction/useGas';
 import { width } from '@@utils/ui';
 
 import SpeedInputs from './SpeedInputs';
@@ -24,7 +24,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
     gasLimit,
     gasPrice,
     gasLevel,
-    totalGas,
+    transactionFee,
     maxFeePerGas,
     maxPriorityFeePerGas,
     advanced,
@@ -77,7 +77,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
           <S.MarginRow>
             {/* TODO: 컴포넌트 타입으로 받게해서 new 붙일지 말지 */}
             <S.Label>{t('new_transaction_fee')}</S.Label>
-            <S.Value>{`${totalGas} BNB`}</S.Value>
+            <S.Value>{`${transactionFee} BNB`}</S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{'6.30 USD'}</S.BaseCurrency>
           <S.Warning>
