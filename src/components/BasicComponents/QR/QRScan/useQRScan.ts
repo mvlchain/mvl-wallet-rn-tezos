@@ -14,7 +14,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
 import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
 
-const useQR = (targetToken?: string) => {
+const useQRScan = (targetToken?: string) => {
   const [scanResult, setScanResult] = useState<string | null>(null);
   const { openModal } = globalModalStore();
   const { t } = useTranslation();
@@ -94,4 +94,4 @@ const useQR = (targetToken?: string) => {
   };
 };
 
-export default useQR;
+export default useQRScan;

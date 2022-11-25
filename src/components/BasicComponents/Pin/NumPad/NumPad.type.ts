@@ -1,5 +1,5 @@
+import { TBackspace, TBioAuth, TSetPassword } from '@@components/BasicComponents/Pin/PinLayout/usePin.type';
 import { NUMPAD } from '@@constants/pin.constant';
-import { TBackspace, TBioAuth, TSetPassword } from '@@hooks/pin/usePin.type';
 
 export type TNumPadType = typeof NUMPAD[keyof typeof NUMPAD];
 export interface INumPadProps {

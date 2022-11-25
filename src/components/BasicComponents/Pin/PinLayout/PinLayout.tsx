@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { BackIconDark, BackIconLight } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import usePin from '@@components/BasicComponents/Pin/PinLayout/usePin';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
-import usePin from '@@hooks/pin/usePin';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import { pinStore } from '@@store/pin/pinStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
