@@ -8,9 +8,9 @@ export interface IGasFeeInfo {
   gasLimit: BigNumber;
 }
 export interface IEIP1559GasFeeInfo {
-  maxFeePerGas: BigNumber | null;
-  maxPriorityFeePerGas: BigNumber | null;
-  gasPrice: BigNumber | null;
+  maxFeePerGas: BigNumber;
+  maxPriorityFeePerGas: BigNumber;
+  gasPrice?: BigNumber;
   gasLimit: BigNumber;
 }
 
