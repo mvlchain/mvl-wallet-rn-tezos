@@ -24,6 +24,8 @@
 		33F8E6C6292F557A001EB0BA /* TorusCredentialModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F8E6C5292F557A001EB0BA /* TorusCredentialModel.swift */; };
 		33F8E6C8292F558E001EB0BA /* SocialSignInProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F8E6C7292F558E001EB0BA /* SocialSignInProvider.swift */; };
 		33F8E6CA292F55C2001EB0BA /* ExtendedKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F8E6C9292F55C1001EB0BA /* ExtendedKeyModel.swift */; };
+		33F8E6CF29308A50001EB0BA /* LegacyAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F8E6CE29308A50001EB0BA /* LegacyAuthManager.swift */; };
+		33F8E6D529309407001EB0BA /* LegacyAuthManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8E6D429309407001EB0BA /* LegacyAuthManagerBridge.m */; };
 		479E0C5B29237A980078C3FF /* ThemeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 479E0C5A29237A980078C3FF /* ThemeType.m */; };
 		479F00532921D57E00D556A6 /* DiContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479F00522921D2BF00D556A6 /* DiContainer.swift */; };
 		479F00582923592B00D556A6 /* IOSTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 479F00572923592B00D556A6 /* IOSTheme.m */; };
@@ -69,6 +71,9 @@
 		33F8E6C5292F557A001EB0BA /* TorusCredentialModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorusCredentialModel.swift; sourceTree = "<group>"; };
 		33F8E6C7292F558E001EB0BA /* SocialSignInProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInProvider.swift; sourceTree = "<group>"; };
 		33F8E6C9292F55C1001EB0BA /* ExtendedKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedKeyModel.swift; sourceTree = "<group>"; };
+		33F8E6CE29308A50001EB0BA /* LegacyAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyAuthManager.swift; sourceTree = "<group>"; };
+		33F8E6D429309407001EB0BA /* LegacyAuthManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LegacyAuthManagerBridge.m; sourceTree = "<group>"; };
+		33F8E6D629309455001EB0BA /* LegacyAuthManager-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LegacyAuthManager-Bridging-Header.h"; sourceTree = "<group>"; };
 		35117A27FBA1ACB77A014599 /* libPods-Wallet-WalletTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Wallet-WalletTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		41C88689A61266EEC0DFAA36 /* libPods-Wallet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Wallet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		479E0C5A29237A980078C3FF /* ThemeType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemeType.m; sourceTree = "<group>"; };
@@ -155,6 +160,9 @@
 		33F8E6B2292F4D91001EB0BA /* LegacyAuth */ = {
 			isa = PBXGroup;
 			children = (
+				33F8E6CE29308A50001EB0BA /* LegacyAuthManager.swift */,
+				33F8E6D429309407001EB0BA /* LegacyAuthManagerBridge.m */,
+				33F8E6D629309455001EB0BA /* LegacyAuthManager-Bridging-Header.h */,
 				33F8E6B3292F4E17001EB0BA /* UserSessionRepository.swift */,
 				33F8E6B5292F4FAB001EB0BA /* UserSessionRepositoryProtocol.swift */,
 				33F8E6B7292F4FD4001EB0BA /* Keychain.swift */,
@@ -512,10 +520,12 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				479F00532921D57E00D556A6 /* DiContainer.swift in Sources */,
 				47C2EF24291DF481009FC5F5 /* StorageKey.swift in Sources */,
+				33F8E6D529309407001EB0BA /* LegacyAuthManagerBridge.m in Sources */,
 				479E0C5B29237A980078C3FF /* ThemeType.m in Sources */,
 				33F8E6CA292F55C2001EB0BA /* ExtendedKeyModel.swift in Sources */,
 				33F8E6C6292F557A001EB0BA /* TorusCredentialModel.swift in Sources */,
 				47C2EF15291DCE93009FC5F5 /* RTNSettingsModule.m in Sources */,
+				33F8E6CF29308A50001EB0BA /* LegacyAuthManager.swift in Sources */,
 				33F8E6BA292F4FE9001EB0BA /* KeychainKey.swift in Sources */,
 				33F8E6C0292F53EE001EB0BA /* Constants+AppInfo.swift in Sources */,
 				33F8E6B8292F4FD4001EB0BA /* Keychain.swift in Sources */,
