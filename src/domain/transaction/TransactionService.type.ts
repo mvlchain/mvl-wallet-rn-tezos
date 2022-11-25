@@ -41,10 +41,17 @@ export interface ITezosEstimateArguments extends TransferParams {
   to: string;
   value: number;
 }
+
+//TODO: getGasFee에서 얻는 값자체가 null 아니면 bignumber인데 값 입력시에는 null안받음 어떻게 할까.
+export interface ISendTransactionGasFee {
+  maxFeePerGas: BigNumber;
+  maxPriorityFeePerGas: BigNumber;
+  gasLimit: BigNumber;
+}
 export interface ISendTransactionArguments {
   networkInfo: INetworkInfo;
   privateKey: string;
-  gasFeeInfo: IGasFeeInfo | IEIP1559GasFeeInfo;
+  gasFeeInfo: IGasFeeInfo | ISendTransactionGasFee;
   to: string;
   from: string;
   value: BigNumberish;
