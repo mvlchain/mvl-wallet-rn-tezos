@@ -7,7 +7,7 @@ import { formatEther } from 'ethers/lib/utils';
 import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/transaction/GasService.type';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 
 const useGas = () => {
