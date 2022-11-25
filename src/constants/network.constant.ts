@@ -1,4 +1,4 @@
-import { valueOf } from '@@types/etc';
+import { valueOf } from '@@utils/types';
 
 export const NETWORK = {
   ETHEREUM: 'ETHEREUM',

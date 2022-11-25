@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Toggle from '@@components/Form/Toggle';
+import Toggle from '@@components/BasicComponents/Form/Toggle';
 
 import * as S from './SettingToggleMenu.style';
 import { ISettingToggleMenuProps } from './SettingToggleMenu.type';

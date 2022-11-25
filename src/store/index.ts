@@ -3,9 +3,6 @@ import FilesystemStorage from 'redux-persist-filesystem-storage';
 import create from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
 
-import createMigrate from './createMigration';
-import { migrations, version } from './migrations';
-
 export class DeviceShareHolderDto {
   readonly postboxKeyJsonEncrypted: string;
   readonly shareJsonEncrypted: string;

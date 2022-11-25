@@ -3,8 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import Chip from '@@components/Chip';
-import HideContentSection from '@@components/HideContentSection';
+import Chip from '@@components/BasicComponents/Chip';
+import HideContentSection from '@@components/BasicComponents/HideContentSection';
 import { height } from '@@utils/ui';
 
 import * as S from './SettingPrivateKeyScreen.style';

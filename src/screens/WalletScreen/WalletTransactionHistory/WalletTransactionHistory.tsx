@@ -11,7 +11,7 @@ import PendingTransactionButtons from '@@components/WalletTransactionHistory/Pen
 import TransactionDetailBoard from '@@components/WalletTransactionHistory/TransactionDetailBoard';
 import TransactionFeeBoard from '@@components/WalletTransactionHistory/TransactionFeeBoard';
 import TransactionHashBoard from '@@components/WalletTransactionHistory/TransactionHashBoard';
-import useHeader from '@@hooks/common/useHeader';
+import useHeader from '@@hooks/useHeader';
 
 import * as S from './WalletTransactionHistory.style';
 import { TTransactionHistoryRouteProps, TTransactionHistoryRootStackProps } from './WalletTransactionHistory.type';

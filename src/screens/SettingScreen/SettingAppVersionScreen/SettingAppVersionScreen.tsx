@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 
 import { ClutchImageLight, ClutchImageDark } from '@@assets/image';
 import { SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './SettingAppVersionScreen.style';
 /**

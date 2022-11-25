@@ -2,11 +2,11 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import useBottomSelectModal from '@@components/Modals/BottomSelectModal/useBottomSelectModal';
-import { MODAL_TYPES } from '@@components/Modals/GlobalModal';
+import useBottomSelectModal from '@@components/BasicComponents/Modals/BottomSelectModal/useBottomSelectModal';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
 import { LANGUAGE_NAME, THEME_NAME } from '@@constants/setting.constant';
-import useCommonSetting from '@@hooks/setting/useCommonSetting';
+import useCommonSetting from '@@hooks/useCommonSetting';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';

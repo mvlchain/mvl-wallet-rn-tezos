@@ -3,7 +3,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 
 import { ChevronDownLightIcon, ChevronDownDarkIcon } from '@@assets/image';
-import { useAssetFromTheme } from '@@hooks/common/useTheme';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './WalletSelector.style';
 import { IWalletSelectorProps } from './WalletSelector.type';

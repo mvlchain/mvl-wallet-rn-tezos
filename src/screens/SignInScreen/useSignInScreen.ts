@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { AuthProvider } from '@@domain/auth/IAuthService';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';

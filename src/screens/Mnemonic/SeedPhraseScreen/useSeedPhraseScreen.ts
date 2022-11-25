@@ -7,8 +7,8 @@ import { BackHandler } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { useDi } from '@@hooks/common/useDi';
-import useHeader from '@@hooks/common/useHeader';
+import { useDi } from '@@hooks/useDi';
+import useHeader from '@@hooks/useHeader';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 
