@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
@@ -13,7 +13,7 @@ import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function GasTextField(props: Type.IGasTextFieldProps) {
-  const { value, setValue, style, unit, hint } = props;
+  const { value, setValue, style, unit, hint, delay } = props;
   const { appTheme } = settingPersistStore();
   const color = theme[appTheme.value].color;
   const [lcColor, setLcColor] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   const onChange = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
     let value = data.nativeEvent.text;
 
-    if (!value) {
+    if (!value || value === '') {
       setValue(BigNumber.from(0));
       setDisplayValue('0');
     }
@@ -50,6 +50,16 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
     setValue(BigNumber.from(0));
     setDisplayValue('0');
   };
+
+  const debounce = useCallback((callback) => {
+    let timer;
+    return (...args) => {
+      // 실행한 함수(setTimeout())를 취소
+      clearTimeout(timer);
+      // delay가 지나면 callback 함수를 실행
+      timer = setTimeout(() => callback(...args), delay);
+    };
+  }, []);
 
   return (
     <S.BaseTextFieldContainer>

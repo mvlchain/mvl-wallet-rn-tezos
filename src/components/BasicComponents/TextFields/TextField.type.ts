@@ -30,6 +30,7 @@ export interface IGasTextFieldProps {
   hint?: string;
   style?: TextInputProps['style'];
   unit?: 'gwei' | 'ether';
+  delay?: number;
 }
 
 export interface ITextFieldContainerProps {
