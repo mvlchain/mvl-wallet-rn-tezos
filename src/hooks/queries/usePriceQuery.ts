@@ -3,7 +3,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { Network } from '@@constants/network.constant';
 import { CURRENCY } from '@@constants/setting.constant';
 import { IGetPriceDto, IGetPriceResponseDto } from '@@domain/wallet/repositories/WalletRepository.type';
-import { useDi } from '@@hooks/common/useDi';
+import { useDi } from '@@hooks/useDi';
 
 export interface IPriceQueryKey {
   network: Network;

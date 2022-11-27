@@ -4,13 +4,14 @@ import { PRICE_NAME, PRICE_TYPE } from '@@constants/wallet.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { IGetPriceResponseDto } from '@@domain/wallet/repositories/WalletRepository.type';
 import { IBalance, IBalanceData } from '@@domain/wallet/services/WalletBlockChainService.type';
+import { useDi } from '@@hooks/useDi';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-import { useDi } from './common/useDi';
 import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
 import useWalletsQuery from './queries/useWalletsQuery';
+
 export const useTokenBalanceList = () => {
   // @TODO 데이터 연결
   const ethService = useDi('WalletBlockChainService');
