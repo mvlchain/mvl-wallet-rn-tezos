@@ -9,9 +9,11 @@ import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/transaction/GasService.type';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useGas = () => {
   const gasService = useDi('GasService');
+  const { selectedNetwork } = walletPersistStore();
 
   // advanced mode means the value will from user direct input
   const [advanced, setAdvanced] = useState(false);
@@ -37,9 +39,8 @@ const useGas = () => {
     setInitialGas();
   }, []);
 
-  const privateKey = '0x8082bea335283b2ac437fb6a93530dcf8aea48db478f7b0df871568d17b0094e';
   const setInitialGas = async () => {
-    if (EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name)) {
+    if (EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork)) {
       const gasFeeData = await gasService.getEIP1559GasFeeData(networkInfo);
       setMaxFeePerGas(gasFeeData.maxFeePerGas);
       setBlockMaxFeePerGas(gasFeeData.maxFeePerGas);
@@ -55,7 +56,7 @@ const useGas = () => {
   };
 
   const transactionFee = useMemo(async () => {
-    if (EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name)) {
+    if (EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork)) {
       if (advanced) {
         if (!maxFeePerGas || !maxPriorityFeePerGas) return '-';
         if (!to || !value) return '-';
