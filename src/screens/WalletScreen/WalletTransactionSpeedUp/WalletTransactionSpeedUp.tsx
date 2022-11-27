@@ -6,8 +6,8 @@ import { Text, View } from 'react-native';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
+import SpeedOperationBoard from '@@components/BasicComponents/GasFeeBoard';
 import OldTransactionBoard from '@@components/WalletTransactionSpeedUpCancel/OldTransactionBoard';
-import SpeedOperationBoard from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard';
 import useHeader from '@@hooks/useHeader';
 
 import { TSpeedUpRootStackProps, TSpeedUpRouteProps } from './WalletTransactionSpeedUp.type';

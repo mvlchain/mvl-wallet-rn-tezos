@@ -8,8 +8,8 @@ import { add } from 'react-native-reanimated';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
+import SpeedOperationBoard from '@@components/BasicComponents/GasFeeBoard';
 import SendInputBoard from '@@components/WalletTokenSend/SendInputBoard';
-import SpeedOperationBoard from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard';
 import useHeader from '@@hooks/useHeader';
 
 import { TTokenSendRootStackProps, TTokenSendRouteProps } from './WalletTokenSend.type';
