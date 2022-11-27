@@ -10,6 +10,7 @@ import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.
 import Toggle from '@@components/BasicComponents/Form/Toggle';
 import useGas from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard/useGas';
 import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { width } from '@@utils/ui';
 
 import SpeedInputs from './SpeedInputs';
@@ -20,6 +21,7 @@ import SpeedRadioButtons from './SpeedRadioButtons';
 
 function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
   const { t } = useTranslation();
+  const { selectedNetwork } = walletPersistStore();
   const {
     gasLimit,
     gasPrice,
@@ -53,7 +55,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
               />
             </S.ToggleWrapper>
           </S.Row>
-          {advanced && EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name) && (
+          {advanced && EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork) && (
             <SpeedInputsEIP1559
               maxFeePerGas={maxFeePerGas}
               maxPriorityFeePerGas={maxPriorityFeePerGas}
@@ -63,7 +65,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
               setGasLimit={setGasLimit}
             />
           )}
-          {advanced && !EIP_1559_SUPPORT_NETWORK.includes(networkInfo.name) && (
+          {advanced && !EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork) && (
             <SpeedInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
           )}
           {!advanced && <SpeedRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />}
