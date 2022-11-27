@@ -1,8 +1,6 @@
 import { container, instanceCachingFactory } from 'tsyringe';
 
-import { testNetBTCBAbi } from '@@constants/contract/abi/testNet/testNetBTCBAbi';
-import { testNetMvlAbi } from '@@constants/contract/abi/testNet/testNetMvlAbi';
-import { testNetbMvlAbi } from '@@constants/contract/abi/testNet/testNetbMvlAbi';
+import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { MVL_GOERLI, B_MVL_STAGE, BTCB_STAGE } from '@@constants/contract/contract.constant';
 
 import { TestData } from './TestData';
@@ -42,7 +40,7 @@ it('get mvl balance', async () => {
   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
   const balance = await contractRepository.getContractBalance({
     contractAddress: MVL_GOERLI.contractAddress,
-    abi: JSON.stringify(testNetMvlAbi),
+    abi: abiERC20,
     address: TestData.ethAddress,
     rpcUrl: TEST_ETH_RPC_URL,
   });
@@ -62,7 +60,7 @@ it('get bMvl balance', async () => {
   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
   const balance = await contractRepository.getContractBalance({
     contractAddress: B_MVL_STAGE.contractAddress,
-    abi: JSON.stringify(testNetbMvlAbi),
+    abi: abiERC20,
     address: TestData.bscAddress,
     rpcUrl: TEST_BSC_RPC_URL,
   });
@@ -73,7 +71,7 @@ it('get BTCB balance', async () => {
   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
   const balance = await contractRepository.getContractBalance({
     contractAddress: BTCB_STAGE.contractAddress,
-    abi: JSON.stringify(testNetBTCBAbi),
+    abi: abiERC20,
     address: TestData.bscAddress,
     rpcUrl: TEST_BSC_RPC_URL,
   });

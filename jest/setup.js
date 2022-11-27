@@ -257,13 +257,3 @@ jest.mock('react-native-vision-camera', () => {
     Camera,
   };
 });
-
-jest.mock('react-native-dotenv', () => ({
-  IS_PRODUCT: 'FALSE',
-  ETH_RPC_URL: 'https://goerli.infura.io/v3/***REMOVED***',
-  ETH_CHAIN_ID: '5',
-  ETH_SCAN_URL: 'https://goerli.etherscan.io/',
-  BSC_RPC_URL: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-  BSC_CHAIN_ID: '97',
-  BSC_SCAN_URL: 'https://testnet.bscscan.com/',
-}));

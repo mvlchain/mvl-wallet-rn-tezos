@@ -1,10 +1,9 @@
-import { IS_PRODUCT, ETH_RPC_URL, BSC_RPC_URL } from 'react-native-dotenv';
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getToken } from '@@constants/contract/contract.constant';
 import { Network } from '@@constants/network.constant';
-import { BASIC_ETH_TOKEN, BASIC_BSC_TOKEN, WALLET_TOKEN } from '@@constants/token.constant';
+import { BASIC_ETH_TOKEN, BASIC_BSC_TOKEN } from '@@constants/token.constant';
 import { BlockChainList } from '@@domain/blockchain/BlockChain';
 import { CryptoType } from '@@types/ContractType';
 
@@ -16,6 +15,9 @@ import { WalletService } from './WalletService';
 export interface ContractService {
   getBalanceFromNetwork: (index: number, network: Network) => Promise<any>;
 }
+
+const ETH_RPC_URL = 'https://goerli.infura.io/v3/***REMOVED***';
+const BSC_RPC_URL = 'https://data-seed-prebsc-1-s1.binance.org:8545';
 
 @injectable()
 export class EthersContractServiceImpl implements ContractService {
@@ -33,7 +35,7 @@ export class EthersContractServiceImpl implements ContractService {
     const wallet = await this.walletService.getWalletInfo({ index, blockchain });
     const getBalancePromise = keyOfCrypto.map(async (crypto) => {
       let balance;
-      const value = getToken(IS_PRODUCT === 'TRUE', crypto);
+      const value = getToken(false, crypto);
       if (value.cryptoType === CryptoType.COIN) {
         balance = await this.ethersContractRepository.getBalance({
           selectedWalletPrivateKey: wallet.privateKey,
@@ -56,6 +58,7 @@ export class EthersContractServiceImpl implements ContractService {
     return balanceList;
   };
 
+  // TODO: env로 설정
   _getSetting = (network: Network) => {
     const ethSetting = {
       tokenList: BASIC_ETH_TOKEN,
