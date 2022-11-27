@@ -12,7 +12,7 @@ import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
 import useWalletsQuery from './queries/useWalletsQuery';
 
-export const useTokenBalanceList = () => {
+export const useTokenBalance = () => {
   // @TODO 데이터 연결
   const ethService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();

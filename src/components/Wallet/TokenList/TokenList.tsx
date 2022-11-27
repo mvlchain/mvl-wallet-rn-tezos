@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { useTokenBalanceList } from '@@hooks/useTokenBalanceList';
+import { useTokenBalance } from '@@hooks/useTokenBalance';
 
 import * as S from './TokenList.style';
 import TokenListItem from './TokenListItem';
 
 function TokenList() {
-  const { formalizedBalance } = useTokenBalanceList();
+  const { formalizedBalance } = useTokenBalance();
   return (
     <S.Container>
       <S.TitleContainer>
