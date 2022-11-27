@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android:staging": "APP_ENV=staging react-native run-android  --active-arch-only",
-    "ios:staging": "APP_ENV=staging react-native run-ios",
+    "ios:staging": "APP_ENV=staging react-native run-ios --simulator='iPhone 14'",
     "android:product": "APP_ENV=product react-native run-android  --active-arch-only",
     "ios:product": "APP_ENV=product react-native run-ios",
     "start": "react-native start",
