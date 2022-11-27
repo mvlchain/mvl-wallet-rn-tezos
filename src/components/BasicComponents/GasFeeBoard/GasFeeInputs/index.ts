@@ -1,1 +1,1 @@
-export { default } from './SpeedInputs';
+export { default } from './GasFeeInputs';

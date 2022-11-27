@@ -13,13 +13,13 @@ import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant'
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { width } from '@@utils/ui';
 
-import SpeedInputs from './GasFeeInputs';
-import SpeedInputsEIP1559 from './GasFeeInputs/SpeedInputsEIP1559';
-import SpeedRadioButtons from './GasLevelRadioButtons';
-import * as S from './SpeedOperationBoard.style';
-import { ISpeedOperationBoardProps } from './SpeedOperationBoard.type';
+import * as S from './GasFeeBoard.style';
+import { IGasFeeBoardProps } from './GasFeeBoard.type';
+import GasFeeInputs from './GasFeeInputs';
+import GasFeeInputsEIP1559 from './GasFeeInputs/GasFeeInputsEIP1559';
+import GasLevelRadioButtons from './GasLevelRadioButtons';
 
-function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
+function GasFeeBoard({ onConfirm }: IGasFeeBoardProps) {
   const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
   const {
@@ -56,7 +56,7 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
             </S.ToggleWrapper>
           </S.Row>
           {advanced && EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork) && (
-            <SpeedInputsEIP1559
+            <GasFeeInputsEIP1559
               maxFeePerGas={maxFeePerGas}
               maxPriorityFeePerGas={maxPriorityFeePerGas}
               gasLimit={gasLimit}
@@ -66,9 +66,9 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
             />
           )}
           {advanced && !EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork) && (
-            <SpeedInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
+            <GasFeeInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
           )}
-          {!advanced && <SpeedRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />}
+          {!advanced && <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />}
         </S.InnerContainer>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>
@@ -97,4 +97,4 @@ function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
   );
 }
 
-export default SpeedOperationBoard;
+export default GasFeeBoard;

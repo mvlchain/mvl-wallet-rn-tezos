@@ -1,6 +1,6 @@
 import { TGasLevel } from '@@domain/transaction/GasService.type';
 
-export interface ISpeedRadioButtonsProps {
+export interface IGasLevelRadioButtonsProps {
   setGasLevel: (level: TGasLevel) => void;
   gasLevel: TGasLevel;
 }

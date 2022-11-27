@@ -8,7 +8,7 @@ import { add } from 'react-native-reanimated';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
-import SpeedOperationBoard from '@@components/BasicComponents/GasFeeBoard';
+import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
 import SendInputBoard from '@@components/WalletTokenSend/SendInputBoard';
 import useHeader from '@@hooks/useHeader';
 
@@ -30,7 +30,7 @@ function WalletTokenSend() {
     <ScrollView style={{ flex: 1 }}>
       <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <SpeedOperationBoard onConfirm={confirmSend} />
+      <GasFeeBoard onConfirm={confirmSend} />
     </ScrollView>
   );
 }

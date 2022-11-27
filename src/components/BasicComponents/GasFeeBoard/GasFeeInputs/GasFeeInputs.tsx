@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
 import { height } from '@@utils/ui';
 
-import * as S from './SpeedInputs.style';
-import { ISpeedInputsProps } from './SpeedInputs.type';
+import * as S from './GasFeeInputs.style';
+import { IGasFeeInputsProps } from './GasFeeInputs.type';
 
-function SpeedInputs({ gasPrice, gasLimit, setGasPrice, setGasLimit }: ISpeedInputsProps) {
+function GasFeeInputs({ gasPrice, gasLimit, setGasPrice, setGasLimit }: IGasFeeInputsProps) {
   const { t } = useTranslation();
 
   return (
@@ -25,4 +25,4 @@ function SpeedInputs({ gasPrice, gasLimit, setGasPrice, setGasLimit }: ISpeedInp
   );
 }
 
-export default SpeedInputs;
+export default GasFeeInputs;
