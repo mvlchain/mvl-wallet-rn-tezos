@@ -1,4 +1,4 @@
-declare module 'react-native-dotenv' {
+declare module '@env' {
   export const IS_PRODUCT: string;
   export const ETH_RPC_URL: string;
   export const ETH_CHAIN_ID: string;

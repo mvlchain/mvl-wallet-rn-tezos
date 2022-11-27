@@ -1,4 +1,4 @@
-import { valueOf } from '@@types/etc';
+import { valueOf } from '@@utils/types';
 
 export interface IBep20Token {
   contractAddress: string; // Contract address only for tokens (Not for coins)
