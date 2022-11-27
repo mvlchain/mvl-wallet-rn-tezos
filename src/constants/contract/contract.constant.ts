@@ -75,7 +75,7 @@ export const BTCB: IBep20Token = {
   cryptoType: CryptoType.TOKEN,
 };
 
-export const getToken = (isMainnet: boolean, ticker: keyof typeof WALLET_TOKEN): IErc20Token | IBep20Token => {
+export const getToken = (isMainnet: boolean, ticker: string): IErc20Token | IBep20Token => {
   if (isMainnet) {
     switch (ticker) {
       case WALLET_TOKEN.ETH:

@@ -1,7 +1,7 @@
 import { IS_PRODUCT, ETH_RPC_URL, BSC_RPC_URL } from 'react-native-dotenv';
 import { inject, injectable } from 'tsyringe';
 
-import { getAbi } from '@@constants/contract/abi';
+import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getToken } from '@@constants/contract/contract.constant';
 import { Network } from '@@constants/network.constant';
 import { BASIC_ETH_TOKEN, BASIC_BSC_TOKEN, WALLET_TOKEN } from '@@constants/token.constant';
@@ -33,7 +33,7 @@ export class EthersContractServiceImpl implements ContractService {
     const wallet = await this.walletService.getWalletInfo({ index, blockchain });
     const getBalancePromise = keyOfCrypto.map(async (crypto) => {
       let balance;
-      const value = getToken(IS_PRODUCT === 'TRUE', crypto as keyof typeof tokenList);
+      const value = getToken(IS_PRODUCT === 'TRUE', crypto);
       if (value.cryptoType === CryptoType.COIN) {
         balance = await this.ethersContractRepository.getBalance({
           selectedWalletPrivateKey: wallet.privateKey,
@@ -43,7 +43,7 @@ export class EthersContractServiceImpl implements ContractService {
         balance = await this.ethersContractRepository.getContractBalance({
           contractAddress: value.contractAddress,
           rpcUrl: rpcUrl,
-          abi: getAbi(IS_PRODUCT === 'TRUE', value.symbol as keyof typeof WALLET_TOKEN),
+          abi: abiERC20,
           address: wallet.address,
         });
       }
