@@ -6,7 +6,7 @@ import { Text, View } from 'react-native';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
-import SpeedOperationBoard from '@@components/BasicComponents/GasFeeBoard';
+import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
 import OldTransactionBoard from '@@components/WalletTransactionSpeedUpCancel/OldTransactionBoard';
 import useHeader from '@@hooks/useHeader';
 
@@ -26,7 +26,7 @@ function WalletTransactionSpeedUp() {
     <View style={{ flex: 1 }}>
       <OldTransactionBoard />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <SpeedOperationBoard onConfirm={() => {}} />
+      <GasFeeBoard onConfirm={() => {}} />
     </View>
   );
 }

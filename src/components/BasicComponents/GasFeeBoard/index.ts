@@ -1,1 +1,1 @@
-export { default } from './SpeedOperationBoard';
+export { default } from './GasFeeBoard';

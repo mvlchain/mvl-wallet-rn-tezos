@@ -6,10 +6,10 @@ import { Pressable } from 'react-native';
 import CustomRadio from '@@components/BasicComponents/Form/CustomRadio';
 import { GAS_LEVEL } from '@@constants/transaction.constant';
 
-import * as S from './SpeedRadioButtons.style';
-import { ISpeedRadioButtonsProps } from './SpeedRadioButtons.type';
+import * as S from './GasLevelRadioButtons.style';
+import { IGasLevelRadioButtonsProps } from './GasLevelRadioButtons.type';
 
-function SpeedRadioButtons({ setGasLevel, gasLevel }: ISpeedRadioButtonsProps) {
+function GasLevelRadioButtons({ setGasLevel, gasLevel }: IGasLevelRadioButtonsProps) {
   const { t } = useTranslation();
 
   const options = [
@@ -46,4 +46,4 @@ function SpeedRadioButtons({ setGasLevel, gasLevel }: ISpeedRadioButtonsProps) {
   );
 }
 
-export default SpeedRadioButtons;
+export default GasLevelRadioButtons;
