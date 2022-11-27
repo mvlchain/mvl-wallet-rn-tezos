@@ -8,16 +8,16 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
-import useGas from '@@components/WalletTransactionSpeedUpCancel/SpeedOperationBoard/useGas';
+import useGas from '@@components/BasicComponents/GasFeeBoard/useGas';
 import { EIP_1559_SUPPORT_NETWORK, NETWORK } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { width } from '@@utils/ui';
 
-import SpeedInputs from './SpeedInputs';
-import SpeedInputsEIP1559 from './SpeedInputs/SpeedInputsEIP1559';
+import SpeedInputs from './GasFeeInputs';
+import SpeedInputsEIP1559 from './GasFeeInputs/SpeedInputsEIP1559';
+import SpeedRadioButtons from './GasLevelRadioButtons';
 import * as S from './SpeedOperationBoard.style';
 import { ISpeedOperationBoardProps } from './SpeedOperationBoard.type';
-import SpeedRadioButtons from './SpeedRadioButtons';
 
 function SpeedOperationBoard({ onConfirm }: ISpeedOperationBoardProps) {
   const { t } = useTranslation();
