@@ -8,7 +8,9 @@ import { formatEther } from 'ethers/lib/utils';
 import { NETWORK_INFO } from '@@components/BasicComponents/GasFeeBoard/testNetworkEnv';
 import { EIP_1559_SUPPORT_NETWORK, NETWORK, TEZOS_NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
-import { TGasLevel } from '@@domain/transaction/GasService.type';
+import { TGasLevel } from '@@domain/gas/GasService.type';
+import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
+import { IGasFeeInfoEip1559 } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -36,8 +38,6 @@ const useGas = () => {
 
   //need estimated gas for EIP1559 total gas
   const { to, value, data } = transactionRequestStore();
-  const ethersTransactionService = useDi('EtherTransactionService');
-  const tezosTransactionService = useDi('TezosTransactionService');
 
   useEffect(() => {
     setInitialGas();
@@ -46,21 +46,20 @@ const useGas = () => {
   useEffect(() => {
     estimateGas();
   }, [to, value, data]);
+
   const networkInfo = NETWORK_INFO[selectedNetwork];
   const privateKey = '0x2b27eaa12c946c41c523324a9c4a87e386e4f90cc61844aedc6edea18320002a';
 
   const setInitialGas = async () => {
     if (EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork)) {
-      const gasFeeData = await gasService.getEIP1559GasFeeData(networkInfo);
-      console.log('gasFeeData', gasFeeData);
+      const gasFeeData = (await gasService.getGasFeeData(selectedNetwork)) as IGasFeeInfoEip1559;
       setMaxFeePerGas(gasFeeData.maxFeePerGas);
       setBlockMaxFeePerGas(gasFeeData.maxFeePerGas);
       setBlockMaxPriorityFeePerGas(gasFeeData.maxPriorityFeePerGas);
       setMaxPriorityFeePerGas(gasFeeData.maxPriorityFeePerGas);
       setMaxBlockGasLimit(gasFeeData.gasLimit);
     } else {
-      const gasFeeData = await gasService.getGasFeeData(networkInfo);
-      console.log('gasFeeData', gasFeeData);
+      const gasFeeData = (await gasService.getGasFeeData(selectedNetwork)) as IGasFeeInfo;
       setAvgBlockGasPrice(gasFeeData.gasPrice);
       setMaxBlockGasLimit(gasFeeData.gasLimit);
       setGasPrice(gasFeeData.gasPrice);
@@ -68,12 +67,12 @@ const useGas = () => {
   };
 
   const estimateGas = async () => {
-    // if (!to || !value) return;
+    if (!to || !value) return;
     if (TEZOS_NETWORK.includes(selectedNetwork)) {
-      const newEstimatedGas = (await tezosTransactionService.estimateGas({
+      const newEstimatedGas = (await gasService.estimateGas({
         to: 'tz1TbtL8o42styDAngvPkKBb6wpgTnT71m3t',
         value: 2,
-        networkInfo,
+        selectedNetwork,
         privateKey: 'edsk2rKA8YEExg9Zo2qNPiQnnYheF1DhqjLVmfKdxiFfu5GyGRZRnb',
       })) as Estimate;
 
@@ -90,10 +89,10 @@ const useGas = () => {
       );
       // setEstimatedGas(newEstimatedGas.suggestedFeeMutez);
     } else {
-      const newEstimatedGas = (await ethersTransactionService.estimateGas({
+      const newEstimatedGas = (await gasService.estimateGas({
         to,
         value,
-        networkInfo,
+        selectedNetwork,
         privateKey,
       })) as BigNumber;
 
@@ -106,7 +105,8 @@ const useGas = () => {
       if (advanced) {
         if (!maxFeePerGas || !maxPriorityFeePerGas) return '-';
         if (!estimatedGas) return '-';
-        return gasService.getTotalGasFee_EIP1559({
+        return gasService.getTotalGasFee({
+          selectedNetwork,
           maxFeePerGas,
           maxPriorityFeePerGas,
           estimatedGas: estimatedGas as BigNumber,
@@ -115,7 +115,8 @@ const useGas = () => {
         if (!blockMaxFeePerGas || !blockMaxPriorityFeePerGas) return '-';
         if (!estimatedGas) return '-';
         //TODO: maxPriorityFeePerGas 가져온 값을 그냥 사용할지 아니면 셋팅대로 갈지 확인후 수정필요
-        return gasService.getTotalGasFee_EIP1559({
+        return gasService.getTotalGasFee({
+          selectedNetwork,
           maxFeePerGas: blockMaxFeePerGas,
           maxPriorityFeePerGas: blockMaxPriorityFeePerGas,
           estimatedGas: estimatedGas as BigNumber,
@@ -126,12 +127,14 @@ const useGas = () => {
       if (advanced) {
         if (!gasPrice) return '-';
         return gasService.getTotalGasFee({
+          selectedNetwork,
           gasPrice,
           gasLimit,
         });
       } else {
         if (!avgBlockGasPrice) return '-';
         return gasService.getTotalGasFee({
+          selectedNetwork,
           gasPrice: avgBlockGasPrice,
           gasLimit,
           gasLevel,

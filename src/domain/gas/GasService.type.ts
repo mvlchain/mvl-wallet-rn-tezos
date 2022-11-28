@@ -1,22 +1,28 @@
+import { Estimate } from '@taquito/taquito';
 import { BigNumber } from 'ethers';
 
-import { Network } from '@@constants/network.constant';
+import { Network, NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL } from '@@constants/transaction.constant';
-import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
-import { IGasFeeInfo, IGetTotalGasFeeArgumentsEthers } from './repository/gasRepository/GasRepository.type';
-import { IGasFeeInfoEip1559, IGetTotalGasFeeArgumentsEIP1559 } from './repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
-import { IGetTotalGasFeeArgumentsTezos } from './repository/gasRepositoryTezos/GasRepositoryTezos.type';
+import { IEstimateGasArgs, IGasFeeInfo, IGetTotalGasFeeArgsEthers } from './repository/gasRepository/GasRepository.type';
+import { IGasFeeInfoEip1559, IGetTotalGasFeeArgsEIP1559 } from './repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
+import { IEstimateGasArgsTEZ, IGetTotalGasFeeArgsTEZ } from './repository/gasRepositoryTezos/GasRepositoryTezos.type';
+
 export type TGasLevel = typeof GAS_LEVEL[keyof typeof GAS_LEVEL];
+export type TSelectedNetwork = { selectedNetwork: Network };
 
-export type TGetTotalGasFeeArguments = IGetTotalGasFeeArgumentsEthers | IGetTotalGasFeeArgumentsEIP1559 | IGetTotalGasFeeArgumentsTezos;
-export type TGasFeeData = IGasFeeInfo | IGasFeeInfoEip1559 | null;
+export type TGetTotalGasFeeArgsEthers = IGetTotalGasFeeArgsEthers & TSelectedNetwork;
+export type TGetTotalGasFeeArgsEIP1559 = IGetTotalGasFeeArgsEIP1559 & TSelectedNetwork;
+export type TGetTotalGasFeeArgsTEZ = IGetTotalGasFeeArgsTEZ & TSelectedNetwork;
+
+export type TEstimateGasArgs = Omit<IEstimateGasArgs, 'networkInfo'> & TSelectedNetwork;
+export type TEstimateGasArgsTEZ = Omit<IEstimateGasArgsTEZ, 'rpcUrl'> & TSelectedNetwork;
 export interface IGasService {
-  getGasFeeData: (selectedNetwork: Network) => Promise<TGasFeeData>;
+  getGasFeeData: (selectedNetwork: Network) => Promise<IGasFeeInfo | IGasFeeInfoEip1559 | null>;
 
-  getTotalGasFee: (args: TGetTotalGasFeeArguments) => string;
+  getTotalGasFee: (args: TGetTotalGasFeeArgsEthers | TGetTotalGasFeeArgsEIP1559 | TGetTotalGasFeeArgsTEZ) => string;
 
   getEstimateTime: (gasLevel: TGasLevel) => number;
 
-  estimateGas: () => Promise<void>;
+  estimateGas: (args: TEstimateGasArgs | TEstimateGasArgsTEZ) => Promise<BigNumber | Estimate>;
 }

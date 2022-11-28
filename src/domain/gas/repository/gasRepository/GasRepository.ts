@@ -6,7 +6,7 @@ import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/gas/GasService.type';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
-import { IGasRepository, IGetTotalGasFeeArgumentsEthers } from './GasRepository.type';
+import { IEstimateGasArgs, IGasRepository, IGetTotalGasFeeArgsEthers } from './GasRepository.type';
 
 import Decimal from 'decimal.js';
 import { formatEther } from 'ethers/lib/utils';
@@ -22,7 +22,7 @@ export class GasRepositoryImpl implements IGasRepository {
   };
 
   //Total = gasPrice * gasLimit
-  getTotalGasFee = ({ gasPrice, gasLimit, gasLevel }: IGetTotalGasFeeArgumentsEthers) => {
+  getTotalGasFee = ({ gasPrice, gasLimit, gasLevel }: IGetTotalGasFeeArgsEthers) => {
     const gasWeight = gasLevel ? GAS_LEVEL_SETTING[gasLevel].weight : '1';
     const gasPriceInDecimal = new Decimal(gasPrice.toString());
     const gasLimitInDecimal = new Decimal(gasLimit.toString());
@@ -31,5 +31,19 @@ export class GasRepositoryImpl implements IGasRepository {
     const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
 
     return formatEther(totalGasInBN);
+  };
+
+  estimateGas = async (args: IEstimateGasArgs) => {
+    const { networkInfo, privateKey, to, value, data } = args;
+    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const wallet = new ethers.Wallet(privateKey, provider);
+
+    const res = await wallet.estimateGas({
+      to,
+      data,
+      value,
+    });
+
+    return res as BigNumber;
   };
 }

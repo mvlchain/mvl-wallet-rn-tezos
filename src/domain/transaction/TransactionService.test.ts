@@ -2,7 +2,8 @@ import '@ethersproject/shims';
 import { BigNumber, ethers } from 'ethers';
 import { instanceCachingFactory, container } from 'tsyringe';
 
-import { GasServiceImpl } from './GasService';
+import { GasServiceImpl } from '@@domain/gas/GasService';
+
 import { EthersTransactionImpl } from './TransactionService';
 import { ITransactionService } from './TransactionService.type';
 
@@ -29,46 +30,4 @@ afterAll(() => {
 
 it('constructs correctly', () => {
   expect(transactionService).toBeDefined();
-});
-
-it('send eth transaction', async () => {
-  const EthersTransactionImpl = container.resolve<EthersTransactionImpl>('EthersTransactionImpl');
-  const GasService = container.resolve<GasServiceImpl>('GasService');
-  const gasFeeInfo = await GasService.getGasFeeData(networkInfo);
-  await EthersTransactionImpl.sendTransaction({
-    networkInfo,
-    privateKey,
-    gasFeeInfo,
-    from,
-    to,
-    value,
-  });
-}, 30000);
-
-it('approve eth transaction', async () => {
-  const EthersTransactionImpl = container.resolve<EthersTransactionImpl>('EthersTransactionImpl');
-  const GasService = container.resolve<GasServiceImpl>('GasService');
-  const gasFeeInfo = await GasService.getGasFeeData(networkInfo);
-  await EthersTransactionImpl.approveTransaction({
-    networkInfo,
-    privateKey,
-    gasFeeInfo,
-    from,
-    to,
-    value,
-  });
-});
-
-it('estimate eth gas', async () => {
-  const EthersTransactionImpl = container.resolve<EthersTransactionImpl>('EthersTransactionImpl');
-  const GasService = container.resolve<GasServiceImpl>('GasService');
-  const gasFeeInfo = await GasService.getGasFeeData(networkInfo);
-  await EthersTransactionImpl.estimateGas({
-    networkInfo,
-    privateKey,
-    gasFeeInfo,
-    from,
-    to,
-    value,
-  });
 });
