@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android  --active-arch-only",
+    "android": "react-native run-android --active-arch-only",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "clean": "yarn clean:ios && yarn clean:android && yarn clean:node",
@@ -13,8 +13,6 @@
     "test": "jest",
     "test:transaction": "jest src/domain/transaction/TransactionService.test.ts",
     "test:keymanager": "jest --watch src/domain/blockchain/Clutch.test.ts",
-    "test:walletBCR": "jest src/domain/wallet/repositories/WalletBlockChainRepository.test.ts",
-    "test:walletBCS": "jest src/domain/wallet/services/WalletBlockChainService.test.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
