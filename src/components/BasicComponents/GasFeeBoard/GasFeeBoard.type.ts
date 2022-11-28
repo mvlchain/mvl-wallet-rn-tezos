@@ -1,5 +1,6 @@
-import { IEIP1559GasFeeInfo, IGasFeeInfo } from '@@domain/gas/GasService.type';
-
+import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
+import { IGasFeeInfoEip1559 } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
 export interface IGasFeeBoardProps {
-  onConfirm: (gasFeeInfo: IGasFeeInfo | IEIP1559GasFeeInfo) => void;
+  isRevision: boolean;
+  onConfirm: ((gasFeeInfo: IGasFeeInfo) => void) | ((gasFeeInfo: IGasFeeInfoEip1559) => void);
 }

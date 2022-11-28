@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
 
@@ -10,7 +10,7 @@ import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useGas = () => {
+const useGasFeeEip1559 = () => {
   const gasService = useDi('GasService');
   const { selectedNetwork } = walletPersistStore();
   const [advanced, setAdvanced] = useState(false);
@@ -81,6 +81,10 @@ const useGas = () => {
     }
   }, [advanced, gasLimit, gasLevel, gasLimit, maxFeePerGas, maxPriorityFeePerGas, blockMaxFeePerGas, blockMaxPriorityFeePerGas, estimatedGas]);
 
+  const handleAdvanced = useCallback(() => {
+    setAdvanced(!advanced);
+  }, [advanced]);
+
   return {
     maxBlockGasLimit,
     gasLimit,
@@ -90,11 +94,11 @@ const useGas = () => {
     maxFeePerGas,
     maxPriorityFeePerGas,
     setGasLevel,
-    setAdvanced,
+    handleAdvanced,
     setGasLimit,
     setMaxFeePerGas,
     setMaxPriorityFeePerGas,
   };
 };
 
-export default useGas;
+export default useGasFeeEip1559;
