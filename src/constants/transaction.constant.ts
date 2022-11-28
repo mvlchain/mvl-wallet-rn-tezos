@@ -18,18 +18,21 @@ export const GAS_LEVEL_SETTING = {
   [GAS_LEVEL.LOW]: {
     weight: '0.75',
     eip1559Weight: '1.1',
+    tezosAdditionalFee: 0.0001,
     maxPriorityFeePerGas: parseUnits('1', 'gwei'),
     waitTime: 30_000,
   },
   [GAS_LEVEL.MID]: {
     weight: '1',
     eip1559Weight: '1.2',
+    tezosAdditionalFee: 0.00015,
     maxPriorityFeePerGas: parseUnits('1.5', 'gwei'),
     waitTime: 30_000,
   },
   [GAS_LEVEL.HIGH]: {
     weight: '1.5',
     eip1559Weight: '1.3',
+    tezosAdditionalFee: 0.0002,
     maxPriorityFeePerGas: parseUnits('2', 'gwei'),
     waitTime: 15_000,
   },

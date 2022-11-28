@@ -8,8 +8,8 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
+import { IGasService } from '@@domain/gas/GasService.type';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
-import { IGasService } from '@@domain/transaction/GasService.type';
 import { ITransactionService } from '@@domain/transaction/TransactionService.type';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
