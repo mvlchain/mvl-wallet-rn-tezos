@@ -40,6 +40,7 @@ const useAccount = () => {
   );
 
   const onChangeWalletInput = (value: string) => {
+    console.log('edit!!   ', selectedWalletIndex, value, selectedNetwork);
     editWalletName({ index: selectedWalletIndex, name: value }, selectedNetwork);
     closeModal();
   };
