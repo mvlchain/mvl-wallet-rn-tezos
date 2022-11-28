@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
 
@@ -52,6 +52,10 @@ const useGasFee = () => {
     }
   }, [advanced, avgBlockGasPrice, gasLimit, gasLevel, gasPrice, gasLimit]);
 
+  const handleAdvanced = useCallback(() => {
+    setAdvanced(!advanced);
+  }, [advanced]);
+
   return {
     avgBlockGasPrice,
     maxBlockGasLimit,
@@ -61,7 +65,7 @@ const useGasFee = () => {
     advanced,
     gasLevel,
     setGasLevel,
-    setAdvanced,
+    handleAdvanced,
     setGasLimit,
     setGasPrice,
   };
