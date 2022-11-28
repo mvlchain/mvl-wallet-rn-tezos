@@ -51,7 +51,7 @@ function App(props: { foxCode?: string }) {
       console.log(`getIsSignedIn: ${getIsSignedIn}`);
 
       const getTorusCredential = await LegacyAuthManager.getTorusCredential();
-      console.log(`getTorusCredential.postboxKey: ${getTorusCredential.postboxKey}`);
+      console.log(`getTorusCredential.postboxKey: ${getTorusCredential ? getTorusCredential.postboxKey : null}`);
       console.log(`getTorusCredential: ${JSON.stringify(getTorusCredential, null, 2)}`);
 
       const getPIN = await LegacyAuthManager.getPIN();
