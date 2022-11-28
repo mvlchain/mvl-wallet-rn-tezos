@@ -11,6 +11,7 @@ const useTransactionHistoryFilter = () => {
 
   const filterCriteria: IBottomSelectMenuProps[] = [
     {
+      id: ALL,
       title: ALL,
       isSelected: currentCriteria === ALL,
       onPress: () => {
@@ -18,6 +19,7 @@ const useTransactionHistoryFilter = () => {
       },
     },
     {
+      id: SENT_ONLY,
       title: SENT_ONLY,
       isSelected: currentCriteria === SENT_ONLY,
       onPress: () => {
@@ -25,6 +27,7 @@ const useTransactionHistoryFilter = () => {
       },
     },
     {
+      id: RECEIVED_ONLY,
       title: RECEIVED_ONLY,
       isSelected: currentCriteria === RECEIVED_ONLY,
       onPress: () => {

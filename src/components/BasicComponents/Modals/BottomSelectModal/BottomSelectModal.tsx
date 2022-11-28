@@ -21,6 +21,7 @@ function BottomSelectModal({ modalTitle, menuList }: IBottomSelectModalProps) {
     >
       {menuList.map((props) => (
         <BottomSelectMenu
+          key={props.id}
           {...props}
           onPress={() => {
             closeModal();

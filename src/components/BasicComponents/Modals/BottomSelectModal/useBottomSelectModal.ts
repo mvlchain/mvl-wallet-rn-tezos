@@ -13,6 +13,7 @@ const useBottomSelectModal = () => {
   const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingPersistStore();
   const currencyMenu: IBottomSelectMenuProps[] = [
     {
+      id: CURRENCY.USD,
       title: 'USD',
       isSelected: settedCurrency === CURRENCY.USD,
       onPress: () => {
@@ -20,6 +21,7 @@ const useBottomSelectModal = () => {
       },
     },
     {
+      id: CURRENCY.SGD,
       title: 'SGD',
       isSelected: settedCurrency === CURRENCY.SGD,
       onPress: () => {
@@ -27,6 +29,7 @@ const useBottomSelectModal = () => {
       },
     },
     {
+      id: CURRENCY.KRW,
       title: 'KRW',
       isSelected: settedCurrency === CURRENCY.KRW,
       onPress: () => {
@@ -37,6 +40,7 @@ const useBottomSelectModal = () => {
 
   const languageMenu: IBottomSelectMenuProps[] = [
     {
+      id: LANGUAGE_CODE.EN,
       title: 'English',
       isSelected: settedLanguage === LANGUAGE_CODE.EN,
       onPress: () => {
@@ -44,6 +48,7 @@ const useBottomSelectModal = () => {
       },
     },
     {
+      id: LANGUAGE_CODE.KM,
       title: 'ភាសាខ្មែរ',
       isSelected: settedLanguage === LANGUAGE_CODE.KM,
       onPress: () => {
@@ -51,6 +56,7 @@ const useBottomSelectModal = () => {
       },
     },
     {
+      id: LANGUAGE_CODE.KO,
       title: '한국어',
       isSelected: settedLanguage === LANGUAGE_CODE.KO,
       onPress: () => {
@@ -61,6 +67,7 @@ const useBottomSelectModal = () => {
 
   const themeMenu: IBottomSelectMenuProps[] = [
     {
+      id: THEME.DEFAULT,
       title: t(THEME_NAME[THEME.DEFAULT]),
       isSelected: appTheme.displayName === THEME.DEFAULT,
       onPress: () => {
@@ -74,6 +81,7 @@ const useBottomSelectModal = () => {
       },
     },
     {
+      id: THEME.LIGHT,
       title: t(THEME_NAME[THEME.LIGHT]),
       isSelected: appTheme.displayName === THEME.LIGHT,
       onPress: () => {
@@ -85,6 +93,7 @@ const useBottomSelectModal = () => {
       },
     },
     {
+      id: THEME.DARK,
       title: t(THEME_NAME[THEME.DARK]),
       isSelected: appTheme.displayName === THEME.DARK,
       onPress: () => {
