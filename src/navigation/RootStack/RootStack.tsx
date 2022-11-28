@@ -82,7 +82,7 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY,
       component: SettingPrivacyPolicyScreen,
-      options: handleStackHeaderOption({ title: t('privacy_policy') }),
+      options: handleStackHeaderOption({ title: '' }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_SECURITY,
@@ -92,7 +92,7 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SETTING_TERMS_OF_SERVICE,
       component: SettingTermsOfServiceScreen,
-      options: handleStackHeaderOption({ title: t('terms_of_service') }),
+      options: handleStackHeaderOption({ title: '' }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT,

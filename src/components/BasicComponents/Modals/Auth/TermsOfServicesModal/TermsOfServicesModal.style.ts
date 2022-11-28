@@ -30,4 +30,7 @@ export const inlineStyles = StyleSheet.create({
     shadowOpacity: 0.24,
     shadowRadius: 32,
   },
+  safeAreaView: {
+    flex: 1,
+  },
 });
