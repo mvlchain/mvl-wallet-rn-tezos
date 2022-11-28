@@ -61,7 +61,7 @@ export class EthersTransactionImpl implements ITransactionService {
   async speedUpTransaction(txId: string) {
     return 'good';
   }
-  async estimateGas(args: ISendTransactionArguments) {
+  async estimateGas(args: ISendTransactionArguments): Promise<BigNumber> {
     const { networkInfo, privateKey, to, value, data } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
@@ -72,7 +72,7 @@ export class EthersTransactionImpl implements ITransactionService {
       value,
     });
 
-    return res;
+    return res as BigNumber;
   }
 
   async getHistory(params: IGetHistoryArguments) {
@@ -137,10 +137,11 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
     return 'good';
   }
   async estimateGas(args: ITezosEstimateArguments) {
+    //TEZO에 맞는 지갑 주소 필요함, 양식이 다름
     const { networkInfo, privateKey, to, value } = args;
     const Tezos = new TezosToolkit(networkInfo.rpcUrl);
     Tezos.setProvider({
-      signer: new InMemorySigner(privateKey),
+      signer: new InMemorySigner('edsk2rKA8YEExg9Zo2qNPiQnnYheF1DhqjLVmfKdxiFfu5GyGRZRnb'),
     });
     const estimation = await Tezos.estimate.transfer({ to, amount: value });
 
