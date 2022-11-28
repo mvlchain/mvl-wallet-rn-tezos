@@ -24,11 +24,13 @@ const useAccount = () => {
   const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
     () => [
       {
+        id: NETWORK.ETH,
         title: formatNetwork(NETWORK.ETH),
         isSelected: selectedNetwork === NETWORK.ETH,
         onPress: () => selectNetwork(NETWORK.ETH),
       },
       {
+        id: NETWORK.BSC,
         title: formatNetwork(NETWORK.BSC),
         isSelected: selectedNetwork === NETWORK.BSC,
         onPress: () => selectNetwork(NETWORK.BSC),
@@ -45,6 +47,7 @@ const useAccount = () => {
   const moreEditList = useMemo(
     () => [
       {
+        id: 'EDIT_WALLET',
         title: t('edit_wallet_name'),
         isSelected: false,
         onPress: () =>
@@ -55,6 +58,7 @@ const useAccount = () => {
           }),
       },
       {
+        id: 'EDIT_TOKEN_LIST',
         title: t('edit_token_list'),
         isSelected: false,
         onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
