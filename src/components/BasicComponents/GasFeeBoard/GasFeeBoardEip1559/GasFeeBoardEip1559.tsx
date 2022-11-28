@@ -28,18 +28,17 @@ function GasFeeBoardEip1559({ isRevision, onConfirm }: IGasFeeBoardEip1559Props)
       transactionFee={transactionFee}
       advanced={advanced}
       handleAdvanced={handleAdvanced}
-      GasFeeInputs={
-        <GasFeeInputsEIP1559
-          maxFeePerGas={maxFeePerGas}
-          maxPriorityFeePerGas={maxPriorityFeePerGas}
-          gasLimit={gasLimit}
-          setMaxFeePerGas={setMaxFeePerGas}
-          setMaxPriorityFeePerGas={setMaxPriorityFeePerGas}
-          setGasLimit={setGasLimit}
-        />
-      }
-      GasLevelRadioButtons={<GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />}
-    />
+    >
+      <GasFeeInputsEIP1559
+        maxFeePerGas={maxFeePerGas}
+        maxPriorityFeePerGas={maxPriorityFeePerGas}
+        gasLimit={gasLimit}
+        setMaxFeePerGas={setMaxFeePerGas}
+        setMaxPriorityFeePerGas={setMaxPriorityFeePerGas}
+        setGasLimit={setGasLimit}
+      />
+      <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
+    </GasFeeBoardLayout>
   );
 }
 export default GasFeeBoardEip1559;
