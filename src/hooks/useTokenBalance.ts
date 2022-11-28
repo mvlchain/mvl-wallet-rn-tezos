@@ -76,24 +76,34 @@ export const useTokenBalance = () => {
     // TODO: wallet data 못가져왔을 때 에러 로직 추가
     if (walletData.length === 0) return;
     getBalance();
-  }, [selectedNetwork, walletData]);
+  }, [selectedNetwork, walletData, selectedWalletIndex]);
 
   useEffect(() => {
     if (!price || !balanceData) return;
     let formalizedArray: IBalanceData[] = [];
-    // TODO: 중요! 타입 형변환이 너무 무식하게 들어감 위험해보임.
-    // 타입 캐스팅이 너무 많습니다. 해결방안이 있다면 수정해야할 것 같습니다.
+    // TODO: 타입 캐스팅이 너무 많습니다. 해결방안이 있다면 수정해야할 것 같습니다.
     for (const [crypto, balance] of Object.entries(balanceData)) {
       const data = price[PRICE_NAME[crypto as keyof typeof PRICE_NAME]] as IGetPriceResponseDto;
       const currency = settedCurrency.toLocaleLowerCase();
       if (data) {
-        const floatBalance = parseFloat(balance);
+        // TODO: 계산 테스트 필요(자리수 등등)
+        let floatBalance = parseFloat(balance);
+        if (isNaN(floatBalance)) {
+          // TODO: 0으로 넣는것 말고 다른 예외처리를 어떻게 해줄것인가?
+          floatBalance = 0;
+        }
+
+        let valuatedPrice = (data[currency] as unknown as number) * floatBalance;
+        if (isNaN(valuatedPrice)) {
+          // TODO: 0으로 넣는것 말고 다른 예외처리를 어떻게 해줄것인가?
+          valuatedPrice = 0;
+        }
         formalizedArray = [
           ...formalizedArray,
           {
             ticker: crypto,
             balance: floatBalance,
-            valuatedPrice: (data[currency] as unknown as number) * floatBalance,
+            valuatedPrice,
           },
         ];
       }
