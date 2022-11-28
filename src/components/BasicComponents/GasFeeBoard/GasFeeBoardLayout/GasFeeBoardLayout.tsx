@@ -13,16 +13,7 @@ import { width } from '@@utils/ui';
 import * as S from './GasFeeBoardLayout.style';
 import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
-function GasFeeBoardLayout({
-  isRevision,
-  estimatedTime,
-  transactionFee,
-  advanced,
-  GasFeeInputs,
-  GasLevelRadioButtons,
-  onConfirm,
-  handleAdvanced,
-}: IGasFeeBoardLayoutProps) {
+function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced, onConfirm, handleAdvanced, children }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   return (
     <S.Container>
@@ -35,8 +26,8 @@ function GasFeeBoardLayout({
               <Toggle checked={advanced} onPress={handleAdvanced} style={{ marginLeft: width * 16 }} />
             </S.ToggleWrapper>
           </S.Row>
-          <GasFeeInputs />
-          <GasLevelRadioButtons />
+          {children[0]}
+          {children[1]}
         </S.InnerContainer>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>
