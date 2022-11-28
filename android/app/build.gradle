@@ -278,6 +278,9 @@ dependencies {
 
     implementation 'org.torusresearch:customauth-android-sdk:2.1.0'
 
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
