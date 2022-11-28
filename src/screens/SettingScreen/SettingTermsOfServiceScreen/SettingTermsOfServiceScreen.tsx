@@ -1,13 +1,10 @@
 import React from 'react';
 
-import { Text, View } from 'react-native';
+import Webview from '@@components/BasicComponents/Webview';
+const TOS_URL = 'https://policy.mvlclutch.io/tos';
 
 function SettingTermsOfService() {
-  return (
-    <View>
-      <Text>Setting Terms Of Service</Text>
-    </View>
-  );
+  return <Webview url={TOS_URL} />;
 }
 
 export default SettingTermsOfService;
