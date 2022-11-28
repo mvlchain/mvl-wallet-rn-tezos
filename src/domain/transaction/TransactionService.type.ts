@@ -1,7 +1,6 @@
-import { Estimate, TransferParams } from '@taquito/taquito';
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
-import { IEIP1559GasFeeInfo, IGasFeeInfo } from './GasService.type';
+import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
 
 //TODO: generatedscheme에 있는지 확인하기
 export enum TTransactionStatus {
@@ -35,20 +34,14 @@ export interface INetworkInfo {
 }
 export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
 
-export interface ITezosEstimateArguments extends TransferParams {
-  networkInfo: ITezosNetworkInfo;
-  privateKey: string;
-  to: string;
-  value: number;
-}
-
 //TODO: getGasFee에서 얻는 값자체가 null 아니면 bignumber인데 값 입력시에는 null안받음 어떻게 할까.
+//IGasFeeEip1559랑 중복됨 null만없음
 export interface ISendTransactionGasFee {
   maxFeePerGas: BigNumber;
   maxPriorityFeePerGas: BigNumber;
   gasLimit: BigNumber;
 }
-export interface ISendTransactionArguments {
+export interface ISendTransactionArgs {
   networkInfo: INetworkInfo;
   privateKey: string;
   gasFeeInfo: IGasFeeInfo | ISendTransactionGasFee;
@@ -57,7 +50,7 @@ export interface ISendTransactionArguments {
   value: BigNumberish;
   data?: BytesLike;
 }
-export interface ITezosSendTransactionArguments {
+export interface ITezosSendTransactionArgs {
   networkInfo: ITezosNetworkInfo;
   privateKey: string;
   gasFeeInfo: IGasFeeInfo;
@@ -67,17 +60,7 @@ export interface ITezosSendTransactionArguments {
   data?: BytesLike;
 }
 
-export interface IEthersEstimateGasArguments {
-  networkInfo: INetworkInfo;
-  privateKey: string;
-  to: string;
-  value: BigNumberish;
-}
-
-export interface ITezosEstimateGasArguments extends Omit<IEthersEstimateGasArguments, 'networkInfo'> {
-  networkInfo: ITezosNetworkInfo;
-}
-export interface IGetHistoryArguments {
+export interface IGetHistoryArgs {
   network: string;
   ticker: string;
   address: string;
@@ -115,10 +98,9 @@ export interface ITransaction {
   estimateGasError?: string;
 }
 export interface ITransactionService {
-  sendTransaction(args: ISendTransactionArguments | ITezosSendTransactionArguments): Promise<string>;
-  approveTransaction(args: ISendTransactionArguments): Promise<string>;
+  sendTransaction(args: ISendTransactionArgs | ITezosSendTransactionArgs): Promise<string>;
+  approveTransaction(args: ISendTransactionArgs): Promise<string>;
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
-  estimateGas(args: IEthersEstimateGasArguments | ITezosEstimateGasArguments): Promise<BigNumber | Estimate>;
-  getHistory(args: IGetHistoryArguments): Promise<IGetTransactionHistoryResponse[] | undefined>;
+  getHistory(args: IGetHistoryArgs): Promise<IGetTransactionHistoryResponse[] | undefined>;
 }

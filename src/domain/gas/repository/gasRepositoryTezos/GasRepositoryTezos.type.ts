@@ -1,14 +1,18 @@
-import { BigNumber } from 'ethers';
+import { Estimate, TransferParams } from '@taquito/taquito';
 
-import { GAS_LEVEL } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/gas/GasService.type';
-import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
-
-export interface IGetTotalGasFeeArgumentsTezos {
+export interface IGetTotalGasFeeArgsTEZ {
   gasLevel?: TGasLevel;
   baseFee: number;
   additionalFee?: number;
 }
+
+export interface IEstimateGasArgsTEZ extends TransferParams {
+  rpcUrl: string;
+  privateKey: string;
+}
+
 export interface IGasRepositoryTezos {
-  getTotalGasFee: (args: IGetTotalGasFeeArgumentsTezos) => string;
+  getTotalGasFee: (args: IGetTotalGasFeeArgsTEZ) => string;
+  estimateGas: (args: IEstimateGasArgsTEZ) => Promise<Estimate>;
 }

@@ -13,17 +13,16 @@ import {
   ITransactionService,
   TTransactionStatus,
   TTransactionType,
-  IGetHistoryArguments,
-  ISendTransactionArguments,
-  ITezosSendTransactionArguments,
-  ITezosEstimateArguments,
+  IGetHistoryArgs,
+  ISendTransactionArgs,
+  ITezosSendTransactionArgs,
 } from './TransactionService.type';
 
 @injectable()
 export class EthersTransactionImpl implements ITransactionService {
   constructor() {}
 
-  async sendTransaction(args: ISendTransactionArguments): Promise<string> {
+  async sendTransaction(args: ISendTransactionArgs): Promise<string> {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
@@ -39,7 +38,7 @@ export class EthersTransactionImpl implements ITransactionService {
 
     return res.hash;
   }
-  async approveTransaction(args: ISendTransactionArguments) {
+  async approveTransaction(args: ISendTransactionArgs) {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
@@ -61,21 +60,8 @@ export class EthersTransactionImpl implements ITransactionService {
   async speedUpTransaction(txId: string) {
     return 'good';
   }
-  async estimateGas(args: ISendTransactionArguments): Promise<BigNumber> {
-    const { networkInfo, privateKey, to, value, data } = args;
-    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    const wallet = new ethers.Wallet(privateKey, provider);
 
-    const res = await wallet.estimateGas({
-      to,
-      data,
-      value,
-    });
-
-    return res as BigNumber;
-  }
-
-  async getHistory(params: IGetHistoryArguments) {
+  async getHistory(params: IGetHistoryArgs) {
     //TODO: v2에서는 auth header붙여야함
     try {
       // const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
@@ -98,7 +84,7 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
   constructor() {}
 
   // Tezos는 general한 sendTransaction을 raw string data를 활용하는 방식으로 구현하기 어려워서 transfer 기준으로 일단 구현
-  async sendTransaction(args: ITezosSendTransactionArguments): Promise<string> {
+  async sendTransaction(args: ITezosSendTransactionArgs): Promise<string> {
     const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
     const Tezos = new TezosToolkit(networkInfo.rpcUrl);
     Tezos.setProvider({
@@ -127,7 +113,7 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
     return txHash;
   }
 
-  async approveTransaction(args: ISendTransactionArguments) {
+  async approveTransaction(args: ISendTransactionArgs) {
     return 'approve';
   }
   async cancelTransaction(txId: string) {
@@ -136,19 +122,8 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
   async speedUpTransaction(txId: string) {
     return 'good';
   }
-  async estimateGas(args: ITezosEstimateArguments) {
-    //TEZO에 맞는 지갑 주소 필요함, 양식이 다름
-    const { networkInfo, privateKey, to, value } = args;
-    const Tezos = new TezosToolkit(networkInfo.rpcUrl);
-    Tezos.setProvider({
-      signer: new InMemorySigner('edsk2rKA8YEExg9Zo2qNPiQnnYheF1DhqjLVmfKdxiFfu5GyGRZRnb'),
-    });
-    const estimation = await Tezos.estimate.transfer({ to, amount: value });
 
-    return estimation;
-  }
-
-  async getHistory(args: IGetHistoryArguments) {
+  async getHistory(args: IGetHistoryArgs) {
     //TODO: v2에서는 auth header붙여야함
     try {
       // const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;

@@ -16,9 +16,3 @@ beforeAll(() => {
 afterAll(() => {
   container.dispose();
 });
-
-it('getGasFeeData', async () => {
-  const GasService = container.resolve<GasServiceImpl>('GasService');
-  const res = await GasService.getGasFeeData(networkInfo);
-  console.log('gaslimit', formatEther(res.gasLimit), 'gasprice', formatEther(res.gasPrice));
-});
