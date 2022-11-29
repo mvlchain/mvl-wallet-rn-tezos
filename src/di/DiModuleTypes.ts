@@ -9,6 +9,9 @@ import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRep
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
 import { IGasService } from '@@domain/gas/GasService.type';
+import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
+import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
+import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { ITransactionService } from '@@domain/transaction/TransactionService.type';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
@@ -42,6 +45,10 @@ export interface DiModuleTypes {
   RTNSettingsRepository: RTNSettingsRepository;
   EarnEventRepository: EarnEventRepository;
   TokenRepository: ITokenRepository;
+  GasRepository: GasRepositoryImpl;
+  GasRepositoryEip1559: GasRepositoryEip1559Impl;
+  GasRepositoryTezos: GasRepositoryTezosImpl;
+
   // Client
   KeyClient: KeyClient;
   KeyClientUtil: KeyClientUtil;
