@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GasFeeInputsEIP1559 from '../../GasFeeInputs/GasFeeInputsEip1559/GasFeeInputsEIP1559';
+import GasFeeInputsEIP1559 from '../../GasFeeInputs/GasFeeInputsEip1559';
 import GasLevelRadioButtons from '../../GasLevelRadioButtons';
 import GasFeeBoardLayout from '../GasFeeBoardLayout';
 

@@ -6,7 +6,8 @@ import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextFie
 import { height } from '@@utils/ui';
 
 import * as S from '../GasFeeInputs.style';
-import { IGasFeeInputsProps } from '../GasFeeInputs.type';
+
+import { IGasFeeInputsProps } from './GasFeeInputs.type';
 
 function GasFeeInputs({ gasPrice, gasLimit, setGasPrice, setGasLimit }: IGasFeeInputsProps) {
   const { t } = useTranslation();

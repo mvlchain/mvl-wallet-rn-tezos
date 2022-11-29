@@ -1,5 +1,3 @@
-import React, { ReactElement } from 'react';
-
 import { ReactChildren } from 'react-native-toast-message';
 
 import { TOnConfirmEip1559, TOnConfirmEthers, TOnConfirmTezos } from '../GasFeeBoard.type';

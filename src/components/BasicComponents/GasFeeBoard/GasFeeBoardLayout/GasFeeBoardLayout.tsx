@@ -26,8 +26,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
               <Toggle checked={advanced} onPress={handleAdvanced} style={{ marginLeft: width * 16 }} />
             </S.ToggleWrapper>
           </S.Row>
-          {children[0]}
-          {children[1]}
+          {!advanced ? children[0] : children[1]}
         </S.InnerContainer>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>

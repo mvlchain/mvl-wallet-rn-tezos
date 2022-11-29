@@ -28,7 +28,7 @@ const useTokenSend = () => {
   const from = '0x5852d8Bc656562A27292df4cA2cbB14dE62b88f0';
   const networkInfo = NETWORK_INFO[selectedNetwork];
 
-  const confirmSend = async (gasFeeInfo: IGasFeeInfo | ISendTransactionGasFee) => {
+  const confirmSend = async (gasFeeInfo: IGasFeeInfo) => {
     if (!to || !value) return;
     try {
       const res = await ethersTransactionService.sendTransaction({

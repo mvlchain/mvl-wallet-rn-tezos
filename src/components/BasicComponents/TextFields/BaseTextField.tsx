@@ -46,7 +46,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   return (
     <S.BaseTextFieldContainer>
       {label && <S.BaseTextFieldLabel>{label}</S.BaseTextFieldLabel>}
-      <S.BaseTextFieldInputWrapper lcColor={lcColor}>
+      <S.BaseTextFieldInputWrapper lcColor={lcColor} editable={true}>
         <S.BaseInput
           keyboardType={KeyboardTypeByInputType[type]}
           placeholder={placeholder}
