@@ -33,7 +33,7 @@ it('get eth balance', async () => {
     selectedWalletPrivateKey: TestData.selectedWalletPrivateKey,
     rpcUrl: TEST_ETH_RPC_URL,
   });
-  expect(balance).toBe('0.0');
+  expect(balance).toBe('0.199914121574889052');
 });
 
 it('get mvl balance', async () => {
@@ -44,7 +44,7 @@ it('get mvl balance', async () => {
     address: TestData.ethAddress,
     rpcUrl: TEST_ETH_RPC_URL,
   });
-  expect(balance).toBe('0.0');
+  expect(balance).toBe('1000.123456789000001');
 });
 
 it('get bsc balance', async () => {
@@ -53,7 +53,7 @@ it('get bsc balance', async () => {
     selectedWalletPrivateKey: TestData.selectedWalletPrivateKey,
     rpcUrl: TEST_BSC_RPC_URL,
   });
-  expect(balance).toBe('0.0');
+  expect(balance).toBe('0.5');
 });
 
 it('get bMvl balance', async () => {
