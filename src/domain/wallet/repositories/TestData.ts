@@ -1,5 +1,5 @@
 export const TestData = {
-  ethAddress: '0x686329AF72E935E5BB5c7a0339E99d2C14874daa',
-  bscAddress: '0x686329AF72E935E5BB5c7a0339E99d2C14874daa',
-  selectedWalletPrivateKey: '0x48308097d2e2bc2f79afe58887567046a8dca558f63e35d5d23da162534e2ee8',
+  ethAddress: '0xC2981a878baA621E22799C31265aeaAFB7f74c50',
+  bscAddress: '0xC2981a878baA621E22799C31265aeaAFB7f74c50',
+  selectedWalletPrivateKey: '0xf7a6969b7e1c36b5b86c9be0865acc4b9348f4342e0227a4e95ef435fe5cc0ca',
 };
