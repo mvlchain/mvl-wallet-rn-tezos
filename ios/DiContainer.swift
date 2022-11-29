@@ -9,11 +9,12 @@ import Foundation
 
 @objc(DiContainer)
 class DiContainer: NSObject {
-  
+  private let keychain: KeychainProtocol
   private let settings: SettingsStorageProtocol
   
-  init(settings: SettingsStorageProtocol) {
+  init(settings: SettingsStorageProtocol, keychain: KeychainProtocol) {
     self.settings = settings
+    self.keychain = keychain
   }
   
   @objc
@@ -22,5 +23,5 @@ class DiContainer: NSObject {
   }
 
   @objc
-  static let shared: DiContainer = DiContainer(settings: SettingsStorage())
+  static let shared: DiContainer = DiContainer(settings: SettingsStorage(), keychain: Keychain.default)
 }
