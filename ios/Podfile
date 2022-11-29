@@ -21,8 +21,9 @@ target 'Wallet' do
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'Permission-FaceID', :path => "#{permissions_path}/FaceID"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-
-
+  pod 'RxSwift', '6.5.0'
+  pod 'RxCocoa', '6.5.0'
+  pod 'KeychainAccess'
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -36,6 +37,8 @@ target 'Wallet' do
   target 'WalletTests' do
     inherit! :complete
     # Pods for testing
+    pod 'RxBlocking', '6.5.0'
+    pod 'RxTest', '6.5.0'
   end
 
   # Enables Flipper.

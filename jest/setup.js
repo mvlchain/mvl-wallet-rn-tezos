@@ -1,15 +1,10 @@
 import 'react-native-gesture-handler/jestSetup';
 import 'reflect-metadata';
+import mockLegacyAuthManager from '../__mocks__/@@store/LegacyAuthManager';
 import mockSecureKeychain from '../__mocks__/@@utils/SecureKeychain';
-// const mockKeychain = require('../__mocks__/react-native-keychain');
 
-// const mockAsyncStorage = require('../__mocks__/@react-native-async-storage/async-storage');
-//
-// jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
-// jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
-// jest.mock('react-native-keychain', () => mockKeychain);
 jest.mock('@@utils/SecureKeychain', () => mockSecureKeychain);
-
+jest.mock('@@store/LegacyAuthManager', () => mockLegacyAuthManager);
 jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
 jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
 jest.mock('@react-native-clipboard/clipboard', () => () => jest.fn());

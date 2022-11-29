@@ -17,6 +17,7 @@ import { THEME } from '@@constants/setting.constant';
 import { useDi } from '@@hooks/useDi';
 import RootStack from '@@navigation/RootStack';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
+import LegacyAuthManager from '@@store/LegacyAuthManager';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
@@ -46,6 +47,22 @@ function App(props: { foxCode?: string }) {
   const settingsRepository = useDi('RTNSettingsRepository');
   useEffect(() => {
     (async () => {
+      const getIsSignedIn = await LegacyAuthManager.getIsSignedIn();
+      console.log(`getIsSignedIn: ${getIsSignedIn}`);
+
+      const getTorusCredential = await LegacyAuthManager.getTorusCredential();
+      console.log(`getTorusCredential.postboxKey: ${getTorusCredential ? getTorusCredential.postboxKey : null}`);
+      console.log(`getTorusCredential: ${JSON.stringify(getTorusCredential, null, 2)}`);
+
+      const getPIN = await LegacyAuthManager.getPIN();
+      console.log(`getPIN: ${getPIN}`);
+
+      const getExtendedKey = await LegacyAuthManager.getExtendedKey();
+      console.log(`getExtendedKey: ${JSON.stringify(getExtendedKey, null, 2)}`);
+
+      const getDeviceShare = await LegacyAuthManager.getDeviceShare();
+      console.log(`getDeviceShare: ${getDeviceShare}`);
+
       const themeType = await settingsRepository.getThemeType();
       console.log(`Theme> fetching native theme settings: ${themeType}`);
 
