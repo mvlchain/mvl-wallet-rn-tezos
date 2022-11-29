@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
 
-import { NETWORK_INFO } from '@@components/BasicComponents/GasFeeBoard/testNetworkEnv';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/gas/GasService.type';
 import { IGasFeeInfoEip1559 } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEip1559.type';

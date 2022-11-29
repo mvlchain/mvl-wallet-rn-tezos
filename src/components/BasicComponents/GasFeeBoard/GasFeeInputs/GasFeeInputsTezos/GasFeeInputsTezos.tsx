@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { BaseTextField } from '@@components/BasicComponents/TextFields/BaseTextField';
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
 import { height } from '@@utils/ui';
 
@@ -18,7 +17,7 @@ function GasFeeInputsTezos({ baseFee, additionalFee, setAdditionalFee }: IGasFee
       {/* TODO: 다국어 요청 */}
       <S.Label>{t('base_fee')}</S.Label>
       <S.InputWrapper>
-        <GasTextField defaultValue={baseFee} unit={'tez'} editable={false} />
+        <GasTextField defaultValue={baseFee} unit={'tez'} disabled={true} />
       </S.InputWrapper>
       <S.Label style={{ marginTop: height * 24 }}>{t('additional_fee')}</S.Label>
       <S.InputWrapper>

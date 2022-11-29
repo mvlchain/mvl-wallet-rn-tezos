@@ -13,7 +13,7 @@ import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function GasTextField(props: Type.IGasTextFieldProps) {
-  const { value, setValue, style, unit, hint, delay, editable, defaultValue } = props;
+  const { value, setValue, style, unit, hint, delay, disabled, defaultValue } = props;
   const { appTheme } = settingPersistStore();
   const color = theme[appTheme.value].color;
   const [lcColor, setLcColor] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
 
   return (
     <S.BaseTextFieldContainer>
-      <S.BaseTextFieldInputWrapper lcColor={lcColor} editable={editable}>
+      <S.BaseTextFieldInputWrapper lcColor={lcColor} editable={!disabled}>
         <S.BaseInput
           defaultValue={defaultValue}
           keyboardType={'numeric'}
@@ -77,7 +77,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
           style={style}
           selectionColor={color.black}
           placeholderTextColor={color.grey300Grey700}
-          editable={editable}
+          editable={!disabled}
         />
         {unit && <S.Unit>{unit.toUpperCase()}</S.Unit>}
         <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />

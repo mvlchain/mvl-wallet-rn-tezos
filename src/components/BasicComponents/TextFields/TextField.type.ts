@@ -33,7 +33,7 @@ export interface IGasTextFieldProps {
   //TODO: ticker 관련되서 정리되면 나중에 상수 및 타입 처리하기
   unit?: 'gwei' | 'ether' | 'tez';
   delay?: number;
-  editable?: boolean;
+  disabled?: boolean;
 }
 
 export interface ITextFieldContainerProps {
