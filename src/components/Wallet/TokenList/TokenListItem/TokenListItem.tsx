@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { commify } from 'ethers/lib/utils';
 import { Pressable } from 'react-native';
 
 import * as TokenIcon from '@@assets/image/token';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import numberFormatter from '@@utils/numberFormatter';
 
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
@@ -30,10 +30,10 @@ function TokenListItem({ ticker, balance, valuatedPrice }: ITokenListItemProps) 
         </S.LabelContainer>
         <S.ValueContainer>
           <S.Text>
-            {numberFormatter.setComma(balance)} {ticker}
+            {commify(balance)} {ticker}
           </S.Text>
           <S.AmountUSD>
-            {numberFormatter.setComma(valuatedPrice)} {settedCurrency}
+            {commify(valuatedPrice)} {settedCurrency}
           </S.AmountUSD>
         </S.ValueContainer>
       </S.Container>

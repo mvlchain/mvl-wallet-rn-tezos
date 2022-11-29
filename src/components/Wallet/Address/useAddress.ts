@@ -23,7 +23,7 @@ const useAddress = () => {
       type: 'basic',
       text1: t('copy_to_clipboard'),
     });
-  }, [data]);
+  }, [data, selectedWalletIndex]);
 
   return {
     address: (data && data[selectedWalletIndex]?.address) ?? 'Wallet 1',
