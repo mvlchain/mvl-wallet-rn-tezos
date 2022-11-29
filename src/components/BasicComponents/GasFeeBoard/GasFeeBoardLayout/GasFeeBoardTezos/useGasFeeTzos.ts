@@ -2,6 +2,8 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { Estimate } from '@taquito/taquito';
 import Decimal from 'decimal.js';
+import { BigNumber } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
 
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/gas/GasService.type';
@@ -15,8 +17,8 @@ const useGasFeeTezos = () => {
 
   const [advanced, setAdvanced] = useState(false);
   const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
-  const [baseFee, setBaseFee] = useState<number | null>(null);
-  const [additionalFee, setAdditionalFee] = useState<number>(GAS_LEVEL_SETTING[GAS_LEVEL.LOW].tezosAdditionalFee);
+  const [baseFee, setBaseFee] = useState<BigNumber | null>(null);
+  const [additionalFee, setAdditionalFee] = useState<BigNumber>(GAS_LEVEL_SETTING[GAS_LEVEL.LOW].tezosAdditionalFee);
   const { to, value, data } = transactionRequestStore();
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const useGasFeeTezos = () => {
     const burnFeeMutezInDecimal = new Decimal(newEstimatedGas.burnFeeMutez);
     const suggestedFeeMutezInDecimal = new Decimal(newEstimatedGas.suggestedFeeMutez);
     const baseFeeInDecimal = burnFeeMutezInDecimal.add(suggestedFeeMutezInDecimal);
-    setBaseFee(baseFeeInDecimal.toNumber);
+    setBaseFee(parseUnits(baseFeeInDecimal.toString(), 'gwei'));
   };
 
   const transactionFee = useMemo(() => {
@@ -44,14 +46,14 @@ const useGasFeeTezos = () => {
       if (!baseFee || !additionalFee) return '-';
       return gasService.getTotalGasFee({
         selectedNetwork,
-        baseFee,
-        additionalFee,
+        baseFee: baseFee.toNumber(),
+        additionalFee: additionalFee.toNumber(),
       });
     } else {
       if (!baseFee) return '-';
       return gasService.getTotalGasFee({
         selectedNetwork,
-        baseFee,
+        baseFee: baseFee.toNumber(),
         gasLevel,
       });
     }

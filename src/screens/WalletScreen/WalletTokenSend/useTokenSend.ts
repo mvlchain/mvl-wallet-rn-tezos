@@ -6,7 +6,8 @@ import 'reflect-metadata';
 import { BigNumber } from 'ethers';
 import { GestureResponderEvent } from 'react-native-modal';
 
-import { IEIP1559GasFeeInfo, IGasFeeInfo } from '@@domain/gas/GasService.type';
+import { IGasFeeInfoEip1559 } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
+import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
 import { ISendTransactionGasFee } from '@@domain/transaction/TransactionService.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';

@@ -30,7 +30,7 @@ function WalletTokenSend() {
     <ScrollView style={{ flex: 1 }}>
       <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <GasFeeBoard onConfirm={confirmSend} />
+      <GasFeeBoard isRevision={false} onConfirm={confirmSend} />
     </ScrollView>
   );
 }

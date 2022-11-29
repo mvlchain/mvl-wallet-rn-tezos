@@ -13,7 +13,7 @@ import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function GasTextField(props: Type.IGasTextFieldProps) {
-  const { value, setValue, style, unit, hint, delay } = props;
+  const { value, setValue, style, unit, hint, delay, editable, defaultValue } = props;
   const { appTheme } = settingPersistStore();
   const color = theme[appTheme.value].color;
   const [lcColor, setLcColor] = useState<string | null>(null);
@@ -28,6 +28,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   };
 
   const onChange = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    if (!setValue) return;
     let value = data.nativeEvent.text;
 
     if (!value || value === '') {
@@ -48,10 +49,12 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   };
 
   const clearTextField = () => {
+    if (!setValue) return;
     setValue(BigNumber.from(0));
     setDisplayValue('0');
   };
 
+  //TODO: 디바운스 처리
   const debounce = useCallback((callback: any) => {
     let timer: any;
     return (...args: any[]) => {
@@ -62,8 +65,9 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
 
   return (
     <S.BaseTextFieldContainer>
-      <S.BaseTextFieldInputWrapper lcColor={lcColor}>
+      <S.BaseTextFieldInputWrapper lcColor={lcColor} editable={editable}>
         <S.BaseInput
+          defaultValue={defaultValue}
           keyboardType={'numeric'}
           placeholder={'0.00'}
           onChange={onChange}
@@ -73,6 +77,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
           style={style}
           selectionColor={color.black}
           placeholderTextColor={color.grey300Grey700}
+          editable={editable}
         />
         {unit && <S.Unit>{unit.toUpperCase()}</S.Unit>}
         <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />

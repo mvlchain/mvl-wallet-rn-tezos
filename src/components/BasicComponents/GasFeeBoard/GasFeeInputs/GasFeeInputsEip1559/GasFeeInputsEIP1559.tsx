@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
 import { height } from '@@utils/ui';
 
-import * as S from './GasFeeInputs.style';
+import * as S from '../GasFeeInputs.style';
+
 import { ISpeedInputsEIP1559Props } from './GasFeeInputsEIP1559.type';
 
 function GasFeeInputsEIP1559({
