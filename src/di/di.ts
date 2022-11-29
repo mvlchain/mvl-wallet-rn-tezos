@@ -14,6 +14,10 @@ import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyReposit
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
+import { GasServiceImpl } from '@@domain/gas/GasService';
+import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
+import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
+import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { EhtersClient } from '@@domain/wallet/clients/EthersClient';
 import { TezosClient } from '@@domain/wallet/clients/TezosClient';
@@ -93,4 +97,13 @@ container.register('EhtersClient', {
 
 container.register('TezosClient', {
   useFactory: instancePerContainerCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),
+});
+container.register('GasRepository', {
+  useFactory: instancePerContainerCachingFactory<GasRepositoryImpl>((container) => container.resolve(GasRepositoryImpl)),
+});
+container.register('GasRepositoryEip1559', {
+  useFactory: instancePerContainerCachingFactory<GasRepositoryEip1559Impl>((container) => container.resolve(GasRepositoryEip1559Impl)),
+});
+container.register('GasRepositoryTezos', {
+  useFactory: instancePerContainerCachingFactory<GasRepositoryTezosImpl>((container) => container.resolve(GasRepositoryTezosImpl)),
 });
