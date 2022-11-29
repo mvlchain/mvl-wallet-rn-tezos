@@ -27,6 +27,8 @@ export const BaseTextFieldInputWrapper = styled.View<Type.ITextFieldContainerPro
   gap: ${width * 8}px;
   outline-color: ${({ theme }) => theme.color.primary};
   outline-style: solid;
+  //TODO: 임의 설정 디자인 요청해야함
+  background-color: ${({ theme, editable }) => (editable ? 'transparent' : theme.color.grey300Grey700)};
 `;
 
 export const Unit = styled.Text`

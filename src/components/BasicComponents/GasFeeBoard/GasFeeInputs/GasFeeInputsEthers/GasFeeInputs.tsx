@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
 import { height } from '@@utils/ui';
 
-import * as S from './GasFeeInputs.style';
-import { IGasFeeInputsProps } from './GasFeeInputs.type';
+import * as S from '../GasFeeInputs.style';
+import { IGasFeeInputsProps } from '../GasFeeInputs.type';
 
 function GasFeeInputs({ gasPrice, gasLimit, setGasPrice, setGasLimit }: IGasFeeInputsProps) {
   const { t } = useTranslation();

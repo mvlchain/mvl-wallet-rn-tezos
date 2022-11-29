@@ -1,8 +1,8 @@
 import React from 'react';
 
-import GasFeeBoardLayout from '../GasFeeBoardLayout/GasFeeBoardLayout';
-import GasFeeInputs from '../GasFeeInputs';
-import GasLevelRadioButtons from '../GasLevelRadioButtons';
+import GasFeeInputs from '../../GasFeeInputs/GasFeeInputsEthers';
+import GasLevelRadioButtons from '../../GasLevelRadioButtons';
+import GasFeeBoardLayout from '../GasFeeBoardLayout';
 
 import { IGasFeeBoardEthersProps } from './GasFeeBoardEthers.type';
 import useGasFee from './useGasFee';
