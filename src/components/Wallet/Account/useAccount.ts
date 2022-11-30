@@ -5,12 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { NETWORK } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { formatNetwork } from '@@utils/format';
 
 const useAccount = () => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
@@ -25,13 +24,13 @@ const useAccount = () => {
     () => [
       {
         id: NETWORK.ETH,
-        title: formatNetwork(NETWORK.ETH),
+        title: getNetworkConfig(NETWORK.ETH).name,
         isSelected: selectedNetwork === NETWORK.ETH,
         onPress: () => selectNetwork(NETWORK.ETH),
       },
       {
         id: NETWORK.BSC,
-        title: formatNetwork(NETWORK.BSC),
+        title: getNetworkConfig(NETWORK.BSC).name,
         isSelected: selectedNetwork === NETWORK.BSC,
         onPress: () => selectNetwork(NETWORK.BSC),
       },
@@ -76,7 +75,7 @@ const useAccount = () => {
   };
 
   return {
-    networkName: formatNetwork(selectedNetwork),
+    networkName: getNetworkConfig(selectedNetwork).name,
     onPressSwitchNetwork,
     onPressMore,
   };
