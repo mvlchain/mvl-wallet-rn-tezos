@@ -11,6 +11,7 @@ import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/Terms
 import { ToastPopup } from '@@components/BasicComponents/Modals/BaseModal/ToastPopup';
 import { GlobalModal } from '@@components/BasicComponents/Modals/GlobalModal';
 import useHeader from '@@hooks/useHeader';
+import { useColor } from '@@hooks/useTheme';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
@@ -29,8 +30,6 @@ import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
 import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
 import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
-import settingPersistStore from '@@store/setting/settingPersistStore';
-import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
 
 import { ROOT_STACK_ROUTE, TRootStackParamList } from './RootStack.type';
@@ -48,9 +47,9 @@ const routerTheme = {
 
 function RootStack() {
   const { t } = useTranslation();
-  const { appTheme } = settingPersistStore();
   const { handleStackHeaderOption } = useHeader();
-  const color = theme[appTheme.value].color;
+  const { color } = useColor();
+
   const screens: Array<ScreenProps> = [
     {
       name: ROOT_STACK_ROUTE.AUTH,
@@ -83,7 +82,7 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY,
       component: SettingPrivacyPolicyScreen,
-      options: handleStackHeaderOption({ title: t('privacy_policy') }),
+      options: handleStackHeaderOption({ title: '' }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_SECURITY,
@@ -93,7 +92,7 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.SETTING_TERMS_OF_SERVICE,
       component: SettingTermsOfServiceScreen,
-      options: handleStackHeaderOption({ title: t('terms_of_service') }),
+      options: handleStackHeaderOption({ title: '' }),
     },
     {
       name: ROOT_STACK_ROUTE.SETTING_DELETE_ACCOUNT,
