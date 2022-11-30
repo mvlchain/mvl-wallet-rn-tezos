@@ -54,23 +54,13 @@ export class EthersTransactionImpl implements ITransactionService {
 
     return res;
   }
-  async cancelTransaction(txId: string) {
-    return 'good';
-  }
-  async speedUpTransaction(txId: string) {
-    return 'good';
-  }
-
   async getHistory(params: IGetHistoryArgs) {
-    //TODO: v2에서는 auth header붙여야함
     try {
-      // const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
-      // const res = await request.get(endpoint);
-      // console.log('resr', res);
-      const res = { status: 200 };
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      const res = await request.get(endpoint);
       if (res.status === 200) {
         return mockData;
-        // return res.data;
+        return res.data;
       } else {
         return [];
       }
@@ -116,23 +106,15 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
   async approveTransaction(args: ISendTransactionArgs) {
     return 'approve';
   }
-  async cancelTransaction(txId: string) {
-    return 'good';
-  }
-  async speedUpTransaction(txId: string) {
-    return 'good';
-  }
 
   async getHistory(args: IGetHistoryArgs) {
     //TODO: v2에서는 auth header붙여야함
     try {
-      // const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
-      // const res = await request.get(endpoint);
-      // console.log('resr', res);
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      const res = await request.get(endpoint);
       const res = { status: 200 };
       if (res.status === 200) {
-        return mockData;
-        // return res.data;
+        return res.data;
       } else {
         return [];
       }
