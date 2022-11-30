@@ -26,7 +26,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
               <Toggle checked={advanced} onPress={handleAdvanced} style={{ marginLeft: width * 16 }} />
             </S.ToggleWrapper>
           </S.Row>
-          {!advanced ? children[0] : children[1]}
+          {advanced ? children[1] : children[0]}
         </S.InnerContainer>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.InnerContainer>
@@ -37,7 +37,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
             </S.Row>
           )}
           <S.MarginRow>
-            <S.Label>{`${isRevision ? t('new') + ' ' : null}${t('transaction_fee')}`}</S.Label>
+            <S.Label>{`${isRevision ? t('new') + ' ' : ''}${t('transaction_fee')}`}</S.Label>
             <S.Value>{`${transactionFee} BNB`}</S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{'6.30 USD'}</S.BaseCurrency>

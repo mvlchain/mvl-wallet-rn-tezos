@@ -18,8 +18,8 @@ function GasFeeBoardTezos({ isRevision, onConfirm }: IGasFeeBoardTezosProps) {
       advanced={advanced}
       handleAdvanced={handleAdvanced}
     >
-      <GasFeeInputsTezos baseFee={baseFee} additionalFee={additionalFee} setAdditionalFee={setAdditionalFee} />
       <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
+      <GasFeeInputsTezos baseFee={baseFee} additionalFee={additionalFee} setAdditionalFee={setAdditionalFee} />
     </GasFeeBoardLayout>
   );
 }
