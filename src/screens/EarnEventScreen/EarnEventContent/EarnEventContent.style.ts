@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { width } from '@@utils/ui';
 
 export const Layout = styled.View`
-  padding: ${width * 12}px 0px;
+  padding: ${width * 12}px ${width * 24}px;
 `;
 
 export const RoundCornerGroup = styled.View`
@@ -13,10 +13,9 @@ export const RoundCornerGroup = styled.View`
   border-width: ${width * 1}px;
   border-color: ${({ theme }) => theme.color.grey100};
   border-radius: ${width * 16}px;
-  background-color: #07777777;
 `;
 
-export const TimeLabelContainer = styled.View`
+export const TimeLabelRoundContainer = styled.View`
   align-self: flex-start;
   padding: ${width * 4}px ${width * 10}px;
   border-radius: ${width * 16}px;
@@ -50,7 +49,6 @@ export const TitleText = styled.Text`
   font-weight: 800;
   line-height: ${width * 20}px;
   color: ${({ theme }) => theme.color.blackWhite};
-  background-color: #f00;
 `;
 
 export const SubTitleText = styled.Text`
@@ -59,5 +57,4 @@ export const SubTitleText = styled.Text`
   font-weight: 800;
   line-height: ${width * 20}px;
   color: ${({ theme }) => theme.color.primary};
-  background-color: #00f;
 `;

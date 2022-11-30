@@ -1,0 +1,130 @@
+[
+  {
+    "id": "65974552-8035-4242-9eb6-1a3ad2321094",
+    "eventStartAt": "2022-11-12T23:00:00.000Z",
+    "eventEndAt": "2022-11-13T23:00:00.000Z",
+    "claimStartAt": "2022-11-14T23:00:00.000Z",
+    "claimEndAt": "2022-12-07T23:00:00.000Z",
+    "iconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/laywhqudfrtpouc",
+    "title": "STAGING!! Exchange MVL points",
+    "subTitle": "to MVL coins for Driver",
+    "detailPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/65974552-8035-4242-9eb6-1a3ad2321094/detail",
+    "pointInfoArr": [
+      {
+        "key": "k0",
+        "currency": "MVL",
+        "title": "수령가능한 MVL"
+      }
+    ],
+    "pointIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/tzxdeylef71m0c",
+    "eventActionButtonTitle": "Claim",
+    "eventActionScheme": "***REMOVED***://clutch/connect",
+    "currency": "bMVL",
+    "currencyIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg",
+    "calcInfoPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/65974552-8035-4242-9eb6-1a3ad2321094/claim/calc",
+    "claimType": "CONSTANT",
+    "app": {
+      "id": "3d100001-ffff-4000-a000-000000000000",
+      "name": "TADA-DRIVER-STAGING",
+      "connectionDeepLink": null
+    },
+    "alias": "tada-mvp",
+    "isAllowParticipationInClaim": true
+  },
+  {
+    "id": "6360d830-8b30-4b8d-8b7b-4994d23f12eb",
+    "eventStartAt": "2022-11-12T23:00:00.000Z",
+    "eventEndAt": "2022-11-13T23:00:00.000Z",
+    "claimStartAt": "2022-11-14T23:00:00.000Z",
+    "claimEndAt": "2022-12-07T23:00:00.000Z",
+    "iconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/laywhqudfrtpouc",
+    "title": "DEV!! Exchange MVL points",
+    "subTitle": "to MVL coins for Driver",
+    "detailPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/6360d830-8b30-4b8d-8b7b-4994d23f12eb/detail",
+    "pointInfoArr": [
+      {
+        "key": "k0",
+        "currency": "MVL",
+        "title": "수령가능한 MVL"
+      }
+    ],
+    "pointIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/tzxdeylef71m0c",
+    "eventActionButtonTitle": "Claim",
+    "eventActionScheme": "***REMOVED***://clutch/connect",
+    "currency": "bMVL",
+    "currencyIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg",
+    "calcInfoPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/6360d830-8b30-4b8d-8b7b-4994d23f12eb/claim/calc",
+    "claimType": "CONSTANT",
+    "app": {
+      "id": "3d100001-eeee-4000-a000-000000000000",
+      "name": "TADA-DRIVER-DEV",
+      "connectionDeepLink": null
+    },
+    "alias": "tada-mvp",
+    "isAllowParticipationInClaim": true
+  },
+  {
+    "id": "a39b36f1-7f6d-45f5-95a6-b37eff1f1d86",
+    "eventStartAt": "2022-11-12T23:00:00.000Z",
+    "eventEndAt": "2022-11-13T23:00:00.000Z",
+    "claimStartAt": "2022-11-14T23:00:00.000Z",
+    "claimEndAt": "2022-12-07T23:00:00.000Z",
+    "iconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/laywhqudfrtpouc",
+    "title": "STAGING!! Exchange MVL points",
+    "subTitle": "to MVL coins for Rider",
+    "detailPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/a39b36f1-7f6d-45f5-95a6-b37eff1f1d86/detail",
+    "pointInfoArr": [
+      {
+        "key": "k0",
+        "currency": "MVL",
+        "title": "수령가능한 MVL"
+      }
+    ],
+    "pointIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/tzxdeylef71m0c",
+    "eventActionButtonTitle": "Claim",
+    "eventActionScheme": "***REMOVED***://clutch/connect",
+    "currency": "bMVL",
+    "currencyIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg",
+    "calcInfoPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/a39b36f1-7f6d-45f5-95a6-b37eff1f1d86/claim/calc",
+    "claimType": "CONSTANT",
+    "app": {
+      "id": "093f89f6-e590-4743-82ab-f5a60f564d58",
+      "name": "tada",
+      "connectionDeepLink": "***REMOVED***://clutch/connect"
+    },
+    "alias": "tada-mvp",
+    "isAllowParticipationInClaim": true
+  },
+  {
+    "id": "05d72db6-6ef5-4f82-8ff5-e7c7955802d2",
+    "eventStartAt": "2022-11-12T23:00:00.000Z",
+    "eventEndAt": "2022-11-13T23:00:00.000Z",
+    "claimStartAt": "2022-11-14T23:00:00.000Z",
+    "claimEndAt": "2022-12-07T23:00:00.000Z",
+    "iconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/laywhqudfrtpouc",
+    "title": "DEV!! Exchange MVL points",
+    "subTitle": "to MVL coins for Rider",
+    "detailPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/05d72db6-6ef5-4f82-8ff5-e7c7955802d2/detail",
+    "pointInfoArr": [
+      {
+        "key": "k0",
+        "currency": "MVL",
+        "title": "수령가능한 MVL"
+      }
+    ],
+    "pointIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/tzxdeylef71m0c",
+    "eventActionButtonTitle": "Claim",
+    "eventActionScheme": "***REMOVED***://clutch/connect",
+    "currency": "bMVL",
+    "currencyIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg",
+    "calcInfoPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/05d72db6-6ef5-4f82-8ff5-e7c7955802d2/claim/calc",
+    "claimType": "CONSTANT",
+    "app": {
+      "id": "dd888656-bff7-44e7-864e-37bb8c1cb263",
+      "name": "tada-rider-dev",
+      "connectionDeepLink": "***REMOVED***://clutch/connect"
+    },
+    "alias": "tada-mvp",
+    "isAllowParticipationInClaim": true
+  }
+]

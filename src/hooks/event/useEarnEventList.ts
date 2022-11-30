@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { EarnEventDto } from '@@generated/generated-scheme';
+import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { useDi } from '@@hooks/common/useDi';
 
 /**
@@ -9,7 +9,7 @@ import { useDi } from '@@hooks/common/useDi';
  *
  * @returns a list of ear-events
  */
-export const useEarEventList = (): UseQueryResult<EarnEventDto[], AxiosError> => {
+export const useEarnEventList = (): UseQueryResult<EarnEventDto[], AxiosError> => {
   const repository = useDi('EarnEventRepository');
   return useQuery({
     queryKey: ['earn-events'],
