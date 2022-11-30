@@ -2,7 +2,6 @@
 import { injectable } from 'tsyringe';
 
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { mockApi } from '@@utils/mockApi';
 import { authRequest } from '@@utils/request';
 
 /**
