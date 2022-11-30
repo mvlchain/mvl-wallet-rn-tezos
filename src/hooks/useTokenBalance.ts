@@ -19,6 +19,7 @@ export const useTokenBalance = () => {
   const ethService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
+  // @ts-ignore
   const priceIds = Object.values(PRICE_TYPE[selectedNetwork]).flat();
   const [formalizedBalance, setFormalizedBalance] = useState<IBalanceData[]>();
   const [walletData, setWalletData] = useState<WalletDto[]>([]);
