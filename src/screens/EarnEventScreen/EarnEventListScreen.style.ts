@@ -3,8 +3,6 @@ import styled from 'styled-components/native';
 
 import { width } from '@@utils/ui';
 
-import { IEarnEventContentProps } from './EarnEventContent';
-
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.color.whiteBlack};
@@ -13,7 +11,7 @@ export const Container = styled.View`
 export const TopTitleBar = styled.View`
   flex-direction: row;
   align-items: flex-start;
-  background-color: #aaa;
+  /* background-color: #aaa; */
 `;
 
 export const HeaderText = styled.Text`
@@ -38,8 +36,14 @@ export const BetaTagText = styled.Text`
 
 export const BodyContainer = styled.View`
   flex: 1;
-  padding: 0px ${width * 24}px;
-  background-color: #0f0;
+  /* background-color: #0f0; */
 `;
 
-export const EventList = styled(FlashList<IEarnEventContentProps>)``;
+export const EventListLayout = styled.View`
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(128, 128, 128, 0.6); */
+`;

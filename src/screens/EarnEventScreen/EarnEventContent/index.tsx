@@ -20,9 +20,9 @@ export const EarnEventContent = ({ timeLabel, avatarUrl, title, subtitle }: IEar
   return (
     <S.Layout>
       <S.RoundCornerGroup>
-        <S.TimeLabelContainer>
+        <S.TimeLabelRoundContainer>
           <S.TimeLabel>{timeLabel}</S.TimeLabel>
-        </S.TimeLabelContainer>
+        </S.TimeLabelRoundContainer>
 
         <S.ContentsGroup>
           <S.Avatar source={{ uri: avatarUrl }} />
