@@ -11,7 +11,7 @@ import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository
 import { ISendTransactionGasFee } from '@@domain/transaction/TransactionService.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { NETWORK_INFO } from '@@components/BasicComponents/GasFeeBoard/testNetworkEnv';
+import { getNetworkConfig } from '@@constants/network.constant';
 
 const useTokenSend = () => {
   const ethersTransactionService = useDi('EtherTransactionService');
@@ -22,17 +22,18 @@ const useTokenSend = () => {
   const [amount, setAmount] = useState<BigNumber | null>(null);
   const [address, setAddress] = useState<string | null>('');
 
+  const network = getNetworkConfig(selectedNetwork);
+
   //TODO: TEST를 위해서 임시로 하드코딩해둠 테스트용 계정
   const privateKey = '0x2b27eaa12c946c41c523324a9c4a87e386e4f90cc61844aedc6edea18320002a';
   const publicKey = '0x033c908f4aab15a406b9128763b1757ed68a3ee9b09d70146fa4f042355e9d332f';
   const from = '0x5852d8Bc656562A27292df4cA2cbB14dE62b88f0';
-  const networkInfo = NETWORK_INFO[selectedNetwork];
 
   const confirmSend = async (gasFeeInfo: IGasFeeInfo) => {
     if (!to || !value) return;
     try {
       const res = await ethersTransactionService.sendTransaction({
-        networkInfo,
+        networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId },
         privateKey,
         gasFeeInfo,
         to,
