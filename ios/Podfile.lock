@@ -740,7 +740,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: fe8b5f1429cfe83a8d72dc8ed61dc7704cac8745
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
-  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
@@ -767,7 +767,7 @@ SPEC CHECKSUMS:
   RCTRequired: 21229f84411088e5d8538f21212de49e46cc83e2
   RCTTypeSafety: 62eed57a32924b09edaaf170a548d1fc96223086
   React: f0254ccddeeef1defe66c6b1bb9133a4f040792b
-  React-bridging: 5da09feef76f6c594da560e105322b813b522ccd
+  React-bridging: e46911666b7ec19538a620a221d6396cd293d687
   React-callinvoker: 66b62e2c34546546b2f21ab0b7670346410a2b53
   React-Codegen: b6999435966df3bdf82afa3f319ba0d6f9a8532a
   React-Core: dabbc9d1fe0a11d884e6ee1599789cf8eb1058a5
