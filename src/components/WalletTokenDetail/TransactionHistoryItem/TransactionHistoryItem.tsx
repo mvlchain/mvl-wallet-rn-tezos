@@ -26,13 +26,13 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
   const navigation = useNavigation<TTransactionHistoryRootStackProps | TCancelRootStackProps | TSpeedUpRootStackProps>();
 
-  const goToSpeedUp = () => {
-    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP);
-  };
-
-  const goToCancel = () => {
-    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL);
-  };
+  // NOTE: 우선은 취소랑 스피드업 지원하지 않음
+  // const goToSpeedUp = () => {
+  //   navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP);
+  // };
+  // const goToCancel = () => {
+  //   navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL);
+  // };
 
   return (
     <Pressable
@@ -62,7 +62,8 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
 
           <RightIcon />
         </S.HistoryItemTopContent>
-        {status === TTransactionStatus.PENDING && (
+        {/* NOTE: 우선은 취소랑 스피드업 지원하지 않음 */}
+        {/* {status === TTransactionStatus.PENDING && (
           <S.HistoryItemBottomContent>
             <SecondaryButton
               label={t('cancel')}
@@ -80,7 +81,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
               textStyle={{ lineHeight: fontSize(14) }}
             />
           </S.HistoryItemBottomContent>
-        )}
+        )} */}
       </S.TransactionHistoryListItem>
     </Pressable>
   );
