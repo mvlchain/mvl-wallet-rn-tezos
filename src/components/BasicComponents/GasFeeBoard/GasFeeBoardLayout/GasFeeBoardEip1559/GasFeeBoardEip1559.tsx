@@ -29,6 +29,7 @@ function GasFeeBoardEip1559({ isRevision, onConfirm }: IGasFeeBoardEip1559Props)
       advanced={advanced}
       handleAdvanced={handleAdvanced}
     >
+      <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
       <GasFeeInputsEIP1559
         maxFeePerGas={maxFeePerGas}
         maxPriorityFeePerGas={maxPriorityFeePerGas}
@@ -37,7 +38,6 @@ function GasFeeBoardEip1559({ isRevision, onConfirm }: IGasFeeBoardEip1559Props)
         setMaxPriorityFeePerGas={setMaxPriorityFeePerGas}
         setGasLimit={setGasLimit}
       />
-      <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
     </GasFeeBoardLayout>
   );
 }

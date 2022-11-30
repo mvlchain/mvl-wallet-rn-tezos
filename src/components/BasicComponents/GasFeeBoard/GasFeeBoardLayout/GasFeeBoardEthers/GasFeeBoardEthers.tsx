@@ -17,8 +17,8 @@ function GasFeeBoardEthers({ isRevision, onConfirm }: IGasFeeBoardEthersProps) {
       advanced={advanced}
       handleAdvanced={handleAdvanced}
     >
-      <GasFeeInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
       <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
+      <GasFeeInputs gasPrice={gasPrice} gasLimit={gasLimit} setGasPrice={setGasPrice} setGasLimit={setGasLimit} />
     </GasFeeBoardLayout>
   );
 }

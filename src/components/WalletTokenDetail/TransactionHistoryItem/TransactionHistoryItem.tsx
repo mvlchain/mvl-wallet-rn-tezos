@@ -22,6 +22,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TTransactionStatus.FAIL;
+  //TODO: 나중에 주소랑 들어와서 수정
   const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
   const navigation = useNavigation<TTransactionHistoryRootStackProps | TCancelRootStackProps | TSpeedUpRootStackProps>();
 
