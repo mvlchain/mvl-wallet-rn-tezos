@@ -16,7 +16,7 @@ const DAYS_UNIT = 24 * HOUR_UNIT;
  * @return TimeDuration object that priotised in the order as follows, days, hours, minutes.
  * otherwise return null if there's no duration at all in seconds.
  */
-export const parseTimeDuration = (current: Date, target: Date): TimeDuration | null => {
+export const parseTimeDuration = (target: Date, current: Date = new Date()): TimeDuration | null => {
   // getTime() always use UTC in milliseconds
   const duration = target.getTime() - current.getTime();
 
