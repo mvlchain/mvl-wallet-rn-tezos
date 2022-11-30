@@ -10,7 +10,7 @@ const useWalletListModal = () => {
   const { selectedWalletIndex, selectedNetwork, walletList, selectWallet } = walletPersistStore();
   const { data } = useWalletsQuery();
   const { pKey } = authStore();
-  const [wallet, setWallet] = useState<IWalletListMenuProps[]>();
+  const [wallet, setWallet] = useState<IWalletListMenuProps[]>([]);
 
   useEffect(() => {
     if (!pKey || !data) return;

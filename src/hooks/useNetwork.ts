@@ -3,7 +3,7 @@ import { NETWORK } from '@@assets/constants';
 export const useNetwork = () => {
   // @TODO 데이터 연결
 
-  const networkList = [NETWORK.ETHEREUM, NETWORK.BSC];
+  const networkList = [NETWORK.ETH, NETWORK.BSC];
 
   return networkList;
 };
@@ -11,7 +11,7 @@ export const useNetwork = () => {
 export const useCurrentNetwork = () => {
   // @TODO 데이터 연결
 
-  const current = NETWORK.ETHEREUM;
+  const current = NETWORK.ETH;
 
   return current;
 };

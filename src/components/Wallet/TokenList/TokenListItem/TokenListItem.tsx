@@ -1,19 +1,22 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, View } from 'react-native';
-import { SvgUri } from 'react-native-svg';
+import { commify } from 'ethers/lib/utils';
+import { Pressable } from 'react-native';
 
+import * as TokenIcon from '@@assets/image/token';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
-import { width } from '@@utils/ui';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
 
-function TokenListItem({ asset, amount, valuatedAmount, valuatedCurrency }: ITokenListItemProps) {
-  const { ticker, iconUrl } = asset;
+function TokenListItem({ ticker, balance, valuatedPrice }: ITokenListItemProps) {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const navigation = useNavigation<rootStackProps>();
+  const TokenImage = TokenIcon[ticker as keyof typeof TokenIcon];
+  const { settedCurrency } = settingPersistStore();
+
   return (
     <Pressable
       onPress={() => {
@@ -22,21 +25,17 @@ function TokenListItem({ asset, amount, valuatedAmount, valuatedCurrency }: ITok
     >
       <S.Container>
         <S.LabelContainer>
-          {iconUrl && (
-            <S.IconWrapper>
-              <SvgUri uri={iconUrl} width={`${width * 36}`} height={`${width * 36}`} />
-            </S.IconWrapper>
-          )}
+          <TokenImage />
           <S.Name>{ticker}</S.Name>
         </S.LabelContainer>
-        <View>
+        <S.ValueContainer>
           <S.Text>
-            {amount} {ticker}
+            {commify(balance)} {ticker}
           </S.Text>
           <S.AmountUSD>
-            {valuatedAmount} {valuatedCurrency}
+            {commify(valuatedPrice)} {settedCurrency}
           </S.AmountUSD>
-        </View>
+        </S.ValueContainer>
       </S.Container>
     </Pressable>
   );

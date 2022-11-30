@@ -33,3 +33,10 @@ export const TEZOS: BlockChain = {
   name: 'XTZ',
   coinType: 1729,
 };
+
+export const BlockChainList = {
+  BITCOIN: BITCOIN,
+  ETHEREUM: ETHEREUM,
+  BSC: BINANCE,
+  TEZOS: TEZOS,
+} as const;

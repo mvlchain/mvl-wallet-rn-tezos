@@ -1,6 +1,6 @@
 import { container, instanceCachingFactory } from 'tsyringe';
 
-import { WalletRepository, WalletRepositoryImpl } from '@@domain/wallet/WalletRepository';
+import { WalletRepository, WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
 
 beforeAll(() => {
   container.register('WalletRepository', {

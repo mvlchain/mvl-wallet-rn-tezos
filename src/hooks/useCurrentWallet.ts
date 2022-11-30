@@ -8,13 +8,12 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
  * UseCase: get current selected wallet from local storage
  */
 export const useCurrentWallet = () => {
-  const { pKey } = authStore();
   const { mutate } = useWalletMutation();
   const { data } = useWalletsQuery();
   const { createWallet: create } = walletPersistStore();
   const createWallet = async (blockchain: BlockChain) => {
-    if (!pKey || !data) return;
-    mutate({ pKey: pKey ?? 'TODO: ERROR', index: data.length, blockchain: blockchain });
+    if (!data) return;
+    mutate({ index: data.length, blockchain: blockchain });
     create();
   };
 
