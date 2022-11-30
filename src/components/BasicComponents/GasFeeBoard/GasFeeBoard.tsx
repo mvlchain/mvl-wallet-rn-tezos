@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EIP_1559_SUPPORT_NETWORK, TEZOS_NETWORK } from '@@constants/network.constant';
+import { NETWORK_FEE_TYPE, getNetworkConfig } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import { IGasFeeBoardProps, TOnConfirmEip1559, TOnConfirmEthers, TOnConfirmTezos } from './GasFeeBoard.type';
@@ -10,16 +10,16 @@ import GasFeeBoardTezos from './GasFeeBoardLayout/GasFeeBoardTezos';
 
 function GasFeeBoard({ isRevision, onConfirm }: IGasFeeBoardProps) {
   const { selectedNetwork } = walletPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
 
   const renderGasFeeBoard = () => {
-    if (TEZOS_NETWORK.includes(selectedNetwork)) {
-      return <GasFeeBoardTezos isRevision={isRevision} onConfirm={onConfirm as TOnConfirmTezos} />;
-    } else if (EIP_1559_SUPPORT_NETWORK.includes(selectedNetwork)) {
-      //TODO: onConfirm x타입 리팩토링
-      return <GasFeeBoardEip1559 isRevision={isRevision} onConfirm={onConfirm as TOnConfirmEip1559} />;
-    } else {
-      //TODO: onConfirm x타입 리팩토링
-      return <GasFeeBoardEthers isRevision={isRevision} onConfirm={onConfirm as TOnConfirmEthers} />;
+    switch (network.networkFeeType) {
+      case NETWORK_FEE_TYPE.TEZOS:
+        return <GasFeeBoardTezos isRevision={isRevision} onConfirm={onConfirm as TOnConfirmTezos} />;
+      case NETWORK_FEE_TYPE.EIP1559:
+        return <GasFeeBoardEip1559 isRevision={isRevision} onConfirm={onConfirm as TOnConfirmEip1559} />;
+      default:
+        return <GasFeeBoardEthers isRevision={isRevision} onConfirm={onConfirm as TOnConfirmEthers} />;
     }
   };
   return <>{renderGasFeeBoard()}</>;
