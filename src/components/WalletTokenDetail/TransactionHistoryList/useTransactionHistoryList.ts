@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
+import useTransactionHitoryQuery from '@@hooks/queries/useTransactionHistoryQuery';
 import { useDi } from '@@hooks/useDi';
 import transactionHistoryStore from '@@store/transaction/transactionHistoryStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 
@@ -12,10 +14,11 @@ const useTransactionHistoryList = () => {
   //TDOO: mock => real
   const myPublicAddress = '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d';
   const token = 'ETH';
-  const network = 'ETHEREUM';
 
   const ethersTransactionService = useDi('EtherTransactionService');
   const tezosTransactionService = useDi('TezosTransactionService');
+
+  const { selectedNetwork } = walletPersistStore();
 
   const [loading, setLoading] = useState(false);
   const { tokens, setHistory } = transactionHistoryStore();
@@ -35,11 +38,26 @@ const useTransactionHistoryList = () => {
     }
     //TODO: deps고민 해보기
   }, [currentCriteria, tokens[token]?.history.length]);
+  const list = useTransactionHitoryQuery(
+    {
+      network: selectedNetwork,
+      address: myPublicAddress,
+      ticker: token,
+      beforeblock: tokens[token]?.beforeblock ?? 2147483647,
+      beforeindex: tokens[token]?.beforeindex ?? 2147483647,
+      limit: 20,
+    },
+    {
+      // enabled:
+      // refetchOnMount: 'always',
+      keepPreviousData: true,
+    }
+  );
 
   const getData = async () => {
     setLoading(true);
     const params = {
-      network,
+      network: selectedNetwork,
       address: myPublicAddress,
       ticker: token,
       beforeblock: tokens[token]?.beforeblock ?? 2147483647,

@@ -72,10 +72,10 @@ export class EthersTransactionImpl implements ITransactionService {
         return mockData;
         // return res.data;
       } else {
-        return undefined;
+        return [];
       }
     } catch (e) {
-      return undefined;
+      return [];
     }
   }
 }
@@ -134,10 +134,10 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
         return mockData;
         // return res.data;
       } else {
-        return undefined;
+        return [];
       }
     } catch (e) {
-      return undefined;
+      return [];
     }
   }
 }
