@@ -1,3 +1,5 @@
+import { NETWORK } from '@@constants/network.constant';
+
 export const ETH_NAME = 'ethereum';
 export const BINANCE_NAME = 'binancecoin';
 export const MVL_NAME = 'mass-vehicle-ledger';
@@ -19,11 +21,20 @@ export const B_MVL_TYPE = [B_MVL_NAME, 'bmvl', 'bMVL'];
 export const BTCB_TYPE = [BTCB_NAME, 'btcb', 'Binance Bitcoin'];
 
 export const PRICE_TYPE = {
-  ETHEREUM: {
+  [NETWORK.ETH]: {
     ETHEREUM: ETH_TYPE,
     MVL: MVL_TYPE,
   },
-  BSC: {
+  [NETWORK.BSC]: {
+    BINANCE: BINANCE_TYPE,
+    B_MVL: B_MVL_TYPE,
+    BTCB: BTCB_TYPE,
+  },
+  [NETWORK.GOERLI]: {
+    ETHEREUM: ETH_TYPE,
+    MVL: MVL_TYPE,
+  },
+  [NETWORK.BSC_TESTNET]: {
     BINANCE: BINANCE_TYPE,
     B_MVL: B_MVL_TYPE,
     BTCB: BTCB_TYPE,
