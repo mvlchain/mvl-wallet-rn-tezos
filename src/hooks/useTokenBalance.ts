@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { formatUnits } from 'ethers/lib/utils';
+
 import { PRICE_NAME, PRICE_TYPE } from '@@constants/wallet.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { IGetPriceResponseDto } from '@@domain/wallet/repositories/WalletRepository.type';
@@ -36,7 +38,7 @@ export const useTokenBalance = () => {
       data.forEach((balance) => {
         newData = {
           ...newData,
-          [balance.asset.ticker]: balance.amount,
+          [balance.asset.ticker]: formatUnits(balance.amount),
         };
       });
       return newData;
@@ -60,6 +62,7 @@ export const useTokenBalance = () => {
 
   const getBalance = async () => {
     try {
+      // TODO: address에 따라 token list호출 후 해당 값에 대해 balance 조회
       const balance = await ethService.getBalanceFromNetwork(selectedWalletIndex, selectedNetwork);
       if (balance && Object.keys(balance).length === 0) {
         console.log('Data fetch from blockchain is fail -> Fetch from Server');
