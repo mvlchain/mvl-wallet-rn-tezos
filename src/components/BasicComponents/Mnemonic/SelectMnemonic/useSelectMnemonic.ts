@@ -9,7 +9,7 @@ const useSelectMnemonic = () => {
   useEffect(() => {
     // mnemonic 없을 때 예외처리(에러처리)추가
     if (!mnemonic) return;
-    setMnemonicArr(mnemonic.split(' ').sort(() => Math.random() - 0.5));
+    setMnemonicArr(mnemonic.split(' ').sort());
   }, [mnemonic]);
 
   const onPressSelectChip = (word: string, index: number) => {

@@ -1,13 +1,11 @@
 import React from 'react';
 
-import { Text, View } from 'react-native';
+import Webview from '@@components/BasicComponents/Webview';
 
 function SettingPrivacyPolicyScreen() {
-  return (
-    <View>
-      <Text>Setting Privacy Policy</Text>
-    </View>
-  );
+  const PRIVACY_URL = 'https://policy.mvlclutch.io/privacy-policy';
+
+  return <Webview url={PRIVACY_URL} />;
 }
 
 export default SettingPrivacyPolicyScreen;

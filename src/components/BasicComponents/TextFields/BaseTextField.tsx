@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
-import settingPersistStore from '@@store/setting/settingPersistStore';
+import { useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
-import { theme } from '@@style/theme';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
@@ -16,8 +15,7 @@ export const KeyboardTypeByInputType = {
 
 export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const { placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint } = props;
-  const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.value].color;
+  const { color } = useColor();
 
   const [lcColor, setLcColor] = useState<string | null>(null);
 

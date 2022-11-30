@@ -20,13 +20,11 @@ import {
   TradeNormalDark,
   TradeSelectedDark,
 } from '@@assets/image';
-import { useAssetFromTheme } from '@@hooks/useTheme';
+import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
 import SettingScreen from '@@screens/SettingScreen';
 import Trade from '@@screens/Trade';
 import WalletScreen from '@@screens/WalletScreen';
-import settingPersistStore from '@@store/setting/settingPersistStore';
-import { theme } from '@@style/theme';
 import { height } from '@@utils/ui';
 
 import { MAIN_TAB_ROUTE, TMainTabParamList } from './MainTab.type';
@@ -35,8 +33,7 @@ function MainTab() {
   const { Navigator, Screen } = createBottomTabNavigator<TMainTabParamList>();
   type ScreenProps = Parameters<typeof Screen>[0];
 
-  const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.value].color;
+  const { color } = useColor();
   const backgorundColor = color.whiteBlack;
 
   const HomeNormal = useAssetFromTheme(HomeNormalLight, HomeNormalDark);
