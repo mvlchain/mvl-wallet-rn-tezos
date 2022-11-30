@@ -14,11 +14,11 @@ function SettingPrivateKeyScreen() {
   const { t } = useTranslation();
 
   // TODO: 실제 데이터와 연동 필요
-  const { type, pkey, wallet_length, onPressViewPrivatekey, onPressCopyPrivateKey, onPressWalletList } = useSettingPrivateKeyScreen();
+  const { type, pkey, wallet, onPressViewPrivatekey, onPressCopyPrivateKey, onPressWalletList } = useSettingPrivateKeyScreen();
   return (
     <S.Container bounces={false}>
       <S.Description>{t('private_key_lbl_description')}</S.Description>
-      <Chip isMultiple={wallet_length > 1} label='Ethereum Wallet' onPress={onPressWalletList} />
+      <Chip isMultiple={wallet?.length > 1} label='Ethereum Wallet' onPress={onPressWalletList} />
       <HideContentSection
         isHide={type === 'hide'}
         onPress={onPressViewPrivatekey}

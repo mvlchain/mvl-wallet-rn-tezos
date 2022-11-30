@@ -19,8 +19,8 @@ function WalletEditTokenListScreen() {
   // TODO: 실제 데이터 연동하기
   const [data, setData] = useState([
     {
-      id: WALLET_TOKEN.Eth,
-      tokenName: WALLET_TOKEN.Eth,
+      id: WALLET_TOKEN.ETH,
+      tokenName: WALLET_TOKEN.ETH,
     },
     {
       id: WALLET_TOKEN.BNB,
@@ -31,8 +31,8 @@ function WalletEditTokenListScreen() {
       tokenName: WALLET_TOKEN.BTCB,
     },
     {
-      id: WALLET_TOKEN.Mvl,
-      tokenName: WALLET_TOKEN.Mvl,
+      id: WALLET_TOKEN.MVL,
+      tokenName: WALLET_TOKEN.MVL,
     },
     {
       id: WALLET_TOKEN.bMVL,

@@ -57,7 +57,7 @@ const useConfirmSeedPhraseScreen = () => {
       }
       removeStageByPostboxKey(_postboxKey);
       initWallet();
-      mutate({ pKey, index: 0, blockchain: ETHEREUM });
+      mutate({ index: 0, blockchain: ETHEREUM });
       navigation.reset({
         index: 0,
         routes: [{ name: ROOT_STACK_ROUTE.MAIN }],

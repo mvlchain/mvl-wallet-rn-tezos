@@ -12,7 +12,7 @@ export interface IWalletPersist extends IWalletPersistState {
 export interface IWalletPersistState {
   selectedWalletIndex: number;
   selectedNetwork: Network;
-  walletList: { ETHEREUM: IPersistWallet[]; BSC: IPersistWallet[] };
+  walletList: { [network: string]: IPersistWallet[] };
 }
 
 export interface IPersistWallet {

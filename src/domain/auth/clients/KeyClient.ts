@@ -1,16 +1,16 @@
 import { ShareStore } from '@tkey/common-types';
 import { inject, injectable } from 'tsyringe';
 
-import { AuthProvider, AUTH_PROVIDER } from '@@domain/auth/constants/constants';
+import { AuthProvider, AUTH_PROVIDER } from '@@constants/auth.constant';
 import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/Clutch';
-import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
+import SecureKeychain from '@@utils/SecureKeychain';
 
 import { KeyClientUtil } from './KeyClientUtil';
-interface PostboxKeyHolder {
+export interface PostboxKeyHolder {
   postboxKey: string;
   provider?: AuthProvider;
   providerIdToken?: string;

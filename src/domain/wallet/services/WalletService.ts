@@ -1,19 +1,21 @@
 import { injectable, inject } from 'tsyringe';
 
+import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
-import { BlockChain } from '@@domain/blockchain/BlockChain';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
 import { WalletDto } from '@@domain/model/WalletDto';
-import { WalletRepository } from '@@domain/wallet/WalletRepository';
+import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 
-import { ICreateWalletBody } from './WalletService.type';
+import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam } from './WalletService.type';
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
+  getWalletInfo(param: IGetWalletInfoParam): Promise<Clutch>;
   getWalletList(): Promise<WalletDto[]>;
   createWallet(body: ICreateWalletBody): Promise<WalletResponseDto>;
+  getWalletPKey(param: IGetWalletPKeyParam): Promise<string>;
 }
 
 /**
@@ -23,7 +25,8 @@ export interface WalletService {
 export class WalletServiceImpl implements WalletService {
   constructor(
     @inject('WalletRepository') private walletRepository: WalletRepository,
-    @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository
+    @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository,
+    @inject('KeyClient') private keyClient: KeyClient
   ) {}
 
   /**
@@ -56,6 +59,12 @@ export class WalletServiceImpl implements WalletService {
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);
   };
 
+  getWalletInfo = async ({ index, blockchain }: IGetWalletInfoParam) => {
+    const pKey = await this.keyClient.getPrivateKey();
+    const wallet = Clutch.createWalletWithEntropy(pKey, `m/44'/${blockchain.coinType}'/0'/0/${index}`);
+    return wallet;
+  };
+
   /**
    * @returns Get a list of wallets
    */
@@ -64,14 +73,18 @@ export class WalletServiceImpl implements WalletService {
     return this.walletRepository.getWallets(xpub);
   };
 
-  createWallet = async (body: ICreateWalletBody): Promise<WalletResponseDto> => {
-    const { pKey, index, blockchain } = body;
-    const wallet = Clutch.createWalletWithEntropy(pKey, `m/44'/${blockchain.coinType}'/0'/0/${index}`);
+  createWallet = async ({ index, blockchain }: ICreateWalletBody): Promise<WalletResponseDto> => {
+    const wallet = await this.getWalletInfo({ index, blockchain });
     return this.walletRepository.registerWallet({
       network: blockchain.name,
       address: wallet.address,
       index,
       name: `Wallet ${index + 1}`,
     });
+  };
+
+  getWalletPKey = async ({ index, blockchain }: IGetWalletPKeyParam) => {
+    const wallet = await this.getWalletInfo({ index, blockchain });
+    return wallet.privateKey;
   };
 }

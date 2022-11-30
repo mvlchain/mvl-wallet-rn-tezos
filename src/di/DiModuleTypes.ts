@@ -7,8 +7,10 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
-import { WalletRepository } from '@@domain/wallet/WalletRepository';
-import { WalletService } from '@@domain/wallet/WalletService';
+import { ContractRepository } from '@@domain/wallet/repositories/WalletBlockChainRepository';
+import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
+import { EthersContractServiceImpl } from '@@domain/wallet/services/WalletBlockChainService';
+import { WalletService } from '@@domain/wallet/services/WalletService';
 
 /**
  * A map that holds instances registered by di container
@@ -16,10 +18,10 @@ import { WalletService } from '@@domain/wallet/WalletService';
 export interface DiModuleTypes {
   // Service
   WalletService: WalletService;
-
+  WalletBlockChainService: EthersContractServiceImpl;
   // Repository
   WalletRepository: WalletRepository;
-
+  EthersContractRepository: ContractRepository;
   AuthService: AuthService;
   KeyClient: KeyClient;
   KeyClientUtil: KeyClientUtil;

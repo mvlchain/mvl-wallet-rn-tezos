@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 
+import 'react-native-get-random-values';
+import '@ethersproject/shims';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Appearance } from 'react-native';
 import ErrorBoundary from 'react-native-error-boundary';

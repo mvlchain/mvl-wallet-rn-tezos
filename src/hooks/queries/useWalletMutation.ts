@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
 
-import { ICreateWalletBody } from '@@domain/wallet/WalletService.type';
+import { ICreateWalletBody } from '@@domain/wallet/services/WalletService.type';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 import { useDi } from '@@hooks/useDi';
 
