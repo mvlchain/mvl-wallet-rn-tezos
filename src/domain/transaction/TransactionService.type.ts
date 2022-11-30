@@ -102,5 +102,5 @@ export interface ITransactionService {
   approveTransaction(args: ISendTransactionArgs): Promise<string>;
   cancelTransaction(txId: string): Promise<string>;
   speedUpTransaction(txId: string): Promise<string>;
-  getHistory(args: IGetHistoryArgs): Promise<IGetTransactionHistoryResponse[] | undefined>;
+  getHistory(args: IGetHistoryArgs): Promise<IGetTransactionHistoryResponse[] | []>;
 }
