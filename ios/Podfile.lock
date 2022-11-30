@@ -448,7 +448,7 @@ PODS:
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.4.4):
+  - RNSVG (13.6.0):
     - React-Core
   - RxBlocking (6.5.0):
     - RxSwift (= 6.5.0)
@@ -798,7 +798,7 @@ SPEC CHECKSUMS:
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
-  RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
+  RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
   RxBlocking: 04b5fd28bb5ea49f7d64b80db8bbfe50d9cc1c7d
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
