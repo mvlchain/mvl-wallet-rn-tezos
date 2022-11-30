@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 
 import { parseUnits } from 'ethers/lib/utils';
 import { NativeSyntheticEvent, TextInputChangeEventData, TextInputEndEditingEventData } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import * as TokenIcon from '@@assets/image/token';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
-import { height } from '@@utils/ui';
+import { height, width } from '@@utils/ui';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
-  const { useMax, onSelect, label, symbol, value, onChange, hint } = props;
+  const { useMax, onSelect, label, symbol, value, onChange, hint, iconUrl } = props;
   const { appTheme } = settingPersistStore();
   const color = theme[appTheme.value].color;
-  //TODO: 리스트에 없는 토큰일 결루 보여줄 심볼
-  const TokenImage = TokenIcon[symbol ?? 'Mvl'];
+
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
 
@@ -74,7 +74,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
-          <TokenImage width={height * 32} height={height * 32} />
+          {iconUrl && <SvgUri uri={iconUrl} width={`${width * 32}`} height={`${width * 32}`} />}
           <S.Token>{symbol}</S.Token>
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>

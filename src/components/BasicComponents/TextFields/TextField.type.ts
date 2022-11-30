@@ -50,4 +50,5 @@ export interface ITradeVolumeComponentProps {
   value: BigNumber | null;
   onChange: (amount: any) => void;
   hint?: string;
+  iconUrl?: string;
 }

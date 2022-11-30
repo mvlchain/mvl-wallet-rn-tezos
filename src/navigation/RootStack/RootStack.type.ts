@@ -22,9 +22,11 @@ export type TRootStackParamList = {
   SETTING_FAQ: undefined;
   WALLET_TOKEN_DETAIL: {
     symbol: keyof typeof WALLET_TOKEN;
+    iconUrl: string;
   };
   WALLET_TOKEN_SEND: {
     symbol: keyof typeof WALLET_TOKEN;
+    iconUrl: string;
   };
   WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse;
   WALLET_TRANSACTION_SPEED_UP: undefined;

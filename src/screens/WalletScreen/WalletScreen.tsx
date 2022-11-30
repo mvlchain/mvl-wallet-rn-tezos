@@ -18,12 +18,6 @@ function WalletScreen() {
     <S.Container>
       <Account />
       <S.Seperator />
-      <Button
-        title={'click '}
-        onPress={() => {
-          navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { symbol: WALLET_TOKEN.bMVL });
-        }}
-      />
       <TokenList />
     </S.Container>
   );
