@@ -3,7 +3,6 @@ import React from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 import * as TokenIcon from '@@assets/image/token';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
@@ -26,12 +25,12 @@ function TokenDetailBoard() {
   const gotoSend = () => {
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, params);
   };
-
+  const TokenImage = TokenIcon[params.symbol as keyof typeof TokenIcon];
   return (
     <View>
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
-          {params.iconUrl && <SvgUri uri={params.iconUrl} width={`${width * 32}`} height={`${width * 32}`} />}
+          <TokenImage width={width * 32} height={height * 32} />
           <S.TokenName>{params.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>

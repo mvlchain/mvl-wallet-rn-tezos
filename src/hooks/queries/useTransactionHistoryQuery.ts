@@ -1,8 +1,9 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-import { Network, TEZOS_NETWORK } from '@@constants/network.constant';
+import { Network, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { useDi } from '@@hooks/useDi';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 export default function useTransactionHitoryQuery(
   {
@@ -15,10 +16,12 @@ export default function useTransactionHitoryQuery(
   }: { network: Network; ticker: string; address: string; beforeblock?: number; beforeindex?: number; limit?: number },
   options: UseQueryOptions<IGetTransactionHistoryResponse[], unknown, IGetTransactionHistoryResponse[]> = {}
 ) {
+  const { selectedNetwork } = walletPersistStore();
+  const networkInfo = getNetworkConfig(selectedNetwork);
   //TODO: 나중에 네트워크 파악하는건 트랜잭션레파지토리 만들면서 서비스로 넣기
   const tezosTransactionService = useDi('TezosTransactionService');
   const etherTransactionService = useDi('EtherTransactionService');
-  const TransactionService = TEZOS_NETWORK.includes(network) ? tezosTransactionService : etherTransactionService;
+  const TransactionService = networkInfo.networkFeeType === NETWORK_FEE_TYPE.TEZOS ? tezosTransactionService : etherTransactionService;
   return useQuery<IGetTransactionHistoryResponse[], unknown, IGetTransactionHistoryResponse[]>(
     ['history', address, network, ticker],
     () => TransactionService.getHistory({ address, network, ticker, beforeblock, beforeindex, limit }),
