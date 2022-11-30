@@ -52,6 +52,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   };
 
   const onEndEditing = (data: NativeSyntheticEvent<TextInputEndEditingEventData>) => {};
+  const TokenImage = TokenIcon[symbol as keyof typeof TokenIcon];
 
   return (
     <S.TradeVolumeContainer>
@@ -71,10 +72,11 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
             placeholderTextColor={color.grey300Grey700}
             onKeyPress={onKeyPress}
           />
+
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
-          {iconUrl && <SvgUri uri={iconUrl} width={`${width * 32}`} height={`${width * 32}`} />}
+          <TokenImage width={`${width * 32}`} height={`${width * 32}`} />
           <S.Token>{symbol}</S.Token>
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>

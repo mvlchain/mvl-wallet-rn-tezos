@@ -60,7 +60,6 @@ export class EthersTransactionImpl implements ITransactionService {
       const res = await request.get(endpoint);
       if (res.status === 200) {
         return mockData;
-        return res.data;
       } else {
         return [];
       }
@@ -107,12 +106,11 @@ export class TezosTaquitoTransactionsImpl implements ITransactionService {
     return 'approve';
   }
 
-  async getHistory(args: IGetHistoryArgs) {
+  async getHistory(params: IGetHistoryArgs) {
     //TODO: v2에서는 auth header붙여야함
     try {
       const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
       const res = await request.get(endpoint);
-      const res = { status: 200 };
       if (res.status === 200) {
         return res.data;
       } else {

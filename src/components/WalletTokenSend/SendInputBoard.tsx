@@ -18,7 +18,7 @@ function SendInputBoard({ amount, setAmount, address, setAddress }: ISendInputBo
     <S.Container>
       <BaseTextField value={address} onChange={setAddress} scanable={true} type={'address'} label={t('send_address')} />
       <S.Gap />
-      <TradeVolume label={t('send_amount')} onChange={setAmount} value={amount} useMax={true} symbol={params.symbol} iconUrl={params.iconUrl} />
+      <TradeVolume label={t('send_amount')} onChange={setAmount} value={amount} useMax={true} symbol={params.symbol} />
     </S.Container>
   );
 }

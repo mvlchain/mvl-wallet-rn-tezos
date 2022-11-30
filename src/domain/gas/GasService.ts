@@ -43,19 +43,16 @@ export class GasServiceImpl implements IGasService {
 
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        const { baseFee, additionalFee, gasLevel } = args as TGetTotalGasFeeArgsTEZ;
-        return this.gasRepositoryTezos.getTotalGasFee({ baseFee, additionalFee, gasLevel });
+        return this.gasRepositoryTezos.getTotalGasFee({ baseFee: args.baseFee, additionalFee: args.additionalFee, gasLevel: args.gasLevel });
       case NETWORK_FEE_TYPE.EIP1559:
-        const { maxFeePerGas, maxPriorityFeePerGas, estimatedGas, gasLevel } = args as TGetTotalGasFeeArgsEIP1559;
         return this.gasRepositoryEip1559.getTotalGasFee({
-          maxFeePerGas,
-          maxPriorityFeePerGas,
-          estimatedGas,
-          gasLevel,
+          maxFeePerGas: args.maxFeePerGas,
+          maxPriorityFeePerGas: args.maxPriorityFeePerGas,
+          estimatedGas: args.estimatedGas,
+          gasLevel: args.gasLevel,
         });
       default:
-        const { gasPrice, gasLimit, gasLevel } = args as TGetTotalGasFeeArgsEthers;
-        return this.gasRepository.getTotalGasFee({ gasPrice, gasLimit, gasLevel });
+        return this.gasRepository.getTotalGasFee({ gasPrice: args.gasPrice, gasLimit: args.gasLimit, gasLevel: args.gasLevel });
     }
   };
 
@@ -65,14 +62,12 @@ export class GasServiceImpl implements IGasService {
 
   estimateGas = async (args: TEstimateGasArgs | TEstimateGasArgsTEZ) => {
     const network = getNetworkConfig(args.selectedNetwork);
-
+    const { to, value, amount, privateKey } = args;
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        const { to, amount, privateKey } = args as TEstimateGasArgsTEZ;
         return await this.gasRepositoryTezos.estimateGas({ rpcUrl: network.rpcUrl, to, amount, privateKey });
       default:
-        const { to, value, privateKey } = args as TEstimateGasArgs;
-        return await this.gasRepository.estimateGas({ network, to, value, privateKey });
+        return await this.gasRepository.estimateGas({ networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId }, to, value, privateKey });
     }
   };
 }
