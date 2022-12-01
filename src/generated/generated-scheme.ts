@@ -86,6 +86,36 @@ export interface paths {
     /** Delete Clutch Account. */
     post: operations["ClutchUserController_deleteAccounts"];
   };
+  "/v2/accounts/token/hmac": {
+    /** Get JWT Access Token with HMAC. */
+    post: operations["ClutchUserControllerV2_authHmacVerification"];
+  };
+  "/v2/accounts/sessions/refresh": {
+    /** Renew Access Token and Refresh Token using Refresh Token */
+    post: operations["ClutchUserControllerV2_refresh"];
+  };
+  "/v2/accounts": {
+    /** Register Or Login User with APPLE, GOOGLE OAuth. */
+    post: operations["ClutchUserControllerV2_signup"];
+  };
+  "/v2/accounts/check": {
+    /** Check the User is registered with APPLE, GOOGLE OAuth. */
+    post: operations["ClutchUserControllerV2_check"];
+  };
+  "/v2/accounts/restore": {
+    /** Restore User's polynomialId with APPLE, GOOGLE OAuth. */
+    post: operations["ClutchUserControllerV2_restore"];
+  };
+  "/v2/accounts/ss": {
+    /** Retrieve server share based on the social login access token */
+    get: operations["ClutchUserControllerV2_getServerShare"];
+    /** HMAC Secured */
+    put: operations["ClutchUserControllerV2_updateServerShare"];
+  };
+  "/v2/accounts/delete": {
+    /** Delete Clutch Account. */
+    post: operations["ClutchUserControllerV2_deleteAccounts"];
+  };
   "/v1/third-party/{appId}/connection/status": {
     /** Get Third Party connection Status */
     get: operations["ThirdPartyController_connectionCheck"];
@@ -146,6 +176,18 @@ export interface paths {
     /** Disconnecting to third party user (for now just TADA) */
     post: operations["ThirdPartyForClutchController_disconnect"];
   };
+  "/v2/third-party/{appId}/connect/check": {
+    /** Get Third Party connection Status for Clutch */
+    post: operations["ThirdPartyForClutchV2Controller_connectCheck"];
+  };
+  "/v2/third-party/{appId}/connect": {
+    /** Connecting to third party user (for now just TADA) */
+    post: operations["ThirdPartyForClutchV2Controller_connect"];
+  };
+  "/v2/third-party/{appId}/disconnect": {
+    /** Disconnecting to third party user (for now just TADA) */
+    post: operations["ThirdPartyForClutchV2Controller_disconnect"];
+  };
   "/currencies/{id}": {
     get: operations["CurrenciesController_getCurrency"];
   };
@@ -185,6 +227,30 @@ export interface paths {
   "/v1/earn-event/{id}": {
     /** Get one Earn Event. */
     post: operations["EarnEventController_post"];
+  };
+  "/v2/earn-event": {
+    /** Event Lists. */
+    get: operations["EarnEventV2Controller_listPost"];
+  };
+  "/v2/earn-event/{id}/participation/current": {
+    /** User's Current point from this event. */
+    get: operations["EarnEventV2Controller_participationCurrentPost"];
+  };
+  "/v2/earn-event/{id}/claim/request": {
+    /** Request Claim this event. */
+    post: operations["EarnEventV2Controller_claimRequestPost"];
+  };
+  "/v2/earn-event/{id}/claim/status": {
+    /** Check Claim processing status. */
+    get: operations["EarnEventV2Controller_claimStatusPost"];
+  };
+  "/v2/earn-event/{id}/claim/information": {
+    /** Claim informations to show claim modal. */
+    get: operations["EarnEventV2Controller_claimInformationPost"];
+  };
+  "/v2/earn-event/{id}": {
+    /** Get one Earn Event. */
+    get: operations["EarnEventV2Controller_post"];
   };
   "/payments": {
     post: operations["PaymentsController_createPayment"];
@@ -289,6 +355,12 @@ export interface paths {
   "/v1/mobiles/current": {
     post: operations["MobileController_checkCurrent"];
   };
+  "/v2/mobiles": {
+    post: operations["MobileV2Controller_register"];
+  };
+  "/v2/mobiles/current": {
+    get: operations["MobileV2Controller_checkCurrent"];
+  };
   "/v1/wallets": {
     get: operations["VerifiedWalletV10Controller_list"];
     /** Register client-side created wallet */
@@ -313,6 +385,26 @@ export interface paths {
      * Response Multiple Tokens.
      */
     get: operations["VerifiedWalletV12Controller_balance"];
+  };
+  "/v2/wallets": {
+    /**
+     * List registered wallet<BR/>
+     * sorted by index
+     */
+    get: operations["VerifiedWalletV2Controller_list"];
+    /** Register client-side created wallet */
+    post: operations["VerifiedWalletV2Controller_registerWallet"];
+  };
+  "/v2/wallets/balance": {
+    /**
+     * Get balance of a wallet<BR/>
+     * Response Multiple Tokens.
+     */
+    get: operations["VerifiedWalletV2Controller_balance"];
+  };
+  "/v2/wallets/simple/price": {
+    /** Get price from coingecko */
+    get: operations["VerifiedWalletV2Controller_simplePrice"];
   };
   "/v1/balance-clutch/current": {
     post: operations["BalanceClutchController_currentGet"];
@@ -425,6 +517,7 @@ export interface components {
       /** Format: date-time */
       deletedAt: string | null;
       authClientId: string;
+      /** @description Token for renew Access Token. */
       refreshToken?: string;
       authClient: {
         id?: string;
@@ -445,6 +538,7 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
       user: components["schemas"]["UserWithWalletDto"];
+      /** @description Token for Access APIs. */
       accessToken: string;
       authSession?: components["schemas"]["AuthSessionDtoWithRefreshToken"];
     };
@@ -477,6 +571,7 @@ export interface components {
       authClient?: components["schemas"]["AuthClientEntity"];
     };
     JwtAccessToken: {
+      /** @description Token for Access APIs. */
       accessToken: string;
       authSession?: components["schemas"]["AuthSessionDtoWithRefreshToken"];
     };
@@ -572,6 +667,10 @@ export interface components {
        * @example 48855e7a-1ef3-4c1d-ae88-5361a2c8f7e6
        */
       id: string;
+      /** @description Token for Access APIs. */
+      accessToken: string;
+      /** @description Token for renew Access Token. */
+      refreshToken: string;
     };
     SignupCheckDto: {
       /** @description Only GOOGLE, APPLE */
@@ -625,6 +724,45 @@ export interface components {
     HmacErrorDTO: {
       /** @default Invalid Hmac sig! */
       message: string;
+    };
+    AuthJWTResponseDto: {
+      /** @description Token for Access APIs. */
+      accessToken: string;
+      /** @description Token for renew Access Token. */
+      refreshToken: string;
+    };
+    SignupV2Dto: {
+      /** @description Only GOOGLE, APPLE */
+      type: components["schemas"]["ForClutchUserIdentifierType"];
+      /** @description required if type = APPLE */
+      identifier?: string;
+      /**
+       * @description tkey server share
+       * @example {"share":{"share":"xxxx","shareIndex":"xxx"},"polynomialID":"xxx|xxx"}
+       */
+      share: string;
+      token: string;
+    };
+    SnsAuthDto: {
+      /** @description Only GOOGLE, APPLE */
+      type: components["schemas"]["ForClutchUserIdentifierType"];
+      /** @description required if type = APPLE */
+      identifier?: string;
+      token: string;
+    };
+    RestoreAccountV2Dto: {
+      /** @description Only GOOGLE, APPLE */
+      type: components["schemas"]["ForClutchUserIdentifierType"];
+      /** @description required if type = APPLE */
+      identifier?: string;
+      /**
+       * @description tkey server share
+       * @example {"share":{"share":"xxxx","shareIndex":"xxx"},"polynomialID":"xxx|xxx"}
+       */
+      share: string;
+      /** @description Wallet 0 address for setting */
+      walletAddress0: string;
+      token: string;
     };
     ThirdPartyConnectionCheckResponseDto: {
       /** @description Flag for connection information for third party app is exists. */
@@ -709,7 +847,11 @@ export interface components {
       currency: string;
       /** @description currency icon for claim */
       currencyIconUrl: string;
-      /** @description Web page url to show point and token information for claim. */
+      /**
+       * @description Web page url to show point and token information for claim.<br/>
+       * This page need pubKey in query parameter.<br/>
+       * ex) https://calcInfoPageUrl.com?pubKey=clutch.pubKey.
+       */
       calcInfoPageUrl: string;
       /**
        * @description Third party app information.
@@ -719,6 +861,8 @@ export interface components {
       app: components["schemas"]["ThirdPartyApp"] | null;
       /** @description Alias of Earn Event. */
       alias: string;
+      /** @description Flag That determines whether to allow or not earn point within a claim period. */
+      isAllowParticipationInClaim: boolean;
     };
     EarnEventCurrentResponseDto: {
       /** @description current amount */
@@ -750,7 +894,10 @@ export interface components {
       identifier: string;
       /** @description Timestamp sent request. */
       timestamp: string;
-      /** @description Earn event participation value. number string */
+      /**
+       * @description Earn event participation value. number string<BR/>
+       * Value can be up to 8 decimal place and is discarded belew it.
+       */
       value: string;
       /** @description Earn Event point key. */
       key: string;
@@ -1415,6 +1562,65 @@ export interface components {
       subCurrencyIconUrl: string | null;
       /** @description Total amount to claim. */
       subCurrencyAmount: string | null;
+      /** @description Flag That can claim or not. */
+      isClaimable: boolean;
+    };
+    EarnEventV2Dto: {
+      /** @enum {string} */
+      claimType: "CONSTANT" | "RATIO_DIVISION";
+      /** @description event id */
+      id: string;
+      /** Format: date-time */
+      eventStartAt: string;
+      /** Format: date-time */
+      eventEndAt: string;
+      /** Format: date-time */
+      claimStartAt: string;
+      /** Format: date-time */
+      claimEndAt: string;
+      /** @description event icon image url */
+      iconUrl: string;
+      title: string;
+      subTitle: string;
+      detailPageUrl: string;
+      /** @description Information of point array */
+      pointInfoArr: components["schemas"]["EarnEventPointInfoDto"][];
+      /** @description currency icon image url for point */
+      pointIconUrl: string;
+      /**
+       * @description button text for earn
+       * ex) Trade 바로가기
+       * @default null
+       */
+      eventActionButtonTitle: string | null;
+      /**
+       * @description scheme for execute when earn button clicked
+       * @default null
+       */
+      eventActionScheme: string | null;
+      /**
+       * @description Unit text for claim
+       * ex) bMVL
+       */
+      currency: string;
+      /** @description currency icon for claim */
+      currencyIconUrl: string;
+      /**
+       * @description Web page url to show point and token information for claim.<br/>
+       * This page need accessToken in query parameter.<br/>
+       * ex) https://calcInfoPageUrl.com?accessToken=clutch.access.token.
+       */
+      calcInfoPageUrl: string;
+      /**
+       * @description Third party app information.
+       * This is nullable property.
+       * @default null
+       */
+      app: components["schemas"]["ThirdPartyApp"] | null;
+      /** @description Alias of Earn Event. */
+      alias: string;
+      /** @description Flag That determines whether to allow or not earn point within a claim period. */
+      isAllowParticipationInClaim: boolean;
     };
     PaymentOptions: {
       /**
@@ -2262,6 +2468,299 @@ export interface operations {
       };
     };
   };
+  /** Get JWT Access Token with HMAC. */
+  ClutchUserControllerV2_authHmacVerification: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["AuthJWTResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default Invalid auth client! */
+            message?: string;
+            /** @default INVALID_CLIENT */
+            code?: string;
+          };
+        };
+      };
+      422: {
+        content: {
+          "application/json": {
+            /** @default User must be signed up! */
+            message?: string;
+            /** @default MUST_BE_SIGNED_UP */
+            code?: string;
+          };
+        };
+      };
+      426: {
+        content: {
+          "application/json": {
+            /** @default Client update required */
+            message?: string;
+            /** @default REQUIRED_CLIENT_VERSION_UPDATE */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Renew Access Token and Refresh Token using Refresh Token */
+  ClutchUserControllerV2_refresh: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["AuthJWTResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Invalid auth session! perhaps already refreshed? */
+            message?: string;
+            /** @default INVALID_SESSION */
+            code?: string;
+          };
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default AuthSession is not refreshable! */
+            message?: string;
+            /** @default NOT_REFRESHABLE */
+            code?: string;
+          };
+        };
+      };
+      422: {
+        content: {
+          "application/json": {
+            /** @default User must be signed up! */
+            message?: string;
+            /** @default MUST_BE_SIGNED_UP */
+            code?: string;
+          };
+        };
+      };
+      426: {
+        content: {
+          "application/json": {
+            /** @default Client update required */
+            message?: string;
+            /** @default REQUIRED_CLIENT_VERSION_UPDATE */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Register Or Login User with APPLE, GOOGLE OAuth. */
+  ClutchUserControllerV2_signup: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ClutchUserResponseDto"];
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default Invalid auth client! */
+            message?: string;
+            /** @default INVALID_CLIENT */
+            code?: string;
+          };
+        };
+      };
+      409: {
+        content: {
+          "application/json": {
+            /** @default already existing user! */
+            message?: string;
+            /** @default ALREADY_EXIST */
+            code?: string;
+          };
+        };
+      };
+      422: {
+        content: {
+          "application/json": {
+            /** @default User must be signed up! */
+            message?: string;
+            /** @default MUST_BE_SIGNED_UP */
+            code?: string;
+          };
+        };
+      };
+      426: {
+        content: {
+          "application/json": {
+            /** @default Client update required */
+            message?: string;
+            /** @default REQUIRED_CLIENT_VERSION_UPDATE */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SignupV2Dto"];
+      };
+    };
+  };
+  /** Check the User is registered with APPLE, GOOGLE OAuth. */
+  ClutchUserControllerV2_check: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SignupCheckResponseDto"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SnsAuthDto"];
+      };
+    };
+  };
+  /** Restore User's polynomialId with APPLE, GOOGLE OAuth. */
+  ClutchUserControllerV2_restore: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default There is no user: type, userId, email */
+            message?: string;
+            /** @default NOT_FOUND_USER */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RestoreAccountV2Dto"];
+      };
+    };
+  };
+  /** Retrieve server share based on the social login access token */
+  ClutchUserControllerV2_getServerShare: {
+    parameters: {
+      query: {
+        /** Only GOOGLE, APPLE */
+        type: components["schemas"]["ForClutchUserIdentifierType"];
+        /** required if type = APPLE */
+        identifier?: string;
+        token: string;
+        polynomialId?: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ShareResponseDto"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default There is no user: provider, userId, email */
+            message?: string;
+            /** @default NOT_FOUND_USER */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
+  /** HMAC Secured */
+  ClutchUserControllerV2_updateServerShare: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ShareResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+      default: {
+        content: {
+          "application/json": components["schemas"]["ShareResponseDto"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateServerShareDto"];
+      };
+    };
+  };
+  /** Delete Clutch Account. */
+  ClutchUserControllerV2_deleteAccounts: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
   /** Get Third Party connection Status */
   ThirdPartyController_connectionCheck: {
     parameters: {
@@ -2851,6 +3350,139 @@ export interface operations {
       404: unknown;
     };
   };
+  /** Get Third Party connection Status for Clutch */
+  ThirdPartyForClutchV2Controller_connectCheck: {
+    parameters: {
+      path: {
+        appId: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ThirdPartyConnectCheckResponseDto"];
+        };
+      };
+      400: {
+        content: {
+          "application/json": {
+            /** @default Invalied JWT token: "jwtToken" for appId */
+            message?: string;
+            /** @default INVALID_JWT_TOKEN */
+            code?: string;
+          };
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found App: by appId */
+            message?: string;
+            /** @default NOT_FOUND_APP */
+            code?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyConnectCheckDto"];
+      };
+    };
+  };
+  /** Connecting to third party user (for now just TADA) */
+  ThirdPartyForClutchV2Controller_connect: {
+    parameters: {
+      path: {
+        appId: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      400: {
+        content: {
+          "application/json": {
+            /** @default Invalied JWT token: "jwtToken" for appId */
+            message?: string;
+            /** @default INVALID_JWT_TOKEN */
+            code?: string;
+          };
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ThirdPartyConnectDto"];
+      };
+    };
+  };
+  /** Disconnecting to third party user (for now just TADA) */
+  ThirdPartyForClutchV2Controller_disconnect: {
+    parameters: {
+      path: {
+        appId: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found connection info by appId: appId */
+            message?: string;
+            /** @default NOT_FOUND_CONNECTION_INFO */
+            code?: string;
+          };
+        };
+      };
+    };
+  };
   CurrenciesController_getCurrency: {
     parameters: {
       path: {
@@ -3103,6 +3735,229 @@ export interface operations {
       401: {
         content: {
           "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Event Lists. */
+  EarnEventV2Controller_listPost: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventV2Dto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** User's Current point from this event. */
+  EarnEventV2Controller_participationCurrentPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventCurrentResponseDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Request Claim this event. */
+  EarnEventV2Controller_claimRequestPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SimpleResponseDto"];
+        };
+      };
+      400: {
+        content: {
+          "application/json": {
+            /** @default Already Claimed Earn Event earnEventId by user userId */
+            message?: string;
+          };
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      403: {
+        content: {
+          "application/json": {
+            /** @default Not Claimable Period Earn Event: earnEventId */
+            message?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default Not Found Earn Event by earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EarnEventClaimRequestDto"];
+      };
+    };
+  };
+  /** Check Claim processing status. */
+  EarnEventV2Controller_claimStatusPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventClaimCheckResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Claim informations to show claim modal. */
+  EarnEventV2Controller_claimInformationPost: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventGetClaimResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+      500: {
+        content: {
+          "application/json": {
+            /** @default Not Found Exchange Rate currencyId0, currencyId1 for Earn Event earnEventId */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Get one Earn Event. */
+  EarnEventV2Controller_post: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EarnEventV2Dto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
         };
       };
       404: {
@@ -3619,6 +4474,72 @@ export interface operations {
       };
     };
   };
+  MobileV2Controller_register: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["MobileResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MobileRegisterDto"];
+      };
+    };
+  };
+  MobileV2Controller_checkCurrent: {
+    parameters: {
+      query: {
+        os: components["schemas"]["MobileOs"];
+        fcmToken: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["MobileCheckResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
   VerifiedWalletV10Controller_list: {
     parameters: {
       query: {
@@ -3706,12 +4627,12 @@ export interface operations {
   VerifiedWalletV11Controller_simplePrice: {
     parameters: {
       query: {
+        include_market_cap?: string;
+        include_24hr_vol?: string;
+        include_24hr_change?: string;
+        include_last_updated_at?: string;
         ids: string;
         vs_currencies: string;
-        include_market_cap?: boolean;
-        include_24hr_vol?: boolean;
-        include_24hr_change?: boolean;
-        include_last_updated_at?: boolean;
       };
     };
     responses: {
@@ -3744,6 +4665,153 @@ export interface operations {
       default: {
         content: {
           "application/json": components["schemas"]["BalanceResponseDto"][];
+        };
+      };
+    };
+  };
+  /**
+   * List registered wallet<BR/>
+   * sorted by index
+   */
+  VerifiedWalletV2Controller_list: {
+    parameters: {
+      query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network?: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["WalletResponseDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Register client-side created wallet */
+  VerifiedWalletV2Controller_registerWallet: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["WalletResponseDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RegisterWalletDto"];
+      };
+    };
+  };
+  /**
+   * Get balance of a wallet<BR/>
+   * Response Multiple Tokens.
+   */
+  VerifiedWalletV2Controller_balance: {
+    parameters: {
+      query: {
+        address: string;
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: "BITCOIN" | "ETHEREUM" | "BSC" | "XTZ";
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["BalanceResponseDto"][];
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Get price from coingecko */
+  VerifiedWalletV2Controller_simplePrice: {
+    parameters: {
+      query: {
+        include_market_cap?: string;
+        include_24hr_vol?: string;
+        include_24hr_change?: string;
+        include_last_updated_at?: string;
+        ids: string;
+        vs_currencies: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      401: {
+        content: {
+          "application/json": {
+            /** @default Session expired or deleted */
+            message?: string;
+            /** @default EXPIRED_SESSION */
+            code?: string;
+          };
+        };
+      };
+      404: {
+        content: {
+          "application/json": {
+            /** @default UserIdentifier not exists! */
+            message?: string;
+          };
         };
       };
     };
@@ -3865,6 +4933,10 @@ export type SimpleResponseDto = components['schemas']['SimpleResponseDto'];
 export type UpdateServerShareDto = components['schemas']['UpdateServerShareDto'];
 export type ShareResponseDto = components['schemas']['ShareResponseDto'];
 export type HmacErrorDTO = components['schemas']['HmacErrorDTO'];
+export type AuthJWTResponseDto = components['schemas']['AuthJWTResponseDto'];
+export type SignupV2Dto = components['schemas']['SignupV2Dto'];
+export type SnsAuthDto = components['schemas']['SnsAuthDto'];
+export type RestoreAccountV2Dto = components['schemas']['RestoreAccountV2Dto'];
 export type ThirdPartyConnectionCheckResponseDto = components['schemas']['ThirdPartyConnectionCheckResponseDto'];
 export type ThirdPartyEarnDto = components['schemas']['ThirdPartyEarnDto'];
 export type ThirdPartyBalanceResponseDto = components['schemas']['ThirdPartyBalanceResponseDto'];
@@ -3920,6 +4992,7 @@ export type CreateBalanceWithdrawalRequestDto = components['schemas']['CreateBal
 export type EarnEventClaimRequestDto = components['schemas']['EarnEventClaimRequestDto'];
 export type EarnEventClaimCheckResponseDto = components['schemas']['EarnEventClaimCheckResponseDto'];
 export type EarnEventGetClaimResponseDto = components['schemas']['EarnEventGetClaimResponseDto'];
+export type EarnEventV2Dto = components['schemas']['EarnEventV2Dto'];
 export type PaymentOptions = components['schemas']['PaymentOptions'];
 export type CreatePaymentDto = components['schemas']['CreatePaymentDto'];
 export type PaymentStatusDto = components['schemas']['PaymentStatusDto'];

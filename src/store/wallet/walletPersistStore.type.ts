@@ -10,7 +10,7 @@ export interface IWalletPersist extends IWalletPersistState {
 }
 
 export interface IWalletPersistState {
-  selectedWalletIndex: number;
+  selectedWalletIndex: { [network: string]: number };
   selectedNetwork: Network;
   walletList: { [network: string]: IPersistWallet[] };
 }

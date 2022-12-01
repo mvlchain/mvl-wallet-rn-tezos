@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { formatUnits } from 'ethers/lib/utils';
 
@@ -12,6 +12,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
+import useTokenQuery from './queries/useTokenQuery';
 import useWalletsQuery from './queries/useWalletsQuery';
 
 export const useTokenBalance = () => {
@@ -19,11 +20,17 @@ export const useTokenBalance = () => {
   const ethService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
+  const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
   // @ts-ignore
   const priceIds = Object.values(PRICE_TYPE[selectedNetwork]).flat();
   const [formalizedBalance, setFormalizedBalance] = useState<IBalanceData[]>();
   const [walletData, setWalletData] = useState<WalletDto[]>([]);
   const [balanceData, setBalanceData] = useState<IBalance>();
+  const { data: tokenList } = useTokenQuery(selectedNetwork);
+
+  useEffect(() => {
+    console.log('TokenList:  ', tokenList);
+  }, [tokenList]);
 
   useWalletsQuery({
     onSuccess: (data) => {
@@ -31,7 +38,7 @@ export const useTokenBalance = () => {
     },
   });
 
-  const { refetch } = useBalanceQuery(walletData[selectedWalletIndex]?.address, selectedNetwork, {
+  const { refetch } = useBalanceQuery(walletData[_selectedWalletIndex]?.address, selectedNetwork, {
     enabled: false,
     keepPreviousData: true,
     select: (data) => {
@@ -64,7 +71,7 @@ export const useTokenBalance = () => {
   const getBalance = async () => {
     try {
       // TODO: address에 따라 token list호출 후 해당 값에 대해 balance 조회
-      const balance = await ethService.getBalanceFromNetwork(selectedWalletIndex, selectedNetwork);
+      const balance = await ethService.getBalanceFromNetwork(_selectedWalletIndex, selectedNetwork);
       if (balance && Object.keys(balance).length === 0) {
         console.log('Data fetch from blockchain is fail -> Fetch from Server');
         refetch();
@@ -80,7 +87,7 @@ export const useTokenBalance = () => {
     // TODO: wallet data 못가져왔을 때 에러 로직 추가
     if (walletData.length === 0) return;
     getBalance();
-  }, [selectedNetwork, walletData, selectedWalletIndex]);
+  }, [selectedNetwork, walletData, _selectedWalletIndex]);
 
   useEffect(() => {
     if (!price || !balanceData) return;
