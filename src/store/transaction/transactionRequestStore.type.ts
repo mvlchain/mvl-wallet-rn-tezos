@@ -1,5 +1,5 @@
 import { TransactionRequest } from '@ethersproject/abstract-provider';
-import { BigNumberish, BytesLike } from 'ethers';
+import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 import { AccessListish } from 'ethers/lib/utils';
 
 export interface ITransactionRequestBody {
@@ -9,7 +9,7 @@ export interface ITransactionRequestBody {
   gasLimit: BigNumberish | null;
   gasPrice: BigNumberish | null;
   data: BytesLike | null;
-  value: BigNumberish | null;
+  value: BigNumber | null;
   chainId: number | null;
   type: number | null;
   accessList: AccessListish | null;

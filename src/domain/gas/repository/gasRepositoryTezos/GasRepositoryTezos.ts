@@ -25,7 +25,7 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
     return formatEther(totalGasInBN);
   };
 
-  estimateGas = async ({ rpcUrl, to, amount, privateKey }: IEstimateGasArgsTEZ) => {
+  estimateGas = async ({ rpcUrl, to, amount }: IEstimateGasArgsTEZ) => {
     //TODO: 임시 주소 TEZO에 맞는 지갑 주소 필요함, 양식이 다름
     const Tezos = new TezosToolkit(rpcUrl);
     Tezos.setProvider({

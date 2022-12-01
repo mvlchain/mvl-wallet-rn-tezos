@@ -32,7 +32,6 @@ const useGasFeeTezos = () => {
       to: 'tz1TbtL8o42styDAngvPkKBb6wpgTnT71m3t',
       value: 2,
       selectedNetwork,
-      privateKey: 'edsk2rKA8YEExg9Zo2qNPiQnnYheF1DhqjLVmfKdxiFfu5GyGRZRnb',
     })) as Estimate;
 
     const burnFeeMutezInDecimal = new Decimal(newEstimatedGas.burnFeeMutez);

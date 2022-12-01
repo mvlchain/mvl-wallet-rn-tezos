@@ -34,11 +34,11 @@ export class GasRepositoryImpl implements IGasRepository {
   };
 
   estimateGas = async (args: IEstimateGasArgs) => {
-    const { networkInfo, privateKey, to, value, data } = args;
+    const { networkInfo, to, value, data } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    const wallet = new ethers.Wallet(privateKey, provider);
+    // const wallet = new ethers.Wallet(privateKey, provider);
 
-    const res = await wallet.estimateGas({
+    const res = await provider.estimateGas({
       to,
       data,
       value,

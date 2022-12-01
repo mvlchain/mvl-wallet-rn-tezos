@@ -37,7 +37,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   };
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    onChange(data);
+    onChange(data.nativeEvent.text);
     if (!data.nativeEvent.text) {
       setShowDelete(false);
     }

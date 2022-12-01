@@ -9,7 +9,6 @@ export interface IGetTotalGasFeeArgsTEZ {
 
 export interface IEstimateGasArgsTEZ extends TransferParams {
   rpcUrl: string;
-  privateKey: string;
 }
 
 export interface IGasRepositoryTezos {
