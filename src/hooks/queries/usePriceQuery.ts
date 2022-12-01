@@ -10,14 +10,10 @@ export interface IPriceQueryKey {
   currency: keyof typeof CURRENCY;
 }
 
-export default function usePriceQuery(
-  key: IPriceQueryKey,
-  param: IGetPriceDto,
-  options: UseQueryOptions<IGetPriceResponseDto, unknown, IGetPriceResponseDto> = {}
-) {
+export default function usePriceQuery(param: IGetPriceDto, options: UseQueryOptions<IGetPriceResponseDto, unknown, IGetPriceResponseDto> = {}) {
   const walletRepository = useDi('WalletRepository');
-  return useQuery<IGetPriceResponseDto, unknown, IGetPriceResponseDto>(createKey(key), () => walletRepository.getPrice(param), options);
+  return useQuery<IGetPriceResponseDto, unknown, IGetPriceResponseDto>(createKey(param), () => walletRepository.getPrice(param), options);
 }
 
-const createKey = (key: IPriceQueryKey) => ['price', key.network, key.currency];
+const createKey = (key: IGetPriceDto) => ['price', key.ids, key.vsCurrencies];
 usePriceQuery.createKey = createKey;

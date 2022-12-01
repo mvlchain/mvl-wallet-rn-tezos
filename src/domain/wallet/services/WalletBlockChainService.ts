@@ -1,11 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getToken } from '@@constants/contract/contract.constant';
-import { Network } from '@@constants/network.constant';
-import { BASIC_ETH_TOKEN, BASIC_BSC_TOKEN } from '@@constants/token.constant';
-import { BlockChainList } from '@@domain/blockchain/BlockChain';
-import { CryptoType } from '@@types/ContractType';
+import { getNetworkConfig, getNetworkName, Network } from '@@constants/network.constant';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import { ContractRepository } from '../repositories/WalletBlockChainRepository';
 
@@ -13,11 +10,8 @@ import { IBalance } from './WalletBlockChainService.type';
 import { WalletService } from './WalletService';
 
 export interface ContractService {
-  getBalanceFromNetwork: (index: number, network: Network) => Promise<any>;
+  getBalanceFromNetwork: (index: number, network: Network, tokenList: TokenDto[]) => Promise<any>;
 }
-
-const ETH_RPC_URL = 'https://goerli.infura.io/v3/***REMOVED***';
-const BSC_RPC_URL = 'https://data-seed-prebsc-1-s1.binance.org:8545';
 
 @injectable()
 export class EthersContractServiceImpl implements ContractService {
@@ -26,22 +20,21 @@ export class EthersContractServiceImpl implements ContractService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
-  getBalanceFromNetwork = async (index: number, network: Network) => {
-    const { blockchain, rpcUrl, tokenList } = this._getSetting(network);
-    const keyOfCrypto = Object.keys(tokenList);
+  getBalanceFromNetwork = async (index: number, network: Network, tokenList: TokenDto[]) => {
+    const { bip44, rpcUrl } = getNetworkConfig(getNetworkName(false, network));
     let balanceList: IBalance = {};
-    const wallet = await this.walletService.getWalletInfo({ index, blockchain });
-    const getBalancePromise = keyOfCrypto.map(async (crypto) => {
+    const wallet = await this.walletService.getWalletInfo({ index, bip44 });
+
+    const getBalancePromise = tokenList.map(async (token) => {
       let balance;
-      const value = getToken(false, crypto);
-      if (value.cryptoType === CryptoType.COIN) {
+      if (token.contractAddress === null) {
         balance = await this.ethersContractRepository.getBalance({
           selectedWalletPrivateKey: wallet.privateKey,
           rpcUrl: rpcUrl,
         });
       } else {
         balance = await this.ethersContractRepository.getContractBalance({
-          contractAddress: value.contractAddress,
+          contractAddress: token.contractAddress,
           rpcUrl: rpcUrl,
           abi: abiERC20,
           address: wallet.address,
@@ -49,25 +42,10 @@ export class EthersContractServiceImpl implements ContractService {
       }
       balanceList = {
         ...balanceList,
-        [value.symbol]: balance,
+        [token.symbol]: balance,
       };
     });
     await Promise.all(getBalancePromise);
     return balanceList;
-  };
-
-  // TODO: env로 설정
-  _getSetting = (network: Network) => {
-    const ethSetting = {
-      tokenList: BASIC_ETH_TOKEN,
-      blockchain: BlockChainList.ETHEREUM,
-      rpcUrl: ETH_RPC_URL,
-    };
-    const bscSetting = {
-      tokenList: BASIC_BSC_TOKEN,
-      blockchain: BlockChainList.BSC,
-      rpcUrl: BSC_RPC_URL,
-    };
-    return network === 'ETHEREUM' ? ethSetting : bscSetting;
   };
 }
