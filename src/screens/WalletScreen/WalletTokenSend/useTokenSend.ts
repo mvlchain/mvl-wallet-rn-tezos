@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDi } from '@@hooks/useDi';
 
@@ -9,45 +9,93 @@ import { GestureResponderEvent } from 'react-native-modal';
 import { IGasFeeInfoEip1559 } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
 import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
 import { ISendTransactionGasFee } from '@@domain/transaction/TransactionService.type';
+import globalModalStore from '@@store/globalModal/globalModalStore';
+import { pinStore } from '@@store/pin/pinStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, Network, NETWORK } from '@@constants/network.constant';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import { BINANCE, ETHEREUM, TEZOS } from '@@domain/blockchain/BlockChain';
+import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
+import PinLayout from '@@components/BasicComponents/Pin/PinLayout';
 
 const useTokenSend = () => {
   const ethersTransactionService = useDi('EtherTransactionService');
   const tezosTransactionService = useDi('TezosTransactionService');
+  const walletService = useDi('WalletService');
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
-  const { selectedNetwork } = walletPersistStore();
-
-  const [amount, setAmount] = useState<BigNumber | null>(null);
-  const [address, setAddress] = useState<string | null>('');
+  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { setState: pinSet } = pinStore;
 
   const network = getNetworkConfig(selectedNetwork);
+  const { openModal, closeModal } = globalModalStore();
 
-  //TODO: TEST를 위해서 임시로 하드코딩해둠 테스트용 계정
-  const privateKey = '0x2b27eaa12c946c41c523324a9c4a87e386e4f90cc61844aedc6edea18320002a';
-  const publicKey = '0x033c908f4aab15a406b9128763b1757ed68a3ee9b09d70146fa4f042355e9d332f';
-  const from = '0x5852d8Bc656562A27292df4cA2cbB14dE62b88f0';
+  //TODO: 뒤로가기할때 resetBody로 없애기
 
-  const confirmSend = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!to || !value) return;
-    try {
-      const res = await ethersTransactionService.sendTransaction({
-        networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId },
-        privateKey,
-        gasFeeInfo,
-        to,
-        from,
-        value,
-        //TODO: data null로 보내도 되는지 모르겠음 확인해보고 타입 수정 혹은 코드 수정
-        //data
+  const send = (params: any) => {
+    closeModal();
+    return async () => {
+      //TODO: 코드 중복됨 합칠수 있는지 보자.
+      let pinModalResolver, pinModalRejector;
+      const pinModalObserver = new Promise((resolve, reject) => {
+        pinModalResolver = resolve;
+        pinModalRejector = reject;
       });
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+      pinSet({ pinMode: PIN_MODE.CONFIRM, layout: PIN_LAYOUT.MODAL, pinModalResolver, pinModalRejector });
+      //TODO: 에러 나면 리셋바디 + 샌드화면으로 이동
+      const password = await pinModalObserver;
+      //TODO: 결과에따라 성공화면 실패화면
+      const res = await ethersTransactionService.sendTransaction(params);
+    };
+  };
+
+  const getChain = (network: Network) => {
+    switch (network) {
+      case NETWORK.ETH:
+        return ETHEREUM;
+      case NETWORK.GOERLI:
+        return ETHEREUM;
+      case NETWORK.BSC:
+        return BINANCE;
+      case NETWORK.BSC_TESTNET:
+        return BINANCE;
+      case NETWORK.TEZOS:
+        return TEZOS;
+      case NETWORK.TEZOS_GHOSTNET:
+        return TEZOS;
+      default:
+        return null;
     }
   };
 
-  return { amount, setAmount, address, setAddress, confirmSend };
+  const confirmSend = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
+    if (!to || !value) return;
+
+    const blockchain = getChain(selectedNetwork);
+    if (!blockchain) return;
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex, blockchain });
+    const params = {
+      networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId },
+      privateKey: wallet.privateKey,
+      gasFeeInfo,
+      to,
+      from: wallet.publicKey,
+      value,
+    };
+
+    const res = await ethersTransactionService.approveTransaction(params);
+    const recipientAddress = res;
+    openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress, amount: value, fee: total, onConfirm: send });
+  };
+
+  const setAddress = (address: string) => {
+    setBody({ to: address });
+  };
+
+  const setAmount = (amount: BigNumber) => {
+    setBody({ value: amount });
+  };
+
+  return { amount: value, setAmount, address: to, setAddress, confirmSend };
 };
 export default useTokenSend;

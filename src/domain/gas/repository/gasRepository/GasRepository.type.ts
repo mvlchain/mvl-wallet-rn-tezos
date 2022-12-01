@@ -17,7 +17,6 @@ export interface IGetTotalGasFeeArgsEthers {
 
 export interface IEstimateGasArgs extends TransactionRequest {
   networkInfo: INetworkInfo;
-  privateKey: string;
 }
 
 export interface IGasRepository {
