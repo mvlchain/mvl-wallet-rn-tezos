@@ -78,14 +78,14 @@ it('get pkey', async () => {
   expect(pkey).toBe('f8b52a72b38b08d1a2a838ab9bad0cdb39cae8bf63c238d43a87d52c68a3de24');
 });
 
-it('get eth balance', async () => {
-  const ethService = container.resolve<EthersContractServiceImpl>('WalletBlockChainService');
-  const ethBalance = await ethService.getBalanceFromNetwork(0, 'ETHEREUM', ETH_TOKENLIST);
-  expect(ethBalance).toStrictEqual({ ETH: '0.0', MVL: '0.0' });
-});
+// it('get eth balance', async () => {
+//   const ethService = container.resolve<EthersContractServiceImpl>('WalletBlockChainService');
+//   const ethBalance = await ethService.getBalanceFromNetwork(0, 'ETHEREUM', ETH_TOKENLIST);
+//   expect(ethBalance).toStrictEqual({ ETH: '0.0', MVL: '0.0' });
+// });
 
-it('get bsc balance', async () => {
-  const ethService = container.resolve<EthersContractServiceImpl>('WalletBlockChainService');
-  const bscBalance = await ethService.getBalanceFromNetwork(0, 'BSC', BSC_TOKENLIST);
-  expect(bscBalance).toStrictEqual({ bMVL: '0.0', BNB: '0.0', BTCB: '0.0' });
-});
+// it('get bsc balance', async () => {
+//   const ethService = container.resolve<EthersContractServiceImpl>('WalletBlockChainService');
+//   const bscBalance = await ethService.getBalanceFromNetwork(0, 'BSC', BSC_TOKENLIST);
+//   expect(bscBalance).toStrictEqual({ bMVL: '0.0', BNB: '0.0', BTCB: '0.0' });
+// });
