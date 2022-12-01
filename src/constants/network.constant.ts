@@ -11,6 +11,14 @@ export const NETWORK = {
 
 export type Network = valueOf<typeof NETWORK>;
 
+export const NETWORK_ID = {
+  ETHEREUM: 'ETHEREUM',
+  BSC: 'BSC',
+  XTZ: 'XTZ',
+} as const;
+
+export type NetworkId = valueOf<typeof NETWORK_ID>;
+
 export const NETWORK_FEE_TYPE = {
   EVM_LEGACY_GAS: 'EVM_LEGACY_GAS',
   EIP1559: 'EIP1559',
@@ -26,6 +34,7 @@ export type NetworkConfig = {
   bip44: number;
   rpcUrl: string;
   networkFeeType: NetworkFeeType;
+  networkId: NetworkId;
 };
 
 export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
@@ -36,6 +45,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     bip44: 60,
     rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
+    networkId: NETWORK_ID.ETHEREUM,
   },
   [NETWORK.GOERLI]: {
     name: 'Ethereum Goerli Testnet',
@@ -44,6 +54,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     bip44: 60,
     rpcUrl: 'https://goerli.infura.io/v3/***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
+    networkId: NETWORK_ID.ETHEREUM,
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',
@@ -52,6 +63,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     bip44: 60,
     rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
+    networkId: NETWORK_ID.BSC,
   },
   [NETWORK.BSC_TESTNET]: {
     name: 'BNB Smart Chain - Testnet',
@@ -60,6 +72,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     bip44: 60,
     rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
+    networkId: NETWORK_ID.BSC,
   },
   [NETWORK.TEZOS]: {
     name: 'Tezos Mainnet',
@@ -68,6 +81,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     bip44: 1729,
     rpcUrl: 'https://mainnet-node.madfish.solutions/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
+    networkId: NETWORK_ID.XTZ,
   },
   [NETWORK.TEZOS_GHOSTNET]: {
     name: 'Tezos Ghostnet',
@@ -76,6 +90,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     bip44: 1729,
     rpcUrl: 'https://ghostnet.smartpy.io/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
+    networkId: NETWORK_ID.XTZ,
   },
 };
 

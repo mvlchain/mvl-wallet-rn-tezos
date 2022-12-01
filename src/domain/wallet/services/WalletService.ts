@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
-import { Network } from '@@constants/network.constant';
+import { getNetworkConfig, Network, NetworkId } from '@@constants/network.constant';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
@@ -8,7 +8,7 @@ import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 
-import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam, TCreateWallet } from './WalletService.type';
+import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam } from './WalletService.type';
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
@@ -74,31 +74,10 @@ export class WalletServiceImpl implements WalletService {
     return this.walletRepository.getWallets(xpub);
   };
 
-  _filterNetwork = (network: Network): TCreateWallet => {
-    let filteredNetwork: TCreateWallet = 'ETHEREUM';
-    switch (network) {
-      case 'GOERLI':
-        filteredNetwork = 'ETHEREUM';
-        break;
-      case 'BSC':
-      case 'BSC_TESTNET':
-        filteredNetwork = 'BSC';
-        break;
-      case 'TEZOS':
-      case 'TEZOS_GHOSTNET':
-        filteredNetwork = 'XTZ';
-        break;
-      default:
-        filteredNetwork = 'ETHEREUM';
-    }
-    return filteredNetwork;
-  };
-
   createWallet = async ({ index, bip44, network }: ICreateWalletBody): Promise<WalletResponseDto> => {
     const wallet = await this.getWalletInfo({ index, bip44 });
-    const filteredNetwork = this._filterNetwork(network);
     return this.walletRepository.registerWallet({
-      network: filteredNetwork,
+      network: getNetworkConfig(network).networkId,
       address: wallet.address,
       index,
       name: `Wallet ${index + 1}`,
