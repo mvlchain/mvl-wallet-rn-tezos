@@ -1,4 +1,4 @@
-import { ShareStore } from '@tkey/common-types';
+import ShareStore from '@tkey/common-types/src/base/ShareStore';
 import { container, instanceCachingFactory } from 'tsyringe';
 
 import { AuthProvider } from '@@constants/auth.constant';
