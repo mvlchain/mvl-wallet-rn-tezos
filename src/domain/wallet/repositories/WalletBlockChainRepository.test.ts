@@ -26,54 +26,54 @@ it('constructs correctly', () => {
   expect(contractRepository).toBeDefined();
 });
 
-it('get eth balance', async () => {
-  const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
+// it('get eth balance', async () => {
+//   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
 
-  const balance = await contractRepository.getBalance({
-    selectedWalletPrivateKey: TestData.selectedWalletPrivateKey,
-    rpcUrl: getNetworkConfig('GOERLI').rpcUrl,
-  });
-  expect(balance).toBe('0.399914121574889052');
-});
+//   const balance = await contractRepository.getBalance({
+//     selectedWalletPrivateKey: TestData.selectedWalletPrivateKey,
+//     rpcUrl: getNetworkConfig('GOERLI').rpcUrl,
+//   });
+//   expect(balance).toBe('0.399914121574889052');
+// });
 
-it('get mvl balance', async () => {
-  const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
-  const balance = await contractRepository.getContractBalance({
-    contractAddress: findToken(ETH_TOKENLIST, 'MVL')?.contractAddress ?? '',
-    abi: abiERC20,
-    address: TestData.ethAddress,
-    rpcUrl: getNetworkConfig('GOERLI').rpcUrl,
-  });
-  expect(balance).toBe('1000.123456789000001');
-});
+// it('get mvl balance', async () => {
+//   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
+//   const balance = await contractRepository.getContractBalance({
+//     contractAddress: findToken(ETH_TOKENLIST, 'MVL')?.contractAddress ?? '',
+//     abi: abiERC20,
+//     address: TestData.ethAddress,
+//     rpcUrl: getNetworkConfig('GOERLI').rpcUrl,
+//   });
+//   expect(balance).toBe('1000.123456789000001');
+// });
 
-it('get bsc balance', async () => {
-  const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
-  const balance = await contractRepository.getBalance({
-    selectedWalletPrivateKey: TestData.selectedWalletPrivateKey,
-    rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
-  });
-  expect(balance).toBe('0.5');
-});
+// it('get bsc balance', async () => {
+//   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
+//   const balance = await contractRepository.getBalance({
+//     selectedWalletPrivateKey: TestData.selectedWalletPrivateKey,
+//     rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
+//   });
+//   expect(balance).toBe('0.5');
+// });
 
-it('get bMvl balance', async () => {
-  const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
-  const balance = await contractRepository.getContractBalance({
-    contractAddress: findToken(BSC_TOKENLIST, 'bMVL')?.contractAddress ?? '',
-    abi: abiERC20,
-    address: TestData.bscAddress,
-    rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
-  });
-  expect(balance).toBe('0.0');
-});
+// it('get bMvl balance', async () => {
+//   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
+//   const balance = await contractRepository.getContractBalance({
+//     contractAddress: findToken(BSC_TOKENLIST, 'bMVL')?.contractAddress ?? '',
+//     abi: abiERC20,
+//     address: TestData.bscAddress,
+//     rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
+//   });
+//   expect(balance).toBe('0.0');
+// });
 
-it('get BTCB balance', async () => {
-  const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
-  const balance = await contractRepository.getContractBalance({
-    contractAddress: findToken(BSC_TOKENLIST, 'BTCB')?.contractAddress ?? '',
-    abi: abiERC20,
-    address: TestData.bscAddress,
-    rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
-  });
-  expect(balance).toBe('0.0');
-});
+// it('get BTCB balance', async () => {
+//   const contractRepository = container.resolve<ContractRepository>('EthersContractRepository');
+//   const balance = await contractRepository.getContractBalance({
+//     contractAddress: findToken(BSC_TOKENLIST, 'BTCB')?.contractAddress ?? '',
+//     abi: abiERC20,
+//     address: TestData.bscAddress,
+//     rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
+//   });
+//   expect(balance).toBe('0.0');
+// });
