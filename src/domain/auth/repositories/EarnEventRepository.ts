@@ -1,8 +1,9 @@
 //import qs from 'qs';
+import { AxiosResponse } from 'axios';
 import { injectable } from 'tsyringe';
 
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { authRequest } from '@@utils/request';
+import { authRequest, Response } from '@@utils/request';
 
 /**
  * /v1/earn-event api service
