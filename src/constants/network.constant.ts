@@ -79,6 +79,9 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
   },
 };
 
+// TODO: tezos추가
+export const SUPPORTED_NETWORKS = [NETWORK.ETH, NETWORK.BSC];
+
 // TODO: inMainnet을 체크하는 부분 False로 하드코딩 되어있는 부분 수정 필요
 export const getNetworkName = (isMainnet: boolean, network: Network) => {
   let networkName: Network = network;

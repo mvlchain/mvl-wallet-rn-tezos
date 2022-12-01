@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName, NETWORK, SUPPORTED_NETWORKS } from '@@constants/network.constant';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -19,26 +19,20 @@ const useAccount = () => {
   const { data } = useWalletsQuery();
   const { selectedWalletIndex, selectedNetwork, walletList, selectNetwork, editWalletName } = walletPersistStore();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
-  const [networkList, setNetworkList] = useState([]);
+  const [networkList, setNetworkList] = useState<IBottomSelectMenuProps[]>([]);
 
-  useEffect(() => {}, [selectedNetwork]);
-  const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
-    () => [
-      {
-        id: NETWORK.ETH,
-        title: getNetworkConfig(getNetworkName(false, NETWORK.ETH)).name,
-        isSelected: selectedNetwork === NETWORK.ETH,
-        onPress: () => selectNetwork(NETWORK.ETH),
-      },
-      {
-        id: NETWORK.BSC,
-        title: getNetworkConfig(getNetworkName(false, NETWORK.BSC)).name,
-        isSelected: selectedNetwork === NETWORK.BSC,
-        onPress: () => selectNetwork(NETWORK.BSC),
-      },
-    ],
-    [selectedNetwork]
-  );
+  useEffect(() => {
+    const _networkList: IBottomSelectMenuProps[] = [];
+    SUPPORTED_NETWORKS.forEach((network) => {
+      _networkList.push({
+        id: network,
+        title: getNetworkConfig(getNetworkName(false, network)).name,
+        isSelected: selectedNetwork === network,
+        onPress: () => selectNetwork(network),
+      });
+    });
+    setNetworkList(_networkList);
+  }, [selectedNetwork]);
 
   const onChangeWalletInput = (value: string) => {
     editWalletName({ index: _selectedWalletIndex, name: value }, selectedNetwork);
@@ -69,7 +63,7 @@ const useAccount = () => {
   );
 
   const onPressSwitchNetwork = () => {
-    openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('dialog_network_switch_lbl_title'), menuList: dummyNetwork });
+    openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('dialog_network_switch_lbl_title'), menuList: networkList });
   };
 
   const onPressMore = () => {
