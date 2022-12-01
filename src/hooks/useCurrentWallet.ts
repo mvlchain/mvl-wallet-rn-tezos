@@ -1,4 +1,4 @@
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -12,7 +12,7 @@ export const useCurrentWallet = () => {
   const { createWallet: create, selectedNetwork } = walletPersistStore();
   const createWallet = async () => {
     if (!data) return;
-    mutate({ index: data.length, bip44: getNetworkConfig(selectedNetwork).bip44, network: selectedNetwork });
+    mutate({ index: data.length, bip44: getNetworkConfig(getNetworkName(false, selectedNetwork)).bip44, network: selectedNetwork });
     create();
   };
 
