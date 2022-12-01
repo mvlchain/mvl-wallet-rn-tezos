@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 
 import { parseUnits } from 'ethers/lib/utils';
 import { NativeSyntheticEvent, TextInputChangeEventData, TextInputEndEditingEventData } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import * as TokenIcon from '@@assets/image/token';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import settingPersistStore from '@@store/setting/settingPersistStore';
-import { theme } from '@@style/theme';
+import { useColor } from '@@hooks/useTheme';
+import { useTokenBalance } from '@@hooks/useTokenBalance';
 import { height, width } from '@@utils/ui';
 
 import * as S from './TextField.style';
@@ -16,11 +15,11 @@ import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const { useMax, onSelect, label, symbol, value, onChange, hint, iconUrl } = props;
-  const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.value].color;
-
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
+  const TokenImage = TokenIcon[symbol as keyof typeof TokenIcon];
+  const { formalizedBalance } = useTokenBalance();
+  const { color } = useColor();
 
   const clearTextField = () => {
     onChange(null);
@@ -52,7 +51,10 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   };
 
   const onEndEditing = (data: NativeSyntheticEvent<TextInputEndEditingEventData>) => {};
-  const TokenImage = TokenIcon[symbol as keyof typeof TokenIcon];
+
+  //TODO: 어레이를 계속 필터링해서 가져오는게 맞는걸까? 어차피 토큰 보기전 어레이는 갱신될텐데...토큰하나용 쿼리를 만드는게 좋은걸까?
+  //너무 느린것 같아서 고민.
+  const selectedToken = formalizedBalance?.find((v) => symbol === v.ticker);
 
   return (
     <S.TradeVolumeContainer>
@@ -81,7 +83,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
-      {hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{'Balance: 2222222222222'}</S.Balance>}
+      {hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`Balance: ${selectedToken?.balance ?? '-'}`}</S.Balance>}
     </S.TradeVolumeContainer>
   );
 }
