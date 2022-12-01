@@ -81,22 +81,8 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
 
 // TODO: inMainnet을 체크하는 부분 False로 하드코딩 되어있는 부분 수정 필요
 export const getNetworkName = (isMainnet: boolean, network: Network) => {
-  let networkName: Network = NETWORK.ETH;
-  if (isMainnet) {
-    switch (network) {
-      case NETWORK.ETH:
-        networkName = NETWORK.ETH;
-        break;
-      case NETWORK.BSC:
-        networkName = NETWORK.BSC;
-        break;
-      case NETWORK.TEZOS:
-        networkName = NETWORK.TEZOS;
-        break;
-      default:
-        networkName = NETWORK.ETH;
-    }
-  } else {
+  let networkName: Network = network;
+  if (!isMainnet) {
     switch (network) {
       case NETWORK.ETH:
         networkName = NETWORK.GOERLI;
@@ -113,25 +99,5 @@ export const getNetworkName = (isMainnet: boolean, network: Network) => {
   }
   return networkName;
 };
-
-const NetworkName = {
-  mainnet: {
-    [NETWORK.ETH]: NETWORK.ETH,
-    [NETWORK.BSC]: NETWORK.BSC,
-    [NETWORK.TEZOS]: NETWORK.TEZOS,
-  },
-  testnet: {
-    [NETWORK.ETH]: NETWORK.GOERLI,
-    [NETWORK.BSC]: NETWORK.BSC_TESTNET,
-    [NETWORK.TEZOS]: NETWORK.TEZOS_GHOSTNET,
-  },
-};
-
-type TsupportedNetwork = NETWORK.ETH | NETWORK.BSC | NETWORK.TEZOS;
-
-// export const getNetworkName_v2 = (isMainnet: boolean, network: TsupportedNetwork) => {
-//   const networkType = isMainnet ? 'mainnet' : 'testnet';
-//   return NetworkName[networkType][network];
-// };
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
