@@ -79,7 +79,7 @@ const useTokenSend = () => {
       privateKey: wallet.privateKey,
       gasFeeInfo,
       to,
-      from: wallet.publicKey,
+      from: wallet.address,
       value,
     };
 

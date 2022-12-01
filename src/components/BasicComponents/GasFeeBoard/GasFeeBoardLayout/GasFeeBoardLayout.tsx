@@ -8,6 +8,9 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
+import { NETWORK_CONFIGS } from '@@constants/network.constant';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { width } from '@@utils/ui';
 
 import * as S from './GasFeeBoardLayout.style';
@@ -15,6 +18,9 @@ import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
 function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced, onConfirm, handleAdvanced, children }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
+  const { selectedNetwork } = walletPersistStore();
+  const { settedCurrency } = settingPersistStore();
+  const coin = NETWORK_CONFIGS[selectedNetwork].coin;
   return (
     <S.Container>
       <View>
@@ -38,9 +44,9 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
           )}
           <S.MarginRow>
             <S.Label>{`${isRevision ? t('new') + ' ' : ''}${t('transaction_fee')}`}</S.Label>
-            <S.Value>{`${transactionFee} BNB`}</S.Value>
+            <S.Value>{`${transactionFee} ${coin}`}</S.Value>
           </S.MarginRow>
-          <S.BaseCurrency>{'6.30 USD'}</S.BaseCurrency>
+          <S.BaseCurrency>{`6.30 ${settedCurrency}`}</S.BaseCurrency>
           <S.Warning>
             <S.WarningIconWrapper>
               <WarningIcon />
