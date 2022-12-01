@@ -35,6 +35,7 @@ export type NetworkConfig = {
   rpcUrl: string;
   networkFeeType: NetworkFeeType;
   networkId: NetworkId;
+  coin: string;
 };
 
 export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
@@ -46,6 +47,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
+    coin: 'ETH',
   },
   [NETWORK.GOERLI]: {
     name: 'Ethereum Goerli Testnet',
@@ -55,6 +57,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://goerli.infura.io/v3/***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
+    coin: 'GoerliETH',
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',
@@ -64,6 +67,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
+    coin: 'BNB',
   },
   [NETWORK.BSC_TESTNET]: {
     name: 'BNB Smart Chain - Testnet',
@@ -73,6 +77,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
+    coin: 'BNB',
   },
   [NETWORK.TEZOS]: {
     name: 'Tezos Mainnet',
@@ -82,6 +87,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://mainnet-node.madfish.solutions/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
+    coin: 'TEZ',
   },
   [NETWORK.TEZOS_GHOSTNET]: {
     name: 'Tezos Ghostnet',
@@ -91,6 +97,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://ghostnet.smartpy.io/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
+    coin: 'TEZ',
   },
 };
 
