@@ -1,5 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
+import { Network } from '@@constants/network.constant';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
@@ -7,7 +8,7 @@ import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 
-import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam } from './WalletService.type';
+import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam, TCreateWallet } from './WalletService.type';
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
@@ -59,9 +60,9 @@ export class WalletServiceImpl implements WalletService {
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);
   };
 
-  getWalletInfo = async ({ index, blockchain }: IGetWalletInfoParam) => {
+  getWalletInfo = async ({ index, bip44 }: IGetWalletInfoParam) => {
     const pKey = await this.keyClient.getPrivateKey();
-    const wallet = Clutch.createWalletWithEntropy(pKey, `m/44'/${blockchain.coinType}'/0'/0/${index}`);
+    const wallet = Clutch.createWalletWithEntropy(pKey, `m/44'/${bip44}'/0'/0/${index}`);
     return wallet;
   };
 
@@ -73,18 +74,39 @@ export class WalletServiceImpl implements WalletService {
     return this.walletRepository.getWallets(xpub);
   };
 
-  createWallet = async ({ index, blockchain }: ICreateWalletBody): Promise<WalletResponseDto> => {
-    const wallet = await this.getWalletInfo({ index, blockchain });
+  _filterNetwork = (network: Network): TCreateWallet => {
+    let filteredNetwork: TCreateWallet = 'ETHEREUM';
+    switch (network) {
+      case 'GOERLI':
+        filteredNetwork = 'ETHEREUM';
+        break;
+      case 'BSC':
+      case 'BSC_TESTNET':
+        filteredNetwork = 'BSC';
+        break;
+      case 'TEZOS':
+      case 'TEZOS_GHOSTNET':
+        filteredNetwork = 'XTZ';
+        break;
+      default:
+        filteredNetwork = 'ETHEREUM';
+    }
+    return filteredNetwork;
+  };
+
+  createWallet = async ({ index, bip44, network }: ICreateWalletBody): Promise<WalletResponseDto> => {
+    const wallet = await this.getWalletInfo({ index, bip44 });
+    const filteredNetwork = this._filterNetwork(network);
     return this.walletRepository.registerWallet({
-      network: blockchain.name,
+      network: filteredNetwork,
       address: wallet.address,
       index,
       name: `Wallet ${index + 1}`,
     });
   };
 
-  getWalletPKey = async ({ index, blockchain }: IGetWalletPKeyParam) => {
-    const wallet = await this.getWalletInfo({ index, blockchain });
+  getWalletPKey = async ({ index, bip44 }: IGetWalletPKeyParam) => {
+    const wallet = await this.getWalletInfo({ index, bip44 });
     return wallet.privateKey;
   };
 }

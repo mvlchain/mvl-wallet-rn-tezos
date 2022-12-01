@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -19,19 +19,20 @@ const useAccount = () => {
   const { data } = useWalletsQuery();
   const { selectedWalletIndex, selectedNetwork, walletList, selectNetwork, editWalletName } = walletPersistStore();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
+  const [networkList, setNetworkList] = useState([]);
 
-  // TODO: network를 서버에서 받아오는지 체크, 현재는 로컬에서 저장 중
+  useEffect(() => {}, [selectedNetwork]);
   const dummyNetwork: IBottomSelectMenuProps[] = useMemo(
     () => [
       {
         id: NETWORK.ETH,
-        title: getNetworkConfig(NETWORK.ETH).name,
+        title: getNetworkConfig(getNetworkName(false, NETWORK.ETH)).name,
         isSelected: selectedNetwork === NETWORK.ETH,
         onPress: () => selectNetwork(NETWORK.ETH),
       },
       {
         id: NETWORK.BSC,
-        title: getNetworkConfig(NETWORK.BSC).name,
+        title: getNetworkConfig(getNetworkName(false, NETWORK.BSC)).name,
         isSelected: selectedNetwork === NETWORK.BSC,
         onPress: () => selectNetwork(NETWORK.BSC),
       },
@@ -76,7 +77,7 @@ const useAccount = () => {
   };
 
   return {
-    networkName: getNetworkConfig(selectedNetwork).name,
+    networkName: getNetworkConfig(getNetworkName(false, selectedNetwork)).name,
     onPressSwitchNetwork,
     onPressMore,
   };
