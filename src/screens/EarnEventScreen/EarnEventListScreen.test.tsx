@@ -25,7 +25,7 @@ jest.mock('@@hooks/event/useEarnEventList', () => {
   };
 });
 
-jest.mock('@@hooks/common/useRefetchByRefreshControl', () => {
+jest.mock('@@hooks/useRefetchByRefreshControl', () => {
   const useRefetchByRefreshControl = (refetch: () => Promise<unknown>) => ({
     refreshing: false,
     refresh: jest.fn(),

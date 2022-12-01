@@ -1,12 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { AnimatedFlashList, FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl } from 'react-native';
 
+import { EarnEvent } from '@@domain/model/EarnEvent';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { useRefetchByRefreshControl } from '@@hooks/common/useRefetchByRefreshControl';
 import { useEarnEventList } from '@@hooks/event/useEarnEventList';
+import { useRefetchByRefreshControl } from '@@hooks/useRefetchByRefreshControl';
 
 import { IEarnEventContentProps, EarnEventContent } from './EarnEventContent';
 import * as S from './EarnEventListScreen.style';
@@ -38,8 +39,8 @@ export const EarnEventListScreen = () => {
   const { refreshing, refresh } = useRefetchByRefreshControl(refetch);
 
   // callback rendering EarnEventContent (by FlashList)
-  const renderEarnEventContents = useCallback(({ item }: ListRenderItemInfo<EarnEventDto>) => {
-    return <EarnEventContent timeLabel={'40 min left until the start'} avatarUrl={item.iconUrl} title={item.title} subtitle={item.subTitle} />;
+  const renderEarnEventContents = useCallback(({ item }: ListRenderItemInfo<EarnEvent>) => {
+    return <EarnEventContent timeLabel={item.timeDescription} avatarUrl={item.iconUrl} title={item.title} subtitle={item.subTitle} />;
   }, []);
 
   return (
@@ -52,7 +53,7 @@ export const EarnEventListScreen = () => {
       </S.TopTitleBar>
 
       <S.BodyContainer>
-        {data?.length === 0 && <EmptyEarnEventContent />}
+        {data?.length == 0 && <EmptyEarnEventContent />}
 
         <S.EventListLayout>
           <FlashList
