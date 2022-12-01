@@ -10,5 +10,3 @@ export interface ICreateWalletBody extends IGetWalletInfoParam {
 }
 
 export interface IGetWalletPKeyParam extends IGetWalletInfoParam {}
-
-export type TCreateWallet = 'ETHEREUM' | 'BSC' | 'BITCOIN' | 'XTZ';
