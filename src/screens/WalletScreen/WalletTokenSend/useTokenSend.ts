@@ -64,6 +64,7 @@ const useTokenSend = () => {
 
     const res = await ethersTransactionService.approveTransaction(params);
     const recipientAddress = res;
+
     openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress, amount: value, fee: total, onConfirm: send });
   };
 

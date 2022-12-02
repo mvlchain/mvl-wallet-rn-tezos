@@ -26,7 +26,7 @@ function WalletTransactionCancel() {
     <View style={{ flex: 1 }}>
       <OldTransactionBoard />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <GasFeeBoard onConfirm={() => {}} />
+      <GasFeeBoard onConfirm={() => {}} isRevision={true} />
     </View>
   );
 }
