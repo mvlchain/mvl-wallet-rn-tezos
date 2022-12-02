@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber, BigNumberish } from 'ethers';
 
 export interface ISendInputBoardProps {
   amount: BigNumber | null;

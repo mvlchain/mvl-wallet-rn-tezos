@@ -33,8 +33,6 @@ const useGasFeeEip1559 = () => {
     estimateGas();
   }, [to, value, data]);
 
-  const privateKey = '0x2b27eaa12c946c41c523324a9c4a87e386e4f90cc61844aedc6edea18320002a';
-
   const setInitialGas = async () => {
     const gasFeeData = (await gasService.getGasFeeData(selectedNetwork)) as IGasFeeInfoEip1559;
     setMaxFeePerGas(gasFeeData.maxFeePerGas);
@@ -50,7 +48,6 @@ const useGasFeeEip1559 = () => {
       to,
       value,
       selectedNetwork,
-      privateKey,
     })) as BigNumber;
 
     setEstimatedGas(newEstimatedGas);

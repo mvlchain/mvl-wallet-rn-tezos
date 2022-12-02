@@ -66,7 +66,7 @@ const useTransactionHistoryList = () => {
     };
     //TODO: 나중에 고칠 부분
     //@ts-ignore
-    const transactionService = network === 'TEZOS' ? tezosTransactionService : ethersTransactionService;
+    const transactionService = selectedNetwork === 'TEZOS' ? tezosTransactionService : ethersTransactionService;
     const history = await transactionService.getHistory(params);
     if (!history) {
       setLoading(false);
