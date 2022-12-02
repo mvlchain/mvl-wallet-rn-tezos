@@ -49,32 +49,10 @@ const useTokenSend = () => {
     };
   };
 
-  //TODO: 블록체인 가져오려고 임시로 만들었는데 더 좋은 방법이 있을지..
-  const getChain = (network: Network) => {
-    switch (network) {
-      case NETWORK.ETH:
-        return ETHEREUM;
-      case NETWORK.GOERLI:
-        return ETHEREUM;
-      case NETWORK.BSC:
-        return BINANCE;
-      case NETWORK.BSC_TESTNET:
-        return BINANCE;
-      case NETWORK.TEZOS:
-        return TEZOS;
-      case NETWORK.TEZOS_GHOSTNET:
-        return TEZOS;
-      default:
-        return null;
-    }
-  };
-
   const confirmSend = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
     if (!to || !value) return;
-
-    const blockchain = getChain(selectedNetwork);
-    if (!blockchain) return;
-    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex, blockchain });
+    const bip44 = getNetworkConfig(selectedNetwork).bip44;
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44 });
     const params = {
       networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId },
       privateKey: wallet.privateKey,

@@ -12,7 +12,7 @@ import { width } from '@@utils/ui';
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
 
-function TokenListItem({ ticker, balance, valuatedPrice, logoURI }: ITokenListItemProps) {
+function TokenListItem({ ticker, balance, valuatedPrice, logoURI, tokenDto }: ITokenListItemProps) {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const navigation = useNavigation<rootStackProps>();
   const { settedCurrency } = settingPersistStore();
@@ -20,7 +20,7 @@ function TokenListItem({ ticker, balance, valuatedPrice, logoURI }: ITokenListIt
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL, { symbol: ticker });
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_DETAIL, { tokenDto });
       }}
     >
       <S.Container>

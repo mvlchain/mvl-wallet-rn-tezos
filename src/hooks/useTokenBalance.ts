@@ -125,6 +125,7 @@ export const useTokenBalance = () => {
             balance: floatBalance,
             valuatedPrice,
             logoURI: token.logoURI,
+            tokenDto: token,
           },
         ];
       }

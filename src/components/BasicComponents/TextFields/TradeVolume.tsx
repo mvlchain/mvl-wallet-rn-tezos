@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { parseUnits } from 'ethers/lib/utils';
 import { NativeSyntheticEvent, TextInputChangeEventData, TextInputEndEditingEventData } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
-import * as TokenIcon from '@@assets/image/token';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
@@ -15,11 +15,10 @@ import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
-  const { useMax, onSelect, label, symbol, value, onChange, hint, iconUrl } = props;
+  const { useMax, onSelect, label, tokenDto, value, onChange, hint } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
-  const TokenImage = TokenIcon[symbol as keyof typeof TokenIcon];
-  const { balance } = useOneTokenBalance(symbol);
+  const { balance } = useOneTokenBalance(tokenDto);
   const { color } = useColor();
 
   const clearTextField = () => {
@@ -75,8 +74,8 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
-          <TokenImage width={`${width * 32}`} height={`${width * 32}`} />
-          <S.Token>{symbol}</S.Token>
+          <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />
+          <S.Token>{tokenDto.symbol}</S.Token>
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>

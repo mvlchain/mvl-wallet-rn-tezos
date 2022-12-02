@@ -2,13 +2,12 @@ import React, { useEffect } from 'react';
 
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import * as TokenIcon from '@@assets/image/token';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { WALLET_TOKEN } from '@@constants/token.constant';
-import { PRICE_NAME } from '@@constants/wallet.constant';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { useTokenBalance } from '@@hooks/useTokenBalance';
@@ -25,9 +24,9 @@ function TokenDetailBoard() {
   const { settedCurrency } = settingPersistStore();
   const { params } = useRoute<TTokenDetailRouteProps>();
   const navigation = useNavigation<TTokenSendRootStackProps>();
-  const { balance } = useOneTokenBalance(params.symbol);
-  const { price } = useOneTokenPrice(params.symbol, BigNumber.from(1));
-  const TokenImage = TokenIcon[params.symbol as keyof typeof TokenIcon];
+  const { balance } = useOneTokenBalance(params.tokenDto);
+  const { price } = useOneTokenPrice(params.tokenDto, balance);
+  const TokenImage = TokenIcon[params.tokenDto.symbol as keyof typeof TokenIcon];
 
   const gotoSend = () => {
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, params);
@@ -38,12 +37,12 @@ function TokenDetailBoard() {
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
           <TokenImage width={width * 32} height={height * 32} />
-          <S.TokenName>{params.symbol}</S.TokenName>
+          <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>
           <S.TokenAmount>{balance}</S.TokenAmount>
           <S.TokenBaseCurrency>
-            {'-'} {settedCurrency}
+            {price} {settedCurrency}
           </S.TokenBaseCurrency>
         </S.TokenAmountWrapper>
       </S.TokenInfoContainer>
