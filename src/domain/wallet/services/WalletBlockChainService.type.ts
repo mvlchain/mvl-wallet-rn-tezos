@@ -1,3 +1,5 @@
+import { TokenDto } from '@@generated/generated-scheme-clutch';
+
 export interface IBalance {
   [key: string]: string;
 }
@@ -7,4 +9,5 @@ export interface IBalanceData {
   balance: number;
   valuatedPrice: number;
   logoURI: string;
+  tokenDto: TokenDto;
 }

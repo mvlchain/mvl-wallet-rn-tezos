@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { TextInputProps, TextInputChangeEventData } from 'react-native';
 import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
 
-import { WALLET_TOKEN } from '@@constants/token.constant';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import { KeyboardTypeByInputType } from './BaseTextField';
 //Base
@@ -46,7 +46,7 @@ export interface ITradeVolumeComponentProps {
   useMax?: boolean;
   onSelect?: () => void;
   label?: string;
-  symbol: keyof typeof WALLET_TOKEN;
+  tokenDto: TokenDto;
   value: BigNumber | null;
   onChange: (amount: any) => void;
   hint?: string;

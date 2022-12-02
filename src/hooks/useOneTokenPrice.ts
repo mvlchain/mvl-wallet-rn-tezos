@@ -1,46 +1,35 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
-import { formatUnits } from 'ethers/lib/utils';
+import { formatEther } from 'ethers/lib/utils';
 
-import { Network } from '@@constants/network.constant';
-import { WALLET_TOKEN } from '@@constants/token.constant';
-import { PRICE_NAME, PRICE_TYPE } from '@@constants/wallet.constant';
-import { WalletDto } from '@@domain/model/WalletDto';
-import { IGetPriceResponseDto } from '@@domain/wallet/repositories/WalletRepository.type';
-import { IBalance, IBalanceData } from '@@domain/wallet/services/WalletBlockChainService.type';
-import { useDi } from '@@hooks/useDi';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
-import useWalletsQuery from './queries/useWalletsQuery';
 
-const useOneTokenPrice = (symbol: keyof typeof WALLET_TOKEN, amount: BigNumber) => {
+const useOneTokenPrice = (tokenDto: TokenDto, amount: string) => {
   const { settedCurrency } = settingPersistStore();
-  const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   // @ts-ignore
-  const priceIds = PRICE_NAME[symbol];
-
   const { data } = usePriceQuery(
-    { network: selectedNetwork, currency: settedCurrency },
-    { ids: priceIds, vsCurrencies: settedCurrency },
+    { ids: tokenDto.priceId, vsCurrencies: settedCurrency },
     {
       keepPreviousData: true,
     }
   );
 
   const price = useMemo(() => {
-    console.log('data', data);
-    return '-';
-    // const amountInDecimal = new Decimal(amount.toString());
-    // const unitInDecimal = new Decimal(data.);
-    // const priceInDecimal = amountInDecimal.mul(unitInDecimal);
+    if (!data) return '-';
+    const priceInfo = Object.values(data)[0];
+    const unitPrice = Object.values(priceInfo as Object)[0];
+    if (amount === '-') return '-';
+    const amountInDecimal = new Decimal(amount);
+    const unitInDecimal = new Decimal(unitPrice as number);
+    const priceInDecimal = amountInDecimal.mul(unitInDecimal);
 
-    // return priceInDecimal.toString();
-  }, [data]);
+    return priceInDecimal.toString();
+  }, [data, amount]);
 
   return { price };
 };
