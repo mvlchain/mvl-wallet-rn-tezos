@@ -1,17 +1,32 @@
+/* eslint max-lines: off */
 import React from 'react';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { getEventTimeDescriptionByEventPhase, useEarnEventList } from '@@hooks/event/useEarnEventList';
-import { renderHook, waitFor } from '@@test/test-utils';
+import { renderHook, waitFor, Providers } from '@@test/test-utils';
 import { mockApi } from '@@utils/mockApi';
 
-const queryClient = new QueryClient();
+/**
+ * MOCK useTranslation hook
+ */
+jest.mock('react-i18next', () => ({
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    };
+  },
+}));
 
+/**
+ * MOCK class EarnEventRepository
+ */
 @injectable()
 class MockEarnEventRepository implements EarnEventRepository {
   constructor() {}
@@ -39,7 +54,7 @@ describe('useEarnEventList', () => {
    */
   it('useCase', async () => {
     const { result } = renderHook(() => useEarnEventList(), {
-      wrapper: ({ children }) => <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>,
+      wrapper: ({ children }) => <Providers>{children}</Providers>,
     });
 
     await waitFor(() => expect(result.current.data?.length ?? 0).toBe(4));

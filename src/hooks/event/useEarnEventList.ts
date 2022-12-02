@@ -20,32 +20,22 @@ export const useEarnEventList = (): UseQueryResult<EarnEvent[], AxiosError> => {
 
   return useQuery({
     queryKey: ['earn-events'],
-    queryFn: () => {
-      return async (repository: EarnEventRepository, t: (key: string) => string): Promise<EarnEvent[]> => {
-        const events = await repository.getEvents();
-        return events.map((event): EarnEvent => {
-          return {
-            timeDescription: getEventTimeDescriptionByEventPhase(event, t),
-            ...event,
-          };
-        });
-      };
-    },
+    queryFn: () => UseCase(repository, t),
   });
 };
 
 /**
  * UseCase: GetEarnEventUseCase
  */
-// const useCase = async (repository: EarnEventRepository, t: (key: string) => string): Promise<EarnEvent[]> => {
-//   const events = await repository.getEvents();
-//   return events.map((event): EarnEvent => {
-//     return {
-//       timeDescription: getEventTimeDescriptionByEventPhase(event, t),
-//       ...event
-//     }
-//   })
-// }
+const UseCase = async (repository: EarnEventRepository, t: (key: string) => string): Promise<EarnEvent[]> => {
+  const events = await repository.getEvents();
+  return events.map((event): EarnEvent => {
+    return {
+      timeDescription: getEventTimeDescriptionByEventPhase(event, t),
+      ...event,
+    };
+  });
+};
 
 /**
  * Event time duration dependes on event phase which has following order.
