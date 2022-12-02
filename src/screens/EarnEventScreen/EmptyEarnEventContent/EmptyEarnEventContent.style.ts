@@ -24,5 +24,5 @@ export const EmptyDescriptionText = styled.Text`
   ${({ theme }) => theme.font.Label.lg};
   line-height: ${width * 24}px;
   text-align: center;
-  color: ${({ theme }) => theme.color.blackWhite};
+  color: ${({ theme }) => theme.color.grey300};
 `;
