@@ -21,9 +21,9 @@ export class EthersContractServiceImpl implements ContractService {
   ) {}
 
   getBalanceFromNetwork = async (index: number, network: Network, tokenList: TokenDto[]) => {
-    const { bip44, rpcUrl } = getNetworkConfig(getNetworkName(false, network));
+    const { rpcUrl } = getNetworkConfig(getNetworkName(false, network));
     let balanceList: IBalance = {};
-    const wallet = await this.walletService.getWalletInfo({ index, bip44 });
+    const wallet = await this.walletService.getWalletInfo({ index, network });
 
     const getBalancePromise = tokenList.map(async (token) => {
       let balance;

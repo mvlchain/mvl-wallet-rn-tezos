@@ -2,29 +2,21 @@ import { Wallet } from 'ethers';
 import { HDNode, arrayify, entropyToMnemonic, mnemonicToSeed } from 'ethers/lib/utils';
 import { injectable } from 'tsyringe';
 
+import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+
 import { IWalletClient, IWallet } from './walletClient.type';
 
 @injectable()
 export class EhtersClient implements IWalletClient {
-  wallet: IWallet | null;
+  wallet: IWallet;
 
   constructor() {
-    this.wallet = null;
-  }
-
-  get address(): string | undefined {
-    if (!this.wallet) return;
-    return this.wallet?.address;
-  }
-
-  get publicKey(): string | undefined {
-    if (!this.wallet) return;
-    return this.wallet?.publicKey;
-  }
-
-  get privateKey(): string | undefined {
-    if (!this.wallet) return;
-    return this.wallet?.privateKey;
+    // TODO: wallet 기본값 생각해보기
+    this.wallet = {
+      address: '',
+      publicKey: '',
+      privateKey: '',
+    };
   }
 
   createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<void> => {
@@ -43,6 +35,10 @@ export class EhtersClient implements IWalletClient {
   createWalletWithMnemonic = async (mnemonic: string, derivePath?: string): Promise<void> => {
     const { address, publicKey, privateKey } = Wallet.fromMnemonic(mnemonic, derivePath);
     this.wallet = { address, publicKey, privateKey };
+  };
+
+  getDerivePath = (index: number): string => {
+    return `m/44'/${getNetworkConfig(NETWORK.ETH).bip44}'/0'/0/${index}`;
   };
 }
 // ================== extended key pair ==================

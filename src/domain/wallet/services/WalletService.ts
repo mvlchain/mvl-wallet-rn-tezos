@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
-import { getNetworkConfig, Network, NetworkId } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_ID } from '@@constants/network.constant';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
@@ -8,12 +8,14 @@ import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 
+import { IWallet, IWalletClient } from '../clients/walletClient.type';
+
 import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam } from './WalletService.type';
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
-  getWalletInfo(param: IGetWalletInfoParam): Promise<Clutch>;
+  getWalletInfo(param: IGetWalletInfoParam): Promise<IWallet>;
   getWalletList(): Promise<WalletDto[]>;
   createWallet(body: ICreateWalletBody): Promise<WalletResponseDto>;
   getWalletPKey(param: IGetWalletPKeyParam): Promise<string>;
@@ -27,7 +29,9 @@ export class WalletServiceImpl implements WalletService {
   constructor(
     @inject('WalletRepository') private walletRepository: WalletRepository,
     @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository,
-    @inject('KeyClient') private keyClient: KeyClient
+    @inject('KeyClient') private keyClient: KeyClient,
+    @inject('EhtersClient') private ehtersClient: IWalletClient,
+    @inject('TezosClient') private tezosClient: IWalletClient
   ) {}
 
   /**
@@ -60,9 +64,19 @@ export class WalletServiceImpl implements WalletService {
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);
   };
 
-  getWalletInfo = async ({ index, bip44 }: IGetWalletInfoParam) => {
+  getWalletInfo = async ({ index, network }: IGetWalletInfoParam) => {
+    let walletClient: IWalletClient = this.ehtersClient;
+    // TODO: Client를 선택할 때 각 함수에서 하는게 별로다. 어떻게 해야할까?
+    const networkId = getNetworkConfig(network).networkId;
+    if (networkId === NETWORK_ID.ETHEREUM || networkId === NETWORK_ID.BSC) {
+      walletClient = this.ehtersClient;
+    } else if (networkId === NETWORK_ID.XTZ) {
+      walletClient = this.tezosClient;
+    }
+    const wallet = walletClient.wallet;
     const pKey = await this.keyClient.getPrivateKey();
-    const wallet = Clutch.createWalletWithEntropy(pKey, `m/44'/${bip44}'/0'/0/${index}`);
+    const derivePath = walletClient.getDerivePath(index);
+    await walletClient.createWalletWithEntropy(pKey, derivePath);
     return wallet;
   };
 
@@ -74,8 +88,8 @@ export class WalletServiceImpl implements WalletService {
     return this.walletRepository.getWallets(xpub);
   };
 
-  createWallet = async ({ index, bip44, network }: ICreateWalletBody): Promise<WalletResponseDto> => {
-    const wallet = await this.getWalletInfo({ index, bip44 });
+  createWallet = async ({ index, network }: ICreateWalletBody): Promise<WalletResponseDto> => {
+    const wallet = await this.getWalletInfo({ index, network });
     return this.walletRepository.registerWallet({
       network: getNetworkConfig(network).networkId,
       address: wallet.address,
@@ -84,8 +98,8 @@ export class WalletServiceImpl implements WalletService {
     });
   };
 
-  getWalletPKey = async ({ index, bip44 }: IGetWalletPKeyParam) => {
-    const wallet = await this.getWalletInfo({ index, bip44 });
+  getWalletPKey = async ({ index, network }: IGetWalletPKeyParam) => {
+    const wallet = await this.getWalletInfo({ index, network });
     return wallet.privateKey;
   };
 }
