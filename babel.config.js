@@ -29,6 +29,8 @@ module.exports = {
           '@@navigation': './src/navigation',
           '@@constants': './src/constants',
           '@@generated': './src/generated',
+          '@@test': './src/test',
+          '@@mocks': './__mocks__',
         },
       },
     ],
