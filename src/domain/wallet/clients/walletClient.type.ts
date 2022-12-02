@@ -1,10 +1,8 @@
 export interface IWalletClient {
-  wallet: IWallet | null;
-  address: string | undefined;
-  publicKey: string | undefined;
-  privateKey: string | undefined;
+  wallet: IWallet;
   createWalletWithEntropy(entropy: string | Uint8Array, derivePath?: string): Promise<void>;
   createWalletWithMnemonic(mnemonic: string, derivePath?: string): Promise<void>;
+  getDerivePath(index: number): string;
 }
 
 export interface IWallet {

@@ -10,25 +10,14 @@ import { IWalletClient, IWallet } from './walletClient.type';
 
 @injectable()
 export class TezosClient implements IWalletClient {
-  wallet: IWallet | null;
-
+  wallet: IWallet;
   constructor() {
-    this.wallet = null;
-  }
-
-  get address(): string | undefined {
-    if (!this.wallet) return;
-    return this.wallet?.address;
-  }
-
-  get publicKey(): string | undefined {
-    if (!this.wallet) return;
-    return this.wallet?.publicKey;
-  }
-
-  get privateKey(): string | undefined {
-    if (!this.wallet) return;
-    return this.wallet?.privateKey;
+    // TODO: wallet 기본값 생각해보기
+    this.wallet = {
+      address: '',
+      publicKey: '',
+      privateKey: '',
+    };
   }
 
   createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<void> => {
@@ -77,5 +66,9 @@ export class TezosClient implements IWalletClient {
     if (!privateKey) throw new Error('No private key');
 
     this.wallet = { address, publicKey, privateKey };
+  };
+
+  getDerivePath = (index: number): string => {
+    return `44'/${getNetworkConfig(NETWORK.TEZOS).bip44}'/${index}'/0'`;
   };
 }
