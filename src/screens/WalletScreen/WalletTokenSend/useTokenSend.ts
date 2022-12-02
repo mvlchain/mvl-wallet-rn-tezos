@@ -49,6 +49,7 @@ const useTokenSend = () => {
     };
   };
 
+  //TODO: 블록체인 가져오려고 임시로 만들었는데 더 좋은 방법이 있을지..
   const getChain = (network: Network) => {
     switch (network) {
       case NETWORK.ETH:
