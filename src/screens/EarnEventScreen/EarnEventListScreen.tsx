@@ -1,32 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { AnimatedFlashList, FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl } from 'react-native';
 
 import { EarnEvent } from '@@domain/model/EarnEvent';
-import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { useRefetchByRefreshControl } from '@@hooks/useRefetchByRefreshControl';
 
-import { IEarnEventContentProps, EarnEventContent } from './EarnEventContent';
+import { EarnEventContent } from './EarnEventContent';
 import * as S from './EarnEventListScreen.style';
 import { EmptyEarnEventContent } from './EmptyEarnEventContent';
-
-const DATA: IEarnEventContentProps[] = [
-  {
-    timeLabel: '40 min left until the start',
-    avatarUrl: 'https://reactjs.org/logo-og.png',
-    title: 'First title 1 First title 1 First title 1 First title 1 First title 1 First title 1 First title 1 First title 1 ',
-    subtitle: 'First subtitle 1',
-  },
-  {
-    timeLabel: '40 min left until the start',
-    avatarUrl: 'https://reactjs.org/logo-og.png',
-    title: 'First title 2',
-    subtitle: 'First subtitle 2',
-  },
-];
 
 /**
  * EarnEventList screen
@@ -53,16 +37,18 @@ export const EarnEventListScreen = () => {
       </S.TopTitleBar>
 
       <S.BodyContainer>
-        {data?.length == 0 && <EmptyEarnEventContent />}
-
+        {(data?.length ?? 0) === 0 && <EmptyEarnEventContent />}
         <S.EventListLayout>
-          <FlashList
-            data={data}
-            keyExtractor={(item) => item.id}
-            renderItem={renderEarnEventContents}
-            estimatedItemSize={data?.length ?? 0}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
-          />
+          {data && (
+            <FlashList
+              data={data}
+              extraData={data}
+              keyExtractor={(item) => item.id}
+              renderItem={renderEarnEventContents}
+              estimatedItemSize={data?.length ?? 0}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
+            />
+          )}
         </S.EventListLayout>
       </S.BodyContainer>
     </S.Container>
