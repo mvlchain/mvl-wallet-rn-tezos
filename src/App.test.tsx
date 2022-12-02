@@ -2,7 +2,7 @@ import 'react-native';
 import React from 'react';
 
 import App from './App';
-import { act, cleanup, render } from './test/test-utils';
+import { cleanup, render } from './test/test-utils';
 
 import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
@@ -26,7 +26,6 @@ class MockRTNSettingsRepository implements RTNSettingsRepository {
 jest.useFakeTimers();
 
 // Note: test renderer must be required after react-native.
-afterEach(cleanup);
 afterEach(() => {
   cleanup();
   container.clearInstances();

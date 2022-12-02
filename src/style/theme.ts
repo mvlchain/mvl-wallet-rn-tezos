@@ -63,6 +63,12 @@ const commonFont = {
       'font-weight': '800',
     },
   },
+  BetaTag: {
+    color: '#000',
+    'font-size': `${fontSize(10)}px`,
+    'font-family': 'AppleSDGothicNeoH00',
+    'font-weight': '700',
+  },
 };
 const commonFontFamily = {
   fmThin: 'AppleSDGothicNeoT00',
