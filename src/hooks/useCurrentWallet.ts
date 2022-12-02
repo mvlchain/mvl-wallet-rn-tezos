@@ -12,7 +12,7 @@ export const useCurrentWallet = () => {
   const { createWallet: create, selectedNetwork } = walletPersistStore();
   const createWallet = async () => {
     if (!data) return;
-    mutate({ index: data.length, bip44: getNetworkConfig(getNetworkName(false, selectedNetwork)).bip44, network: selectedNetwork });
+    mutate({ index: data.length, network: selectedNetwork });
     create();
   };
 
