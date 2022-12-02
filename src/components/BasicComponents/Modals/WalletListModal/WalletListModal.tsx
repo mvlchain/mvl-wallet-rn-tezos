@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { useCurrentWallet } from '@@hooks/useCurrentWallet';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
@@ -56,7 +55,7 @@ function WalletListModal({ menuList }: IWalletListModalProps) {
         <S.ButtonContainer>
           <PrimaryButton
             onPress={() => {
-              createWallet(ETHEREUM);
+              createWallet();
               // createWallet(index, BINANCE);
               closeModal();
             }}

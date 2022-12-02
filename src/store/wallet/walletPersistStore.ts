@@ -7,9 +7,23 @@ import { Network, NETWORK } from '@@constants/network.constant';
 import * as Type from './walletPersistStore.type';
 
 const initState: Type.IWalletPersistState = {
-  selectedWalletIndex: 0,
+  selectedWalletIndex: {
+    [NETWORK.ETH]: 0,
+    [NETWORK.BSC]: 0,
+    [NETWORK.GOERLI]: 0,
+    [NETWORK.BSC_TESTNET]: 0,
+    [NETWORK.TEZOS]: 0,
+    [NETWORK.TEZOS_GHOSTNET]: 0,
+  },
   selectedNetwork: NETWORK.ETH,
-  walletList: { ETHEREUM: [{ index: -1, name: 'default Wallet' }], BSC: [{ index: -1, name: 'default Wallet' }] },
+  walletList: {
+    ETHEREUM: [{ index: -1, name: 'default Wallet' }],
+    BSC: [{ index: -1, name: 'default Wallet' }],
+    GOERLI: [{ index: -1, name: 'default Wallet' }],
+    BSC_TESTNET: [{ index: -1, name: 'default Wallet' }],
+    TEZOS: [{ index: -1, name: 'default Wallet' }],
+    TEZOS_GHOSTNET: [{ index: -1, name: 'default Wallet' }],
+  },
 };
 
 const walletPersistStore = create<Type.IWalletPersist>()(
@@ -21,7 +35,17 @@ const walletPersistStore = create<Type.IWalletPersist>()(
           set(() => ({
             ...initState,
           })),
-        selectWallet: (index: number) => set(() => ({ selectedWalletIndex: index }), false, 'selectWallet'),
+        selectWallet: (index: number) =>
+          set(
+            (state) => ({
+              selectedWalletIndex: {
+                ...state.selectedWalletIndex,
+                [state.selectedNetwork]: index,
+              },
+            }),
+            false,
+            'selectWallet'
+          ),
         selectNetwork: (network: Network) =>
           set(
             () => ({

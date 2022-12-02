@@ -1,7 +1,7 @@
 import { Method } from 'axios';
 
 import { httpRequest } from './httpRequest';
-import { RequestConfig } from './type';
+import { RequestConfig, Response } from './type';
 
 const getConfig = (endpoint: string, reqConfig: RequestConfig) => {
   const { contentType, ...config } = reqConfig;
@@ -21,7 +21,7 @@ const getConfig = (endpoint: string, reqConfig: RequestConfig) => {
 
 export const promiseRequest =
   (method: Method) =>
-  async (endpoint: string, reqConfig: RequestConfig = {}) => {
+  async <D = any>(endpoint: string, reqConfig: RequestConfig = {}): Promise<Response<D>> => {
     reqConfig.method = method;
 
     const config = getConfig(endpoint, reqConfig);

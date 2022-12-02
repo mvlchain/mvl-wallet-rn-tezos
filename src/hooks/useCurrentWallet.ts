@@ -1,7 +1,6 @@
-import { BlockChain } from '@@domain/blockchain/BlockChain';
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
-import authStore from '@@store/auth/authStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 /**
@@ -10,10 +9,10 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 export const useCurrentWallet = () => {
   const { mutate } = useWalletMutation();
   const { data } = useWalletsQuery();
-  const { createWallet: create } = walletPersistStore();
-  const createWallet = async (blockchain: BlockChain) => {
+  const { createWallet: create, selectedNetwork } = walletPersistStore();
+  const createWallet = async () => {
     if (!data) return;
-    mutate({ index: data.length, blockchain: blockchain });
+    mutate({ index: data.length, bip44: getNetworkConfig(getNetworkName(false, selectedNetwork)).bip44, network: selectedNetwork });
     create();
   };
 
