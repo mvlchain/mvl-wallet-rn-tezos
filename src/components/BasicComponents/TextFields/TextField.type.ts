@@ -46,7 +46,7 @@ export interface ITradeVolumeComponentProps {
   useMax?: boolean;
   onSelect?: () => void;
   label?: string;
-  symbol?: keyof typeof WALLET_TOKEN;
+  symbol: keyof typeof WALLET_TOKEN;
   value: BigNumber | null;
   onChange: (amount: any) => void;
   hint?: string;
