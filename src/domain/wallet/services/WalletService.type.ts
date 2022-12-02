@@ -1,10 +1,12 @@
-import { BlockChain } from '@@domain/blockchain/BlockChain';
+import { Network } from '@@constants/network.constant';
 
 export interface IGetWalletInfoParam {
   index: number;
-  blockchain: BlockChain;
+  bip44: number;
 }
 
-export interface ICreateWalletBody extends IGetWalletInfoParam {}
+export interface ICreateWalletBody extends IGetWalletInfoParam {
+  network: Network;
+}
 
 export interface IGetWalletPKeyParam extends IGetWalletInfoParam {}

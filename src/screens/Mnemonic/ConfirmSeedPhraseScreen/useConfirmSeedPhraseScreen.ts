@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { ETHEREUM } from '@@domain/blockchain/BlockChain';
+import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
@@ -57,7 +57,10 @@ const useConfirmSeedPhraseScreen = () => {
       }
       removeStageByPostboxKey(_postboxKey);
       initWallet();
-      mutate({ index: 0, blockchain: ETHEREUM });
+      mutate({ index: 0, bip44: getNetworkConfig(getNetworkName(false, NETWORK.ETH)).bip44, network: NETWORK.ETH });
+      // TODO: create default tezos wallet
+      // mutate({ index: 0, bip44: getNetworkConfig(NETWORK.TEZOS).bip44, network: NETWORK.TEZOS });
+
       navigation.reset({
         index: 0,
         routes: [{ name: ROOT_STACK_ROUTE.MAIN }],

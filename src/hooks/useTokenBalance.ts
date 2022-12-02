@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { formatUnits } from 'ethers/lib/utils';
 
-import { PRICE_NAME, PRICE_TYPE } from '@@constants/wallet.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { IGetPriceResponseDto } from '@@domain/wallet/repositories/WalletRepository.type';
 import { IBalance, IBalanceData } from '@@domain/wallet/services/WalletBlockChainService.type';
@@ -12,6 +11,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
+import useTokenQuery from './queries/useTokenQuery';
 import useWalletsQuery from './queries/useWalletsQuery';
 
 export const useTokenBalance = () => {
@@ -19,11 +19,20 @@ export const useTokenBalance = () => {
   const ethService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
+  const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
   // @ts-ignore
-  const priceIds = Object.values(PRICE_TYPE[selectedNetwork]).flat();
   const [formalizedBalance, setFormalizedBalance] = useState<IBalanceData[]>();
   const [walletData, setWalletData] = useState<WalletDto[]>([]);
   const [balanceData, setBalanceData] = useState<IBalance>();
+  const [priceIds, setPriceIds] = useState<string>('');
+
+  // 1. network변경 시 token list 조회
+  const { data: tokenList } = useTokenQuery(selectedNetwork, {
+    onSuccess: (data) => {
+      // 2. priceIds 업데이트
+      setPriceIds(data.map((token) => token.priceId).join(','));
+    },
+  });
 
   useWalletsQuery({
     onSuccess: (data) => {
@@ -31,7 +40,7 @@ export const useTokenBalance = () => {
     },
   });
 
-  const { refetch } = useBalanceQuery(walletData[selectedWalletIndex]?.address, selectedNetwork, {
+  const { refetch } = useBalanceQuery(walletData[_selectedWalletIndex]?.address, selectedNetwork, {
     enabled: false,
     keepPreviousData: true,
     select: (data) => {
@@ -49,9 +58,9 @@ export const useTokenBalance = () => {
     },
   });
 
+  // 3. priceIds 변경 시 price 조회
   const { data: price } = usePriceQuery(
-    { network: selectedNetwork, currency: settedCurrency },
-    { ids: priceIds.join(','), vsCurrencies: settedCurrency },
+    { ids: priceIds, vsCurrencies: settedCurrency },
     {
       onError: () => {
         // TODO: 일괄로 처리할것인가..?
@@ -61,16 +70,18 @@ export const useTokenBalance = () => {
     }
   );
 
+  // 4. price 변경 시 blockchain에서 balance조회 후 balanceData업데이트
   const getBalance = async () => {
     try {
-      // TODO: address에 따라 token list호출 후 해당 값에 대해 balance 조회
-      const balance = await ethService.getBalanceFromNetwork(selectedWalletIndex, selectedNetwork);
+      if (!tokenList) return;
+      const balance = await ethService.getBalanceFromNetwork(_selectedWalletIndex, selectedNetwork, tokenList);
       if (balance && Object.keys(balance).length === 0) {
         console.log('Data fetch from blockchain is fail -> Fetch from Server');
         refetch();
       }
       setBalanceData(balance);
     } catch (e) {
+      console.log('ERROR:  ', e);
       console.log('Data fetch from blockchain is fail -> Fetch from Server');
       refetch();
     }
@@ -80,14 +91,16 @@ export const useTokenBalance = () => {
     // TODO: wallet data 못가져왔을 때 에러 로직 추가
     if (walletData.length === 0) return;
     getBalance();
-  }, [selectedNetwork, walletData, selectedWalletIndex]);
+  }, [selectedNetwork, walletData, _selectedWalletIndex, tokenList]);
 
+  //5. balanceData, price 변경 시 formalizedBalance 업데이트
   useEffect(() => {
-    if (!price || !balanceData) return;
+    if (!price || !balanceData || !tokenList) return;
     let formalizedArray: IBalanceData[] = [];
-    // TODO: 타입 캐스팅이 너무 많습니다. 해결방안이 있다면 수정해야할 것 같습니다.
     for (const [crypto, balance] of Object.entries(balanceData)) {
-      const data = price[PRICE_NAME[crypto as keyof typeof PRICE_NAME]] as IGetPriceResponseDto;
+      const token = tokenList.find((token) => token.symbol === crypto);
+      if (!token) continue;
+      const data = price[token.priceId] as IGetPriceResponseDto;
       const currency = settedCurrency.toLocaleLowerCase();
       if (data) {
         // TODO: 계산 테스트 필요(자리수 등등)
@@ -102,6 +115,7 @@ export const useTokenBalance = () => {
           // TODO: 0으로 넣는것 말고 다른 예외처리를 어떻게 해줄것인가?
           valuatedPrice = 0;
         }
+
         formalizedArray = [
           ...formalizedArray,
           {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import useWalletListModal from '@@components/BasicComponents/Modals/WalletListModal/useWalletListModal';
@@ -12,6 +12,8 @@ const useWalletSelector = () => {
   const { openModal } = globalModalStore();
 
   const { selectedWalletIndex, selectedNetwork, walletList, setWallets } = walletPersistStore();
+  const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
+
   const { pKey } = authStore();
   const { data } = useWalletsQuery();
 
@@ -41,7 +43,7 @@ const useWalletSelector = () => {
   }, [walletList, data, pKey]);
 
   return {
-    name: walletList[selectedNetwork][selectedWalletIndex]?.name,
+    name: walletList[selectedNetwork][_selectedWalletIndex]?.name,
     onPressWalletList,
   };
 };

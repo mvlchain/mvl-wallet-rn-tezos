@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import authStore from '@@store/auth/authStore';
@@ -11,6 +11,7 @@ const useWalletListModal = () => {
   const { data } = useWalletsQuery();
   const { pKey } = authStore();
   const [wallet, setWallet] = useState<IWalletListMenuProps[]>([]);
+  const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
 
   useEffect(() => {
     if (!pKey || !data) return;
@@ -22,11 +23,11 @@ const useWalletListModal = () => {
         name: walletList[selectedNetwork][index]?.name,
         address,
         onPress: () => selectWallet(index),
-        isSelected: selectedWalletIndex === index,
+        isSelected: _selectedWalletIndex === index,
       } as unknown as IWalletListMenuProps;
     });
     setWallet(walletArr);
-  }, [data, walletList, selectedNetwork, selectedWalletIndex]);
+  }, [data, walletList, selectedNetwork, _selectedWalletIndex]);
 
   useEffect(() => {
     if (!wallet) return;
@@ -34,11 +35,11 @@ const useWalletListModal = () => {
       wallet?.map((val) => {
         return {
           ...val,
-          isSelected: val.index === selectedWalletIndex,
+          isSelected: val.index === _selectedWalletIndex,
         };
       })
     );
-  }, [selectedWalletIndex]);
+  }, [_selectedWalletIndex]);
 
   return { wallet };
 };

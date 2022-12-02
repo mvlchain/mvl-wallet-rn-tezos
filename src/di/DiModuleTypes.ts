@@ -7,9 +7,10 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
+import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { ContractRepository } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
-import { EthersContractServiceImpl } from '@@domain/wallet/services/WalletBlockChainService';
+import { ContractService } from '@@domain/wallet/services/WalletBlockChainService';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 
 /**
@@ -18,17 +19,19 @@ import { WalletService } from '@@domain/wallet/services/WalletService';
 export interface DiModuleTypes {
   // Service
   WalletService: WalletService;
-  WalletBlockChainService: EthersContractServiceImpl;
+  WalletBlockChainService: ContractService;
+  AuthService: AuthService;
+  UIService: UIService;
   // Repository
   WalletRepository: WalletRepository;
   EthersContractRepository: ContractRepository;
-  AuthService: AuthService;
-  KeyClient: KeyClient;
-  KeyClientUtil: KeyClientUtil;
-  UIService: UIService;
   DeviceShareRepository: DeviceShareRepository;
   ServerShareRepository: ServerShareRepository;
   TorusShareRepository: TorusShareRepository;
   RootKeyRepository: RootKeyRepository;
   RTNSettingsRepository: RTNSettingsRepository;
+  TokenRepository: ITokenRepository;
+  // Client
+  KeyClient: KeyClient;
+  KeyClientUtil: KeyClientUtil;
 }
