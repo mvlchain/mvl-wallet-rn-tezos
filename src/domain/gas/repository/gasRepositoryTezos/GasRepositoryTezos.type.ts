@@ -1,17 +1,18 @@
 import { Estimate, TransferParams } from '@taquito/taquito';
 
 import { TGasLevel } from '@@domain/gas/GasService.type';
-export interface IGetTotalGasFeeArgsTEZ {
+
+export interface IGetTotalGasFeeParamsTEZ {
   gasLevel?: TGasLevel;
   baseFee: number;
-  additionalFee?: number;
+  tip?: number;
 }
 
-export interface IEstimateGasArgsTEZ extends TransferParams {
+export interface IEstimateGasParamsTEZ extends TransferParams {
   rpcUrl: string;
 }
 
 export interface IGasRepositoryTezos {
-  getTotalGasFee: (args: IGetTotalGasFeeArgsTEZ) => string;
-  estimateGas: (args: IEstimateGasArgsTEZ) => Promise<Estimate>;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsTEZ) => string;
+  estimateGas: (args: IEstimateGasParamsTEZ) => Promise<Estimate>;
 }

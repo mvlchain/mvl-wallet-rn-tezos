@@ -9,18 +9,18 @@ export interface IGasFeeInfo {
   gasLimit: BigNumber;
 }
 
-export interface IGetTotalGasFeeArgsEthers {
+export interface IGetTotalGasFeeParamsEthers {
   gasLevel?: TGasLevel;
-  gasPrice: BigNumber;
-  gasLimit: BigNumber;
+  baseFee: BigNumber;
+  estimatedGas: BigNumber;
 }
 
-export interface IEstimateGasArgs extends TransactionRequest {
+export interface IEstimateGasParams extends TransactionRequest {
   networkInfo: INetworkInfo;
 }
 
 export interface IGasRepository {
   getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfo>;
-  getTotalGasFee: (args: IGetTotalGasFeeArgsEthers) => string;
-  estimateGas: (args: IEstimateGasArgs) => Promise<BigNumber>;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsEthers) => string;
+  estimateGas: (args: IEstimateGasParams) => Promise<BigNumber>;
 }

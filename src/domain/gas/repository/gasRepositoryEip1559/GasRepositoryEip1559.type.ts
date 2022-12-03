@@ -11,14 +11,14 @@ export interface IGasFeeInfoEip1559 {
   gasLimit: BigNumber;
 }
 
-export interface IGetTotalGasFeeArgsEIP1559 {
+export interface IGetTotalGasFeeParamsEIP1559 {
   gasLevel?: TGasLevel;
-  maxFeePerGas: BigNumber;
+  baseFee: BigNumber;
   estimatedGas: BigNumber;
-  maxPriorityFeePerGas: BigNumber;
+  tip: BigNumber;
 }
 
 export interface IGasRepositoryEip1559 {
   getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfoEip1559>;
-  getTotalGasFee: (args: IGetTotalGasFeeArgsEIP1559) => string;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsEIP1559) => string;
 }
