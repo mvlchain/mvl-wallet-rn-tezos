@@ -18,11 +18,31 @@ export type TGetTotalGasFeeArgsTEZ = IGetTotalGasFeeArgsTEZ & TSelectedNetwork;
 export type TEstimateGasArgs = Omit<IEstimateGasArgs, 'networkInfo'> & TSelectedNetwork;
 export type TEstimateGasArgsTEZ = Omit<IEstimateGasArgsTEZ, 'rpcUrl'> & TSelectedNetwork;
 export interface IGasService {
-  getGasFeeData: (selectedNetwork: Network) => Promise<IGasFeeInfo | IGasFeeInfoEip1559 | null>;
+  getGasFeeData: (selectedNetwork: Network) => Promise<{
+    baseFee: BigNumber;
+    enableTip: boolean;
+    enableLimitCustom: boolean;
+    gasLimit: BigNumber;
+    maxBaseFee: BigNumber;
+    maxTip?: BigNumber;
+    maxGasLimit?: BigNumber;
+  }>;
 
-  getTotalGasFee: (args: TGetTotalGasFeeArgsEthers | TGetTotalGasFeeArgsEIP1559 | TGetTotalGasFeeArgsTEZ) => string;
+  getTotalGasFee: ({
+    selectedNetwork,
+    baseFee,
+    tip,
+    estimatedGas,
+    gasLevel,
+  }: {
+    selectedNetwork: Network;
+    baseFee: BigNumber;
+    tip: BigNumber | null;
+    estimatedGas: BigNumber;
+    gasLevel?: TGasLevel;
+  }) => string;
 
   getEstimateTime: (gasLevel: TGasLevel) => number;
 
-  estimateGas: (args: TEstimateGasArgs | TEstimateGasArgsTEZ) => Promise<BigNumber | Estimate>;
+  estimateGas: ({ selectedNetwork, to, value }: { selectedNetwork: Network; to: string; value: BigNumber }) => Promise<BigNumber>;
 }

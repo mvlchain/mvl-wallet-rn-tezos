@@ -20,6 +20,7 @@ export const GAS_LEVEL_SETTING = {
     eip1559Weight: '1.1',
     tezosAdditionalFee: parseUnits('1', 'gwei'),
     maxPriorityFeePerGas: parseUnits('1', 'gwei'),
+    tip: parseUnits('1', 'gwei'),
     waitTime: 30_000,
   },
   [GAS_LEVEL.MID]: {
@@ -27,6 +28,7 @@ export const GAS_LEVEL_SETTING = {
     eip1559Weight: '1.2',
     tezosAdditionalFee: parseUnits('1.5', 'gwei'),
     maxPriorityFeePerGas: parseUnits('1.5', 'gwei'),
+    tip: parseUnits('1.5', 'gwei'),
     waitTime: 30_000,
   },
   [GAS_LEVEL.HIGH]: {
@@ -34,6 +36,7 @@ export const GAS_LEVEL_SETTING = {
     eip1559Weight: '1.3',
     tezosAdditionalFee: parseUnits('2', 'gwei'),
     maxPriorityFeePerGas: parseUnits('2', 'gwei'),
+    tip: parseUnits('2', 'gwei'),
     waitTime: 15_000,
   },
 } as const;

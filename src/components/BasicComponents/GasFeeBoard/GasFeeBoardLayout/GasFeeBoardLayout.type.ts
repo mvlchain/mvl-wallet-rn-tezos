@@ -8,7 +8,8 @@ export interface IGasFeeBoardLayoutProps {
   transactionFee: string;
   advanced: boolean;
   children: ReactChildren[];
-  //TODO: onConfirm x타입 리팩토링
+  //TODO: 타입
   onConfirm: TOnConfirmEip1559 | TOnConfirmEthers | TOnConfirmTezos;
-  handleAdvanced: (v: any) => void;
+  //TODO:타입
+  toggleGasAdvanced: (v: any) => void;
 }

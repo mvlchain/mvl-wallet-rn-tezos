@@ -76,6 +76,10 @@ const useTokenSend = () => {
     setBody({ value: amount });
   };
 
+  useEffect(() => {
+    resetBody();
+  }, []);
+
   return { amount: value, setAmount, address: to, setAddress, confirmSend };
 };
 export default useTokenSend;
