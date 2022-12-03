@@ -4,7 +4,7 @@ import { BigNumber, ethers } from 'ethers';
 
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 
-import { IGetTotalGasFeeArgsTEZ, IGasRepositoryTezos, IEstimateGasArgsTEZ } from './GasRepositoryTezos.type';
+import { IGetTotalGasFeeParamsTEZ, IGasRepositoryTezos, IEstimateGasParamsTEZ } from './GasRepositoryTezos.type';
 
 import Decimal from 'decimal.js';
 import { formatEther } from 'ethers/lib/utils';
@@ -14,8 +14,8 @@ import { InMemorySigner } from '@taquito/signer';
 @injectable()
 export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
   //Total = baseFee + feeOption
-  getTotalGasFee = ({ baseFee, additionalFee, gasLevel }: IGetTotalGasFeeArgsTEZ) => {
-    const addFee = gasLevel ? GAS_LEVEL_SETTING[gasLevel].tezosAdditionalFee : additionalFee ? additionalFee : 0.0001;
+  getTotalGasFee = ({ baseFee, tip, gasLevel }: IGetTotalGasFeeParamsTEZ) => {
+    const addFee = gasLevel ? GAS_LEVEL_SETTING[gasLevel].tezosAdditionalFee : tip ? tip : 0.0001;
     const addFeeInDecimal = new Decimal(addFee.toString());
     const baseFeeInDecimal = new Decimal(baseFee.toString());
 
@@ -25,7 +25,7 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
     return formatEther(totalGasInBN);
   };
 
-  estimateGas = async ({ rpcUrl, to, amount }: IEstimateGasArgsTEZ) => {
+  estimateGas = async ({ rpcUrl, to, amount }: IEstimateGasParamsTEZ) => {
     //TODO: 임시 주소 TEZO에 맞는 지갑 주소 필요함, 양식이 다름
     const Tezos = new TezosToolkit(rpcUrl);
     Tezos.setProvider({

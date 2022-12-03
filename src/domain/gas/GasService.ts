@@ -5,21 +5,13 @@ import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
-import {
-  IGasService,
-  TGasLevel,
-  TGetTotalGasFeeArgsEthers,
-  TGetTotalGasFeeArgsEIP1559,
-  TGetTotalGasFeeArgsTEZ,
-  TEstimateGasArgs,
-  TEstimateGasArgsTEZ,
-} from './GasService.type';
+import { IGasService, TGasLevel } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
-import { IGetTotalGasFeeArgsEthers } from './repository/gasRepository/GasRepository.type';
+import { IGetTotalGasFeeParamsEthers } from './repository/gasRepository/GasRepository.type';
 import { GasRepositoryEip1559Impl } from './repository/gasRepositoryEip1559/GasRepositoryEIP1559';
-import { IGetTotalGasFeeArgsEIP1559 } from './repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
+import { IGetTotalGasFeeParamsEIP1559 } from './repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
 import { GasRepositoryTezosImpl } from './repository/gasRepositoryTezos/GasRepositoryTezos';
-import { IGetTotalGasFeeArgsTEZ } from './repository/gasRepositoryTezos/GasRepositoryTezos.type';
+import { IGetTotalGasFeeParamsTEZ } from './repository/gasRepositoryTezos/GasRepositoryTezos.type';
 
 import { Estimate } from '@taquito/taquito';
 import { BigNumber } from 'ethers';
@@ -36,15 +28,43 @@ export class GasServiceImpl implements IGasService {
 
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        return null;
+        return { enableTip: true, enableLimitCustom: false };
       case NETWORK_FEE_TYPE.EIP1559:
-        return await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
+        const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
+
+        return {
+          baseFee: gasFeeDataEip1559.lastBaseFeePerGas,
+          enableTip: true,
+          enableLimitCustom: true,
+          gasLimit: gasFeeDataEip1559.gasLimit,
+          maxBaseFee: gasFeeDataEip1559.maxFeePerGas,
+          maxTip: gasFeeDataEip1559.maxPriorityFeePerGas,
+        };
+
       default:
-        return await this.gasRepository.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
+        const gasFeeData = await this.gasRepository.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
+        return {
+          baseFee: gasFeeData.gasPrice,
+          enableTip: false,
+          enableLimitCustom: true,
+          gasLimit: gasFeeData.gasLimit,
+        };
     }
   };
 
-  getTotalGasFee = (args: TGetTotalGasFeeArgsEthers | TGetTotalGasFeeArgsEIP1559 | TGetTotalGasFeeArgsTEZ) => {
+  getTotalGasFee = ({
+    selectedNetwork,
+    baseFee,
+    tip,
+    estimatedGas,
+    gasLevel,
+  }: {
+    selectedNetwork: Network;
+    baseFee: BigNumber;
+    tip: BigNumber | null;
+    estimatedGas: BigNumber;
+    gasLevel?: TGasLevel;
+  }) => {
     const network = getNetworkConfig(args.selectedNetwork);
 
     if (network.networkFeeType === NETWORK_FEE_TYPE.TEZOS) {
@@ -68,7 +88,7 @@ export class GasServiceImpl implements IGasService {
     return GAS_LEVEL_SETTING[gasLevel].waitTime;
   };
 
-  estimateGas = async (args: TEstimateGasArgs | TEstimateGasArgsTEZ) => {
+  estimateGas = async ({ selectedNetwork, to, value }: { selectedNetwork: Network; to: string; value: BigNumber }) => {
     const network = getNetworkConfig(args.selectedNetwork);
     if (network.networkFeeType === NETWORK_FEE_TYPE.TEZOS) {
       const { to, amount } = args as TEstimateGasArgsTEZ;

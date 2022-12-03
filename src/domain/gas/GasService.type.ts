@@ -4,28 +4,18 @@ import { BigNumber } from 'ethers';
 import { Network, NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL } from '@@constants/transaction.constant';
 
-import { IEstimateGasArgs, IGasFeeInfo, IGetTotalGasFeeArgsEthers } from './repository/gasRepository/GasRepository.type';
-import { IGasFeeInfoEip1559, IGetTotalGasFeeArgsEIP1559 } from './repository/gasRepositoryEip1559/GasRepositoryEip1559.type';
-import { IEstimateGasArgsTEZ, IGetTotalGasFeeArgsTEZ } from './repository/gasRepositoryTezos/GasRepositoryTezos.type';
-
 export type TGasLevel = typeof GAS_LEVEL[keyof typeof GAS_LEVEL];
 export type TSelectedNetwork = { selectedNetwork: Network };
 
-export type TGetTotalGasFeeArgsEthers = IGetTotalGasFeeArgsEthers & TSelectedNetwork;
-export type TGetTotalGasFeeArgsEIP1559 = IGetTotalGasFeeArgsEIP1559 & TSelectedNetwork;
-export type TGetTotalGasFeeArgsTEZ = IGetTotalGasFeeArgsTEZ & TSelectedNetwork;
-
-export type TEstimateGasArgs = Omit<IEstimateGasArgs, 'networkInfo'> & TSelectedNetwork;
-export type TEstimateGasArgsTEZ = Omit<IEstimateGasArgsTEZ, 'rpcUrl'> & TSelectedNetwork;
 export interface IGasService {
   getGasFeeData: (selectedNetwork: Network) => Promise<{
-    baseFee: BigNumber;
+    baseFee?: BigNumber | null;
     enableTip: boolean;
     enableLimitCustom: boolean;
-    gasLimit: BigNumber;
-    maxBaseFee: BigNumber;
-    maxTip?: BigNumber;
-    maxGasLimit?: BigNumber;
+    gasLimit?: BigNumber | null;
+    maxBaseFee?: BigNumber | null;
+    maxTip?: BigNumber | null;
+    maxGasLimit?: BigNumber | null;
   }>;
 
   getTotalGasFee: ({
