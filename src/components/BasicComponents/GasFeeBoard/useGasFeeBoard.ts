@@ -35,7 +35,7 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
   const [customTip, setCustomTip] = useState<BigNumber | null>(null);
   const [customGasLimit, setCustomGasLimit] = useState<BigNumber | null>(null);
 
-  const { to, value } = transactionRequestStore();
+  const { to, value, data } = transactionRequestStore();
 
   useEffect(() => {
     setInitialGas();
@@ -66,14 +66,21 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
 
   const estimateGas = async () => {
     if (!to || !value) return;
-    const walletIndex = selectedWalletIndex[selectedNetwork];
-    const gasUsage = await gasService.estimateGas({
-      to,
-      value,
-      selectedNetwork,
-      tokenDto,
-      walletIndex,
-    });
+    let gasUsage: BigNumber;
+    if (data) {
+      gasUsage = await gasService.estimateGas({
+        to,
+        value,
+        selectedNetwork,
+        data,
+      });
+    } else {
+      gasUsage = await gasService.estimateGas({
+        to,
+        value,
+        selectedNetwork,
+      });
+    }
 
     setEstimatedGas(gasUsage);
   };

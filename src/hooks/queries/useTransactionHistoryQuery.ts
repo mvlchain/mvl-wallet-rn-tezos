@@ -16,15 +16,11 @@ export default function useTransactionHitoryQuery(
   }: { network: Network; ticker: string; address: string; beforeblock?: number; beforeindex?: number; limit?: number },
   options: UseQueryOptions<IGetTransactionHistoryResponse[], unknown, IGetTransactionHistoryResponse[]> = {}
 ) {
-  const { selectedNetwork } = walletPersistStore();
-  const networkInfo = getNetworkConfig(selectedNetwork);
   //TODO: 나중에 네트워크 파악하는건 트랜잭션레파지토리 만들면서 서비스로 넣기
-  const tezosTransactionService = useDi('TezosTransactionService');
-  const etherTransactionService = useDi('EtherTransactionService');
-  const TransactionService = networkInfo.networkFeeType === NETWORK_FEE_TYPE.TEZOS ? tezosTransactionService : etherTransactionService;
+  const transactionService = useDi('TransactionService');
   return useQuery<IGetTransactionHistoryResponse[], unknown, IGetTransactionHistoryResponse[]>(
     ['history', address, network, ticker],
-    () => TransactionService.getHistory({ address, network, ticker, beforeblock, beforeindex, limit }),
+    () => transactionService.getHistory({ address, network, ticker, beforeblock, beforeindex, limit }),
     options
   );
 }

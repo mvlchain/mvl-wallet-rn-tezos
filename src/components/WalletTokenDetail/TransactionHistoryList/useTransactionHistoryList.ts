@@ -15,8 +15,7 @@ const useTransactionHistoryList = () => {
   const myPublicAddress = '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d';
   const token = 'ETH';
 
-  const ethersTransactionService = useDi('EtherTransactionService');
-  const tezosTransactionService = useDi('TezosTransactionService');
+  const transactionService = useDi('TransactionService');
 
   const { selectedNetwork } = walletPersistStore();
 
@@ -66,7 +65,6 @@ const useTransactionHistoryList = () => {
     };
     //TODO: 나중에 고칠 부분
     //@ts-ignore
-    const transactionService = selectedNetwork === 'TEZOS' ? tezosTransactionService : ethersTransactionService;
     const history = await transactionService.getHistory(params);
     if (!history) {
       setLoading(false);
