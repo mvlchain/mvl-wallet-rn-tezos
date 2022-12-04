@@ -9,7 +9,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
@@ -44,7 +44,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
   };
 
   const setData = async () => {
-    if (!to || !value) return;
+    if (!to || !value || network.networkFeeType === NETWORK_FEE_TYPE.TEZOS) return;
     if (tokenDto.contractAddress) {
       const walletIndex = selectedWalletIndex[selectedNetwork];
       const data = await transactionService.encodeTransferData(walletIndex, network.bip44, to, value);
@@ -77,7 +77,14 @@ const useTokenSend = (tokenDto: TokenDto) => {
         if (!to || !value) {
           throw new Error('to address and value is required');
         }
-        await transactionService.sendTransaction({ selectedNetwork, gasFeeInfo, to, value, data });
+        await transactionService.sendTransaction({
+          selectedNetwork,
+          selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+          gasFeeInfo,
+          to,
+          value,
+          data,
+        });
         resetBody();
         //goto result(result)
       } catch (err) {

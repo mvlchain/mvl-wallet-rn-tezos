@@ -67,6 +67,7 @@ export interface ITransactionService {
   encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike>;
   sendTransaction: ({
     selectedNetwork,
+    selectedWalletIndex,
     gasFeeInfo,
     to,
     from,
@@ -74,6 +75,7 @@ export interface ITransactionService {
     data,
   }: {
     selectedNetwork: Network;
+    selectedWalletIndex: number;
     gasFeeInfo: IGasFeeInfo;
     to: string;
     from?: BigNumber;

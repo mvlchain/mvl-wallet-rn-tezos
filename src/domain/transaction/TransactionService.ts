@@ -1,6 +1,7 @@
 import '@ethersproject/shims';
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { BigNumber, ethers } from 'ethers';
-import { BytesLike } from 'ethers/lib/utils';
+import { BytesLike, formatUnits } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
@@ -31,6 +32,7 @@ export class TransactionService implements ITransactionService {
 
   sendTransaction = async ({
     selectedNetwork,
+    selectedWalletIndex,
     gasFeeInfo,
     to,
     from,
@@ -38,6 +40,7 @@ export class TransactionService implements ITransactionService {
     data,
   }: {
     selectedNetwork: Network;
+    selectedWalletIndex: number;
     gasFeeInfo: {
       baseFee: BigNumber;
       tip?: BigNumber;
@@ -49,19 +52,57 @@ export class TransactionService implements ITransactionService {
     data?: BytesLike | null;
   }): Promise<string> => {
     const network = getNetworkConfig(selectedNetwork);
-
+    const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        return this.tezosService.sendTransaction();
+        if (!gasFeeInfo.tip) {
+          throw new Error('tip is required');
+        }
+        const fee = parseFloat(formatUnits(gasFeeInfo.tip));
+        const amount = parseFloat(formatUnits(value));
+        return this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
       case NETWORK_FEE_TYPE.EIP1559:
-        return this.etherService.sendTransaction();
+        if (data) {
+          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            to,
+            chainId: network.chainId,
+            maxFeePerGas: gasFeeInfo.baseFee,
+            maxPriorityFeePerGas: gasFeeInfo.tip,
+            gasLimit: gasFeeInfo.gasLimit,
+            data,
+          });
+        } else {
+          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            to,
+            chainId: network.chainId,
+            maxFeePerGas: gasFeeInfo.baseFee,
+            maxPriorityFeePerGas: gasFeeInfo.tip,
+            gasLimit: gasFeeInfo.gasLimit,
+            value,
+          });
+        }
       default:
-        return this.etherService.sendTransaction();
+        if (data) {
+          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            to,
+            chainId: network.chainId,
+            gasPrice: gasFeeInfo.baseFee,
+            gasLimit: gasFeeInfo.gasLimit,
+            data,
+          });
+        } else {
+          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            to,
+            chainId: network.chainId,
+            gasPrice: gasFeeInfo.baseFee,
+            gasLimit: gasFeeInfo.gasLimit,
+            value,
+          });
+        }
     }
   };
 
   getHistory = async (params: IGetHistoryParams) => {
-    //TODO: v2에서는 auth header붙여야함
     try {
       const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
       const res = await request.get(endpoint);
