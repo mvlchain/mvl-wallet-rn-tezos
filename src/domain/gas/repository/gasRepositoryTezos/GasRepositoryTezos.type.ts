@@ -4,7 +4,7 @@ import { TGasLevel } from '@@domain/gas/GasService.type';
 
 export interface IGetTotalGasFeeParamsTEZ {
   gasLevel?: TGasLevel;
-  baseFee: number;
+  estimatedGas: number;
   tip?: number;
 }
 

@@ -13,13 +13,12 @@ import { InMemorySigner } from '@taquito/signer';
 
 @injectable()
 export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
-  //Total = baseFee + feeOption
-  getTotalGasFee = ({ baseFee, tip, gasLevel }: IGetTotalGasFeeParamsTEZ) => {
+  getTotalGasFee = ({ tip, estimatedGas, gasLevel }: IGetTotalGasFeeParamsTEZ) => {
     const addFee = gasLevel ? GAS_LEVEL_SETTING[gasLevel].tezosAdditionalFee : tip ? tip : 0.0001;
     const addFeeInDecimal = new Decimal(addFee.toString());
-    const baseFeeInDecimal = new Decimal(baseFee.toString());
+    const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
 
-    const totalGas = baseFeeInDecimal.add(addFeeInDecimal);
+    const totalGas = estimatedGasInDecimal.add(addFeeInDecimal);
     const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
 
     return formatEther(totalGasInBN);
