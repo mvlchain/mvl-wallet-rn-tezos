@@ -23,11 +23,12 @@ function GasFeeBoard({ isRevision, onConfirm, tokenDto }: IGasFeeBoardProps) {
     setCustomTip,
     setCustomGasLimit,
     toggleGasAdvanced,
+    onConfirmGasFee,
   } = useGasFeeBoard(tokenDto, onConfirm);
   return (
     <GasFeeBoardLayout
       isRevision={isRevision}
-      onConfirm={onConfirm}
+      onConfirm={onConfirmGasFee}
       transactionFee={transactionFee}
       advanced={advanced}
       toggleGasAdvanced={toggleGasAdvanced}
