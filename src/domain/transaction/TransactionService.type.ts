@@ -1,5 +1,6 @@
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
+import { Network } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
 
 //TODO: generatedscheme에 있는지 확인하기
@@ -41,7 +42,7 @@ export interface ISendTransactionGasFee {
   maxPriorityFeePerGas: BigNumber;
   gasLimit: BigNumber;
 }
-export interface ISendTransactionArgs {
+export interface ISendTransactionParams {
   networkInfo: INetworkInfo;
   privateKey: string;
   gasFeeInfo: IGasFeeInfo | ISendTransactionGasFee;
@@ -50,7 +51,7 @@ export interface ISendTransactionArgs {
   value: BigNumberish;
   data?: BytesLike;
 }
-export interface ITezosSendTransactionArgs {
+export interface ITezosSendTransactionParams {
   networkInfo: ITezosNetworkInfo;
   privateKey: string;
   gasFeeInfo: IGasFeeInfo;
@@ -60,7 +61,7 @@ export interface ITezosSendTransactionArgs {
   data?: BytesLike;
 }
 
-export interface IGetHistoryArgs {
+export interface IGetHistoryParams {
   network: string;
   ticker: string;
   address: string;
@@ -97,8 +98,45 @@ export interface ITransaction {
   estimatedBaseFee?: string;
   estimateGasError?: string;
 }
+
 export interface ITransactionService {
-  sendTransaction(args: ISendTransactionArgs | ITezosSendTransactionArgs): Promise<string>;
-  approveTransaction(args: ISendTransactionArgs): Promise<string>;
-  getHistory(args: IGetHistoryArgs): Promise<IGetTransactionHistoryResponse[] | []>;
+  sendTransaction({
+    selectedNetwork,
+    gasFeeInfo,
+    to,
+    from,
+    value,
+    data,
+  }: {
+    selectedNetwork: Network;
+    gasFeeInfo: {
+      baseFee: BigNumber;
+      tip?: BigNumber;
+      gasLimit: BigNumber;
+    };
+    to: string;
+    from?: BigNumber;
+    value: BigNumber;
+    data?: BytesLike;
+  }): Promise<string>;
+  approveTransaction({
+    selectedNetwork,
+    gasFeeInfo,
+    to,
+    from,
+    value,
+    data,
+  }: {
+    selectedNetwork: Network;
+    gasFeeInfo: {
+      baseFee: BigNumber;
+      tip?: BigNumber;
+      gasLimit: BigNumber;
+    };
+    to: string;
+    from?: BigNumber;
+    value: BigNumber;
+    data?: BytesLike;
+  }): Promise<string>;
+  getHistory(params: IGetHistoryParams): Promise<IGetTransactionHistoryResponse[] | []>;
 }

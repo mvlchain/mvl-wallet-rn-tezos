@@ -3,110 +3,87 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import Decimal from 'decimal.js';
 import '@ethersproject/shims';
 import { BigNumber, ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther, BytesLike } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
+import { getNetworkConfig, Network, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request, authRequest } from '@@utils/request';
 
-import {
-  ITransactionService,
-  TTransactionStatus,
-  TTransactionType,
-  IGetHistoryArgs,
-  ISendTransactionArgs,
-  ITezosSendTransactionArgs,
-} from './TransactionService.type';
+import { ITransactionService, TTransactionStatus, TTransactionType, IGetHistoryParams } from './TransactionService.type';
+import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
+import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 
 @injectable()
-export class EthersTransactionImpl implements ITransactionService {
-  constructor() {}
+export class TransactionService implements ITransactionService {
+  constructor(
+    @inject('TransactionServiceEthers') private etherService: ITransactionServiceEthers,
+    @inject('TransactionServiceTezos') private tezosService: ITransactionServiceTezos,
+    @inject('WalletService') private walletSerivce: WalletService
+  ) {}
 
-  async sendTransaction(args: ISendTransactionArgs): Promise<string> {
-    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
-    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    const wallet = new ethers.Wallet(privateKey, provider);
-
-    const res = await wallet.sendTransaction({
-      from,
-      to,
-      data,
-      value,
-      chainId: networkInfo.chainId,
-      ...gasFeeInfo,
-    });
-
-    return res.hash;
-  }
-  async approveTransaction(args: ISendTransactionArgs) {
-    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
-    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    const wallet = new ethers.Wallet(privateKey, provider);
-
-    const res = await wallet.signTransaction({
-      from,
-      to,
-      data,
-      value,
-      chainId: networkInfo.chainId,
-      ...gasFeeInfo,
-    });
-
-    return res;
-  }
-  async getHistory(params: IGetHistoryArgs) {
-    try {
-      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
-      const res = await request.get(endpoint);
-      if (res.status === 200) {
-        return mockData;
-      } else {
-        return [];
-      }
-    } catch (e) {
-      return [];
+  async sendTransaction({
+    selectedNetwork,
+    gasFeeInfo,
+    to,
+    from,
+    value,
+    data,
+  }: {
+    selectedNetwork: Network;
+    gasFeeInfo: {
+      baseFee: BigNumber;
+      tip?: BigNumber;
+      gasLimit: BigNumber;
+    };
+    to: string;
+    from?: BigNumber;
+    value: BigNumber;
+    data?: BytesLike;
+  }): Promise<string> {
+    const network = getNetworkConfig(selectedNetwork);
+    switch (network.networkFeeType) {
+      case NETWORK_FEE_TYPE.TEZOS:
+        return this.tezosService.sendTransaction();
+      case NETWORK_FEE_TYPE.EIP1559:
+        return this.etherService.sendTransaction();
+      default:
+        return this.etherService.sendTransaction();
     }
   }
-}
-@injectable()
-export class TezosTaquitoTransactionsImpl implements ITransactionService {
-  constructor() {}
 
-  // Tezos는 general한 sendTransaction을 raw string data를 활용하는 방식으로 구현하기 어려워서 transfer 기준으로 일단 구현
-  async sendTransaction(args: ITezosSendTransactionArgs): Promise<string> {
-    const { networkInfo, privateKey, from, to, value, data, gasFeeInfo } = args;
-    const Tezos = new TezosToolkit(networkInfo.rpcUrl);
-    Tezos.setProvider({
-      signer: new InMemorySigner(privateKey),
-    });
-
-    // 나중에 methodName과 methodArgumentObject 를 밖에서 받아서 구현할 수 있을 때 참고
-    // const contract = await Tezos.contract.at(to);
-    // const methodName = 'methodName';
-    // const methodArgumentObject = {};
-    // const txHash = await contract.methodsObject[methodName](methodArgumentObject)
-    //   .send({
-    //     fee: Number(this.selectedGasFeeInfo.gasPrice),
-    //   })
-    //   .then((op) => op.confirmation(1).then(() => op.hash));
-
-    const txHash = await Tezos.wallet
-      .transfer({
-        to,
-        amount: new Decimal(formatEther(value)).toNumber(),
-        fee: Number(gasFeeInfo.gasPrice),
-      })
-      .send()
-      .then((op) => op.confirmation(1).then(() => op.opHash));
-    console.log(`txHash: ${txHash}`);
-    return txHash;
+  async approveTransaction({
+    selectedNetwork,
+    gasFeeInfo,
+    to,
+    from,
+    value,
+    data,
+  }: {
+    selectedNetwork: Network;
+    gasFeeInfo: {
+      baseFee: BigNumber;
+      tip?: BigNumber;
+      gasLimit: BigNumber;
+    };
+    to: string;
+    from?: BigNumber;
+    value: BigNumber;
+    data?: BytesLike;
+  }) {
+    const network = getNetworkConfig(selectedNetwork);
+    switch (network.networkFeeType) {
+      case NETWORK_FEE_TYPE.TEZOS:
+        return this.tezosService.approveTransaction();
+      case NETWORK_FEE_TYPE.EIP1559:
+        return this.etherService.approveTransaction();
+      default:
+        return this.etherService.approveTransaction();
+    }
   }
 
-  async approveTransaction(args: ISendTransactionArgs) {
-    return 'approve';
-  }
-
-  async getHistory(params: IGetHistoryArgs) {
+  async getHistory(params: IGetHistoryParams) {
     //TODO: v2에서는 auth header붙여야함
     try {
       const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
@@ -166,9 +143,3 @@ const mockData = [
     nonce: 0,
   },
 ];
-
-//환산겂 구하기
-// id: mass-vehicle-ledger / ethereum /binancecoin /binance-bitcoin
-//v1.1/wallets/simple/price
-//ids comma
-//vs_currencies
