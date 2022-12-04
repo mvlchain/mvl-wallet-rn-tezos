@@ -23,7 +23,7 @@ function GasFeeBoard({ isRevision, onConfirm, tokenDto }: IGasFeeBoardProps) {
     setCustomTip,
     setCustomGasLimit,
     toggleGasAdvanced,
-  } = useGasFeeBoard(tokenDto);
+  } = useGasFeeBoard(tokenDto, onConfirm);
   return (
     <GasFeeBoardLayout
       isRevision={isRevision}

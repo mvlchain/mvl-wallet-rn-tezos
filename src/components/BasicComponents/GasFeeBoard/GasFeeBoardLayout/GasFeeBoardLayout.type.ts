@@ -1,7 +1,7 @@
+import { BigNumber } from 'ethers';
 import { ReactChildren } from 'react-native-toast-message';
 
-import { TOnConfirmEip1559, TOnConfirmEthers, TOnConfirmTezos } from '../GasFeeBoard.type';
-
+import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 export interface IGasFeeBoardLayoutProps {
   isRevision: boolean;
   estimatedTime?: string;
@@ -9,7 +9,7 @@ export interface IGasFeeBoardLayoutProps {
   advanced: boolean;
   children: ReactChildren[];
   //TODO: 타입
-  onConfirm: TOnConfirmEip1559 | TOnConfirmEthers | TOnConfirmTezos;
+  onConfirm: Function;
   //TODO:타입
   toggleGasAdvanced: (v: any) => void;
 }

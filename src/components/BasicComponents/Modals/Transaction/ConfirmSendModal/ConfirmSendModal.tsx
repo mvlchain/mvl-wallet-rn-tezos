@@ -7,6 +7,7 @@ import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import { height } from '@@utils/ui';
 
 import { MODAL_TYPES } from '../../GlobalModal';
@@ -17,7 +18,7 @@ import { IConfirmSendModalProps } from './ConfirmSendModal.type';
 function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm }: IConfirmSendModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
-
+  const { to, value } = transactionRequestStore();
   return (
     <ModalLayout
       title={t('confirm_send')}
@@ -33,20 +34,20 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm }: IConfirm
     >
       <S.TopContainer>
         <S.GreyText>{'Recipient Address'}</S.GreyText>
-        <S.LargeBlackText>{recipientAddress}</S.LargeBlackText>
+        <S.LargeBlackText>{to}</S.LargeBlackText>
       </S.TopContainer>
       <S.MiddleContainer>
         <S.Row>
           <S.BlackText> {t('send_amount')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{`${formatEther(amount)} MVL`}</S.BlackText>
+            <S.BlackText>{value && `${formatEther(value)} MVL`}</S.BlackText>
             <S.GreyText>{'dsfdsfsadfsaf USD'}</S.GreyText>
           </S.RightAlign>
         </S.Row>
         <S.Row style={{ marginBottom: height * 16 }}>
           <S.BlackText>{t('transaction_fee')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{`${formatEther(fee)} ETH`}</S.BlackText>
+            <S.BlackText>{fee && `${formatEther(fee)} ETH`}</S.BlackText>
             <S.GreyText>{'dsfdsfsadfsaf USD'}</S.GreyText>
           </S.RightAlign>
         </S.Row>
@@ -54,7 +55,7 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm }: IConfirm
         <S.Row>
           <S.BlackText>{t('total')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{`${formatEther(amount)} MVL + ${formatEther(fee)}ETH`}</S.BlackText>
+            <S.BlackText>{value && fee && `${formatEther(value)} MVL + ${formatEther(fee)}ETH`}</S.BlackText>
             <S.GreyText>{'d205465 USD'}</S.GreyText>
           </S.RightAlign>
         </S.Row>
