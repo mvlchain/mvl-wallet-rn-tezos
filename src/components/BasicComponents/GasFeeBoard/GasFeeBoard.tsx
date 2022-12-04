@@ -6,7 +6,7 @@ import GasFeeInputs from './GasFeeInputs';
 import GasLevelRadioButtons from './GasLevelRadioButtons';
 import useGasFeeBoard from './useGasFeeBoard';
 
-function GasFeeBoard({ isRevision, onConfirm }: IGasFeeBoardProps) {
+function GasFeeBoard({ isRevision, onConfirm, tokenDto }: IGasFeeBoardProps) {
   const {
     advanced,
     gasLevel,
@@ -23,7 +23,7 @@ function GasFeeBoard({ isRevision, onConfirm }: IGasFeeBoardProps) {
     setCustomTip,
     setCustomGasLimit,
     toggleGasAdvanced,
-  } = useGasFeeBoard();
+  } = useGasFeeBoard(tokenDto);
   return (
     <GasFeeBoardLayout
       isRevision={isRevision}

@@ -5,13 +5,15 @@ import { formatEther, formatUnits } from 'ethers/lib/utils';
 
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { TGasLevel } from '@@domain/gas/GasService.type';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useGasFeeBoard = () => {
+const useGasFeeBoard = (tokenDto: TokenDto) => {
   const gasService = useDi('GasService');
-  const { selectedNetwork } = walletPersistStore();
+  const transactionService = useDi('TransactionService');
+  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
 
   //The setted value
   const [advanced, setAdvanced] = useState(false);
@@ -64,11 +66,15 @@ const useGasFeeBoard = () => {
 
   const estimateGas = async () => {
     if (!to || !value) return;
+    const walletIndex = selectedWalletIndex[selectedNetwork];
     const gasUsage = await gasService.estimateGas({
       to,
       value,
       selectedNetwork,
+      tokenDto,
+      walletIndex,
     });
+
     setEstimatedGas(gasUsage);
   };
 

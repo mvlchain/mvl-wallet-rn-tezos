@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
 import { TGasLevel } from '../../GasService.type';
-export interface IGasFeeInfo {
+export interface IGasFeeInfoEthers {
   gasPrice: BigNumber;
   gasLimit: BigNumber;
 }
@@ -20,7 +20,7 @@ export interface IEstimateGasParams extends TransactionRequest {
 }
 
 export interface IGasRepository {
-  getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfo>;
+  getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfoEthers>;
   getTotalGasFee: (args: IGetTotalGasFeeParamsEthers) => string;
   estimateGas: (args: IEstimateGasParams) => Promise<BigNumber>;
 }

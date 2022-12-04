@@ -35,7 +35,6 @@ export class GasRepositoryImpl implements IGasRepository {
   estimateGas = async (args: IEstimateGasParams) => {
     const { networkInfo, to, value, data } = args;
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-    // const wallet = new ethers.Wallet(privateKey, provider);
 
     const res = await provider.estimateGas({
       to,

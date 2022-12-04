@@ -7,11 +7,19 @@ import { formatEther, BytesLike } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
+import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, Network, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { request, authRequest } from '@@utils/request';
 
-import { ITransactionService, TTransactionStatus, TTransactionType, IGetHistoryParams } from './TransactionService.type';
+import {
+  ITransactionService,
+  TTransactionStatus,
+  TTransactionType,
+  IGetHistoryParams,
+  IGetTransactionHistoryResponse,
+} from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 
@@ -20,10 +28,18 @@ export class TransactionService implements ITransactionService {
   constructor(
     @inject('TransactionServiceEthers') private etherService: ITransactionServiceEthers,
     @inject('TransactionServiceTezos') private tezosService: ITransactionServiceTezos,
-    @inject('WalletService') private walletSerivce: WalletService
+    @inject('WalletService') private walletService: WalletService
   ) {}
 
-  async sendTransaction({
+  encodeTransferData = async (index: number, bip44: number, to: string, value: BigNumber) => {
+    const wallet = await this.walletService.getWalletInfo({ index, bip44 });
+    const from = wallet.address;
+    const etherInterface = new ethers.utils.Interface(abiERC20);
+    const data = etherInterface.encodeFunctionData('Transfer', [from, to, value]);
+    return data;
+  };
+
+  sendTransaction = async ({
     selectedNetwork,
     gasFeeInfo,
     to,
@@ -39,10 +55,11 @@ export class TransactionService implements ITransactionService {
     };
     to: string;
     from?: BigNumber;
-    value: BigNumber;
+    value?: BigNumber;
     data?: BytesLike;
-  }): Promise<string> {
+  }): Promise<string> => {
     const network = getNetworkConfig(selectedNetwork);
+
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
         return this.tezosService.sendTransaction();
@@ -51,9 +68,9 @@ export class TransactionService implements ITransactionService {
       default:
         return this.etherService.sendTransaction();
     }
-  }
+  };
 
-  async approveTransaction({
+  approveTransaction = async ({
     selectedNetwork,
     gasFeeInfo,
     to,
@@ -69,9 +86,9 @@ export class TransactionService implements ITransactionService {
     };
     to: string;
     from?: BigNumber;
-    value: BigNumber;
+    value?: BigNumber;
     data?: BytesLike;
-  }) {
+  }) => {
     const network = getNetworkConfig(selectedNetwork);
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
@@ -81,9 +98,9 @@ export class TransactionService implements ITransactionService {
       default:
         return this.etherService.approveTransaction();
     }
-  }
+  };
 
-  async getHistory(params: IGetHistoryParams) {
+  getHistory = async (params: IGetHistoryParams) => {
     //TODO: v2에서는 auth header붙여야함
     try {
       const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
@@ -96,7 +113,7 @@ export class TransactionService implements ITransactionService {
     } catch (e) {
       return [];
     }
-  }
+  };
 }
 
 const mockData = [
