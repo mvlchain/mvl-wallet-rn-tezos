@@ -27,7 +27,7 @@ export interface IGasService {
   }: {
     selectedNetwork: Network;
     baseFee: BigNumber;
-    tip: BigNumber | null;
+    tip?: BigNumber | null;
     estimatedGas: BigNumber;
     gasLevel?: TGasLevel;
   }) => string;

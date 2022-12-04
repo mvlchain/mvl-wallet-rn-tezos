@@ -13,13 +13,13 @@ const useGasFeeBoard = () => {
   const gasService = useDi('GasService');
   const { selectedNetwork } = walletPersistStore();
 
-  //셋팅해놓은 값
+  //The setted value
   const [advanced, setAdvanced] = useState(false);
   const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(null);
   const [tip, setTip] = useState<BigNumber>(GAS_LEVEL_SETTING.MID.tip);
 
-  //체인에서 조회해오는 값
+  //The values from blockchain
   const [estimatedGas, setEstimatedGas] = useState<BigNumber | null>(null);
   const [baseFee, setBaseFee] = useState<BigNumber | null>(null);
   const [enableTip, setEnableTip] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const useGasFeeBoard = () => {
   const [maxTip, setMaxTip] = useState<BigNumber | null>(null);
   const [maxGasLimit, setMaxGasLimit] = useState<BigNumber | null>(null);
 
-  //유저가 입력할 값
+  //The values to be entered by the user
   const [customBaseFee, setCustomBaseFee] = useState<BigNumber | null>(null);
   const [customTip, setCustomTip] = useState<BigNumber | null>(null);
   const [customGasLimit, setCustomGasLimit] = useState<BigNumber | null>(null);
@@ -45,7 +45,7 @@ const useGasFeeBoard = () => {
 
   useEffect(() => {
     if (!advanced) return;
-    //TODO: leveledBaseFee 입력하도록해야함
+    //TODO: leveledBaseFee 입력하도록해야함 수정피료
     setCustomBaseFee(baseFee);
     setCustomTip(tip);
     setCustomGasLimit(gasLimit);
@@ -53,11 +53,11 @@ const useGasFeeBoard = () => {
 
   const setInitialGas = async () => {
     const gasFeeData = await gasService.getGasFeeData(selectedNetwork);
-    setBaseFee(gasFeeData.baseFee);
+    setBaseFee(gasFeeData.baseFee ?? null);
     setEnableTip(gasFeeData.enableTip);
     setEnableLimitCustom(gasFeeData.enableLimitCustom);
-    setGasLimit(gasFeeData.gasLimit);
-    setMaxBaseFee(gasFeeData.maxBaseFee);
+    setGasLimit(gasFeeData.gasLimit ?? null);
+    setMaxBaseFee(gasFeeData.maxBaseFee ?? null);
     setMaxTip(gasFeeData.maxTip ?? null);
     setMaxGasLimit(gasFeeData.maxGasLimit ?? null);
   };
