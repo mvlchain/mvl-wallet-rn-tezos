@@ -3,10 +3,16 @@ import { BigNumber } from 'ethers';
 
 import { Network, NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL } from '@@constants/transaction.constant';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 export type TGasLevel = typeof GAS_LEVEL[keyof typeof GAS_LEVEL];
 export type TSelectedNetwork = { selectedNetwork: Network };
 
+export interface IGasFeeInfo {
+  baseFee: BigNumber;
+  tip?: BigNumber;
+  gasLimit: BigNumber;
+}
 export interface IGasService {
   getGasFeeData: (selectedNetwork: Network) => Promise<{
     baseFee?: BigNumber | null;
@@ -34,5 +40,17 @@ export interface IGasService {
 
   getEstimateTime: (gasLevel: TGasLevel) => number;
 
-  estimateGas: ({ selectedNetwork, to, value }: { selectedNetwork: Network; to: string; value: BigNumber }) => Promise<BigNumber>;
+  estimateGas: ({
+    selectedNetwork,
+    to,
+    value,
+    tokenDto,
+    walletIndex,
+  }: {
+    selectedNetwork: Network;
+    to: string;
+    value: BigNumber;
+    tokenDto: TokenDto;
+    walletIndex: number;
+  }) => Promise<BigNumber>;
 }

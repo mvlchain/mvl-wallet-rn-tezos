@@ -1,7 +1,7 @@
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
 import { Network } from '@@constants/network.constant';
-import { IGasFeeInfo } from '@@domain/gas/repository/gasRepository/GasRepository.type';
+import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 
 //TODO: generatedscheme에 있는지 확인하기
 export enum TTransactionStatus {
@@ -19,47 +19,11 @@ export enum TTransactionType {
   SEND_XTZ = 'SEND_XTZ',
 }
 
-export enum TToken {
-  ETH = 'ETH',
-  ERC20 = 'ERC20',
-  ERC721 = 'ERC721',
-  BEP20 = 'BEP20',
-  BEP20_BTCB = 'BEP20_BTCB',
-  BNB = 'BNB',
-  XTZ = 'XTZ',
-}
-
 export interface INetworkInfo {
   rpcUrl: string;
   chainId: number;
 }
 export interface ITezosNetworkInfo extends Omit<INetworkInfo, 'chainId'> {}
-
-//TODO: getGasFee에서 얻는 값자체가 null 아니면 bignumber인데 값 입력시에는 null안받음 어떻게 할까.
-//IGasFeeEip1559랑 중복됨 null만없음
-export interface ISendTransactionGasFee {
-  maxFeePerGas: BigNumber;
-  maxPriorityFeePerGas: BigNumber;
-  gasLimit: BigNumber;
-}
-export interface ISendTransactionParams {
-  networkInfo: INetworkInfo;
-  privateKey: string;
-  gasFeeInfo: IGasFeeInfo | ISendTransactionGasFee;
-  to: string;
-  from: string;
-  value: BigNumberish;
-  data?: BytesLike;
-}
-export interface ITezosSendTransactionParams {
-  networkInfo: ITezosNetworkInfo;
-  privateKey: string;
-  gasFeeInfo: IGasFeeInfo;
-  to: string;
-  from: string;
-  value: BigNumberish;
-  data?: BytesLike;
-}
 
 export interface IGetHistoryParams {
   network: string;
@@ -100,7 +64,8 @@ export interface ITransaction {
 }
 
 export interface ITransactionService {
-  sendTransaction({
+  encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike>;
+  sendTransaction: ({
     selectedNetwork,
     gasFeeInfo,
     to,
@@ -109,17 +74,13 @@ export interface ITransactionService {
     data,
   }: {
     selectedNetwork: Network;
-    gasFeeInfo: {
-      baseFee: BigNumber;
-      tip?: BigNumber;
-      gasLimit: BigNumber;
-    };
+    gasFeeInfo: IGasFeeInfo;
     to: string;
     from?: BigNumber;
-    value: BigNumber;
+    value?: BigNumber;
     data?: BytesLike;
-  }): Promise<string>;
-  approveTransaction({
+  }) => Promise<string>;
+  approveTransaction: ({
     selectedNetwork,
     gasFeeInfo,
     to,
@@ -128,15 +89,11 @@ export interface ITransactionService {
     data,
   }: {
     selectedNetwork: Network;
-    gasFeeInfo: {
-      baseFee: BigNumber;
-      tip?: BigNumber;
-      gasLimit: BigNumber;
-    };
+    gasFeeInfo: IGasFeeInfo;
     to: string;
     from?: BigNumber;
-    value: BigNumber;
+    value?: BigNumber;
     data?: BytesLike;
-  }): Promise<string>;
-  getHistory(params: IGetHistoryParams): Promise<IGetTransactionHistoryResponse[] | []>;
+  }) => Promise<string>;
+  getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
 }

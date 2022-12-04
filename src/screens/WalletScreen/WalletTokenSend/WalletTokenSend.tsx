@@ -25,12 +25,12 @@ function WalletTokenSend() {
     const headerOption = handleStackHeaderOption({ title: t('send') });
     navigation.setOptions(headerOption);
   }, []);
-  const { amount, setAmount, address, setAddress, confirmSend } = useTokenSend();
+  const { amount, setAmount, address, setAddress, confirmSend } = useTokenSend(params.tokenDto);
   return (
     <ScrollView style={{ flex: 1 }}>
       <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <GasFeeBoard isRevision={false} onConfirm={confirmSend} />
+      <GasFeeBoard isRevision={false} onConfirm={confirmSend} tokenDto={params.tokenDto} />
     </ScrollView>
   );
 }

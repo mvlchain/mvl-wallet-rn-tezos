@@ -1,8 +1,11 @@
 import { BigNumber } from 'ethers';
 
+import { TokenDto } from '@@generated/generated-scheme-clutch';
+
 export interface IGasFeeBoardProps {
   isRevision: boolean;
   onConfirm: (param: TempParam) => Promise<string>;
+  tokenDto: TokenDto;
 }
 
 //TODO 서비스에서 재지정
