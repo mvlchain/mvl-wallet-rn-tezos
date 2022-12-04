@@ -40,15 +40,4 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
 
     return txHash;
   }
-  async approveTransaction(selectedNetwork: Network, selectedWalletPrivateKey: string, params: TransferParams) {
-    const network = getNetworkConfig(selectedNetwork);
-    const Tezos = new TezosToolkit(network.rpcUrl);
-    Tezos.setProvider({
-      signer: new InMemorySigner(selectedWalletPrivateKey),
-    });
-
-    const txHash = await Tezos.wallet.batch;
-
-    return '';
-  }
 }
