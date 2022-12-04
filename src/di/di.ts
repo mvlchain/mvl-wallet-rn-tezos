@@ -2,6 +2,7 @@
  * Dependency Injection
  * import this file from the App(Entry) componet to register di modules
  */
+import { Transaction } from 'bitcoinjs-lib';
 import { container, instancePerContainerCachingFactory } from 'tsyringe';
 
 import { AuthServiceImpl } from '@@domain/auth/AuthService';
@@ -19,6 +20,12 @@ import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepo
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
+import { TransactionService } from '@@domain/transaction/TransactionService';
+import { ITransactionService } from '@@domain/transaction/TransactionService.type';
+import { TransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers';
+import { ITransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers.type';
+import { TransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos';
+import { ITransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos.type';
 import { EhtersClient } from '@@domain/wallet/clients/EthersClient';
 import { TezosClient } from '@@domain/wallet/clients/TezosClient';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
@@ -98,12 +105,31 @@ container.register('EhtersClient', {
 container.register('TezosClient', {
   useFactory: instancePerContainerCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),
 });
+
+container.register('TransactionService', {
+  useFactory: instancePerContainerCachingFactory<ITransactionService>((container) => container.resolve(TransactionService)),
+});
+
+container.register('TransactionServiceEthers', {
+  useFactory: instancePerContainerCachingFactory<ITransactionServiceEthers>((container) => container.resolve(TransactionServiceEthers)),
+});
+
+container.register('TransactionServiceTezos', {
+  useFactory: instancePerContainerCachingFactory<ITransactionServiceTezos>((container) => container.resolve(TransactionServiceTezos)),
+});
+
+container.register('GasService', {
+  useFactory: instancePerContainerCachingFactory<GasServiceImpl>((container) => container.resolve(GasServiceImpl)),
+});
+
 container.register('GasRepository', {
   useFactory: instancePerContainerCachingFactory<GasRepositoryImpl>((container) => container.resolve(GasRepositoryImpl)),
 });
+
 container.register('GasRepositoryEip1559', {
   useFactory: instancePerContainerCachingFactory<GasRepositoryEip1559Impl>((container) => container.resolve(GasRepositoryEip1559Impl)),
 });
+
 container.register('GasRepositoryTezos', {
   useFactory: instancePerContainerCachingFactory<GasRepositoryTezosImpl>((container) => container.resolve(GasRepositoryTezosImpl)),
 });
