@@ -1,25 +1,15 @@
-import { InMemorySigner } from '@taquito/signer';
-import { TezosToolkit, TransferParams } from '@taquito/taquito';
-import Decimal from 'decimal.js';
 import '@ethersproject/shims';
 import { BigNumber, ethers } from 'ethers';
-import { formatEther, BytesLike } from 'ethers/lib/utils';
+import { BytesLike } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, Network, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
-import { request, authRequest } from '@@utils/request';
+import { request } from '@@utils/request';
 
-import {
-  ITransactionService,
-  TTransactionStatus,
-  TTransactionType,
-  IGetHistoryParams,
-  IGetTransactionHistoryResponse,
-} from './TransactionService.type';
+import { ITransactionService, TTransactionStatus, TTransactionType, IGetHistoryParams } from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 
@@ -55,8 +45,8 @@ export class TransactionService implements ITransactionService {
     };
     to: string;
     from?: BigNumber;
-    value?: BigNumber;
-    data?: BytesLike;
+    value: BigNumber;
+    data?: BytesLike | null;
   }): Promise<string> => {
     const network = getNetworkConfig(selectedNetwork);
 
@@ -67,36 +57,6 @@ export class TransactionService implements ITransactionService {
         return this.etherService.sendTransaction();
       default:
         return this.etherService.sendTransaction();
-    }
-  };
-
-  approveTransaction = async ({
-    selectedNetwork,
-    gasFeeInfo,
-    to,
-    from,
-    value,
-    data,
-  }: {
-    selectedNetwork: Network;
-    gasFeeInfo: {
-      baseFee: BigNumber;
-      tip?: BigNumber;
-      gasLimit: BigNumber;
-    };
-    to: string;
-    from?: BigNumber;
-    value?: BigNumber;
-    data?: BytesLike;
-  }) => {
-    const network = getNetworkConfig(selectedNetwork);
-    switch (network.networkFeeType) {
-      case NETWORK_FEE_TYPE.TEZOS:
-        return this.tezosService.approveTransaction();
-      case NETWORK_FEE_TYPE.EIP1559:
-        return this.etherService.approveTransaction();
-      default:
-        return this.etherService.approveTransaction();
     }
   };
 

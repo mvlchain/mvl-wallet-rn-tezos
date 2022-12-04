@@ -2,7 +2,7 @@ import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
 import { Network } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
-
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 //TODO: generatedscheme에 있는지 확인하기
 export enum TTransactionStatus {
   PENDING = 'PENDING',
@@ -77,23 +77,9 @@ export interface ITransactionService {
     gasFeeInfo: IGasFeeInfo;
     to: string;
     from?: BigNumber;
-    value?: BigNumber;
-    data?: BytesLike;
+    value: BigNumber;
+    data?: BytesLike | null;
   }) => Promise<string>;
-  approveTransaction: ({
-    selectedNetwork,
-    gasFeeInfo,
-    to,
-    from,
-    value,
-    data,
-  }: {
-    selectedNetwork: Network;
-    gasFeeInfo: IGasFeeInfo;
-    to: string;
-    from?: BigNumber;
-    value?: BigNumber;
-    data?: BytesLike;
-  }) => Promise<string>;
+
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
 }
