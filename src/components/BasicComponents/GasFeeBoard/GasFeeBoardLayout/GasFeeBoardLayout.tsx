@@ -65,7 +65,12 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
         </S.InnerContainer>
       </View>
       <S.ConfirmWrapper>
-        <PrimaryButton label={t('confirm')} onPress={onConfirm} />
+        <PrimaryButton
+          label={t('confirm')}
+          onPress={() => {
+            onConfirm();
+          }}
+        />
       </S.ConfirmWrapper>
     </S.Container>
   );

@@ -1,16 +1,16 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
-import { formatEther, formatUnits } from 'ethers/lib/utils';
+import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
-import { TGasLevel } from '@@domain/gas/GasService.type';
+import { IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useGasFeeBoard = (tokenDto: TokenDto) => {
+const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>) => {
   const gasService = useDi('GasService');
   const transactionService = useDi('TransactionService');
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
@@ -110,6 +110,11 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
     setAdvanced(!advanced);
   }, [advanced]);
 
+  const onConfirmGasFee = async () => {
+    if (!baseFee || !gasLimit) return;
+    onConfirm({ baseFee, tip, gasLimit }, parseUnits(transactionFee, 'ether'));
+  };
+
   return {
     advanced,
     gasLevel,
@@ -126,6 +131,7 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
     setCustomTip,
     setCustomGasLimit,
     toggleGasAdvanced,
+    onConfirmGasFee,
   };
 };
 
