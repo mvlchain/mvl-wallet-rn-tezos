@@ -1,16 +1,10 @@
 import { BigNumber } from 'ethers';
 
+import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 export interface IGasFeeBoardProps {
   isRevision: boolean;
-  onConfirm: (param: TempParam) => Promise<string>;
+  onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>;
   tokenDto: TokenDto;
-}
-
-//TODO 서비스에서 재지정
-export interface TempParam {
-  baseFee: BigNumber;
-  tip?: BigNumber | null;
-  gasLimit?: BigNumber | null;
 }

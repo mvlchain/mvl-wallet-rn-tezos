@@ -1,5 +1,5 @@
 import { Estimate } from '@taquito/taquito';
-import { BigNumber } from 'ethers';
+import { BigNumber, BytesLike } from 'ethers';
 
 import { Network, NETWORK } from '@@constants/network.constant';
 import { GAS_LEVEL } from '@@constants/transaction.constant';
@@ -44,13 +44,11 @@ export interface IGasService {
     selectedNetwork,
     to,
     value,
-    tokenDto,
-    walletIndex,
+    data,
   }: {
     selectedNetwork: Network;
     to: string;
     value: BigNumber;
-    tokenDto: TokenDto;
-    walletIndex: number;
+    data?: BytesLike;
   }) => Promise<BigNumber>;
 }

@@ -109,19 +109,7 @@ export class GasServiceImpl implements IGasService {
     return GAS_LEVEL_SETTING[gasLevel].waitTime;
   };
 
-  estimateGas = async ({
-    selectedNetwork,
-    to,
-    value,
-    tokenDto,
-    walletIndex,
-  }: {
-    selectedNetwork: Network;
-    to: string;
-    value?: BigNumber;
-    tokenDto: TokenDto;
-    walletIndex: number;
-  }) => {
+  estimateGas = async ({ selectedNetwork, to, value, data }: { selectedNetwork: Network; to: string; value?: BigNumber; data?: BytesLike }) => {
     const network = getNetworkConfig(selectedNetwork);
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
@@ -132,11 +120,10 @@ export class GasServiceImpl implements IGasService {
         const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({ rpcUrl: network.rpcUrl, to, amount: valueTezos });
         return parseUnits(gasUsageTezos.consumedMilligas.toString(), 'gwei');
       default:
-        if (tokenDto.contractAddress) {
+        if (data) {
           if (!value) {
             throw new Error('need value');
           }
-          const data = await this.transactionService.encodeTransferData(walletIndex, network.bip44, to, value);
           return await this.gasRepository.estimateGas({ networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId }, data });
         } else {
           return await this.gasRepository.estimateGas({ networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId }, to, value });
