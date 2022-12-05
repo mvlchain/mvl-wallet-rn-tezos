@@ -9,9 +9,8 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
-import { NETWORK_CONFIGS } from '@@constants/network.constant';
+import { COIN_DTO, NETWORK_CONFIGS } from '@@constants/network.constant';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
-import { TTokenSendRouteProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { width } from '@@utils/ui';
@@ -23,9 +22,8 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
   const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
   const { settedCurrency } = settingPersistStore();
-  const { params } = useRoute<TTokenSendRouteProps>();
-  const { price } = useOneTokenPrice(params.tokenDto, transactionFee);
   const coin = NETWORK_CONFIGS[selectedNetwork].coin;
+  const { price } = useOneTokenPrice(COIN_DTO[coin], transactionFee);
   return (
     <S.Container>
       <View>

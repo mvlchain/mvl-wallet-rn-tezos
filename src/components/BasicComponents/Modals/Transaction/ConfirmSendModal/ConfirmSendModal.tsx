@@ -1,13 +1,18 @@
 import React from 'react';
 
-import { formatEther } from 'ethers/lib/utils';
+import Decimal from 'decimal.js';
+import { formatEther, formatUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
+import { COIN_DTO, getNetworkConfig } from '@@constants/network.constant';
+import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { height } from '@@utils/ui';
 
 import { MODAL_TYPES } from '../../GlobalModal';
@@ -15,10 +20,20 @@ import { MODAL_TYPES } from '../../GlobalModal';
 import * as S from './ConfirmSendModal.style';
 import { IConfirmSendModalProps } from './ConfirmSendModal.type';
 
-function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm }: IConfirmSendModalProps) {
+function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }: IConfirmSendModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
-  const { to, value } = transactionRequestStore();
+  const { selectedNetwork } = walletPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
+  const { settedCurrency } = settingPersistStore();
+
+  const { price: tokenPrice } = useOneTokenPrice(tokenDto, formatEther(amount));
+  const { price: coinPrice } = useOneTokenPrice(COIN_DTO[network.coin], formatEther(fee));
+  const tokenPriceInDeciaml = new Decimal(tokenPrice);
+  const coinPriceInDecimal = new Decimal(coinPrice);
+
+  const feeAmountTotal = tokenPriceInDeciaml.add(coinPriceInDecimal);
+
   return (
     <ModalLayout
       title={t('confirm_send')}
@@ -34,29 +49,29 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm }: IConfirm
     >
       <S.TopContainer>
         <S.GreyText>{'Recipient Address'}</S.GreyText>
-        <S.LargeBlackText>{to}</S.LargeBlackText>
+        <S.LargeBlackText>{recipientAddress}</S.LargeBlackText>
       </S.TopContainer>
       <S.MiddleContainer>
         <S.Row>
           <S.BlackText> {t('send_amount')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{value && `${formatEther(value)} MVL`}</S.BlackText>
-            <S.GreyText>{'dsfdsfsadfsaf USD'}</S.GreyText>
+            <S.BlackText>{amount && `${formatEther(amount)} ${tokenDto.symbol}`}</S.BlackText>
+            <S.GreyText>{`${tokenPrice} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
         <S.Row style={{ marginBottom: height * 16 }}>
           <S.BlackText>{t('transaction_fee')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{fee && `${formatEther(fee)} ETH`}</S.BlackText>
-            <S.GreyText>{'dsfdsfsadfsaf USD'}</S.GreyText>
+            <S.BlackText>{fee && `${formatEther(fee)} ${network.coin}`}</S.BlackText>
+            <S.GreyText>{`${coinPrice} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
         <Divider thickness={DIVIDER_THICKNESS.THIN} />
         <S.Row>
           <S.BlackText>{t('total')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{value && fee && `${formatEther(value)} MVL + ${formatEther(fee)}ETH`}</S.BlackText>
-            <S.GreyText>{'d205465 USD'}</S.GreyText>
+            <S.BlackText>{amount && fee && `${formatEther(amount)} ${tokenDto.symbol} + ${formatEther(fee)} ${network.coin}`}</S.BlackText>
+            <S.GreyText>{`${feeAmountTotal.toString()} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
       </S.MiddleContainer>
