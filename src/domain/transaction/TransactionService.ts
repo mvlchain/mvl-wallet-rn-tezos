@@ -1,19 +1,18 @@
 import '@ethersproject/shims';
-import { TransactionRequest } from '@ethersproject/abstract-provider';
+
 import { BigNumber, ethers } from 'ethers';
-import { BytesLike, formatUnits } from 'ethers/lib/utils';
+import { formatUnits, formatEther } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, Network, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request } from '@@utils/request';
 
-import { ITransactionService, TTransactionStatus, TTransactionType, IGetHistoryParams } from './TransactionService.type';
+import { ITransactionService, IGetHistoryParams, ISendTransactionRequest } from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
-
 @injectable()
 export class TransactionService implements ITransactionService {
   constructor(
@@ -23,82 +22,70 @@ export class TransactionService implements ITransactionService {
   ) {}
 
   encodeTransferData = async (index: number, bip44: number, to: string, value: BigNumber) => {
-    const wallet = await this.walletService.getWalletInfo({ index, bip44 });
-    const from = wallet.address;
-    const etherInterface = new ethers.utils.Interface(abiERC20);
-    const data = etherInterface.encodeFunctionData('Transfer', [from, to, value]);
-    return data;
+    try {
+      const wallet = await this.walletService.getWalletInfo({ index, bip44 });
+      const from = wallet.address;
+      const etherInterface = new ethers.utils.Interface(abiERC20);
+      const data = etherInterface.encodeFunctionData('Transfer', [from, to, value]);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  sendTransaction = async ({
-    selectedNetwork,
-    selectedWalletIndex,
-    gasFeeInfo,
-    to,
-    from,
-    value,
-    data,
-  }: {
-    selectedNetwork: Network;
-    selectedWalletIndex: number;
-    gasFeeInfo: {
-      baseFee: BigNumber;
-      tip?: BigNumber;
-      gasLimit: BigNumber;
-    };
-    to: string;
-    from?: BigNumber;
-    value: BigNumber;
-    data?: BytesLike | null;
-  }): Promise<string> => {
-    const network = getNetworkConfig(selectedNetwork);
-    const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
-    switch (network.networkFeeType) {
-      case NETWORK_FEE_TYPE.TEZOS:
-        if (!gasFeeInfo.tip) {
-          throw new Error('tip is required');
-        }
-        const fee = parseFloat(formatUnits(gasFeeInfo.tip));
-        const amount = parseFloat(formatUnits(value));
-        return this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
-      case NETWORK_FEE_TYPE.EIP1559:
-        if (data) {
-          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-            to,
-            chainId: network.chainId,
-            maxFeePerGas: gasFeeInfo.baseFee,
-            maxPriorityFeePerGas: gasFeeInfo.tip,
-            gasLimit: gasFeeInfo.gasLimit,
-            data,
-          });
-        } else {
-          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-            to,
-            chainId: network.chainId,
-            maxFeePerGas: gasFeeInfo.baseFee,
-            maxPriorityFeePerGas: gasFeeInfo.tip,
-            gasLimit: gasFeeInfo.gasLimit,
-            value,
-          });
-        }
-      default:
-        if (data) {
-          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-            to,
-            chainId: network.chainId,
-            gasPrice: gasFeeInfo.baseFee,
-            gasLimit: gasFeeInfo.gasLimit,
-            data,
-          });
-        } else {
-          return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-            to,
-            chainId: network.chainId,
-            gasPrice: gasFeeInfo.baseFee,
-            gasLimit: gasFeeInfo.gasLimit,
-            value,
-          });
-        }
+  sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data }: ISendTransactionRequest) => {
+    try {
+      const network = getNetworkConfig(selectedNetwork);
+      const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
+      switch (network.networkFeeType) {
+        case NETWORK_FEE_TYPE.TEZOS:
+          if (!gasFeeInfo.tip || !value || !to) {
+            throw new Error('tip,value,to is required');
+          }
+          const fee = parseFloat(formatUnits(gasFeeInfo.tip));
+          const amount = parseFloat(formatUnits(value));
+          return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
+        case NETWORK_FEE_TYPE.EIP1559:
+          if (data) {
+            return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+              chainId: network.chainId,
+              maxFeePerGas: gasFeeInfo.baseFee,
+              maxPriorityFeePerGas: gasFeeInfo.tip,
+              gasLimit: gasFeeInfo.gasLimit,
+              to,
+              data,
+            });
+          } else {
+            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+              chainId: network.chainId,
+              maxFeePerGas: gasFeeInfo.baseFee,
+              maxPriorityFeePerGas: gasFeeInfo.tip,
+              gasLimit: gasFeeInfo.gasLimit,
+              to,
+              value,
+            });
+          }
+        default:
+          if (data) {
+            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+              chainId: network.chainId,
+              gasPrice: gasFeeInfo.baseFee,
+              gasLimit: gasFeeInfo.gasLimit,
+              to,
+              data,
+            });
+          } else {
+            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+              chainId: network.chainId,
+              gasPrice: gasFeeInfo.baseFee,
+              gasLimit: gasFeeInfo.gasLimit,
+              to,
+              value,
+            });
+          }
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -116,48 +103,3 @@ export class TransactionService implements ITransactionService {
     }
   };
 }
-
-const mockData = [
-  {
-    type: TTransactionType.SEND_ETH,
-    status: TTransactionStatus.SUCCESS,
-    from: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
-    to: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
-    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e759f',
-    value: '15',
-    fee: '0.04',
-    updatedAt: '2022-01-20T12:01:30.543Z',
-    ticker: 'ETH',
-    blockNumber: 2147483647,
-    index: 2147483647,
-    nonce: 0,
-  },
-  {
-    type: TTransactionType.SEND_ETH,
-    status: TTransactionStatus.PENDING,
-    to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
-    from: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
-    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb78e',
-    value: '15',
-    fee: '0.04',
-    updatedAt: '2022-01-20T12:01:30.543Z',
-    ticker: 'ETH',
-    blockNumber: 2147483647,
-    index: 2147483647,
-    nonce: 0,
-  },
-  {
-    type: TTransactionType.SEND_ETH,
-    status: TTransactionStatus.FAIL,
-    to: '0xAEa73293569cf1e4CA314d44b0DE3f648A76a173',
-    from: '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d',
-    hash: '0x6e7bde8ca2d601bd2fac793c68b3f82317ee64d9a71d069a216aef4cb',
-    value: '15',
-    fee: '0.04',
-    updatedAt: '2022-01-20T12:01:30.543Z',
-    ticker: 'ETH',
-    blockNumber: 2147483647,
-    index: 2147483647,
-    nonce: 0,
-  },
-];

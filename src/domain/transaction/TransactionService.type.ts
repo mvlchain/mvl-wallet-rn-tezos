@@ -73,7 +73,15 @@ export interface ISendTransactionRequest {
   data?: BytesLike | null;
 }
 export interface ITransactionService {
-  encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike>;
-  sendTransaction: ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, from, value, data }: ISendTransactionRequest) => Promise<string>;
+  encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike | undefined>;
+  sendTransaction: ({
+    selectedNetwork,
+    selectedWalletIndex,
+    gasFeeInfo,
+    to,
+    from,
+    value,
+    data,
+  }: ISendTransactionRequest) => Promise<string | undefined>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
 }

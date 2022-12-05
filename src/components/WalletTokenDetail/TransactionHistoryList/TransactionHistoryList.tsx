@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
@@ -28,7 +29,7 @@ function TransactionHistoryList() {
           disabled={false}
         />
       </S.TransactionHistoryLabelWrapper>
-      {filteredData ? (
+      {filteredData && filteredData.length > 0 ? (
         <FlatList
           data={filteredData}
           renderItem={({ item }) => <TransactionHistoryListItem {...item} />}
