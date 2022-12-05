@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
-import { getNetworkConfig, NETWORK_ID } from '@@constants/network.constant';
+import { getNetworkConfig, Network, NetworkId, NETWORK_ID } from '@@constants/network.constant';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
@@ -8,17 +8,18 @@ import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
 
-import { IWallet, IWalletClient } from '../clients/walletClient.type';
+import { IWallet, IWalletClient } from '../clients/WalletClient.type';
 
-import { ICreateWalletBody, IGetWalletInfoParam, IGetWalletPKeyParam } from './WalletService.type';
+import * as Type from './WalletService.type';
 
 export interface WalletService {
+  walletClient: Type.IServiceWalletClient;
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
-  getWalletInfo(param: IGetWalletInfoParam): Promise<IWallet>;
+  getWalletInfo(param: Type.IGetWalletInfoParam): Promise<IWallet>;
   getWalletList(): Promise<WalletDto[]>;
-  createWallet(body: ICreateWalletBody): Promise<WalletResponseDto>;
-  getWalletPKey(param: IGetWalletPKeyParam): Promise<string>;
+  createWallet(body: Type.ICreateWalletBody): Promise<WalletResponseDto>;
+  getWalletPKey(param: Type.IGetWalletPKeyParam): Promise<string>;
 }
 
 /**
@@ -26,13 +27,34 @@ export interface WalletService {
  */
 @injectable()
 export class WalletServiceImpl implements WalletService {
+  walletClient: Type.IServiceWalletClient;
   constructor(
     @inject('WalletRepository') private walletRepository: WalletRepository,
     @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository,
     @inject('KeyClient') private keyClient: KeyClient,
     @inject('EhtersClient') private ehtersClient: IWalletClient,
     @inject('TezosClient') private tezosClient: IWalletClient
-  ) {}
+  ) {
+    // TODO: Object로 가져갈지 함수로 가져갈지 고민중입니다.
+    this.walletClient = {
+      [NETWORK_ID.ETHEREUM]: this.ehtersClient,
+      [NETWORK_ID.BSC]: this.ehtersClient,
+      [NETWORK_ID.XTZ]: this.tezosClient,
+    };
+  }
+
+  // 함수로 가져갔을 경우
+  // setWallet = (networkId: NetworkId) => {
+  //   switch (networkId) {
+  //     case NETWORK_ID.ETHEREUM:
+  //     case NETWORK_ID.BSC:
+  //       return this.ehtersClient;
+  //     case NETWORK_ID.XTZ:
+  //       return this.tezosClient;
+  //     default:
+  //       return this.ehtersClient;
+  //   }
+  // };
 
   /**
    * Get an extended public key by KeyChain credentials
@@ -64,19 +86,14 @@ export class WalletServiceImpl implements WalletService {
     return await Clutch.signMessageByExtendedKeyPair(extendedKeyPair, message, timestampInMs);
   };
 
-  getWalletInfo = async ({ index, network }: IGetWalletInfoParam) => {
-    let walletClient: IWalletClient = this.ehtersClient;
+  getWalletInfo = async ({ index, network }: Type.IGetWalletInfoParam) => {
     // TODO: Client를 선택할 때 각 함수에서 하는게 별로다. 어떻게 해야할까?
     const networkId = getNetworkConfig(network).networkId;
-    if (networkId === NETWORK_ID.ETHEREUM || networkId === NETWORK_ID.BSC) {
-      walletClient = this.ehtersClient;
-    } else if (networkId === NETWORK_ID.XTZ) {
-      walletClient = this.tezosClient;
-    }
-    const wallet = walletClient.wallet;
+    const client = this.walletClient[networkId];
+    const wallet = client.wallet;
     const pKey = await this.keyClient.getPrivateKey();
-    const derivePath = walletClient.getDerivePath(index);
-    await walletClient.createWalletWithEntropy(pKey, derivePath);
+    const derivePath = client.getDerivePath(index);
+    await client.createWalletWithEntropy(pKey, derivePath);
     return wallet;
   };
 
@@ -88,7 +105,7 @@ export class WalletServiceImpl implements WalletService {
     return this.walletRepository.getWallets(xpub);
   };
 
-  createWallet = async ({ index, network }: ICreateWalletBody): Promise<WalletResponseDto> => {
+  createWallet = async ({ index, network }: Type.ICreateWalletBody): Promise<WalletResponseDto> => {
     const wallet = await this.getWalletInfo({ index, network });
     return this.walletRepository.registerWallet({
       network: getNetworkConfig(network).networkId,
@@ -98,8 +115,10 @@ export class WalletServiceImpl implements WalletService {
     });
   };
 
-  getWalletPKey = async ({ index, network }: IGetWalletPKeyParam) => {
+  getWalletPKey = async ({ index, network }: Type.IGetWalletPKeyParam) => {
     const wallet = await this.getWalletInfo({ index, network });
     return wallet.privateKey;
   };
+
+  setWalletClient = (network: Network) => {};
 }
