@@ -6,7 +6,7 @@ import { injectable } from 'tsyringe';
 
 import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
 
-import { IWalletClient, IWallet } from './walletClient.type';
+import { IWalletClient, IWallet } from './WalletClient.type';
 
 @injectable()
 export class TezosClient implements IWalletClient {
