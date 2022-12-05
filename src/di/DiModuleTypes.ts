@@ -9,7 +9,7 @@ import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRep
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
-import { IWalletClient } from '@@domain/wallet/clients/walletClient.type';
+import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import { ContractRepository } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { ContractService } from '@@domain/wallet/services/WalletBlockChainService';
