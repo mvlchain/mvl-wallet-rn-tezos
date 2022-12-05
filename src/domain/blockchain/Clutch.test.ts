@@ -14,33 +14,6 @@ const PRIVATE_KEY = '9ccef3bb3a34182dfd138e101997bdf1770a3b92aeb525cfed548ace0bd
 const MNEMONIC =
   'antenna guess solve guard cross scrap leg check three art galaxy sail jacket fade tool frost false tree relief mule sock future rail abuse';
 
-it('create a wallet with string type entropy, no hex prefix, no zero padding', () => {
-  const wallet = Clutch.createWalletWithEntropy(PRIVATE_KEY, "m/44'/60'/0'/0/0");
-
-  expect(wallet.address).toBe('0x42D1AD80F2E09B51146b4E7F91C80ee803f5DFe5');
-});
-
-it('create a wallet with string type entropy, hex prefix, no zero padding', () => {
-  const entropy = `0x${PRIVATE_KEY}`;
-  const wallet = Clutch.createWalletWithEntropy(entropy, "m/44'/60'/0'/0/0");
-
-  expect(wallet.address).toBe('0x42D1AD80F2E09B51146b4E7F91C80ee803f5DFe5');
-});
-
-it('create a wallet with string type entropy, hex prefix, zero padding', () => {
-  const entropy = `0x0${PRIVATE_KEY}`;
-  const wallet = Clutch.createWalletWithEntropy(entropy, "m/44'/60'/0'/0/0");
-
-  expect(wallet.address).toBe('0x42D1AD80F2E09B51146b4E7F91C80ee803f5DFe5');
-});
-
-it('create a wallet with mnemonic phrase and derivation path', () => {
-  // keyDerivationPath(ETHEREUM, 0) == "m/44'/60'/0'/0/0"
-  const wallet = Clutch.createWalletWithMnemonic(MNEMONIC, keyDerivationPath(ETHEREUM, 0));
-
-  expect(wallet.address).toBe('0x42D1AD80F2E09B51146b4E7F91C80ee803f5DFe5');
-});
-
 it('create extended KeyPair, BIP32 RootKey', () => {
   const entropy = `0x0${PRIVATE_KEY}`;
   const extendedKeyPair = Clutch.extendedKeyPair(entropy, 'm');
@@ -160,114 +133,19 @@ describe('Tezos base methods', () => {
     expect(tzAddress0).toBe('tz1iACqtM523s3R1da5JSTXN2hBbAFYSWE4o');
 
     return;
-    // get Tezos coin balance
-    const tzBalance = await Tezos.tz.getBalance(tzAddress0);
-    // console.log(tzBalance.toFixed());
-
-    // fa2.0 token balance
-    const fa2TokenContractAddress = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'; // QUIPU
-    const fa2TokenContract = await Tezos.wallet.at(fa2TokenContractAddress);
-    const balance = await fa2TokenContract.views
-      .balance_of([
-        {
-          owner: tzAddress0,
-          token_id: 0,
-        },
-      ])
-      .read();
-    const fa2BalanceRes = JSON.parse(JSON.stringify(balance));
-    // const fa2BalanceRes = [
-    //   {
-    //     request: { owner: 'tz1SPsMFyXYdn7n3483AULz72kwn36tAP9vX', token_id: '0' },
-    //     balance: '4410043',
-    //   },
-    // ];
-    console.log(fa2BalanceRes);
-
-    const fa2BalanceStr = fa2BalanceRes[0].balance;
-    console.log(fa2BalanceStr);
-    // 4410043 -> 4.410043 (decimal 6)
-
-    // fa1.2
-    // const fa1_2TokenContractAddress = 'KT1Wdq6sj3ZkNqQ7CeE6kTNbJXfobMX7Eqpz'; // tzBTC
-    const fa1_2TokenContractAddress = 'KT1GG8Zd5rUp1XV8nMPRBY2tSyVn6NR5F4Q1'; // kUSD
-    // const fa1_2TokenContractAddress = 'KT1QzmrMs1xUXZJ8TPAoDEFaKC6w56RfdLWo'; // USDtz
-
-    const fa1_2TokenContract = await Tezos.wallet.at(fa1_2TokenContractAddress, compose(tzip12, tzip16));
-    const fa1Balance = await fa1_2TokenContract.views.getBalance(tzAddress0).read();
-    console.log(fa1Balance.toFixed());
     // 195123 -> 0.0019512 (decimal 8)
     // 33049843457497740 -> 0.0330498 (decimal 18)
   });
 
   it('send tezos', async () => {
     return;
-    const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
-    const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);
-    expect(mnemonicToSeed.length).toBe(64);
-    const keyPair = tezosCrypto.hd.keyPairFromAccountIndex(mnemonicToSeed, 0);
-    await importKey(Tezos, keyPair.sk);
-
-    const txHash = await Tezos.wallet
-      .transfer({
-        to: tzDestAddress,
-        amount: 0.1, // in TEZ unit (not muTez)
-      })
-      .send()
-      .then((op) => op.confirmation(1).then(() => op.opHash));
-    console.log(`txHash: ${txHash}`);
   });
 
   it('send fa2 token', async () => {
     return;
-    jest.setTimeout(50000);
-
-    const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
-    Tezos.addExtension(new Tzip12Module());
-    const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);
-    expect(mnemonicToSeed.length).toBe(64);
-    const keyPair = tezosCrypto.hd.keyPairFromAccountIndex(mnemonicToSeed, 0);
-    const tzAddress0 = keyPair.pkh;
-    await importKey(Tezos, keyPair.sk);
-
-    const fa2TokenContractAddress = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'; // QUIPU
-    const fa2TokenContract = await Tezos.wallet.at(fa2TokenContractAddress, tzip12);
-    console.log('before transfer');
-    const metadata = await fa2TokenContract.tzip12().getTokenMetadata(0);
-    console.log(`metadata`, metadata);
-    const tokenId = metadata.token_id;
-    const decimals = metadata.decimals;
-    const tokenAmount = '1';
-    const pennyAmount = new Decimal(tokenAmount).mul(Decimal.pow(10, decimals)).toFixed();
-    const op = await fa2TokenContract.methods
-      .transfer([{ from_: tzAddress0, txs: [{ to_: tzDestAddress, token_id: tokenId, amount: pennyAmount }] }])
-      .send();
-    console.log('op send finished');
-    await op.confirmation();
-    console.log(op.opHash);
   });
 
   it('send fa1.2 token', async () => {
     return;
-    const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
-    Tezos.addExtension(new Tzip12Module());
-    const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);
-    expect(mnemonicToSeed.length).toBe(64);
-    const keyPair = tezosCrypto.hd.keyPairFromAccountIndex(mnemonicToSeed, 0);
-    const tzAddress0 = keyPair.pkh;
-    await importKey(Tezos, keyPair.sk);
-
-    const fa1_2TokenContractAddress = 'KT1GG8Zd5rUp1XV8nMPRBY2tSyVn6NR5F4Q1'; // kUSD
-    const fa1_2TokenContract = await Tezos.wallet.at(fa1_2TokenContractAddress, tzip12);
-    console.log('before transfer');
-    const metadata = await fa1_2TokenContract.tzip12().getTokenMetadata(0);
-    console.log(`metadata`, metadata);
-    const decimals = metadata.decimals;
-    const tokenAmount = '0.01';
-    const pennyAmount = new Decimal(tokenAmount).mul(Decimal.pow(10, decimals)).toFixed();
-    const op = await fa1_2TokenContract.methods.transfer(tzAddress0, tzDestAddress, pennyAmount).send();
-    console.log('op send finished');
-    await op.confirmation();
-    console.log(op.opHash);
   });
 });
