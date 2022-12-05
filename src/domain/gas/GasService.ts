@@ -3,7 +3,6 @@ import { injectable, inject } from 'tsyringe';
 import '@ethersproject/shims';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
-import { TransactionService } from '@@domain/transaction/TransactionService';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import { IGasService, TGasLevel } from './GasService.type';
@@ -19,8 +18,7 @@ export class GasServiceImpl implements IGasService {
   constructor(
     @inject('GasRepository') private gasRepository: GasRepositoryImpl,
     @inject('GasRepositoryEip1559') private gasRepositoryEip1559: GasRepositoryEip1559Impl,
-    @inject('GasRepositoryTezos') private gasRepositoryTezos: GasRepositoryTezosImpl,
-    @inject('TransactionService') private transactionService: TransactionService
+    @inject('GasRepositoryTezos') private gasRepositoryTezos: GasRepositoryTezosImpl
   ) {}
 
   getGasFeeData = async (selectedNetwork: Network) => {
@@ -62,7 +60,7 @@ export class GasServiceImpl implements IGasService {
     selectedNetwork: Network;
     baseFee?: BigNumber;
     tip?: BigNumber | null;
-    estimatedGas: BigNumber;
+    estimatedGas: BigNumber | null;
     gasLevel?: TGasLevel;
     gasLimit?: BigNumber | null;
   }) => {
@@ -82,11 +80,11 @@ export class GasServiceImpl implements IGasService {
         return this.gasRepositoryTezos.getTotalGasFee({ tip: tipTezos, estimatedGas: estimatedGasTezos, gasLevel });
 
       case NETWORK_FEE_TYPE.EIP1559:
-        if (!tip || !baseFee) {
+        if (!tip || !baseFee || !estimatedGas) {
           throw new Error(
             `Current network has Eip1559 network fee type, 
-             So tip and baseFee parameter is required 
-             which means maxPriorityPerGas and gasPrice per gas in ethersjs`
+             So tip and baseFee, estimatedGas parameter is required 
+             which means maxPriorityPerGas and gasPrice per gas and gasUsage in ethersjs`
           );
         }
         return this.gasRepositoryEip1559.getTotalGasFee({

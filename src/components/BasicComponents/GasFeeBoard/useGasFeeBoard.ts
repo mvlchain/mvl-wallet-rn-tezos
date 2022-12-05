@@ -4,7 +4,7 @@ import { networks } from 'bitcoinjs-lib';
 import { BigNumber } from 'ethers';
 import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
@@ -92,7 +92,8 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   const transactionFee = useMemo(() => {
     if (advanced) {
-      if (!customBaseFee || !estimatedGas) return '-';
+      if (!customBaseFee) return '-';
+      if (network.networkFeeType !== NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !estimatedGas) return '-';
       return gasService.getTotalGasFee({
         selectedNetwork,
         baseFee: customBaseFee,
@@ -101,8 +102,8 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
         estimatedGas,
       });
     } else {
-      if (!baseFee || !estimatedGas) return '-';
-      console.log(formatEther(baseFee), formatEther(gasLimit));
+      if (!baseFee) return '-';
+      if (network.networkFeeType !== NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !estimatedGas) return '-';
       return gasService.getTotalGasFee({
         selectedNetwork,
         baseFee,

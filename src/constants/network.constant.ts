@@ -1,3 +1,4 @@
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { valueOf } from '@@utils/types';
 
 export const NETWORK = {
@@ -125,3 +126,23 @@ export const getNetworkName = (isMainnet: boolean, network: Network) => {
 };
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
+
+//TODO: 네트워크 코인들의 경우 이렇게말고 list받아올때 contranctaddress가없는 코인을 어떻게 같이 넘겨주는 방법 고민..
+export const COIN_DTO: Record<string, TokenDto> = {
+  BNB: {
+    symbol: 'BNB',
+    name: 'BNB',
+    decimals: 18,
+    contractAddress: null,
+    logoURI: 'https://exchange.biswap.org/images/coins/bnb.svg',
+    priceId: 'binancecoin',
+  },
+  ETH: {
+    symbol: 'ETH',
+    name: 'Ethereum Token',
+    decimals: 18,
+    contractAddress: null,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/eth.svg',
+    priceId: 'ethereum',
+  },
+};
