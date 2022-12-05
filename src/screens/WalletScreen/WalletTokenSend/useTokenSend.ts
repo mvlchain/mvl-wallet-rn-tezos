@@ -1,29 +1,34 @@
 import { useEffect } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
+import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import { ISendTransactionRequest } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
-import 'reflect-metadata';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+
+import { TTransactionResultRootStackProps } from '../WalletTransactionResult/WalletTransactionResult.type';
 
 const useTokenSend = (tokenDto: TokenDto) => {
   const transactionService = useDi('TransactionService');
 
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
-  const { setState: pinSet } = pinStore;
+  const { openModal, closeModal } = globalModalStore();
+  const { setState: pinSet } = pinStore();
 
   const network = getNetworkConfig(selectedNetwork);
-  const { openModal, closeModal } = globalModalStore();
-
+  const navigation = useNavigation<TTransactionResultRootStackProps>();
   useEffect(() => {
     resetBody();
   }, []);
@@ -32,7 +37,15 @@ const useTokenSend = (tokenDto: TokenDto) => {
     setData();
   }, [to, value]);
 
-  //TODO: 뒤로가기할때 resetBody로 없애기
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', clearSendInput);
+    return () => backHandler.remove();
+  }, []);
+
+  const clearSendInput = () => {
+    resetBody();
+    return true;
+  };
 
   const setAddress = (address: string) => {
     setBody({ to: address });
@@ -53,39 +66,46 @@ const useTokenSend = (tokenDto: TokenDto) => {
     }
   };
 
+  //show confirm modal
   const confirm = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
     if (!to || !value) return;
     openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress: to, amount: value, fee: total, tokenDto, onConfirm: send(gasFeeInfo) });
   };
 
+  //send transaction
   const send = (gasFeeInfo: { baseFee: BigNumber; tip?: BigNumber; gasLimit: BigNumber }) => {
     if (!to || !value) {
       throw new Error('to address and value is required');
     }
     closeModal();
     return async () => {
-      let pinModalResolver, pinModalRejector;
-      const pinModalObserver = new Promise((resolve, reject) => {
-        pinModalResolver = resolve;
-        pinModalRejector = reject;
-      });
-      pinSet({ pinMode: PIN_MODE.CONFIRM, layout: PIN_LAYOUT.MODAL, pinModalResolver, pinModalRejector });
-      openModal('CONFIRM_TX_PIN', undefined);
       try {
+        //pinmode setting
+        let pinModalResolver, pinModalRejector;
+        const pinModalObserver = new Promise((resolve, reject) => {
+          pinModalResolver = resolve;
+          pinModalRejector = reject;
+        });
+        pinSet({ pinMode: PIN_MODE.CONFIRM, layout: PIN_LAYOUT.MODAL, pinModalResolver, pinModalRejector });
+        openModal('CONFIRM_TX_PIN', undefined);
         await pinModalObserver;
-        closeModal();
-        await transactionService.sendTransaction({
+        const request: ISendTransactionRequest = {
           selectedNetwork,
           selectedWalletIndex: selectedWalletIndex[selectedNetwork],
           gasFeeInfo,
-          to,
-          value,
-          data,
-        });
+        };
+        if (selectedNetwork !== NETWORK.TEZOS && selectedNetwork !== NETWORK.TEZOS_GHOSTNET && tokenDto.contractAddress) {
+          request.data = data;
+        } else {
+          request.to = to;
+          request.value = value;
+        }
+        await transactionService.sendTransaction(request);
+        closeModal();
         resetBody();
-        //goto result(result)
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
       } catch (err) {
-        //goto result(result)
+        //TODO: 무슨 처리를 해줘야하지?
       }
     };
   };

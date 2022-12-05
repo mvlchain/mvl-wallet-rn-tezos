@@ -30,6 +30,7 @@ export type TRootStackParamList = {
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
   WALLET_SCAN_QR: undefined;
+  WALLET_TRANSACTION_RESULT: undefined;
 };
 
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
@@ -54,6 +55,7 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   WALLET_TRANSACTION_SPEED_UP: 'WALLET_TRANSACTION_SPEED_UP',
   WALLET_TRANSACTION_CANCEL: 'WALLET_TRANSACTION_CANCEL',
   WALLET_SCAN_QR: 'WALLET_SCAN_QR',
+  WALLET_TRANSACTION_RESULT: 'WALLET_TRANSACTION_RESULT',
 } as const;
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;

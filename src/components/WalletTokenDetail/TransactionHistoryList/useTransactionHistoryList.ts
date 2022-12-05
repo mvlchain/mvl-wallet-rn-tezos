@@ -12,8 +12,6 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 
-import 'reflect-metadata';
-
 const useTransactionHistoryList = () => {
   const { params } = useRoute<TTokenDetailRouteProps>();
   const walletService = useDi('WalletService');

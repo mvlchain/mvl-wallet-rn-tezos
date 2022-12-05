@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
@@ -31,6 +32,7 @@ import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
 import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
 import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
+import WalletTransactionResult from '@@screens/WalletScreen/WalletTransactionResult';
 import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
 import { fontSize, height } from '@@utils/ui';
 
@@ -151,6 +153,10 @@ function RootStack() {
       component: WalletScanQR,
       options: handleStackHeaderOption({ title: t('scan_qr_code') }),
     },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
+      component: WalletTransactionResult,
+    },
   ];
 
   return (
@@ -187,5 +193,4 @@ function RootStack() {
   );
 }
 
-// eslint-disable-next-line max-lines
 export default RootStack;

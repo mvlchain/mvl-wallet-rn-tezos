@@ -63,25 +63,17 @@ export interface ITransaction {
   estimateGasError?: string;
 }
 
+export interface ISendTransactionRequest {
+  selectedNetwork: Network;
+  selectedWalletIndex: number;
+  gasFeeInfo: IGasFeeInfo;
+  to?: string;
+  from?: BigNumber;
+  value?: BigNumber;
+  data?: BytesLike | null;
+}
 export interface ITransactionService {
   encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike>;
-  sendTransaction: ({
-    selectedNetwork,
-    selectedWalletIndex,
-    gasFeeInfo,
-    to,
-    from,
-    value,
-    data,
-  }: {
-    selectedNetwork: Network;
-    selectedWalletIndex: number;
-    gasFeeInfo: IGasFeeInfo;
-    to: string;
-    from?: BigNumber;
-    value: BigNumber;
-    data?: BytesLike | null;
-  }) => Promise<string>;
-
+  sendTransaction: ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, from, value, data }: ISendTransactionRequest) => Promise<string>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
 }

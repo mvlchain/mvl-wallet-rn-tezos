@@ -6,7 +6,6 @@ export type TWalletStackParamList = {
   WALLET: undefined;
   WALLET_TOKEN_RECEIVE: undefined;
   WALLET_TOKEN_RECEIVE_SELECT: undefined;
-  WALLET_TRANSACTION_RESULT: undefined;
 };
 
 export type TWalletStackRouteType = Record<keyof TWalletStackParamList, keyof TWalletStackParamList>;
@@ -15,7 +14,6 @@ export const WALLET_STACK_ROUTE: TWalletStackRouteType = {
   WALLET: 'WALLET',
   WALLET_TOKEN_RECEIVE: 'WALLET_TOKEN_RECEIVE',
   WALLET_TOKEN_RECEIVE_SELECT: 'WALLET_TOKEN_RECEIVE_SELECT',
-  WALLET_TRANSACTION_RESULT: 'WALLET_TRANSACTION_RESULT',
 } as const;
 
 export type RouteName = valueOf<typeof WALLET_STACK_ROUTE>;
