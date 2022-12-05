@@ -1,5 +1,6 @@
 import { Curves, InMemorySigner } from '@taquito/signer';
 import { TezosToolkit } from '@taquito/taquito';
+import 'text-encoding-polyfill';
 import { b58cencode, Prefix, prefix } from '@taquito/utils';
 import { arrayify, entropyToMnemonic } from 'ethers/lib/utils';
 import { injectable } from 'tsyringe';
