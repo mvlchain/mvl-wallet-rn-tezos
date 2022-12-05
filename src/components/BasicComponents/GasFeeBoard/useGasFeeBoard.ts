@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 
+import { networks } from 'bitcoinjs-lib';
 import { BigNumber } from 'ethers';
 import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 
+import { getNetworkConfig } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
@@ -14,6 +16,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const gasService = useDi('GasService');
   const transactionService = useDi('TransactionService');
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
 
   //The setted value
   const [advanced, setAdvanced] = useState(false);
@@ -28,7 +31,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const [enableLimitCustom, setEnableLimitCustom] = useState<boolean>(true);
   const [maxBaseFee, setMaxBaseFee] = useState<BigNumber | null>(null);
   const [maxTip, setMaxTip] = useState<BigNumber | null>(null);
-  const [maxGasLimit, setMaxGasLimit] = useState<BigNumber | null>(null);
 
   //The values to be entered by the user
   const [customBaseFee, setCustomBaseFee] = useState<BigNumber | null>(null);
@@ -46,6 +48,10 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   }, [to, value]);
 
   useEffect(() => {
+    setTip(GAS_LEVEL_SETTING[gasLevel].tip);
+  }, [gasLevel]);
+
+  useEffect(() => {
     if (!advanced) return;
     //TODO: leveledBaseFee 입력하도록해야함 수정피료
     setCustomBaseFee(baseFee);
@@ -61,7 +67,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
     setGasLimit(gasFeeData.gasLimit ?? null);
     setMaxBaseFee(gasFeeData.maxBaseFee ?? null);
     setMaxTip(gasFeeData.maxTip ?? null);
-    setMaxGasLimit(gasFeeData.maxGasLimit ?? null);
   };
 
   const estimateGas = async () => {
@@ -92,19 +97,22 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
         selectedNetwork,
         baseFee: customBaseFee,
         tip: customTip,
+        gasLimit: customGasLimit,
         estimatedGas,
       });
     } else {
       if (!baseFee || !estimatedGas) return '-';
+      console.log(formatEther(baseFee), formatEther(gasLimit));
       return gasService.getTotalGasFee({
         selectedNetwork,
         baseFee,
         tip,
         estimatedGas,
+        gasLimit,
         gasLevel,
       });
     }
-  }, [advanced, gasLimit, gasLevel, gasLimit]);
+  }, [advanced, gasLimit, gasLevel, to, value, baseFee, tip, customBaseFee, customTip, customGasLimit, estimatedGas]);
 
   const toggleGasAdvanced = useCallback(() => {
     setAdvanced(!advanced);
@@ -112,6 +120,8 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   const onConfirmGasFee = async () => {
     if (!baseFee || !gasLimit) return;
+    if (network.networkFeeType) {
+    }
     onConfirm({ baseFee, tip, gasLimit }, parseUnits(transactionFee, 'ether'));
   };
 

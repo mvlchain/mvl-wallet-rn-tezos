@@ -30,12 +30,14 @@ export interface IGasService {
     tip,
     estimatedGas,
     gasLevel,
+    gasLimit,
   }: {
     selectedNetwork: Network;
     baseFee: BigNumber;
     tip?: BigNumber | null;
     estimatedGas: BigNumber;
     gasLevel?: TGasLevel;
+    gasLimit?: BigNumber | null;
   }) => string;
 
   getEstimateTime: (gasLevel: TGasLevel) => number;

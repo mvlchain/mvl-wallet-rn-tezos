@@ -31,12 +31,11 @@ export class GasServiceImpl implements IGasService {
         return { enableTip: true, enableLimitCustom: false };
       case NETWORK_FEE_TYPE.EIP1559:
         const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
-
         return {
           baseFee: gasFeeDataEip1559.lastBaseFeePerGas,
           enableTip: true,
           enableLimitCustom: true,
-          gasLimit: gasFeeDataEip1559.gasLimit,
+          gasLimit: BigNumber.from(21000),
           maxBaseFee: gasFeeDataEip1559.maxFeePerGas,
           maxTip: gasFeeDataEip1559.maxPriorityFeePerGas,
         };
@@ -47,7 +46,7 @@ export class GasServiceImpl implements IGasService {
           baseFee: gasFeeData.gasPrice,
           enableTip: false,
           enableLimitCustom: true,
-          gasLimit: gasFeeData.gasLimit,
+          gasLimit: BigNumber.from(21000),
         };
     }
   };
@@ -58,12 +57,14 @@ export class GasServiceImpl implements IGasService {
     tip,
     estimatedGas,
     gasLevel,
+    gasLimit,
   }: {
     selectedNetwork: Network;
     baseFee?: BigNumber;
     tip?: BigNumber | null;
     estimatedGas: BigNumber;
     gasLevel?: TGasLevel;
+    gasLimit?: BigNumber | null;
   }) => {
     const network = getNetworkConfig(selectedNetwork);
     switch (network.networkFeeType) {
@@ -95,13 +96,13 @@ export class GasServiceImpl implements IGasService {
           gasLevel,
         });
       default:
-        if (!baseFee) {
+        if (!baseFee || !gasLimit) {
           throw new Error(
             `Current network has legacy ethereum network fee type, 
              baseFee parameter is required which means gasPrice per gas in ethersjs`
           );
         }
-        return this.gasRepository.getTotalGasFee({ baseFee, estimatedGas, gasLevel });
+        return this.gasRepository.getTotalGasFee({ baseFee, gasLimit, gasLevel });
     }
   };
 

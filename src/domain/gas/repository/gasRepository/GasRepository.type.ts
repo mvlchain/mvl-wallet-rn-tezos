@@ -12,7 +12,7 @@ export interface IGasFeeInfoEthers {
 export interface IGetTotalGasFeeParamsEthers {
   gasLevel?: TGasLevel;
   baseFee: BigNumber;
-  estimatedGas: BigNumber;
+  gasLimit: BigNumber;
 }
 
 export interface IEstimateGasParams extends TransactionRequest {
