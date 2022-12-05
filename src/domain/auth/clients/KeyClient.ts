@@ -227,7 +227,7 @@ export class KeyClientImpl implements KeyClient {
     const privateKey = await this.getPrivateKey();
     const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(ETHEREUM));
     const derivePath = this.ethersClient.getDerivePath(0);
-    await this.ethersClient.createWalletWithEntropy(privateKey, derivePath);
+    const wallet = await this.ethersClient.createWalletWithEntropy(privateKey, derivePath);
 
     const restoreObj = {
       type: this.postboxKeyHolder.provider,
@@ -236,7 +236,7 @@ export class KeyClientImpl implements KeyClient {
       share: this.util.shareToShareJson(this.serverShare),
       identifier: this.postboxKeyHolder.providerUserIdentifier,
       pubKey: extendedKeyPair.xpub,
-      walletAddress0: this.ethersClient.wallet.address,
+      walletAddress0: wallet.address,
     };
     //identifier 프로퍼티 지워줘야하는지? setserver에서는 그냥 보냄
     if (this.postboxKeyHolder.provider === AUTH_PROVIDER.GOOGLE) {

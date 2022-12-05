@@ -26,20 +26,9 @@ const useWalletListModal = () => {
         isSelected: _selectedWalletIndex === index,
       } as unknown as IWalletListMenuProps;
     });
+
     setWallet(walletArr);
   }, [data, walletList, selectedNetwork, _selectedWalletIndex]);
-
-  useEffect(() => {
-    if (!wallet) return;
-    setWallet(
-      wallet?.map((val) => {
-        return {
-          ...val,
-          isSelected: val.index === _selectedWalletIndex,
-        };
-      })
-    );
-  }, [_selectedWalletIndex]);
 
   return { wallet };
 };

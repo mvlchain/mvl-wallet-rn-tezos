@@ -92,8 +92,8 @@ export class WalletServiceImpl implements WalletService {
     const client = this.walletClient[networkId];
     const pKey = await this.keyClient.getPrivateKey();
     const derivePath = client.getDerivePath(index);
-    await client.createWalletWithEntropy(pKey, derivePath);
-    return client.wallet;
+    const wallet = await client.createWalletWithEntropy(pKey, derivePath);
+    return wallet;
   };
 
   /**

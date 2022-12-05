@@ -10,17 +10,9 @@ import { IWalletClient, IWallet } from './WalletClient.type';
 
 @injectable()
 export class TezosClient implements IWalletClient {
-  wallet: IWallet;
-  constructor() {
-    // TODO: wallet 기본값 생각해보기
-    this.wallet = {
-      address: '',
-      publicKey: '',
-      privateKey: '',
-    };
-  }
+  constructor() {}
 
-  createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<void> => {
+  createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<IWallet> => {
     const Tezos = new TezosToolkit(getNetworkConfig(getNetworkName(false, NETWORK.TEZOS)).rpcUrl);
     if (derivePath) {
       /**
@@ -31,7 +23,7 @@ export class TezosClient implements IWalletClient {
        *  */
       const bytes = arrayify(entropy, { allowMissingPrefix: true, hexPad: 'left' });
       const mnemonic = entropyToMnemonic(bytes);
-      await this.createWalletWithMnemonic(mnemonic, derivePath);
+      return await this.createWalletWithMnemonic(mnemonic, derivePath);
     } else {
       const b58encodedSecret = b58cencode(entropy, prefix[Prefix.P2SK]);
       const signer = await InMemorySigner.fromSecretKey(b58encodedSecret);
@@ -43,11 +35,11 @@ export class TezosClient implements IWalletClient {
       const privateKey = await wallet.secretKey();
       if (!privateKey) throw new Error('No private key');
 
-      this.wallet = { address, publicKey, privateKey };
+      return { address, publicKey, privateKey };
     }
   };
 
-  createWalletWithMnemonic = async (mnemonic: string, derivePath?: string): Promise<void> => {
+  createWalletWithMnemonic = async (mnemonic: string, derivePath?: string): Promise<IWallet> => {
     const Tezos = new TezosToolkit(getNetworkConfig(getNetworkName(false, NETWORK.TEZOS)).rpcUrl);
 
     const params = {
@@ -65,7 +57,7 @@ export class TezosClient implements IWalletClient {
     const privateKey = await wallet.secretKey();
     if (!privateKey) throw new Error('No private key');
 
-    this.wallet = { address, publicKey, privateKey };
+    return { address, publicKey, privateKey };
   };
 
   getDerivePath = (index: number): string => {

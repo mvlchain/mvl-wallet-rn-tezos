@@ -8,33 +8,24 @@ import { IWalletClient, IWallet } from './WalletClient.type';
 
 @injectable()
 export class EhtersClient implements IWalletClient {
-  wallet: IWallet;
+  constructor() {}
 
-  constructor() {
-    // TODO: wallet 기본값 생각해보기
-    this.wallet = {
-      address: '',
-      publicKey: '',
-      privateKey: '',
-    };
-  }
-
-  createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<void> => {
+  createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<IWallet> => {
     const root = createNodeWithEntropy(entropy);
 
     if (derivePath) {
       const node = root.derivePath(derivePath);
       const { address, publicKey, privateKey } = node;
-      this.wallet = { address, publicKey, privateKey };
+      return { address, publicKey, privateKey };
     } else {
       const { address, publicKey, privateKey } = root;
-      this.wallet = { address, publicKey, privateKey };
+      return { address, publicKey, privateKey };
     }
   };
 
-  createWalletWithMnemonic = async (mnemonic: string, derivePath?: string): Promise<void> => {
+  createWalletWithMnemonic = async (mnemonic: string, derivePath?: string): Promise<IWallet> => {
     const { address, publicKey, privateKey } = Wallet.fromMnemonic(mnemonic, derivePath);
-    this.wallet = { address, publicKey, privateKey };
+    return { address, publicKey, privateKey };
   };
 
   getDerivePath = (index: number): string => {
