@@ -90,11 +90,10 @@ export class WalletServiceImpl implements WalletService {
     // TODO: Client를 선택할 때 각 함수에서 하는게 별로다. 어떻게 해야할까?
     const networkId = getNetworkConfig(network).networkId;
     const client = this.walletClient[networkId];
-    const wallet = client.wallet;
     const pKey = await this.keyClient.getPrivateKey();
     const derivePath = client.getDerivePath(index);
     await client.createWalletWithEntropy(pKey, derivePath);
-    return wallet;
+    return client.wallet;
   };
 
   /**
