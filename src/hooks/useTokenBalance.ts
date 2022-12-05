@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { formatUnits } from 'ethers/lib/utils';
 
+import { getNetworkConfig } from '@@constants/network.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { IGetPriceResponseDto } from '@@domain/wallet/repositories/WalletRepository.type';
 import { IBalance, IBalanceData } from '@@domain/wallet/services/WalletBlockChainService.type';
@@ -27,14 +28,14 @@ export const useTokenBalance = () => {
   const [priceIds, setPriceIds] = useState<string>('');
 
   // 1. network변경 시 token list 조회
-  const { data: tokenList } = useTokenQuery(selectedNetwork, {
+  const { data: tokenList } = useTokenQuery(getNetworkConfig(selectedNetwork).networkId, {
     onSuccess: (data) => {
       // 2. priceIds 업데이트
       setPriceIds(data.map((token) => token.priceId).join(','));
     },
   });
 
-  useWalletsQuery({
+  useWalletsQuery(selectedNetwork, {
     onSuccess: (data) => {
       setWalletData(data);
     },
@@ -97,6 +98,7 @@ export const useTokenBalance = () => {
   useEffect(() => {
     if (!price || !balanceData || !tokenList) return;
     let formalizedArray: IBalanceData[] = [];
+    console.log('tokenList:  ', tokenList);
     for (const [crypto, balance] of Object.entries(balanceData)) {
       const token = tokenList.find((token) => token.symbol === crypto);
       if (!token) continue;

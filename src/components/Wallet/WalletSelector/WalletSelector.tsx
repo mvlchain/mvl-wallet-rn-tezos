@@ -9,15 +9,15 @@ import * as S from './WalletSelector.style';
 import { IWalletSelectorProps } from './WalletSelector.type';
 import useWalletSelector from './useWalletSelector';
 
-function WalletSelector(props: IWalletSelectorProps) {
-  const { name, onPressWalletList } = useWalletSelector();
+function WalletSelector({ walletName }: IWalletSelectorProps) {
+  const { onPressWalletList } = useWalletSelector();
   const DownIcon = useAssetFromTheme(ChevronDownLightIcon, ChevronDownDarkIcon);
   return (
     <S.Container>
       <Pressable onPress={onPressWalletList}>
         {({ pressed }) => (
           <S.Wrapper pressed={pressed}>
-            <S.Label>{name}</S.Label>
+            <S.Label>{walletName}</S.Label>
             <DownIcon />
           </S.Wrapper>
         )}

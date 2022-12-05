@@ -17,7 +17,7 @@ export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
   getWalletInfo(param: Type.IGetWalletInfoParam): Promise<IWallet>;
-  getWalletList(): Promise<WalletDto[]>;
+  getWalletList(networkId: NetworkId): Promise<WalletDto[]>;
   createWallet(body: Type.ICreateWalletBody): Promise<WalletResponseDto>;
   getWalletPKey(param: Type.IGetWalletPKeyParam): Promise<string>;
 }
@@ -100,9 +100,9 @@ export class WalletServiceImpl implements WalletService {
   /**
    * @returns Get a list of wallets
    */
-  getWalletList = async (): Promise<WalletDto[]> => {
+  getWalletList = async (networkId: NetworkId): Promise<WalletDto[]> => {
     const xpub = await this.rootkeyRepository.getExtendedPublicKey();
-    return this.walletRepository.getWallets(xpub);
+    return this.walletRepository.getWallets(xpub, networkId);
   };
 
   createWallet = async ({ index, network }: Type.ICreateWalletBody): Promise<WalletResponseDto> => {

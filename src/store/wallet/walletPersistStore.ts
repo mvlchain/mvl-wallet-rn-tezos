@@ -54,7 +54,8 @@ const walletPersistStore = create<Type.IWalletPersist>()(
             false,
             'selectNetwork'
           ),
-        setWallets: (wallets: Type.IPersistWallet[]) => set(() => ({ walletList: { ETHEREUM: wallets, BSC: wallets } }), false, 'setWallet'),
+        setWallets: (network: Network, wallets: Type.IPersistWallet[]) =>
+          set((state) => ({ walletList: { ...state.walletList, [network]: wallets } }), false, 'setWallet'),
         editWalletName: (wallet: Type.IPersistWallet, network: Network) =>
           set(
             (state) => ({
