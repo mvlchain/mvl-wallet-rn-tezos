@@ -1,6 +1,5 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
-import { WALLET_TOKEN } from '@@constants/token.constant';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { valueOf } from '@@utils/types';
@@ -27,7 +26,7 @@ export type TRootStackParamList = {
   WALLET_TOKEN_SEND: {
     tokenDto: TokenDto;
   };
-  WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse;
+  WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse & { tokenDto: TokenDto };
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
   WALLET_SCAN_QR: undefined;
