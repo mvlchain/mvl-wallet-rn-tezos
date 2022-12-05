@@ -72,15 +72,15 @@ const walletPersistStore = create<Type.IWalletPersist>()(
             false,
             'editWalletName'
           ),
-        createWallet: () =>
+        createWallet: (network: Network) =>
           set(
             (state) => ({
               walletList: {
-                ETHEREUM: [
-                  ...state.walletList.ETHEREUM,
-                  { index: state.walletList.ETHEREUM.length, name: `Wallet ${state.walletList.ETHEREUM.length + 1}` },
+                ...state.walletList,
+                [network]: [
+                  ...state.walletList[network],
+                  { index: state.walletList[network].length, name: `Wallet ${state.walletList[network].length + 1}` },
                 ],
-                BSC: [...state.walletList.BSC, { index: state.walletList.BSC.length, name: `Wallet ${state.walletList.BSC.length + 1}` }],
               },
             }),
             false,

@@ -98,7 +98,6 @@ export const useTokenBalance = () => {
   useEffect(() => {
     if (!price || !balanceData || !tokenList) return;
     let formalizedArray: IBalanceData[] = [];
-    console.log('tokenList:  ', tokenList);
     for (const [crypto, balance] of Object.entries(balanceData)) {
       const token = tokenList.find((token) => token.symbol === crypto);
       if (!token) continue;
