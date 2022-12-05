@@ -27,8 +27,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const [baseFee, setBaseFee] = useState<BigNumber | null>(null);
   const [enableTip, setEnableTip] = useState<boolean>(false);
   const [enableLimitCustom, setEnableLimitCustom] = useState<boolean>(true);
-  const [maxBaseFee, setMaxBaseFee] = useState<BigNumber | null>(null);
-  const [maxTip, setMaxTip] = useState<BigNumber | null>(null);
 
   //The values to be entered by the user
   const [customBaseFee, setCustomBaseFee] = useState<BigNumber | null>(null);
@@ -59,12 +57,10 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   const setInitialGas = async () => {
     const gasFeeData = await gasService.getGasFeeData(selectedNetwork);
-    setBaseFee(gasFeeData.baseFee ?? null);
     setEnableTip(gasFeeData.enableTip);
     setEnableLimitCustom(gasFeeData.enableLimitCustom);
+    setBaseFee(gasFeeData.baseFee ?? null);
     setGasLimit(gasFeeData.gasLimit ?? null);
-    setMaxBaseFee(gasFeeData.maxBaseFee ?? null);
-    setMaxTip(gasFeeData.maxTip ?? null);
   };
 
   const estimateGas = async () => {
@@ -119,10 +115,12 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
     setAdvanced(!advanced);
   }, [advanced]);
 
+  //Wrap up the send transaction function which from useTokenSend and inject parameters
   const onConfirmGasFee = async () => {
     if (!baseFee || !gasLimit) return;
     if (network.networkFeeType) {
     }
+    //TODO: leveledBaseFee 입력하도록해야함 수정피료
     onConfirm({ baseFee, tip, gasLimit }, parseUnits(transactionFee, 'ether'));
   };
 

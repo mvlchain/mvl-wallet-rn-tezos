@@ -11,16 +11,20 @@ import { ITransactionServiceEthers } from './TransactionServiceEthers.type';
 export class TransactionServiceEthers implements ITransactionServiceEthers {
   constructor() {}
 
-  async sendTransaction(selectedNetwork: Network, selectedWalletPrivateKey: string, params: TransactionRequest): Promise<string> {
-    const network = getNetworkConfig(selectedNetwork);
-    const provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
-    const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
+  sendTransaction = async (selectedNetwork: Network, selectedWalletPrivateKey: string, params: TransactionRequest) => {
+    try {
+      const network = getNetworkConfig(selectedNetwork);
+      const provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
+      const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
 
-    const res = await wallet.sendTransaction({
-      chainId: network.chainId,
-      ...params,
-    });
+      const res = await wallet.sendTransaction({
+        chainId: network.chainId,
+        ...params,
+      });
 
-    return res.hash;
-  }
+      return res.hash;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 }

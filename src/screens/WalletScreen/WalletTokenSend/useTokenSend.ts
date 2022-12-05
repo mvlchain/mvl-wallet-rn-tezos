@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { format } from '@taquito/utils';
 import { BigNumber } from 'ethers';
+import { formatEther, parseUnits } from 'ethers/lib/utils';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -80,7 +82,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
     closeModal();
     return async () => {
       try {
-        //pinmode setting
+        //pin mode setting
         let pinModalResolver, pinModalRejector;
         const pinModalObserver = new Promise((resolve, reject) => {
           pinModalResolver = resolve;
@@ -89,19 +91,22 @@ const useTokenSend = (tokenDto: TokenDto) => {
         pinSet({ pinMode: PIN_MODE.CONFIRM, layout: PIN_LAYOUT.MODAL, pinModalResolver, pinModalRejector });
         openModal('CONFIRM_TX_PIN', undefined);
         await pinModalObserver;
+        closeModal();
         const request: ISendTransactionRequest = {
           selectedNetwork,
           selectedWalletIndex: selectedWalletIndex[selectedNetwork],
           gasFeeInfo,
+          to,
         };
         if (selectedNetwork !== NETWORK.TEZOS && selectedNetwork !== NETWORK.TEZOS_GHOSTNET && tokenDto.contractAddress) {
           request.data = data;
         } else {
-          request.to = to;
           request.value = value;
         }
-        await transactionService.sendTransaction(request);
-        closeModal();
+        const res = await transactionService.sendTransaction(request);
+        if (!res) {
+          //TODO: 에러처리
+        }
         resetBody();
         navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
       } catch (err) {
@@ -109,7 +114,6 @@ const useTokenSend = (tokenDto: TokenDto) => {
       }
     };
   };
-
   return { amount: value, setAmount, address: to, setAddress, confirm };
 };
 export default useTokenSend;
