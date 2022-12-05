@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useEffect } from 'react';
 
 import { Modal, BackHandler } from 'react-native';
@@ -16,7 +17,6 @@ function ConfirmTxPinModal() {
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', interruption);
-
     return () => backHandler.remove();
   }, []);
 

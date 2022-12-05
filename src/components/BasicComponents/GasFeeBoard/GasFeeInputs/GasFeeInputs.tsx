@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
@@ -28,7 +29,7 @@ function GasFeeInputs({
       </S.InputWrapper>
       {enableTip && (
         <>
-          <S.Label>{t('gas_price')}</S.Label>
+          <S.Label>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
             <GasTextField value={customTip} setValue={setCustomTip} unit={'gwei'} />
           </S.InputWrapper>

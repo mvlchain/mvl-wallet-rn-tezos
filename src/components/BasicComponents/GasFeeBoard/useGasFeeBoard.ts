@@ -1,8 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 
-import { networks } from 'bitcoinjs-lib';
 import { BigNumber } from 'ethers';
-import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers/lib/utils';
 
 import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
@@ -14,8 +13,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>) => {
   const gasService = useDi('GasService');
-  const transactionService = useDi('TransactionService');
-  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
 
   //The setted value
@@ -93,6 +91,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const transactionFee = useMemo(() => {
     if (advanced) {
       if (!customBaseFee) return '-';
+      if (network.networkFeeType === NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !gasLimit) return '-';
       if (network.networkFeeType !== NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !estimatedGas) return '-';
       return gasService.getTotalGasFee({
         selectedNetwork,
@@ -103,6 +102,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
       });
     } else {
       if (!baseFee) return '-';
+      if (network.networkFeeType === NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !gasLimit) return '-';
       if (network.networkFeeType !== NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !estimatedGas) return '-';
       return gasService.getTotalGasFee({
         selectedNetwork,

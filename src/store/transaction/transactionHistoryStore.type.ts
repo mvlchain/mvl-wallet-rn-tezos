@@ -1,4 +1,4 @@
-import { IGetTransactionHistoryResponse, ITransaction } from '@@domain/transaction/TransactionService.type';
+import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 
 export interface ITokenHistory {
   history: Array<IGetTransactionHistoryResponse>;
@@ -11,5 +11,5 @@ export interface ITokens {
 }
 export interface ITransactionHistoryStore {
   tokens: ITokens;
-  setHistory(token: string | symbol, history: Array<IGetTransactionHistoryResponse>, beforeblock: number, beforeindex: number): void;
+  setHistory(token: string, history: Array<IGetTransactionHistoryResponse>, beforeblock: number, beforeindex: number): void;
 }

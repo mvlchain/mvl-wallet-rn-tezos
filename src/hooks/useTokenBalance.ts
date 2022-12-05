@@ -31,7 +31,6 @@ export const useTokenBalance = () => {
   const { data: tokenList } = useTokenQuery(getNetworkConfig(selectedNetwork).networkId, {
     onSuccess: (data) => {
       // 2. priceIds 업데이트
-      console.log(data);
       setPriceIds(data.map((token) => token.priceId).join(','));
     },
   });

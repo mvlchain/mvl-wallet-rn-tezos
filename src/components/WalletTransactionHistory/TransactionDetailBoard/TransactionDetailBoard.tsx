@@ -1,25 +1,38 @@
-import React from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React, { useEffect, useState } from 'react';
 
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import useHeader from '@@hooks/useHeader';
-import {
-  TTransactionHistoryRootStackProps,
-  TTransactionHistoryRouteProps,
-} from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
+import { getNetworkConfig } from '@@constants/network.constant';
+import { useDi } from '@@hooks/useDi';
+import useOneTokenPrice from '@@hooks/useOneTokenPrice';
+import { TTransactionHistoryRouteProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './TransactionDetailBoard.style';
 
 function TransactionDetailBoard() {
   const { params } = useRoute<TTransactionHistoryRouteProps>();
-  const { handleStackHeaderOption } = useHeader();
-  const navigation = useNavigation<TTransactionHistoryRootStackProps>();
-  const { t } = useTranslation();
-
   const { type, status, value, ticker, updatedAt, to, from } = params;
-  // TODO: 여러번 계산되는 것 같음, 서버 데이터에 구겨넣을까..?
-  const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
+  const { t } = useTranslation();
+  const walletService = useDi('WalletService');
+  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { settedCurrency } = settingPersistStore();
+  const price = useOneTokenPrice(params.tokenDto, value);
+  const [valueSign, setValueSign] = useState('');
+  const network = getNetworkConfig(selectedNetwork);
+
+  const setSign = async () => {
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44: network.bip44 });
+    const valueSign = from === wallet.address ? '-' : '';
+    setValueSign(valueSign);
+  };
+  useEffect(() => {
+    setSign();
+  }, []);
+
   return (
     <>
       <S.TransactionDetailBoardContainer>
@@ -29,10 +42,7 @@ function TransactionDetailBoard() {
           {value}
           {ticker}
         </S.TransactionAmount>
-        <S.TransactionBaseCurrencyAmount>
-          {/* TODO: 계산필요 */}
-          {'≈'} {1000} {'USD'}
-        </S.TransactionBaseCurrencyAmount>
+        <S.TransactionBaseCurrencyAmount>{`≈ ${price} ${settedCurrency}`}</S.TransactionBaseCurrencyAmount>
       </S.TransactionDetailBoardContainer>
       <S.TransactionDetailBoardContainer>
         <S.Row>

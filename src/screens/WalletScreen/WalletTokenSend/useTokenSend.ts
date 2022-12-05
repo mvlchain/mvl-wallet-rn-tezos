@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
+import { BigNumber } from 'ethers';
+
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
+import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
-
 import 'reflect-metadata';
-import { BigNumber, BytesLike } from 'ethers';
-
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
-import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 
 const useTokenSend = (tokenDto: TokenDto) => {
   const transactionService = useDi('TransactionService');
@@ -54,12 +53,15 @@ const useTokenSend = (tokenDto: TokenDto) => {
     }
   };
 
-  const confirmSend = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
+  const confirm = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
     if (!to || !value) return;
-    openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress: to, amount: value, fee: total, onConfirm: send(gasFeeInfo) });
+    openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress: to, amount: value, fee: total, tokenDto, onConfirm: send(gasFeeInfo) });
   };
 
   const send = (gasFeeInfo: { baseFee: BigNumber; tip?: BigNumber; gasLimit: BigNumber }) => {
+    if (!to || !value) {
+      throw new Error('to address and value is required');
+    }
     closeModal();
     return async () => {
       let pinModalResolver, pinModalRejector;
@@ -68,15 +70,10 @@ const useTokenSend = (tokenDto: TokenDto) => {
         pinModalRejector = reject;
       });
       pinSet({ pinMode: PIN_MODE.CONFIRM, layout: PIN_LAYOUT.MODAL, pinModalResolver, pinModalRejector });
+      openModal('CONFIRM_TX_PIN', undefined);
       try {
         await pinModalObserver;
-      } catch (err) {
         closeModal();
-      }
-      try {
-        if (!to || !value) {
-          throw new Error('to address and value is required');
-        }
         await transactionService.sendTransaction({
           selectedNetwork,
           selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -93,6 +90,6 @@ const useTokenSend = (tokenDto: TokenDto) => {
     };
   };
 
-  return { amount: value, setAmount, address: to, setAddress, confirmSend };
+  return { amount: value, setAmount, address: to, setAddress, confirm };
 };
 export default useTokenSend;

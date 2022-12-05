@@ -1,18 +1,15 @@
+import { BigNumber } from 'ethers';
+import { formatUnits, parseUnits, BytesLike } from 'ethers/lib/utils';
 import { injectable, inject } from 'tsyringe';
 
 import '@ethersproject/shims';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import { IGasService, TGasLevel } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from './repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from './repository/gasRepositoryTezos/GasRepositoryTezos';
-
-import { BigNumber } from 'ethers';
-import { formatEther, formatUnits, parseUnits, BytesLike } from 'ethers/lib/utils';
-
 @injectable()
 export class GasServiceImpl implements IGasService {
   constructor(
@@ -60,14 +57,14 @@ export class GasServiceImpl implements IGasService {
     selectedNetwork: Network;
     baseFee?: BigNumber;
     tip?: BigNumber | null;
-    estimatedGas: BigNumber | null;
+    estimatedGas?: BigNumber | null;
     gasLevel?: TGasLevel;
     gasLimit?: BigNumber | null;
   }) => {
     const network = getNetworkConfig(selectedNetwork);
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        if (!tip) {
+        if (!tip || !estimatedGas) {
           throw new Error(
             `Current network has Tezos network fee type, 
              tip parameter is required which means additionalFee in taquito`
