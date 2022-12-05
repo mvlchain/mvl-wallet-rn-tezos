@@ -29,7 +29,7 @@ function GasFeeInputs({
       </S.InputWrapper>
       {enableTip && (
         <>
-          <S.Label>{t('gas_tip')}</S.Label>
+          <S.Label style={{ marginTop: height * 24 }}>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
             <GasTextField value={customTip} setValue={setCustomTip} unit={'gwei'} />
           </S.InputWrapper>
