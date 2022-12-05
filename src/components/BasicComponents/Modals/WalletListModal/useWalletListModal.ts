@@ -8,7 +8,7 @@ import { IWalletListMenuProps } from './WalletListMenu/WalletListMenu.type';
 
 const useWalletListModal = () => {
   const { selectedWalletIndex, selectedNetwork, walletList, selectWallet } = walletPersistStore();
-  const { data } = useWalletsQuery();
+  const { data } = useWalletsQuery(selectedNetwork);
   const { pKey } = authStore();
   const [wallet, setWallet] = useState<IWalletListMenuProps[]>([]);
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);

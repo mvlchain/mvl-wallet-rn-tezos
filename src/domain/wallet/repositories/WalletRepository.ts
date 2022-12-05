@@ -2,7 +2,7 @@ import qs from 'qs';
 import { injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
-import { Network } from '@@constants/network.constant';
+import { Network, NetworkId } from '@@constants/network.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { BalanceResponseDto, RegisterWalletDto, WalletResponseDto } from '@@generated/generated-scheme';
 import { authRequest } from '@@utils/request';
@@ -10,7 +10,7 @@ import { authRequest } from '@@utils/request';
 import { IGetPriceDto, IGetPriceResponseDto } from './WalletRepository.type';
 
 export interface WalletRepository {
-  getWallets: (extendedPublicKey: string) => Promise<WalletDto[]>;
+  getWallets: (extendedPublicKey: string, networkId: NetworkId) => Promise<WalletDto[]>;
   registerWallet: (body: RegisterWalletDto) => Promise<WalletResponseDto>;
   getBalance: (address: string, network: Network) => Promise<BalanceResponseDto[]>;
   getPrice(param: IGetPriceDto): Promise<IGetPriceResponseDto>;
@@ -26,9 +26,10 @@ export class WalletRepositoryImpl implements WalletRepository {
    * @throws {ApiError} when api failed.
    * @throws Error when unexpected error occured
    */
-  getWallets = async (extendedPublicKey: string): Promise<WalletDto[]> => {
+  getWallets = async (extendedPublicKey: string, networkId: NetworkId): Promise<WalletDto[]> => {
     const endpoint = `v1/wallets?${qs.stringify({
       pubkey: extendedPublicKey,
+      network: networkId,
     })}`;
     const res = await authRequest.get<WalletDto[]>(endpoint);
     return res.data;

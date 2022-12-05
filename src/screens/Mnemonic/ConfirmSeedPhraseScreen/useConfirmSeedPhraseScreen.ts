@@ -58,8 +58,7 @@ const useConfirmSeedPhraseScreen = () => {
       removeStageByPostboxKey(_postboxKey);
       initWallet();
       mutate({ index: 0, network: NETWORK.ETH });
-      // TODO: create default tezos wallet
-      // mutate({ index: 0, bip44: getNetworkConfig(NETWORK.TEZOS).bip44, network: NETWORK.TEZOS });
+      mutate({ index: 0, network: NETWORK.TEZOS });
 
       navigation.reset({
         index: 0,
