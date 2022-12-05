@@ -14,7 +14,7 @@ function WalletTransactionSpeedUp() {
     <View style={{ flex: 1 }}>
       <OldTransactionBoard />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      <GasFeeBoard onConfirm={() => {}} isRevision={true} />
+      {/* <GasFeeBoard onConfirm={() => {}} isRevision={true} /> */}
     </View>
   );
 }
