@@ -11,7 +11,7 @@ import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from './repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from './repository/gasRepositoryTezos/GasRepositoryTezos';
 @injectable()
-export class GasServiceImpl implements IGasService {
+export class GasService implements IGasService {
   constructor(
     @inject('GasRepository') private gasRepository: GasRepositoryImpl,
     @inject('GasRepositoryEip1559') private gasRepositoryEip1559: GasRepositoryEip1559Impl,

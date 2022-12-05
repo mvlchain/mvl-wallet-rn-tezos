@@ -15,7 +15,7 @@ import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyReposit
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
-import { GasServiceImpl } from '@@domain/gas/GasService';
+import { GasService } from '@@domain/gas/GasService';
 import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
@@ -119,7 +119,7 @@ container.register('TransactionServiceTezos', {
 });
 
 container.register('GasService', {
-  useFactory: instancePerContainerCachingFactory<GasServiceImpl>((container) => container.resolve(GasServiceImpl)),
+  useFactory: instancePerContainerCachingFactory<GasService>((container) => container.resolve(GasService)),
 });
 
 container.register('GasRepository', {
