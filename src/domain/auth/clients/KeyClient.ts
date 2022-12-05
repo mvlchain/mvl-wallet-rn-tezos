@@ -60,8 +60,7 @@ export class KeyClientImpl implements KeyClient {
     @inject('ServerShareRepository') private serverShareRepository: ServerShareRepository,
     @inject('TorusShareRepository') private torusShareRepository: TorusShareRepository,
     @inject('KeyClientUtil') private util: KeyClientUtil,
-    @inject('EhtersClient') private ethersClient: IWalletClient,
-    @inject('TezosClient') private tezosClient: IWalletClient
+    @inject('EhtersClient') private ethersClient: IWalletClient
   ) {
     this.postboxKeyHolder = null;
     this.deviceShare = null;
