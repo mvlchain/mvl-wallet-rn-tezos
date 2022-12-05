@@ -6,7 +6,8 @@ import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRep
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { ETHEREUM } from '@@domain/blockchain/BlockChain';
-import { Clutch, extendedKeyPath, keyDerivationPath } from '@@domain/blockchain/Clutch';
+import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
+import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import SecureKeychain from '@@utils/SecureKeychain';
 
 import { KeyClientUtil } from './KeyClientUtil';
@@ -58,7 +59,9 @@ export class KeyClientImpl implements KeyClient {
     @inject('DeviceShareRepository') private deviceShareRepository: DeviceShareRepository,
     @inject('ServerShareRepository') private serverShareRepository: ServerShareRepository,
     @inject('TorusShareRepository') private torusShareRepository: TorusShareRepository,
-    @inject('KeyClientUtil') private util: KeyClientUtil
+    @inject('KeyClientUtil') private util: KeyClientUtil,
+    @inject('EhtersClient') private ethersClient: IWalletClient,
+    @inject('TezosClient') private tezosClient: IWalletClient
   ) {
     this.postboxKeyHolder = null;
     this.deviceShare = null;
@@ -224,7 +227,9 @@ export class KeyClientImpl implements KeyClient {
     }
     const privateKey = await this.getPrivateKey();
     const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(ETHEREUM));
-    const wallet0 = Clutch.createWalletWithEntropy(privateKey, keyDerivationPath(ETHEREUM, 0));
+    const derivePath = this.ethersClient.getDerivePath(0);
+    await this.ethersClient.createWalletWithEntropy(privateKey, derivePath);
+
     const restoreObj = {
       type: this.postboxKeyHolder.provider,
       idtoken: this.postboxKeyHolder.providerIdToken,
@@ -232,7 +237,7 @@ export class KeyClientImpl implements KeyClient {
       share: this.util.shareToShareJson(this.serverShare),
       identifier: this.postboxKeyHolder.providerUserIdentifier,
       pubKey: extendedKeyPair.xpub,
-      walletAddress0: wallet0.address,
+      walletAddress0: this.ethersClient.wallet.address,
     };
     //identifier 프로퍼티 지워줘야하는지? setserver에서는 그냥 보냄
     if (this.postboxKeyHolder.provider === AUTH_PROVIDER.GOOGLE) {
