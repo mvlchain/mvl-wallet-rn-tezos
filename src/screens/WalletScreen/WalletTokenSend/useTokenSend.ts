@@ -75,7 +75,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
   };
 
   //send transaction
-  const send = (gasFeeInfo: { baseFee: BigNumber; tip?: BigNumber; gasLimit: BigNumber }) => {
+  const send = (gasFeeInfo: IGasFeeInfo) => {
     if (!to || !value) {
       throw new Error('to address and value is required');
     }
