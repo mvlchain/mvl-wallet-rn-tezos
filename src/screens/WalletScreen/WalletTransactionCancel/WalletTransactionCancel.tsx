@@ -1,28 +1,16 @@
-import React, { useLayoutEffect } from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React from 'react';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
 import OldTransactionBoard from '@@components/WalletTransactionSpeedUpCancel/OldTransactionBoard';
-import useHeader from '@@hooks/useHeader';
-
-import { TCancelRootStackProps, TCancelRouteProps } from './WalletTransactionCancel.type';
 
 function WalletTransactionCancel() {
-  const { params } = useRoute<TCancelRouteProps>();
-  const { handleStackHeaderOption } = useHeader();
-  const navigation = useNavigation<TCancelRootStackProps>();
-  const { t } = useTranslation();
-
-  useLayoutEffect(() => {
-    const headerOption = handleStackHeaderOption({ title: t('cancel_transaction') });
-    navigation.setOptions(headerOption);
-  }, []);
   return (
+    // eslint-disable-next-line react-native/no-inline-styles
     <View style={{ flex: 1 }}>
       <OldTransactionBoard />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />

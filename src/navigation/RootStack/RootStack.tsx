@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -128,22 +129,27 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.WALLET_TOKEN_SEND,
       component: WalletTokenSend,
+      options: handleStackHeaderOption({ title: t('send') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY,
       component: WalletTransactionHistory,
+      options: handleStackHeaderOption({ title: t('transaction_history') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP,
       component: WalletTransactionSpeedUp,
+      options: handleStackHeaderOption({ title: t('speed_up') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL,
       component: WalletTransactionCancel,
+      options: handleStackHeaderOption({ title: t('cancel_transaction') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_SCAN_QR,
       component: WalletScanQR,
+      options: handleStackHeaderOption({ title: t('scan_qr_code') }),
     },
   ];
 
@@ -181,4 +187,5 @@ function RootStack() {
   );
 }
 
+// eslint-disable-next-line max-lines
 export default RootStack;
