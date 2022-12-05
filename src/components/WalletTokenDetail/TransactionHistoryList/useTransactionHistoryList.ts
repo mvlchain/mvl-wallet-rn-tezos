@@ -4,10 +4,10 @@ import { useRoute } from '@react-navigation/native';
 
 import { getNetworkConfig } from '@@constants/network.constant';
 import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
+import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import useTransactionHitoryQuery from '@@hooks/queries/useTransactionHistoryQuery';
 import { useDi } from '@@hooks/useDi';
 import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
-import transactionHistoryStore from '@@store/transaction/transactionHistoryStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
@@ -19,8 +19,9 @@ const useTransactionHistoryList = () => {
   const walletService = useDi('WalletService');
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-
-  const { tokens, setHistory } = transactionHistoryStore();
+  const [history, setHistory] = useState<IGetTransactionHistoryResponse[]>([]);
+  const [beforeblock, setBeforeBlock] = useState(2147483647);
+  const [beforeindex, setBeforeIndex] = useState(2147483647);
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
 
   const [myaddress, setMyAddress] = useState('');
@@ -33,33 +34,32 @@ const useTransactionHistoryList = () => {
   }, []);
 
   const filteredData = useMemo(() => {
-    if (!tokens[params.tokenDto.symbol] || !myaddress) return;
+    if (!history || !myaddress) return;
     switch (currentCriteria) {
-      case TRANSACTION_HISTORY_FILTER_CRITERIA.ALL:
-        return tokens[params.tokenDto.symbol]?.history;
       case TRANSACTION_HISTORY_FILTER_CRITERIA.SENT_ONLY:
-        return tokens[params.tokenDto.symbol]?.history.filter((v, i) => v.from === myaddress);
+        return history.filter((v, i) => v.from === myaddress);
       case TRANSACTION_HISTORY_FILTER_CRITERIA.RECEIVED_ONLY:
-        return tokens[params.tokenDto.symbol]?.history.filter((v, i) => v.to === myaddress);
+        return history.filter((v, i) => v.to === myaddress);
       default:
-        return tokens[params.tokenDto.symbol]?.history;
+        return history;
     }
-    //TODO: deps고민 해보기
-  }, [currentCriteria, tokens[params.tokenDto.symbol]?.history.length, myaddress]);
+  }, [currentCriteria, history.length, myaddress]);
 
   const { refetch } = useTransactionHitoryQuery(
     {
       network: selectedNetwork,
       address: myaddress,
       ticker: params.tokenDto.symbol,
-      beforeblock: tokens[params.tokenDto.symbol]?.beforeblock ?? 2147483647,
-      beforeindex: tokens[params.tokenDto.symbol]?.beforeindex ?? 2147483647,
+      beforeblock,
+      beforeindex,
       limit: 20,
     },
     {
       onSuccess: (list) => {
-        if (list) {
-          setHistory(params.tokenDto.symbol, list, list[list.length - 1].blockNumber, list[list.length - 1].index);
+        if (list.length > 0) {
+          setHistory([...history, ...list]);
+          setBeforeBlock(list[list.length - 1].blockNumber);
+          setBeforeIndex(list[list.length - 1].index);
         }
       },
       keepPreviousData: true,

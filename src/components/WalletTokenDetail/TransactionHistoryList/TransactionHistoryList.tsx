@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -10,7 +9,6 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import TransactionHistoryListItem from '../TransactionHistoryItem';
 
 import * as S from './TransactionHistoryList.style';
-import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 import useTransactionHistoryList from './useTransactionHistoryList';
 
 function TransactionHistoryList() {
