@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
-import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
-import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
-import { TTransactionStatus, TTransactionType, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { getNetworkConfig } from '@@constants/network.constant';
+import { TTransactionStatus, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { useDi } from '@@hooks/useDi';
+import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
+import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
 import { TCancelRootStackProps } from '@@screens/WalletScreen/WalletTransactionCancel/WalletTransactionCancel.type';
 import { TTransactionHistoryRootStackProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
 import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
-import { fontSize } from '@@utils/ui';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './TransactionHistoryListItem.style';
 
 function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
-  const { type, status, updatedAt, value, hash, from, to } = props;
-  const { t } = useTranslation();
+  const { params } = useRoute<TTokenDetailRouteProps>();
+  const [valueSign, setValueSign] = useState('');
+  const { status, updatedAt, value, from } = props;
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TTransactionStatus.FAIL;
-  //TODO: 나중에 주소랑 들어와서 수정
-  const valueSign = from === '0x09Fc9e92261113C227c0eC6F1B20631AA7b2789d' ? '-' : null;
+
   const navigation = useNavigation<TTransactionHistoryRootStackProps | TCancelRootStackProps | TSpeedUpRootStackProps>();
+  const walletService = useDi('WalletService');
+  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { settedCurrency } = settingPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
+  const price = useOneTokenPrice(params.tokenDto, value);
+
+  const setSign = async () => {
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44: network.bip44 });
+    const valueSign = from === wallet.address ? '-' : '';
+    setValueSign(valueSign);
+  };
+  useEffect(() => {
+    setSign();
+  }, []);
 
   // NOTE: 우선은 취소랑 스피드업 지원하지 않음
   // const goToSpeedUp = () => {
@@ -37,7 +54,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, props);
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, { ...props, tokenDto: params.tokenDto });
       }}
     >
       <S.TransactionHistoryListItem>
@@ -52,14 +69,9 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
                 {valueSign}
                 {value}
               </S.TransactionAmount>
-              <S.TransactionBaseCurrency isCanceled={isCanceled}>
-                {valueSign}
-                {/* TODO: 계산 필요 */}
-                {10} {'USD'}
-              </S.TransactionBaseCurrency>
+              <S.TransactionBaseCurrency isCanceled={isCanceled}>{`${valueSign} ${price} ${settedCurrency}`}</S.TransactionBaseCurrency>
             </S.TransactionAmountWrapper>
           </S.TransactionHistoryContentInnerWrapper>
-
           <RightIcon />
         </S.HistoryItemTopContent>
         {/* NOTE: 우선은 취소랑 스피드업 지원하지 않음 */}

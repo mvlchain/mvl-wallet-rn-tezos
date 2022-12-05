@@ -1,9 +1,7 @@
-import { Estimate } from '@taquito/taquito';
 import { BigNumber, BytesLike } from 'ethers';
 
-import { Network, NETWORK } from '@@constants/network.constant';
+import { Network } from '@@constants/network.constant';
 import { GAS_LEVEL } from '@@constants/transaction.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 export type TGasLevel = typeof GAS_LEVEL[keyof typeof GAS_LEVEL];
 export type TSelectedNetwork = { selectedNetwork: Network };
@@ -35,7 +33,7 @@ export interface IGasService {
     selectedNetwork: Network;
     baseFee: BigNumber;
     tip?: BigNumber | null;
-    estimatedGas: BigNumber | null;
+    estimatedGas?: BigNumber | null;
     gasLevel?: TGasLevel;
     gasLimit?: BigNumber | null;
   }) => string;
