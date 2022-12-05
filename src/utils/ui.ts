@@ -28,3 +28,10 @@ export const fontSize = (size: number) => {
 
   return Platform.OS === 'ios' ? normalized : normalized - 2;
 };
+
+/**
+ * shortcut for `width * size` calculation
+ * @param size size of pixel for figma design
+ * @returns adaptive pixel size based on width
+ */
+export const pixel = (size: number) => width * size;
