@@ -21,12 +21,12 @@ export class GasRepositoryImpl implements IGasRepository {
     return { gasLimit, gasPrice };
   };
 
-  getTotalGasFee = ({ baseFee, gasLevel, estimatedGas }: IGetTotalGasFeeParamsEthers) => {
+  getTotalGasFee = ({ baseFee, gasLevel, gasLimit }: IGetTotalGasFeeParamsEthers) => {
     const gasWeight = gasLevel ? GAS_LEVEL_SETTING[gasLevel].weight : '1';
     const baseFeeInDecimal = new Decimal(baseFee.toString());
-    const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
+    const gasLimitInDecimal = new Decimal(gasLimit.toString());
 
-    const totalGas = baseFeeInDecimal.mul(gasWeight).mul(estimatedGasInDecimal);
+    const totalGas = baseFeeInDecimal.mul(gasWeight).mul(gasLimitInDecimal);
     const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
 
     return formatEther(totalGasInBN);
