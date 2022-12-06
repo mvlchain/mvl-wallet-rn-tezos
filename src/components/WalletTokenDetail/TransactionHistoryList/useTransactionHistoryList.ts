@@ -25,7 +25,7 @@ const useTransactionHistoryList = () => {
 
   const [myaddress, setMyAddress] = useState('');
   const setWallet = async () => {
-    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44: network.bip44 });
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
     setMyAddress(wallet.address);
   };
   useEffect(() => {

@@ -96,7 +96,7 @@ export class GasService implements IGasService {
 
   estimateGas = async ({ selectedNetwork, selectedWalletIndex, to, value, contractAddress, data }: IEstimateGasRequest) => {
     const network = getNetworkConfig(selectedNetwork);
-    const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
+    const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
         if (contractAddress && data) {

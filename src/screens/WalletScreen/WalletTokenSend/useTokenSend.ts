@@ -2,14 +2,13 @@ import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
-import { parseTransaction } from 'ethers/lib/utils';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, NETWORK, NETWORK_FEE_TYPE, getNetworkName, NETWORK_ID, NetworkId } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE, getNetworkName } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
-import { getTransactionType, ISendTransactionRequest } from '@@domain/transaction/TransactionService.type';
+import { getTransactionType } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
@@ -61,7 +60,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
     if (!to || !value || network.networkFeeType === NETWORK_FEE_TYPE.TEZOS) return;
     if (tokenDto.contractAddress) {
       const walletIndex = selectedWalletIndex[selectedNetwork];
-      const data = await transactionService.encodeTransferData(walletIndex, network.bip44, to, value);
+      const data = await transactionService.encodeTransferData(to, value);
       setBody({
         data,
       });
@@ -116,7 +115,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
           throw new Error('fail send transaction');
         }
         //send server
-        const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44: network.bip44 });
+        const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
         const transactionType = getTransactionType(network.networkId, !!tokenDto.contractAddress, tokenDto.symbol === 'BTCB', false);
         if (!transactionType) {
           throw new Error('check transaction type');
