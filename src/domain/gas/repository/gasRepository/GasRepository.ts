@@ -1,18 +1,21 @@
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import '@ethersproject/shims';
 import { BigNumber, ethers } from 'ethers';
 
-import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
-import { TGasLevel } from '@@domain/gas/GasService.type';
+import { getNetworkConfig } from '@@constants/network.constant';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
+import { WalletService } from '@@domain/wallet/services/WalletService';
 
 import { IEstimateGasParams, IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
 
 import Decimal from 'decimal.js';
 import { formatEther } from 'ethers/lib/utils';
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 
 @injectable()
 export class GasRepositoryImpl implements IGasRepository {
+  constructor(@inject('WalletService') private walletService: WalletService) {}
+
   getGasFeeData = async (networkInfo: INetworkInfo) => {
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const block = await provider.getBlock('latest');
@@ -31,16 +34,8 @@ export class GasRepositoryImpl implements IGasRepository {
     return formatEther(totalGasInBN);
   };
 
-  estimateGas = async (args: IEstimateGasParams) => {
-    const { networkInfo, to, value, data } = args;
+  estimateGas = async (networkInfo: INetworkInfo, args: TransactionRequest) => {
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
-
-    const res = await provider.estimateGas({
-      to,
-      data,
-      value,
-    });
-
-    return res as BigNumber;
+    return await provider.estimateGas(args);
   };
 }

@@ -1,4 +1,4 @@
-import { TransactionRequest } from '@ethersproject/abstract-provider';
+import { TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 
 import { Network } from '@@constants/network.constant';
 

@@ -22,24 +22,30 @@ export interface IGetTotalGasFeeRequest {
 
 export interface IEstimateGasRequest {
   selectedNetwork: Network;
-  to: string;
-  value: BigNumber;
+  selectedWalletIndex: number;
+  to?: string;
+  value?: BigNumber;
+  contractAddress?: string;
   data?: BytesLike;
 }
+
 export interface IGasService {
-  getGasFeeData: (selectedNetwork: Network) => Promise<{
-    baseFee?: BigNumber | null;
-    enableTip: boolean;
-    enableLimitCustom: boolean;
-    gasLimit?: BigNumber | null;
-    maxBaseFee?: BigNumber | null;
-    maxTip?: BigNumber | null;
-    maxGasLimit?: BigNumber | null;
-  }>;
+  getGasFeeData: (selectedNetwork: Network) => Promise<
+    | {
+        baseFee?: BigNumber | null;
+        enableTip: boolean;
+        enableLimitCustom: boolean;
+        gasLimit?: BigNumber | null;
+        maxBaseFee?: BigNumber | null;
+        maxTip?: BigNumber | null;
+        maxGasLimit?: BigNumber | null;
+      }
+    | undefined
+  >;
 
   getTotalGasFee: ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => string;
 
   getEstimateTime: (gasLevel: TGasLevel) => number;
 
-  estimateGas: ({ selectedNetwork, to, value, data }: IEstimateGasRequest) => Promise<BigNumber>;
+  estimateGas: (args: IEstimateGasRequest) => Promise<BigNumber>;
 }
