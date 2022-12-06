@@ -6,7 +6,6 @@ import { KeyClient, PostboxKeyHolder } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
 import { EthersContractImpl } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 
-import { BSC_TOKENLIST, ETH_TOKENLIST } from '../repositories/TestData';
 import { WalletRepositoryImpl } from '../repositories/WalletRepository';
 
 import { EthersContractServiceImpl } from './WalletBlockChainService';
