@@ -5,7 +5,7 @@
 
 #import "RTNSettingsModule.h"
 #import <Foundation/Foundation.h>
-#import <Wallet-Swift.h>
+#import <CryptoVehicleWallet-Swift.h>
 #import <React/RCTLog.h>
 #import "ThemeType.h"
 #import "IOSTheme.h"
