@@ -1,11 +1,4 @@
 import { Network } from '@@constants/network.constant';
-
-import { IWalletClient } from '../clients/WalletClient.type';
-
-export interface IServiceWalletClient {
-  [key: string]: IWalletClient;
-}
-
 export interface IGetWalletInfoParam {
   index: number;
   network: Network;

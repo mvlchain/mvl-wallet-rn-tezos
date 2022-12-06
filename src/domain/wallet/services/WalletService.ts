@@ -13,13 +13,13 @@ import { IWallet, IWalletClient } from '../clients/WalletClient.type';
 import * as Type from './WalletService.type';
 
 export interface WalletService {
-  walletClient: Type.IServiceWalletClient;
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
   getWalletInfo(param: Type.IGetWalletInfoParam): Promise<IWallet>;
   getWalletList(networkId: NetworkId): Promise<WalletDto[]>;
   createWallet(body: Type.ICreateWalletBody): Promise<WalletResponseDto>;
   getWalletPKey(param: Type.IGetWalletPKeyParam): Promise<string>;
+  setWalletClient(network: Network): IWalletClient;
 }
 
 /**
@@ -27,34 +27,25 @@ export interface WalletService {
  */
 @injectable()
 export class WalletServiceImpl implements WalletService {
-  walletClient: Type.IServiceWalletClient;
   constructor(
     @inject('WalletRepository') private walletRepository: WalletRepository,
     @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository,
     @inject('KeyClient') private keyClient: KeyClient,
     @inject('EhtersClient') private ehtersClient: IWalletClient,
     @inject('TezosClient') private tezosClient: IWalletClient
-  ) {
-    // TODO: Object로 가져갈지 함수로 가져갈지 고민중입니다.
-    this.walletClient = {
-      [NETWORK_ID.ETHEREUM]: this.ehtersClient,
-      [NETWORK_ID.BSC]: this.ehtersClient,
-      [NETWORK_ID.XTZ]: this.tezosClient,
-    };
-  }
+  ) {}
 
   // 함수로 가져갔을 경우
-  // setWallet = (networkId: NetworkId) => {
-  //   switch (networkId) {
-  //     case NETWORK_ID.ETHEREUM:
-  //     case NETWORK_ID.BSC:
-  //       return this.ehtersClient;
-  //     case NETWORK_ID.XTZ:
-  //       return this.tezosClient;
-  //     default:
-  //       return this.ehtersClient;
-  //   }
-  // };
+  setWalletClient = (network: Network): IWalletClient => {
+    const networkId = getNetworkConfig(network).networkId;
+    switch (networkId) {
+      case NETWORK_ID.ETHEREUM:
+      case NETWORK_ID.BSC:
+        return this.ehtersClient;
+      case NETWORK_ID.XTZ:
+        return this.tezosClient;
+    }
+  };
 
   /**
    * Get an extended public key by KeyChain credentials
@@ -87,9 +78,7 @@ export class WalletServiceImpl implements WalletService {
   };
 
   getWalletInfo = async ({ index, network }: Type.IGetWalletInfoParam) => {
-    // TODO: Client를 선택할 때 각 함수에서 하는게 별로다. 어떻게 해야할까?
-    const networkId = getNetworkConfig(network).networkId;
-    const client = this.walletClient[networkId];
+    const client = this.setWalletClient(network);
     const pKey = await this.keyClient.getPrivateKey();
     const derivePath = client.getDerivePath(index);
     const wallet = await client.createWalletWithEntropy(pKey, derivePath);
@@ -118,6 +107,4 @@ export class WalletServiceImpl implements WalletService {
     const wallet = await this.getWalletInfo({ index, network });
     return wallet.privateKey;
   };
-
-  setWalletClient = (network: Network) => {};
 }
