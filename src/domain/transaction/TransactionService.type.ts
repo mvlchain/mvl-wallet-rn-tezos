@@ -1,6 +1,6 @@
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
-import { Network } from '@@constants/network.constant';
+import { Network, NetworkId } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 //TODO: generatedscheme에 있는지 확인하기
@@ -72,6 +72,17 @@ export interface ISendTransactionRequest {
   value?: BigNumber;
   data?: BytesLike | null;
 }
+
+export interface IRegisterTransactionRequest {
+  network: NetworkId;
+  type: TTransactionType;
+  value: string;
+  from: string;
+  to: string;
+  hash: string;
+  data: null;
+  nonce: 0;
+}
 export interface ITransactionService {
   encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike | undefined>;
   sendTransaction: ({
@@ -84,4 +95,5 @@ export interface ITransactionService {
     data,
   }: ISendTransactionRequest) => Promise<string | undefined>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
+  registerHistory: (params: IRegisterTransactionRequest) => Promise<void>;
 }

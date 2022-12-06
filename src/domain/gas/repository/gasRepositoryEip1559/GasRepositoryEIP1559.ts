@@ -20,13 +20,12 @@ export class GasRepositoryEip1559Impl implements IGasRepositoryEip1559 {
     return { gasLimit, ...gasPrice };
   };
 
-  getTotalGasFee = ({ gasLevel, baseFee, estimatedGas, tip }: IGetTotalGasFeeParamsEIP1559) => {
-    const gasWeight = gasLevel ? GAS_LEVEL_SETTING[gasLevel].eip1559Weight : '1.1';
+  getTotalGasFee = ({ baseFee, estimatedGas, tip }: IGetTotalGasFeeParamsEIP1559) => {
     const baseFeeInDecimal = new Decimal(baseFee.toString());
     const tipInDecimal = new Decimal(tip.toString());
     const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
 
-    const totalGas = baseFeeInDecimal.mul(gasWeight).add(tipInDecimal).mul(estimatedGasInDecimal);
+    const totalGas = baseFeeInDecimal.add(tipInDecimal).mul(estimatedGasInDecimal);
     const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
     return formatEther(totalGasInBN);
   };
