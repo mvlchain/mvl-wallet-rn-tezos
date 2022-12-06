@@ -1,1 +1,3 @@
-export interface IWalletSelectorProps {}
+export interface IWalletSelectorProps {
+  walletName: string;
+}

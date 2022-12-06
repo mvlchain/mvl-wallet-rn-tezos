@@ -8,7 +8,7 @@ import { IWalletListMenuProps } from './WalletListMenu/WalletListMenu.type';
 
 const useWalletListModal = () => {
   const { selectedWalletIndex, selectedNetwork, walletList, selectWallet } = walletPersistStore();
-  const { data } = useWalletsQuery();
+  const { data } = useWalletsQuery(selectedNetwork);
   const { pKey } = authStore();
   const [wallet, setWallet] = useState<IWalletListMenuProps[]>([]);
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
@@ -26,20 +26,9 @@ const useWalletListModal = () => {
         isSelected: _selectedWalletIndex === index,
       } as unknown as IWalletListMenuProps;
     });
+
     setWallet(walletArr);
   }, [data, walletList, selectedNetwork, _selectedWalletIndex]);
-
-  useEffect(() => {
-    if (!wallet) return;
-    setWallet(
-      wallet?.map((val) => {
-        return {
-          ...val,
-          isSelected: val.index === _selectedWalletIndex,
-        };
-      })
-    );
-  }, [_selectedWalletIndex]);
 
   return { wallet };
 };

@@ -44,21 +44,6 @@ export class Clutch {
     return this.wallet.privateKey;
   }
 
-  static createWalletWithEntropy(entropy: string | Uint8Array, derivePath?: string): Clutch {
-    const root = createNodeWithEntropy(entropy);
-
-    if (derivePath) {
-      const node = root.derivePath(derivePath);
-      return new Clutch(new Wallet(node));
-    } else {
-      return new Clutch(new Wallet(root));
-    }
-  }
-
-  static createWalletWithMnemonic(mnemonic: string, derivePath?: string): Clutch {
-    return new Clutch(Wallet.fromMnemonic(mnemonic, derivePath));
-  }
-
   static createKeyPairWithEntropy(entropy: string | Uint8Array, derivePath?: string): KeyPair {
     const root = createNodeWithEntropy(entropy);
 
