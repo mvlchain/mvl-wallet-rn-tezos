@@ -80,8 +80,7 @@ export class WalletServiceImpl implements WalletService {
   getWalletInfo = async ({ index, network }: Type.IGetWalletInfoParam) => {
     const client = this.setWalletClient(network);
     const pKey = await this.keyClient.getPrivateKey();
-    const derivePath = client.getDerivePath(index);
-    const wallet = await client.createWalletWithEntropy(pKey, derivePath);
+    const wallet = await client.createWalletWithEntropy(pKey, index);
     return wallet;
   };
 

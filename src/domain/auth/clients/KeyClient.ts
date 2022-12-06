@@ -226,8 +226,7 @@ export class KeyClientImpl implements KeyClient {
     }
     const privateKey = await this.getPrivateKey();
     const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(ETHEREUM));
-    const derivePath = this.ethersClient.getDerivePath(0);
-    const wallet = await this.ethersClient.createWalletWithEntropy(privateKey, derivePath);
+    const wallet = await this.ethersClient.createWalletWithEntropy(privateKey, 0);
 
     const restoreObj = {
       type: this.postboxKeyHolder.provider,

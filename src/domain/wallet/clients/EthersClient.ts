@@ -10,29 +10,34 @@ import { IWalletClient, IWallet } from './WalletClient.type';
 export class EhtersClient implements IWalletClient {
   constructor() {}
 
-  createWalletWithEntropy = async (entropy: string | Uint8Array, derivePath?: string): Promise<IWallet> => {
+  createWalletWithEntropy = async (entropy: string | Uint8Array, index?: number): Promise<IWallet> => {
     const root = createNodeWithEntropy(entropy);
-
-    if (derivePath) {
-      const node = root.derivePath(derivePath);
-      const { address, publicKey, privateKey } = node;
-      return { address, publicKey, privateKey };
+    let wallet: Wallet;
+    if (index !== undefined) {
+      const derivationPath = this.getDerivationPath(index);
+      const node = root.derivePath(derivationPath);
+      wallet = new Wallet(node);
     } else {
-      const { address, publicKey, privateKey } = root;
-      return { address, publicKey, privateKey };
+      wallet = new Wallet(root);
     }
-  };
 
-  createWalletWithMnemonic = async (mnemonic: string, derivePath?: string): Promise<IWallet> => {
-    const { address, publicKey, privateKey } = Wallet.fromMnemonic(mnemonic, derivePath);
+    const { address, publicKey, privateKey } = wallet;
     return { address, publicKey, privateKey };
   };
 
-  getDerivePath = (index: number): string => {
+  createWalletWithMnemonic = async (mnemonic: string, index?: number): Promise<IWallet> => {
+    let derivationPath;
+    if (index !== undefined) {
+      derivationPath = this.getDerivationPath(index);
+    }
+    const { address, publicKey, privateKey } = Wallet.fromMnemonic(mnemonic, derivationPath);
+    return { address, publicKey, privateKey };
+  };
+
+  getDerivationPath = (index: number): string => {
     return `m/44'/${getNetworkConfig(NETWORK.ETH).bip44}'/0'/0/${index}`;
   };
 }
-// ================== extended key pair ==================
 
 const createNodeWithEntropy = (entropy: string | Uint8Array): HDNode => {
   let seed: string;
