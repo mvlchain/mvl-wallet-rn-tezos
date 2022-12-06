@@ -1,13 +1,5 @@
-import { importKey } from '@taquito/signer';
-import { compose, TezosToolkit } from '@taquito/taquito';
-import { tzip12, Tzip12Module } from '@taquito/tzip12';
-import { tzip16 } from '@taquito/tzip16';
-// @ts-ignore
-import * as tezosCrypto from '@tezos-core-tools/crypto-utils';
-import Decimal from 'decimal.js';
-
 import { ETHEREUM } from './BlockChain';
-import { Clutch, extendedKeyPath, keyDerivationPath } from './Clutch';
+import { Clutch, extendedKeyPath } from './Clutch';
 import { KeyPair } from './KeyPair';
 
 const PRIVATE_KEY = '9ccef3bb3a34182dfd138e101997bdf1770a3b92aeb525cfed548ace0bd2c38';
@@ -117,35 +109,4 @@ it('sign a message by extended private key from key pair', async () => {
       ':1659172820501:H6oM3YyW5k0FB5dQYymrjDPWouJsrAH2UUZBnmWmIUJ3KDv3Q3UXK1hQiJnB6/2GAlIapytoH1UEUF4K9FMxvSc='
   );
   expect(Clutch.verifyMessageByExtendedKeyPair(message, signed)).toBe(true);
-});
-
-describe('Tezos base methods', () => {
-  jest.setTimeout(50000);
-
-  const tzDestAddress = 'tz1S3m5Awdixhy5puaXT3w83QqD77rP3EqGT';
-
-  it('create a wallet with mnemonic phrase and tezos', async () => {
-    const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
-    const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);
-    expect(mnemonicToSeed.length).toBe(64);
-    const keyPair = tezosCrypto.hd.keyPairFromAccountIndex(mnemonicToSeed, 0);
-    const tzAddress0 = keyPair.pkh;
-    expect(tzAddress0).toBe('tz1iACqtM523s3R1da5JSTXN2hBbAFYSWE4o');
-
-    return;
-    // 195123 -> 0.0019512 (decimal 8)
-    // 33049843457497740 -> 0.0330498 (decimal 18)
-  });
-
-  it('send tezos', async () => {
-    return;
-  });
-
-  it('send fa2 token', async () => {
-    return;
-  });
-
-  it('send fa1.2 token', async () => {
-    return;
-  });
 });
