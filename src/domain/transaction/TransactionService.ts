@@ -10,7 +10,7 @@ import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request } from '@@utils/request';
 
-import { ITransactionService, IGetHistoryParams, ISendTransactionRequest } from './TransactionService.type';
+import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 @injectable()
@@ -93,6 +93,20 @@ export class TransactionService implements ITransactionService {
     try {
       const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
       const res = await request.get(endpoint);
+      if (res.status === 200) {
+        return res.data;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  };
+
+  registerHistory = async (params: IRegisterTransactionRequest) => {
+    try {
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      const res = await request.post(endpoint);
       if (res.status === 200) {
         return res.data;
       } else {

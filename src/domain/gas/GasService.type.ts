@@ -11,6 +11,21 @@ export interface IGasFeeInfo {
   tip?: BigNumber;
   gasLimit: BigNumber;
 }
+
+export interface IGetTotalGasFeeRequest {
+  selectedNetwork: Network;
+  baseFee: BigNumber;
+  tip?: BigNumber | null;
+  estimatedGas?: BigNumber | null;
+  gasLimit?: BigNumber | null;
+}
+
+export interface IEstimateGasRequest {
+  selectedNetwork: Network;
+  to: string;
+  value: BigNumber;
+  data?: BytesLike;
+}
 export interface IGasService {
   getGasFeeData: (selectedNetwork: Network) => Promise<{
     baseFee?: BigNumber | null;
@@ -22,33 +37,9 @@ export interface IGasService {
     maxGasLimit?: BigNumber | null;
   }>;
 
-  getTotalGasFee: ({
-    selectedNetwork,
-    baseFee,
-    tip,
-    estimatedGas,
-    gasLevel,
-    gasLimit,
-  }: {
-    selectedNetwork: Network;
-    baseFee: BigNumber;
-    tip?: BigNumber | null;
-    estimatedGas?: BigNumber | null;
-    gasLevel?: TGasLevel;
-    gasLimit?: BigNumber | null;
-  }) => string;
+  getTotalGasFee: ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => string;
 
   getEstimateTime: (gasLevel: TGasLevel) => number;
 
-  estimateGas: ({
-    selectedNetwork,
-    to,
-    value,
-    data,
-  }: {
-    selectedNetwork: Network;
-    to: string;
-    value: BigNumber;
-    data?: BytesLike;
-  }) => Promise<BigNumber>;
+  estimateGas: ({ selectedNetwork, to, value, data }: IEstimateGasRequest) => Promise<BigNumber>;
 }

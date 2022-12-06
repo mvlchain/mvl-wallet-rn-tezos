@@ -3,14 +3,12 @@ import { BigNumber } from 'ethers';
 
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
-import { TGasLevel } from '../../GasService.type';
 export interface IGasFeeInfoEthers {
   gasPrice: BigNumber;
   gasLimit: BigNumber;
 }
 
 export interface IGetTotalGasFeeParamsEthers {
-  gasLevel?: TGasLevel;
   baseFee: BigNumber;
   gasLimit: BigNumber;
 }

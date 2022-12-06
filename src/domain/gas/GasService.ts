@@ -6,7 +6,7 @@ import '@ethersproject/shims';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 
-import { IGasService, TGasLevel } from './GasService.type';
+import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest, TGasLevel } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from './repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from './repository/gasRepositoryTezos/GasRepositoryTezos';
@@ -44,21 +44,7 @@ export class GasService implements IGasService {
     }
   };
 
-  getTotalGasFee = ({
-    selectedNetwork,
-    baseFee,
-    tip,
-    estimatedGas,
-    gasLevel,
-    gasLimit,
-  }: {
-    selectedNetwork: Network;
-    baseFee?: BigNumber;
-    tip?: BigNumber | null;
-    estimatedGas?: BigNumber | null;
-    gasLevel?: TGasLevel;
-    gasLimit?: BigNumber | null;
-  }) => {
+  getTotalGasFee = ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => {
     const network = getNetworkConfig(selectedNetwork);
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
@@ -72,7 +58,7 @@ export class GasService implements IGasService {
         //Because To make Tezos interface correspond with Ethereum, state stored and entered in units of big numbers
         const tipTezos = parseFloat(formatUnits(tip, 'gwei'));
         const estimatedGasTezos = parseFloat(formatUnits(estimatedGas, 'gwei'));
-        return this.gasRepositoryTezos.getTotalGasFee({ tip: tipTezos, estimatedGas: estimatedGasTezos, gasLevel });
+        return this.gasRepositoryTezos.getTotalGasFee({ tip: tipTezos, estimatedGas: estimatedGasTezos });
 
       case NETWORK_FEE_TYPE.EIP1559:
         if (!tip || !baseFee || !estimatedGas) {
@@ -86,7 +72,6 @@ export class GasService implements IGasService {
           baseFee,
           tip,
           estimatedGas,
-          gasLevel,
         });
       default:
         if (!baseFee || !gasLimit) {
@@ -95,7 +80,7 @@ export class GasService implements IGasService {
              baseFee parameter is required which means gasPrice per gas in ethersjs`
           );
         }
-        return this.gasRepository.getTotalGasFee({ baseFee, gasLimit, gasLevel });
+        return this.gasRepository.getTotalGasFee({ baseFee, gasLimit });
     }
   };
 
@@ -103,7 +88,7 @@ export class GasService implements IGasService {
     return GAS_LEVEL_SETTING[gasLevel].waitTime;
   };
 
-  estimateGas = async ({ selectedNetwork, to, value, data }: { selectedNetwork: Network; to: string; value?: BigNumber; data?: BytesLike }) => {
+  estimateGas = async ({ selectedNetwork, to, value, data }: IEstimateGasRequest) => {
     const network = getNetworkConfig(selectedNetwork);
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
