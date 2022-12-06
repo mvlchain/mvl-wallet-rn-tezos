@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 
 import Webview from '@@components/BasicComponents/Webview';
 
-import { EarnEventActionModal } from '../EarnEventActionModal';
+import { EventActionControl } from '../EventActionControl';
 
 import * as S from './EarnEventDetailsScreen.style';
 import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
@@ -12,7 +12,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
 /**
  * Event details screen that displays contents to the WebView.
  * WebView: display event contents.
- * EarnEventActionLayout
+ * EventActionControl
  * WebViewModal (EarnEventReceiptModal)
  * Alert modal
  *  . failed claim
@@ -43,7 +43,7 @@ export function EarnEventDetailsScreen() {
       {data && (
         <>
           <Webview url={data.detailPageUrl} />
-          <EarnEventActionModal
+          <EventActionControl
             eventActionButtonTitle={data.eventActionButtonTitle ?? ''}
             eventActionScheme={data.eventActionScheme ?? ''}
             avatarUrl={data.iconUrl}
