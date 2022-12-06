@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
@@ -13,7 +13,8 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>) => {
   const gasService = useDi('GasService');
-  const { selectedNetwork } = walletPersistStore();
+  const { selectedNetwork: pickNetwork } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
 
   //The setted value
@@ -48,7 +49,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   }, [gasLevel]);
 
   useEffect(() => {
-    if (!advanced) return;
     //TODO: leveledBaseFee 입력하도록해야함 수정피료
     setCustomBaseFee(baseFee);
     setCustomTip(tip);

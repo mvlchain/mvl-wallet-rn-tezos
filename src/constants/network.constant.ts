@@ -58,7 +58,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://goerli.infura.io/v3/***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
-    coin: 'GoerliETH',
+    coin: 'ETH',
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',

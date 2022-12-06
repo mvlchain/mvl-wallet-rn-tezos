@@ -9,7 +9,7 @@ import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import Toggle from '@@components/BasicComponents/Form/Toggle';
-import { COIN_DTO, NETWORK_CONFIGS } from '@@constants/network.constant';
+import { COIN_DTO, NETWORK_CONFIGS, getNetworkName } from '@@constants/network.constant';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -20,7 +20,8 @@ import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
 function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced, onConfirm, toggleGasAdvanced, children }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
-  const { selectedNetwork } = walletPersistStore();
+  const { selectedNetwork: pickNetwork } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
   const { settedCurrency } = settingPersistStore();
   const coin = NETWORK_CONFIGS[selectedNetwork].coin;
   const { price } = useOneTokenPrice(COIN_DTO[coin], transactionFee);

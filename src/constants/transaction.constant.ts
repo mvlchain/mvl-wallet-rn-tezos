@@ -14,28 +14,23 @@ export const GAS_LEVEL = {
   HIGH: 'HIGH',
 } as const;
 
+//TODO: eip1559는 메타에서 가져옴 적당한 weight는 무엇일까.
 export const GAS_LEVEL_SETTING = {
   [GAS_LEVEL.LOW]: {
     weight: '1',
     eip1559Weight: '1.1',
-    tezosAdditionalFee: parseUnits('1', 'gwei'),
-    maxPriorityFeePerGas: parseUnits('1', 'gwei'),
     tip: parseUnits('1', 'gwei'),
     waitTime: 30_000,
   },
   [GAS_LEVEL.MID]: {
     weight: '1.2',
     eip1559Weight: '1.2',
-    tezosAdditionalFee: parseUnits('1.5', 'gwei'),
-    maxPriorityFeePerGas: parseUnits('1.5', 'gwei'),
     tip: parseUnits('1.5', 'gwei'),
     waitTime: 30_000,
   },
   [GAS_LEVEL.HIGH]: {
     weight: '1.5',
     eip1559Weight: '1.3',
-    tezosAdditionalFee: parseUnits('2', 'gwei'),
-    maxPriorityFeePerGas: parseUnits('2', 'gwei'),
     tip: parseUnits('2', 'gwei'),
     waitTime: 15_000,
   },

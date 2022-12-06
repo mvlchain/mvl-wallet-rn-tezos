@@ -156,6 +156,9 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
       component: WalletTransactionResult,
+      options: {
+        headerShown: false,
+      },
     },
   ];
 

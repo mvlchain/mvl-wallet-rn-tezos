@@ -14,7 +14,7 @@ import { InMemorySigner } from '@taquito/signer';
 @injectable()
 export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
   getTotalGasFee = ({ tip, estimatedGas, gasLevel }: IGetTotalGasFeeParamsTEZ) => {
-    const addFee = gasLevel ? GAS_LEVEL_SETTING[gasLevel].tezosAdditionalFee : tip ? tip : 0.0001;
+    const addFee = gasLevel ? GAS_LEVEL_SETTING[gasLevel].tip : tip ? tip : 0.0001;
     const addFeeInDecimal = new Decimal(addFee.toString());
     const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
 

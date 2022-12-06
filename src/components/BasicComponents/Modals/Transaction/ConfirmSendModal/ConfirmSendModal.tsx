@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { COIN_DTO, getNetworkConfig } from '@@constants/network.constant';
+import { COIN_DTO, getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
@@ -23,7 +23,8 @@ import { IConfirmSendModalProps } from './ConfirmSendModal.type';
 function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }: IConfirmSendModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
-  const { selectedNetwork } = walletPersistStore();
+  const { selectedNetwork: pickNetwork } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
   const { settedCurrency } = settingPersistStore();
 
