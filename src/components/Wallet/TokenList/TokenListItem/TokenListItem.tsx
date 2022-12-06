@@ -3,18 +3,18 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { commify } from 'ethers/lib/utils';
 import { Pressable } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 
-import * as TokenIcon from '@@assets/image/token';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
+import { width } from '@@utils/ui';
 
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
 
-function TokenListItem({ ticker, balance, valuatedPrice }: ITokenListItemProps) {
+function TokenListItem({ ticker, balance, valuatedPrice, logoURI }: ITokenListItemProps) {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const navigation = useNavigation<rootStackProps>();
-  const TokenImage = TokenIcon[ticker as keyof typeof TokenIcon];
   const { settedCurrency } = settingPersistStore();
 
   return (
@@ -25,7 +25,11 @@ function TokenListItem({ ticker, balance, valuatedPrice }: ITokenListItemProps) 
     >
       <S.Container>
         <S.LabelContainer>
-          <TokenImage />
+          {logoURI && (
+            <S.IconWrapper>
+              <SvgUri uri={logoURI} width={`${width * 36}`} height={`${width * 36}`} />
+            </S.IconWrapper>
+          )}
           <S.Name>{ticker}</S.Name>
         </S.LabelContainer>
         <S.ValueContainer>

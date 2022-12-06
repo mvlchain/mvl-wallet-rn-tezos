@@ -10,9 +10,9 @@ import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepos
 import { UIService } from '@@domain/auth/services/UIService';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
-import { ContractRepository } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
-import { ContractService } from '@@domain/wallet/services/WalletBlockChainService';
+import { IBlockChainRepository } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
+import { IWalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 
 /**
@@ -21,12 +21,13 @@ import { WalletService } from '@@domain/wallet/services/WalletService';
 export interface DiModuleTypes {
   // Service
   WalletService: WalletService;
-  WalletBlockChainService: ContractService;
+  WalletBlockChainService: IWalletBlockChainService;
   AuthService: AuthService;
   UIService: UIService;
   // Repository
   WalletRepository: WalletRepository;
-  EthersContractRepository: ContractRepository;
+  EthersRepository: IBlockChainRepository;
+  TezosRepository: IBlockChainRepository;
   DeviceShareRepository: DeviceShareRepository;
   ServerShareRepository: ServerShareRepository;
   TorusShareRepository: TorusShareRepository;
