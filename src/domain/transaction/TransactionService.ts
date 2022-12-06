@@ -108,11 +108,7 @@ export class TransactionService implements ITransactionService {
     try {
       const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
       const res = await request.post(endpoint);
-      if (res.status === 200) {
-        return res.data;
-      } else {
-        return [];
-      }
+      return res.data;
     } catch (e) {
       return [];
     }

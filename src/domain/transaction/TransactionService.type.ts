@@ -119,6 +119,22 @@ export interface IRegisterTransactionRequest {
   data: BytesLike | null;
   nonce: 0;
 }
+
+export interface IRegisterTransactionResponse {
+  nonce: number;
+  index: number;
+  blockNumber: number;
+  updatedAt: string;
+  fee: number;
+  value: number | string;
+  hash: string;
+  to: string;
+  from: string;
+  type: TTransactionType;
+  status: TTransactionStatus;
+  ticker: string;
+}
+
 export interface ITransactionService {
   encodeTransferData: (index: number, bip44: number, to: string, value: BigNumber) => Promise<BytesLike | undefined>;
   sendTransaction: ({
@@ -131,5 +147,5 @@ export interface ITransactionService {
     data,
   }: ISendTransactionRequest) => Promise<string | undefined>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
-  registerHistory: (params: IRegisterTransactionRequest) => Promise<void>;
+  registerHistory: (params: IRegisterTransactionRequest) => Promise<IRegisterTransactionResponse>;
 }
