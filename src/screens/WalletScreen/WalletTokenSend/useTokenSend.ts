@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { format } from '@taquito/utils';
 import { BigNumber } from 'ethers';
-import { formatEther, parseUnits } from 'ethers/lib/utils';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, NETWORK, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK, NETWORK_FEE_TYPE, getNetworkName } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { ISendTransactionRequest } from '@@domain/transaction/TransactionService.type';
@@ -25,7 +23,8 @@ const useTokenSend = (tokenDto: TokenDto) => {
   const transactionService = useDi('TransactionService');
 
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
-  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
   const { openModal, closeModal } = globalModalStore();
   const { setState: pinSet } = pinStore();
 
@@ -108,6 +107,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
           //TODO: 에러처리
         }
         resetBody();
+        console.log('res', res);
         navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
       } catch (err) {
         //TODO: 무슨 처리를 해줘야하지?

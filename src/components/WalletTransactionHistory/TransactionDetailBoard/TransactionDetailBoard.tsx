@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { TTransactionHistoryRouteProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
@@ -18,7 +18,8 @@ function TransactionDetailBoard() {
   const { type, status, value, ticker, updatedAt, to, from } = params;
   const { t } = useTranslation();
   const walletService = useDi('WalletService');
-  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
   const { settedCurrency } = settingPersistStore();
   const price = useOneTokenPrice(params.tokenDto, value);
   const [valueSign, setValueSign] = useState('');

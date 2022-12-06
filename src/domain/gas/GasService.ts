@@ -27,7 +27,7 @@ export class GasService implements IGasService {
       case NETWORK_FEE_TYPE.EIP1559:
         const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
         return {
-          baseFee: gasFeeDataEip1559.maxFeePerGas,
+          baseFee: gasFeeDataEip1559.lastBaseFeePerGas,
           enableTip: true,
           enableLimitCustom: true,
           gasLimit: BigNumber.from(21000),

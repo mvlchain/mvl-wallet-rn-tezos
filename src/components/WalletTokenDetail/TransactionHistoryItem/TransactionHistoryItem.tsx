@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { TTransactionStatus, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
@@ -29,7 +29,8 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
 
   const navigation = useNavigation<TTransactionHistoryRootStackProps | TCancelRootStackProps | TSpeedUpRootStackProps>();
   const walletService = useDi('WalletService');
-  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
   const { settedCurrency } = settingPersistStore();
   const network = getNetworkConfig(selectedNetwork);
   const price = useOneTokenPrice(params.tokenDto, value);

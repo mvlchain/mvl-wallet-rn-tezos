@@ -47,7 +47,7 @@ export class TransactionService implements ITransactionService {
           return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
         case NETWORK_FEE_TYPE.EIP1559:
           if (data) {
-            return this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
               chainId: network.chainId,
               maxFeePerGas: gasFeeInfo.baseFee,
               maxPriorityFeePerGas: gasFeeInfo.tip,
