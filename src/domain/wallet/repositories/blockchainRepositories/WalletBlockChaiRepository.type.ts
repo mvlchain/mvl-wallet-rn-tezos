@@ -10,7 +10,7 @@ export interface IGetCoinBalance {
 
 export interface IGetTokenBalance {
   contractAddress: string;
-  abi: string;
+  abi?: string;
   address: string;
   rpcUrl: string;
 }

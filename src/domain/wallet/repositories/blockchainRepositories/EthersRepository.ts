@@ -21,6 +21,7 @@ export class EthersRepository implements Type.IBlockChainRepository {
 
   getContractBalance = async ({ contractAddress, abi, address, rpcUrl }: Type.IGetTokenBalance) => {
     try {
+      if (!abi) throw new Error('abi is required');
       const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
       const contract = new ethers.Contract(contractAddress, abi, provider);
       const bigNumBalance = await contract.balanceOf(address);
