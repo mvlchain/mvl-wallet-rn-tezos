@@ -7,13 +7,13 @@ import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 
-import * as S from './EarnEventActionModal.style';
-import { EarnEventActionModalProps } from './EarnEventActionModal.type';
+import * as S from './EventActionControl.style';
+import { EarnEventActionModalProps } from './EventActionControl.type';
 
 /**
  * EarnEvent action modal to behave event features
  */
-export const EarnEventActionModal = ({ eventActionButtonTitle, eventActionScheme, avatarUrl }: EarnEventActionModalProps) => {
+export const EventActionControl = ({ eventActionButtonTitle, eventActionScheme, avatarUrl }: EarnEventActionModalProps) => {
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
 
   return (
