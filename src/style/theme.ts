@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native';
+
 import { fontSize } from '@@utils/ui';
 
 import { commonColors, lightColors, darkColors } from './colors';
@@ -82,7 +84,7 @@ const commonFontFamily = {
   fmHeavey: 'AppleSDGothicNeoH00',
 };
 
-const common = {
+export const common = {
   font: commonFont,
   ...commonFontFamily,
 };
@@ -105,3 +107,76 @@ export const theme = {
 export type Theme = typeof theme.dark & typeof theme.light;
 export type CommonColor = keyof typeof commonColors;
 export type ThemeColor = keyof typeof lightColors & keyof typeof darkColors;
+
+/**
+ * StyleSheet fonts
+ */
+
+const paragraphFontStyle = StyleSheet.create({
+  md: {
+    color: '#000',
+    fontSize: fontSize(16),
+    fontFamily: 'AppleSDGothicNeoM00',
+    fontWeight: '400',
+  },
+  lg: {
+    color: '#000',
+    fontSize: fontSize(18),
+    fontFamily: 'AppleSDGothicNeoM00',
+    fontWeight: '400',
+  },
+});
+
+const labelFontStyle = StyleSheet.create({
+  sm: {
+    color: '#000',
+    fontSize: fontSize(14),
+    fontFamily: 'AppleSDGothicNeoB00',
+    fontWeight: '500',
+  },
+  md: {
+    color: '#000',
+    fontSize: fontSize(16),
+    fontFamily: 'AppleSDGothicNeoB00',
+    fontWeight: '500',
+  },
+  lg: {
+    color: '#000',
+    fontSize: fontSize(18),
+    fontFamily: 'AppleSDGothicNeoB00',
+    fontWeight: '500',
+  },
+});
+
+const titleFontStyle = StyleSheet.create({
+  xs: {
+    color: '#000',
+    fontSize: fontSize(20),
+    fontFamily: 'AppleSDGothicNeoH00',
+    fontWeight: '800',
+  },
+  sm: {
+    color: '#000',
+    fontSize: fontSize(24),
+    fontFamily: 'AppleSDGothicNeoH00',
+    fontWeight: '800',
+  },
+  md: {
+    color: '#000',
+    fontSize: fontSize(28),
+    fontFamily: 'AppleSDGothicNeoH00',
+    fontWeight: '800',
+  },
+  lg: {
+    color: '#000',
+    fontSize: fontSize(32),
+    fontFamily: 'AppleSDGothicNeoH00',
+    fontWeight: '800',
+  },
+});
+
+export const fontStyle = {
+  paragraph: paragraphFontStyle,
+  label: labelFontStyle,
+  title: titleFontStyle,
+};

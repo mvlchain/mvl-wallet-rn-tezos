@@ -30,8 +30,9 @@ export const fontSize = (size: number) => {
 };
 
 /**
- * shortcut for `width * size` calculation
+ * shortcut for `width * size` or `height * size` calculation
  * @param size size of pixel for figma design
- * @returns adaptive pixel size based on width
+ * @returns adaptive pixel size based on width or height
  */
-export const pixel = (size: number) => width * size;
+export const getWidth = (size: number) => width * size;
+export const getHeight = (size: number) => height * size;
