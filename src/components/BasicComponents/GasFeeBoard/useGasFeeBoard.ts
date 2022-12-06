@@ -90,6 +90,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
         data,
       });
       setEstimatedGas(gasUsage);
+      setCustomGasLimit(gasUsage);
     } else {
       const gasUsage = await gasService.estimateGas({
         selectedNetwork,
@@ -98,13 +99,13 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
         value,
       });
       setEstimatedGas(gasUsage);
+      setCustomGasLimit(gasUsage);
     }
   };
 
   const transactionFee = useMemo(() => {
-    if (!customBaseFee) return '-';
+    if (!customBaseFee || !estimatedGas) return '-';
     if (network.networkFeeType === NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !customGasLimit) return '-';
-    if (network.networkFeeType !== NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !estimatedGas) return '-';
     return gasService.getTotalGasFee({
       selectedNetwork,
       baseFee: customBaseFee,
@@ -121,8 +122,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   //Wrap up the send transaction function which from useTokenSend and inject parameters
   const onConfirmGasFee = async () => {
     if (!customBaseFee || !customTip || !customGasLimit) return;
-    if (network.networkFeeType) {
-    }
     onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
   };
 
