@@ -36,7 +36,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const price = useOneTokenPrice(params.tokenDto, value);
 
   const setSign = async () => {
-    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44: network.bip44 });
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
     const valueSign = from === wallet.address ? '-' : '';
     setValueSign(valueSign);
   };

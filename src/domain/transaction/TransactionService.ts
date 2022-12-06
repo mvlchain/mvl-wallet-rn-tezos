@@ -6,7 +6,7 @@ import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, Network, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request } from '@@utils/request';
 
@@ -21,10 +21,8 @@ export class TransactionService implements ITransactionService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
-  encodeTransferData = async (index: number, bip44: number, to: string, value: BigNumber) => {
+  encodeTransferData = async (to: string, value: BigNumber) => {
     try {
-      const wallet = await this.walletService.getWalletInfo({ index, bip44 });
-      const from = wallet.address;
       const etherInterface = new ethers.utils.Interface(abiERC20);
       const data = etherInterface.encodeFunctionData('transfer', [to, value]);
       return data;
@@ -36,7 +34,7 @@ export class TransactionService implements ITransactionService {
   sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data, contractAddress }: ISendTransactionRequest) => {
     try {
       const network = getNetworkConfig(selectedNetwork);
-      const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
+      const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
 
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
