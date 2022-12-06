@@ -1,5 +1,5 @@
 import { TezosToolkit } from '@taquito/taquito';
-import * as T from '@taquito/utils';
+import { format } from '@taquito/utils';
 // @ts-ignore
 import * as tezosCrypto from '@tezos-core-tools/crypto-utils';
 import { injectable } from 'tsyringe';
@@ -14,8 +14,7 @@ export class TezosRepository implements Type.IBlockChainRepository {
       const Tezos = new TezosToolkit(rpcUrl);
       const address = tezosCrypto.utils.secretKeyToKeyPair(selectedWalletPrivateKey).pkh;
       const balance = await Tezos.tz.getBalance(address);
-      console.log('balance:  ', T.format('tz', 'tz', balance));
-      return `${balance.toNumber() / 1000000}`;
+      return format('mutez', 'tz', balance).toString();
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
