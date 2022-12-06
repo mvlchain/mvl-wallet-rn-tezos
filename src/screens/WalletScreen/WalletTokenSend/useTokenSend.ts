@@ -121,7 +121,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
         if (!transactionType) {
           throw new Error('check transaction type');
         }
-        transactionService.registerHistory({
+        const serverRes = await transactionService.registerHistory({
           network: network.networkId,
           from: wallet.address,
           to: tokenDto.contractAddress ?? to,
@@ -131,6 +131,9 @@ const useTokenSend = (tokenDto: TokenDto) => {
           nonce: 0,
           value: value.toString(),
         });
+        if (!serverRes) {
+          throw new Error('fail register history');
+        }
         resetBody();
         navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
       } catch (err) {

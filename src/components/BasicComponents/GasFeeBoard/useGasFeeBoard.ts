@@ -51,6 +51,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   }, [to, value, data]);
 
   useEffect(() => {
+    if (advanced) return;
     if (network.networkFeeType === NETWORK_FEE_TYPE.EIP1559) {
       const validBaseFee = leveledBaseFee && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
       setCustomBaseFee(validBaseFee);
@@ -59,7 +60,8 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
       setCustomBaseFee(leveledBaseFee);
       setCustomTip(tip);
     }
-  }, [leveledBaseFee, tip]);
+    setCustomGasLimit(estimatedGas);
+  }, [leveledBaseFee, tip, advanced]);
 
   const setInitialGas = async () => {
     try {
