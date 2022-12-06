@@ -15,6 +15,8 @@ import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShar
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
+import { EhtersClient } from '@@domain/wallet/clients/EthersClient';
+import { TezosClient } from '@@domain/wallet/clients/TezosClient';
 import { EthersContractImpl } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
 import { EthersContractServiceImpl } from '@@domain/wallet/services/WalletBlockChainService';
@@ -78,4 +80,12 @@ container.register('EarnEventRepository', {
 
 container.register('TokenRepository', {
   useFactory: instancePerContainerCachingFactory<TokenRepository>((container) => container.resolve(TokenRepository)),
+});
+
+container.register('EhtersClient', {
+  useFactory: instancePerContainerCachingFactory<EhtersClient>((container) => container.resolve(EhtersClient)),
+});
+
+container.register('TezosClient', {
+  useFactory: instancePerContainerCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),
 });
