@@ -14,7 +14,7 @@ import { getLeveledBaseFee } from '@@utils/gas';
 
 const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>) => {
   const gasService = useDi('GasService');
-  const { selectedNetwork: pickNetwork } = walletPersistStore();
+  const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
 
@@ -22,7 +22,9 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const [advanced, setAdvanced] = useState(false);
   const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(null);
-  const tip = GAS_LEVEL_SETTING[gasLevel].tip;
+  const tip = useMemo(() => {
+    return GAS_LEVEL_SETTING[gasLevel].tip;
+  }, [gasLevel]);
 
   //The reference values from blockchain
   const [estimatedGas, setEstimatedGas] = useState<BigNumber | null>(null);
@@ -34,7 +36,9 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const [customBaseFee, setCustomBaseFee] = useState<BigNumber | null>(null);
   const [customTip, setCustomTip] = useState<BigNumber | null>(null);
   const [customGasLimit, setCustomGasLimit] = useState<BigNumber | null>(null);
-  const leveledBaseFee = getLeveledBaseFee(network.networkFeeType, gasLevel, baseFee);
+  const leveledBaseFee = useMemo(() => {
+    return getLeveledBaseFee(network.networkFeeType, gasLevel, baseFee);
+  }, [gasLevel, baseFee]);
 
   const { to, value, data } = transactionRequestStore();
 
@@ -47,32 +51,54 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   }, [to, value, data]);
 
   useEffect(() => {
-    const validBaseFee = leveledBaseFee && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
-    setCustomBaseFee(validBaseFee);
-    setCustomTip(tip);
+    if (network.networkFeeType === NETWORK_FEE_TYPE.EIP1559) {
+      const validBaseFee = leveledBaseFee && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
+      setCustomBaseFee(validBaseFee);
+      setCustomTip(tip);
+    } else {
+      setCustomBaseFee(leveledBaseFee);
+      setCustomTip(tip);
+    }
   }, [leveledBaseFee, tip]);
 
   const setInitialGas = async () => {
-    const gasFeeData = await gasService.getGasFeeData(selectedNetwork);
-    setEnableTip(gasFeeData.enableTip);
-    setEnableLimitCustom(gasFeeData.enableLimitCustom);
-    setBaseFee(gasFeeData.baseFee ?? null);
-    setGasLimit(gasFeeData.gasLimit ?? null);
-    setCustomGasLimit(gasFeeData.gasLimit ?? null);
+    try {
+      const gasFeeData = await gasService.getGasFeeData(selectedNetwork);
+      if (!gasFeeData) {
+        throw new Error('Fail to get gasfee data');
+      }
+      setEnableTip(gasFeeData.enableTip);
+      setEnableLimitCustom(gasFeeData.enableLimitCustom);
+      setBaseFee(gasFeeData.baseFee ?? null);
+      setGasLimit(gasFeeData.gasLimit ?? null);
+      setCustomGasLimit(gasFeeData.gasLimit ?? null);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const estimateGas = async () => {
     if (!to || !value) return;
-    const request: IEstimateGasRequest = {
-      to,
-      value,
-      selectedNetwork,
-    };
-    if (data) {
-      request.data = data;
+    if (tokenDto.contractAddress) {
+      if (!data) {
+        throw new Error('data is required');
+      }
+      const gasUsage = await gasService.estimateGas({
+        selectedNetwork,
+        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+        contractAddress: tokenDto.contractAddress,
+        data,
+      });
+      setEstimatedGas(gasUsage);
+    } else {
+      const gasUsage = await gasService.estimateGas({
+        selectedNetwork,
+        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+        to,
+        value,
+      });
+      setEstimatedGas(gasUsage);
     }
-    const gasUsage = await gasService.estimateGas(request);
-    setEstimatedGas(gasUsage);
   };
 
   const transactionFee = useMemo(() => {
@@ -97,7 +123,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
     if (!customBaseFee || !customTip || !customGasLimit) return;
     if (network.networkFeeType) {
     }
-    //TODO: leveledBaseFee 입력하도록해야함 수정피료
     onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
   };
 

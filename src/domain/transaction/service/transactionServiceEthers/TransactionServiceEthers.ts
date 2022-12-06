@@ -21,7 +21,6 @@ export class TransactionServiceEthers implements ITransactionServiceEthers {
         chainId: network.chainId,
         ...params,
       });
-
       return res.hash;
     } catch (err) {
       console.log(err);

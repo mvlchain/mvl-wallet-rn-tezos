@@ -2,13 +2,14 @@ import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
+import { parseTransaction } from 'ethers/lib/utils';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, NETWORK, NETWORK_FEE_TYPE, getNetworkName } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK, NETWORK_FEE_TYPE, getNetworkName, NETWORK_ID, NetworkId } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
-import { ISendTransactionRequest } from '@@domain/transaction/TransactionService.type';
+import { getTransactionType, ISendTransactionRequest } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
@@ -21,7 +22,7 @@ import { TTransactionResultRootStackProps } from '../WalletTransactionResult/Wal
 
 const useTokenSend = (tokenDto: TokenDto) => {
   const transactionService = useDi('TransactionService');
-
+  const walletService = useDi('WalletService');
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
@@ -91,23 +92,46 @@ const useTokenSend = (tokenDto: TokenDto) => {
         openModal('CONFIRM_TX_PIN', undefined);
         await pinModalObserver;
         closeModal();
-        const request: ISendTransactionRequest = {
-          selectedNetwork,
-          selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-          gasFeeInfo,
-          to,
-        };
-        if (selectedNetwork !== NETWORK.TEZOS && selectedNetwork !== NETWORK.TEZOS_GHOSTNET && tokenDto.contractAddress) {
-          request.data = data;
+        //send transaction
+        let res;
+        if (tokenDto.contractAddress) {
+          res = await transactionService.sendTransaction({
+            selectedNetwork,
+            selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+            gasFeeInfo,
+            contractAddress: tokenDto.contractAddress,
+            data,
+          });
         } else {
-          request.value = value;
+          res = await transactionService.sendTransaction({
+            selectedNetwork,
+            selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+            gasFeeInfo,
+            to,
+            value,
+          });
         }
-        const res = await transactionService.sendTransaction(request);
+
         if (!res) {
-          //TODO: 에러처리
+          throw new Error('fail send transaction');
         }
+        //send server
+        const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], bip44: network.bip44 });
+        const transactionType = getTransactionType(network.networkId, !!tokenDto.contractAddress, tokenDto.symbol === 'BTCB', false);
+        if (!transactionType) {
+          throw new Error('check transaction type');
+        }
+        transactionService.registerHistory({
+          network: network.networkId,
+          from: wallet.address,
+          to: tokenDto.contractAddress ?? to,
+          data,
+          hash: res,
+          type: transactionType,
+          nonce: 0,
+          value: value.toString(),
+        });
         resetBody();
-        console.log('res', res);
         navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
       } catch (err) {
         //TODO: 무슨 처리를 해줘야하지?

@@ -1,6 +1,6 @@
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
-import { Network, NetworkId } from '@@constants/network.constant';
+import { NETWORK, Network, NetworkId, NETWORK_ID } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 //TODO: generatedscheme에 있는지 확인하기
@@ -18,6 +18,41 @@ export enum TTransactionType {
   SEND_BNB = 'SEND_BNB',
   SEND_XTZ = 'SEND_XTZ',
 }
+
+//TODO: 임시로 만들었는데 좋은 방법이 있을까요
+export const getTransactionType = (networkId: NetworkId, isToken: boolean, isBtcb: boolean, isNft: boolean) => {
+  if (isToken) {
+    switch (networkId) {
+      case NETWORK_ID.ETHEREUM:
+        if (isNft) {
+          return TTransactionType.SEND_ERC721;
+        } else {
+          return TTransactionType.SEND_ERC20;
+        }
+      case NETWORK_ID.BSC:
+        if (isBtcb) {
+          return TTransactionType.SEND_BEP20_BTCB;
+        } else {
+          return TTransactionType.SEND_BEP20;
+        }
+      case NETWORK_ID.XTZ:
+        return TTransactionType.SEND_XTZ;
+      default:
+        null;
+    }
+  } else {
+    switch (networkId) {
+      case NETWORK_ID.ETHEREUM:
+        return TTransactionType.SEND_ETH;
+      case NETWORK_ID.BSC:
+        return TTransactionType.SEND_BNB;
+      case NETWORK_ID.XTZ:
+        return TTransactionType.SEND_XTZ;
+      default:
+        null;
+    }
+  }
+};
 
 export interface INetworkInfo {
   rpcUrl: string;
@@ -71,6 +106,7 @@ export interface ISendTransactionRequest {
   from?: BigNumber;
   value?: BigNumber;
   data?: BytesLike | null;
+  contractAddress?: string;
 }
 
 export interface IRegisterTransactionRequest {
@@ -80,7 +116,7 @@ export interface IRegisterTransactionRequest {
   from: string;
   to: string;
   hash: string;
-  data: null;
+  data: BytesLike | null;
   nonce: 0;
 }
 export interface ITransactionService {

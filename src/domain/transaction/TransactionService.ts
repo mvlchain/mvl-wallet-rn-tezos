@@ -26,17 +26,18 @@ export class TransactionService implements ITransactionService {
       const wallet = await this.walletService.getWalletInfo({ index, bip44 });
       const from = wallet.address;
       const etherInterface = new ethers.utils.Interface(abiERC20);
-      const data = etherInterface.encodeFunctionData('Transfer', [from, to, value]);
+      const data = etherInterface.encodeFunctionData('transfer', [to, value]);
       return data;
     } catch (err) {
       console.log(err);
     }
   };
 
-  sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data }: ISendTransactionRequest) => {
+  sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data, contractAddress }: ISendTransactionRequest) => {
     try {
       const network = getNetworkConfig(selectedNetwork);
       const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
+
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
           if (!gasFeeInfo.tip || !value || !to) {
@@ -46,13 +47,13 @@ export class TransactionService implements ITransactionService {
           const amount = parseFloat(formatUnits(value));
           return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
         case NETWORK_FEE_TYPE.EIP1559:
-          if (data) {
+          if (data && contractAddress) {
             return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
               chainId: network.chainId,
               maxFeePerGas: gasFeeInfo.baseFee,
               maxPriorityFeePerGas: gasFeeInfo.tip,
               gasLimit: gasFeeInfo.gasLimit,
-              to,
+              to: contractAddress,
               data,
             });
           } else {
@@ -66,12 +67,12 @@ export class TransactionService implements ITransactionService {
             });
           }
         default:
-          if (data) {
+          if (data && contractAddress) {
             return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
               chainId: network.chainId,
               gasPrice: gasFeeInfo.baseFee,
               gasLimit: gasFeeInfo.gasLimit,
-              to,
+              to: contractAddress,
               data,
             });
           } else {

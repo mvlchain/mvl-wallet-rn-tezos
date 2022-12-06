@@ -5,6 +5,7 @@ import { injectable, inject } from 'tsyringe';
 import '@ethersproject/shims';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
+import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest, TGasLevel } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
@@ -15,37 +16,42 @@ export class GasService implements IGasService {
   constructor(
     @inject('GasRepository') private gasRepository: GasRepositoryImpl,
     @inject('GasRepositoryEip1559') private gasRepositoryEip1559: GasRepositoryEip1559Impl,
-    @inject('GasRepositoryTezos') private gasRepositoryTezos: GasRepositoryTezosImpl
+    @inject('GasRepositoryTezos') private gasRepositoryTezos: GasRepositoryTezosImpl,
+    @inject('WalletService') private walletService: WalletServiceImpl
   ) {}
 
   getGasFeeData = async (selectedNetwork: Network) => {
     const network = getNetworkConfig(selectedNetwork);
+    try {
+      switch (network.networkFeeType) {
+        case NETWORK_FEE_TYPE.TEZOS:
+          return { enableTip: true, enableLimitCustom: false };
+        case NETWORK_FEE_TYPE.EIP1559:
+          const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
+          return {
+            baseFee: gasFeeDataEip1559.lastBaseFeePerGas,
+            enableTip: true,
+            enableLimitCustom: true,
+            gasLimit: BigNumber.from(21000),
+          };
 
-    switch (network.networkFeeType) {
-      case NETWORK_FEE_TYPE.TEZOS:
-        return { enableTip: true, enableLimitCustom: false };
-      case NETWORK_FEE_TYPE.EIP1559:
-        const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
-        return {
-          baseFee: gasFeeDataEip1559.lastBaseFeePerGas,
-          enableTip: true,
-          enableLimitCustom: true,
-          gasLimit: BigNumber.from(21000),
-        };
-
-      default:
-        const gasFeeData = await this.gasRepository.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
-        return {
-          baseFee: gasFeeData.gasPrice,
-          enableTip: false,
-          enableLimitCustom: true,
-          gasLimit: BigNumber.from(21000),
-        };
+        default:
+          const gasFeeData = await this.gasRepository.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
+          return {
+            baseFee: gasFeeData.gasPrice,
+            enableTip: false,
+            enableLimitCustom: true,
+            gasLimit: BigNumber.from(21000),
+          };
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
   getTotalGasFee = ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => {
     const network = getNetworkConfig(selectedNetwork);
+
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
         if (!tip || !estimatedGas) {
@@ -88,24 +94,34 @@ export class GasService implements IGasService {
     return GAS_LEVEL_SETTING[gasLevel].waitTime;
   };
 
-  estimateGas = async ({ selectedNetwork, to, value, data }: IEstimateGasRequest) => {
+  estimateGas = async ({ selectedNetwork, selectedWalletIndex, to, value, contractAddress, data }: IEstimateGasRequest) => {
     const network = getNetworkConfig(selectedNetwork);
+    const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, bip44: network.bip44 });
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        if (!value) {
-          throw new Error('need value');
-        }
-        const valueTezos = parseFloat(formatUnits(value, 'gwei'));
-        const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({ rpcUrl: network.rpcUrl, to, amount: valueTezos });
-        return parseUnits(gasUsageTezos.consumedMilligas.toString(), 'gwei');
-      default:
-        if (data) {
-          if (!value) {
-            throw new Error('need value');
-          }
-          return await this.gasRepository.estimateGas({ networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId }, data });
+        if (contractAddress && data) {
+          //작업필요
+        } else if (to && value) {
+          const valueTezos = parseFloat(formatUnits(value, 'gwei'));
+          const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({ rpcUrl: network.rpcUrl, to, amount: valueTezos });
+          return parseUnits(gasUsageTezos.consumedMilligas.toString(), 'gwei');
         } else {
-          return await this.gasRepository.estimateGas({ networkInfo: { rpcUrl: network.rpcUrl, chainId: network.chainId }, to, value });
+          throw new Error('request body must have contractAddress, data or to, value');
+        }
+      default:
+        if (contractAddress && data) {
+          return await this.gasRepository.estimateGas(
+            { rpcUrl: network.rpcUrl, chainId: network.chainId },
+            {
+              from: wallet.address,
+              to: contractAddress,
+              data,
+            }
+          );
+        } else if (to && value) {
+          return await this.gasRepository.estimateGas({ rpcUrl: network.rpcUrl, chainId: network.chainId }, { from: wallet.address, to, value });
+        } else {
+          throw new Error('request body must have contractAddress, data or to, value');
         }
     }
   };
