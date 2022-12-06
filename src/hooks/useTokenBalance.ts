@@ -17,7 +17,7 @@ import useWalletsQuery from './queries/useWalletsQuery';
 
 export const useTokenBalance = () => {
   // @TODO 데이터 연결
-  const ethService = useDi('WalletBlockChainService');
+  const walletBlockChainService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
@@ -75,7 +75,7 @@ export const useTokenBalance = () => {
   const getBalance = async () => {
     try {
       if (!tokenList) return;
-      const balance = await ethService.getBalanceFromNetwork(_selectedWalletIndex, selectedNetwork, tokenList);
+      const balance = await walletBlockChainService.getBalanceFromNetwork(_selectedWalletIndex, selectedNetwork, tokenList);
       if (balance && Object.keys(balance).length === 0) {
         console.log('Data fetch from blockchain is fail -> Fetch from Server');
         refetch();
@@ -123,6 +123,7 @@ export const useTokenBalance = () => {
             ticker: crypto,
             balance: floatBalance,
             valuatedPrice,
+            logoURI: token.logoURI,
           },
         ];
       }
