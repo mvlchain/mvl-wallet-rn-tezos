@@ -83,6 +83,6 @@ it('get eth balance', async () => {
 //       selectedWalletPrivateKey: TestData.tezosSelectedWalletPrivateKey,
 //       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
 //     });
-//     expect(balance).toBe('2101');
+//     expect(balance).toBe('2100.999165');
 //   });
 // });
