@@ -8,7 +8,7 @@ import { RefreshControl } from 'react-native';
 import { EarnEvent } from '@@domain/model/EarnEvent';
 import { useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { useRefetchByRefreshControl } from '@@hooks/useRefetchByRefreshControl';
-import { EVENT_STACK_ROUTE, TEventStackNavigationProps } from '@@navigation/EventStack/EventStack.type';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 
 import { EarnEventContent } from './EarnEventContent';
 import * as S from './EarnEventListScreen.style';
@@ -22,7 +22,7 @@ export const EarnEventListScreen = () => {
   const { t } = useTranslation();
   const { isLoading, error, data, refetch } = useEarnEventList();
   const { refreshing, refresh } = useRefetchByRefreshControl(refetch);
-  const navigation = useNavigation<TEventStackNavigationProps<typeof EVENT_STACK_ROUTE.EVENT>>();
+  const navigation = useNavigation<TRootStackNavigationProps<typeof ROOT_STACK_ROUTE.MAIN>>();
 
   // callback rendering EarnEventContent (by FlashList)
   const renderEarnEventContents = useCallback(({ item }: ListRenderItemInfo<EarnEvent>) => {
@@ -34,7 +34,7 @@ export const EarnEventListScreen = () => {
         subtitle={item.subTitle}
         onPress={() => {
           // onItemClick event
-          navigation.navigate(EVENT_STACK_ROUTE.DETAILS);
+          navigation.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, { data: item });
         }}
       />
     );
