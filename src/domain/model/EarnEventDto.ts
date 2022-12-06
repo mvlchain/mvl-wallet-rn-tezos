@@ -11,6 +11,9 @@ export interface EarnEventDto {
   iconUrl: string;
   title: string;
   subTitle: string;
+  /**
+   * EarnEventDetailsScreen's main WebView contents
+   */
   detailPageUrl: string;
 
   pointIconUrl: string | null;

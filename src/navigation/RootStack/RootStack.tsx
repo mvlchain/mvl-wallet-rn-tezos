@@ -17,6 +17,7 @@ import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
 import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
+import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
 import SettingAppVersionScreen from '@@screens/SettingScreen/SettingAppVersionScreen';
@@ -160,6 +161,11 @@ function RootStack() {
       options: {
         headerShown: false,
       },
+    },
+    {
+      name: ROOT_STACK_ROUTE.EVENT_DETAILS,
+      component: EarnEventDetailsScreen,
+      options: handleStackHeaderOption({ title: '' }),
     },
   ];
 
