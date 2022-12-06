@@ -15,6 +15,7 @@ const generator = () =>
             }}
             size={size}
             style={wrapperStyle}
+            disabled={disabled}
           >
             {({ pressed }) => (
               <S.BaseButton pressed={pressed} disabled={disabled} {...baseStyle.bg} size={size} style={buttonStyle}>
