@@ -1,0 +1,13 @@
+//
+//  goorm-dod.driver.debug.xcconfig
+//  goorm-dod-driver
+//
+//  Created by mvl14 on 2020/09/11.
+//  Copyright © 2020 MVL. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// ** Note: Path may vary by projects **
+#include "Resources/Configs/Wallet.staging.xcconfig"

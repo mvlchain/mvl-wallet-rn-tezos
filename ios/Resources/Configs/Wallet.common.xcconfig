@@ -1,0 +1,19 @@
+//
+//  goorm-dod.driver.common.xcconfig
+//  goorm-dod-driver
+//
+//  Created by mvl14 on 2020/08/21.
+//  Copyright © 2020 MVL. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// App Icon
+WALLET_APP_ICON = AppIcon
+
+// App Version
+WALLET_APP_VERSION = 1.0.0
+
+// Launch Screen
+WALLET_LAUNCH_SCREEN = LaunchScreen
