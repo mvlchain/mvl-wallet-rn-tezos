@@ -1,28 +1,41 @@
 import React from 'react';
 
-import { Alert, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Text } from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon, CircleAlertIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { useAssetFromTheme } from '@@hooks/useTheme';
+import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import * as S from './EventActionControl.style';
 import { EarnEventActionModalProps } from './EventActionControl.type';
+import { useRewardReceiptUrlByExtenedPublicKey } from './useRewardReceiptUrlByExtenedPublicKey';
 
 /**
  * EarnEvent action modal to behave event features
  */
-export const EventActionControl = ({ eventActionButtonTitle, eventActionScheme, avatarUrl }: EarnEventActionModalProps) => {
+export const EventActionControl = ({ avatarUrl, eventActionButtonTitle, eventActionScheme, receiptUrl }: EarnEventActionModalProps) => {
+  const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
+  const { rewardReceiptUrl } = useRewardReceiptUrlByExtenedPublicKey(receiptUrl);
+  const { openModal } = globalModalStore();
+  const isReceiptEnabled = receiptUrl ? true : false;
+
+  console.log(`Event> receipt: ${receiptUrl}, rewardReceiptUrl: ${rewardReceiptUrl} isEnabled: ${isReceiptEnabled}`);
 
   return (
     <DropShadow style={S.style.shadow}>
       <S.Container>
         <S.RewardBoard
+          disabled={!isReceiptEnabled}
           onPress={() => {
-            // TODO replace this
-            Alert.alert('Go to event receipt screen', 'description', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
+            // open Reward Receipt using WebViewModal
+            openModal(MODAL_TYPES.REWARD_RECEIPT, {
+              url: rewardReceiptUrl,
+            });
           }}
         >
           <S.Avatar source={{ uri: avatarUrl }} />
@@ -35,7 +48,7 @@ export const EventActionControl = ({ eventActionButtonTitle, eventActionScheme, 
               <Text style={S.style.pointUnit}>{'bMVL'}</Text>
             </Text>
           </S.PointGroupLayout>
-          <RightIcon style={S.style.extensionArrow} />
+          {isReceiptEnabled ? <RightIcon style={S.style.extensionArrow} /> : null}
         </S.RewardBoard>
 
         <S.TxFeeLayout>

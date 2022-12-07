@@ -1,5 +1,6 @@
 export interface EarnEventActionModalProps {
+  avatarUrl: string;
   eventActionButtonTitle: string;
   eventActionScheme: string;
-  avatarUrl: string;
+  receiptUrl?: string;
 }

@@ -13,7 +13,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * Event details screen that displays contents to the WebView.
  * WebView: display event contents.
  * EventActionControl
- * WebViewModal (EarnEventReceiptModal)
+ * RewardReceiptModal (WebView based modal)
  * Alert modal
  *  . failed claim
  *  . transfer failed
@@ -44,9 +44,10 @@ export function EarnEventDetailsScreen() {
         <>
           <Webview url={data.detailPageUrl} />
           <EventActionControl
+            avatarUrl={data.iconUrl}
             eventActionButtonTitle={data.eventActionButtonTitle ?? ''}
             eventActionScheme={data.eventActionScheme ?? ''}
-            avatarUrl={data.iconUrl}
+            receiptUrl={data.calcInfoPageUrl}
           />
         </>
       ) : null}
