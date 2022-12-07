@@ -13,6 +13,6 @@ export const getLeveledBaseFee = (networkFeeType: NetworkFeeType, gasLevel: TGas
     default:
       const gasWeight = GAS_LEVEL_SETTING[gasLevel].weight;
       const baseFeeInDecimal = new Decimal(baseFee.toString()).mul(gasWeight);
-      return BigNumber.from(BigInt(Math.floor(baseFeeInDecimal.toNumber())));
+      return BigNumber.from(Math.floor(baseFeeInDecimal.toNumber()));
   }
 };
