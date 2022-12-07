@@ -9,6 +9,8 @@ export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: flex-end;
   padding-top: ${({ isFull }) => (isFull ? `0px` : `${height * 60}px`)};
+  //TODO: 수정필요
+  background-color: gray;
 `;
 
 export const PinContainer = styled.View<IPinLayoutStyleProps>`

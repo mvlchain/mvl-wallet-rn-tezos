@@ -1,13 +1,57 @@
-import { ChevronDownLightIcon, TextFieldDelete, TokenMVL32Icon } from '@@assets/image';
+import React, { useState } from 'react';
+
+import { parseUnits } from 'ethers/lib/utils';
+import { NativeSyntheticEvent, TextInputChangeEventData, TextInputEndEditingEventData } from 'react-native';
+import { SvgUri } from 'react-native-svg';
+
+import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
-import { theme } from '@@style/theme';
+import useOneTokenBalance from '@@hooks/useOneTokenBalance';
+import { useColor } from '@@hooks/useTheme';
+import { useTokenBalance } from '@@hooks/useTokenBalance';
+import { height, width } from '@@utils/ui';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
-  const { useMax, onSelect, label, symbol, value, onChange, hint } = props;
-  const clearTextField = () => {};
+  const { useMax, onSelect, label, tokenDto, value, onChange, hint } = props;
+  const [showDelete, setShowDelete] = useState(false);
+  const [displayValue, setDisplayValue] = useState<string | null>(null);
+  const { balance } = useOneTokenBalance(tokenDto);
+  const { color } = useColor();
+
+  const clearTextField = () => {
+    onChange(null);
+    setDisplayValue(null);
+    setShowDelete(false);
+  };
+
+  const onKeyPress = () => {
+    setShowDelete(true);
+  };
+
+  const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    let value = data.nativeEvent.text;
+
+    if (!value) {
+      setShowDelete(false);
+    }
+
+    if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
+      value = value.slice(1);
+    }
+
+    if (value.indexOf('.') !== value.lastIndexOf('.')) {
+      return;
+    }
+
+    onChange(parseUnits(value, 'ether'));
+    setDisplayValue(value);
+  };
+
+  const onEndEditing = (data: NativeSyntheticEvent<TextInputEndEditingEventData>) => {};
+
   return (
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
@@ -17,24 +61,25 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
           <S.TradeVolumeInput
-            value={value}
-            onChange={onChange}
+            value={displayValue ?? ''}
+            onChange={onSet}
+            onEndEditing={onEndEditing}
             keyboardType={'numeric'}
-            selectionColor={theme.light.color.black}
+            selectionColor={color.black}
             placeholder={'0.00'}
-            //TODO: 스토어에 theme 들어오면 수정필요
-            placeholderTextColor={theme.light.color.grey300Grey700}
+            placeholderTextColor={color.grey300Grey700}
+            onKeyPress={onKeyPress}
           />
 
-          <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
+          {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
-          <TokenMVL32Icon />
-          <S.Token>bMVL</S.Token>
+          <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />
+          <S.Token>{tokenDto.symbol}</S.Token>
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
-      {hint && <S.Hint>{hint}</S.Hint>}
+      {hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`Balance: ${balance}`}</S.Balance>}
     </S.TradeVolumeContainer>
   );
 }

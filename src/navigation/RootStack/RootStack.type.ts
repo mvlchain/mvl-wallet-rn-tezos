@@ -1,5 +1,7 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
+import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
@@ -19,14 +21,16 @@ export type TRootStackParamList = {
   SETTING_PRIVATE_KEY: undefined;
   SETTING_FAQ: undefined;
   WALLET_TOKEN_DETAIL: {
-    symbol: string;
+    tokenDto: TokenDto;
   };
-  WALLET_TRANSACTION_HISTORY: {
-    txHash: string;
+  WALLET_TOKEN_SEND: {
+    tokenDto: TokenDto;
   };
+  WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse & { tokenDto: TokenDto };
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
   WALLET_SCAN_QR: undefined;
+  WALLET_TRANSACTION_RESULT: undefined;
 };
 
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
@@ -46,10 +50,12 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   SETTING_PRIVATE_KEY: 'SETTING_PRIVATE_KEY',
   SETTING_FAQ: 'SETTING_FAQ',
   WALLET_TOKEN_DETAIL: 'WALLET_TOKEN_DETAIL',
+  WALLET_TOKEN_SEND: 'WALLET_TOKEN_SEND',
   WALLET_TRANSACTION_HISTORY: 'WALLET_TRANSACTION_HISTORY',
   WALLET_TRANSACTION_SPEED_UP: 'WALLET_TRANSACTION_SPEED_UP',
   WALLET_TRANSACTION_CANCEL: 'WALLET_TRANSACTION_CANCEL',
   WALLET_SCAN_QR: 'WALLET_SCAN_QR',
+  WALLET_TRANSACTION_RESULT: 'WALLET_TRANSACTION_RESULT',
 } as const;
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;

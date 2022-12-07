@@ -1,83 +1,93 @@
-import { InMemorySigner } from '@taquito/signer';
-import { TezosToolkit } from '@taquito/taquito';
-import Decimal from 'decimal.js';
-import { ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { BigNumber, ethers } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
+import qs from 'qs';
+import { inject, injectable } from 'tsyringe';
 
-export interface TransactionService {
-  sendTransaction(from: string, to: string, value: string, data: string | undefined): Promise<string>;
-}
+import { abiERC20 } from '@@constants/contract/abi/abiERC20';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { WalletService } from '@@domain/wallet/services/WalletService';
+import { request } from '@@utils/request';
 
-export class EvmNetworkInfo {
-  constructor(readonly rpcUrl: string, readonly chainId: number) {}
-}
-
-export class TezosNetworkInfo {
-  constructor(readonly rpcUrl: string) {}
-}
-
-export class GasFeeInfo {
-  constructor(readonly gasPrice: string) {}
-}
-
-export class EthersTransactionImpl implements TransactionService {
+import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
+import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
+import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
+@injectable()
+export class TransactionService implements ITransactionService {
   constructor(
-    private readonly selectedNetworkInfo: EvmNetworkInfo,
-    private readonly selectedWalletPrivateKey: string,
-    private readonly selectedGasFeeInfo: GasFeeInfo
+    @inject('TransactionServiceEthers') private etherService: ITransactionServiceEthers,
+    @inject('TransactionServiceTezos') private tezosService: ITransactionServiceTezos,
+    @inject('WalletService') private walletService: WalletService
   ) {}
 
-  async sendTransaction(from: string, to: string, value: string, data: string | undefined): Promise<string> {
-    const provider = new ethers.providers.JsonRpcProvider(this.selectedNetworkInfo.rpcUrl);
+  encodeTransferData = async (to: string, value: BigNumber) => {
+    try {
+      const etherInterface = new ethers.utils.Interface(abiERC20);
+      const data = etherInterface.encodeFunctionData('transfer', [to, value]);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    const wallet = new ethers.Wallet(this.selectedWalletPrivateKey, provider);
+  sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data }: ISendTransactionRequest) => {
+    try {
+      const network = getNetworkConfig(selectedNetwork);
+      const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
 
-    const res = await wallet.sendTransaction({
-      from,
-      to,
-      data,
-      value,
-      gasPrice: this.selectedGasFeeInfo.gasPrice,
-      chainId: this.selectedNetworkInfo.chainId,
-    });
+      switch (network.networkFeeType) {
+        case NETWORK_FEE_TYPE.TEZOS:
+          if (!gasFeeInfo.tip || !value || !to) {
+            throw new Error('tip,value,to is required');
+          }
+          const fee = parseFloat(formatUnits(gasFeeInfo.tip));
+          const amount = parseFloat(formatUnits(value));
+          return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
+        case NETWORK_FEE_TYPE.EIP1559:
+          return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            chainId: network.chainId,
+            maxFeePerGas: gasFeeInfo.baseFee,
+            maxPriorityFeePerGas: gasFeeInfo.tip,
+            gasLimit: gasFeeInfo.gasLimit,
+            to,
+            value,
+            data,
+          });
+        case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
+          return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            chainId: network.chainId,
+            gasPrice: gasFeeInfo.baseFee,
+            gasLimit: gasFeeInfo.gasLimit,
+            to,
+            value,
+            data,
+          });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    return res.hash;
-  }
-}
+  getHistory = async (params: IGetHistoryParams) => {
+    try {
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      const res = await request.get(endpoint);
+      if (res.status === 200) {
+        return res.data;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  };
 
-export class TezosTaquitoTransactionsImpl implements TransactionService {
-  constructor(
-    private readonly selectedNetworkInfo: TezosNetworkInfo,
-    private readonly selectedWalletPrivateKey: string,
-    private readonly selectedGasFeeInfo: GasFeeInfo
-  ) {}
-
-  // Tezos는 general한 sendTransaction을 raw string data를 활용하는 방식으로 구현하기 어려워서 transfer 기준으로 일단 구현
-  async sendTransaction(from: string, to: string, value: string, data: string | undefined): Promise<string> {
-    const Tezos = new TezosToolkit(this.selectedNetworkInfo.rpcUrl);
-    Tezos.setProvider({
-      signer: new InMemorySigner(this.selectedWalletPrivateKey),
-    });
-
-    // 나중에 methodName과 methodArgumentObject 를 밖에서 받아서 구현할 수 있을 때 참고
-    // const contract = await Tezos.contract.at(to);
-    // const methodName = 'methodName';
-    // const methodArgumentObject = {};
-    // const txHash = await contract.methodsObject[methodName](methodArgumentObject)
-    //   .send({
-    //     fee: Number(this.selectedGasFeeInfo.gasPrice),
-    //   })
-    //   .then((op) => op.confirmation(1).then(() => op.hash));
-
-    const txHash = await Tezos.wallet
-      .transfer({
-        to: to,
-        amount: new Decimal(formatEther(value)).toNumber(),
-        fee: Number(this.selectedGasFeeInfo.gasPrice),
-      })
-      .send()
-      .then((op) => op.confirmation(1).then(() => op.opHash));
-    console.log(`txHash: ${txHash}`);
-    return txHash;
-  }
+  registerHistory = async (params: IRegisterTransactionRequest) => {
+    try {
+      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
+      const res = await request.post(endpoint);
+      return res.data;
+    } catch (e) {
+      return [];
+    }
+  };
 }

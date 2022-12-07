@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -27,15 +29,16 @@ import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfS
 import WalletEditTokenListScreen from '@@screens/WalletScreen/WalletEditTokenListScreen';
 import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
 import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
+import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
 import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
+import WalletTransactionResult from '@@screens/WalletScreen/WalletTransactionResult';
 import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
 import { fontSize, height } from '@@utils/ui';
 
 import { ROOT_STACK_ROUTE, TRootStackParamList } from './RootStack.type';
 
 const { Navigator, Screen } = createStackNavigator<TRootStackParamList>();
-
 type ScreenProps = Parameters<typeof Screen>[0];
 const routerTheme = {
   ...DefaultTheme,
@@ -126,20 +129,36 @@ function RootStack() {
       component: WalletTokenDetail,
     },
     {
+      name: ROOT_STACK_ROUTE.WALLET_TOKEN_SEND,
+      component: WalletTokenSend,
+      options: handleStackHeaderOption({ title: t('send') }),
+    },
+    {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY,
       component: WalletTransactionHistory,
+      options: handleStackHeaderOption({ title: t('transaction_history') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_SPEED_UP,
       component: WalletTransactionSpeedUp,
+      options: handleStackHeaderOption({ title: t('speed_up') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL,
       component: WalletTransactionCancel,
+      options: handleStackHeaderOption({ title: t('cancel_transaction') }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_SCAN_QR,
       component: WalletScanQR,
+      options: handleStackHeaderOption({ title: t('scan_qr_code') }),
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
+      component: WalletTransactionResult,
+      options: {
+        headerShown: false,
+      },
     },
   ];
 

@@ -1,39 +1,54 @@
-import React from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React, { useEffect, useState } from 'react';
 
+import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { useDi } from '@@hooks/useDi';
+import useOneTokenPrice from '@@hooks/useOneTokenPrice';
+import { TTransactionHistoryRouteProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './TransactionDetailBoard.style';
 
 function TransactionDetailBoard() {
+  const { params } = useRoute<TTransactionHistoryRouteProps>();
+  const { type, status, value, ticker, updatedAt, to, from } = params;
   const { t } = useTranslation();
-  //TODO: 데이터정해지면 수정
-  const { type, status, amount, symbol, baseCurrencyAmount, baseCurrencySymbol, date, receiver } = {
-    type: 'Send',
-    amount: 10,
-    symbol: 'MVL',
-    baseCurrencyAmount: 10000,
-    baseCurrencySymbol: 'USD',
-    date: '2021.10.31 09:00 am',
-    status: 'Confirmed',
-    receiver: 'DFGSHSHSDHSDHSDHSDHFDSHDFHdgsgdsgdgsgsdgsglighlks422124124242421352135ngvaln436543.21.3SDHDFHDFH',
+  const walletService = useDi('WalletService');
+  const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const { settedCurrency } = settingPersistStore();
+  const price = useOneTokenPrice(params.tokenDto, value);
+  const [valueSign, setValueSign] = useState('');
+  const network = getNetworkConfig(selectedNetwork);
+
+  const setSign = async () => {
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
+    const valueSign = from === wallet.address ? '-' : '';
+    setValueSign(valueSign);
   };
+  useEffect(() => {
+    setSign();
+  }, []);
+
   return (
     <>
       <S.TransactionDetailBoardContainer>
         <S.TransactionType>{type}</S.TransactionType>
         <S.TransactionAmount>
-          {'sign'}
-          {amount}
-          {symbol}
+          {valueSign}
+          {value}
+          {ticker}
         </S.TransactionAmount>
-        <S.TransactionBaseCurrencyAmount>
-          {'≈'} {baseCurrencyAmount} {baseCurrencySymbol}
-        </S.TransactionBaseCurrencyAmount>
+        <S.TransactionBaseCurrencyAmount>{`≈ ${price} ${settedCurrency}`}</S.TransactionBaseCurrencyAmount>
       </S.TransactionDetailBoardContainer>
       <S.TransactionDetailBoardContainer>
         <S.Row>
           <S.Label>{t('date')}</S.Label>
-          <S.Value>{date}</S.Value>
+          <S.Value>{updatedAt}</S.Value>
         </S.Row>
         <S.Row isMiddle={true}>
           <S.Label>{t('status')}</S.Label>
@@ -42,7 +57,7 @@ function TransactionDetailBoard() {
         <S.Row>
           <S.Label>{t('receiver')}</S.Label>
           <S.ReceiverWrapper>
-            <S.Value>{receiver}</S.Value>
+            <S.Value>{to}</S.Value>
           </S.ReceiverWrapper>
         </S.Row>
       </S.TransactionDetailBoardContainer>

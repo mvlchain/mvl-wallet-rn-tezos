@@ -1,55 +1,72 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import {
-  TTranscationType,
-  ITransactionHistoryListItemProps,
-} from '@@components/WalletTokenDetail/TransactionHistoryItem/TransactionHistoryListItem.type';
-import { TRANSACTION_HISTORY_FILTER_CRITERIA, TRANSACTION_STATUS, TRANSACTION_TYPE } from '@@constants/transaction.constant';
+import { useRoute } from '@react-navigation/native';
+
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
+import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import useTransactionHitoryQuery from '@@hooks/queries/useTransactionHistoryQuery';
+import { useDi } from '@@hooks/useDi';
+import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 
 const useTransactionHistoryList = () => {
-  //TODO: 나중에 데이터 붙여야함 스토어랑ㅇㅇㅇㅇㅇㅇㅇㅇ t함수동!
-  const LIMIT = 5;
-  const [data, setData] = useState<ITransactionHistoryListItemProps[]>([]);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const { params } = useRoute<TTokenDetailRouteProps>();
+  const walletService = useDi('WalletService');
+  const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
+  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const network = getNetworkConfig(selectedNetwork);
+  const [history, setHistory] = useState<IGetTransactionHistoryResponse[]>([]);
+  const [beforeblock, setBeforeBlock] = useState(2147483647);
+  const [beforeindex, setBeforeIndex] = useState(2147483647);
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
 
-  const filteredData = useMemo(() => {
-    let type: TTranscationType;
-    switch (currentCriteria) {
-      case TRANSACTION_HISTORY_FILTER_CRITERIA.ALL:
-        return data;
-      case TRANSACTION_HISTORY_FILTER_CRITERIA.SENT_ONLY:
-        type = TRANSACTION_TYPE.SEND;
-        break;
-      case TRANSACTION_HISTORY_FILTER_CRITERIA.RECEIVED_ONLY:
-        type = TRANSACTION_TYPE.RECEIVE;
-        break;
-      default:
-        return data;
-    }
-    return data.filter((v, i) => v.type === type);
-  }, [currentCriteria, data]);
-
-  const getData = () => {
-    setLoading(true);
-    setData([...data, ...mockData.transactionHistory]);
-    setOffset(offset + 5);
-    setLoading(false);
+  const [myaddress, setMyAddress] = useState('');
+  const setWallet = async () => {
+    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
+    setMyAddress(wallet.address);
   };
-
   useEffect(() => {
-    getData();
+    setWallet();
   }, []);
 
-  const onEndReached = () => {
-    if (loading) {
-      return;
-    } else {
-      getData();
+  const filteredData = useMemo(() => {
+    if (!history || !myaddress) return;
+    switch (currentCriteria) {
+      case TRANSACTION_HISTORY_FILTER_CRITERIA.SENT_ONLY:
+        return history.filter((v, i) => v.from === myaddress);
+      case TRANSACTION_HISTORY_FILTER_CRITERIA.RECEIVED_ONLY:
+        return history.filter((v, i) => v.to === myaddress);
+      default:
+        return history;
     }
+  }, [currentCriteria, history.length, myaddress]);
+
+  const { refetch } = useTransactionHitoryQuery(
+    {
+      network: selectedNetwork,
+      address: myaddress,
+      ticker: params.tokenDto.symbol,
+      beforeblock,
+      beforeindex,
+      limit: 20,
+    },
+    {
+      onSuccess: (list) => {
+        if (list.length > 0) {
+          setHistory([...history, ...list]);
+          setBeforeBlock(list[list.length - 1].blockNumber);
+          setBeforeIndex(list[list.length - 1].index);
+        }
+      },
+      keepPreviousData: true,
+    }
+  );
+
+  const onEndReached = () => {
+    refetch();
   };
 
   return {
@@ -60,55 +77,3 @@ const useTransactionHistoryList = () => {
 };
 
 export default useTransactionHistoryList;
-
-const mockData = {
-  symbol: 'MVL',
-  base: 'USD',
-  transactionHistory: [
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagdsfsdfsfdfsfsfsdfsdfsdfsfsfsfsfsfsfsfdsfsfsdsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.CANCELED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.RECEIVE,
-      status: TRANSACTION_STATUS.CONFIRMED,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-    {
-      type: TRANSACTION_TYPE.SEND,
-      status: TRANSACTION_STATUS.PENDING,
-      amount: 1000,
-      baseCurrencyAmount: 0.5,
-      baseCurrencySymbol: 'USD',
-      txHash: 'sdgsgsdgdahgjagsk',
-      date: '21.10.31 10:30',
-    },
-  ],
-};
