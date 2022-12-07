@@ -29,7 +29,7 @@ function GasFeeBoard({ isRevision, onConfirm, tokenDto }: IGasFeeBoardProps) {
     <GasFeeBoardLayout
       isRevision={isRevision}
       onConfirm={onConfirmGasFee}
-      transactionFee={transactionFee ?? '-'}
+      transactionFee={transactionFee}
       advanced={advanced}
       toggleGasAdvanced={toggleGasAdvanced}
     >

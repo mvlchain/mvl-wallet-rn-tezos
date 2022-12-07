@@ -112,6 +112,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
       console.log('fail to get total');
       return '-';
     }
+    return total;
   }, [customBaseFee, customTip, customGasLimit, estimatedGas]);
 
   const toggleGasAdvanced = useCallback(() => {
