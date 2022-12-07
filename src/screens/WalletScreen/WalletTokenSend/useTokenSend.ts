@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, NETWORK_FEE_TYPE, getNetworkName } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { getTransactionType } from '@@domain/transaction/TransactionService.type';
