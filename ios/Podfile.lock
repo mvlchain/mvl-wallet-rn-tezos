@@ -1,6 +1,7 @@
 PODS:
   - BigInt (5.0.0)
   - boost (1.76.0)
+  - CocoaAsyncSocket (7.6.5)
   - CryptoSwift (1.5.1)
   - CustomAuth (4.1.0):
     - JWTDecode (~> 2.6)
@@ -14,6 +15,66 @@ PODS:
     - React-Core (= 0.70.5)
     - React-jsi (= 0.70.5)
     - ReactCommon/turbomodule/core (= 0.70.5)
+  - Flipper (0.172.0):
+    - Flipper-Folly (~> 2.6)
+  - Flipper-Boost-iOSX (1.76.0.1.11)
+  - Flipper-DoubleConversion (3.2.0)
+  - Flipper-Fmt (7.1.7)
+  - Flipper-Folly (2.6.10):
+    - Flipper-Boost-iOSX
+    - Flipper-DoubleConversion
+    - Flipper-Fmt (= 7.1.7)
+    - Flipper-Glog
+    - libevent (~> 2.1.12)
+    - OpenSSL-Universal (= 1.1.1100)
+  - Flipper-Glog (0.5.0.3)
+  - Flipper-PeerTalk (0.0.4)
+  - Flipper-RSocket (1.4.3):
+    - Flipper-Folly (~> 2.6)
+  - FlipperKit (0.172.0):
+    - FlipperKit/Core (= 0.172.0)
+  - FlipperKit/Core (0.172.0):
+    - Flipper (~> 0.172.0)
+    - FlipperKit/CppBridge
+    - FlipperKit/FBCxxFollyDynamicConvert
+    - FlipperKit/FBDefines
+    - FlipperKit/FKPortForwarding
+    - SocketRocket (~> 0.6.0)
+  - FlipperKit/CppBridge (0.172.0):
+    - Flipper (~> 0.172.0)
+  - FlipperKit/FBCxxFollyDynamicConvert (0.172.0):
+    - Flipper-Folly (~> 2.6)
+  - FlipperKit/FBDefines (0.172.0)
+  - FlipperKit/FKPortForwarding (0.172.0):
+    - CocoaAsyncSocket (~> 7.6)
+    - Flipper-PeerTalk (~> 0.0.4)
+  - FlipperKit/FlipperKitHighlightOverlay (0.172.0)
+  - FlipperKit/FlipperKitLayoutHelpers (0.172.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitHighlightOverlay
+    - FlipperKit/FlipperKitLayoutTextSearchable
+  - FlipperKit/FlipperKitLayoutIOSDescriptors (0.172.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitHighlightOverlay
+    - FlipperKit/FlipperKitLayoutHelpers
+    - YogaKit (~> 1.18)
+  - FlipperKit/FlipperKitLayoutPlugin (0.172.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitHighlightOverlay
+    - FlipperKit/FlipperKitLayoutHelpers
+    - FlipperKit/FlipperKitLayoutIOSDescriptors
+    - FlipperKit/FlipperKitLayoutTextSearchable
+    - YogaKit (~> 1.18)
+  - FlipperKit/FlipperKitLayoutTextSearchable (0.172.0)
+  - FlipperKit/FlipperKitNetworkPlugin (0.172.0):
+    - FlipperKit/Core
+  - FlipperKit/FlipperKitReactPlugin (0.172.0):
+    - FlipperKit/Core
+  - FlipperKit/FlipperKitUserDefaultsPlugin (0.172.0):
+    - FlipperKit/Core
+  - FlipperKit/SKIOSNetworkPlugin (0.172.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - GenericJSON (2.0.2)
   - glog (0.3.5)
@@ -76,6 +137,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - OpenSSL-Universal (1.1.1100)
   - Permission-Camera (3.6.1):
     - RNPermissions
   - Permission-FaceID (3.6.1):
@@ -319,6 +381,8 @@ PODS:
     - React-Core
   - react-native-blob-util (0.16.2):
     - React-Core
+  - react-native-flipper (0.176.0):
+    - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
   - react-native-image-picker (4.10.0):
@@ -465,6 +529,7 @@ PODS:
   - RxTest (6.5.0):
     - RxSwift (= 6.5.0)
   - secp256k1.swift (0.1.4)
+  - SocketRocket (0.6.0)
   - Torus-fetchNodeDetails (3.0.0):
     - PromiseKit/Foundation (~> 6.0)
     - web3.swift (~> 0.9.3)
@@ -489,6 +554,8 @@ PODS:
     - GenericJSON (~> 2.0)
     - secp256k1.swift (~> 0.1)
   - Yoga (1.14.0)
+  - YogaKit (1.18.1):
+    - Yoga (~> 1.14)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -496,10 +563,32 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
+  - Flipper (= 0.172.0)
+  - Flipper-Boost-iOSX (= 1.76.0.1.11)
+  - Flipper-DoubleConversion (= 3.2.0)
+  - Flipper-Fmt (= 7.1.7)
+  - Flipper-Folly (= 2.6.10)
+  - Flipper-Glog (= 0.5.0.3)
+  - Flipper-PeerTalk (= 0.0.4)
+  - Flipper-RSocket (= 1.4.3)
+  - FlipperKit (= 0.172.0)
+  - FlipperKit/Core (= 0.172.0)
+  - FlipperKit/CppBridge (= 0.172.0)
+  - FlipperKit/FBCxxFollyDynamicConvert (= 0.172.0)
+  - FlipperKit/FBDefines (= 0.172.0)
+  - FlipperKit/FKPortForwarding (= 0.172.0)
+  - FlipperKit/FlipperKitHighlightOverlay (= 0.172.0)
+  - FlipperKit/FlipperKitLayoutPlugin (= 0.172.0)
+  - FlipperKit/FlipperKitLayoutTextSearchable (= 0.172.0)
+  - FlipperKit/FlipperKitNetworkPlugin (= 0.172.0)
+  - FlipperKit/FlipperKitReactPlugin (= 0.172.0)
+  - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.172.0)
+  - FlipperKit/SKIOSNetworkPlugin (= 0.172.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes/hermes-engine.podspec`)
   - KeychainAccess
   - libevent (~> 2.1.12)
+  - OpenSSL-Universal (= 1.1.1100)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera`)
   - Permission-FaceID (from `../node_modules/react-native-permissions/ios/FaceID`)
   - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary`)
@@ -512,6 +601,7 @@ DEPENDENCIES:
   - React-callinvoker (from `../node_modules/react-native/ReactCommon/callinvoker`)
   - React-Codegen (from `build/generated/ios`)
   - React-Core (from `../node_modules/react-native/`)
+  - React-Core/DevSupport (from `../node_modules/react-native/`)
   - React-Core/RCTWebSocket (from `../node_modules/react-native/`)
   - React-CoreModules (from `../node_modules/react-native/React/CoreModules`)
   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
@@ -522,6 +612,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-aes (from `../node_modules/react-native-aes-crypto`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
+  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
@@ -557,15 +648,28 @@ DEPENDENCIES:
   - RxCocoa (= 6.5.0)
   - RxSwift (= 6.5.0)
   - RxTest (= 6.5.0)
+  - secp256k1.swift (= 0.1.4)
+  - Torus-utils (= 3.0.0)
   - TouchID (from `../node_modules/react-native-touch-id`)
   - vision-camera-code-scanner (from `../node_modules/vision-camera-code-scanner`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
+  - web3.swift (= 0.9.3)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - BigInt
+    - CocoaAsyncSocket
     - CryptoSwift
+    - Flipper
+    - Flipper-Boost-iOSX
+    - Flipper-DoubleConversion
+    - Flipper-Fmt
+    - Flipper-Folly
+    - Flipper-Glog
+    - Flipper-PeerTalk
+    - Flipper-RSocket
+    - FlipperKit
     - fmt
     - GenericJSON
     - GoogleDataTransport
@@ -582,6 +686,7 @@ SPEC REPOS:
     - MLKitCommon
     - MLKitVision
     - nanopb
+    - OpenSSL-Universal
     - PromiseKit
     - PromisesObjC
     - Protobuf
@@ -591,10 +696,12 @@ SPEC REPOS:
     - RxSwift
     - RxTest
     - secp256k1.swift
+    - SocketRocket
     - Torus-fetchNodeDetails
     - Torus-utils
     - TweetNacl
     - web3.swift
+    - YogaKit
 
 EXTERNAL SOURCES:
   boost:
@@ -654,6 +761,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-aes-crypto"
   react-native-blob-util:
     :path: "../node_modules/react-native-blob-util"
+  react-native-flipper:
+    :path: "../node_modules/react-native-flipper"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-image-picker:
@@ -733,14 +842,24 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: a7c83b31436843459a1961bfd74b96033dc77234
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   CustomAuth: 45d5fd9962530fa0d4c8e7e4c867c1bb81ae48ea
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: affa4ba1bfdaac110a789192f4d452b053a86624
   FBReactNativeSpec: fe8b5f1429cfe83a8d72dc8ed61dc7704cac8745
+  Flipper: e57750a29313c49b9783a310150053d32b2b2b6f
+  Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
+  Flipper-DoubleConversion: 3d3d04a078d4f3a1b6c6916587f159dc11f232c4
+  Flipper-Fmt: 60cbdd92fc254826e61d669a5d87ef7015396a9b
+  Flipper-Folly: 584845625005ff068a6ebf41f857f468decd26b3
+  Flipper-Glog: 7761f5362d23ead28c19afc2dd1d819f00e40df9
+  Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
+  Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
+  FlipperKit: 02fd59af13a1465d04268cbffe3f93505f0a1dc2
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
-  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
@@ -756,6 +875,7 @@ SPEC CHECKSUMS:
   MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
   MLKitVision: 96c96571190b7f63eddf4a12068ce8a8689e0d2c
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-Camera: bf6791b17c7f614b6826019fcfdcc286d3a107f6
   Permission-FaceID: e70223280292a1a5e4b8ad943b70cd9229a7d2c3
   Permission-PhotoLibrary: 5b34ca67279f7201ae109cef36f9806a6596002d
@@ -780,6 +900,7 @@ SPEC CHECKSUMS:
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
   react-native-aes: c75c46aa744bef7c2415fdf7f5b2dcb75ca4364d
   react-native-blob-util: c3b0faecd2919db568e9d552084396f3e50b57c7
+  react-native-flipper: bbbbb6e3d8b7e6f5fb083885cb9898765fd6d782
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
@@ -817,6 +938,7 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   RxTest: eb2d23adefc5a5ebf5779c7792fa3edfe6ebcc17
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Torus-fetchNodeDetails: 186d6bc852bfd943f8d25154f25b5cc5fd6a03b1
   Torus-utils: e3bbb4f884fce6290b43a86ee88544fbd5addb91
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
@@ -825,7 +947,8 @@ SPEC CHECKSUMS:
   VisionCamera: e0e345300f0780ffc71874e50d20b716c201d9ae
   web3.swift: c6c3bf1f853743f8a7a58d263e5f7e46545e22c7
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
+  YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 07800f1a108b4b90230fd15fd06de645dfcde0cc
+PODFILE CHECKSUM: e8e71ef671a7ed1604f058372e7fdc8be1f45c27
 
 COCOAPODS: 1.11.3
