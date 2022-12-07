@@ -1,6 +1,7 @@
 export const TestData = {
   ethAddress: '0xC2981a878baA621E22799C31265aeaAFB7f74c50',
   bscAddress: '0xC2981a878baA621E22799C31265aeaAFB7f74c50',
+  tezosAddress: 'tz1XmNmcHRP7J7ZHurpUy4ZbjE3dpNT9chtS',
   ethersSelectedWalletPrivateKey: '0xf7a6969b7e1c36b5b86c9be0865acc4b9348f4342e0227a4e95ef435fe5cc0ca',
   tezosSelectedWalletPrivateKey: 'edskS252S8sZYXuai5qRuqxx1BsNaRdNdgZt3VmJdmPEZAE3kuBdG3KNVjWctV2Zf5mXz4nnoEDQRx9bXYjGqHUsLCkbkJYeVh',
 };
