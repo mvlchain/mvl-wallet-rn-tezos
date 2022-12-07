@@ -1,16 +1,13 @@
-import { inject, injectable } from 'tsyringe';
-import '@ethersproject/shims';
+import { TransactionRequest } from '@ethersproject/abstract-provider';
+import Decimal from 'decimal.js';
 import { BigNumber, ethers } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
+import { inject, injectable } from 'tsyringe';
 
-import { getNetworkConfig } from '@@constants/network.constant';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 
-import { IEstimateGasParams, IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
-
-import Decimal from 'decimal.js';
-import { formatEther } from 'ethers/lib/utils';
-import { TransactionRequest } from '@ethersproject/abstract-provider';
+import { IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
 
 @injectable()
 export class GasRepositoryImpl implements IGasRepository {

@@ -1,5 +1,3 @@
-import '@ethersproject/shims';
-
 import { BigNumber, ethers } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import qs from 'qs';

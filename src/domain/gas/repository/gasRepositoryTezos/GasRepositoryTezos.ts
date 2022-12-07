@@ -1,13 +1,11 @@
-import { injectable } from 'tsyringe';
-import '@ethersproject/shims';
+import { InMemorySigner } from '@taquito/signer';
+import { TezosToolkit } from '@taquito/taquito';
+import Decimal from 'decimal.js';
 import { BigNumber, ethers } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
+import { injectable } from 'tsyringe';
 
 import { IGetTotalGasFeeParamsTEZ, IGasRepositoryTezos, IEstimateGasParamsTEZ } from './GasRepositoryTezos.type';
-
-import Decimal from 'decimal.js';
-import { formatEther } from 'ethers/lib/utils';
-import { TezosToolkit } from '@taquito/taquito';
-import { InMemorySigner } from '@taquito/signer';
 
 @injectable()
 export class GasRepositoryTezosImpl implements IGasRepositoryTezos {

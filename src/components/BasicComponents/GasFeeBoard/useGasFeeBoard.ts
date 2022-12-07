@@ -5,7 +5,7 @@ import { parseUnits } from 'ethers/lib/utils';
 
 import { getNetworkConfig, getNetworkName, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
-import { IEstimateGasRequest, IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
+import { IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -81,28 +81,20 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   const estimateGas = async () => {
     if (!to || !value) return;
-    if (tokenDto.contractAddress) {
-      if (!data) {
-        throw new Error('data is required');
-      }
-      const gasUsage = await gasService.estimateGas({
-        selectedNetwork,
-        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-        contractAddress: tokenDto.contractAddress,
-        data,
-      });
-      setEstimatedGas(gasUsage);
-      setCustomGasLimit(gasUsage);
-    } else {
-      const gasUsage = await gasService.estimateGas({
-        selectedNetwork,
-        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-        to,
-        value,
-      });
-      setEstimatedGas(gasUsage);
-      setCustomGasLimit(gasUsage);
+    if (!!tokenDto.contractAddress && !data) return;
+    const gasUsage = await gasService.estimateGas({
+      selectedNetwork,
+      selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+      to: tokenDto.contractAddress ?? to,
+      value: tokenDto.contractAddress ? undefined : value,
+      data: data ?? undefined,
+    });
+    if (!gasUsage) {
+      console.log('fail to estimate gas');
+      return;
     }
+    setEstimatedGas(gasUsage);
+    setCustomGasLimit(gasUsage);
   };
 
   const transactionFee = useMemo(() => {
@@ -123,7 +115,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   //Wrap up the send transaction function which from useTokenSend and inject parameters
   const onConfirmGasFee = async () => {
-    if (!customBaseFee || !customTip || !customGasLimit) return;
+    if (!customBaseFee || !customTip || !customGasLimit || !transactionFee) return;
     onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
   };
 
