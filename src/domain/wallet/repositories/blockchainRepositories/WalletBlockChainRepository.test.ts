@@ -83,25 +83,41 @@ it('is the same singleton instnace', () => {
 // });
 
 // describe('get Tezos balance', () => {
-// it('get tezos balance', async () => {
-//   const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
-//   const balance = await blockchainRepository.getBalance({
-//     selectedWalletPrivateKey: TestData.tezosSelectedWalletPrivateKey,
-//     rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//   it('get tezos balance', async () => {
+//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//     const balance = await blockchainRepository.getBalance({
+//       selectedWalletPrivateKey: TestData.tezosSelectedWalletPrivateKey,
+//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//       decimals: 6,
+//     });
+//     expect(balance).toBe('1598.919713');
 //   });
-//   expect(balance).toBe('2100.998562');
-// });
-// it('get USDtz(fa1.2) balance', async () => {
-//   const fa1_2TokenContractAddress = 'KT1QzmrMs1xUXZJ8TPAoDEFaKC6w56RfdLWo'; // USDtz
-//   const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
-//   const balance = await blockchainRepository.getContractBalance({
-//     contractAddress: fa1_2TokenContractAddress,
-//     rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
-//     address: TestData.tezosAddress,
-//     standardType: 'fa1.2',
+//   it('get tzBTC(fa1.2) balance', async () => {
+//     const fa1_2TokenContractAddress = 'KT1Wdq6sj3ZkNqQ7CeE6kTNbJXfobMX7Eqpz'; // tzBTC
+//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//     const balance = await blockchainRepository.getContractBalance({
+//       contractAddress: fa1_2TokenContractAddress,
+//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//       address: TestData.tezosAddress,
+//       standardType: 'fa1.2',
+//       decimals: 8,
+//     });
+//     expect(balance).toBe('0.00391686');
 //   });
-//   expect(balance).toBe('0');
-// });
+
+//   it('get kUSD(fa1.2) balance', async () => {
+//     const fa1_2TokenContractAddress = 'KT1GG8Zd5rUp1XV8nMPRBY2tSyVn6NR5F4Q1'; // kUSD
+//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//     const balance = await blockchainRepository.getContractBalance({
+//       contractAddress: fa1_2TokenContractAddress,
+//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//       address: TestData.tezosAddress,
+//       standardType: 'fa1.2',
+//       decimals: 18,
+//     });
+//     expect(balance).toBe('1154.708485994096640983');
+//   });
+
 //   it('get QUIPU(fa2) balance', async () => {
 //     const fa2TokenContractAddress = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'; // QUIPU
 //     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
@@ -110,7 +126,8 @@ it('is the same singleton instnace', () => {
 //       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
 //       address: TestData.tezosAddress,
 //       standardType: 'fa2',
+//       decimals: 6,
 //     });
-//     expect(balance).toBe('0');
+//     expect(balance).toBe('0.010878');
 //   });
 // });
