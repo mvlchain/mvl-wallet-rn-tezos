@@ -120,7 +120,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   //Wrap up the send transaction function which from useTokenSend and inject parameters
   const onConfirmGasFee = async () => {
-    if (!customBaseFee || !customTip || !customGasLimit || transactionFee === '-') return;
+    if (!customBaseFee || !customTip || !customGasLimit || transactionFee !== '-') return;
     onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
   };
 
