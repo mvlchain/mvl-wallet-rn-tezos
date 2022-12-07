@@ -1,6 +1,6 @@
 import { AuthProvider } from '@@domain/auth/IAuthService';
 
-export interface ClutchAppConfig {
+export interface WalletAppConfig {
   auth: AuthConfig;
 }
 
@@ -18,5 +18,6 @@ export interface AuthConfig {
     };
     network: 'testnet' | 'mainnet';
     nativeNetwork: 'ropsten' | 'mainnet';
+    logging: boolean;
   };
 }
