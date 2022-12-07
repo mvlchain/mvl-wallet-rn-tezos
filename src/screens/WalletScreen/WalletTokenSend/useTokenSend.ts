@@ -22,14 +22,15 @@ import { TTransactionResultRootStackProps } from '../WalletTransactionResult/Wal
 const useTokenSend = (tokenDto: TokenDto) => {
   const transactionService = useDi('TransactionService');
   const walletService = useDi('WalletService');
+  const { openModal, closeModal } = globalModalStore();
+  const { setState: pinSet } = pinStore();
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
-  const { openModal, closeModal } = globalModalStore();
-  const { setState: pinSet } = pinStore();
 
   const network = getNetworkConfig(selectedNetwork);
   const navigation = useNavigation<TTransactionResultRootStackProps>();
+
   useEffect(() => {
     resetBody();
   }, []);

@@ -1,14 +1,12 @@
-import { injectable } from 'tsyringe';
-import '@ethersproject/shims';
+import Decimal from 'decimal.js';
 import { BigNumber, ethers } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
+import { injectable } from 'tsyringe';
 
 import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
 import { IGetTotalGasFeeParamsEIP1559, IGasRepositoryEip1559 } from './GasRepositoryEip1559.type';
-
-import Decimal from 'decimal.js';
-import { formatEther } from 'ethers/lib/utils';
 
 @injectable()
 export class GasRepositoryEip1559Impl implements IGasRepositoryEip1559 {

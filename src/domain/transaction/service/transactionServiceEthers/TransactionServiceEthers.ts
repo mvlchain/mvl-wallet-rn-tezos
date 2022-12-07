@@ -1,4 +1,3 @@
-import '@ethersproject/shims';
 import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { ethers } from 'ethers';
 import { injectable } from 'tsyringe';

@@ -1,5 +1,3 @@
-import '@ethersproject/shims';
-
 import { InMemorySigner } from '@taquito/signer';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import qs from 'qs';
