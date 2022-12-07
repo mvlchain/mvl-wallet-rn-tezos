@@ -6,17 +6,19 @@ import { format } from '@taquito/utils';
 import * as tezosCrypto from '@tezos-core-tools/crypto-utils';
 import { injectable } from 'tsyringe';
 
+import { getTezosDecimalUnit } from '@@utils/tezosDecimal';
+
 import * as Type from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class TezosRepository implements Type.IBlockChainRepository {
   constructor() {}
-  getBalance = async ({ selectedWalletPrivateKey, rpcUrl }: Type.IGetCoinBalance) => {
+  getBalance = async ({ selectedWalletPrivateKey, rpcUrl, decimals = 6 }: Type.IGetCoinBalance) => {
     try {
       const Tezos = new TezosToolkit(rpcUrl);
       const address = tezosCrypto.utils.secretKeyToKeyPair(selectedWalletPrivateKey).pkh;
       const balance = await Tezos.tz.getBalance(address);
-      return format('mutez', 'tz', balance).toString();
+      return format('mutez', getTezosDecimalUnit(decimals), balance).toString();
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
@@ -36,14 +38,14 @@ export class TezosRepository implements Type.IBlockChainRepository {
     }
   };
 
-  _getFa1_2Balance = async ({ contractAddress, address, rpcUrl }: Type.IGetTokenBalance) => {
+  _getFa1_2Balance = async ({ contractAddress, address, rpcUrl, decimals = 6 }: Type.IGetTokenBalance) => {
     const Tezos = new TezosToolkit(rpcUrl);
     const fa1_2TokenContract = await Tezos.wallet.at(contractAddress, compose(tzip12, tzip16));
     const fa1_2Balance = await fa1_2TokenContract.views.getBalance(address).read();
-    return fa1_2Balance.toFixed();
+    return format('mutez', getTezosDecimalUnit(decimals), fa1_2Balance).toString();
   };
 
-  _getFa2Balance = async ({ contractAddress, address, rpcUrl }: Type.IGetTokenBalance) => {
+  _getFa2Balance = async ({ contractAddress, address, rpcUrl, decimals = 6 }: Type.IGetTokenBalance) => {
     const Tezos = new TezosToolkit(rpcUrl);
     const fa2TokenContract = await Tezos.wallet.at(contractAddress);
     const balance = await fa2TokenContract.views
@@ -56,6 +58,6 @@ export class TezosRepository implements Type.IBlockChainRepository {
       .read();
     const fa2BalanceRes = JSON.parse(JSON.stringify(balance));
     const fa2BalanceStr = fa2BalanceRes[0].balance;
-    return fa2BalanceStr;
+    return format('mutez', getTezosDecimalUnit(decimals), fa2BalanceStr).toString();
   };
 }

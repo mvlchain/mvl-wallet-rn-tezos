@@ -77,25 +77,25 @@ const findToken = (tokenList: TokenDto[], symbol: string) => {
 // });
 
 // describe('get Tezos balance', () => {
-//   it('get tezos balance', async () => {
-//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
-//     const balance = await blockchainRepository.getBalance({
-//       selectedWalletPrivateKey: TestData.tezosSelectedWalletPrivateKey,
-//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
-//     });
-//     expect(balance).toBe('2100.998562');
+// it('get tezos balance', async () => {
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//   const balance = await blockchainRepository.getBalance({
+//     selectedWalletPrivateKey: TestData.tezosSelectedWalletPrivateKey,
+//     rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
 //   });
-//   it('get USDtz(fa1.2) balance', async () => {
-//     const fa1_2TokenContractAddress = 'KT1QzmrMs1xUXZJ8TPAoDEFaKC6w56RfdLWo'; // USDtz
-//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
-//     const balance = await blockchainRepository.getContractBalance({
-//       contractAddress: fa1_2TokenContractAddress,
-//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
-//       address: TestData.tezosAddress,
-//       standardType: 'fa1.2',
-//     });
-//     expect(balance).toBe('0');
+//   expect(balance).toBe('2100.998562');
+// });
+// it('get USDtz(fa1.2) balance', async () => {
+//   const fa1_2TokenContractAddress = 'KT1QzmrMs1xUXZJ8TPAoDEFaKC6w56RfdLWo'; // USDtz
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//   const balance = await blockchainRepository.getContractBalance({
+//     contractAddress: fa1_2TokenContractAddress,
+//     rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//     address: TestData.tezosAddress,
+//     standardType: 'fa1.2',
 //   });
+//   expect(balance).toBe('0');
+// });
 //   it('get QUIPU(fa2) balance', async () => {
 //     const fa2TokenContractAddress = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'; // QUIPU
 //     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
