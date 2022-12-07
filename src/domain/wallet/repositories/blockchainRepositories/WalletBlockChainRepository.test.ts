@@ -27,6 +27,12 @@ const findToken = (tokenList: TokenDto[], symbol: string) => {
   return tokenList.find((token) => token.symbol === symbol);
 };
 
+it('is the same singleton instnace', () => {
+  const ethersRepository1 = container.resolve<EthersRepository>('EthersRepository');
+  const ethersRepository2 = container.resolve<EthersRepository>('EthersRepository');
+  expect(ethersRepository1).toBe(ethersRepository2);
+});
+
 // describe('get Ethers balance', () => {
 // it('get eth balance', async () => {
 //   const blockchainRepository = container.resolve<IBlockChainRepository>('EthersRepository');
