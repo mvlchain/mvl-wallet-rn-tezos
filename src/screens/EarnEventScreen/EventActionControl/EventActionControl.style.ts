@@ -34,7 +34,7 @@ export const Container = styled.View`
   background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
-export const RewardLayout = styled.Pressable`
+export const RewardBoard = styled.Pressable`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -60,4 +60,22 @@ export const PointCategoryText = styled.Text`
   font-weight: 800;
   line-height: ${height * 20}px;
   color: ${({ theme }) => theme.color.grey500};
+`;
+
+export const TxFeeLayout = styled.View`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  margin-bottom: ${height * 24}px;
+`;
+
+export const TxFeeLabel = styled.Text`
+  flex: 1;
+  ${({ theme }) => theme.font.Label.sm};
+  line-height: ${height * 16}px;
+  color: ${({ theme }) => theme.color.grey500};
+  margin-left: ${width * 8}px;
+  margin-top: ${height * 2}px;
+  margin-bottom: ${height * 2}px;
 `;

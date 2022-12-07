@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert, Text } from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
-import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
+import { ChevronRightBlackIcon, ChevronRightLightIcon, CircleAlertIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 
@@ -19,7 +19,7 @@ export const EventActionControl = ({ eventActionButtonTitle, eventActionScheme, 
   return (
     <DropShadow style={S.style.shadow}>
       <S.Container>
-        <S.RewardLayout
+        <S.RewardBoard
           onPress={() => {
             // TODO replace this
             Alert.alert('Go to event receipt screen', 'description', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
@@ -36,7 +36,12 @@ export const EventActionControl = ({ eventActionButtonTitle, eventActionScheme, 
             </Text>
           </S.PointGroupLayout>
           <RightIcon style={S.style.extensionArrow} />
-        </S.RewardLayout>
+        </S.RewardBoard>
+
+        <S.TxFeeLayout>
+          <CircleAlertIcon />
+          <S.TxFeeLabel>{'Transaction Fee: 10 bMVL'}</S.TxFeeLabel>
+        </S.TxFeeLayout>
 
         <PrimaryButton
           label={eventActionButtonTitle}

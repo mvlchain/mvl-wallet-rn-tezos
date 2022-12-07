@@ -43,6 +43,7 @@ export { default as PasswordDeleteDark } from './ic-password-delete-black-dark.s
 export { default as PasswordDeleteLight } from './ic-password-delete-black-light.svg';
 export { default as CloseBlackIconDark } from './ic-close-black-dark.svg';
 export { default as CloseBlackIconLight } from './ic-close-black-light.svg';
+export { default as CircleAlertIcon } from './ic-circle-alert.svg';
 
 export { default as BiometricSmallDark } from './img-biometric-s-dark.svg';
 export { default as BiometricSmallLight } from './img-biometric-s-light.svg';

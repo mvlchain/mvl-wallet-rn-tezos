@@ -40,7 +40,7 @@ export function EarnEventDetailsScreen() {
 
   return (
     <S.Container>
-      {data && (
+      {data ? (
         <>
           <Webview url={data.detailPageUrl} />
           <EventActionControl
@@ -49,7 +49,7 @@ export function EarnEventDetailsScreen() {
             avatarUrl={data.iconUrl}
           />
         </>
-      )}
+      ) : null}
     </S.Container>
   );
 }
