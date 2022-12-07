@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { formatUnits } from 'ethers/lib/utils';
+import { formatFixed } from '@ethersproject/bignumber';
 
 import { getNetworkConfig } from '@@constants/network.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
@@ -41,15 +41,16 @@ export const useTokenBalance = () => {
     },
   });
 
-  const { refetch } = useBalanceQuery(walletData[_selectedWalletIndex]?.address, selectedNetwork, {
+  const { refetch } = useBalanceQuery(walletData[_selectedWalletIndex]?.address, getNetworkConfig(selectedNetwork).networkId, {
     enabled: false,
     keepPreviousData: true,
     select: (data) => {
       let newData: IBalance = {};
       data.forEach((balance) => {
+        const token = tokenList?.find((token) => token.symbol === balance.asset.ticker);
         newData = {
           ...newData,
-          [balance.asset.ticker]: formatUnits(balance.amount),
+          [balance.asset.ticker]: formatFixed(balance.amount, token?.decimals),
         };
       });
       return newData;
