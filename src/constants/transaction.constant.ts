@@ -1,6 +1,4 @@
-import BN from 'bn.js';
-import { BigNumber } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers/lib/utils';
 
 export const TRANSACTION_HISTORY_FILTER_CRITERIA = {
   ALL: 'All',
