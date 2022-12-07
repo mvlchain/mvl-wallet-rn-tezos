@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { BigNumber } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
+import { BytesLike, parseUnits } from 'ethers/lib/utils';
 
 import { getNetworkConfig, getNetworkName, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
@@ -48,23 +48,29 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   }, []);
 
   useEffect(() => {
-    estimateGas();
+    if (!to || !value) return;
+    if (!!tokenDto.contractAddress && !data) return;
+    estimateGas({ to, value, data, contractAddress: tokenDto.contractAddress });
   }, [to, value, data]);
 
   useEffect(() => {
-    if (advanced) return;
     if (network.networkFeeType === NETWORK_FEE_TYPE.EIP1559) {
       const validBaseFee = leveledBaseFee && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
       setCustomBaseFee(validBaseFee);
-      setCustomTip(tip);
     } else {
       setCustomBaseFee(leveledBaseFee);
-      setCustomTip(tip);
     }
-    setCustomGasLimit(estimatedGas);
-  }, [leveledBaseFee, tip, advanced]);
+  }, [leveledBaseFee]);
 
-  const setInitialGas = async () => {
+  useEffect(() => {
+    setCustomTip(tip);
+  }, [tip]);
+
+  useEffect(() => {
+    setCustomGasLimit(estimatedGas);
+  }, [estimatedGas]);
+
+  const setInitialGas = useCallback(async () => {
     try {
       const gasFeeData = await gasService.getGasFeeData(selectedNetwork);
       if (!gasFeeData) {
@@ -78,29 +84,31 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [selectedNetwork]);
 
-  const estimateGas = async () => {
-    if (!to || !value) return;
-    if (!!tokenDto.contractAddress && !data) return;
-    const gasUsage = await gasService.estimateGas({
-      selectedNetwork,
-      selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-      to: tokenDto.contractAddress ?? to,
-      value: tokenDto.contractAddress ? undefined : value,
-      data: data ?? undefined,
-    });
-    if (!gasUsage) {
-      console.log('fail to estimate gas');
-      return;
-    }
-    setEstimatedGas(gasUsage);
-    setCustomGasLimit(gasUsage);
-  };
+  const estimateGas = useCallback(
+    async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
+      const gasUsage = await gasService.estimateGas({
+        selectedNetwork,
+        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+        to: contractAddress ?? to,
+        value: contractAddress ? undefined : value,
+        data: contractAddress ? data! : undefined,
+        //data set after entering to and value in useTokenSend useEffect, so add non-null assertion
+      });
+      if (!gasUsage) {
+        console.log('fail to estimate gas');
+        return;
+      }
+      setEstimatedGas(gasUsage);
+      setCustomGasLimit(gasUsage);
+    },
+    []
+  );
 
   const transactionFee = useMemo(() => {
-    if (!customBaseFee || !estimatedGas) return '-';
-    if (network.networkFeeType === NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !customGasLimit) return '-';
+    if (!customBaseFee || !customGasLimit) return '-';
+    if (network.networkFeeType !== NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !customTip) return '-';
     const total = gasService.getTotalGasFee({
       selectedNetwork,
       baseFee: customBaseFee,
@@ -120,10 +128,11 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   }, [advanced]);
 
   //Wrap up the send transaction function which from useTokenSend and inject parameters
-  const onConfirmGasFee = async () => {
-    if (!customBaseFee || !customTip || !customGasLimit || transactionFee !== '-') return;
+  const onConfirmGasFee = useCallback(async () => {
+    if (!customBaseFee || !customGasLimit || transactionFee === '-') return;
+    if (enableTip || !customTip) return;
     onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
-  };
+  }, [customBaseFee, customGasLimit, transactionFee, customTip, enableTip, onConfirm]);
 
   return {
     advanced,

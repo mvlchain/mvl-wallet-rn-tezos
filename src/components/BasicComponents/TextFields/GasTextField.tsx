@@ -58,7 +58,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
     let timer: any;
     return (...args: any[]) => {
       clearTimeout(timer);
-      timer = setTimeout(() => callback(...args), delay ?? 2000);
+      timer = setTimeout(() => callback(...args), delay ?? 500);
     };
   }, []);
 
