@@ -90,8 +90,12 @@ function usePin() {
     if (!TouchID) return;
     //TODO: setting 에서 바꿀때 TouchID.isSupported 묻기
     TouchID.authenticate(t('enable_touchid'))
-      .then(() => {
-        success(input);
+      .then(async () => {
+        const credential = await SecureKeychain.getGenericPassword();
+        if (!credential?.password) {
+          throw new Error('need to set up pin');
+        }
+        success(credential.password);
         setState({ step: PIN_STEP.FINISH });
       })
       .catch(() => {});
