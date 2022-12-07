@@ -45,6 +45,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
           rpcUrl: rpcUrl,
         });
       } else {
+        // TODO: tezos token일 시 standardType 추가해야함
         balance = await blockchainRepository.getContractBalance({
           contractAddress: token.contractAddress,
           rpcUrl: rpcUrl,

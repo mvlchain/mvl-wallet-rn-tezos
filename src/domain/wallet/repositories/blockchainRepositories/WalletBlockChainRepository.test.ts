@@ -28,17 +28,17 @@ const findToken = (tokenList: TokenDto[], symbol: string) => {
 };
 
 // describe('get Ethers balance', () => {
-it('get eth balance', async () => {
-  const contractRepository = container.resolve<IBlockChainRepository>('EthersRepository');
-  const balance = await contractRepository.getBalance({
-    selectedWalletPrivateKey: TestData.ethersSelectedWalletPrivateKey,
-    rpcUrl: getNetworkConfig('GOERLI').rpcUrl,
-  });
-  expect(balance).toBe('0.599914121574889052');
-});
+// it('get eth balance', async () => {
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('EthersRepository');
+//   const balance = await blockchainRepository.getBalance({
+//     selectedWalletPrivateKey: TestData.ethersSelectedWalletPrivateKey,
+//     rpcUrl: getNetworkConfig('GOERLI').rpcUrl,
+//   });
+//   expect(balance).toBe('0.599914121574889052');
+// });
 // it('get mvl balance', async () => {
-//   const contractRepository = container.resolve<ContractRepository>('EthersRepository');
-//   const balance = await contractRepository.getContractBalance({
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('EthersRepository');
+//   const balance = await blockchainRepository.getContractBalance({
 //     contractAddress: findToken(ETH_TOKENLIST, 'MVL')?.contractAddress ?? '',
 //     abi: abiERC20,
 //     address: TestData.ethAddress,
@@ -47,16 +47,16 @@ it('get eth balance', async () => {
 //   expect(balance).toBe('1000.123456789000001');
 // });
 // it('get bsc balance', async () => {
-//   const contractRepository = container.resolve<ContractRepository>('EthersRepository');
-//   const balance = await contractRepository.getBalance({
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('EthersRepository');
+//   const balance = await blockchainRepository.getBalance({
 //     selectedWalletPrivateKey: TestData.ethersSelectedWalletPrivateKey,
 //     rpcUrl: getNetworkConfig('BSC_TESTNET').rpcUrl,
 //   });
 //   expect(balance).toBe('0.5');
 // });
 // it('get bMvl balance', async () => {
-//   const contractRepository = container.resolve<ContractRepository>('EthersRepository');
-//   const balance = await contractRepository.getContractBalance({
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('EthersRepository');
+//   const balance = await blockchainRepository.getContractBalance({
 //     contractAddress: findToken(BSC_TOKENLIST, 'bMVL')?.contractAddress ?? '',
 //     abi: abiERC20,
 //     address: TestData.bscAddress,
@@ -65,8 +65,8 @@ it('get eth balance', async () => {
 //   expect(balance).toBe('0.0');
 // });
 // it('get BTCB balance', async () => {
-//   const contractRepository = container.resolve<ContractRepository>('EthersRepository');
-//   const balance = await contractRepository.getContractBalance({
+//   const blockchainRepository = container.resolve<IBlockChainRepository>('EthersRepository');
+//   const balance = await blockchainRepository.getContractBalance({
 //     contractAddress: findToken(BSC_TOKENLIST, 'BTCB')?.contractAddress ?? '',
 //     abi: abiERC20,
 //     address: TestData.bscAddress,
@@ -78,11 +78,33 @@ it('get eth balance', async () => {
 
 // describe('get Tezos balance', () => {
 //   it('get tezos balance', async () => {
-//     const contractRepository = container.resolve<IBlockChainRepository>('TezosRepository');
-//     const balance = await contractRepository.getBalance({
+//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//     const balance = await blockchainRepository.getBalance({
 //       selectedWalletPrivateKey: TestData.tezosSelectedWalletPrivateKey,
 //       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
 //     });
-//     expect(balance).toBe('2100.999165');
+//     expect(balance).toBe('2100.998562');
+//   });
+//   it('get USDtz(fa1.2) balance', async () => {
+//     const fa1_2TokenContractAddress = 'KT1QzmrMs1xUXZJ8TPAoDEFaKC6w56RfdLWo'; // USDtz
+//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//     const balance = await blockchainRepository.getContractBalance({
+//       contractAddress: fa1_2TokenContractAddress,
+//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//       address: TestData.tezosAddress,
+//       standardType: 'fa1.2',
+//     });
+//     expect(balance).toBe('0');
+//   });
+//   it('get QUIPU(fa2) balance', async () => {
+//     const fa2TokenContractAddress = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'; // QUIPU
+//     const blockchainRepository = container.resolve<IBlockChainRepository>('TezosRepository');
+//     const balance = await blockchainRepository.getContractBalance({
+//       contractAddress: fa2TokenContractAddress,
+//       rpcUrl: getNetworkConfig('TEZOS_GHOSTNET').rpcUrl,
+//       address: TestData.tezosAddress,
+//       standardType: 'fa2',
+//     });
+//     expect(balance).toBe('0');
 //   });
 // });
