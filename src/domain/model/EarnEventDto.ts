@@ -16,10 +16,16 @@ export interface EarnEventDto {
    */
   detailPageUrl: string;
 
-  pointIconUrl: string | null;
-  pointArr: EarnEventPoint[] | null;
+  /**
+   * An icon url displaying reward points in EventActionControl
+   */
+  pointIconUrl: string;
+  pointInfoArr: EarnEventPoint[];
 
   eventActionButtonTitle: string | null;
+  /**
+   * DeepLink that will execute when the EventActionButton clicked
+   */
   eventActionScheme: string | null;
 
   currency: string | null;
