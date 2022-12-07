@@ -35,6 +35,7 @@ export interface KeyClient {
   checkSet: () => boolean;
   checkPincode: () => Promise<boolean>;
   getPrivateKey: () => Promise<string>;
+  getExtendPublicKey: () => Promise<string>;
   setDevice: (pincode: string) => Promise<void>;
   setServer: () => Promise<void>;
   setKeyFromDevice: () => Promise<void>;
@@ -124,6 +125,10 @@ export class KeyClientImpl implements KeyClient {
   };
   getPrivateKey = async () => {
     return this.torusShareRepository.getPrivateKey();
+  };
+  getExtendPublicKey = async () => {
+    const privateKey = await this.getPrivateKey();
+    return Clutch.extendedPublicKey(privateKey, extendedKeyPath(ETHEREUM));
   };
   setDevice = async (pincode: string) => {
     if (!this.postboxKeyHolder || !this.deviceShare) {
