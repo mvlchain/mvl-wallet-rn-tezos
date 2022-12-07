@@ -14,7 +14,7 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
     const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
 
     const totalGas = estimatedGasInDecimal.add(tipInDecimal);
-    const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
+    const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));
 
     return formatEther(totalGasInBN);
   };

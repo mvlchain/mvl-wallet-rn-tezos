@@ -24,7 +24,7 @@ export class GasRepositoryEip1559Impl implements IGasRepositoryEip1559 {
     const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
 
     const totalGas = baseFeeInDecimal.add(tipInDecimal).mul(estimatedGasInDecimal);
-    const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
+    const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));
     return formatEther(totalGasInBN);
   };
 }

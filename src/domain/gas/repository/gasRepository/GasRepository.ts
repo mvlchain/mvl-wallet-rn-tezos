@@ -26,7 +26,7 @@ export class GasRepositoryImpl implements IGasRepository {
     const gasLimitInDecimal = new Decimal(gasLimit.toString());
 
     const totalGas = baseFeeInDecimal.mul(gasLimitInDecimal);
-    const totalGasInBN = BigNumber.from(BigInt(Math.floor(totalGas.toNumber())));
+    const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));
 
     return formatEther(totalGasInBN);
   };
