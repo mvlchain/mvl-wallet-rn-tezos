@@ -8,7 +8,7 @@ const useWalletSelector = () => {
 
   const onPressWalletList = () => {
     if (!wallet) return;
-    openModal(MODAL_TYPES.WALLET_LIST, { menuList: wallet });
+    openModal(MODAL_TYPES.WALLET_LIST, { menuList: wallet, disableCreate: false });
   };
 
   return {

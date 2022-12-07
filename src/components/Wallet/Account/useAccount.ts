@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig, getNetworkName, NETWORK, SUPPORTED_NETWORKS } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
+import { useNetworkList } from '@@hooks/useNetworkList';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -21,6 +21,7 @@ const useAccount = () => {
 
   const { openModal, closeModal } = globalModalStore();
   const { pKey } = authStore();
+  const { networkList } = useNetworkList();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
   const { mutate } = useWalletMutation();
   const { data } = useWalletsQuery(selectedNetwork, {
@@ -30,7 +31,6 @@ const useAccount = () => {
       }
     },
   });
-  const [networkList, setNetworkList] = useState<IBottomSelectMenuProps[]>([]);
 
   // TODO: 추후 네트워크 추가 시 walletList에 해당 네트워크 name object추가하기
   const checkNetworkDefault = () => {
@@ -47,19 +47,6 @@ const useAccount = () => {
       );
     }
   }, [walletList, data, pKey]);
-
-  useEffect(() => {
-    const _networkList: IBottomSelectMenuProps[] = [];
-    SUPPORTED_NETWORKS.forEach((network) => {
-      _networkList.push({
-        id: network,
-        title: getNetworkConfig(getNetworkName(false, network)).name,
-        isSelected: selectedNetwork === network,
-        onPress: () => selectNetwork(network),
-      });
-    });
-    setNetworkList(_networkList);
-  }, [selectedNetwork]);
 
   const onChangeWalletInput = (value: string) => {
     editWalletName({ index: _selectedWalletIndex, name: value }, selectedNetwork);

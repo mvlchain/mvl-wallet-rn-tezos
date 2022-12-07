@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Chip from '@@components/BasicComponents/Chip';
 import HideContentSection from '@@components/BasicComponents/HideContentSection';
+import { getNetworkConfig } from '@@constants/network.constant';
 import { height } from '@@utils/ui';
 
 import * as S from './SettingPrivateKeyScreen.style';
@@ -14,11 +15,24 @@ function SettingPrivateKeyScreen() {
   const { t } = useTranslation();
 
   // TODO: 실제 데이터와 연동 필요
-  const { type, pkey, wallet, onPressViewPrivatekey, onPressCopyPrivateKey, onPressWalletList } = useSettingPrivateKeyScreen();
+  const {
+    type,
+    pkey,
+    wallet,
+    pkeySelectedNetwork,
+    pkeyWalletIndex,
+    onPressSwitchNetwork,
+    onPressViewPrivatekey,
+    onPressCopyPrivateKey,
+    onPressWalletList,
+  } = useSettingPrivateKeyScreen();
   return (
     <S.Container bounces={false}>
       <S.Description>{t('private_key_lbl_description')}</S.Description>
-      <Chip isMultiple={wallet?.length > 1} label='Ethereum Wallet' onPress={onPressWalletList} />
+      <Chip isMultiple={true} label={getNetworkConfig(pkeySelectedNetwork).name} onPress={onPressSwitchNetwork} />
+      {wallet.length > 0 && (
+        <Chip isMultiple={wallet?.length > 1} label={wallet[pkeyWalletIndex[pkeySelectedNetwork]].name} onPress={onPressWalletList} />
+      )}
       <HideContentSection
         isHide={type === 'hide'}
         onPress={onPressViewPrivatekey}
