@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
@@ -20,9 +19,9 @@ import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
 function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced, onConfirm, toggleGasAdvanced, children }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
+  const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
-  const { settedCurrency } = settingPersistStore();
   const coin = NETWORK_CONFIGS[selectedNetwork].coin;
   const { price } = useOneTokenPrice(COIN_DTO[coin], transactionFee);
   return (
