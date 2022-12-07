@@ -5,6 +5,8 @@ import SettingSignOutModal from './SettingSignOutModal';
 import TextInputModal from './TextInputModal';
 import TextModal from './TextModal';
 import TitleOnlyModal from './TitleOnlyModal/TitleOnlyModal';
+import ConfirmSendModal from './Transaction/ConfirmSendModal/ConfirmSendModal';
+import ConfirmTxPinModal from './Transaction/Pin/ConfirmTxPinModal';
 import WalletListModal from './WalletListModal';
 
 export const MODAL_TYPES = {
@@ -14,6 +16,8 @@ export const MODAL_TYPES = {
   SETTING_LOG_OUT: 'SETTING_LOG_OUT',
   TITLE_ONLY: 'TITLE_ONLY',
   WALLET_LIST: 'WALLET_LIST',
+  CONFIRM_SEND: 'CONFIRM_SEND',
+  CONFIRM_TX_PIN: 'CONFIRM_TX_PIN',
 } as const;
 
 export const MODAL_COMPONENTS = {
@@ -23,6 +27,8 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.TITLE_ONLY]: TitleOnlyModal,
   [MODAL_TYPES.WALLET_LIST]: WalletListModal,
   [MODAL_TYPES.TEXT_INPUT]: TextInputModal,
+  [MODAL_TYPES.CONFIRM_SEND]: ConfirmSendModal,
+  [MODAL_TYPES.CONFIRM_TX_PIN]: ConfirmTxPinModal,
 };
 
 export const GlobalModal = () => {

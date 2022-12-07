@@ -1,8 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -10,7 +10,6 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import TransactionHistoryListItem from '../TransactionHistoryItem';
 
 import * as S from './TransactionHistoryList.style';
-import useTransactionHistoryFilter from './useTransactionHistoryFilter';
 import useTransactionHistoryList from './useTransactionHistoryList';
 
 function TransactionHistoryList() {
@@ -30,22 +29,11 @@ function TransactionHistoryList() {
           disabled={false}
         />
       </S.TransactionHistoryLabelWrapper>
-      {filteredData ? (
+      {filteredData && filteredData.length > 0 ? (
         <FlatList
           data={filteredData}
-          renderItem={({ item }) => (
-            <TransactionHistoryListItem
-              type={item.type}
-              status={item.status}
-              amount={item.amount}
-              baseCurrencyAmount={item.baseCurrencyAmount}
-              baseCurrencySymbol={item.baseCurrencySymbol}
-              txHash={item.txHash}
-              date={item.date}
-            />
-          )}
-          //TODO: 키나중에 할당
-          // keyExtractor={item.txHash}
+          renderItem={({ item }) => <TransactionHistoryListItem {...item} />}
+          keyExtractor={(item, idx) => item.hash}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}

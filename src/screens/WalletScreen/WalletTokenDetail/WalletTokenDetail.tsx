@@ -17,7 +17,7 @@ function WalletTokenDetail() {
   const navigation = useNavigation<TTokenDetailRootStackProps>();
 
   useLayoutEffect(() => {
-    const title = params.symbol;
+    const title = params.tokenDto.symbol;
     const headerOption = handleStackHeaderOption({ title });
     navigation.setOptions(headerOption);
   }, []);

@@ -1,15 +1,12 @@
 import { BigNumber, ethers } from 'ethers';
+import { instanceCachingFactory, container } from 'tsyringe';
 
-import { EthersTransactionImpl, TransactionService } from './TransactionService';
+import { ITransactionService } from './TransactionService.type';
 
-const transactionService: TransactionService = new EthersTransactionImpl(
-  { rpcUrl: 'http://localhost:3000', chainId: 1 },
-  '0x0000000000000000000000000000000000000000000000000000000000000000',
-  {
-    gasPrice: ethers.utils.formatUnits(BigNumber.from('100'), 'gwei'),
-  }
-);
+//useCase
+//토큰보내는경우, 코인보내는경우
+//각 네트워크별
 
-it('constructs correctly', () => {
-  expect(transactionService).toBeDefined();
+it('define', async () => {
+  return;
 });

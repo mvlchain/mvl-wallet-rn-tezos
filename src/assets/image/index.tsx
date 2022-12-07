@@ -54,7 +54,6 @@ export { default as SocialAppleLight } from './img-social-apple-light.svg';
 export { default as SocialGoogle } from './img-social-google.svg';
 export { default as NFTImage } from './img-nft.svg';
 
-export { default as TokenMVL32Icon } from './ic-token-mvlx32.svg';
 export { default as QRScanOverlay } from './img-qr-scan-overlay.svg';
 export { default as SelectIcon } from './ic-select.svg';
 

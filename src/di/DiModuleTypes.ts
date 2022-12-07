@@ -8,7 +8,14 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
+import { IGasService } from '@@domain/gas/GasService.type';
+import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
+import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
+import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
+import { ITransactionService } from '@@domain/transaction/TransactionService.type';
+import { ITransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers.type';
+import { ITransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos.type';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { IBlockChainRepository } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
@@ -24,6 +31,11 @@ export interface DiModuleTypes {
   WalletBlockChainService: IWalletBlockChainService;
   AuthService: AuthService;
   UIService: UIService;
+  TransactionService: ITransactionService;
+  TransactionServiceEthers: ITransactionServiceEthers;
+  TransactionServiceTezos: ITransactionServiceTezos;
+  GasService: IGasService;
+
   // Repository
   WalletRepository: WalletRepository;
   EthersRepository: IBlockChainRepository;
@@ -35,6 +47,10 @@ export interface DiModuleTypes {
   RTNSettingsRepository: RTNSettingsRepository;
   EarnEventRepository: EarnEventRepository;
   TokenRepository: ITokenRepository;
+  GasRepository: GasRepositoryImpl;
+  GasRepositoryEip1559: GasRepositoryEip1559Impl;
+  GasRepositoryTezos: GasRepositoryTezosImpl;
+
   // Client
   KeyClient: KeyClient;
   KeyClientUtil: KeyClientUtil;

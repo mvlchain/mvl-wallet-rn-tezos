@@ -11,6 +11,7 @@ import { WalletService } from './WalletService';
 export interface IWalletBlockChainService {
   getBalanceFromNetwork: (index: number, network: Network, tokenList: TokenDto[]) => Promise<any>;
   setBlockChainRepository(network: Network): IBlockChainRepository;
+  getOneBalanceFromNetwork: (index: number, network: Network, token: TokenDto) => Promise<string>;
 }
 
 @injectable()
@@ -63,5 +64,30 @@ export class WalletBlockChainService implements IWalletBlockChainService {
     });
     await Promise.all(getBalancePromise);
     return balanceList;
+  };
+
+  getOneBalanceFromNetwork = async (index: number, network: Network, token: TokenDto) => {
+    const { rpcUrl } = getNetworkConfig(getNetworkName(false, network));
+    const wallet = await this.walletService.getWalletInfo({ index, network });
+    const blockchainRepository = this.setBlockChainRepository(network);
+    let balance;
+    if (token.contractAddress === null) {
+      balance = await blockchainRepository.getBalance({
+        selectedWalletPrivateKey: wallet.privateKey,
+        rpcUrl: rpcUrl,
+        decimals: token.decimals,
+      });
+    } else {
+      // TODO: tezos token일 시 standardType 추가해야함
+      balance = await blockchainRepository.getContractBalance({
+        contractAddress: token.contractAddress,
+        rpcUrl: rpcUrl,
+        abi: abiERC20,
+        address: wallet.address,
+        decimals: token.decimals,
+        // standardType: token.standardType, // undefined or string?
+      });
+    }
+    return balance;
   };
 }

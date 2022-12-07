@@ -1,3 +1,4 @@
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { valueOf } from '@@utils/types';
 
 export const NETWORK = {
@@ -35,6 +36,7 @@ export type NetworkConfig = {
   rpcUrl: string;
   networkFeeType: NetworkFeeType;
   networkId: NetworkId;
+  coin: string;
 };
 
 export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
@@ -46,6 +48,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
+    coin: 'ETH',
   },
   [NETWORK.GOERLI]: {
     name: 'Ethereum Goerli Testnet',
@@ -55,6 +58,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://goerli.infura.io/v3/***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
+    coin: 'ETH',
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',
@@ -64,6 +68,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
+    coin: 'BNB',
   },
   [NETWORK.BSC_TESTNET]: {
     name: 'BNB Smart Chain - Testnet',
@@ -73,6 +78,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
+    coin: 'BNB',
   },
   [NETWORK.TEZOS]: {
     name: 'Tezos Mainnet',
@@ -82,6 +88,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://mainnet-node.madfish.solutions/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
+    coin: 'TEZ',
   },
   [NETWORK.TEZOS_GHOSTNET]: {
     name: 'Tezos Ghostnet',
@@ -91,6 +98,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://ghostnet.smartpy.io/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
+    coin: 'TEZ',
   },
 };
 
@@ -118,3 +126,23 @@ export const getNetworkName = (isMainnet: boolean, network: Network) => {
 };
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
+
+//TODO: 네트워크 코인들의 경우 이렇게말고 list받아올때 contranctaddress가없는 코인을 어떻게 같이 넘겨주는 방법 고민..
+export const COIN_DTO: Record<string, TokenDto> = {
+  BNB: {
+    symbol: 'BNB',
+    name: 'BNB',
+    decimals: 18,
+    contractAddress: null,
+    logoURI: 'https://exchange.biswap.org/images/coins/bnb.svg',
+    priceId: 'binancecoin',
+  },
+  ETH: {
+    symbol: 'ETH',
+    name: 'Ethereum Token',
+    decimals: 18,
+    contractAddress: null,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/eth.svg',
+    priceId: 'ethereum',
+  },
+};

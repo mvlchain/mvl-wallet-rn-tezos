@@ -24,13 +24,13 @@ export const BoardLabel = styled.Text`
   margin-bottom: ${height * 16}px;
   ${({ theme }) => theme.font.Title.xs};
   font-family: ${({ theme }) => theme.fmExBold};
-  line-height: ${fontSize(28)};
+  line-height: ${fontSize(28)}px;
   color: ${({ theme }) => theme.color.blackWhite};
 `;
 export const Text = styled.Text`
   ${({ theme }) => theme.font.Label.md};
   font-family: ${({ theme }) => theme.fmRegular};
-  line-height: ${fontSize(20)};
+  line-height: ${fontSize(20)}px;
   color: ${({ theme }) => theme.color.blackWhite};
 `;
 export const Label = styled(Text)``;

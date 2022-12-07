@@ -1,17 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import WalletScreen from '@@screens/WalletScreen';
-import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
-import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
 import WalletTokenReceive from '@@screens/WalletScreen/WalletTokenReceive';
 import WalletTokenReceiveSelect from '@@screens/WalletScreen/WalletTokenReceiveSelect';
-import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
-import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
-import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
-import WalletTransactionResult from '@@screens/WalletScreen/WalletTransactionResult';
-import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
 import { fontSize, height } from '@@utils/ui';
@@ -41,15 +35,6 @@ function WalletStack() {
     {
       name: WALLET_STACK_ROUTE.WALLET_TOKEN_RECEIVE_SELECT,
       component: WalletTokenReceiveSelect,
-    },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TOKEN_SEND,
-      component: WalletTokenSend,
-    },
-
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
-      component: WalletTransactionResult,
     },
   ];
 
