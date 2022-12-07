@@ -17,9 +17,10 @@ import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { EhtersClient } from '@@domain/wallet/clients/EthersClient';
 import { TezosClient } from '@@domain/wallet/clients/TezosClient';
-import { EthersContractImpl } from '@@domain/wallet/repositories/WalletBlockChainRepository';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
-import { EthersContractServiceImpl } from '@@domain/wallet/services/WalletBlockChainService';
+import { EthersRepository } from '@@domain/wallet/repositories/blockchainRepositories/EthersRepository';
+import { TezosRepository } from '@@domain/wallet/repositories/blockchainRepositories/TezosRepository';
+import { WalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 container.register('WalletRepository', {
@@ -30,12 +31,16 @@ container.register('WalletService', {
   useFactory: instancePerContainerCachingFactory<WalletServiceImpl>((container) => container.resolve(WalletServiceImpl)),
 });
 
-container.register('EthersContractRepository', {
-  useFactory: instancePerContainerCachingFactory<EthersContractImpl>((container) => container.resolve(EthersContractImpl)),
+container.register('EthersRepository', {
+  useFactory: instancePerContainerCachingFactory<EthersRepository>((container) => container.resolve(EthersRepository)),
+});
+
+container.register('TezosRepository', {
+  useFactory: instancePerContainerCachingFactory<TezosRepository>((container) => container.resolve(TezosRepository)),
 });
 
 container.register('WalletBlockChainService', {
-  useFactory: instancePerContainerCachingFactory<EthersContractServiceImpl>((container) => container.resolve(EthersContractServiceImpl)),
+  useFactory: instancePerContainerCachingFactory<WalletBlockChainService>((container) => container.resolve(WalletBlockChainService)),
 });
 
 container.register('AuthService', {

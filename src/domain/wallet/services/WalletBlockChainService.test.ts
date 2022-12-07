@@ -2,14 +2,23 @@ import ShareStore from '@tkey/common-types/src/base/ShareStore';
 import { container, instanceCachingFactory } from 'tsyringe';
 
 import { AuthProvider } from '@@constants/auth.constant';
+import { NetworkId, Network } from '@@constants/network.constant';
 import { KeyClient, PostboxKeyHolder } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
-import { EthersContractImpl } from '@@domain/wallet/repositories/WalletBlockChainRepository';
+import { WalletDto } from '@@domain/model/WalletDto';
 
+import { EhtersClient } from '../clients/EthersClient';
+import { TezosClient } from '../clients/TezosClient';
+import { IWallet, IWalletClient } from '../clients/WalletClient.type';
+import { BSC_TOKENLIST, ETH_TOKENLIST, TEZOS_TOKENLIST } from '../repositories/TestData';
 import { WalletRepositoryImpl } from '../repositories/WalletRepository';
+import { EthersRepository } from '../repositories/blockchainRepositories/EthersRepository';
+import { TezosRepository } from '../repositories/blockchainRepositories/TezosRepository';
 
-import { EthersContractServiceImpl } from './WalletBlockChainService';
-import { WalletServiceImpl } from './WalletService';
+import { WalletBlockChainService } from './WalletBlockChainService';
+import { WalletService } from './WalletService';
+import { IGetWalletInfoParam, ICreateWalletBody, IGetWalletPKeyParam } from './WalletService.type';
+
 export class KeyClientImpl implements KeyClient {
   postboxKeyHolder: PostboxKeyHolder | null;
   serverShare: ShareStore | null;
@@ -43,10 +52,52 @@ export class KeyClientImpl implements KeyClient {
   signOut!: () => void;
   findDeviceShareByServerShare!: () => void;
 }
+
+class WalletServiceImpl implements WalletService {
+  extendedPublicKeyByCredentials(): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  signMessageByExtendedKey(data: any): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  getWalletInfo = async (param: IGetWalletInfoParam) => {
+    return {
+      address: 'tz1XmNmcHRP7J7ZHurpUy4ZbjE3dpNT9chtS',
+      privateKey: 'edskS252S8sZYXuai5qRuqxx1BsNaRdNdgZt3VmJdmPEZAE3kuBdG3KNVjWctV2Zf5mXz4nnoEDQRx9bXYjGqHUsLCkbkJYeVh',
+      publicKey: '',
+    };
+  };
+  getWalletList(networkId: NetworkId): Promise<WalletDto[]> {
+    throw new Error('Method not implemented.');
+  }
+  createWallet(
+    body: ICreateWalletBody
+  ): Promise<{ id: string; address: string; network: 'ETHEREUM' | 'BSC' | 'XTZ' | 'BITCOIN'; index: number; name: string }> {
+    throw new Error('Method not implemented.');
+  }
+  getWalletPKey(param: IGetWalletPKeyParam): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  setWalletClient(network: Network): IWalletClient {
+    throw new Error('Method not implemented.');
+  }
+}
+
 beforeAll(() => {
-  container.register('EthersContractRepository', {
-    useFactory: instanceCachingFactory<EthersContractImpl>((container) => container.resolve(EthersContractImpl)),
+  container.register('EhtersClient', {
+    useFactory: instanceCachingFactory<EhtersClient>((container) => container.resolve(EhtersClient)),
   });
+  container.register('TezosClient', {
+    useFactory: instanceCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),
+  });
+  container.register('EthersRepository', {
+    useFactory: instanceCachingFactory<EthersRepository>((container) => container.resolve(EthersRepository)),
+  });
+
+  container.register('TezosRepository', {
+    useFactory: instanceCachingFactory<TezosRepository>((container) => container.resolve(TezosRepository)),
+  });
+
   container.register('WalletRepository', {
     useFactory: instanceCachingFactory<WalletRepositoryImpl>((container) => container.resolve(WalletRepositoryImpl)),
   });
@@ -63,7 +114,7 @@ beforeAll(() => {
     useFactory: instanceCachingFactory<KeyClientImpl>((container) => container.resolve(KeyClientImpl)),
   });
   container.register('WalletBlockChainService', {
-    useFactory: instanceCachingFactory<EthersContractServiceImpl>((container) => container.resolve(EthersContractServiceImpl)),
+    useFactory: instanceCachingFactory<WalletBlockChainService>((container) => container.resolve(WalletBlockChainService)),
   });
 });
 
@@ -78,13 +129,19 @@ it('get pkey', async () => {
 });
 
 // it('get eth balance', async () => {
-//   const ethService = container.resolve<EthersContractServiceImpl>('WalletBlockChainService');
-//   const ethBalance = await ethService.getBalanceFromNetwork(0, 'ETHEREUM', ETH_TOKENLIST);
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const ethBalance = await blockChainService.getBalanceFromNetwork(0, 'ETHEREUM', ETH_TOKENLIST);
 //   expect(ethBalance).toStrictEqual({ ETH: '0.0', MVL: '0.0' });
 // });
 
 // it('get bsc balance', async () => {
-//   const ethService = container.resolve<EthersContractServiceImpl>('WalletBlockChainService');
-//   const bscBalance = await ethService.getBalanceFromNetwork(0, 'BSC', BSC_TOKENLIST);
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const bscBalance = await blockChainService.getBalanceFromNetwork(0, 'BSC', BSC_TOKENLIST);
 //   expect(bscBalance).toStrictEqual({ bMVL: '0.0', BNB: '0.0', BTCB: '0.0' });
+// });
+
+// it('get xtz balance', async () => {
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const xtzBalance = await blockChainService.getBalanceFromNetwork(0, 'TEZOS', TEZOS_TOKENLIST);
+//   expect(xtzBalance).toStrictEqual({ XTZ: '2101' });
 // });
