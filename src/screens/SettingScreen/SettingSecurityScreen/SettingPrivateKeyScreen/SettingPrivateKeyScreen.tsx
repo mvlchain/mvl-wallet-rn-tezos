@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Chip from '@@components/BasicComponents/Chip';
 import HideContentSection from '@@components/BasicComponents/HideContentSection';
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { height } from '@@utils/ui';
 
 import * as S from './SettingPrivateKeyScreen.style';
@@ -29,7 +29,7 @@ function SettingPrivateKeyScreen() {
   return (
     <S.Container bounces={false}>
       <S.Description>{t('private_key_lbl_description')}</S.Description>
-      <Chip isMultiple={true} label={getNetworkConfig(pkeySelectedNetwork).name} onPress={onPressSwitchNetwork} />
+      <Chip isMultiple={true} label={getNetworkConfig(getNetworkName(false, pkeySelectedNetwork)).name} onPress={onPressSwitchNetwork} />
       {wallet.length > 0 && (
         <Chip isMultiple={wallet?.length > 1} label={wallet[pkeyWalletIndex[pkeySelectedNetwork]].name} onPress={onPressWalletList} />
       )}
