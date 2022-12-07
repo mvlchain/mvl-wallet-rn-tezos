@@ -57,9 +57,8 @@ const useTokenSend = (tokenDto: TokenDto) => {
   };
 
   const setData = async () => {
-    if (!to || !value || network.networkFeeType === NETWORK_FEE_TYPE.TEZOS) return;
+    if (!to || !value) return;
     if (tokenDto.contractAddress) {
-      const walletIndex = selectedWalletIndex[selectedNetwork];
       const data = await transactionService.encodeTransferData(to, value);
       setBody({
         data,
@@ -92,40 +91,27 @@ const useTokenSend = (tokenDto: TokenDto) => {
         await pinModalObserver;
         closeModal();
         //send transaction
-        let res;
-        if (tokenDto.contractAddress) {
-          res = await transactionService.sendTransaction({
-            selectedNetwork,
-            selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-            gasFeeInfo,
-            contractAddress: tokenDto.contractAddress,
-            data,
-          });
-        } else {
-          res = await transactionService.sendTransaction({
-            selectedNetwork,
-            selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-            gasFeeInfo,
-            to,
-            value,
-          });
-        }
+        const txHash = await transactionService.sendTransaction({
+          selectedNetwork,
+          selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+          gasFeeInfo,
+          to: tokenDto.contractAddress ?? to,
+          value: tokenDto.contractAddress ? undefined : value,
+          data: data ?? undefined,
+        });
 
-        if (!res) {
+        if (!txHash) {
           throw new Error('fail send transaction');
         }
         //send server
         const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
         const transactionType = getTransactionType(network.networkId, !!tokenDto.contractAddress, tokenDto.symbol === 'BTCB', false);
-        if (!transactionType) {
-          throw new Error('check transaction type');
-        }
         const serverRes = await transactionService.registerHistory({
           network: network.networkId,
           from: wallet.address,
           to: tokenDto.contractAddress ?? to,
           data,
-          hash: res,
+          hash: txHash,
           type: transactionType,
           nonce: 0,
           value: value.toString(),
@@ -136,7 +122,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
         resetBody();
         navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
       } catch (err) {
-        //TODO: 무슨 처리를 해줘야하지?
+        console.log(err);
       }
     };
   };

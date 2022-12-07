@@ -1,6 +1,6 @@
 import { BigNumberish, BytesLike, BigNumber } from 'ethers';
 
-import { NETWORK, Network, NetworkId, NETWORK_ID } from '@@constants/network.constant';
+import { NETWORK, Network, NetworkId, NETWORK_FEE_TYPE, NETWORK_ID } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 //TODO: generatedscheme에 있는지 확인하기
@@ -37,8 +37,6 @@ export const getTransactionType = (networkId: NetworkId, isToken: boolean, isBtc
         }
       case NETWORK_ID.XTZ:
         return TTransactionType.SEND_XTZ;
-      default:
-        null;
     }
   } else {
     switch (networkId) {
@@ -48,8 +46,6 @@ export const getTransactionType = (networkId: NetworkId, isToken: boolean, isBtc
         return TTransactionType.SEND_BNB;
       case NETWORK_ID.XTZ:
         return TTransactionType.SEND_XTZ;
-      default:
-        null;
     }
   }
 };
@@ -102,11 +98,10 @@ export interface ISendTransactionRequest {
   selectedNetwork: Network;
   selectedWalletIndex: number;
   gasFeeInfo: IGasFeeInfo;
-  to?: string;
+  to: string;
   from?: BigNumber;
   value?: BigNumber;
-  data?: BytesLike | null;
-  contractAddress?: string;
+  data?: BytesLike;
 }
 
 export interface IRegisterTransactionRequest {
@@ -116,7 +111,7 @@ export interface IRegisterTransactionRequest {
   from: string;
   to: string;
   hash: string;
-  data: BytesLike | null;
+  data?: BytesLike | null;
   nonce: 0;
 }
 

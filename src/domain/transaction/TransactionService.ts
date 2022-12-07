@@ -1,12 +1,12 @@
 import '@ethersproject/shims';
 
 import { BigNumber, ethers } from 'ethers';
-import { formatUnits, formatEther } from 'ethers/lib/utils';
+import { formatUnits } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, Network, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request } from '@@utils/request';
 
@@ -31,7 +31,7 @@ export class TransactionService implements ITransactionService {
     }
   };
 
-  sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data, contractAddress }: ISendTransactionRequest) => {
+  sendTransaction = async ({ selectedNetwork, selectedWalletIndex, gasFeeInfo, to, value, data }: ISendTransactionRequest) => {
     try {
       const network = getNetworkConfig(selectedNetwork);
       const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
@@ -45,43 +45,24 @@ export class TransactionService implements ITransactionService {
           const amount = parseFloat(formatUnits(value));
           return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
         case NETWORK_FEE_TYPE.EIP1559:
-          if (data && contractAddress) {
-            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-              chainId: network.chainId,
-              maxFeePerGas: gasFeeInfo.baseFee,
-              maxPriorityFeePerGas: gasFeeInfo.tip,
-              gasLimit: gasFeeInfo.gasLimit,
-              to: contractAddress,
-              data,
-            });
-          } else {
-            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-              chainId: network.chainId,
-              maxFeePerGas: gasFeeInfo.baseFee,
-              maxPriorityFeePerGas: gasFeeInfo.tip,
-              gasLimit: gasFeeInfo.gasLimit,
-              to,
-              value,
-            });
-          }
-        default:
-          if (data && contractAddress) {
-            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-              chainId: network.chainId,
-              gasPrice: gasFeeInfo.baseFee,
-              gasLimit: gasFeeInfo.gasLimit,
-              to: contractAddress,
-              data,
-            });
-          } else {
-            return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
-              chainId: network.chainId,
-              gasPrice: gasFeeInfo.baseFee,
-              gasLimit: gasFeeInfo.gasLimit,
-              to,
-              value,
-            });
-          }
+          return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            chainId: network.chainId,
+            maxFeePerGas: gasFeeInfo.baseFee,
+            maxPriorityFeePerGas: gasFeeInfo.tip,
+            gasLimit: gasFeeInfo.gasLimit,
+            to,
+            value,
+            data,
+          });
+        case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
+          return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
+            chainId: network.chainId,
+            gasPrice: gasFeeInfo.baseFee,
+            gasLimit: gasFeeInfo.gasLimit,
+            to,
+            value,
+            data,
+          });
       }
     } catch (err) {
       console.log(err);
