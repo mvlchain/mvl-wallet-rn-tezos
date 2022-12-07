@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { formatUnits } from 'ethers/lib/utils';
+import { formatFixed } from '@ethersproject/bignumber';
 
 import { getNetworkConfig } from '@@constants/network.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
@@ -17,7 +17,7 @@ import useWalletsQuery from './queries/useWalletsQuery';
 
 export const useTokenBalance = () => {
   // @TODO 데이터 연결
-  const ethService = useDi('WalletBlockChainService');
+  const walletBlockChainService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
@@ -41,15 +41,16 @@ export const useTokenBalance = () => {
     },
   });
 
-  const { refetch } = useBalanceQuery(walletData[_selectedWalletIndex]?.address, selectedNetwork, {
+  const { refetch } = useBalanceQuery(walletData[_selectedWalletIndex]?.address, getNetworkConfig(selectedNetwork).networkId, {
     enabled: false,
     keepPreviousData: true,
     select: (data) => {
       let newData: IBalance = {};
       data.forEach((balance) => {
+        const token = tokenList?.find((token) => token.symbol === balance.asset.ticker);
         newData = {
           ...newData,
-          [balance.asset.ticker]: formatUnits(balance.amount),
+          [balance.asset.ticker]: formatFixed(balance.amount, token?.decimals),
         };
       });
       return newData;
@@ -75,7 +76,7 @@ export const useTokenBalance = () => {
   const getBalance = async () => {
     try {
       if (!tokenList) return;
-      const balance = await ethService.getBalanceFromNetwork(_selectedWalletIndex, selectedNetwork, tokenList);
+      const balance = await walletBlockChainService.getBalanceFromNetwork(_selectedWalletIndex, selectedNetwork, tokenList);
       if (balance && Object.keys(balance).length === 0) {
         console.log('Data fetch from blockchain is fail -> Fetch from Server');
         refetch();
@@ -123,6 +124,7 @@ export const useTokenBalance = () => {
             ticker: crypto,
             balance: floatBalance,
             valuatedPrice,
+            logoURI: token.logoURI,
           },
         ];
       }

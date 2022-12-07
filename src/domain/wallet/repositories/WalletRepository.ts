@@ -12,7 +12,7 @@ import { IGetPriceDto, IGetPriceResponseDto } from './WalletRepository.type';
 export interface WalletRepository {
   getWallets: (extendedPublicKey: string, networkId: NetworkId) => Promise<WalletDto[]>;
   registerWallet: (body: RegisterWalletDto) => Promise<WalletResponseDto>;
-  getBalance: (address: string, network: Network) => Promise<BalanceResponseDto[]>;
+  getBalance: (address: string, network: NetworkId) => Promise<BalanceResponseDto[]>;
   getPrice(param: IGetPriceDto): Promise<IGetPriceResponseDto>;
 }
 
@@ -48,10 +48,10 @@ export class WalletRepositoryImpl implements WalletRepository {
     return res.data;
   };
 
-  getBalance = async (address: string, network: Network): Promise<BalanceResponseDto[]> => {
+  getBalance = async (address: string, networkId: NetworkId): Promise<BalanceResponseDto[]> => {
     const endpoint = `v1.2/wallets/balance?${qs.stringify({
       address,
-      network,
+      network: networkId,
     })}`;
     const res = await authRequest.get<BalanceResponseDto[]>(endpoint);
     return res.data;

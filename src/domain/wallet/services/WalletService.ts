@@ -35,7 +35,6 @@ export class WalletServiceImpl implements WalletService {
     @inject('TezosClient') private tezosClient: IWalletClient
   ) {}
 
-  // 함수로 가져갔을 경우
   setWalletClient = (network: Network): IWalletClient => {
     const networkId = getNetworkConfig(network).networkId;
     switch (networkId) {
