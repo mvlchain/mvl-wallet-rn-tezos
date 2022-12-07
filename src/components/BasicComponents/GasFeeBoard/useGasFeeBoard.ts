@@ -101,13 +101,17 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const transactionFee = useMemo(() => {
     if (!customBaseFee || !estimatedGas) return '-';
     if (network.networkFeeType === NETWORK_FEE_TYPE.EVM_LEGACY_GAS && !customGasLimit) return '-';
-    return gasService.getTotalGasFee({
+    const total = gasService.getTotalGasFee({
       selectedNetwork,
       baseFee: customBaseFee,
       tip: customTip,
       gasLimit: customGasLimit,
       estimatedGas,
     });
+    if (!total) {
+      console.log('fail to get total');
+      return '-';
+    }
   }, [customBaseFee, customTip, customGasLimit, estimatedGas]);
 
   const toggleGasAdvanced = useCallback(() => {
@@ -116,7 +120,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   //Wrap up the send transaction function which from useTokenSend and inject parameters
   const onConfirmGasFee = async () => {
-    if (!customBaseFee || !customTip || !customGasLimit || !transactionFee) return;
+    if (!customBaseFee || !customTip || !customGasLimit || transactionFee === '-') return;
     onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
   };
 

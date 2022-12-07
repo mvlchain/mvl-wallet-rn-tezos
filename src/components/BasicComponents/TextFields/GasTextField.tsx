@@ -32,7 +32,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
     let value = data.nativeEvent.text;
 
     if (!value || value === '') {
-      setValue(BigNumber.from(0));
+      debounce(setValue(BigNumber.from(0)));
       setDisplayValue('0');
     }
 
@@ -44,22 +44,21 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
       return;
     }
 
-    setValue(unit ? parseUnits(value, unit) : BigNumber.from(value));
+    debounce(setValue(unit ? parseUnits(value, unit) : BigNumber.from(value)));
     setDisplayValue(value);
   };
 
   const clearTextField = () => {
     if (!setValue) return;
-    setValue(BigNumber.from(0));
+    debounce(setValue(BigNumber.from(0)));
     setDisplayValue('0');
   };
 
-  //TODO: 디바운스 처리
   const debounce = useCallback((callback: any) => {
     let timer: any;
     return (...args: any[]) => {
       clearTimeout(timer);
-      timer = setTimeout(() => callback(...args), delay);
+      timer = setTimeout(() => callback(...args), delay ?? 2000);
     };
   }, []);
 
