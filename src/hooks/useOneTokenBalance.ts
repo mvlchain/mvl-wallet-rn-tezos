@@ -8,8 +8,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useOneTokenBalance = (tokenDto: TokenDto) => {
   const ethService = useDi('WalletBlockChainService');
-  const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const [balance, setBalance] = useState<string>('-');
 
   const getBalance = async () => {
@@ -17,7 +16,7 @@ const useOneTokenBalance = (tokenDto: TokenDto) => {
       const balance = await ethService.getOneBalanceFromNetwork(selectedWalletIndex[selectedNetwork], selectedNetwork, tokenDto);
       setBalance(balance);
     } catch (e) {
-      console.log('Data fetch from blockchain is fail -> Fetch from Server');
+      console.log('Data fetch from blockchain is fail -> Fetch from Server', e);
     }
   };
 
