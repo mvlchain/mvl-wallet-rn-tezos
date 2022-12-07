@@ -49,7 +49,13 @@ export const Avatar = styled.Image`
 
 export const PointGroupLayout = styled.View`
   flex: 1;
-  margin-left: ${width * 16}px;
+  flex-direction: row;
+  margin-left: ${width * 8}px;
+`;
+
+export const PointContentLayout = styled.View`
+  flex: 1;
+  margin-left: ${width * 8}px;
 `;
 
 export const PointCategoryWrapper = styled.View`

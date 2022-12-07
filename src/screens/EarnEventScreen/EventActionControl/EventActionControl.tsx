@@ -17,14 +17,12 @@ import { useRewardReceiptUrlByExtenedPublicKey } from './useRewardReceiptUrlByEx
 /**
  * EarnEvent action modal to behave event features
  */
-export const EventActionControl = ({ avatarUrl, eventActionButtonTitle, eventActionScheme, receiptUrl }: EarnEventActionModalProps) => {
+export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, eventActionScheme, receiptUrl }: EarnEventActionModalProps) => {
   const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const { rewardReceiptUrl } = useRewardReceiptUrlByExtenedPublicKey(receiptUrl);
   const { openModal } = globalModalStore();
   const isReceiptEnabled = receiptUrl ? true : false;
-
-  console.log(`Event> receipt: ${receiptUrl}, rewardReceiptUrl: ${rewardReceiptUrl} isEnabled: ${isReceiptEnabled}`);
 
   return (
     <DropShadow style={S.style.shadow}>
@@ -39,15 +37,24 @@ export const EventActionControl = ({ avatarUrl, eventActionButtonTitle, eventAct
           }}
         >
           <S.Avatar source={{ uri: avatarUrl }} />
-          <S.PointGroupLayout>
-            <S.PointCategoryWrapper>
-              <S.PointCategoryText>{'My point'}</S.PointCategoryText>
-            </S.PointCategoryWrapper>
-            <Text style={S.style.pointAmount}>
-              {'315 '}
-              <Text style={S.style.pointUnit}>{'bMVL'}</Text>
-            </Text>
-          </S.PointGroupLayout>
+          {points ? (
+            <S.PointGroupLayout>
+              {points.map((point) => {
+                return (
+                  <S.PointContentLayout>
+                    <S.PointCategoryWrapper>
+                      <S.PointCategoryText>{point.title}</S.PointCategoryText>
+                    </S.PointCategoryWrapper>
+                    <Text style={S.style.pointAmount}>
+                      {/* TODO 포인트 조회하여 기입할 것. */}
+                      {'315'}
+                      <Text style={S.style.pointUnit}>{` ${point.currency}`}</Text>
+                    </Text>
+                  </S.PointContentLayout>
+                );
+              })}
+            </S.PointGroupLayout>
+          ) : null}
           {isReceiptEnabled ? <RightIcon style={S.style.extensionArrow} /> : null}
         </S.RewardBoard>
 
