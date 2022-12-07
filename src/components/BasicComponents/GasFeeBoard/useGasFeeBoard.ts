@@ -22,9 +22,6 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const [advanced, setAdvanced] = useState(false);
   const [gasLevel, setGasLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(null);
-  const tip = useMemo(() => {
-    return GAS_LEVEL_SETTING[gasLevel].tip;
-  }, [gasLevel]);
 
   //The reference values from blockchain
   const [estimatedGas, setEstimatedGas] = useState<BigNumber | null>(null);
@@ -36,9 +33,13 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   const [customBaseFee, setCustomBaseFee] = useState<BigNumber | null>(null);
   const [customTip, setCustomTip] = useState<BigNumber | null>(null);
   const [customGasLimit, setCustomGasLimit] = useState<BigNumber | null>(null);
+
   const leveledBaseFee = useMemo(() => {
     return getLeveledBaseFee(network.networkFeeType, gasLevel, baseFee);
   }, [gasLevel, baseFee]);
+  const tip = useMemo(() => {
+    return GAS_LEVEL_SETTING[gasLevel].tip;
+  }, [gasLevel]);
 
   const { to, value, data } = transactionRequestStore();
 
