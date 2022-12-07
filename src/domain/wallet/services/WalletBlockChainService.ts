@@ -43,6 +43,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
         balance = await blockchainRepository.getBalance({
           selectedWalletPrivateKey: wallet.privateKey,
           rpcUrl: rpcUrl,
+          decimals: token.decimals,
         });
       } else {
         // TODO: tezos token일 시 standardType 추가해야함
@@ -51,6 +52,8 @@ export class WalletBlockChainService implements IWalletBlockChainService {
           rpcUrl: rpcUrl,
           abi: abiERC20,
           address: wallet.address,
+          decimals: token.decimals,
+          // standardType: token.standardType, // undefined or string?
         });
       }
       balanceList = {

@@ -6,6 +6,7 @@ export interface IBlockChainRepository {
 export interface IGetCoinBalance {
   selectedWalletPrivateKey: string;
   rpcUrl: string;
+  decimals?: number;
 }
 
 export interface IGetTokenBalance {
@@ -14,4 +15,5 @@ export interface IGetTokenBalance {
   standardType?: string;
   address: string;
   rpcUrl: string;
+  decimals?: number;
 }
