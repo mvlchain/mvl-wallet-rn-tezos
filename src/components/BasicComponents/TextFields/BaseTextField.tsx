@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { TextInput, Platform, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
+import useDebounce from '@@hooks/useDebounce';
 import { useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
 
@@ -21,9 +22,12 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
 
   const [lcColor, setLcColor] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
+  const [displayValue, setDisplayValue] = useState<string>('');
+  const debounceCallback = useDebounce(onChange, 1000);
 
   const clearTextField = () => {
-    onChange('');
+    debounceCallback('');
+    setDisplayValue('');
     setShowDelete(false);
   };
   const onBlur = () => {
@@ -37,7 +41,8 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   };
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    onChange(data.nativeEvent.text);
+    debounceCallback(data.nativeEvent.text);
+    setDisplayValue(data.nativeEvent.text);
     if (!data.nativeEvent.text) {
       setShowDelete(false);
     }
@@ -52,7 +57,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           placeholder={placeholder}
           placeholderTextColor={color.grey300Grey700}
           isValid={isValid}
-          value={value}
+          value={displayValue}
           onChange={onSet}
           scanable={scanable}
           style={style}
