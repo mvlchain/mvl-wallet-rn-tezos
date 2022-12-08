@@ -3,7 +3,9 @@ import SeedPhraseModule, { MetamaskSeedPhraseFormat, SEED_PHRASE_MODULE_NAME } f
 import { TorusStorageLayer } from '@tkey/storage-layer-torus';
 import BN from 'bn.js';
 
-export const ENABLE_TORUS_LOGGING = process.env.ENABLE_TORUS_LOGGING === 'true';
+import appconfig from '@@config/appconfig';
+
+export const ENABLE_TORUS_LOGGING = appconfig().auth.web3Auth.logging;
 export const TORUS_SHARE_INDEX = '1';
 export const TORUS_STORAGE_LAYER = new TorusStorageLayer({ hostUrl: 'https://metadata.tor.us' });
 export const TORUS_MODULES = {
