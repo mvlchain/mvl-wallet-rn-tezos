@@ -35,4 +35,11 @@ const walletAppConfig: WalletAppConfig = {
   },
 };
 
-export default (): WalletAppConfig => walletAppConfig;
+export default (): WalletAppConfig => {
+  if (!BASIC_USERNAME) {
+    console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    console.warn('BASIC_USERNAME is not set! Please check your .env file');
+    console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  }
+  return walletAppConfig;
+};
