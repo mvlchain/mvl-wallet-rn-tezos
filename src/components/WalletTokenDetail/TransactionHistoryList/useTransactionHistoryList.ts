@@ -46,7 +46,7 @@ const useTransactionHistoryList = () => {
 
   const { refetch } = useTransactionHitoryQuery(
     {
-      network: selectedNetwork,
+      network: pickNetwork,
       address: myaddress,
       ticker: params.tokenDto.symbol,
       beforeblock,
