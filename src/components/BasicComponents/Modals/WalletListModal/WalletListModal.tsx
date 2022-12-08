@@ -29,7 +29,7 @@ const RenderItem = ({ data }: { data: IWalletListMenuProps }) => {
   );
 };
 
-function WalletListModal({ menuList }: IWalletListModalProps) {
+function WalletListModal({ menuList, disableCreate }: IWalletListModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
   const { createWallet } = useCurrentWallet();
@@ -52,17 +52,19 @@ function WalletListModal({ menuList }: IWalletListModalProps) {
           showsVerticalScrollIndicator={false}
           bounces={false}
         />
-        <S.ButtonContainer>
-          <PrimaryButton
-            onPress={() => {
-              createWallet();
-              // createWallet(index, BINANCE);
-              closeModal();
-            }}
-            label={t('create_wallet')}
-            size={BUTTON_SIZE.SMALL}
-          />
-        </S.ButtonContainer>
+        {!disableCreate && (
+          <S.ButtonContainer>
+            <PrimaryButton
+              onPress={() => {
+                createWallet();
+                // createWallet(index, BINANCE);
+                closeModal();
+              }}
+              label={t('create_wallet')}
+              size={BUTTON_SIZE.SMALL}
+            />
+          </S.ButtonContainer>
+        )}
       </S.Container>
     </ModalLayout>
   );
