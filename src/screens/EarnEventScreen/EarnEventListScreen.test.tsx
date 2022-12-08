@@ -10,6 +10,7 @@ import { EarnEventListScreen } from './EarnEventListScreen';
  * MOCK UseCases
  *  useEarnEventList
  *  useRefetchByRefreshControl
+ *  useNavigation
  */
 jest.mock('@@hooks/event/useEarnEventList', () => {
   const useEarnEventList = () => {
@@ -33,6 +34,14 @@ jest.mock('@@hooks/useRefetchByRefreshControl', () => {
 
   return {
     useRefetchByRefreshControl,
+  };
+});
+
+jest.mock('@react-navigation/native', () => {
+  return {
+    useNavigation: () => ({
+      navigate: jest.fn(),
+    }),
   };
 });
 
