@@ -7,9 +7,10 @@ export interface IGetTotalGasFeeParamsTEZ {
 
 export interface IEstimateGasParamsTEZ extends TransferParams {
   rpcUrl: string;
+  walletPrivateKey: string;
 }
 
 export interface IGasRepositoryTezos {
   getTotalGasFee: (args: IGetTotalGasFeeParamsTEZ) => string;
-  estimateGas: (args: IEstimateGasParamsTEZ) => Promise<Estimate>;
+  estimateGas: (args: IEstimateGasParamsTEZ) => Promise<Estimate | undefined>;
 }

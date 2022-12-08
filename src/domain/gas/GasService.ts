@@ -106,7 +106,16 @@ export class GasService implements IGasService {
             throw new Error('value is required');
           }
           const valueTezos = parseFloat(formatUnits(value, 'gwei'));
-          const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({ rpcUrl: network.rpcUrl, to, amount: valueTezos });
+          const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({
+            rpcUrl: network.rpcUrl,
+            walletPrivateKey: wallet.privateKey,
+            to,
+            amount: valueTezos,
+          });
+          if (!gasUsageTezos) {
+            throw new Error('fail to estimate');
+          }
+          console.log(gasUsageTezos.storageLimit, gasUsageTezos.gasLimit, gasUsageTezos.suggestedFeeMutez, gasUsageTezos);
           return parseUnits(gasUsageTezos.consumedMilligas.toString(), 'gwei');
         case NETWORK_FEE_TYPE.EIP1559:
           return await this.gasRepository.estimateGas(
