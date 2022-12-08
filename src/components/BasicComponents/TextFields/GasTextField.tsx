@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 import { BigNumber } from 'ethers';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
-import { TextInput, Platform, NativeSyntheticEvent, TextInputChangeEventData, View } from 'react-native';
+import { NativeSyntheticEvent, TextInputChangeEventData, View } from 'react-native';
 
-import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
+import { TextFieldDelete } from '@@assets/image';
+import useDebounce from '@@hooks/useDebounce';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { commonColors } from '@@style/colors';
 import { theme } from '@@style/theme';
@@ -19,6 +20,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   const [lcColor, setLcColor] = useState<string | null>(null);
   const initialDisplayValue = value && unit ? formatUnits(value, unit).toString() : value ? value.toString() : '0';
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
+  const debounceCallback = useDebounce(setValue, 1000);
 
   const onBlur = () => {
     setLcColor(null);
@@ -32,8 +34,9 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
     let value = data.nativeEvent.text;
 
     if (!value || value === '') {
-      debounce(setValue(BigNumber.from(0)));
+      debounceCallback(BigNumber.from(0));
       setDisplayValue('0');
+      console.log('????');
     }
 
     if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
@@ -44,23 +47,15 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
       return;
     }
 
-    debounce(setValue(unit ? parseUnits(value, unit) : BigNumber.from(value)));
+    debounceCallback(unit ? parseUnits(value, unit) : BigNumber.from(value));
     setDisplayValue(value);
   };
 
   const clearTextField = () => {
     if (!setValue) return;
-    debounce(setValue(BigNumber.from(0)));
+    debounceCallback(BigNumber.from(0));
     setDisplayValue('0');
   };
-
-  const debounce = useCallback((callback: any) => {
-    let timer: any;
-    return (...args: any[]) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => callback(...args), delay ?? 500);
-    };
-  }, []);
 
   return (
     <S.BaseTextFieldContainer>
