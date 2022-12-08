@@ -4,7 +4,7 @@
 //
 
 #import "IOSTheme.h"
-#import <Wallet-Swift.h>
+#import <CryptoVehicleWallet-Swift.h>
 #import <React/RCTLog.h>
 
 #import "ThemeType.h"

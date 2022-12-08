@@ -630,3 +630,7 @@ fabric.properties
 credentials
 .env
 .env.*
+
+CryptoVehicleWallet.ipa
+CryptoVehicleWallet.app.dSYM.zip
+***REMOVED***

@@ -1,6 +1,3 @@
-// jest.config.js
-const { defaults: tsjPreset } = require('ts-jest/presets');
-
 module.exports = {
   preset: '@testing-library/react-native',
   globals: {
@@ -22,6 +19,7 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   moduleNameMapper: {
     '\\.(png|jpg|ico|jpeg|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/jest/ImageMock.js',
+    '^@env$': '<rootDir>/jest/env.js',
   },
   snapshotResolver: './snapshot-resolver.js',
 };
