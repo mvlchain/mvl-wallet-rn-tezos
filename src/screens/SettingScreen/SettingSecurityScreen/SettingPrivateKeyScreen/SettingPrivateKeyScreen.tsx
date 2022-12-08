@@ -14,7 +14,6 @@ import useSettingPrivateKeyScreen from './useSettingPrivateKeyScreen';
 function SettingPrivateKeyScreen() {
   const { t } = useTranslation();
 
-  // TODO: 실제 데이터와 연동 필요
   const {
     type,
     pkey,
