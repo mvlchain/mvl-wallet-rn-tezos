@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon, CircleAlertIcon } from '@@assets/image';
-import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -36,7 +36,7 @@ export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, 
             });
           }}
         >
-          <S.Avatar source={{ uri: avatarUrl }} />
+          <S.RewardAvatar source={{ uri: avatarUrl }} />
           {points ? (
             <S.PointGroupLayout>
               {points.map((point) => {
@@ -46,7 +46,7 @@ export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, 
                       <S.PointCategoryText>{point.title}</S.PointCategoryText>
                     </S.PointCategoryWrapper>
                     <Text style={S.style.pointAmount}>
-                      {/* TODO 포인트 조회하여 기입할 것. */}
+                      {/* TODO 포인트 조회하여 기입할 것. require space before currency unit.*/}
                       {'315'}
                       <Text style={S.style.pointUnit}>{` ${point.currency}`}</Text>
                     </Text>

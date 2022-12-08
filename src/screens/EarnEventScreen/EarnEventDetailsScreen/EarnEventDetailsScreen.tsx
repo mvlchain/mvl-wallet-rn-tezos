@@ -5,6 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import Webview from '@@components/BasicComponents/Webview';
 
 import { EventActionControl } from '../EventActionControl';
+import { ThirdPartyApp } from '../ThirdPartyApp';
 
 import * as S from './EarnEventDetailsScreen.style';
 import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
@@ -44,6 +45,7 @@ export function EarnEventDetailsScreen() {
       {data ? (
         <>
           <Webview url={data.detailPageUrl} />
+          <ThirdPartyApp avatarUrl={data.iconUrl} thirdPartyAccountState={'Connected Account'} thirdPartyDisplayName={'010-6886-0099'} />
           <EventActionControl
             avatarUrl={data.pointIconUrl}
             points={data.pointInfoArr}

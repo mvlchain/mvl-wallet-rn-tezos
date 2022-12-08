@@ -2,8 +2,11 @@ import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 import { fontStyle } from '@@style/theme';
-import { width, height, fontSize } from '@@utils/ui';
+import { width, height } from '@@utils/ui';
 
+/**
+ * inline style for EventActionControl
+ */
 export const style = StyleSheet.create({
   shadow: {
     shadowColor: '#000',
@@ -42,7 +45,7 @@ export const RewardBoard = styled.Pressable`
   margin-bottom: ${height * 24}px;
 `;
 
-export const Avatar = styled.Image`
+export const RewardAvatar = styled.Image`
   width: ${width * 40}px;
   height: ${width * 40}px;
 `;
@@ -77,8 +80,8 @@ export const TxFeeLayout = styled.View`
 `;
 
 export const TxFeeLabel = styled.Text`
-  flex: 1;
   ${({ theme }) => theme.font.Label.sm};
+  flex: 1;
   line-height: ${height * 16}px;
   color: ${({ theme }) => theme.color.grey500};
   margin-left: ${width * 8}px;
