@@ -585,7 +585,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BDC519CB698ED2312A7297EC /* Pods-Wallet-WalletTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -617,7 +617,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A517FB06CC5DAC83D6D93FF9 /* Pods-Wallet-WalletTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -645,6 +645,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 33906B4E293F2A05009CDA3D /* Wallet.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Wallet/Wallet.entitlements;
@@ -681,6 +682,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 33906B5A293F32B0009CDA3D /* Wallet.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Wallet/Wallet.entitlements;
@@ -782,6 +784,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 33906B4F293F2A05009CDA3D /* Wallet.staging.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Wallet/Wallet.entitlements;
@@ -815,7 +818,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C4DD34B12522132F7CC838B1 /* Pods-Wallet-WalletTests.staging.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
