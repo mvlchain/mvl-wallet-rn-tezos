@@ -51,6 +51,7 @@ export const ConfirmWrapper = styled.View`
 
 export const Warning = styled.View`
   flex-direction: row;
+  width: 100%;
   margin-top: ${height * 10}px;
 `;
 
@@ -59,6 +60,8 @@ export const WarningIconWrapper = styled.View`
 `;
 
 export const WarningText = styled.Text`
+  flex: 1;
+  flex-wrap: wrap;
   ${({ theme }) => theme.font.Label.sm}
   line-height: ${fontSize(16)}px;
   color: ${({ theme }) => theme.color.red};
