@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { BigNumber } from 'ethers';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
@@ -22,6 +22,10 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
   const debounceCallback = useDebounce(setValue, 1000);
 
+  useEffect(() => {
+    debounceCallback(unit ? parseUnits(displayValue, unit) : BigNumber.from(displayValue));
+  }, [displayValue]);
+
   const onBlur = () => {
     setLcColor(null);
   };
@@ -34,9 +38,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
     let value = data.nativeEvent.text;
 
     if (!value || value === '') {
-      debounceCallback(BigNumber.from(0));
       setDisplayValue('0');
-      console.log('????');
     }
 
     if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
@@ -47,13 +49,11 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
       return;
     }
 
-    debounceCallback(unit ? parseUnits(value, unit) : BigNumber.from(value));
     setDisplayValue(value);
   };
 
   const clearTextField = () => {
     if (!setValue) return;
-    debounceCallback(BigNumber.from(0));
     setDisplayValue('0');
   };
 
