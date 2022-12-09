@@ -56,9 +56,8 @@ function WalletListModal({ menuList, disableCreate }: IWalletListModalProps) {
           <S.ButtonContainer>
             <PrimaryButton
               onPress={() => {
-                createWallet();
-                // createWallet(index, BINANCE);
                 closeModal();
+                createWallet();
               }}
               label={t('create_wallet')}
               size={BUTTON_SIZE.SMALL}
