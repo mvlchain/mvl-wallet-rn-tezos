@@ -1,14 +1,15 @@
 import { formatFixed } from '@ethersproject/bignumber';
 import { ethers } from 'ethers';
-// import { formatEther } from 'ethers/lib/utils';
 import { injectable } from 'tsyringe';
+
+import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class EthersRepository implements Type.IBlockChainRepository {
   constructor() {}
-  getBalance = async ({ selectedWalletPrivateKey, rpcUrl, decimals = 18 }: Type.IGetCoinBalance) => {
+  getBalance = loadingFunction<string>(async ({ selectedWalletPrivateKey, rpcUrl, decimals = 18 }: Type.IGetCoinBalance) => {
     try {
       const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
       const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
@@ -18,9 +19,9 @@ export class EthersRepository implements Type.IBlockChainRepository {
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
-  };
+  });
 
-  getContractBalance = async ({ contractAddress, abi, address, rpcUrl, decimals = 18 }: Type.IGetTokenBalance) => {
+  getContractBalance = loadingFunction<string>(async ({ contractAddress, abi, address, rpcUrl, decimals = 18 }: Type.IGetTokenBalance) => {
     try {
       if (!abi) throw new Error('abi is required');
       const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -31,5 +32,5 @@ export class EthersRepository implements Type.IBlockChainRepository {
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
-  };
+  });
 }

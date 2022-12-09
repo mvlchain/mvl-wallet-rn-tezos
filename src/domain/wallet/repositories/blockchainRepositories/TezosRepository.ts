@@ -7,13 +7,14 @@ import BigNumber from 'bignumber.js';
 import { injectable } from 'tsyringe';
 
 import { formatTezos } from '@@utils/formatTezos';
+import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class TezosRepository implements Type.IBlockChainRepository {
   constructor() {}
-  getBalance = async ({ selectedWalletPrivateKey, rpcUrl, decimals = 6 }: Type.IGetCoinBalance) => {
+  getBalance = loadingFunction<string>(async ({ selectedWalletPrivateKey, rpcUrl, decimals = 6 }: Type.IGetCoinBalance) => {
     try {
       const Tezos = new TezosToolkit(rpcUrl);
       const address = tezosCrypto.utils.secretKeyToKeyPair(selectedWalletPrivateKey).pkh;
@@ -23,9 +24,9 @@ export class TezosRepository implements Type.IBlockChainRepository {
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
-  };
+  });
 
-  getContractBalance = async ({ contractAddress, address, rpcUrl, standardType, decimals }: Type.IGetTokenBalance) => {
+  getContractBalance = loadingFunction<string>(async ({ contractAddress, address, rpcUrl, standardType, decimals }: Type.IGetTokenBalance) => {
     try {
       // api나오기 전 임시 작업
       if (standardType === 'fa1.2') {
@@ -37,7 +38,7 @@ export class TezosRepository implements Type.IBlockChainRepository {
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
-  };
+  });
 
   _getFa1_2Balance = async ({ contractAddress, address, rpcUrl, decimals = 6 }: Type.IGetTokenBalance) => {
     const Tezos = new TezosToolkit(rpcUrl);

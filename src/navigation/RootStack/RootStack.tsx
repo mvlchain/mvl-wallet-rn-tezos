@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
+import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
@@ -186,6 +187,7 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
         </Navigator>
+        <LoadingIndicator />
         <PinModal />
         <TermsOfServicesModal />
         <PincodeGuideModal />
