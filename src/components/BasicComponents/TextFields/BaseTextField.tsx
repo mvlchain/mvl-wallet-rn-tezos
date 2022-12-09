@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
@@ -25,8 +25,11 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const [displayValue, setDisplayValue] = useState<string>('');
   const debounceCallback = useDebounce(onChange, 1000);
 
+  useEffect(() => {
+    debounceCallback(displayValue);
+  }, [displayValue]);
+
   const clearTextField = () => {
-    debounceCallback('');
     setDisplayValue('');
     setShowDelete(false);
   };
@@ -41,7 +44,6 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   };
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    debounceCallback(data.nativeEvent.text);
     setDisplayValue(data.nativeEvent.text);
     if (!data.nativeEvent.text) {
       setShowDelete(false);
