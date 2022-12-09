@@ -187,12 +187,12 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
         </Navigator>
+        <LoadingIndicator />
         <PinModal />
         <TermsOfServicesModal />
         <PincodeGuideModal />
         <GlobalModal />
         <ToastPopup />
-        <LoadingIndicator />
       </NavigationContainer>
     </SafeAreaView>
   );

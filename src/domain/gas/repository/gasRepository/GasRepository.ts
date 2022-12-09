@@ -6,20 +6,21 @@ import { inject, injectable } from 'tsyringe';
 
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { WalletService } from '@@domain/wallet/services/WalletService';
+import { loadingFunction } from '@@utils/loadingHelper';
 
-import { IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
+import { IGasFeeInfoEthers, IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
 
 @injectable()
 export class GasRepositoryImpl implements IGasRepository {
   constructor(@inject('WalletService') private walletService: WalletService) {}
 
-  getGasFeeData = async (networkInfo: INetworkInfo) => {
+  getGasFeeData = loadingFunction<IGasFeeInfoEthers>(async (networkInfo: INetworkInfo) => {
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     const block = await provider.getBlock('latest');
     const gasLimit = block.gasLimit;
     const gasPrice = await provider.getGasPrice();
     return { gasLimit, gasPrice };
-  };
+  });
 
   getTotalGasFee = ({ baseFee, gasLimit }: IGetTotalGasFeeParamsEthers) => {
     const baseFeeInDecimal = new Decimal(baseFee.toString());
@@ -31,8 +32,8 @@ export class GasRepositoryImpl implements IGasRepository {
     return formatEther(totalGasInBN);
   };
 
-  estimateGas = async (networkInfo: INetworkInfo, args: TransactionRequest) => {
+  estimateGas = loadingFunction<BigNumber>(async (networkInfo: INetworkInfo, args: TransactionRequest) => {
     const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
     return await provider.estimateGas(args);
-  };
+  });
 }

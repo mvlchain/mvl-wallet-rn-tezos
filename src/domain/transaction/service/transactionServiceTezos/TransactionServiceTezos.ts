@@ -4,6 +4,7 @@ import qs from 'qs';
 import { injectable } from 'tsyringe';
 
 import { Network, getNetworkConfig } from '@@constants/network.constant';
+import { loadingFunction } from '@@utils/loadingHelper';
 
 import { ITransactionServiceTezos } from './TransactionServiceTezos.type';
 
@@ -12,7 +13,7 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
   constructor() {}
 
   // Tezos는 general한 sendTransaction을 raw string data를 활용하는 방식으로 구현하기 어려워서 transfer 기준으로 일단 구현
-  sendTransaction = async (selectedNetwork: Network, selectedWalletPrivateKey: string, params: TransferParams) => {
+  sendTransaction = loadingFunction<string>(async (selectedNetwork: Network, selectedWalletPrivateKey: string, params: TransferParams) => {
     const network = getNetworkConfig(selectedNetwork);
     const Tezos = new TezosToolkit(network.rpcUrl);
     Tezos.setProvider({
@@ -37,5 +38,5 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
       .then((op) => op.confirmation(1).then(() => op.opHash));
 
     return txHash;
-  };
+  });
 }
