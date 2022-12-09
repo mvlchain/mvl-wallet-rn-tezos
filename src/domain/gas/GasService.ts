@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 import { injectable, inject } from 'tsyringe';
 
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
@@ -105,7 +105,7 @@ export class GasService implements IGasService {
           if (!value) {
             throw new Error('value is required');
           }
-          const valueTezos = parseFloat(formatUnits(value, 'gwei'));
+          const valueTezos = parseFloat(formatEther(value));
           const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({
             rpcUrl: network.rpcUrl,
             walletPrivateKey: wallet.privateKey,
