@@ -12,7 +12,6 @@ export const IndicatorContainer = styled.View`
   height: 100%;
   margin-top: ${height * 56}px;
   align-items: center;
-  background-color: transparent;
   z-index: 999;
 `;
 
