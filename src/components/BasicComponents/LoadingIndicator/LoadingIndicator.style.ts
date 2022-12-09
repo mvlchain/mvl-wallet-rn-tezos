@@ -18,6 +18,6 @@ export const IndicatorContainer = styled.View`
 
 export const styles = StyleSheet.create({
   lottie: {
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.6 }],
   },
 });
