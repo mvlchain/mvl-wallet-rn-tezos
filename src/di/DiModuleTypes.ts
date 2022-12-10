@@ -1,4 +1,5 @@
-import { AuthService } from '@@domain/auth/AuthService';
+import { AuthService } from '@@domain/auth/IAuthService';
+import { ILegacyAuthMigrationService } from '@@domain/auth/ILegacyAuthMigrationService';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
 import { KeyClientUtil } from '@@domain/auth/clients/KeyClientUtil';
 import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
@@ -35,6 +36,8 @@ export interface DiModuleTypes {
   TransactionServiceEthers: ITransactionServiceEthers;
   TransactionServiceTezos: ITransactionServiceTezos;
   GasService: IGasService;
+
+  LegacyAuthMigrationService: ILegacyAuthMigrationService;
 
   // Repository
   WalletRepository: WalletRepository;
