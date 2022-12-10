@@ -1,19 +1,22 @@
-package com.wallet;
+package io.mvlchain.wallet;
 
-import static com.wallet.settings.AndroidThemeKt.THEME_TYPE_DARK;
-import static com.wallet.settings.AndroidThemeKt.THEME_TYPE_DEFAULT;
-import static com.wallet.settings.AndroidThemeKt.THEME_TYPE_LIGHT;
+import static io.mvlchain.wallet.settings.AndroidThemeKt.THEME_TYPE_DARK;
+import static io.mvlchain.wallet.settings.AndroidThemeKt.THEME_TYPE_DEFAULT;
+import static io.mvlchain.wallet.settings.AndroidThemeKt.THEME_TYPE_LIGHT;
 
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
-import com.wallet.settings.AndroidTheme;
-import com.wallet.settings.SharedPreferenceStorage;
-import com.wallet.settings.ThemeType;
+import io.mvlchain.wallet.BuildConfig;
+import io.mvlchain.wallet.R;
+
+import io.mvlchain.wallet.settings.AndroidTheme;
+import io.mvlchain.wallet.settings.SharedPreferenceStorage;
+import io.mvlchain.wallet.settings.ThemeType;
 
 public class MainActivity extends ReactActivity {
   private static final String OPTION_FOX_CODE = "foxCode";

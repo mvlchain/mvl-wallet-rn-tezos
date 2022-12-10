@@ -1,4 +1,4 @@
-package com.wallet.settings
+package io.mvlchain.wallet.settings
 
 import android.content.Context
 import android.content.SharedPreferences
