@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.wallet">
+  package="io.mvlchain.wallet">
 
   <application
     android:allowBackup="false"
