@@ -11,11 +11,10 @@ import * as Type from './WalletBlockChaiRepository.type';
 export class EthersRepository implements Type.IBlockChainRepository {
   constructor(@inject('EvmJsonRpcProviderHolder') private evmJsonRpcProviderHolder: EvmJsonRpcProviderHolder) {}
 
-  getBalance = loadingFunction<string>(async ({ selectedWalletPrivateKey, rpcUrl, decimals = 18 }: Type.IGetCoinBalance) => {
+  getBalance = loadingFunction<string>(async ({ selectedWalletAddress, rpcUrl, decimals = 18 }: Type.IGetCoinBalance) => {
     try {
       const provider = this.evmJsonRpcProviderHolder.getProvider(rpcUrl);
-      const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
-      const bigNumBalance = await wallet.getBalance();
+      const bigNumBalance = await provider.getBalance(selectedWalletAddress);
       const balance = formatFixed(bigNumBalance, decimals);
       return balance;
     } catch (e) {
