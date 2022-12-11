@@ -1,9 +1,10 @@
 import { TransactionRequest } from '@ethersproject/abstract-provider';
 import Decimal from 'decimal.js';
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { inject, injectable } from 'tsyringe';
 
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { loadingFunction } from '@@utils/loadingHelper';
@@ -12,10 +13,14 @@ import { IGasFeeInfoEthers, IGasRepository, IGetTotalGasFeeParamsEthers } from '
 
 @injectable()
 export class GasRepositoryImpl implements IGasRepository {
-  constructor(@inject('WalletService') private walletService: WalletService) {}
+  constructor(
+    @inject('WalletService') private walletService: WalletService,
+    @inject('EvmJsonRpcProviderHolder') private evmJsonRpcProviderHolder: EvmJsonRpcProviderHolder
+  ) {}
 
   getGasFeeData = loadingFunction<IGasFeeInfoEthers>(async (networkInfo: INetworkInfo) => {
-    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    // TODO: get gasPrice from v1/fee/:networkName | v2/fee/:networkName
+    const provider = this.evmJsonRpcProviderHolder.getProvider(networkInfo.rpcUrl);
     const block = await provider.getBlock('latest');
     const gasLimit = block.gasLimit;
     const gasPrice = await provider.getGasPrice();
@@ -33,7 +38,7 @@ export class GasRepositoryImpl implements IGasRepository {
   };
 
   estimateGas = loadingFunction<BigNumber>(async (networkInfo: INetworkInfo, args: TransactionRequest) => {
-    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const provider = this.evmJsonRpcProviderHolder.getProvider(networkInfo.rpcUrl);
     return await provider.estimateGas(args);
   });
 }
