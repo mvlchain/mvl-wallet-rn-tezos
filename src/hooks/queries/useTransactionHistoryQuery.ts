@@ -4,7 +4,7 @@ import { Network } from '@@constants/network.constant';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { useDi } from '@@hooks/useDi';
 
-export default function useTransactionHitoryQuery(
+export default function useTransactionHistoryQuery(
   {
     network,
     ticker,
