@@ -60,7 +60,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
   const setData = async () => {
     if (!to || !value) return;
     if (tokenDto.contractAddress) {
-      const data = await transactionService.encodeTransferData(to, value);
+      const data = await transactionService.getTransferData(selectedNetwork, selectedWalletIndex[selectedNetwork], to, value);
       setBody({
         data,
       });
