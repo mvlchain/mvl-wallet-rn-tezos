@@ -42,7 +42,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
       let balance;
       if (token.contractAddress === null) {
         balance = await blockchainRepository.getBalance({
-          selectedWalletPrivateKey: wallet.privateKey,
+          selectedWalletAddress: wallet.address,
           rpcUrl: rpcUrl,
           decimals: token.decimals,
         });
@@ -73,7 +73,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
     let balance;
     if (token.contractAddress === null) {
       balance = await blockchainRepository.getBalance({
-        selectedWalletPrivateKey: wallet.privateKey,
+        selectedWalletAddress: wallet.address,
         rpcUrl: rpcUrl,
         decimals: token.decimals,
       });
