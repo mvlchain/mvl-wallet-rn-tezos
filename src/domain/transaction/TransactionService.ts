@@ -1,16 +1,22 @@
 import { BigNumber, ethers } from 'ethers';
-import { formatUnits } from 'ethers/lib/utils';
+import { formatEther, formatUnits } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE, Network } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request } from '@@utils/request';
 
-import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
+import {
+  ITransactionService,
+  IGetHistoryParams,
+  ISendTransactionRequest,
+  IRegisterTransactionRequest,
+  IRegisterTransactionResponse,
+} from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
-import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
+import { ITezosData, ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 @injectable()
 export class TransactionService implements ITransactionService {
   constructor(
@@ -19,11 +25,25 @@ export class TransactionService implements ITransactionService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
-  encodeTransferData = async (to: string, value: BigNumber) => {
+  getTransferData = async (selectedNetwork: Network, selectedWalletIndex: number, to: string, value: BigNumber) => {
     try {
-      const etherInterface = new ethers.utils.Interface(abiERC20);
-      const data = etherInterface.encodeFunctionData('transfer', [to, value]);
-      return data;
+      const network = getNetworkConfig(selectedNetwork);
+      const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
+
+      switch (network.networkFeeType) {
+        case NETWORK_FEE_TYPE.TEZOS:
+          const data: ITezosData = {
+            from: wallet.address,
+            to,
+            value: formatEther(value),
+          };
+          return JSON.stringify(data);
+        case NETWORK_FEE_TYPE.EIP1559:
+          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value]);
+
+        case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
+          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value]);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -39,9 +59,14 @@ export class TransactionService implements ITransactionService {
           if (!gasFeeInfo.tip || !value || !to) {
             throw new Error('tip,value,to is required');
           }
-          const fee = parseFloat(formatUnits(gasFeeInfo.tip));
-          const amount = parseFloat(formatUnits(value));
-          return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
+          const fee = parseFloat(formatEther(gasFeeInfo.tip));
+          const amount = parseFloat(formatEther(value));
+          if (data) {
+            return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount, data: data as string });
+          } else {
+            return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
+          }
+
         case NETWORK_FEE_TYPE.EIP1559:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,

@@ -23,7 +23,6 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
   };
 
   estimateGas = async ({ rpcUrl, walletPrivateKey, to, amount }: IEstimateGasParamsTEZ) => {
-    console.log('amount', amount);
     try {
       const Tezos = new TezosToolkit(rpcUrl);
       Tezos.setProvider({
