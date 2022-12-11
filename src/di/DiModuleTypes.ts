@@ -9,6 +9,7 @@ import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository'
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { IGasService } from '@@domain/gas/GasService.type';
 import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
@@ -36,8 +37,8 @@ export interface DiModuleTypes {
   TransactionServiceEthers: ITransactionServiceEthers;
   TransactionServiceTezos: ITransactionServiceTezos;
   GasService: IGasService;
-
   LegacyAuthMigrationService: ILegacyAuthMigrationService;
+  EvmJsonRpcProviderHolder: EvmJsonRpcProviderHolder;
 
   // Repository
   WalletRepository: WalletRepository;

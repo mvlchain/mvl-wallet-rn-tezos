@@ -15,6 +15,7 @@ import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyReposit
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasService } from '@@domain/gas/GasService';
 import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
@@ -133,4 +134,8 @@ container.register('GasRepositoryTezos', {
 
 container.register('LegacyAuthMigrationService', {
   useFactory: instancePerContainerCachingFactory<LegacyAuthMigrationService>((container) => container.resolve(LegacyAuthMigrationService)),
+});
+
+container.register('EvmJsonRpcProviderHolder', {
+  useFactory: instancePerContainerCachingFactory<EvmJsonRpcProviderHolder>((container) => container.resolve(EvmJsonRpcProviderHolder)),
 });

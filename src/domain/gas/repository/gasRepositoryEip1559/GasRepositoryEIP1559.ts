@@ -1,18 +1,20 @@
 import Decimal from 'decimal.js';
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
-import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { loadingFunction } from '@@utils/loadingHelper';
 
-import { IGetTotalGasFeeParamsEIP1559, IGasRepositoryEip1559, IGasFeeInfoEip1559 } from './GasRepositoryEip1559.type';
+import { IGasFeeInfoEip1559, IGasRepositoryEip1559, IGetTotalGasFeeParamsEIP1559 } from './GasRepositoryEip1559.type';
 
 @injectable()
 export class GasRepositoryEip1559Impl implements IGasRepositoryEip1559 {
+  constructor(@inject('EvmJsonRpcProviderHolder') private evmJsonRpcProviderHolder: EvmJsonRpcProviderHolder) {}
+
   getGasFeeData = loadingFunction<IGasFeeInfoEip1559>(async (networkInfo: INetworkInfo) => {
-    const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcUrl);
+    const provider = this.evmJsonRpcProviderHolder.getProvider(networkInfo.rpcUrl);
     const block = await provider.getBlock('latest');
     const gasLimit = block.gasLimit;
     const gasPrice = await provider.getFeeData();
