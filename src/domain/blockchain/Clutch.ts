@@ -13,17 +13,17 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import * as bitcoinMessage from 'bitcoinjs-message';
 import { Wallet } from 'ethers';
-import { HDNode, arrayify, entropyToMnemonic, mnemonicToSeed } from 'ethers/lib/utils';
+import { arrayify, entropyToMnemonic, HDNode, mnemonicToSeed } from 'ethers/lib/utils';
 import HDKey from 'hdkey';
 
+import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { stripHexPrefix } from '@@utils/platform';
 
-import { ETHEREUM, BlockChain } from './BlockChain';
 import { ExtendedKeyPair } from './ExtendedKeyPair';
 import { KeyPair } from './KeyPair';
 
 // extendedKeyPath(60) == "m/44'/60'/0'"
-export const CLUTCH_EXTENDED_KEY_PATH = extendedKeyPath(ETHEREUM);
+export const CLUTCH_EXTENDED_KEY_PATH = extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44);
 
 export class Clutch {
   private wallet: Wallet;
@@ -236,8 +236,8 @@ function extendedPublicKeyFrom(node: HDNode, derivePath?: string): string {
  * @param addressIndex address index number
  * @returns BIP44 format key derivation path as string
  */
-export function keyDerivationPath(network: BlockChain, addressIndex: number): string {
-  return `m/44'/${network.coinType}'/0'/0/${addressIndex}`;
+export function keyDerivationPath(bip44: number, addressIndex: number): string {
+  return `m/44'/${bip44}'/0'/0/${addressIndex}`;
 }
 
 /**
@@ -248,6 +248,6 @@ export function keyDerivationPath(network: BlockChain, addressIndex: number): st
  *  SLIP-0044(https://github.com/satoshilabs/slips/blob/master/slip-0044.md)
  * @returns root extended key path for Clutch
  */
-export function extendedKeyPath(network: BlockChain): string {
-  return `m/44'/${network.coinType}'/0'`;
+export function extendedKeyPath(bip44: number): string {
+  return `m/44'/${bip44}'/0'`;
 }

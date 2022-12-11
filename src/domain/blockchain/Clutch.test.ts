@@ -1,4 +1,5 @@
-import { ETHEREUM } from './BlockChain';
+import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+
 import { Clutch, extendedKeyPath } from './Clutch';
 import { KeyPair } from './KeyPair';
 
@@ -59,7 +60,7 @@ it('create extended KeyPair, BIP32 ethereum', () => {
   const entropy = `0x0${PRIVATE_KEY}`;
 
   // extendedKeyPath(60) == "m/44'/60'/0'"
-  const extendedKeyPair = Clutch.extendedKeyPair(entropy, extendedKeyPath(ETHEREUM));
+  const extendedKeyPair = Clutch.extendedKeyPair(entropy, extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44));
 
   expect(extendedKeyPair.xprv).toBe(
     'xprv9yxj3pfGaK9o63tNT2MJjGvGRNtTF7wd356VKFgjUCBaEnRtPzPggmmnwi6GfeyGVLb3mixDEvW88vCeXRQwsky8Q1SsbDnoGkSpVBDJzQn'
@@ -82,7 +83,7 @@ it('create KeyPair with entropy -> m/44 style address', () => {
 });
 
 it('sign a message by extended private key from key node', async () => {
-  const keyNode = Clutch.keyNode(PRIVATE_KEY, extendedKeyPath(ETHEREUM));
+  const keyNode = Clutch.keyNode(PRIVATE_KEY, extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44));
   // console.log(`Clutch> xprv: ${keyNode.extendedKey}, xpub: ${keyNode.neuter().extendedKey}`);
 
   const message = 'This is the test for signing and verifying message';
