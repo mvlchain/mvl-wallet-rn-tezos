@@ -1,9 +1,10 @@
+import { Estimate } from '@taquito/taquito';
 import { BigNumber } from 'ethers';
 import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 import { injectable, inject } from 'tsyringe';
 
+import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
-import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest, TGasLevel } from './GasService.type';
@@ -24,7 +25,7 @@ export class GasService implements IGasService {
     try {
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          return { enableTip: true, enableLimitCustom: true };
+          return { enableTip: true, enableLimitCustom: false };
         case NETWORK_FEE_TYPE.EIP1559:
           const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
           return {
@@ -52,10 +53,10 @@ export class GasService implements IGasService {
     try {
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          if (!tip || !estimatedGas || !baseFee) {
+          if (!tip || !baseFee) {
             throw new Error(`basefee, tip,estimatedGas is required`);
           }
-          return this.gasRepositoryTezos.getTotalGasFee({ baseFee, tip, estimatedGas });
+          return this.gasRepositoryTezos.getTotalGasFee({ baseFee, tip });
         case NETWORK_FEE_TYPE.EIP1559:
           if (!tip || !baseFee || !estimatedGas) {
             throw new Error(`basefee, tip,estimatedGas is required`);
@@ -76,10 +77,6 @@ export class GasService implements IGasService {
     }
   };
 
-  getEstimateTime = (gasLevel: TGasLevel) => {
-    return GAS_LEVEL_SETTING[gasLevel].waitTime;
-  };
-
   estimateGas = async ({ selectedNetwork, selectedWalletIndex, to, value, data }: IEstimateGasRequest) => {
     try {
       const network = getNetworkConfig(selectedNetwork);
@@ -89,7 +86,7 @@ export class GasService implements IGasService {
           if (!value) {
             throw new Error('value is required');
           }
-          const valueTezos = parseFloat(formatEther(value));
+          const valueTezos = parseFloat(formatUnits(value, 6));
           const estimationTezos = await this.gasRepositoryTezos.estimateGas({
             rpcUrl: network.rpcUrl,
             walletPrivateKey: wallet.privateKey,
@@ -100,7 +97,7 @@ export class GasService implements IGasService {
             throw new Error('fail to estimate');
           }
           return {
-            baseFee: BigNumber.from(estimationTezos.usingBaseFeeMutez.toString()),
+            baseFee: parseUnits(estimationTezos.totalCost.toString(), 0),
             gasUsage: BigNumber.from(estimationTezos.gasLimit.toString()),
           };
         case NETWORK_FEE_TYPE.EIP1559:

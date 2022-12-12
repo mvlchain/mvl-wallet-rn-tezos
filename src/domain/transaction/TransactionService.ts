@@ -35,7 +35,7 @@ export class TransactionService implements ITransactionService {
           const data: ITezosData = {
             from: wallet.address,
             to,
-            value: formatEther(value),
+            value: formatUnits(value, 6),
           };
           return JSON.stringify(data);
         case NETWORK_FEE_TYPE.EIP1559:
@@ -59,8 +59,8 @@ export class TransactionService implements ITransactionService {
           if (!gasFeeInfo.tip || !value || !to) {
             throw new Error('tip,value,to is required');
           }
-          const fee = parseFloat(formatEther(gasFeeInfo.tip));
-          const amount = parseFloat(formatEther(value));
+          const fee = parseFloat(formatUnits(gasFeeInfo.tip, 0));
+          const amount = parseFloat(formatUnits(value, 6));
           if (data) {
             return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount, data: data as string });
           } else {

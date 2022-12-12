@@ -6,15 +6,19 @@ import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { height } from '@@utils/ui';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
+  const { selectedNetwork } = walletPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
   const { useMax, onSelect, label, tokenDto, value, onChange, hint } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
@@ -23,8 +27,18 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const debounceCallback = useDebounce(onChange, 1000);
 
   useEffect(() => {
-    debounceCallback(displayValue ? parseUnits(displayValue, 'ether') : null);
+    debounceCallback(getUnitValue(displayValue));
   }, [displayValue]);
+
+  const getUnitValue = (value: string | null) => {
+    if (!value) return null;
+    switch (network.networkFeeType) {
+      case NETWORK_FEE_TYPE.TEZOS:
+        return parseUnits(value, 6);
+      default:
+        return parseUnits(value, 'ether');
+    }
+  };
 
   const clearTextField = () => {
     onChange(null);
@@ -59,7 +73,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
           <S.TradeVolumeInput
-            value={displayValue ? commify(displayValue) : ''}
+            value={displayValue ?? ''}
             onChange={onSet}
             keyboardType={'numeric'}
             selectionColor={color.black}

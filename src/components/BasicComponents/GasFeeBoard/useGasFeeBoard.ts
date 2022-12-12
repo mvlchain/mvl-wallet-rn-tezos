@@ -3,10 +3,11 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { BigNumber } from 'ethers';
 import { BytesLike, parseUnits } from 'ethers/lib/utils';
 
+import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { getNetworkConfig, getNetworkName, NETWORK_FEE_TYPE } from '@@constants/network.constant';
-import { GAS_LEVEL, GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { IGasFeeInfo, TGasLevel } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
+import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -50,7 +51,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   useEffect(() => {
     if (!to || !value) return;
     if (!!tokenDto.contractAddress && !data) return;
-    estimateGas({ to, value, data, contractAddress: tokenDto.contractAddress });
+    debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
   }, [to, value, data]);
 
   useEffect(() => {
@@ -109,6 +110,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
     },
     []
   );
+  const debounceEstimate = useDebounce(estimateGas, 1000);
 
   const transactionFee = useMemo(() => {
     if (!customBaseFee || !customGasLimit) return '-';
