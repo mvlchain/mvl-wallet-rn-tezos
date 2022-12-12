@@ -1,7 +1,7 @@
 export interface IThirdPartyAppProps {
   avatarUrl: string;
-  thirdPartyAccountState: string;
-  thirdPartyDisplayName?: string;
+  connectionState: string;
+  displayName?: string;
   onConnectPress?: () => void;
   onDisconnectPress?: () => void;
 }

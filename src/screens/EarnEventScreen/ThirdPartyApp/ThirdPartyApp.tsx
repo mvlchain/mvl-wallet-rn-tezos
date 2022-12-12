@@ -7,14 +7,14 @@ import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/But
 import * as S from './ThirdPartyApp.style';
 import { IThirdPartyAppProps } from './ThirdPartyApp.type';
 
-export function ThirdPartyApp({ avatarUrl, thirdPartyAccountState, thirdPartyDisplayName, onConnectPress, onDisconnectPress }: IThirdPartyAppProps) {
+export function ThirdPartyApp({ avatarUrl, connectionState, displayName, onConnectPress, onDisconnectPress }: IThirdPartyAppProps) {
   return (
     <DropShadow style={S.style.shadow}>
       <S.Container>
         <S.ThirdPartyAvatar source={{ uri: avatarUrl }} />
         <S.ThirdPartyConnectionLayout>
-          <S.ThirdPartyAccountState>{thirdPartyAccountState}</S.ThirdPartyAccountState>
-          {thirdPartyDisplayName && <S.ThirdPartyDisplayName>{thirdPartyDisplayName}</S.ThirdPartyDisplayName>}
+          <S.ThirdPartyConnectionState>{connectionState}</S.ThirdPartyConnectionState>
+          {displayName && <S.ThirdPartyDisplayName>{displayName}</S.ThirdPartyDisplayName>}
         </S.ThirdPartyConnectionLayout>
 
         {/* TODO 버튼 width를 변경하여 다시 잘 맞출 것 */}

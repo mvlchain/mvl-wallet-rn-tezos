@@ -20,7 +20,7 @@ import { useRewardReceiptUrlByExtenedPublicKey } from './useRewardReceiptUrlByEx
 export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, eventActionScheme, receiptUrl }: EarnEventActionModalProps) => {
   const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
-  const { rewardReceiptUrl } = useRewardReceiptUrlByExtenedPublicKey(receiptUrl);
+  // const { rewardReceiptUrl } = useRewardReceiptUrlByExtenedPublicKey(receiptUrl);
   const { openModal } = globalModalStore();
   const isReceiptEnabled = receiptUrl ? true : false;
 
@@ -32,16 +32,17 @@ export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, 
           onPress={() => {
             // open Reward Receipt using WebViewModal
             openModal(MODAL_TYPES.REWARD_RECEIPT, {
-              url: rewardReceiptUrl,
+              // url: rewardReceiptUrl,
+              url: '',
             });
           }}
         >
           <S.RewardAvatar source={{ uri: avatarUrl }} />
           {points ? (
             <S.PointGroupLayout>
-              {points.map((point) => {
+              {points.map((point, index) => {
                 return (
-                  <S.PointContentLayout>
+                  <S.PointContentLayout key={`point.key-${index}`}>
                     <S.PointCategoryWrapper>
                       <S.PointCategoryText>{point.title}</S.PointCategoryText>
                     </S.PointCategoryWrapper>
