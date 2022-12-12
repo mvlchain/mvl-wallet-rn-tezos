@@ -1,8 +1,9 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
+import { Network } from '@@constants/network.constant';
+import { EarnEvent } from '@@domain/model/EarnEvent';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
-import { EarnEvent } from '@@domain/model/EarnEvent';
 import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
@@ -41,6 +42,10 @@ export type TRootStackParamList = {
     tokenDto: TokenDto;
   };
   WALLET_TRANSACTION_RESULT: undefined;
+  WALLET_TOKEN_RECEIVE_SELECT: {
+    network: Network;
+    address: string;
+  };
   EVENT_DETAILS: {
     data: EarnEvent;
   };
@@ -70,6 +75,7 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   WALLET_SCAN_QR: 'WALLET_SCAN_QR',
   WALLET_TOKEN_RECEIVE: 'WALLET_TOKEN_RECEIVE',
   WALLET_TRANSACTION_RESULT: 'WALLET_TRANSACTION_RESULT',
+  WALLET_TOKEN_RECEIVE_SELECT: 'WALLET_TOKEN_RECEIVE_SELECT',
   EVENT_DETAILS: 'EVENT_DETAILS',
 } as const;
 

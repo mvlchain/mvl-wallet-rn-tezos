@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkName, NETWORK, SUPPORTED_NETWORKS } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { useNetworkList } from '@@hooks/useNetworkList';
@@ -17,7 +17,7 @@ const useAccount = () => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const rootNavigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
-  const { selectedWalletIndex, selectedNetwork, walletList, setWallets, selectNetwork, editWalletName } = walletPersistStore();
+  const { selectedWalletIndex, selectedNetwork, walletList, setWallets, editWalletName } = walletPersistStore();
 
   const { openModal, closeModal } = globalModalStore();
   const { pKey } = authStore();
@@ -84,12 +84,21 @@ const useAccount = () => {
     openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: '', menuList: moreEditList });
   };
 
+  const onPressReceive = () => {
+    if (!data) return;
+    rootNavigation.navigate('WALLET_TOKEN_RECEIVE_SELECT', {
+      network: selectedNetwork,
+      address: data[_selectedWalletIndex]?.address,
+    });
+  };
+
   return {
     walletName: walletList[selectedNetwork][_selectedWalletIndex]?.name ?? 'default wallet',
     networkName: getNetworkConfig(getNetworkName(false, selectedNetwork)).name,
     address: (data && data[_selectedWalletIndex]?.address) ?? 'default address',
     onPressSwitchNetwork,
     onPressMore,
+    onPressReceive,
   };
 };
 
