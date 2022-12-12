@@ -9,7 +9,7 @@ module.exports = (async () => {
     resolver: {
       extraNodeModules: {
         stream: require.resolve('readable-stream'),
-        crypto: require.resolve('crypto-browserify'),
+        crypto: require.resolve('react-native-quick-crypto'),
         http: require.resolve('stream-http'),
         https: require.resolve('https-browserify'),
         os: require.resolve('os-browserify'),

@@ -23,7 +23,6 @@ function TokenDetailBoard() {
   const navigation = useNavigation<TTokenSendRootStackProps>();
   const { balance } = useOneTokenBalance(params.tokenDto);
   const { price } = useOneTokenPrice(params.tokenDto, balance);
-
   const gotoSend = () => {
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, params);
   };

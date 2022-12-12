@@ -23,52 +23,13 @@ if (typeof localStorage !== 'undefined') {
 
 // If using the crypto shim, uncomment the following line to ensure
 // crypto is loaded first, so it can populate global.crypto
-require('crypto');
+require('react-native-quick-crypto');
 
-const { decode, encode } = require('base-64');
-
+const { btoa, atob } = require('react-native-quick-base64');
 if (!global.btoa) {
-  global.btoa = encode;
+  global.btoa = btoa;
 }
 
 if (!global.atob) {
-  global.atob = decode;
-}
-
-if (require('./package.json').dependencies['react-native-crypto']) {
-  const algos = require('browserify-sign/algos');
-  if (!algos.sha256) {
-    algos.sha256 = {
-      sign: 'ecdsa',
-      hash: 'sha256',
-      id: new Buffer(''),
-    };
-  }
-
-  if (typeof window === 'object') {
-    const wCrypto = (window.crypto = window.crypto || {});
-    wCrypto.getRandomValues = wCrypto.getRandomValues || getRandomValues;
-  }
-
-  const crypto = require('crypto');
-  const randomBytes = crypto.randomBytes;
-  crypto.randomBytes = function (size, cb) {
-    if (cb) return randomBytes.apply(crypto, arguments);
-
-    const arr = new Buffer(size);
-    getRandomValues(arr);
-    return arr;
-  };
-
-  crypto.getRandomValues = crypto.getRandomValues || getRandomValues;
-
-  // eslint-disable-next-line no-inner-declarations
-  function getRandomValues(arr) {
-    // console.warn('WARNING: generating insecure psuedorandom number')
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = (Math.random() * 256) | 0;
-    }
-
-    return arr;
-  }
+  global.atob = atob;
 }
