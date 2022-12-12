@@ -24,7 +24,7 @@ export class GasService implements IGasService {
     try {
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          return { enableTip: true, enableLimitCustom: false };
+          return { enableTip: true, enableLimitCustom: true };
         case NETWORK_FEE_TYPE.EIP1559:
           const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
           return {
@@ -100,8 +100,8 @@ export class GasService implements IGasService {
             throw new Error('fail to estimate');
           }
           return {
-            baseFee: parseUnits(estimationTezos.usingBaseFeeMutez.toString(), 'ether'),
-            gasUsage: parseUnits(estimationTezos.gasLimit.toString(), 'ether'),
+            baseFee: BigNumber.from(estimationTezos.usingBaseFeeMutez.toString()),
+            gasUsage: BigNumber.from(estimationTezos.gasLimit.toString()),
           };
         case NETWORK_FEE_TYPE.EIP1559:
           const estimationEip1559 = await this.gasRepository.estimateGas(

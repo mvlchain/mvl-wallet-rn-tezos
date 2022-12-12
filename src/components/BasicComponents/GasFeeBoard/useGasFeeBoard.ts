@@ -38,7 +38,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
     return getLeveledBaseFee(network.networkFeeType, gasLevel, baseFee);
   }, [gasLevel, baseFee]);
   const tip = useMemo(() => {
-    return GAS_LEVEL_SETTING[gasLevel].tip;
+    return GAS_LEVEL_SETTING[gasLevel].tip[network.networkFeeType];
   }, [gasLevel]);
 
   const { to, value, data } = transactionRequestStore();
@@ -55,7 +55,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   useEffect(() => {
     if (network.networkFeeType === NETWORK_FEE_TYPE.EIP1559) {
-      const validBaseFee = leveledBaseFee && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
+      const validBaseFee = leveledBaseFee && tip && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
       setCustomBaseFee(validBaseFee);
     } else {
       setCustomBaseFee(leveledBaseFee);
