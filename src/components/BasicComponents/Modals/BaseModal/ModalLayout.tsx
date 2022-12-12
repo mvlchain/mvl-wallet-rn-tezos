@@ -25,6 +25,7 @@ export function ModalLayout({
   isConfirmDisabled,
   modalPosition,
   maxHeight,
+  isReverseBtn = false,
 }: Type.IModalLayoutComponentProps) {
   const { t } = useTranslation();
   const { closeModal } = globalModalStore();
@@ -49,7 +50,7 @@ export function ModalLayout({
 
           {children && <S.ContentWrapper>{children}</S.ContentWrapper>}
           {!!onConfirm && (
-            <S.ButtonWrapper>
+            <S.ButtonWrapper isReverseBtn={isReverseBtn}>
               {!!onCancel && (
                 <SecondaryButton
                   label={cancelLabel ? cancelLabel : t('close')}

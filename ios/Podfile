@@ -1,3 +1,5 @@
+# for firebase
+$RNFirebaseAsStaticFramework = true
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -8,6 +10,9 @@ install! 'cocoapods', :deterministic_uuids => false
 flipperkit_version = '0.172.0'
 
 target 'Wallet' do
+  # for firebase
+  use_frameworks!
+  
   config = use_native_modules!
   pod 'TouchID', :path => "../node_modules/react-native-touch-id"
 
@@ -36,7 +41,7 @@ target 'Wallet' do
     :fabric_enabled => flags[:fabric_enabled],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    :flipper_configuration => FlipperConfiguration.enabled(["Debug"], { 'Flipper' => flipperkit_version, 'Flipper-Folly' => '2.6.10', 'Flipper-DoubleConversion' => '3.2.0', 'Flipper-Glog' => '0.5.0.3', 'Flipper-PeerTalk' => '0.0.4', 'OpenSSL-Universal' => '1.1.1100' })
+    # :flipper_configuration => FlipperConfiguration.enabled(["Debug"], { 'Flipper' => flipperkit_version, 'Flipper-Folly' => '2.6.10', 'Flipper-DoubleConversion' => '3.2.0', 'Flipper-Glog' => '0.5.0.3', 'Flipper-PeerTalk' => '0.0.4', 'OpenSSL-Universal' => '1.1.1100' })
   )
 
   target 'WalletTests' do

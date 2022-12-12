@@ -20,8 +20,8 @@ export const ModalTopWrapper = styled.View`
   padding-top: ${width * 8}px;
 `;
 
-export const ButtonWrapper = styled.View`
-  flex-direction: row;
+export const ButtonWrapper = styled.View<{ isReverseBtn: boolean }>`
+  flex-direction: ${({ isReverseBtn }) => (isReverseBtn ? 'reverse-row' : 'row')};
   justify-content: space-between;
   margin: ${width * 24}px 0;
 `;
