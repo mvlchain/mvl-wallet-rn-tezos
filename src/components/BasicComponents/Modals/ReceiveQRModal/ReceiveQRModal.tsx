@@ -22,15 +22,18 @@ function ReceiveQRModal({ title, amount, token, address, cancelLabel, confirmLab
         if (onConfirm) {
           onConfirm();
         }
-        closeModal();
       }}
       onCancel={onCancel}
       cancelLabel={cancelLabel}
       confirmLabel={confirmLabel}
       isReverseBtn={true}
     >
-      <S.AmountText>{amount}</S.AmountText>
-      {/* {qr && <QRcode qr={qr} />} */}
+      <S.Container>
+        <S.AmountText>
+          {amount} {token.symbol}
+        </S.AmountText>
+        {qr && <QRcode qr={qr} />}
+      </S.Container>
     </ModalLayout>
   );
 }
