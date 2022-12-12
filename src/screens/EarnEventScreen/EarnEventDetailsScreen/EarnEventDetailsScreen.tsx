@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import Webview from '@@components/BasicComponents/Webview';
-import { useEarnEventDetailsState, IEventDetailsUiState } from '@@hooks/event/useEventDetailsState';
+import { useEarnEventDetailsState, IEventThirdParty } from '@@hooks/event/useEventDetailsState';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -35,6 +35,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *  • useDisconnectThirdParty
  *  • useThirdPartyConnection (CheckThirdPartyConnection)
  *  • useUserPoints
+ *  • useOnClaimEvent
  *  • useClaimInfomation (GetClaimInfomation)
  *  • useClaimStatus
  *
@@ -109,7 +110,7 @@ export function EarnEventDetailsScreen() {
     console.error('inappropriate event params!');
   }
 
-  const { isThirdPartySupported, thirdPartyConnection, points, error } = useEarnEventDetailsState(params?.data);
+  const { thirdParty, claimStatusInfo } = useEarnEventDetailsState(params?.data);
 
   const data = params?.data;
 
@@ -144,16 +145,18 @@ export function EarnEventDetailsScreen() {
         <>
           <Webview url={data.detailPageUrl} />
 
-          {isThirdPartySupported && thirdPartyConnection ? (
+          {thirdParty.isThirdPartySupported && thirdParty.thirdPartyConnection ? (
             <ThirdPartyApp
               avatarUrl={data.iconUrl}
-              {...decorateThirdPartyApp(thirdPartyConnection.exists ?? false, thirdPartyConnection.displayName, data.app?.name)}
+              {...decorateThirdPartyApp(thirdParty.thirdPartyConnection.exists ?? false, thirdParty.thirdPartyConnection.displayName, data.app?.name)}
             />
           ) : null}
 
           <EventActionControl
             avatarUrl={data.pointIconUrl}
-            points={points}
+            points={thirdParty.points}
+            claimStatusInfo={claimStatusInfo}
+            isAllowParticipationInClaim={data.isAllowParticipationInClaim}
             eventActionButtonTitle={data.eventActionButtonTitle ?? ''}
             eventActionScheme={data.eventActionScheme ?? ''}
             receiptUrl={data.calcInfoPageUrl}

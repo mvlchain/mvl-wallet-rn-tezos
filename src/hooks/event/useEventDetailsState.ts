@@ -2,23 +2,26 @@ import { useEffect, useState } from 'react';
 
 import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import Decimal from 'decimal.js';
 import { useTranslation } from 'react-i18next';
 
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { InvalidThirdPartyDeepLinkConnectionError } from '@@domain/error/InvalidThirdPartyConnectionRequestError';
+import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEvent } from '@@domain/model/EarnEvent';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
-import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto } from '@@generated/generated-scheme';
+import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { useDi } from '@@hooks/useDi';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
 import { isNotBlank, format } from '@@utils/strings';
+import { valueOf } from '@@utils/types';
 
 /**
  * UiState for EarnEventDetailsScreen
  */
-export interface IEventDetailsUiState {
+export interface IEventThirdParty {
   isThirdPartySupported: boolean;
   thirdPartyConnection?: IThirdPartyConnection;
   points: IEventPointAmount[];
@@ -45,18 +48,27 @@ export interface IEventPointAmount {
  * UseCases
  *  • useThirdPartyConnection (O)
  *  • useUserPoints (O)
- *  • useClaimInfomation
- *  • useClaimStatus
+ *  • useClaimStatusInformation (O)
+ *    - useClaimInfomation (O)
+ *    - useClaimStatus (O)
  */
-export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdPartyDeepLink): IEventDetailsUiState => {
+export const useEarnEventDetailsState = (
+  event: EarnEvent,
+  deepLink?: ThirdPartyDeepLink
+): {
+  thirdParty: IEventThirdParty;
+  claimStatusInfo: ClaimStatusInformation | undefined;
+} => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
 
-  const [uiState, setUiState] = useState<IEventDetailsUiState>({
+  const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
     thirdPartyConnection: undefined,
     points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
     error: null,
   });
+
+  const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
 
   // UseCase: useThirdPartyConnection
   useEffect(() => {
@@ -69,10 +81,9 @@ export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdParty
         try {
           const thirdPartyConnection = await repository.checkThirdPartyConnection(appId, token);
 
-          setUiState({
+          setThirdParty({
             isThirdPartySupported: true,
             thirdPartyConnection: {
-              ...uiState,
               appId,
               token,
               exists: thirdPartyConnection.exists,
@@ -83,10 +94,10 @@ export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdParty
           });
         } catch (e) {
           console.error(e);
-          setUiState({ ...uiState, error: e });
+          setThirdParty({ ...thirdParty, error: e });
         }
       } else {
-        setUiState({ ...uiState, isThirdPartySupported: false });
+        setThirdParty({ ...thirdParty, isThirdPartySupported: false });
       }
     })();
   }, [event, deepLink]);
@@ -94,23 +105,51 @@ export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdParty
   // UseCase: useUserPoints
   useEffect(() => {
     (async () => {
-      if (uiState.thirdPartyConnection && isPointInquiryAvailable(event, uiState.isThirdPartySupported)) {
+      if (thirdParty.thirdPartyConnection && isPointInquiryAvailable(event, thirdParty.isThirdPartySupported)) {
         try {
           const res = await repository.getCurrentUserPoints(event.id);
-          setUiState({ ...uiState, points: res });
+          setThirdParty({ ...thirdParty, points: res });
         } catch (e) {
           console.error(e);
-          setUiState({
-            ...uiState,
+          setThirdParty({
+            ...thirdParty,
             points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
             error: e,
           });
         }
       }
     })();
-  }, [uiState]);
+  }, [thirdParty]);
 
-  return uiState;
+  // UseCase: useClaimStatusInformation
+  useEffect(() => {
+    (async () => {
+      const phase = getEventPhase(event);
+      console.log(`EventAction> ClaimStatusInfo phase: ${phase.toString()}`);
+
+      const thirdPartyConnection = thirdParty.thirdPartyConnection;
+      if (phase === EventPhase.OnClaim) {
+        // get an OnClaim phase event id.
+        console.log(`Events> claim status starts`);
+        const claimStatus = await repository.getClaimStatus(event.id);
+        const claimInfo = await repository.getClaimInformation(event.id);
+        const fee = new Decimal(claimInfo.fee);
+
+        // isTxFeeVisible: 'transaction fee' component is visible when the claimInfo.fee is greater then zero.
+        setClaimStatusInfo({
+          ...claimStatus,
+          ...claimInfo,
+          isTxFeeVisible: fee.toNumber() > 0,
+          isEventActionButtonEnabled: isEventActionButtonEnabled(phase, thirdPartyConnection, claimInfo, thirdParty.isThirdPartySupported),
+        });
+      }
+    })();
+  }, [thirdParty]);
+
+  return {
+    thirdParty,
+    claimStatusInfo,
+  } as const;
 };
 
 /**
@@ -156,4 +195,20 @@ function parseThirdPartyConnectionArgs(appId: string, deepLink?: ThirdPartyDeepL
 function isPointInquiryAvailable(event: EarnEvent, isThirdPartySupported: boolean): boolean {
   const phase = getEventPhase(event);
   return (isThirdPartySupported && phase === EventPhase.BeforeEvent) || phase === EventPhase.OnEvent || phase === EventPhase.BeforeClaim;
+}
+
+/**
+ * is event action button enabled.
+ */
+function isEventActionButtonEnabled(
+  phase: valueOf<typeof EventPhase>,
+  thirdPartyConnection: IThirdPartyConnection | undefined,
+  claimInfo: EarnEventGetClaimResponseDto,
+  isThirdPartySupported: boolean
+): boolean {
+  const isThirdPartyConnected = thirdPartyConnection?.exists === true;
+  const isOnEvent = phase == EventPhase.OnEvent;
+  const isAbleToClaim = phase == EventPhase.OnClaim && claimInfo.isClaimable;
+
+  return (!isThirdPartySupported || isThirdPartyConnected) && (isOnEvent || isAbleToClaim);
 }

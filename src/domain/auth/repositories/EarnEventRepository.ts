@@ -5,7 +5,13 @@ import { injectable } from 'tsyringe';
 import { ApiError } from '@@domain/error';
 import { ThirdPartyAlreadyConnectedError } from '@@domain/error/ThirdPartyAlreadyConnectedError';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { ThirdPartyConnectCheckDto, ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto } from '@@generated/generated-scheme';
+import {
+  ThirdPartyConnectCheckDto,
+  ThirdPartyConnectCheckResponseDto,
+  EarnEventCurrentResponseDto,
+  EarnEventClaimCheckResponseDto,
+  EarnEventGetClaimResponseDto,
+} from '@@generated/generated-scheme';
 import { authRequest, Response } from '@@utils/request';
 
 /**
@@ -14,6 +20,8 @@ import { authRequest, Response } from '@@utils/request';
 export interface EarnEventRepository {
   getEvents(): Promise<EarnEventDto[]>;
   getCurrentUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
+  getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto>;
+  getClaimInformation(eventId: string): Promise<EarnEventGetClaimResponseDto>;
   checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto>;
 }
 
@@ -47,6 +55,40 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
       return res.data;
     } else if (res.status == 404) {
       throw new Error('Event not found');
+    } else {
+      // TODO define a generla type of error.
+      console.error(res);
+      throw new ApiError('Unexpected error', res.status);
+    }
+  };
+
+  /**
+   * Get current event ongoing status from server side.
+   * @param eventId an event id
+   */
+  getClaimStatus = async (eventId: string): Promise<EarnEventClaimCheckResponseDto> => {
+    const endpoint = `/v1/earn-event/${eventId}/claim/status`;
+    const res = await authRequest.post<EarnEventClaimCheckResponseDto>(endpoint);
+
+    if ([200, 201].includes(res.status)) {
+      return res.data;
+    } else {
+      // TODO define a generla type of error.
+      console.error(res);
+      throw new ApiError('Unexpected error', res.status);
+    }
+  };
+
+  /**
+   * Get claim information with regards to the event reward.
+   * @param eventId an event id
+   */
+  getClaimInformation = async (eventId: string): Promise<EarnEventGetClaimResponseDto> => {
+    const endpoint = `/v1/earn-event/${eventId}/claim/information`;
+    const res = await authRequest.post<EarnEventGetClaimResponseDto>(endpoint);
+
+    if ([200, 201].includes(res.status)) {
+      return res.data;
     } else {
       // TODO define a generla type of error.
       console.error(res);
