@@ -34,7 +34,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *  • useConnectThirdParty
  *  • useDisconnectThirdParty
  *  • useThirdPartyConnection (CheckThirdPartyConnection)
- *  • useCurrentParticipants
+ *  • useUserPoints
  *  • useClaimInfomation (GetClaimInfomation)
  *  • useClaimStatus
  *
@@ -48,7 +48,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *     const {thirdPartyConnection} = useThirdPartyConnection(event, deepLink?: ThirdPartyDeepLink);
  *
  *     // 2-1
- *     const {participants} = useCurrentParticipants(event, thirdPartyConnection);
+ *     const {participants} = useUserPoints(event, thirdPartyConnection);
  *
  *     // 2-2
  *     const {onClaimEvent} = useOnClaimEvent(event, thirdPartyConnection);
@@ -109,7 +109,7 @@ export function EarnEventDetailsScreen() {
     console.error('inappropriate event params!');
   }
 
-  const { isThirdPartySupported, thirdPartyConnection, error } = useEarnEventDetailsState(params?.data);
+  const { isThirdPartySupported, thirdPartyConnection, points, error } = useEarnEventDetailsState(params?.data);
 
   const data = params?.data;
 
@@ -153,7 +153,7 @@ export function EarnEventDetailsScreen() {
 
           <EventActionControl
             avatarUrl={data.pointIconUrl}
-            points={data.pointInfoArr}
+            points={points}
             eventActionButtonTitle={data.eventActionButtonTitle ?? ''}
             eventActionScheme={data.eventActionScheme ?? ''}
             receiptUrl={data.calcInfoPageUrl}

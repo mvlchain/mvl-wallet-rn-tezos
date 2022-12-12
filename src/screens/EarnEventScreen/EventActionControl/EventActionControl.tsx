@@ -42,13 +42,12 @@ export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, 
             <S.PointGroupLayout>
               {points.map((point, index) => {
                 return (
-                  <S.PointContentLayout key={`point.key-${index}`}>
+                  <S.PointContentLayout key={`${point.key}-${index}`}>
                     <S.PointCategoryWrapper>
                       <S.PointCategoryText>{point.title}</S.PointCategoryText>
                     </S.PointCategoryWrapper>
                     <Text style={S.style.pointAmount}>
-                      {/* TODO 포인트 조회하여 기입할 것. require space before currency unit.*/}
-                      {'315'}
+                      {point.amount}
                       <Text style={S.style.pointUnit}>{` ${point.currency}`}</Text>
                     </Text>
                   </S.PointContentLayout>

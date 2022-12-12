@@ -8,8 +8,9 @@ import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventReposit
 import { InvalidThirdPartyDeepLinkConnectionError } from '@@domain/error/InvalidThirdPartyConnectionRequestError';
 import { EarnEvent } from '@@domain/model/EarnEvent';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
+import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
-import { ThirdPartyConnectCheckResponseDto } from '@@generated/generated-scheme';
+import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto } from '@@generated/generated-scheme';
 import { useDi } from '@@hooks/useDi';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
 import { isNotBlank, format } from '@@utils/strings';
@@ -20,6 +21,7 @@ import { isNotBlank, format } from '@@utils/strings';
 export interface IEventDetailsUiState {
   isThirdPartySupported: boolean;
   thirdPartyConnection?: IThirdPartyConnection;
+  points: IEventPointAmount[];
   error: Error | unknown;
 }
 
@@ -30,22 +32,29 @@ export interface IThirdPartyConnection {
   displayName: string | null;
 }
 
+export interface IEventPointAmount {
+  amount: string;
+  key: string;
+  title: string;
+  currency: string;
+}
+
 /**
  * Combination of following usecases
  *
  * UseCases
- *  • useThirdPartyConnection (CheckThirdPartyConnection)
- *  • useCurrentParticipants
- *  • useClaimInfomation (GetClaimInfomation)
+ *  • useThirdPartyConnection (O)
+ *  • useUserPoints (O)
+ *  • useClaimInfomation
  *  • useClaimStatus
  */
 export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdPartyDeepLink): IEventDetailsUiState => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
-  const { t } = useTranslation();
 
   const [uiState, setUiState] = useState<IEventDetailsUiState>({
     isThirdPartySupported: false,
     thirdPartyConnection: undefined,
+    points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
     error: null,
   });
 
@@ -54,18 +63,22 @@ export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdParty
     (async () => {
       const thirdPartyApp = event.app;
       if (thirdPartyApp) {
+        console.log(`Event> thirdPartyApp found`);
         const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
 
         try {
           const thirdPartyConnection = await repository.checkThirdPartyConnection(appId, token);
+
           setUiState({
             isThirdPartySupported: true,
             thirdPartyConnection: {
+              ...uiState,
               appId,
               token,
               exists: thirdPartyConnection.exists,
               displayName: thirdPartyConnection.displayName,
             },
+            points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
             error: null,
           });
         } catch (e) {
@@ -77,6 +90,25 @@ export const useEarnEventDetailsState = (event: EarnEvent, deepLink?: ThirdParty
       }
     })();
   }, [event, deepLink]);
+
+  // UseCase: useUserPoints
+  useEffect(() => {
+    (async () => {
+      if (uiState.thirdPartyConnection && isPointInquiryAvailable(event, uiState.isThirdPartySupported)) {
+        try {
+          const res = await repository.getCurrentUserPoints(event.id);
+          setUiState({ ...uiState, points: res });
+        } catch (e) {
+          console.error(e);
+          setUiState({
+            ...uiState,
+            points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
+            error: e,
+          });
+        }
+      }
+    })();
+  }, [uiState]);
 
   return uiState;
 };
@@ -116,4 +148,12 @@ function parseThirdPartyConnectionArgs(appId: string, deepLink?: ThirdPartyDeepL
     token: token,
     error: useCaseError,
   };
+}
+
+/**
+ * Check if it's avilable to make an inquiry
+ */
+function isPointInquiryAvailable(event: EarnEvent, isThirdPartySupported: boolean): boolean {
+  const phase = getEventPhase(event);
+  return (isThirdPartySupported && phase === EventPhase.BeforeEvent) || phase === EventPhase.OnEvent || phase === EventPhase.BeforeClaim;
 }
