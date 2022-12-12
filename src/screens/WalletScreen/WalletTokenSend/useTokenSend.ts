@@ -68,9 +68,15 @@ const useTokenSend = (tokenDto: TokenDto) => {
   };
 
   //show confirm modal
-  const confirm = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
+  const confirm = async (gasFeeInfo: IGasFeeInfo) => {
     if (!to || !value) return;
-    openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress: to, amount: value, fee: total, tokenDto, onConfirm: send(gasFeeInfo) });
+    openModal(MODAL_TYPES.CONFIRM_SEND, {
+      recipientAddress: to,
+      amount: value,
+      fee: gasFeeInfo.total.toString(),
+      tokenDto,
+      onConfirm: send(gasFeeInfo),
+    });
   };
 
   //send transaction

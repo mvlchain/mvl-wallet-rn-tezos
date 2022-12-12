@@ -13,7 +13,7 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { getLeveledBaseFee } from '@@utils/gas';
 
-const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>) => {
+const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo) => Promise<void>) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
@@ -136,8 +136,8 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
   //Wrap up the send transaction function which from useTokenSend and inject parameters
   const onConfirmGasFee = useCallback(async () => {
     if (!customBaseFee || !customGasLimit || transactionFee === '-') return;
-    if (enableTip || !customTip) return;
-    onConfirm({ baseFee: customBaseFee, tip: customTip, gasLimit: customGasLimit }, parseUnits(transactionFee, 'ether'));
+    if (enableTip && !customTip) return;
+    onConfirm({ baseFee: customBaseFee, tip: customTip!, gasLimit: customGasLimit, total: parseFloat(transactionFee) });
   }, [customBaseFee, customGasLimit, transactionFee, customTip, enableTip, onConfirm]);
 
   return {

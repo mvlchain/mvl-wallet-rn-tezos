@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
-import { formatEther, formatUnits } from 'ethers/lib/utils';
+import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
@@ -56,17 +56,16 @@ export class TransactionService implements ITransactionService {
 
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          if (!gasFeeInfo.tip || !value || !to) {
+          if (!gasFeeInfo.tip || !gasFeeInfo.total || !value || !to) {
             throw new Error('tip,value,to is required');
           }
-          const fee = parseFloat(formatUnits(gasFeeInfo.tip, 0));
+          const fee = parseFloat(parseUnits(gasFeeInfo.total.toString(), 6).toString());
           const amount = parseFloat(formatUnits(value, 6));
           if (data) {
             return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount, data: data as string });
           } else {
             return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
           }
-
         case NETWORK_FEE_TYPE.EIP1559:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,

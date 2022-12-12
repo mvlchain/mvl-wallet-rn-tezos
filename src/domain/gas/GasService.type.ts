@@ -10,6 +10,7 @@ export interface IGasFeeInfo {
   baseFee: BigNumber;
   tip?: BigNumber;
   gasLimit: BigNumber;
+  total: number;
 }
 
 export interface IGetTotalGasFeeRequest {
