@@ -63,7 +63,7 @@ export class KeyClientImpl implements KeyClient {
     @inject('ServerShareRepository') private serverShareRepository: ServerShareRepository,
     @inject('TorusShareRepository') private torusShareRepository: TorusShareRepository,
     @inject('KeyClientUtil') private util: KeyClientUtil,
-    @inject('EhtersClient') private ethersClient: IWalletClient
+    @inject('EthersWalletClient') private ethersWalletClient: IWalletClient
   ) {
     this.postboxKeyHolder = null;
     this.deviceShare = null;
@@ -229,7 +229,7 @@ export class KeyClientImpl implements KeyClient {
     }
     const privateKey = await this.getPrivateKey();
     const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44));
-    const wallet = await this.ethersClient.createWalletWithEntropy(privateKey, 0);
+    const wallet = await this.ethersWalletClient.createWalletWithEntropy(privateKey, 0);
 
     const restoreObj = {
       type: this.postboxKeyHolder.provider,

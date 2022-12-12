@@ -31,8 +31,8 @@ export class WalletServiceImpl implements WalletService {
     @inject('WalletRepository') private walletRepository: WalletRepository,
     @inject('RootKeyRepository') private rootkeyRepository: RootKeyRepository,
     @inject('KeyClient') private keyClient: KeyClient,
-    @inject('EhtersClient') private ehtersClient: IWalletClient,
-    @inject('TezosClient') private tezosClient: IWalletClient
+    @inject('EthersWalletClient') private ethersWalletClient: IWalletClient,
+    @inject('TezosClient') private tezosWalletClient: IWalletClient
   ) {}
 
   setWalletClient = (network: Network): IWalletClient => {
@@ -40,9 +40,9 @@ export class WalletServiceImpl implements WalletService {
     switch (networkId) {
       case NETWORK_ID.ETHEREUM:
       case NETWORK_ID.BSC:
-        return this.ehtersClient;
+        return this.ethersWalletClient;
       case NETWORK_ID.XTZ:
-        return this.tezosClient;
+        return this.tezosWalletClient;
     }
   };
 
