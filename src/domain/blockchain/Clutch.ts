@@ -13,16 +13,16 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import * as bitcoinMessage from 'bitcoinjs-message';
 import { Wallet } from 'ethers';
-import { arrayify, entropyToMnemonic, HDNode, mnemonicToSeed } from 'ethers/lib/utils';
+import { HDNode } from 'ethers/lib/utils';
 import HDKey from 'hdkey';
 
 import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { KeyPair } from '@@domain/blockchain/KeyPair';
+import { createNodeWithEntropy } from '@@utils/fastCrypto';
 import { stripHexPrefix } from '@@utils/platform';
 
 import { ExtendedKeyPair } from './ExtendedKeyPair';
-import { KeyPair } from './KeyPair';
 
-// extendedKeyPath(60) == "m/44'/60'/0'"
 export const CLUTCH_EXTENDED_KEY_PATH = extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44);
 
 export class Clutch {
@@ -171,29 +171,6 @@ export class Clutch {
     }
     return bitcoinMessage.verify(message, addr, sig);
   }
-}
-
-function createNodeWithEntropy(entropy: string | Uint8Array): HDNode {
-  let seed: string;
-  if (typeof entropy === 'string') {
-    seed = entropyToSeed(entropy);
-  } else {
-    seed = entropyToSeed(entropy);
-  }
-  return HDNode.fromSeed(seed);
-}
-
-function entropyToSeed(entropy: string): string;
-function entropyToSeed(entropy: Uint8Array): string;
-function entropyToSeed(entropy: unknown): string {
-  if (typeof entropy === 'string') {
-    const bytes = arrayify(entropy, { allowMissingPrefix: true, hexPad: 'left' });
-    return mnemonicToSeed(entropyToMnemonic(bytes));
-  } else if (entropy instanceof Uint8Array) {
-    return mnemonicToSeed(entropyToMnemonic(entropy));
-  }
-
-  throw new Error(`Unsupported type(${entropy}) for entropyToSeed`);
 }
 
 function extendedKeyPairFrom(node: HDNode, derivePath?: string): ExtendedKeyPair {

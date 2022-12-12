@@ -6,7 +6,6 @@ import { Platform } from 'react-native';
 import { Simple } from '@@assets/image';
 import { AppleButton, GoogleButton } from '@@components/BasicComponents/Buttons/SocialButton';
 import { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
-import { height } from '@@utils/ui';
 
 import * as S from './SignInScreen.style';
 import useSignInScreen from './useSignInScreen';

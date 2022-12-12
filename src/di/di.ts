@@ -24,7 +24,7 @@ import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TransactionService } from '@@domain/transaction/TransactionService';
 import { TransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers';
 import { TransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos';
-import { EhtersClient } from '@@domain/wallet/clients/EthersClient';
+import { EthersWalletClient } from '@@domain/wallet/clients/EthersWalletClient';
 import { TezosClient } from '@@domain/wallet/clients/TezosClient';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
 import { EthersRepository } from '@@domain/wallet/repositories/blockchainRepositories/EthersRepository';
@@ -96,8 +96,8 @@ container.register('TokenRepository', {
   useFactory: instancePerContainerCachingFactory<TokenRepository>((container) => container.resolve(TokenRepository)),
 });
 
-container.register('EhtersClient', {
-  useFactory: instancePerContainerCachingFactory<EhtersClient>((container) => container.resolve(EhtersClient)),
+container.register('EthersWalletClient', {
+  useFactory: instancePerContainerCachingFactory<EthersWalletClient>((container) => container.resolve(EthersWalletClient)),
 });
 
 container.register('TezosClient', {
