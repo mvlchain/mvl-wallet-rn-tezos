@@ -2,9 +2,10 @@
 import { AxiosResponse } from 'axios';
 import { injectable } from 'tsyringe';
 
+import { ApiError } from '@@domain/error';
 import { ThirdPartyAlreadyConnectedError } from '@@domain/error/ThirdPartyAlreadyConnectedError';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { ThirdPartyConnectCheckDto, ThirdPartyConnectCheckResponseDto } from '@@generated/generated-scheme';
+import { ThirdPartyConnectCheckDto, ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto } from '@@generated/generated-scheme';
 import { authRequest, Response } from '@@utils/request';
 
 /**
@@ -12,6 +13,7 @@ import { authRequest, Response } from '@@utils/request';
  */
 export interface EarnEventRepository {
   getEvents(): Promise<EarnEventDto[]>;
+  getCurrentUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
   checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto>;
 }
 
@@ -33,6 +35,26 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
   };
 
   /**
+   * Get amount of event point
+   * @param event an event id
+   * @returns points
+   */
+  getCurrentUserPoints = async (eventId: string): Promise<EarnEventCurrentResponseDto[]> => {
+    const endpoint = `/v1/earn-event/${eventId}/participation/current`;
+    const res = await authRequest.post<EarnEventCurrentResponseDto[]>(endpoint);
+
+    if ([200, 201].includes(res.status)) {
+      return res.data;
+    } else if (res.status == 404) {
+      throw new Error('Event not found');
+    } else {
+      // TODO define a generla type of error.
+      console.error(res);
+      throw new ApiError('Unexpected error', res.status);
+    }
+  };
+
+  /**
    * Check ThirdParty connections state
    * @param appId third party app id
    * @param token client token
@@ -45,13 +67,9 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
       token: token,
     };
 
-    console.log(`EventDetails> starting api checkThirdPartyConnection: endpoin:${endpoint}`);
-
     const res = await authRequest.post<ThirdPartyConnectCheckResponseDto>(endpoint, {
       data: body,
     });
-
-    console.log(`EventDetails> finished api checkThirdPartyConnection: ${res.data}`);
 
     switch (res.status) {
       case 409: {
