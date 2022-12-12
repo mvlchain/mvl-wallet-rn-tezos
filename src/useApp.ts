@@ -5,7 +5,6 @@ import { Alert, StatusBar, Appearance } from 'react-native';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 
 import { THEME, STATUSBAR_THEME } from '@@constants/setting.constant';
-import RTNSettings from '@@store/RTNSetting';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
 const useApp = () => {

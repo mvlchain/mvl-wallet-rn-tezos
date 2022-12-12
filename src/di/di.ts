@@ -5,6 +5,7 @@
 import { container, instancePerContainerCachingFactory } from 'tsyringe';
 
 import { AuthServiceImpl } from '@@domain/auth/AuthService';
+import { LegacyAuthMigrationService } from '@@domain/auth/LegacyAuthMigrationService';
 import { KeyClientImpl } from '@@domain/auth/clients/KeyClient';
 import { KeyClientUtilImpl } from '@@domain/auth/clients/KeyClientUtil';
 import { DeviceShareRepositoryImpl } from '@@domain/auth/repositories/DeviceShareRepository';
@@ -128,4 +129,8 @@ container.register('GasRepositoryEip1559', {
 
 container.register('GasRepositoryTezos', {
   useFactory: instancePerContainerCachingFactory<GasRepositoryTezosImpl>((container) => container.resolve(GasRepositoryTezosImpl)),
+});
+
+container.register('LegacyAuthMigrationService', {
+  useFactory: instancePerContainerCachingFactory<LegacyAuthMigrationService>((container) => container.resolve(LegacyAuthMigrationService)),
 });
