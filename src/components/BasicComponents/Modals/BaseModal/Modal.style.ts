@@ -21,7 +21,7 @@ export const ModalTopWrapper = styled.View`
 `;
 
 export const ButtonWrapper = styled.View<{ isReverseBtn: boolean }>`
-  flex-direction: ${({ isReverseBtn }) => (isReverseBtn ? 'reverse-row' : 'row')};
+  flex-direction: ${({ isReverseBtn }) => (isReverseBtn ? 'row-reverse' : 'row')};
   justify-content: space-between;
   margin: ${width * 24}px 0;
 `;

@@ -38,14 +38,15 @@ export const useWalletTokenReceiveSelect = () => {
     if (!walletList) return;
     const bigNumber = new BigNumber(amount);
     const formalize = formatBigNumber(bigNumber, token.decimals);
-    // openModal(MODAL_TYPES.RECEIVE_QR, {
-    //   title: t('qr_payment_send_link_title'),
-    //   amount: formalize.toString(),
-    //   token,
-    //   address: 'test',
-    //   // address: walletList[_selectedWalletIndex]?.address,
-    //   onConfirm: onPressShare,
-    // });
+    openModal(MODAL_TYPES.RECEIVE_QR, {
+      title: t('qr_payment_send_link_title'),
+      amount: formalize.toString(),
+      token,
+      address: walletList[_selectedWalletIndex]?.address,
+      cancelLabel: t('qr_payment_send_link_share_qr'),
+      onConfirm: onPressShare,
+      onCancel: onPressShare,
+    });
   };
 
   const onPressShare = () => {};
