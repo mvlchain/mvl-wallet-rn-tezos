@@ -32,6 +32,7 @@ import WalletEditTokenListScreen from '@@screens/WalletScreen/WalletEditTokenLis
 import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
 import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
 import WalletTokenReceive from '@@screens/WalletScreen/WalletTokenReceive';
+import WalletTokenReceiveSelect from '@@screens/WalletScreen/WalletTokenReceiveSelect';
 import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
 import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
@@ -173,6 +174,11 @@ function RootStack() {
       name: ROOT_STACK_ROUTE.EVENT_DETAILS,
       component: EarnEventDetailsScreen,
       options: handleStackHeaderOption({ title: '' }),
+    },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TOKEN_RECEIVE_SELECT,
+      component: WalletTokenReceiveSelect,
+      options: handleStackHeaderOption({ title: t('receive') }),
     },
   ];
 
