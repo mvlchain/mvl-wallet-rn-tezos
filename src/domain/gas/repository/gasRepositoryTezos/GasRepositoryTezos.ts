@@ -12,13 +12,13 @@ import { IGetTotalGasFeeParamsTEZ, IGasRepositoryTezos, IEstimateGasParamsTEZ } 
 
 @injectable()
 export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
-  getTotalGasFee = ({ tip, estimatedGas }: IGetTotalGasFeeParamsTEZ) => {
-    const tipInDecimal = new Decimal(tip);
+  getTotalGasFee = ({ tip, estimatedGas, baseFee }: IGetTotalGasFeeParamsTEZ) => {
+    const baseFeeInDecimal = new Decimal(baseFee.toString());
+    const tipInDecimal = new Decimal(tip.toString());
     const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
 
-    const totalGas = estimatedGasInDecimal.add(tipInDecimal);
+    const totalGas = baseFeeInDecimal.add(tipInDecimal).mul(estimatedGasInDecimal);
     const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));
-
     return formatEther(totalGasInBN);
   };
 

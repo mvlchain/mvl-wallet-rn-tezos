@@ -28,6 +28,11 @@ export interface IEstimateGasRequest {
   data?: BytesLike;
 }
 
+export interface IEstimateGasResponse {
+  baseFee?: BigNumber;
+  gasUsage: BigNumber;
+}
+
 export interface IGetGasFeeResponse {
   baseFee?: BigNumber | null;
   enableTip: boolean;
@@ -44,5 +49,5 @@ export interface IGasService {
 
   getEstimateTime: (gasLevel: TGasLevel) => number;
 
-  estimateGas: (args: IEstimateGasRequest) => Promise<BigNumber | undefined>;
+  estimateGas: (args: IEstimateGasRequest) => Promise<IEstimateGasResponse | undefined>;
 }
