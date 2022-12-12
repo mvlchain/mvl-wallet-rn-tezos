@@ -6,6 +6,6 @@ export interface IAmountInputModalProps {
   defaultValue?: string;
   onCancel?: Function;
   cancelLabel?: string;
-  onConfirm?: (value: string, decimals: number) => void;
+  onConfirm?: (value: string, token: TokenDto) => void;
   confirmLabel?: string;
 }

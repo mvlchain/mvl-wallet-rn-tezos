@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 import { BigNumber } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { BaseTextField } from '@@components/BasicComponents/TextFields/BaseTextField';
 import { TradeVolume } from '@@components/BasicComponents/TextFields/TradeVolume';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
@@ -19,7 +17,6 @@ function AmountInputModal({ title, tokenDto, cancelLabel, confirmLabel, onCancel
   const [value, setValue] = useState<BigNumber>(BigNumber.from('0'));
 
   const onChangeInput = (amount: BigNumber) => {
-    console.log('amount:  ', amount);
     setValue(amount);
   };
 
@@ -30,9 +27,9 @@ function AmountInputModal({ title, tokenDto, cancelLabel, confirmLabel, onCancel
       isVisible={modalType === MODAL_TYPES.AMOUNT_INPUT}
       onConfirm={() => {
         if (!!onConfirm) {
-          onConfirm(value.toString(), tokenDto.decimals);
+          onConfirm(value.toString(), tokenDto);
         }
-        closeModal();
+        // closeModal();
       }}
       onClose={closeModal}
       onCancel={onCancel}
