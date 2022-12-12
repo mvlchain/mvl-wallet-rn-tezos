@@ -52,4 +52,5 @@ export interface ITradeVolumeComponentProps {
   onChange: (amount: any) => void;
   hint?: string;
   iconUrl?: string;
+  disableHint?: boolean;
 }

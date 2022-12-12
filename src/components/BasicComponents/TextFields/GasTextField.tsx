@@ -6,17 +6,15 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { TextFieldDelete } from '@@assets/image';
 import useDebounce from '@@hooks/useDebounce';
-import settingPersistStore from '@@store/setting/settingPersistStore';
+import { useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
-import { theme } from '@@style/theme';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function GasTextField(props: Type.IGasTextFieldProps) {
   const { value, setValue, style, unit, hint, delay, disabled, defaultValue } = props;
-  const { appTheme } = settingPersistStore();
-  const color = theme[appTheme.value].color;
+  const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const getInitialValue = (unit: 'gwei' | 'mutez' | undefined, value: BigNumber | null | undefined) => {
     if (!value) return '0';

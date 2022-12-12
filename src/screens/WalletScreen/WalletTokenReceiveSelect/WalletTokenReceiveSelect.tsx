@@ -10,26 +10,30 @@ import { IRenderItem } from './WalletTokenReceiveSelect.type';
 import { useWalletTokenReceiveSelect } from './useWalletTokenReceiveSelect';
 
 const RenderItem = ({ data, onPress }: IRenderItem) => {
-  return <TokenReceiveSelectListItem tokenItem={data.item} onPress={() => onPress(data.item.title)} />;
+  return <TokenReceiveSelectListItem tokenItem={data.item} onPress={() => onPress(data.item)} />;
 };
 
 function WalletTokenReceiveSelect() {
   const { t } = useTranslation();
-  const { tokenList, onPressReceivetoken } = useWalletTokenReceiveSelect();
+  const { data, tokenList, onPressReceivetoken } = useWalletTokenReceiveSelect();
   return (
     <S.Container>
       <S.ListContainer>
         <S.Title>{t('qr_payment_currency_chooser_title')}</S.Title>
         {tokenList.length !== 0 && (
           <FlashList
-            data={tokenList}
-            extraData={tokenList}
+            data={data}
+            extraData={data}
             renderItem={(data) => RenderItem({ data, onPress: onPressReceivetoken })}
             estimatedItemSize={tokenList?.length ?? 0}
-            keyExtractor={(item) => item.title}
+            keyExtractor={(item) => item.symbol}
           />
         )}
       </S.ListContainer>
+      <S.RecentContainer>
+        <S.Title>{t('qr_payment_currency_chooser_recent_title')}</S.Title>
+        <S.RecentEmptyText>{t('history_empty')}</S.RecentEmptyText>
+      </S.RecentContainer>
     </S.Container>
   );
 }

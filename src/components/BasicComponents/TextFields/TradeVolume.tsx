@@ -19,7 +19,7 @@ import * as Type from './TextField.type';
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-  const { useMax, onSelect, label, tokenDto, value, onChange, hint } = props;
+  const { useMax, onSelect, label, tokenDto, value, onChange, hint, disableHint } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const { balance } = useOneTokenBalance(tokenDto);
@@ -68,7 +68,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
         <S.Label>{label}</S.Label>
-        <TextButton label={'Max'} onPress={() => {}} disabled={true} />
+        {useMax && <TextButton label={'Max'} onPress={() => {}} disabled={true} />}
       </S.TradeVolumeTop>
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
@@ -89,7 +89,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
-      {hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`Balance: ${balance}`}</S.Balance>}
+      {!disableHint && (hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`Balance: ${balance}`}</S.Balance>)}
     </S.TradeVolumeContainer>
   );
 }

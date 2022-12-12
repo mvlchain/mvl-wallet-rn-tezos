@@ -1,6 +1,6 @@
-import { ITokenReceiveListItem } from '@@screens/WalletScreen/WalletTokenReceiveSelect/WalletTokenReceiveSelect.type';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 export interface ITokenReceiveSelectListItemProps {
-  tokenItem: ITokenReceiveListItem;
+  tokenItem: TokenDto;
   onPress: (_: string) => void;
 }
