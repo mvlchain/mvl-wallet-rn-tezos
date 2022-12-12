@@ -3,6 +3,7 @@ import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
+import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, NETWORK_FEE_TYPE, Network } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
@@ -107,8 +108,16 @@ export class TransactionService implements ITransactionService {
 
   registerHistory = async (params: IRegisterTransactionRequest) => {
     try {
-      const endpoint = `/v1/wallets/transactions?${qs.stringify(params)}`;
-      const res = await request.post(endpoint);
+      const authConfig = appconfig().auth;
+      const basicCredential = `${authConfig.basic.username}:${authConfig.basic.password}`;
+      const encoded = new Buffer(basicCredential, 'utf8').toString('base64');
+      const endpoint = `/v1/wallets/transactions`;
+      const res = await request.post(endpoint, {
+        headers: {
+          Authorization: `Basic ${encoded}`,
+        },
+        data: params,
+      });
       return res.data;
     } catch (e) {
       return [];
