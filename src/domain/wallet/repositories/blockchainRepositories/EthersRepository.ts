@@ -1,19 +1,20 @@
 import { formatFixed } from '@ethersproject/bignumber';
 import { ethers } from 'ethers';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class EthersRepository implements Type.IBlockChainRepository {
-  constructor() {}
-  getBalance = loadingFunction<string>(async ({ selectedWalletPrivateKey, rpcUrl, decimals = 18 }: Type.IGetCoinBalance) => {
+  constructor(@inject('EvmJsonRpcProviderHolder') private evmJsonRpcProviderHolder: EvmJsonRpcProviderHolder) {}
+
+  getBalance = loadingFunction<string>(async ({ selectedWalletAddress, rpcUrl, decimals = 18 }: Type.IGetCoinBalance) => {
     try {
-      const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-      const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
-      const bigNumBalance = await wallet.getBalance();
+      const provider = this.evmJsonRpcProviderHolder.getProvider(rpcUrl);
+      const bigNumBalance = await provider.getBalance(selectedWalletAddress);
       const balance = formatFixed(bigNumBalance, decimals);
       return balance;
     } catch (e) {
@@ -24,7 +25,7 @@ export class EthersRepository implements Type.IBlockChainRepository {
   getContractBalance = loadingFunction<string>(async ({ contractAddress, abi, address, rpcUrl, decimals = 18 }: Type.IGetTokenBalance) => {
     try {
       if (!abi) throw new Error('abi is required');
-      const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+      const provider = this.evmJsonRpcProviderHolder.getProvider(rpcUrl);
       const contract = new ethers.Contract(contractAddress, abi, provider);
       const bigNumBalance = await contract.balanceOf(address);
       const balance = formatFixed(bigNumBalance, decimals);

@@ -1,10 +1,10 @@
 export interface IBlockChainRepository {
-  getBalance: ({ selectedWalletPrivateKey, rpcUrl }: IGetCoinBalance) => Promise<string>;
+  getBalance: ({ selectedWalletAddress, rpcUrl }: IGetCoinBalance) => Promise<string>;
   getContractBalance: ({ contractAddress, abi, address }: IGetTokenBalance) => Promise<string>;
 }
 
 export interface IGetCoinBalance {
-  selectedWalletPrivateKey: string;
+  selectedWalletAddress: string;
   rpcUrl: string;
   decimals?: number;
 }

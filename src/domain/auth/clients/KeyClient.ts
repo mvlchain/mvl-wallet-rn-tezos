@@ -1,16 +1,17 @@
 import { ShareStore } from '@tkey/common-types';
 import { inject, injectable } from 'tsyringe';
 
-import { AuthProvider, AUTH_PROVIDER } from '@@constants/auth.constant';
+import { AUTH_PROVIDER, AuthProvider } from '@@constants/auth.constant';
+import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
-import { ETHEREUM } from '@@domain/blockchain/BlockChain';
 import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import SecureKeychain from '@@utils/SecureKeychain';
 
 import { KeyClientUtil } from './KeyClientUtil';
+
 export interface PostboxKeyHolder {
   postboxKey: string;
   provider?: AuthProvider;
@@ -49,18 +50,20 @@ export interface KeyClient {
   signOut: () => void;
   findDeviceShareByServerShare: () => void;
 }
+
 @injectable()
 export class KeyClientImpl implements KeyClient {
   postboxKeyHolder: PostboxKeyHolder | null;
   deviceShare: ShareStore | null;
   serverShare: ShareStore | null;
   deviceShareIndex: string | null;
+
   constructor(
     @inject('DeviceShareRepository') private deviceShareRepository: DeviceShareRepository,
     @inject('ServerShareRepository') private serverShareRepository: ServerShareRepository,
     @inject('TorusShareRepository') private torusShareRepository: TorusShareRepository,
     @inject('KeyClientUtil') private util: KeyClientUtil,
-    @inject('EhtersClient') private ethersClient: IWalletClient
+    @inject('EthersWalletClient') private ethersWalletClient: IWalletClient
   ) {
     this.postboxKeyHolder = null;
     this.deviceShare = null;
@@ -139,7 +142,7 @@ export class KeyClientImpl implements KeyClient {
       throw new Error('postboxKeyHolder, serverShare is required');
     }
     const privateKey = await this.getPrivateKey();
-    const pubKey = Clutch.extendedPublicKey(privateKey, extendedKeyPath(ETHEREUM));
+    const pubKey = Clutch.extendedPublicKey(privateKey, extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44));
     await this.serverShareRepository.saveServerShare({
       type: this.postboxKeyHolder.provider,
       idtoken: this.postboxKeyHolder.providerIdToken,
@@ -225,8 +228,8 @@ export class KeyClientImpl implements KeyClient {
       throw new Error('postboxKey is required');
     }
     const privateKey = await this.getPrivateKey();
-    const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(ETHEREUM));
-    const wallet = await this.ethersClient.createWalletWithEntropy(privateKey, 0);
+    const extendedKeyPair = Clutch.extendedKeyPair(privateKey, extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44));
+    const wallet = await this.ethersWalletClient.createWalletWithEntropy(privateKey, 0);
 
     const restoreObj = {
       type: this.postboxKeyHolder.provider,

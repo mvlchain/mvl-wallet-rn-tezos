@@ -7,7 +7,7 @@ import { KeyClient, PostboxKeyHolder } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
 import { WalletDto } from '@@domain/model/WalletDto';
 
-import { EhtersClient } from '../clients/EthersClient';
+import { EthersWalletClient } from '../clients/EthersWalletClient';
 import { TezosClient } from '../clients/TezosClient';
 import { IWallet, IWalletClient } from '../clients/WalletClient.type';
 import { BSC_TOKENLIST, ETH_TOKENLIST, TEZOS_TOKENLIST } from '../repositories/TestData';
@@ -84,8 +84,8 @@ class WalletServiceImpl implements WalletService {
 }
 
 beforeAll(() => {
-  container.register('EhtersClient', {
-    useFactory: instanceCachingFactory<EhtersClient>((container) => container.resolve(EhtersClient)),
+  container.register('EthersWalletClient', {
+    useFactory: instanceCachingFactory<EthersWalletClient>((container) => container.resolve(EthersWalletClient)),
   });
   container.register('TezosClient', {
     useFactory: instanceCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),

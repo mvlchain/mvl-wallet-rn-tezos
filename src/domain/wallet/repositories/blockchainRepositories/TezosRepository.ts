@@ -14,11 +14,10 @@ import * as Type from './WalletBlockChaiRepository.type';
 @injectable()
 export class TezosRepository implements Type.IBlockChainRepository {
   constructor() {}
-  getBalance = loadingFunction<string>(async ({ selectedWalletPrivateKey, rpcUrl, decimals = 6 }: Type.IGetCoinBalance) => {
+  getBalance = loadingFunction<string>(async ({ selectedWalletAddress, rpcUrl, decimals = 6 }: Type.IGetCoinBalance) => {
     try {
       const Tezos = new TezosToolkit(rpcUrl);
-      const address = tezosCrypto.utils.secretKeyToKeyPair(selectedWalletPrivateKey).pkh;
-      const balance = await Tezos.tz.getBalance(address);
+      const balance = await Tezos.tz.getBalance(selectedWalletAddress);
       const BNBalance = new BigNumber(balance.toString());
       return formatTezos(BNBalance, decimals).toString();
     } catch (e) {
