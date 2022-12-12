@@ -8,6 +8,12 @@ export const Container = styled.View`
   padding: ${height * 18}px ${width * 2}px;
 `;
 
+export const DataContainer = styled.View`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+`;
+
 export const IconWrapper = styled.View`
   width: ${width * 36}px;
   height: ${width * 36}px;
