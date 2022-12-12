@@ -88,7 +88,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
 
   const estimateGas = useCallback(
     async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
-      const gasUsage = await gasService.estimateGas({
+      const estimation = await gasService.estimateGas({
         selectedNetwork,
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
         to: contractAddress ?? to,
@@ -96,12 +96,16 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo, tota
         data: contractAddress ? data! : undefined,
         //data set after entering to and value in useTokenSend useEffect, so add non-null assertion
       });
-      if (!gasUsage) {
+      if (!estimation) {
         console.log('fail to estimate gas');
         return;
       }
-      setEstimatedGas(gasUsage);
-      setCustomGasLimit(gasUsage);
+      setEstimatedGas(estimation.gasUsage);
+      setCustomGasLimit(estimation.gasUsage);
+      //tezos return basefee after estimategas
+      if (estimation.baseFee) {
+        setBaseFee(estimation.baseFee);
+      }
     },
     []
   );
