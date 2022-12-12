@@ -15,6 +15,7 @@ import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyReposit
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasService } from '@@domain/gas/GasService';
 import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
@@ -23,7 +24,7 @@ import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TransactionService } from '@@domain/transaction/TransactionService';
 import { TransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers';
 import { TransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos';
-import { EhtersClient } from '@@domain/wallet/clients/EthersClient';
+import { EthersWalletClient } from '@@domain/wallet/clients/EthersWalletClient';
 import { TezosClient } from '@@domain/wallet/clients/TezosClient';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
 import { EthersRepository } from '@@domain/wallet/repositories/blockchainRepositories/EthersRepository';
@@ -95,8 +96,8 @@ container.register('TokenRepository', {
   useFactory: instancePerContainerCachingFactory<TokenRepository>((container) => container.resolve(TokenRepository)),
 });
 
-container.register('EhtersClient', {
-  useFactory: instancePerContainerCachingFactory<EhtersClient>((container) => container.resolve(EhtersClient)),
+container.register('EthersWalletClient', {
+  useFactory: instancePerContainerCachingFactory<EthersWalletClient>((container) => container.resolve(EthersWalletClient)),
 });
 
 container.register('TezosClient', {
@@ -133,4 +134,8 @@ container.register('GasRepositoryTezos', {
 
 container.register('LegacyAuthMigrationService', {
   useFactory: instancePerContainerCachingFactory<LegacyAuthMigrationService>((container) => container.resolve(LegacyAuthMigrationService)),
+});
+
+container.register('EvmJsonRpcProviderHolder', {
+  useFactory: instancePerContainerCachingFactory<EvmJsonRpcProviderHolder>((container) => container.resolve(EvmJsonRpcProviderHolder)),
 });

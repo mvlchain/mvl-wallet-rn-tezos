@@ -4,6 +4,17 @@ module.exports = function (api) {
     presets: [['module:metro-react-native-babel-preset', { useTransformReactJSXExperimental: true }]],
     plugins: [
       ['module:react-native-dotenv', { moduleName: '@env' }],
+      [
+        require.resolve('babel-plugin-module-resolver'),
+        {
+          alias: {
+            crypto: 'react-native-quick-crypto',
+            stream: 'stream-browserify',
+            buffer: '@craftzdog/react-native-buffer',
+          },
+        },
+        'shim-resolver',
+      ],
       ['@babel/plugin-proposal-numeric-separator'],
       'babel-plugin-transform-typescript-metadata',
       ['@babel/plugin-proposal-decorators', { legacy: true }],

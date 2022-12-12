@@ -2,6 +2,7 @@ import { container, instanceCachingFactory } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig } from '@@constants/network.constant';
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import { ETH_TOKENLIST, BSC_TOKENLIST, TestData } from '../TestData';
@@ -11,6 +12,9 @@ import { TezosRepository } from './TezosRepository';
 import { IBlockChainRepository } from './WalletBlockChaiRepository.type';
 
 beforeAll(() => {
+  container.register('EvmJsonRpcProviderHolder', {
+    useFactory: instanceCachingFactory<EvmJsonRpcProviderHolder>((container) => container.resolve(EvmJsonRpcProviderHolder)),
+  });
   container.register('EthersRepository', {
     useFactory: instanceCachingFactory<EthersRepository>((container) => container.resolve(EthersRepository)),
   });
