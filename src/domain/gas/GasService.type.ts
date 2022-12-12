@@ -1,7 +1,7 @@
 import { BigNumber, BytesLike } from 'ethers';
 
+import { GAS_LEVEL } from '@@constants/gas.constant';
 import { Network } from '@@constants/network.constant';
-import { GAS_LEVEL } from '@@constants/transaction.constant';
 
 export type TGasLevel = typeof GAS_LEVEL[keyof typeof GAS_LEVEL];
 export type TSelectedNetwork = { selectedNetwork: Network };
@@ -44,10 +44,6 @@ export interface IGetGasFeeResponse {
 }
 export interface IGasService {
   getGasFeeData: (selectedNetwork: Network) => Promise<IGetGasFeeResponse | undefined>;
-
   getTotalGasFee: ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => string | undefined;
-
-  getEstimateTime: (gasLevel: TGasLevel) => number;
-
   estimateGas: (args: IEstimateGasRequest) => Promise<IEstimateGasResponse | undefined>;
 }

@@ -18,14 +18,35 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   const { appTheme } = settingPersistStore();
   const color = theme[appTheme.value].color;
   const [lcColor, setLcColor] = useState<string | null>(null);
-  const initialDisplayValue = value && unit === 'gwei' ? formatUnits(value, unit).toString() : value ? value.toString() : '0';
+  const getInitialValue = (unit: 'gwei' | 'mutez' | undefined, value: BigNumber | null | undefined) => {
+    if (!value) return '0';
+    switch (unit) {
+      case 'gwei':
+        return formatUnits(value, 'gwei');
+      case 'mutez':
+        return formatUnits(value, 0);
+      default:
+        return value.toString();
+    }
+  };
+  const initialDisplayValue = getInitialValue(unit, value);
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
   const debounceCallback = useDebounce(setValue, 1000);
 
   useEffect(() => {
-    debounceCallback(unit === 'gwei' ? parseUnits(displayValue, unit) : BigNumber.from(displayValue));
+    debounceCallback(getUnitValue(unit, displayValue));
   }, [displayValue]);
 
+  const getUnitValue = (unit: 'gwei' | 'mutez' | undefined, value: string) => {
+    switch (unit) {
+      case 'gwei':
+        return parseUnits(value, 'gwei');
+      case 'mutez':
+        return parseUnits(value, 0);
+      default:
+        return BigNumber.from(value);
+    }
+  };
   const onBlur = () => {
     setLcColor(null);
   };

@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
 import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
-import { SettingScrollView } from '@@screens/SettingScreen/SettingScreen.style';
-import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { height } from '@@utils/ui';
 
@@ -32,13 +30,13 @@ function GasFeeInputs({
     <S.Container>
       <S.Label>{t('gas_price')}</S.Label>
       <S.InputWrapper>
-        <GasTextField value={customBaseFee} setValue={setCustomBaseFee} unit={tezosFeeType ? 'tez' : 'gwei'} />
+        <GasTextField value={customBaseFee} setValue={setCustomBaseFee} unit={tezosFeeType ? 'mutez' : 'gwei'} disabled={tezosFeeType} />
       </S.InputWrapper>
       {enableTip && (
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={customTip} setValue={setCustomTip} unit={tezosFeeType ? 'tez' : 'gwei'} />
+            <GasTextField value={customTip} setValue={setCustomTip} unit={tezosFeeType ? 'mutez' : 'gwei'} />
           </S.InputWrapper>
         </>
       )}
