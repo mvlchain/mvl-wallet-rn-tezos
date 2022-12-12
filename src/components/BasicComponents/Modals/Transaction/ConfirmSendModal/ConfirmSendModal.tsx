@@ -1,17 +1,17 @@
 import React from 'react';
 
 import Decimal from 'decimal.js';
+import { BigNumber } from 'ethers';
 import { formatEther, formatUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { COIN_DTO, getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { COIN_DTO, getNetworkConfig, getNetworkName, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { height } from '@@utils/ui';
 
@@ -28,8 +28,17 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }
   const network = getNetworkConfig(selectedNetwork);
   const { settedCurrency } = settingPersistStore();
 
-  const { price: tokenPrice } = useOneTokenPrice(tokenDto, formatEther(amount));
-  const { price: coinPrice } = useOneTokenPrice(COIN_DTO[network.coin], formatEther(fee));
+  const getAmountString = (amount: BigNumber) => {
+    switch (network.networkFeeType) {
+      case NETWORK_FEE_TYPE.TEZOS:
+        return formatUnits(amount, 6);
+      default:
+        return formatEther(amount);
+    }
+  };
+  const amountStr = getAmountString(amount);
+  const { price: tokenPrice } = useOneTokenPrice(tokenDto, amountStr);
+  const { price: coinPrice } = useOneTokenPrice(COIN_DTO[network.coin], fee);
   const tokenPriceInDeciaml = new Decimal(tokenPrice);
   const coinPriceInDecimal = new Decimal(coinPrice);
 
@@ -56,14 +65,14 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }
         <S.Row>
           <S.BlackText> {t('send_amount')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{amount && `${formatEther(amount)} ${tokenDto.symbol}`}</S.BlackText>
+            <S.BlackText>{amount && `${amountStr} ${tokenDto.symbol}`}</S.BlackText>
             <S.GreyText>{`${tokenPrice} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
         <S.Row style={{ marginBottom: height * 16 }}>
           <S.BlackText>{t('transaction_fee')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{fee && `${formatEther(fee)} ${network.coin}`}</S.BlackText>
+            <S.BlackText>{fee && `${fee} ${network.coin}`}</S.BlackText>
             <S.GreyText>{`${coinPrice} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
@@ -71,7 +80,7 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }
         <S.Row>
           <S.BlackText>{t('total')}</S.BlackText>
           <S.RightAlign>
-            <S.BlackText>{amount && fee && `${formatEther(amount)} ${tokenDto.symbol} + ${formatEther(fee)} ${network.coin}`}</S.BlackText>
+            <S.BlackText>{amount && fee && `${amountStr} ${tokenDto.symbol} + ${fee} ${network.coin}`}</S.BlackText>
             <S.GreyText>{`${feeAmountTotal.toString()} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
