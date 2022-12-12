@@ -42,7 +42,7 @@ export const ThirdPartyConnectionLayout = styled.View`
   margin-left: ${width * 16}px;
 `;
 
-export const ThirdPartyAccountState = styled.Text`
+export const ThirdPartyConnectionState = styled.Text`
   ${({ theme }) => theme.font.Label.sm};
   line-height: ${height * 16}px;
   color: ${({ theme }) => theme.color.grey500};
