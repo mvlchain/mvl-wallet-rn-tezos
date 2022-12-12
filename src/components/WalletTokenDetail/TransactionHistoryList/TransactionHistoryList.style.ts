@@ -2,7 +2,9 @@ import styled from 'styled-components/native';
 
 import { height, width } from '@@utils/ui';
 
-export const TransactionHistoryContainer = styled.View``;
+export const TransactionHistoryContainer = styled.View`
+  background-color: ${({ theme }) => theme.color.whiteBlack};
+`;
 export const TransactionHistoryLabelWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -11,6 +13,7 @@ export const TransactionHistoryLabelWrapper = styled.View`
 export const TransactionHistoryLabel = styled.Text`
   ${({ theme }) => theme.font.Title.xs}
   font-family: ${({ theme }) => theme.fmExBold};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
 export const EmptyHistoryLabelWrapper = styled.View`

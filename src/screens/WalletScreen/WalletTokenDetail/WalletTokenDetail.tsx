@@ -9,6 +9,7 @@ import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import TransactionHistoryList from '@@components/WalletTokenDetail/TransactionHistoryList';
 import useHeader from '@@hooks/useHeader';
 
+import * as S from './WalletTokenDetail.style';
 import { TTokenDetailRouteProps, TTokenDetailRootStackProps } from './WalletTokenDetail.type';
 
 function WalletTokenDetail() {
@@ -23,11 +24,11 @@ function WalletTokenDetail() {
   }, []);
 
   return (
-    <View>
+    <S.Container>
       <TokenDetailBoard />
       <Divider thickness={DIVIDER_THICKNESS.THICK} />
       <TransactionHistoryList />
-    </View>
+    </S.Container>
   );
 }
 

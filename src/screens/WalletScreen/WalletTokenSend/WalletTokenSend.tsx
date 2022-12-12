@@ -23,8 +23,8 @@ function WalletTokenSend() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
-        <GasFeeBoard isRevision={false} onConfirm={confirm} tokenDto={params.tokenDto} />
       </TouchableWithoutFeedback>
+      <GasFeeBoard isRevision={false} onConfirm={confirm} tokenDto={params.tokenDto} />
     </ScrollView>
   );
 }
