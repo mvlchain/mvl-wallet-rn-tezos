@@ -8,7 +8,7 @@ const globalModalStore = create<IGlobalModalStore>()(
       modalType: null,
       modalProps: null,
       openModal: <K extends MODAL_TYPE>(modalType: K, modalProps: MODAL_PROPS<K>) =>
-        set({ modalType, modalProps }, false, `openGlobalModal-${modalType}-${JSON.stringify(modalProps)}`),
+        set({ modalType, modalProps }, false, `openGlobalModal-${modalType}`),
       closeModal: () => set({ modalType: null, modalProps: null }, false, 'closeGlobalModal'),
     }),
     { name: 'globalModalStore', enabled: __DEV__ }

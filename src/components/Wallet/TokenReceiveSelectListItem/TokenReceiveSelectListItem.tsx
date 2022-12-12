@@ -20,7 +20,7 @@ function TokenReceiveSelectListItem({ tokenItem, onPress }: ITokenReceiveSelectL
             <SvgUri uri={tokenItem.logoURI} width={`${width * 36}`} height={`${width * 36}`} />
           </S.IconWrapper>
         )}
-        <S.Text>{tokenItem.title}</S.Text>
+        <S.Text>{tokenItem.symbol}</S.Text>
       </S.DataContainer>
       <PrimaryButton onPress={onPress} label={t('receive')} size={'fit'} />
     </S.Container>

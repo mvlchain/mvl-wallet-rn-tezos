@@ -18,3 +18,14 @@ export const Title = styled.Text`
   ${({ theme }) => theme.font.Title.sm};
   color: ${({ theme }) => theme.color.blackWhite};
 `;
+
+export const RecentContainer = styled.View`
+  padding: 0 ${width * 24}px;
+`;
+
+export const RecentEmptyText = styled.Text`
+  align-self: center;
+  padding: ${height * 24}px 0;
+  ${({ theme }) => theme.font.Label.md};
+  color: ${({ theme }) => theme.color.grey500};
+`;
