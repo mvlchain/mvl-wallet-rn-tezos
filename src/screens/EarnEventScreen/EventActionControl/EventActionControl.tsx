@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
+import Decimal from 'decimal.js';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
@@ -9,6 +10,7 @@ import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/But
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { format } from '@@utils/strings';
 
 import * as S from './EventActionControl.style';
 import { EarnEventActionModalProps } from './EventActionControl.type';
@@ -17,12 +19,31 @@ import { useRewardReceiptUrlByExtenedPublicKey } from './useRewardReceiptUrlByEx
 /**
  * EarnEvent action modal to behave event features
  */
-export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, eventActionScheme, receiptUrl }: EarnEventActionModalProps) => {
+export const EventActionControl = ({
+  avatarUrl,
+  points,
+  claimStatusInfo,
+  isAllowParticipationInClaim,
+  eventActionButtonTitle,
+  eventActionScheme,
+  receiptUrl,
+}: EarnEventActionModalProps) => {
   const { t } = useTranslation();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
-  // const { rewardReceiptUrl } = useRewardReceiptUrlByExtenedPublicKey(receiptUrl);
+  const { rewardReceiptUrl } = useRewardReceiptUrlByExtenedPublicKey(receiptUrl);
   const { openModal } = globalModalStore();
   const isReceiptEnabled = receiptUrl ? true : false;
+
+  const getTxFee = useCallback((fee: string | undefined) => {
+    if (fee) {
+      // TODO decimal format 홤수 유틸화 할 것
+      return new Decimal(fee).toFixed();
+    } else {
+      return '';
+    }
+  }, []);
+
+  console.log(`EventAction> isAllowParticipationInClaim: ${isAllowParticipationInClaim} claimStatusInfo: ${JSON.stringify(claimStatusInfo)}`);
 
   return (
     <DropShadow style={S.style.shadow}>
@@ -32,8 +53,7 @@ export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, 
           onPress={() => {
             // open Reward Receipt using WebViewModal
             openModal(MODAL_TYPES.REWARD_RECEIPT, {
-              // url: rewardReceiptUrl,
-              url: '',
+              url: rewardReceiptUrl,
             });
           }}
         >
@@ -58,14 +78,16 @@ export const EventActionControl = ({ avatarUrl, points, eventActionButtonTitle, 
           {isReceiptEnabled ? <RightIcon style={S.style.extensionArrow} /> : null}
         </S.RewardBoard>
 
-        <S.TxFeeLayout>
-          <CircleAlertIcon />
-          <S.TxFeeLabel>{'Transaction Fee: 10 bMVL'}</S.TxFeeLabel>
-        </S.TxFeeLayout>
+        {!!claimStatusInfo?.isTxFeeVisible ? (
+          <S.TxFeeLayout>
+            <CircleAlertIcon />
+            <S.TxFeeLabel>{format(t('transaction_fee_with_value_currency'), getTxFee(claimStatusInfo.fee), claimStatusInfo.currency)}</S.TxFeeLabel>
+          </S.TxFeeLayout>
+        ) : null}
 
         <PrimaryButton
           label={eventActionButtonTitle}
-          disabled={false}
+          disabled={!claimStatusInfo?.isEventActionButtonEnabled}
           onPress={() => {
             // onActionButtonPress
           }}

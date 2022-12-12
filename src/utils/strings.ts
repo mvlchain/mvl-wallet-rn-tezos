@@ -15,15 +15,15 @@ export function isNotBlank(str?: string) {
 }
 
 export function format(str: string, ...args: string[]): string {
-  let res = str,
-    i = 0;
+  let res = str;
 
   if (args.length == 0) {
     return str;
   }
 
+  let i = 0;
   while (/%s/.test(res)) {
-    res = str.replace('%s', args[i++]);
+    res = res.replace('%s', args[i++]);
   }
   return res;
 }
