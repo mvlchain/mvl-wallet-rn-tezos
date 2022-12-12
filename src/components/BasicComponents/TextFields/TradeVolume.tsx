@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { parseUnits } from 'ethers/lib/utils';
-import { NativeSyntheticEvent, TextInputChangeEventData, TextInputEndEditingEventData } from 'react-native';
+import { parseUnits, commify } from 'ethers/lib/utils';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
-import { useTokenBalance } from '@@hooks/useTokenBalance';
-import { height, width } from '@@utils/ui';
+import { height } from '@@utils/ui';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
@@ -20,6 +20,11 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const { balance } = useOneTokenBalance(tokenDto);
   const { color } = useColor();
+  const debounceCallback = useDebounce(onChange, 1000);
+
+  useEffect(() => {
+    debounceCallback(displayValue ? parseUnits(displayValue, 'ether') : null);
+  }, [displayValue]);
 
   const clearTextField = () => {
     onChange(null);
@@ -33,24 +38,17 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
     let value = data.nativeEvent.text;
-
     if (!value) {
       setShowDelete(false);
     }
-
     if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
       value = value.slice(1);
     }
-
     if (value.indexOf('.') !== value.lastIndexOf('.')) {
       return;
     }
-
-    onChange(parseUnits(value, 'ether'));
     setDisplayValue(value);
   };
-
-  const onEndEditing = (data: NativeSyntheticEvent<TextInputEndEditingEventData>) => {};
 
   return (
     <S.TradeVolumeContainer>
@@ -61,16 +59,14 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
           <S.TradeVolumeInput
-            value={displayValue ?? ''}
+            value={displayValue ? commify(displayValue) : ''}
             onChange={onSet}
-            onEndEditing={onEndEditing}
             keyboardType={'numeric'}
             selectionColor={color.black}
             placeholder={'0.00'}
             placeholderTextColor={color.grey300Grey700}
             onKeyPress={onKeyPress}
           />
-
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
