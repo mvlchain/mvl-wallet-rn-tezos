@@ -5,7 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
+import { UnsupportOperationError } from '@@domain/error/UnsupportOperationError';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
+import {
+  ThirdPartyConnectCheckDto,
+  ThirdPartyConnectCheckResponseDto,
+  EarnEventCurrentResponseDto,
+  EarnEventClaimCheckResponseDto,
+  EarnEventGetClaimResponseDto,
+} from '@@generated/generated-scheme';
 import { getEventTimeDescriptionByEventPhase, useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { renderHook, waitFor, Providers } from '@@test/test-utils';
 import { mockApi } from '@@utils/mockApi';
@@ -34,6 +42,18 @@ class MockEarnEventRepository implements EarnEventRepository {
   getEvents(): Promise<EarnEventDto[]> {
     const res = mockApi<EarnEventDto[]>('v1/earn-event/list.json');
     return Promise.resolve(res ?? []);
+  }
+  getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]> {
+    return Promise.resolve([]);
+  }
+  getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto> {
+    throw new UnsupportOperationError();
+  }
+  getClaimInformation(eventId: string): Promise<EarnEventGetClaimResponseDto> {
+    throw new UnsupportOperationError();
+  }
+  checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto> {
+    throw new UnsupportOperationError();
   }
 }
 

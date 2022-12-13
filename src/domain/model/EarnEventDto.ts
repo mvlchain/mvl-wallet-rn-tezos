@@ -11,23 +11,32 @@ export interface EarnEventDto {
   iconUrl: string;
   title: string;
   subTitle: string;
+  /**
+   * EarnEventDetailsScreen's main WebView contents
+   */
   detailPageUrl: string;
 
-  pointIconUrl: string | null;
-  pointArr: EarnEventPoint[] | null;
+  /**
+   * An icon url displaying reward points in EventActionControl
+   */
+  pointIconUrl: string;
+  pointInfoArr: EarnEventPoint[];
 
   eventActionButtonTitle: string | null;
+  /**
+   * DeepLink that will execute when the EventActionButton clicked
+   */
   eventActionScheme: string | null;
 
   currency: string | null;
   currencyIconUrl?: string | null;
 
   /**
-   * Web page url to show point and token information for claim.
+   * Web page url to show point and token information for clai\m.
    * This page need pubKey in query parameter.
    * ex) https://calcInfoPageUrl.com?pubKey=clutch.pubKey.
    */
-  calcInfoPageUrl: string | null;
+  calcInfoPageUrl?: string;
 
   /**
    * Third party app information.

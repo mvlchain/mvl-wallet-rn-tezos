@@ -10,6 +10,8 @@ import { EarnEventListScreen } from './EarnEventListScreen';
  * MOCK UseCases
  *  useEarnEventList
  *  useRefetchByRefreshControl
+ *  useNavigation
+ *  useTranslation
  */
 jest.mock('@@hooks/event/useEarnEventList', () => {
   const useEarnEventList = () => {
@@ -25,6 +27,17 @@ jest.mock('@@hooks/event/useEarnEventList', () => {
   };
 });
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    };
+  },
+}));
+
 jest.mock('@@hooks/useRefetchByRefreshControl', () => {
   const useRefetchByRefreshControl = (refetch: () => Promise<unknown>) => ({
     refreshing: false,
@@ -33,6 +46,14 @@ jest.mock('@@hooks/useRefetchByRefreshControl', () => {
 
   return {
     useRefetchByRefreshControl,
+  };
+});
+
+jest.mock('@react-navigation/native', () => {
+  return {
+    useNavigation: () => ({
+      navigate: jest.fn(),
+    }),
   };
 });
 

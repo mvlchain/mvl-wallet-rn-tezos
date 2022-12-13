@@ -2,6 +2,7 @@ import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { EarnEvent } from '@@domain/model/EarnEvent';
 import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
@@ -31,6 +32,9 @@ export type TRootStackParamList = {
   WALLET_TRANSACTION_CANCEL: undefined;
   WALLET_SCAN_QR: undefined;
   WALLET_TRANSACTION_RESULT: undefined;
+  EVENT_DETAILS: {
+    data: EarnEvent;
+  };
 };
 
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
@@ -56,6 +60,7 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   WALLET_TRANSACTION_CANCEL: 'WALLET_TRANSACTION_CANCEL',
   WALLET_SCAN_QR: 'WALLET_SCAN_QR',
   WALLET_TRANSACTION_RESULT: 'WALLET_TRANSACTION_RESULT',
+  EVENT_DETAILS: 'EVENT_DETAILS',
 } as const;
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;
