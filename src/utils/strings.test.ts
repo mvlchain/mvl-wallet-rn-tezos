@@ -1,6 +1,6 @@
 import { exp } from 'react-native-reanimated';
 
-import { format } from './strings';
+import { format, extension } from './strings';
 
 it('format string', () => {
   const res = format('hello %s world', 'Darby');
@@ -20,4 +20,14 @@ it('format string with extra arguments', () => {
 it('format string: transaction fee', () => {
   const res = format('Transaction Fee : %s %s', '100', 'bMVL');
   expect(res).toBe('Transaction Fee : 100 bMVL');
+});
+
+it('extract file extension', () => {
+  const ext = extension('https://hello.svg');
+  expect(ext).toBe('svg');
+});
+
+it('extract empty file extension', () => {
+  const ext = extension('https://hello');
+  expect(ext).toBe('');
 });

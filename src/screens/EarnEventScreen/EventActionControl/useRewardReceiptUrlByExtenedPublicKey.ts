@@ -13,18 +13,18 @@ export const useRewardReceiptUrlByExtenedPublicKey = (receiptUrl?: string) => {
   const [rewardReceiptUrl, setRewardReceiptUrl] = useState<string>('');
 
   useEffect(() => {
-    if (!receiptUrl) return;
-
-    const withExtendPublicKey = async () => {
-      const xpub = await keyClient.getExtendPublicKey();
-      setRewardReceiptUrl(
-        `${receiptUrl}?${qs.stringify({
-          pubKey: xpub,
-        })}`
-      );
-    };
-
-    withExtendPublicKey();
+    if (!receiptUrl) {
+      setRewardReceiptUrl('');
+    } else {
+      (async () => {
+        const xpub = await keyClient.getExtendPublicKey();
+        setRewardReceiptUrl(
+          `${receiptUrl}?${qs.stringify({
+            pubKey: xpub,
+          })}`
+        );
+      })();
+    }
   }, [receiptUrl]);
 
   return {

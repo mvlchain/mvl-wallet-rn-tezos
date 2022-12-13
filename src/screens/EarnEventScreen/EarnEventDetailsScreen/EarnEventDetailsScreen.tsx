@@ -41,20 +41,14 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *
  * Scenario (Analysis of legacy)
  *   whenPageLoaded (event: EarnEvent)
- *     if (event.app == null) {
- *       hide ThirdPartyApp();
- *     }
- *
- *     // 1
  *     const {thirdPartyConnection} = useThirdPartyConnection(event, deepLink?: ThirdPartyDeepLink);
  *
- *     // 2-1
  *     const {participants} = useUserPoints(event, thirdPartyConnection);
  *
- *     // 2-2
- *     const {onClaimEvent} = useOnClaimEvent(event, thirdPartyConnection);
- *     const {claimInfo} = useClaimInfomation(onClaimEvent);
- *     const {claimStatus} = useClaimStatus(onClaimEvent);
+ *     const {claimStatusInfo} = useClaimStatusInformation(event, thirdPartyConnection); {
+ *       const {claimInfo} = useClaimInfomation(onClaimEvent);
+ *       const {claimStatus} = useClaimStatus(onClaimEvent);
+ *     }
  *
  *     // {ThirdPartyApp}
  *     when {
@@ -97,6 +91,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *       toast('msg invalid redirection error')
  *     }
  *
+ * • `transaction fee` will only be visible when claimInfo.fee > 0
  *
  * DeepLinks
  *  clutchwallet://connect
@@ -110,7 +105,7 @@ export function EarnEventDetailsScreen() {
     console.error('inappropriate event params!');
   }
 
-  const { thirdParty, claimStatusInfo } = useEarnEventDetailsState(params?.data);
+  const { phase, thirdParty, claimStatusInfo } = useEarnEventDetailsState(params?.data);
 
   const data = params?.data;
 
@@ -152,15 +147,7 @@ export function EarnEventDetailsScreen() {
             />
           ) : null}
 
-          <EventActionControl
-            avatarUrl={data.pointIconUrl}
-            points={thirdParty.points}
-            claimStatusInfo={claimStatusInfo}
-            isAllowParticipationInClaim={data.isAllowParticipationInClaim}
-            eventActionButtonTitle={data.eventActionButtonTitle ?? ''}
-            eventActionScheme={data.eventActionScheme ?? ''}
-            receiptUrl={data.calcInfoPageUrl}
-          />
+          <EventActionControl phase={phase} event={data} thirdParty={thirdParty} claimStatusInfo={claimStatusInfo} />
         </>
       ) : null}
     </S.Container>

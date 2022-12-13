@@ -27,3 +27,14 @@ export function format(str: string, ...args: string[]): string {
   }
   return res;
 }
+
+export function extension(filename: string | undefined): string {
+  if (filename?.length === 0) {
+    return '';
+  }
+  const index = filename?.lastIndexOf('.') ?? -1;
+  if (index == -1) {
+    return '';
+  }
+  return !!filename ? filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase() : '';
+}
