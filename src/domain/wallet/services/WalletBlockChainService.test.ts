@@ -31,7 +31,7 @@ export class KeyClientImpl implements KeyClient {
     this.deviceShareIndex = null;
   }
   triggerSocialSignIn!: (provider: AuthProvider, isTemp?: boolean | undefined) => Promise<PostboxKeyHolder>;
-  checkDevice!: () => boolean;
+  checkDevice!: () => Promise<boolean>;
   checkSignedUp!: () => Promise<boolean>;
   checkServer!: () => Promise<boolean>;
   checkSet!: () => boolean;
