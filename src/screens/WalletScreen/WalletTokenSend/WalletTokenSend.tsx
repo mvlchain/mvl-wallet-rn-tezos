@@ -10,6 +10,7 @@ import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
 import SendInputBoard from '@@components/WalletTokenSend/SendInputBoard';
 
+import * as S from './WalletTokenSend.style';
 import { TTokenSendRouteProps } from './WalletTokenSend.type';
 import useTokenSend from './useTokenSend';
 
@@ -18,14 +19,11 @@ function WalletTokenSend() {
 
   const { amount, setAmount, address, setAddress, confirm } = useTokenSend(params.tokenDto);
   return (
-    // eslint-disable-next-line react-native/no-inline-styles
-    <ScrollView style={{ flex: 1 }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
-        <Divider thickness={DIVIDER_THICKNESS.THICK} />
-      </TouchableWithoutFeedback>
+    <S.Container>
+      <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
+      <Divider thickness={DIVIDER_THICKNESS.THICK} />
       <GasFeeBoard isRevision={false} onConfirm={confirm} tokenDto={params.tokenDto} />
-    </ScrollView>
+    </S.Container>
   );
 }
 

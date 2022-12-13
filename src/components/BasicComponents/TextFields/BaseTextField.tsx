@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
-import { BlackScanIcon, TextFieldDelete } from '@@assets/image';
+import { WhiteScanIcon, BlackScanIcon, TextFieldDelete } from '@@assets/image';
 import useDebounce from '@@hooks/useDebounce';
-import { useColor } from '@@hooks/useTheme';
+import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
 
 import * as S from './TextField.style';
@@ -17,9 +17,9 @@ export const KeyboardTypeByInputType = {
 } as const;
 
 export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
-  const { placeholder, isValid, value, onChange, scanable, style, unit, type, label, hint } = props;
+  const { placeholder, isValid, value, onChange, scanable, gotoScan, style, unit, type, label, hint } = props;
+  const ScanIcon = useAssetFromTheme(BlackScanIcon, WhiteScanIcon);
   const { color } = useColor();
-
   const [lcColor, setLcColor] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string>('');
@@ -70,8 +70,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
         />
         {unit && <S.Unit>{unit}</S.Unit>}
         {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
-        {/* TODO: 스캔함수 작성되면 추가 필요*/}
-        {scanable && <BlackScanIcon onPress={() => {}} style={S.inlineStyles.marginProvider} />}
+        {scanable && <ScanIcon onPress={gotoScan} style={S.inlineStyles.marginProvider} />}
       </S.BaseTextFieldInputWrapper>
       {hint && <S.BaseTextFieldHint>{hint}</S.BaseTextFieldHint>}
     </S.BaseTextFieldContainer>

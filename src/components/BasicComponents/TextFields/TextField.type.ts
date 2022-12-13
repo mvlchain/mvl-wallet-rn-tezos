@@ -22,6 +22,7 @@ export interface IBaseTextFieldProps {
   hint?: string;
   isValid?: boolean;
   scanable?: boolean;
+  gotoScan?: Fuction;
 }
 
 export interface IGasTextFieldProps {
