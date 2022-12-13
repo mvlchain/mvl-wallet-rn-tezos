@@ -36,7 +36,6 @@ const useTokenSend = () => {
 
   useEffect(() => {
     setInitialFromRouteProps();
-    return () => resetBody();
   }, []);
 
   useEffect(() => {

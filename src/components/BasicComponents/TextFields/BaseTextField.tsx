@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { NativeSyntheticEvent, TextInputChangeEventData, Text } from 'react-native';
 
 import { WhiteScanIcon, BlackScanIcon, TextFieldDelete } from '@@assets/image';
 import useDebounce from '@@hooks/useDebounce';
@@ -22,7 +22,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
-  const [displayValue, setDisplayValue] = useState<string>('');
+  const [displayValue, setDisplayValue] = useState<string>(value ?? '');
   const debounceCallback = useDebounce(onChange, 1000);
 
   useEffect(() => {
@@ -70,7 +70,14 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
         />
         {unit && <S.Unit>{unit}</S.Unit>}
         {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
-        {scanable && <ScanIcon onPress={gotoScan} style={S.inlineStyles.marginProvider} />}
+        {scanable && gotoScan && (
+          <ScanIcon
+            onPress={() => {
+              gotoScan();
+            }}
+            style={S.inlineStyles.marginProvider}
+          />
+        )}
       </S.BaseTextFieldInputWrapper>
       {hint && <S.BaseTextFieldHint>{hint}</S.BaseTextFieldHint>}
     </S.BaseTextFieldContainer>

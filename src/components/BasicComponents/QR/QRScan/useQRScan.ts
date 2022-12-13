@@ -42,7 +42,7 @@ const useQRScan = (targetToken?: string) => {
 
   const goSendPage = useCallback((scanResult: string | null) => {
     if (!scanResult) return;
-    if (!scanResult.includes('token') || !scanResult.includes('address') || !scanResult.includes('amount')) {
+    if (!scanResult.includes('address')) {
       openModal(MODAL_TYPES.TITLE_ONLY, t('dialog_wrong_qr_code_title'));
       return;
     }
@@ -85,12 +85,14 @@ const useQRScan = (targetToken?: string) => {
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
     const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
-    if (!detectedBarcodes) return;
+    // if (!detectedBarcodes) return;
     //Scan area limit to inside overlay area
     // if (!detectedBarcodes || !detectedBarcodes[0] || !detectedBarcodes[0].cornerPoints) return;
     // const [topL, bottomL, bottomR, topR] = detectedBarcodes[0].cornerPoints;
     // if (topL.x < frame.width * 0.1 || topL.y < frame.height * 0.12 || bottomR.x > frame.width * 0.9 || bottomR.y > frame.width * 0.6) return;
-    runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
+    if (detectedBarcodes && detectedBarcodes[0]?.content?.data) {
+      runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
+    }
   }, []);
 
   return {
