@@ -16,8 +16,7 @@ import useTokenSend from './useTokenSend';
 
 function WalletTokenSend() {
   const { params } = useRoute<TTokenSendRouteProps>();
-
-  const { amount, setAmount, address, setAddress, confirm } = useTokenSend(params.tokenDto);
+  const { amount, setAmount, address, setAddress, confirm } = useTokenSend();
   return (
     <S.Container>
       <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />

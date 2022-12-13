@@ -17,7 +17,6 @@ function SendInputBoard({ amount, setAmount, address, setAddress }: ISendInputBo
   const { t } = useTranslation();
   const navigation = useNavigation<TScanQRRootStackProps>();
   const gotoScan = () => {
-    console.log('???');
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_SCAN_QR, params);
   };
 

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { NativeModules, Platform } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -10,6 +10,9 @@ import { useFrameProcessor } from 'react-native-vision-camera';
 import { BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
+import { TScanQRRouteProps } from '@@screens/WalletScreen/WalletScanQR/WalletScanQR.type';
+import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
 import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
@@ -18,6 +21,8 @@ const useQRScan = (targetToken?: string) => {
   const [scanResult, setScanResult] = useState<string | null>(null);
   const { openModal } = globalModalStore();
   const { t } = useTranslation();
+  const { params } = useRoute<TScanQRRouteProps>();
+  const navigation = useNavigation<TTokenSendRootStackProps>();
 
   useEffect(() => {
     requestPermission({ ios: [PERMISSIONS.IOS.CAMERA], android: [PERMISSIONS.ANDROID.CAMERA] }).then(async (res) => {
@@ -42,7 +47,7 @@ const useQRScan = (targetToken?: string) => {
       return;
     }
     const parsedData = JSON.parse(scanResult);
-    //TODO: navigation 작업
+    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, parsedData });
   }, []);
 
   const getQRFromGallery = useCallback(async () => {
