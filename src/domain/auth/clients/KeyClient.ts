@@ -29,7 +29,7 @@ export interface KeyClient {
   deviceShare: ShareStore | null;
   deviceShareIndex: string | null;
   triggerSocialSignIn: (provider: AuthProvider, isTemp?: boolean) => Promise<PostboxKeyHolder>;
-  checkDevice: () => boolean;
+  checkDevice: () => Promise<boolean>;
   checkSignedUp: () => Promise<boolean>;
   checkServer: () => Promise<boolean>;
   checkSet: () => boolean;
@@ -80,7 +80,7 @@ export class KeyClientImpl implements KeyClient {
     }
     return resultPostboxKeyHolder;
   };
-  checkDevice = () => {
+  checkDevice = async () => {
     return this.deviceShareRepository.checkDeviceShare();
   };
   checkSignedUp = async () => {
