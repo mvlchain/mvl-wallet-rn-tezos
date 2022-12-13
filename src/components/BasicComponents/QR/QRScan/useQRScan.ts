@@ -48,6 +48,7 @@ const useQRScan = (targetToken?: string) => {
     }
     const scanData = JSON.parse(scanResult);
     if (scanData && scanData.address) {
+      //
       navigation.push(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, scanData: { address: scanData.address } });
     }
   }, []);
