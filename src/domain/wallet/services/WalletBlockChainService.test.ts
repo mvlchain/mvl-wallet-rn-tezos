@@ -37,6 +37,7 @@ export class KeyClientImpl implements KeyClient {
   checkSet!: () => boolean;
   checkPincode!: () => Promise<boolean>;
   getPrivateKey = async () => 'f8b52a72b38b08d1a2a838ab9bad0cdb39cae8bf63c238d43a87d52c68a3de24';
+  getExtendPublicKey!: () => Promise<string>;
   setDevice!: (pincode: string) => Promise<void>;
   setServer!: () => Promise<void>;
   setKeyFromDevice!: () => Promise<void>;
