@@ -10,7 +10,7 @@ import { KeyboardTypeByInputType } from './BaseTextField';
 //Base
 export interface IBaseTextFieldComponentProps extends IBaseTextFieldProps {
   style?: TextInputProps['style'];
-  unit?: 'GWEI' | 'ETHER';
+  unit?: 'GWEI';
   type: keyof typeof KeyboardTypeByInputType;
 }
 
@@ -31,7 +31,7 @@ export interface IGasTextFieldProps {
   hint?: string;
   style?: TextInputProps['style'];
   //TODO: ticker 관련되서 정리되면 나중에 상수 및 타입 처리하기
-  unit?: 'gwei' | 'ether' | 'tez';
+  unit?: 'gwei' | 'mutez';
   delay?: number;
   disabled?: boolean;
 }

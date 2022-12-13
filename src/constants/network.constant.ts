@@ -88,7 +88,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://mainnet-node.madfish.solutions/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
-    coin: 'TEZ',
+    coin: 'XTZ',
   },
   [NETWORK.TEZOS_GHOSTNET]: {
     name: 'Tezos Ghostnet',
@@ -98,7 +98,7 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     rpcUrl: 'https://ghostnet.smartpy.io/',
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
-    coin: 'TEZ',
+    coin: 'XTZ',
   },
 };
 
@@ -144,5 +144,13 @@ export const COIN_DTO: Record<string, TokenDto> = {
     contractAddress: null,
     logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/eth.svg',
     priceId: 'ethereum',
+  },
+  XTZ: {
+    symbol: 'XTZ',
+    name: 'Tezos',
+    decimals: 6,
+    contractAddress: null,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/xtz.svg',
+    priceId: 'tezos',
   },
 };

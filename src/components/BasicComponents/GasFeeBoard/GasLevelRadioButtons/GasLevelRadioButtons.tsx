@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
 import CustomRadio from '@@components/BasicComponents/Form/CustomRadio';
-import { GAS_LEVEL } from '@@constants/transaction.constant';
+import { GAS_LEVEL } from '@@constants/gas.constant';
 
 import * as S from './GasLevelRadioButtons.style';
 import { IGasLevelRadioButtonsProps } from './GasLevelRadioButtons.type';

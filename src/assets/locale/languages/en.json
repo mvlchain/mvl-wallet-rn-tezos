@@ -399,11 +399,6 @@
   "warning": "Warning",
   "warning_connect_account_description": "To connect with new %s account, please disconnect current %s account and try again.",
   "warning_connect_account_tittle": "Your account is connected to other %s account.",
-  "authentication": {
-    "auth_prompt_title": "Authentication required",
-    "auth_prompt_desc": "Please authenticate in order to use MetaMask",
-    "fingerprint_prompt_title": "Authentication required",
-    "fingerprint_prompt_desc": "Use your fingerprint to unlock MetaMask",
-    "fingerprint_prompt_cancel": "Cancel"
-  }
+  "warning_before_transaction_fee_input": "Estimated Time and Transaction Fee can be checked after entering the Send Address & Amount",
+  "warning_before_transaction_fee_input_without_time": "Transaction Fee can be checked after entering the Send Address & Amount"
 }

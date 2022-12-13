@@ -1,9 +1,10 @@
+import { Estimate } from '@taquito/taquito';
 import { BigNumber } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
 import { injectable, inject } from 'tsyringe';
 
+import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
-import { GAS_LEVEL_SETTING } from '@@constants/transaction.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
 import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest, TGasLevel } from './GasService.type';
@@ -52,26 +53,13 @@ export class GasService implements IGasService {
     try {
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          if (!tip || !estimatedGas) {
-            throw new Error(
-              `Current network has Tezos network fee type, 
-             tip parameter is required which means additionalFee in taquito
-             and estimatedGas is required too`
-            );
+          if (!tip || !baseFee) {
+            throw new Error(`basefee, tip,estimatedGas is required`);
           }
-          //Tezos needs conversion.
-          //Because To make Tezos interface correspond with Ethereum, state stored and entered in units of big numbers
-          const tipTezos = parseFloat(formatUnits(tip, 'gwei'));
-          const estimatedGasTezos = parseFloat(formatUnits(estimatedGas, 'gwei'));
-          return this.gasRepositoryTezos.getTotalGasFee({ tip: tipTezos, estimatedGas: estimatedGasTezos });
-
+          return this.gasRepositoryTezos.getTotalGasFee({ baseFee, tip });
         case NETWORK_FEE_TYPE.EIP1559:
           if (!tip || !baseFee || !estimatedGas) {
-            throw new Error(
-              `Current network has Eip1559 network fee type, 
-             So tip and baseFee, estimatedGas parameter is required 
-             which means maxPriorityPerGas and gasPrice per gas and gasUsage in ethersjs`
-            );
+            throw new Error(`basefee, tip,estimatedGas is required`);
           }
           return this.gasRepositoryEip1559.getTotalGasFee({
             baseFee,
@@ -80,20 +68,13 @@ export class GasService implements IGasService {
           });
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           if (!baseFee || !gasLimit) {
-            throw new Error(
-              `Current network has legacy ethereum network fee type, 
-             baseFee parameter is required which means gasPrice per gas in ethersjs`
-            );
+            throw new Error(`basefee,estimatedGas is required`);
           }
           return this.gasRepository.getTotalGasFee({ baseFee, gasLimit });
       }
     } catch (err) {
       console.log(err);
     }
-  };
-
-  getEstimateTime = (gasLevel: TGasLevel) => {
-    return GAS_LEVEL_SETTING[gasLevel].waitTime;
   };
 
   estimateGas = async ({ selectedNetwork, selectedWalletIndex, to, value, data }: IEstimateGasRequest) => {
@@ -105,19 +86,32 @@ export class GasService implements IGasService {
           if (!value) {
             throw new Error('value is required');
           }
-          const valueTezos = parseFloat(formatUnits(value, 'gwei'));
-          const gasUsageTezos = await this.gasRepositoryTezos.estimateGas({ rpcUrl: network.rpcUrl, to, amount: valueTezos });
-          return parseUnits(gasUsageTezos.consumedMilligas.toString(), 'gwei');
+          const valueTezos = parseFloat(formatUnits(value, 6));
+          const estimationTezos = await this.gasRepositoryTezos.estimateGas({
+            rpcUrl: network.rpcUrl,
+            walletPrivateKey: wallet.privateKey,
+            to,
+            amount: valueTezos,
+          });
+          if (!estimationTezos) {
+            throw new Error('fail to estimate');
+          }
+          return {
+            baseFee: parseUnits(estimationTezos.totalCost.toString(), 0),
+            gasUsage: BigNumber.from(estimationTezos.gasLimit.toString()),
+          };
         case NETWORK_FEE_TYPE.EIP1559:
-          return await this.gasRepository.estimateGas(
+          const estimationEip1559 = await this.gasRepository.estimateGas(
             { rpcUrl: network.rpcUrl, chainId: network.chainId },
             { from: wallet.address, to, value, data }
           );
+          return { gasUsage: estimationEip1559 };
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-          return await this.gasRepository.estimateGas(
+          const estimationLegacy = await this.gasRepository.estimateGas(
             { rpcUrl: network.rpcUrl, chainId: network.chainId },
             { from: wallet.address, to, value, data }
           );
+          return { gasUsage: estimationLegacy };
       }
     } catch (err) {
       console.log(err);

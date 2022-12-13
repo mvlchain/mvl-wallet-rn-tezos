@@ -60,7 +60,7 @@ const useTokenSend = (tokenDto: TokenDto) => {
   const setData = async () => {
     if (!to || !value) return;
     if (tokenDto.contractAddress) {
-      const data = await transactionService.encodeTransferData(to, value);
+      const data = await transactionService.getTransferData(selectedNetwork, selectedWalletIndex[selectedNetwork], to, value);
       setBody({
         data,
       });
@@ -68,9 +68,15 @@ const useTokenSend = (tokenDto: TokenDto) => {
   };
 
   //show confirm modal
-  const confirm = async (gasFeeInfo: IGasFeeInfo, total: BigNumber) => {
+  const confirm = async (gasFeeInfo: IGasFeeInfo) => {
     if (!to || !value) return;
-    openModal(MODAL_TYPES.CONFIRM_SEND, { recipientAddress: to, amount: value, fee: total, tokenDto, onConfirm: send(gasFeeInfo) });
+    openModal(MODAL_TYPES.CONFIRM_SEND, {
+      recipientAddress: to,
+      amount: value,
+      fee: gasFeeInfo.total.toString(),
+      tokenDto,
+      onConfirm: send(gasFeeInfo),
+    });
   };
 
   //send transaction
