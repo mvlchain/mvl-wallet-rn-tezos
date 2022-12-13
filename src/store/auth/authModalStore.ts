@@ -1,10 +1,10 @@
+import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
 
 import { IAuthModalStore, TAuthModal } from './authModalStore.type';
 
-export const authModalStore = create<IAuthModalStore>()(
-  devtools(
+export const authModalStore = create<IAuthModalStore>(
+  zustandFlipper(
     (set, get) => ({
       isOpen: {
         tos: false,
@@ -34,6 +34,6 @@ export const authModalStore = create<IAuthModalStore>()(
           'closeAuthModal'
         ),
     }),
-    { name: 'authModalStore' }
+    'authModalStore'
   )
 );
