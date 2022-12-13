@@ -17,7 +17,7 @@ export const useReceiveQRModal = ({ token, address, value }: IUseReceiveQRModalP
     (async () => {
       const qrLink = await buildReceiveLink({ token, address, value });
       console.log('qrLink:  ', decodeURIComponent(qrLink));
-      setQR(qrLink);
+      setQR(decodeURIComponent(qrLink));
     })();
   }, []);
 
