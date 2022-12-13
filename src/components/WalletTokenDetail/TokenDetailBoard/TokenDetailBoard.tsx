@@ -10,6 +10,7 @@ import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';
+import { TTokenReceiveRootStackProps } from '@@screens/WalletScreen/WalletTokenReceive/WalletTokenRecieve.type';
 import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { fontSize, width, height } from '@@utils/ui';
@@ -20,11 +21,14 @@ function TokenDetailBoard() {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { params } = useRoute<TTokenDetailRouteProps>();
-  const navigation = useNavigation<TTokenSendRootStackProps>();
+  const navigation = useNavigation<TTokenSendRootStackProps | TTokenReceiveRootStackProps>();
   const { balance } = useOneTokenBalance(params.tokenDto);
   const { price } = useOneTokenPrice(params.tokenDto, balance);
   const gotoSend = () => {
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, params);
+  };
+  const gotoReceive = () => {
+    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_RECEIVE, params);
   };
 
   return (
@@ -42,7 +46,13 @@ function TokenDetailBoard() {
         </S.TokenAmountWrapper>
       </S.TokenInfoContainer>
       <S.ReceiveSendContainer>
-        <PrimaryButton label={t('receive')} onPress={() => {}} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+        <PrimaryButton
+          label={t('receive')}
+          onPress={gotoReceive}
+          size={'small'}
+          wrapperStyle={{ flex: 1 }}
+          textStyle={{ lineHeight: fontSize(14) }}
+        />
         <S.Gap />
         <PrimaryButton label={t('send')} onPress={gotoSend} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
       </S.ReceiveSendContainer>
