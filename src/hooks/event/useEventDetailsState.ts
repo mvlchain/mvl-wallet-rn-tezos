@@ -46,20 +46,35 @@ export interface IEventPointAmount {
  * Combination of following usecases
  *
  * UseCases
- *  • useThirdPartyConnection (O)
- *  • useUserPoints (O)
- *  • useClaimStatusInformation (O)
- *    - useClaimInfomation (O)
- *    - useClaimStatus (O)
+ *  • useThirdPartyConnection
+ *  • useUserPoints
+ *  • useClaimStatusInformation
+ *    - useClaimInfomation
+ *    - useClaimStatus
+ *
+ * isClaimable field is equal to the conditions as follows
+ * ```
+ * ((!isAllowParticipationInClaim &&
+ *   (status == null ||
+ *     status == 'CANCELED' ||
+ *     status == 'FAILED_TRANSFER' ||
+ *     status == 'FAILED_WITHDRAW')) ||
+ *   isAllowParticipationInClaim) &&
+ *   (amount > 0 || subCurrencyAmount == null || (subCurrencyAmount != null && subCurrencyAmount > 0)) &&
+ *   currentPoint >= lowerLimitPoint
+ * ```
  */
 export const useEarnEventDetailsState = (
   event: EarnEvent,
   deepLink?: ThirdPartyDeepLink
 ): {
+  phase: valueOf<typeof EventPhase>;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
 } => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
+
+  const [phase, setPhase] = useState<valueOf<typeof EventPhase>>(EventPhase.NotAvailable);
 
   const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
@@ -73,9 +88,11 @@ export const useEarnEventDetailsState = (
   // UseCase: useThirdPartyConnection
   useEffect(() => {
     (async () => {
+      setPhase(getEventPhase(event));
+
       const thirdPartyApp = event.app;
+
       if (thirdPartyApp) {
-        console.log(`Event> thirdPartyApp found`);
         const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
 
         try {
@@ -107,7 +124,7 @@ export const useEarnEventDetailsState = (
     (async () => {
       if (thirdParty.thirdPartyConnection && isPointInquiryAvailable(event, thirdParty.isThirdPartySupported)) {
         try {
-          const res = await repository.getCurrentUserPoints(event.id);
+          const res = await repository.getUserPoints(event.id);
           setThirdParty({ ...thirdParty, points: res });
         } catch (e) {
           console.error(e);
@@ -125,7 +142,6 @@ export const useEarnEventDetailsState = (
   useEffect(() => {
     (async () => {
       const phase = getEventPhase(event);
-      console.log(`EventAction> ClaimStatusInfo phase: ${phase.toString()}`);
 
       const thirdPartyConnection = thirdParty.thirdPartyConnection;
       if (phase === EventPhase.OnClaim) {
@@ -147,6 +163,7 @@ export const useEarnEventDetailsState = (
   }, [thirdParty]);
 
   return {
+    phase,
     thirdParty,
     claimStatusInfo,
   } as const;
@@ -183,14 +200,14 @@ function parseThirdPartyConnectionArgs(appId: string, deepLink?: ThirdPartyDeepL
   }
 
   return {
-    appId: appId,
-    token: token,
+    appId,
+    token,
     error: useCaseError,
   };
 }
 
 /**
- * Check if it's avilable to make an inquiry
+ * Check if it's avilable to make an inquiry about event points
  */
 function isPointInquiryAvailable(event: EarnEvent, isThirdPartySupported: boolean): boolean {
   const phase = getEventPhase(event);

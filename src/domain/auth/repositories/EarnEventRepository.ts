@@ -19,7 +19,7 @@ import { authRequest, Response } from '@@utils/request';
  */
 export interface EarnEventRepository {
   getEvents(): Promise<EarnEventDto[]>;
-  getCurrentUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
+  getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
   getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto>;
   getClaimInformation(eventId: string): Promise<EarnEventGetClaimResponseDto>;
   checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto>;
@@ -47,7 +47,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
    * @param event an event id
    * @returns points
    */
-  getCurrentUserPoints = async (eventId: string): Promise<EarnEventCurrentResponseDto[]> => {
+  getUserPoints = async (eventId: string): Promise<EarnEventCurrentResponseDto[]> => {
     const endpoint = `/v1/earn-event/${eventId}/participation/current`;
     const res = await authRequest.post<EarnEventCurrentResponseDto[]>(endpoint);
 
