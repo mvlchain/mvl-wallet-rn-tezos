@@ -22,15 +22,11 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
-  const [displayValue, setDisplayValue] = useState<string>(value ?? '');
+  const [displayValue, setDisplayValue] = useState<string | null>(null);
   const debounceCallback = useDebounce(onChange, 1000);
-
-  useEffect(() => {
-    debounceCallback(displayValue);
-  }, [displayValue]);
-
   const clearTextField = () => {
     setDisplayValue('');
+    debounceCallback(null);
     setShowDelete(false);
   };
   const onBlur = () => {
@@ -42,9 +38,9 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const onKeyPress = () => {
     setShowDelete(true);
   };
-
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setDisplayValue(data.nativeEvent.text);
+    debounceCallback(data.nativeEvent.text);
     if (!data.nativeEvent.text) {
       setShowDelete(false);
     }
@@ -59,7 +55,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           placeholder={placeholder}
           placeholderTextColor={color.grey300Grey700}
           isValid={isValid}
-          value={displayValue}
+          value={displayValue ?? value}
           onChange={onSet}
           scanable={scanable}
           style={style}
