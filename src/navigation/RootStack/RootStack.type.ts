@@ -30,7 +30,9 @@ export type TRootStackParamList = {
   WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse & { tokenDto: TokenDto };
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
-  WALLET_SCAN_QR: undefined;
+  WALLET_SCAN_QR: {
+    tokenDto: TokenDto;
+  };
   WALLET_TOKEN_RECEIVE: {
     tokenDto: TokenDto;
   };
