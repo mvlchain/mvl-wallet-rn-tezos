@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
+import { Share } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig } from '@@constants/network.constant';
@@ -20,7 +21,7 @@ export const useWalletTokenReceiveSelect = () => {
   type SeedPhraseScreenRouteProp = RouteProp<TRootStackParamList, 'WALLET_TOKEN_RECEIVE_SELECT'>;
   const { t } = useTranslation();
   const { params } = useRoute<SeedPhraseScreenRouteProp>();
-  const { openModal } = globalModalStore();
+  const { openModal, closeModal } = globalModalStore();
   const [tokenList, setTokenList] = useState<ITokenReceiveListItem[]>([]);
 
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
@@ -38,18 +39,27 @@ export const useWalletTokenReceiveSelect = () => {
     if (!walletList) return;
     const bigNumber = new BigNumber(amount);
     const formalize = formatBigNumber(bigNumber, token.decimals);
+    // TODO: history에 추가하기
     openModal(MODAL_TYPES.RECEIVE_QR, {
       title: t('qr_payment_send_link_title'),
       amount: formalize.toString(),
       token,
       address: walletList[_selectedWalletIndex]?.address,
-      cancelLabel: t('qr_payment_send_link_share_qr'),
+      confirmLabel: t('qr_payment_send_link_share_qr'),
       onConfirm: onPressShare,
-      onCancel: onPressShare,
+      onCancel: closeModal,
     });
   };
 
-  const onPressShare = () => {};
+  const onPressShare = async (qr: string) => {
+    try {
+      await Share.share({
+        message: qr,
+      });
+    } catch (error) {
+      throw new Error(`error:  ${error}`);
+    }
+  };
 
   const onPressReceivetoken = (token: TokenDto) => {
     openModal(MODAL_TYPES.AMOUNT_INPUT, {

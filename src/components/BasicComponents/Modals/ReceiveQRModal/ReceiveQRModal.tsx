@@ -20,7 +20,7 @@ function ReceiveQRModal({ title, amount, token, address, cancelLabel, confirmLab
       isVisible={modalType === MODAL_TYPES.RECEIVE_QR}
       onConfirm={() => {
         if (onConfirm) {
-          onConfirm();
+          onConfirm(qr);
         }
       }}
       onCancel={onCancel}
