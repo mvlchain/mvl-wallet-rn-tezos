@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { AnimatedFlashList, FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl } from 'react-native';
@@ -7,11 +8,11 @@ import { RefreshControl } from 'react-native';
 import { EarnEvent } from '@@domain/model/EarnEvent';
 import { useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { useRefetchByRefreshControl } from '@@hooks/useRefetchByRefreshControl';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 
 import { EarnEventContent } from './EarnEventContent';
 import * as S from './EarnEventListScreen.style';
 import { EmptyEarnEventContent } from './EmptyEarnEventContent';
-
 /**
  * EarnEventList screen
  *
@@ -21,10 +22,22 @@ export const EarnEventListScreen = () => {
   const { t } = useTranslation();
   const { isLoading, error, data, refetch } = useEarnEventList();
   const { refreshing, refresh } = useRefetchByRefreshControl(refetch);
+  const navigation = useNavigation<TRootStackNavigationProps<typeof ROOT_STACK_ROUTE.MAIN>>();
 
   // callback rendering EarnEventContent (by FlashList)
   const renderEarnEventContents = useCallback(({ item }: ListRenderItemInfo<EarnEvent>) => {
-    return <EarnEventContent timeLabel={item.timeDescription} avatarUrl={item.iconUrl} title={item.title} subtitle={item.subTitle} />;
+    return (
+      <EarnEventContent
+        timeLabel={item.timeDescription}
+        avatarUrl={item.iconUrl}
+        title={item.title}
+        subtitle={item.subTitle}
+        onPress={() => {
+          // onItemClick event
+          navigation.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, { data: item });
+        }}
+      />
+    );
   }, []);
 
   return (

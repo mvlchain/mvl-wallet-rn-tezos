@@ -26,7 +26,7 @@ import {
 } from '@@assets/image';
 import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
-import EarnEventScreen from '@@screens/EarnEventScreen';
+import { EarnEventListScreen } from '@@screens/EarnEventScreen';
 import SettingScreen from '@@screens/SettingScreen';
 import Trade from '@@screens/Trade';
 import WalletScreen from '@@screens/WalletScreen';
@@ -69,7 +69,7 @@ function MainTab() {
     },
     {
       name: MAIN_TAB_ROUTE.EVENT,
-      component: EarnEventScreen,
+      component: EarnEventListScreen,
       options: {
         tabBarIcon: ({ size, focused }) => (focused ? <EventSelected width={size} height={size} /> : <EventNormal width={size} height={size} />),
       },

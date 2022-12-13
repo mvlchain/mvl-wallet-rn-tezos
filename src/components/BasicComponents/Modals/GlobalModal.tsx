@@ -1,3 +1,4 @@
+import RewardReceiptModal from '@@screens/EarnEventScreen/RewardReceiptModal/RewardReceiptModal';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import BottomSelectModal from './BottomSelectModal';
@@ -18,6 +19,7 @@ export const MODAL_TYPES = {
   WALLET_LIST: 'WALLET_LIST',
   CONFIRM_SEND: 'CONFIRM_SEND',
   CONFIRM_TX_PIN: 'CONFIRM_TX_PIN',
+  REWARD_RECEIPT: 'REWARD_RECEIPT',
 } as const;
 
 export const MODAL_COMPONENTS = {
@@ -29,6 +31,7 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.TEXT_INPUT]: TextInputModal,
   [MODAL_TYPES.CONFIRM_SEND]: ConfirmSendModal,
   [MODAL_TYPES.CONFIRM_TX_PIN]: ConfirmTxPinModal,
+  [MODAL_TYPES.REWARD_RECEIPT]: RewardReceiptModal,
 };
 
 export const GlobalModal = () => {
