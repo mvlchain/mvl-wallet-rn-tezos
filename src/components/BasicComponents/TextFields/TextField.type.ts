@@ -48,7 +48,7 @@ export interface ITradeVolumeComponentProps {
   onSelect?: () => void;
   label?: string;
   tokenDto: TokenDto;
-  value: BigNumber | null;
+  value?: BigNumber | null;
   onChange: (amount: any) => void;
   hint?: string;
   iconUrl?: string;
