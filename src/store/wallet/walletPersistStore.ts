@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
 import { Network, NETWORK } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
@@ -35,9 +36,9 @@ const initState: Type.IWalletPersistState = {
   },
 };
 
-const walletPersistStore = create<Type.IWalletPersist>()(
-  devtools(
-    persist(
+const walletPersistStore = create(
+  zustandFlipper(
+    persist<Type.IWalletPersist>(
       (set) => ({
         ...initState,
         initWallet: () =>
@@ -45,87 +46,67 @@ const walletPersistStore = create<Type.IWalletPersist>()(
             ...initState,
           })),
         selectWallet: (index: number) =>
-          set(
-            (state) => ({
-              selectedWalletIndex: {
-                ...state.selectedWalletIndex,
-                [state.selectedNetwork]: index,
-              },
-            }),
-            false,
-            'selectWallet'
-          ),
-        selectNetwork: (network: Network) =>
-          set(
-            () => ({
-              selectedNetwork: network,
-            }),
-            false,
-            'selectNetwork'
-          ),
-        setWallets: (network: Network, wallets: Type.IPersistWallet[]) =>
-          set((state) => ({ walletList: { ...state.walletList, [network]: wallets } }), false, 'setWallet'),
-        editWalletName: (wallet: Type.IPersistWallet, network: Network) =>
-          set(
-            (state) => ({
-              walletList: {
-                ...state.walletList,
-                [network]: state.walletList[network].map((origin) => {
-                  if (origin.index === wallet.index) {
-                    return { ...origin, name: wallet.name };
-                  }
-                  return origin;
-                }),
-              },
-            }),
-            false,
-            'editWalletName'
-          ),
-        createWallet: (network: Network) =>
-          set(
-            (state) => ({
-              walletList: {
-                ...state.walletList,
-                [network]: [
-                  ...state.walletList[network],
-                  { index: state.walletList[network].length, name: `Wallet ${state.walletList[network].length + 1}` },
-                ],
-              },
-            }),
-            false,
-            'createWallet'
-          ),
-        addReceiveHistory: (network: Network, token: TokenDto, address: string, amount: string) =>
-          set(
-            (state) => {
-              let _receiveHistory = state.receiveHistory[network];
-              _receiveHistory = _receiveHistory.filter((history) => history.token.symbol !== token.symbol);
-              if (_receiveHistory.length > 2) {
-                _receiveHistory.pop();
-              }
-              _receiveHistory.unshift({
-                token,
-                address,
-                amount,
-              });
-              return {
-                ...state,
-                receiveHistory: {
-                  ...state.receiveHistory,
-                  [network]: [..._receiveHistory],
-                },
-              };
+          set((state) => ({
+            selectedWalletIndex: {
+              ...state.selectedWalletIndex,
+              [state.selectedNetwork]: index,
             },
-            false,
-            'addReceiveHistory'
-          ),
+          })),
+        selectNetwork: (network: Network) =>
+          set(() => ({
+            selectedNetwork: network,
+          })),
+        setWallets: (network: Network, wallets: Type.IPersistWallet[]) =>
+          set((state) => ({ walletList: { ...state.walletList, [network]: wallets } })),
+        editWalletName: (wallet: Type.IPersistWallet, network: Network) =>
+          set((state) => ({
+            walletList: {
+              ...state.walletList,
+              [network]: state.walletList[network].map((origin) => {
+                if (origin.index === wallet.index) {
+                  return { ...origin, name: wallet.name };
+                }
+                return origin;
+              }),
+            },
+          })),
+        createWallet: (network: Network) =>
+          set((state) => ({
+            walletList: {
+              ...state.walletList,
+              [network]: [
+                ...state.walletList[network],
+                { index: state.walletList[network].length, name: `Wallet ${state.walletList[network].length + 1}` },
+              ],
+            },
+          })),
+        addReceiveHistory: (network: Network, token: TokenDto, address: string, amount: string) =>
+          set((state) => {
+            let _receiveHistory = state.receiveHistory[network];
+            _receiveHistory = _receiveHistory.filter((history) => history.token.symbol !== token.symbol);
+            if (_receiveHistory.length > 2) {
+              _receiveHistory.pop();
+            }
+            _receiveHistory.unshift({
+              token,
+              address,
+              amount,
+            });
+            return {
+              ...state,
+              receiveHistory: {
+                ...state.receiveHistory,
+                [network]: [..._receiveHistory],
+              },
+            };
+          }),
       }),
       {
         name: 'walletPersist',
         getStorage: () => AsyncStorage,
       }
     ),
-    { name: 'walletPersistStore', enabled: __DEV__ }
+    'walletPersistStore'
   )
 );
 

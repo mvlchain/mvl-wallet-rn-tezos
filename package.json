@@ -157,6 +157,7 @@
     "prettier": "^2.7.1",
     "react-native-dotenv": "^3.4.2",
     "react-native-flipper": "^0.176.0",
+    "react-native-flipper-zustand": "^2.0.1",
     "react-native-gesture-handler": "^2.5.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-test-renderer": "18.2.0",
