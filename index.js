@@ -9,6 +9,10 @@ import { setAxiosConfig } from '@@utils/request';
 import { name as appName } from './app.json';
 import App from './src/App';
 
+if (__DEV__) {
+  import('./src/ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
 Decimal.set({ precision: 1e9, toExpPos: 9e15 });
 
 (() => {

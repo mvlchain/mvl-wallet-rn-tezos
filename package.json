@@ -158,6 +158,7 @@
     "react-native-gesture-handler": "^2.5.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-test-renderer": "18.2.0",
+    "reactotron-react-native": "^5.0.3",
     "rn-nodeify": "^10.3.0",
     "ts-jest": "^29.0.3",
     "typescript": "^4.4.4"
