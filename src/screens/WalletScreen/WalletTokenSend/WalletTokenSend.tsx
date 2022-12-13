@@ -2,8 +2,6 @@
 import React from 'react';
 
 import { useRoute } from '@react-navigation/native';
-import { Keyboard } from 'react-native';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
