@@ -26,7 +26,7 @@ export type TRootStackParamList = {
   };
   WALLET_TOKEN_SEND: {
     tokenDto: TokenDto;
-    parsedData?: {
+    scanData?: {
       address: string;
       amount?: string;
     };
