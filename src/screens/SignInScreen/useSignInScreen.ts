@@ -16,6 +16,16 @@ const useSignInScreen = () => {
   const { stage } = authPersistStore();
 
   const auth = useDi('AuthService');
+  const legacyAuthMigrationService = useDi('LegacyAuthMigrationService');
+
+  useEffect(() => {
+    const checkNeedsMigrationAndExec = async () => {
+      if (await legacyAuthMigrationService.needsMigration()) {
+        await legacyAuthMigrationService.migrate();
+      }
+    };
+    checkNeedsMigrationAndExec();
+  }, []);
 
   useEffect(() => {
     const getPinCodeAndAutoSignIn = async () => {
