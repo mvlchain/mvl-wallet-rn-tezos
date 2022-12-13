@@ -24,7 +24,7 @@ export const useWalletTokenReceiveSelect = () => {
   const { openModal, closeModal } = globalModalStore();
   const [tokenList, setTokenList] = useState<ITokenReceiveListItem[]>([]);
 
-  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
+  const { selectedNetwork, selectedWalletIndex, addReceiveHistory } = walletPersistStore();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
 
   const { data } = useTokenQuery(getNetworkConfig(params?.network).networkId, {
@@ -40,6 +40,7 @@ export const useWalletTokenReceiveSelect = () => {
     const bigNumber = new BigNumber(amount);
     const formalize = formatBigNumber(bigNumber, token.decimals);
     // TODO: history에 추가하기
+    addReceiveHistory(selectedNetwork, token, walletList[_selectedWalletIndex]?.address, formalize.toString());
     openModal(MODAL_TYPES.RECEIVE_QR, {
       title: t('qr_payment_send_link_title'),
       amount: formalize.toString(),
