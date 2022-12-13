@@ -16,7 +16,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
 /**
  * Event details screen that displays contents to the WebView.
  * WebView: display event contents (O)
- * EventActionControl (~ing)
+ * EventActionControl (O)
  * RewardReceiptModal (O WebView based modal)
  * ThirdPartyApp (O)
  * Alert modal
@@ -33,11 +33,11 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * UseCases
  *  • useConnectThirdParty
  *  • useDisconnectThirdParty
- *  • useThirdPartyConnection (CheckThirdPartyConnection)
- *  • useUserPoints
- *  • useOnClaimEvent
- *  • useClaimInfomation (GetClaimInfomation)
- *  • useClaimStatus
+ *  • useThirdPartyConnection (O)
+ *  • useUserPoints (O)
+ *  • useClaimStatusInformation (O)
+ *    - useClaimInfomation
+ *    - useClaimStatus
  *
  * Scenario (Analysis of legacy)
  *   whenPageLoaded (event: EarnEvent)
@@ -108,19 +108,21 @@ export function EarnEventDetailsScreen() {
   const { phase, thirdParty, claimStatusInfo } = useEarnEventDetailsState(params?.data);
 
   const data = params?.data;
+  const isThirdPartyConnected = thirdParty.thirdPartyConnection?.exists ?? false;
 
   function decorateThirdPartyApp(
-    thirdParyExists: boolean,
+    isThirdPartyConnected: boolean,
     thirdPartyDisplayName: string | null,
     thirdPartyAppName: string | undefined
   ): {
+    isThirdPartyConnected: boolean;
     connectionState: string;
     displayName: string | undefined;
   } {
     let connectionState = '';
     let displayName: string | undefined = '';
 
-    if (thirdParyExists) {
+    if (isThirdPartyConnected) {
       connectionState = t('connected_account');
       displayName = thirdPartyDisplayName ?? undefined;
     } else {
@@ -129,6 +131,7 @@ export function EarnEventDetailsScreen() {
     }
 
     return {
+      isThirdPartyConnected,
       connectionState,
       displayName,
     };
@@ -143,7 +146,9 @@ export function EarnEventDetailsScreen() {
           {thirdParty.isThirdPartySupported && thirdParty.thirdPartyConnection ? (
             <ThirdPartyApp
               avatarUrl={data.iconUrl}
-              {...decorateThirdPartyApp(thirdParty.thirdPartyConnection.exists ?? false, thirdParty.thirdPartyConnection.displayName, data.app?.name)}
+              {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, data.app?.name)}
+              onConnectPress={() => {}}
+              onDisconnectPress={() => {}}
             />
           ) : null}
 

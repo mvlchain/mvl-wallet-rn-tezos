@@ -151,8 +151,13 @@ function setUpActionControls(
 
       const avatarUrl = claimStatusInfo.subCurrencyIconUrl ? claimStatusInfo.subCurrencyIconUrl : claimStatusInfo.currencyIconUrl;
 
-      // is the event already claimed.
-      const isClaimCompleted = claimStatusInfo.status === 'COMPLETED';
+      /**
+       * COMPLETED: already claimed.
+       * COMPLETED_TRANSFER: rewarding is in progress
+       * isAllowParticipationInClaim: a flat that the users are allowed to claim multiple times
+       */
+      const isClaimCompleted =
+        !event.isAllowParticipationInClaim || claimStatusInfo.status === 'COMPLETED' || claimStatusInfo.status === 'COMPLETED_TRANSFER';
       return {
         isSvgAvatar: isSvg(avatarUrl),
         avatarUrl,

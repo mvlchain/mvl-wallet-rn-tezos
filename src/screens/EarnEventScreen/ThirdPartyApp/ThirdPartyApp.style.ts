@@ -55,3 +55,7 @@ export const ThirdPartyDisplayName = styled.Text`
   margin-top: ${height * 4}px;
   color: ${({ theme }) => theme.color.blackWhite};
 `;
+
+export const ButtonLayout = styled.View`
+  width: ${width * 120}px;
+`;
