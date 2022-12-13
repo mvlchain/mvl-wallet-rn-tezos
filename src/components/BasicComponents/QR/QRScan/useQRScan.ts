@@ -46,8 +46,8 @@ const useQRScan = (targetToken?: string) => {
       openModal(MODAL_TYPES.TITLE_ONLY, t('dialog_wrong_qr_code_title'));
       return;
     }
-    const parsedData = JSON.parse(scanResult);
-    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, parsedData });
+    const scanData = JSON.parse(scanResult);
+    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, scanData });
   }, []);
 
   const getQRFromGallery = useCallback(async () => {

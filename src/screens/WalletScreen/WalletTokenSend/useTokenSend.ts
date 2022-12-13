@@ -48,8 +48,8 @@ const useTokenSend = () => {
   }, []);
 
   const setInitialFromRouteProps = () => {
-    if (params?.parsedData?.address) {
-      setBody({ to: params.parsedData.address });
+    if (params?.scanData?.address) {
+      setBody({ to: params.scanData.address });
     }
     // TODO: 향후 토큰디테일 페이지에서 qr을 스캔하는것이 아니라, 월렛 메인에서 불러올 경우에 네트워크 선택은 어떻게 할 것인지에 따라서
     // 어마운트 입력이 달라짐. 테조스는 decimal 6이고 이더는 18이니까..
