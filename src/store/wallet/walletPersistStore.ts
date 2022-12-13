@@ -3,6 +3,7 @@ import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 import { Network, NETWORK } from '@@constants/network.constant';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import * as Type from './walletPersistStore.type';
 
@@ -23,6 +24,14 @@ const initState: Type.IWalletPersistState = {
     BSC_TESTNET: [{ index: -1, name: 'default Wallet' }],
     TEZOS: [{ index: -1, name: 'default Wallet' }],
     TEZOS_GHOSTNET: [{ index: -1, name: 'default Wallet' }],
+  },
+  receiveHistory: {
+    ETHEREUM: [],
+    BSC: [],
+    GOERLI: [],
+    BSC_TESTNET: [],
+    TEZOS: [],
+    TEZOS_GHOSTNET: [],
   },
 };
 
@@ -85,6 +94,30 @@ const walletPersistStore = create<Type.IWalletPersist>()(
             }),
             false,
             'createWallet'
+          ),
+        addReceiveHistory: (network: Network, token: TokenDto, address: string, amount: string) =>
+          set(
+            (state) => {
+              let _receiveHistory = state.receiveHistory[network];
+              _receiveHistory = _receiveHistory.filter((history) => history.token.symbol !== token.symbol);
+              if (_receiveHistory.length > 2) {
+                _receiveHistory.pop();
+              }
+              _receiveHistory.unshift({
+                token,
+                address,
+                amount,
+              });
+              return {
+                ...state,
+                receiveHistory: {
+                  ...state.receiveHistory,
+                  [network]: [..._receiveHistory],
+                },
+              };
+            },
+            false,
+            'addReceiveHistory'
           ),
       }),
       {
