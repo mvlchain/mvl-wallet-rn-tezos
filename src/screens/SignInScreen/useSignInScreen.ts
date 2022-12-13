@@ -17,6 +17,17 @@ const useSignInScreen = () => {
 
   const auth = useDi('AuthService');
 
+  useEffect(() => {
+    const getPinCodeAndAutoSignIn = async () => {
+      const pKey = await auth.autoSignIn();
+      if (pKey === null) {
+        return;
+      }
+      setPKey(pKey);
+    };
+    getPinCodeAndAutoSignIn();
+  }, []);
+
   const signIn = async (provider: AuthProvider) => {
     try {
       const key = await auth.signIn(provider);
