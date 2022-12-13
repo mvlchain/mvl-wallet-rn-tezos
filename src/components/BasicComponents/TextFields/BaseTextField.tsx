@@ -65,7 +65,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           onKeyPress={onKeyPress}
         />
         {unit && <S.Unit>{unit}</S.Unit>}
-        {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
+        {(showDelete || displayValue || value) && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         {scanable && gotoScan && (
           <ScanIcon
             onPress={() => {

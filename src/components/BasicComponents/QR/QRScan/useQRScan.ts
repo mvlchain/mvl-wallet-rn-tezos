@@ -47,7 +47,9 @@ const useQRScan = (targetToken?: string) => {
       return;
     }
     const scanData = JSON.parse(scanResult);
-    navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, scanData });
+    if (scanData && scanData.address) {
+      navigation.push(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, scanData: { address: scanData.address } });
+    }
   }, []);
 
   const getQRFromGallery = useCallback(async () => {
