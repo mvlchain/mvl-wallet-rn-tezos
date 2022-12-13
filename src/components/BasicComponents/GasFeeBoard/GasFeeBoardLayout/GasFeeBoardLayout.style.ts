@@ -5,6 +5,7 @@ import { fontSize, height, width } from '@@utils/ui';
 export const Container = styled.View`
   flex: 1;
   justify-content: space-between;
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
 export const InnerContainer = styled.View`
@@ -51,6 +52,7 @@ export const ConfirmWrapper = styled.View`
 
 export const Warning = styled.View`
   flex-direction: row;
+  width: 100%;
   margin-top: ${height * 10}px;
 `;
 
@@ -59,6 +61,8 @@ export const WarningIconWrapper = styled.View`
 `;
 
 export const WarningText = styled.Text`
+  flex: 1;
+  flex-wrap: wrap;
   ${({ theme }) => theme.font.Label.sm}
   line-height: ${fontSize(16)}px;
   color: ${({ theme }) => theme.color.red};

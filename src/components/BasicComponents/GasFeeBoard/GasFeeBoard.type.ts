@@ -5,6 +5,6 @@ import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 export interface IGasFeeBoardProps {
   isRevision: boolean;
-  onConfirm: (param: IGasFeeInfo, total: BigNumber) => Promise<void>;
+  onConfirm: (param: IGasFeeInfo) => Promise<void>;
   tokenDto: TokenDto;
 }

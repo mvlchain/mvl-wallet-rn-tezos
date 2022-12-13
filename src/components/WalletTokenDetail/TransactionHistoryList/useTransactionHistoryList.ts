@@ -23,7 +23,7 @@ const useTransactionHistoryList = () => {
   const [beforeindex, setBeforeIndex] = useState(2147483647);
   const { currentCriteria, filterCriteria } = useTransactionHistoryFilter();
 
-  const [myAddress, setMyAddress] = useState('');
+  const [myAddress, setMyAddress] = useState<string | null>(null);
   const setWallet = async () => {
     const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
     setMyAddress(wallet.address);
@@ -46,7 +46,7 @@ const useTransactionHistoryList = () => {
 
   const { refetch } = useTransactionHistoryQuery(
     {
-      network: pickNetwork,
+      network: network.networkId,
       address: myAddress,
       ticker: params.tokenDto.symbol,
       beforeblock,

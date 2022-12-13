@@ -1,8 +1,9 @@
 import { InMemorySigner } from '@taquito/signer';
-import { Estimate, TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
+import { createNewPollingBasedHeadObservable } from '@taquito/taquito/dist/types/wallet/operation-factory';
 import Decimal from 'decimal.js';
 import { BigNumber, ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther, formatUnits } from 'ethers/lib/utils';
 import { injectable } from 'tsyringe';
 
 import { loadingFunction } from '@@utils/loadingHelper';
@@ -11,22 +12,24 @@ import { IGetTotalGasFeeParamsTEZ, IGasRepositoryTezos, IEstimateGasParamsTEZ } 
 
 @injectable()
 export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
-  getTotalGasFee = ({ tip, estimatedGas }: IGetTotalGasFeeParamsTEZ) => {
-    const tipInDecimal = new Decimal(tip);
-    const estimatedGasInDecimal = new Decimal(estimatedGas.toString());
+  getTotalGasFee = ({ tip, baseFee }: IGetTotalGasFeeParamsTEZ) => {
+    const baseFeeInDecimal = new Decimal(baseFee.toString());
+    const tipInDecimal = new Decimal(tip.toString());
 
-    const totalGas = estimatedGasInDecimal.add(tipInDecimal);
+    const totalGas = baseFeeInDecimal.add(tipInDecimal);
     const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));
-
-    return formatEther(totalGasInBN);
+    return formatUnits(totalGasInBN, 6);
   };
 
-  estimateGas = loadingFunction<Estimate>(async ({ rpcUrl, to, amount }: IEstimateGasParamsTEZ) => {
-    //TODO: 임시 주소 TEZO에 맞는 지갑 주소 필요함, 양식이 다름
-    const Tezos = new TezosToolkit(rpcUrl);
-    Tezos.setProvider({
-      signer: new InMemorySigner('edsk2rKA8YEExg9Zo2qNPiQnnYheF1DhqjLVmfKdxiFfu5GyGRZRnb'),
-    });
-    return await Tezos.estimate.transfer({ to, amount });
-  });
+  estimateGas = async ({ rpcUrl, walletPrivateKey, to, amount }: IEstimateGasParamsTEZ) => {
+    try {
+      const Tezos = new TezosToolkit(rpcUrl);
+      Tezos.setProvider({
+        signer: new InMemorySigner(walletPrivateKey),
+      });
+      return await Tezos.estimate.transfer({ to, amount });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 }

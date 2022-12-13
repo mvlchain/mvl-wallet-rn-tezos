@@ -2,7 +2,8 @@
 import React from 'react';
 
 import { useRoute } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Keyboard } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
@@ -19,8 +20,10 @@ function WalletTokenSend() {
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <ScrollView style={{ flex: 1 }}>
-      <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
-      <Divider thickness={DIVIDER_THICKNESS.THICK} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
+        <Divider thickness={DIVIDER_THICKNESS.THICK} />
+      </TouchableWithoutFeedback>
       <GasFeeBoard isRevision={false} onConfirm={confirm} tokenDto={params.tokenDto} />
     </ScrollView>
   );

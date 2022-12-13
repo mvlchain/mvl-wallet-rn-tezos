@@ -4,6 +4,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { height } from '@@utils/ui';
 
 import * as S from './GasFeeInputs.style';
@@ -20,18 +22,21 @@ function GasFeeInputs({
   setCustomGasLimit,
 }: IGasFeeInputsProps) {
   const { t } = useTranslation();
+  const { selectedNetwork } = walletPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
+  const tezosFeeType = network.networkFeeType === NETWORK_FEE_TYPE.TEZOS;
 
   return (
     <S.Container>
       <S.Label>{t('gas_price')}</S.Label>
       <S.InputWrapper>
-        <GasTextField value={customBaseFee} setValue={setCustomBaseFee} unit={'gwei'} />
+        <GasTextField value={customBaseFee} setValue={setCustomBaseFee} unit={tezosFeeType ? 'mutez' : 'gwei'} disabled={tezosFeeType} />
       </S.InputWrapper>
       {enableTip && (
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={customTip} setValue={setCustomTip} unit={'gwei'} />
+            <GasTextField value={customTip} setValue={setCustomTip} unit={tezosFeeType ? 'mutez' : 'gwei'} />
           </S.InputWrapper>
         </>
       )}

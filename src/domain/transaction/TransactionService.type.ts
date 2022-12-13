@@ -131,7 +131,7 @@ export interface IRegisterTransactionResponse {
 }
 
 export interface ITransactionService {
-  encodeTransferData: (to: string, value: BigNumber) => Promise<BytesLike | undefined>;
+  getTransferData: (network: Network, selectedWalletIndex: number, to: string, value: BigNumber) => Promise<BytesLike | undefined>;
   sendTransaction: ({
     selectedNetwork,
     selectedWalletIndex,

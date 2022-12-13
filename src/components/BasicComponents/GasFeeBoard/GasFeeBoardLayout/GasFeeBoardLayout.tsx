@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { View, Keyboard } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import { WarningIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
