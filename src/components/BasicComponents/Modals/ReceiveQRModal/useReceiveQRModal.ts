@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import BigNumber from 'bignumber.js';
 import qs from 'qs';
@@ -7,33 +5,19 @@ import qs from 'qs';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
-import { IDeepLinkParam, IUseReceiveQRModalParam } from './ReceiveQRModal.type';
+import { IDeepLinkParam } from './ReceiveQRModal.type';
 
 const domainUriPrefix = 'https://link.mvlclutch.io/short';
 
-export const useReceiveQRModal = ({ token, address, value, cacheQR }: IUseReceiveQRModalParam) => {
-  const [qr, setQR] = useState<string>();
-  const [displayAmount, setDisplayAmount] = useState<string>();
-  const { selectedNetwork, addReceiveHistory } = walletPersistStore();
+export const useReceiveQRModal = () => {
+  const { selectedNetwork } = walletPersistStore();
 
-  useEffect(() => {
-    if (cacheQR) {
-      setQR(cacheQR);
-    } else {
-      (async () => {
-        const bigNumber = new BigNumber(value);
-        const formalize = formatBigNumber(bigNumber, token.decimals);
-        setDisplayAmount(formalize.toString());
-        const qrLink = await buildReceiveShortLink({ token, address, value: formalize.toString() });
-        setQR(decodeURIComponent(qrLink));
-      })();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!qr) return;
-    addReceiveHistory(selectedNetwork, token, value, qr);
-  }, [qr]);
+  const generateQR = async ({ token, address, value }: IDeepLinkParam) => {
+    const bigNumber = new BigNumber(value);
+    const formalize = formatBigNumber(bigNumber, token.decimals);
+    const qrLink = await buildReceiveShortLink({ token, address, value: formalize.toString() });
+    return decodeURIComponent(qrLink);
+  };
 
   const buildDeepLink = ({ token, address, value }: IDeepLinkParam) => {
     const { contractAddress } = token;
@@ -61,7 +45,8 @@ export const useReceiveQRModal = ({ token, address, value, cacheQR }: IUseReceiv
   };
 
   return {
-    qr,
-    displayAmount,
+    buildReceiveLink,
+    buildReceiveShortLink,
+    generateQR,
   };
 };

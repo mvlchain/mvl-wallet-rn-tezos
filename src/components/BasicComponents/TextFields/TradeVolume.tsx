@@ -20,7 +20,7 @@ import * as Type from './TextField.type';
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-  const { useMax, onSelect, label, tokenDto, onChange, hint, disableHint } = props;
+  const { useMax, onSelect, label, tokenDto, onChange, hint, disableHint, debounceTime = 1000 } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const { balance } = useOneTokenBalance(tokenDto);
@@ -28,7 +28,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const debounceCallback = useDebounce((value: BigNumber | null) => {
     onChange(value);
     setShowDelete(!!value);
-  }, 1000);
+  }, debounceTime);
 
   useEffect(() => {
     debounceCallback(getUnitValue(displayValue));

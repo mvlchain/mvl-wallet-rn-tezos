@@ -1,8 +1,7 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import { BigNumber } from 'ethers';
-import { TextInputProps, TextInputChangeEventData } from 'react-native';
-import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
+import { TextInputProps } from 'react-native';
 
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
@@ -53,4 +52,5 @@ export interface ITradeVolumeComponentProps {
   hint?: string;
   iconUrl?: string;
   disableHint?: boolean;
+  debounceTime?: number;
 }

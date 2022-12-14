@@ -37,7 +37,7 @@ function AmountInputModal({ title, tokenDto, cancelLabel, confirmLabel, onCancel
       confirmLabel={confirmLabel}
       isConfirmDisabled={!value}
     >
-      <TradeVolume label={t('amount')} onChange={onChangeInput} useMax={false} tokenDto={tokenDto} disableHint={true} />
+      <TradeVolume label={t('amount')} onChange={onChangeInput} useMax={false} tokenDto={tokenDto} disableHint={true} debounceTime={0} />
     </ModalLayout>
   );
 }

@@ -20,4 +20,5 @@ export interface IRenderHistoryItem {
 export interface IHistory {
   token: TokenDto;
   amount: string;
+  cacheQR: string;
 }
