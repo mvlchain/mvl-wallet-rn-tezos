@@ -9,7 +9,7 @@ const INITIAL_TRANSACTION_REQUEST_BODY_STATE = {
   data: null,
   value: null,
 };
-export const transactionRequestStore = create<ITransactionRequestStore>()(
+export const transactionRequestStore = create<ITransactionRequestStore>(
   zustandFlipper(
     (set) => ({
       ...INITIAL_TRANSACTION_REQUEST_BODY_STATE,

@@ -47,7 +47,7 @@ function WalletTokenReceive() {
       <S.QRSection>
         <S.QRLabel>{t('scan_qr_code')}</S.QRLabel>
         <S.QRWrapper>
-          <QRcode address={address} />
+          <QRcode qr={address} />
         </S.QRWrapper>
       </S.QRSection>
     </S.Container>
