@@ -21,7 +21,7 @@ function WalletTransactionHistory() {
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
         <TransactionFeeBoard />
       </View>
-      <PendingTransactionButtons />
+      {/* <PendingTransactionButtons /> */}
     </S.Container>
   );
 }
