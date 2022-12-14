@@ -10,6 +10,7 @@ import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { TTransactionHistoryRouteProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { getDateFormat } from '@@utils/dateFormatter';
 
 import * as S from './TransactionDetailBoard.style';
 
@@ -21,7 +22,7 @@ function TransactionDetailBoard() {
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
   const { settedCurrency } = settingPersistStore();
-  const price = useOneTokenPrice(params.tokenDto, value);
+  const { price } = useOneTokenPrice(params.tokenDto, value);
   const [valueSign, setValueSign] = useState('');
   const network = getNetworkConfig(selectedNetwork);
 
@@ -48,7 +49,7 @@ function TransactionDetailBoard() {
       <S.TransactionDetailBoardContainer>
         <S.Row>
           <S.Label>{t('date')}</S.Label>
-          <S.Value>{updatedAt}</S.Value>
+          <S.Value>{getDateFormat(updatedAt, true)}</S.Value>
         </S.Row>
         <S.Row isMiddle={true}>
           <S.Label>{t('status')}</S.Label>
