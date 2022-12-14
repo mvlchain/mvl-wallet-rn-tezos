@@ -17,6 +17,7 @@ import { TTransactionHistoryRootStackProps } from '@@screens/WalletScreen/Wallet
 import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { getDateFormat } from '@@utils/dateFormatter';
 
 import * as S from './TransactionHistoryListItem.style';
 
@@ -33,7 +34,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const selectedNetwork = getNetworkName(false, pickNetwork);
   const { settedCurrency } = settingPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-  const price = useOneTokenPrice(params.tokenDto, value);
+  const { price } = useOneTokenPrice(params.tokenDto, value);
 
   const setSign = async () => {
     const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
@@ -63,7 +64,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
           <S.TransactionHistoryContentInnerWrapper>
             <S.TransactionStatusWrapper>
               <S.TransactionStatus>{status}</S.TransactionStatus>
-              <S.TransactionDate>{updatedAt}</S.TransactionDate>
+              <S.TransactionDate>{getDateFormat(updatedAt)}</S.TransactionDate>
             </S.TransactionStatusWrapper>
             <S.TransactionAmountWrapper>
               <S.TransactionAmount isCanceled={isCanceled}>
@@ -73,7 +74,9 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
               <S.TransactionBaseCurrency isCanceled={isCanceled}>{`${valueSign} ${price} ${settedCurrency}`}</S.TransactionBaseCurrency>
             </S.TransactionAmountWrapper>
           </S.TransactionHistoryContentInnerWrapper>
-          <RightIcon />
+          <S.IconWrapper>
+            <RightIcon />
+          </S.IconWrapper>
         </S.HistoryItemTopContent>
         {/* NOTE: 우선은 취소랑 스피드업 지원하지 않음 */}
         {/* {status === TTransactionStatus.PENDING && (

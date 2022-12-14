@@ -14,12 +14,12 @@ export const LabelWrapper = styled.View`
 `;
 export const TransactionHashLabel = styled.Text`
   ${({ theme }) => theme.font.Label.md};
-  font-family: ${({ theme }) => theme.fmRegular};
+  font-family: ${({ theme }) => theme.fmMedium};
   color: ${({ theme }) => theme.color.grey500};
 `;
 export const TransactionHash = styled.Text`
   margin-top: ${height * 8}px;
   ${({ theme }) => theme.font.Label.md};
-  font-family: ${({ theme }) => theme.fmRegular};
+  font-family: ${({ theme }) => theme.fmMedium};
   color: ${({ theme }) => theme.color.blackWhite};
 `;
