@@ -20,21 +20,7 @@ const ViewScanButton = ({ txHash }: { txHash: string }) => {
     }
     openModal(MODAL_TYPES.VIEW_SCAN, { url: `${EXPLORER_BASE_URL[selectedNetwork]}${txHash}` });
   };
-  //TODO: 임의설정, 각 스캐너명칭정하고 다국어 엑셀파일에 등록필요
-  const scanLabel = () => {
-    switch (pickNetwork) {
-      case NETWORK.ETH:
-        return t('view_etherscan');
-      case NETWORK.BSC:
-        return t('view_bscscan');
-      case NETWORK.TEZOS:
-        return t('view_tezosscan');
-      default:
-        return t('view_scan');
-    }
-  };
-
-  return <TextButton label={scanLabel()} onPress={onPress} disabled={false} />;
+  return <TextButton label={t('view_on_block_explorer')} onPress={onPress} disabled={false} />;
 };
 
 export default ViewScanButton;

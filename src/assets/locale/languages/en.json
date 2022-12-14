@@ -400,5 +400,6 @@
   "warning_connect_account_description": "To connect with new %s account, please disconnect current %s account and try again.",
   "warning_connect_account_tittle": "Your account is connected to other %s account.",
   "warning_before_transaction_fee_input": "Estimated Time and Transaction Fee can be checked after entering the Send Address & Amount",
-  "warning_before_transaction_fee_input_without_time": "Transaction Fee can be checked after entering the Send Address & Amount"
+  "warning_before_transaction_fee_input_without_time": "Transaction Fee can be checked after entering the Send Address & Amount",
+  "view_on_block_explorer": "View on block explorer"
 }
