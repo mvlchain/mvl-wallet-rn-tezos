@@ -4,7 +4,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import WalletScreen from '@@screens/WalletScreen';
-import WalletTokenReceive from '@@screens/WalletScreen/WalletTokenReceive';
 import WalletTokenReceiveSelect from '@@screens/WalletScreen/WalletTokenReceiveSelect';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { theme } from '@@style/theme';
@@ -27,10 +26,6 @@ function WalletStack() {
       options: {
         headerShown: false,
       },
-    },
-    {
-      name: WALLET_STACK_ROUTE.WALLET_TOKEN_RECEIVE,
-      component: WalletTokenReceive,
     },
     {
       name: WALLET_STACK_ROUTE.WALLET_TOKEN_RECEIVE_SELECT,

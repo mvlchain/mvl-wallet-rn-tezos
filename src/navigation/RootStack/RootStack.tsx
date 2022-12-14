@@ -31,6 +31,7 @@ import SettingTermsOfServiceScreen from '@@screens/SettingScreen/SettingTermsOfS
 import WalletEditTokenListScreen from '@@screens/WalletScreen/WalletEditTokenListScreen';
 import WalletScanQR from '@@screens/WalletScreen/WalletScanQR';
 import WalletTokenDetail from '@@screens/WalletScreen/WalletTokenDetail';
+import WalletTokenReceive from '@@screens/WalletScreen/WalletTokenReceive';
 import WalletTokenSend from '@@screens/WalletScreen/WalletTokenSend';
 import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCancel';
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
@@ -155,6 +156,12 @@ function RootStack() {
       component: WalletScanQR,
       options: handleStackHeaderOption({ title: t('scan_qr_code') }),
     },
+    {
+      name: ROOT_STACK_ROUTE.WALLET_TOKEN_RECEIVE,
+      component: WalletTokenReceive,
+      options: handleStackHeaderOption({ title: t('receive') }),
+    },
+
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT,
       component: WalletTransactionResult,

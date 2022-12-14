@@ -1,3 +1,5 @@
+import React from 'react';
+
 import QRCode from 'react-qr-code';
 
 import { width, height } from '@@utils/ui';

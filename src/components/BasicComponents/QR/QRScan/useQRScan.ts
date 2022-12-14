@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { NativeModules, Platform } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -10,6 +10,9 @@ import { useFrameProcessor } from 'react-native-vision-camera';
 import { BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
+import { TScanQRRouteProps } from '@@screens/WalletScreen/WalletScanQR/WalletScanQR.type';
+import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
 import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
@@ -18,6 +21,8 @@ const useQRScan = (targetToken?: string) => {
   const [scanResult, setScanResult] = useState<string | null>(null);
   const { openModal } = globalModalStore();
   const { t } = useTranslation();
+  const { params } = useRoute<TScanQRRouteProps>();
+  const navigation = useNavigation<TTokenSendRootStackProps>();
 
   useEffect(() => {
     requestPermission({ ios: [PERMISSIONS.IOS.CAMERA], android: [PERMISSIONS.ANDROID.CAMERA] }).then(async (res) => {
@@ -37,12 +42,14 @@ const useQRScan = (targetToken?: string) => {
 
   const goSendPage = useCallback((scanResult: string | null) => {
     if (!scanResult) return;
-    if (!scanResult.includes('token') || !scanResult.includes('address') || !scanResult.includes('amount')) {
+    if (!scanResult.includes('address')) {
       openModal(MODAL_TYPES.TITLE_ONLY, t('dialog_wrong_qr_code_title'));
       return;
     }
-    const parsedData = JSON.parse(scanResult);
-    //TODO: navigation 작업
+    const scanData = JSON.parse(scanResult);
+    if (scanData && scanData.address) {
+      navigation.push(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, { ...params, scanData: { address: scanData.address, amount: scanData.amount } });
+    }
   }, []);
 
   const getQRFromGallery = useCallback(async () => {
@@ -80,12 +87,14 @@ const useQRScan = (targetToken?: string) => {
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
     const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
-    if (!detectedBarcodes) return;
+    // if (!detectedBarcodes) return;
     //Scan area limit to inside overlay area
     // if (!detectedBarcodes || !detectedBarcodes[0] || !detectedBarcodes[0].cornerPoints) return;
     // const [topL, bottomL, bottomR, topR] = detectedBarcodes[0].cornerPoints;
     // if (topL.x < frame.width * 0.1 || topL.y < frame.height * 0.12 || bottomR.x > frame.width * 0.9 || bottomR.y > frame.width * 0.6) return;
-    runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
+    if (detectedBarcodes && detectedBarcodes[0]?.content?.data) {
+      runOnJS(setScanResult)(detectedBarcodes[0].content.data.toString());
+    }
   }, []);
 
   return {
