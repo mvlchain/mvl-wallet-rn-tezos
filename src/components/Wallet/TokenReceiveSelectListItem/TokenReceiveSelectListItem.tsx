@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { SvgUri } from 'react-native-svg';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { width } from '@@utils/ui';
 
@@ -34,7 +35,7 @@ function TokenReceiveSelectListItem({ tokenItem, amount, onPress }: ITokenReceiv
           {displayAmount && displayAmount} {tokenItem.symbol}
         </S.Text>
       </S.DataContainer>
-      <PrimaryButton onPress={onPress} label={t('receive')} size={'fit'} />
+      <PrimaryButton onPress={onPress} label={t('receive')} size={BUTTON_SIZE.FIT} />
     </S.Container>
   );
 }
