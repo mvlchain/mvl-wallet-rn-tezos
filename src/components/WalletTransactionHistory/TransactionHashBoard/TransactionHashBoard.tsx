@@ -4,6 +4,7 @@ import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import ViewScanButton from '@@components/BasicComponents/ViewScanButton';
 import useHeader from '@@hooks/useHeader';
 import {
   TTransactionHistoryRootStackProps,
@@ -22,7 +23,7 @@ function TransactionHashBoard() {
     <S.TransactionHashBoardContainer>
       <S.LabelWrapper>
         <S.TransactionHashLabel>{t('transaction_hash')}</S.TransactionHashLabel>
-        <TextButton label={t('view_etherscan')} onPress={() => {}} disabled={false} />
+        <ViewScanButton txHash={params.hash} />
       </S.LabelWrapper>
       <S.TransactionHash>{params.hash}</S.TransactionHash>
     </S.TransactionHashBoardContainer>
