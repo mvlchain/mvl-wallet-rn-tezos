@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useState } from 'react';
 
 import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
@@ -8,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { InvalidThirdPartyDeepLinkConnectionError } from '@@domain/error/InvalidThirdPartyConnectionRequestError';
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
-import { EarnEvent } from '@@domain/model/EarnEvent';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
@@ -64,30 +64,46 @@ export interface IEventPointAmount {
  *   currentPoint >= lowerLimitPoint
  * ```
  */
-export const useEarnEventDetailsState = (
-  event: EarnEvent,
+export const useEarnEventDetailsUiState = (
+  id: string,
+  data?: EarnEventDto,
   deepLink?: ThirdPartyDeepLink
 ): {
+  event: EarnEventDto | undefined;
   phase: valueOf<typeof EventPhase>;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
 } => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
 
+  const [event, setEvent] = useState<EarnEventDto | undefined>(data);
   const [phase, setPhase] = useState<valueOf<typeof EventPhase>>(EventPhase.NotAvailable);
-
   const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
     thirdPartyConnection: undefined,
-    points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
+    points: event?.pointInfoArr.map((data) => ({ ...data, amount: '0' })) ?? [],
     error: null,
   });
-
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
+
+  // UseCase: useEarnEventDetails
+  useEffect(() => {
+    (async () => {
+      console.log(`Event> useEarnEventDetails`);
+
+      if (!data && isNotBlank(id)) {
+        const res = await repository.getEvent(id);
+        setEvent(res);
+      }
+    })();
+  }, [id, data]);
 
   // UseCase: useThirdPartyConnection
   useEffect(() => {
     (async () => {
+      if (!event) return;
+      console.log(`Event> useThirdPartyConnection`);
+
       setPhase(getEventPhase(event));
 
       const thirdPartyApp = event.app;
@@ -122,6 +138,9 @@ export const useEarnEventDetailsState = (
   // UseCase: useUserPoints
   useEffect(() => {
     (async () => {
+      if (!event) return;
+      console.log(`Event> useUserPoints`);
+
       if (thirdParty.thirdPartyConnection && isPointInquiryAvailable(event, thirdParty.isThirdPartySupported)) {
         try {
           const res = await repository.getUserPoints(event.id);
@@ -141,6 +160,9 @@ export const useEarnEventDetailsState = (
   // UseCase: useClaimStatusInformation
   useEffect(() => {
     (async () => {
+      if (!event) return;
+      console.log(`Event> useClaimStatusInformation`);
+
       const phase = getEventPhase(event);
 
       const thirdPartyConnection = thirdParty.thirdPartyConnection;
@@ -163,6 +185,7 @@ export const useEarnEventDetailsState = (
   }, [thirdParty]);
 
   return {
+    event,
     phase,
     thirdParty,
     claimStatusInfo,
@@ -209,7 +232,7 @@ function parseThirdPartyConnectionArgs(appId: string, deepLink?: ThirdPartyDeepL
 /**
  * Check if it's avilable to make an inquiry about event points
  */
-function isPointInquiryAvailable(event: EarnEvent, isThirdPartySupported: boolean): boolean {
+function isPointInquiryAvailable(event: EarnEventDto, isThirdPartySupported: boolean): boolean {
   const phase = getEventPhase(event);
   return (isThirdPartySupported && phase === EventPhase.BeforeEvent) || phase === EventPhase.OnEvent || phase === EventPhase.BeforeClaim;
 }

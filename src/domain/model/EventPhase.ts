@@ -1,7 +1,7 @@
 import { parseTimeDuration } from '@@utils/parseTimeDuration';
 import { valueOf } from '@@utils/types';
 
-import { EarnEvent } from './EarnEvent';
+import { EarnEventDto } from './EarnEventDto';
 
 export const EventPhase = {
   BeforeEvent: 'BeforeEvent',
@@ -11,7 +11,7 @@ export const EventPhase = {
   NotAvailable: 'NotAvailable',
 };
 
-export function getEventPhase(event: EarnEvent, current: Date = new Date()): valueOf<typeof EventPhase> {
+export function getEventPhase(event: EarnEventDto, current: Date = new Date()): valueOf<typeof EventPhase> {
   // BeforeEvent phase
   const eventStartAtDuration = parseTimeDuration(new Date(event.eventStartAt), current);
   if (eventStartAtDuration != null) {

@@ -39,8 +39,6 @@ export const EventActionControl = ({ phase, event, thirdParty, claimStatusInfo }
     }
   }, []);
 
-  console.log(`Action> event.calcInfoPageUrl: ${event.calcInfoPageUrl}, re: ${rewardReceiptUrl}`);
-
   return (
     <DropShadow style={S.style.shadow}>
       <S.Container>

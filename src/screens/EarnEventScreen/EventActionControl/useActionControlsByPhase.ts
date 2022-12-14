@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
-import { EarnEvent } from '@@domain/model/EarnEvent';
+import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
 import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
-import { IThirdPartyConnection, IEventThirdParty } from '@@hooks/event/useEventDetailsState';
+import { IThirdPartyConnection, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
 import { extension } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
@@ -32,7 +32,7 @@ export interface IEventPointInfo {
  */
 export const useActionControlsByPhase = (
   phase: valueOf<typeof EventPhase>,
-  event: EarnEvent,
+  event: EarnEventDto,
   thirdParty: IEventThirdParty,
   claimStatusInfo: ClaimStatusInformation | undefined
 ): IActionControlAttrs => {
@@ -55,7 +55,7 @@ export const useActionControlsByPhase = (
  */
 function getInitialActionControls(
   phase: valueOf<typeof EventPhase>,
-  event: EarnEvent,
+  event: EarnEventDto,
   thirdParty: IEventThirdParty,
   claimStatusInfo: ClaimStatusInformation | undefined
 ): IActionControlAttrs {
@@ -85,7 +85,7 @@ function getInitialActionControls(
 
 function setUpActionControls(
   phase: valueOf<typeof EventPhase>,
-  event: EarnEvent,
+  event: EarnEventDto,
   thirdParty: IEventThirdParty,
   claimStatusInfo: ClaimStatusInformation | undefined,
   t: (key: string) => string

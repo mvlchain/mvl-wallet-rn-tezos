@@ -1,7 +1,7 @@
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
 import { Network } from '@@constants/network.constant';
-import { EarnEvent } from '@@domain/model/EarnEvent';
+import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { valueOf } from '@@utils/types';
@@ -47,7 +47,8 @@ export type TRootStackParamList = {
     address: string;
   };
   EVENT_DETAILS: {
-    data: EarnEvent;
+    i: string;
+    data?: EarnEventDto;
   };
 };
 
