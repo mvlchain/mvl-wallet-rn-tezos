@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import Webview from '@@components/BasicComponents/Webview';
-import { useEarnEventDetailsState, IEventThirdParty } from '@@hooks/event/useEventDetailsState';
+import { useEarnEventDetailsUiState, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -95,19 +95,24 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *
  * DeepLinks
  *  clutchwallet://connect
- *  clutchwallet://screen/earn
+ *  clutchwallet://screen/earn (O)
  *  clutchwallet://screen/trade
  */
 export function EarnEventDetailsScreen() {
   const { t } = useTranslation();
-  const { params } = useRoute<TEarnEventDetailsRouteProps>();
+  const { params, path } = useRoute<TEarnEventDetailsRouteProps>();
   if (!params) {
     console.error('inappropriate event params!');
   }
 
-  const { phase, thirdParty, claimStatusInfo } = useEarnEventDetailsState(params?.data);
+  console.log(`Details> path: ${path}, i: ${params.i}`);
 
-  const data = params?.data;
+  const { event, phase, thirdParty, claimStatusInfo } = useEarnEventDetailsUiState(params.i, params.data);
+  if (!event) {
+    console.log(`Details> event is null`);
+    return null;
+  }
+
   const isThirdPartyConnected = thirdParty.thirdPartyConnection?.exists ?? false;
 
   function decorateThirdPartyApp(
@@ -139,20 +144,20 @@ export function EarnEventDetailsScreen() {
 
   return (
     <S.Container>
-      {data ? (
+      {event ? (
         <>
-          <Webview url={data.detailPageUrl} />
+          <Webview url={event.detailPageUrl} />
 
           {thirdParty.isThirdPartySupported && thirdParty.thirdPartyConnection ? (
             <ThirdPartyApp
-              avatarUrl={data.iconUrl}
-              {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, data.app?.name)}
+              avatarUrl={event.iconUrl}
+              {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, event.app?.name)}
               onConnectPress={() => {}}
               onDisconnectPress={() => {}}
             />
           ) : null}
 
-          <EventActionControl phase={phase} event={data} thirdParty={thirdParty} claimStatusInfo={claimStatusInfo} />
+          <EventActionControl phase={phase} event={event} thirdParty={thirdParty} claimStatusInfo={claimStatusInfo} />
         </>
       ) : null}
     </S.Container>

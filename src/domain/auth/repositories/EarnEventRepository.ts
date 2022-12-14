@@ -18,7 +18,8 @@ import { authRequest, Response } from '@@utils/request';
  * /v1/earn-event api service
  */
 export interface EarnEventRepository {
-  getEvents(): Promise<EarnEventDto[]>;
+  getEventList(): Promise<EarnEventDto[]>;
+  getEvent(eventId: string): Promise<EarnEventDto>;
   getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
   getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto>;
   getClaimInformation(eventId: string): Promise<EarnEventGetClaimResponseDto>;
@@ -36,10 +37,28 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
    * return res ?? [];
    * ```
    */
-  getEvents = async (): Promise<EarnEventDto[]> => {
+  getEventList = async (): Promise<EarnEventDto[]> => {
     const endpoint = 'v1/earn-event/list';
     const res = await authRequest.post<EarnEventDto[]>(endpoint);
     return res.data;
+  };
+
+  /**
+   * Get a specific event;
+   * @param event an event id
+   * @returns points
+   */
+  getEvent = async (eventId: string): Promise<EarnEventDto> => {
+    const endpoint = `/v1/earn-event/${eventId}`;
+    const res = await authRequest.post<EarnEventDto>(endpoint);
+
+    if ([200, 201].includes(res.status)) {
+      return res.data;
+    } else {
+      // TODO define a generla type of error.
+      console.error(res);
+      throw new ApiError('Unexpected error', res.status);
+    }
   };
 
   /**

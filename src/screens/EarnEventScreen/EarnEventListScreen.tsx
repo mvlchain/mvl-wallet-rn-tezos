@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { RefreshControl } from 'react-native';
 
 import { EarnEvent } from '@@domain/model/EarnEvent';
+import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { useRefetchByRefreshControl } from '@@hooks/useRefetchByRefreshControl';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
@@ -34,7 +35,7 @@ export const EarnEventListScreen = () => {
         subtitle={item.subTitle}
         onPress={() => {
           // onItemClick event
-          navigation.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, { data: item });
+          navigation.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, { i: item.id, data: item });
         }}
       />
     );

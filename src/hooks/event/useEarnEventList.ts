@@ -28,7 +28,7 @@ export const useEarnEventList = (): UseQueryResult<EarnEvent[], AxiosError> => {
  * UseCase: GetEarnEventUseCase
  */
 const UseCase = async (repository: EarnEventRepository, t: (key: string) => string): Promise<EarnEvent[]> => {
-  const events = await repository.getEvents();
+  const events = await repository.getEventList();
   return events.map((event): EarnEvent => {
     return {
       timeDescription: getEventTimeDescriptionByEventPhase(event, t),
