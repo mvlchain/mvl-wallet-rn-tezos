@@ -15,11 +15,11 @@ const RenderItem = ({ data, onPress }: IRenderItem) => {
 
 function WalletTokenReceiveSelect() {
   const { t } = useTranslation();
-  const { data, tokenList, onPressReceivetoken } = useWalletTokenReceiveSelect();
+  const { data, tokenList, history, onPressReceivetoken, onPressConfirm } = useWalletTokenReceiveSelect();
   return (
     <S.Container>
       <S.ListContainer>
-        <S.Title>{t('qr_payment_currency_chooser_title')}</S.Title>
+        <S.Title isPaddingBottom={true}>{t('qr_payment_currency_chooser_title')}</S.Title>
         {tokenList.length !== 0 && (
           <FlashList
             data={data}
@@ -32,7 +32,17 @@ function WalletTokenReceiveSelect() {
       </S.ListContainer>
       <S.RecentContainer>
         <S.Title>{t('qr_payment_currency_chooser_recent_title')}</S.Title>
-        <S.RecentEmptyText>{t('history_empty')}</S.RecentEmptyText>
+
+        {history?.length === 0 && (
+          <S.RecentEmptyTextWrapper>
+            <S.RecentEmptyText>{t('history_empty')}</S.RecentEmptyText>
+          </S.RecentEmptyTextWrapper>
+        )}
+        {history &&
+          history?.length !== 0 &&
+          history.map((item) => (
+            <TokenReceiveSelectListItem tokenItem={item.token} amount={item.amount} onPress={() => onPressConfirm(item.amount, item.token)} />
+          ))}
       </S.RecentContainer>
     </S.Container>
   );

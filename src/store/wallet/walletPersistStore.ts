@@ -80,7 +80,7 @@ const walletPersistStore = create(
               ],
             },
           })),
-        addReceiveHistory: (network: Network, token: TokenDto, address: string, amount: string) =>
+        addReceiveHistory: (network: Network, token: TokenDto, amount: string, cacheQR: string) =>
           set((state) => {
             let _receiveHistory = state.receiveHistory[network];
             _receiveHistory = _receiveHistory.filter((history) => history.token.symbol !== token.symbol);
@@ -89,11 +89,10 @@ const walletPersistStore = create(
             }
             _receiveHistory.unshift({
               token,
-              address,
               amount,
+              cacheQR,
             });
             return {
-              ...state,
               receiveHistory: {
                 ...state.receiveHistory,
                 [network]: [..._receiveHistory],
