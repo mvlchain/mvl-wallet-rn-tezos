@@ -26,11 +26,20 @@ export type TRootStackParamList = {
   };
   WALLET_TOKEN_SEND: {
     tokenDto: TokenDto;
+    scanData?: {
+      address: string;
+      amount?: string;
+    };
   };
   WALLET_TRANSACTION_HISTORY: IGetTransactionHistoryResponse & { tokenDto: TokenDto };
   WALLET_TRANSACTION_SPEED_UP: undefined;
   WALLET_TRANSACTION_CANCEL: undefined;
-  WALLET_SCAN_QR: undefined;
+  WALLET_SCAN_QR: {
+    tokenDto?: TokenDto;
+  };
+  WALLET_TOKEN_RECEIVE: {
+    tokenDto: TokenDto;
+  };
   WALLET_TRANSACTION_RESULT: undefined;
   EVENT_DETAILS: {
     data: EarnEvent;
@@ -59,6 +68,7 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   WALLET_TRANSACTION_SPEED_UP: 'WALLET_TRANSACTION_SPEED_UP',
   WALLET_TRANSACTION_CANCEL: 'WALLET_TRANSACTION_CANCEL',
   WALLET_SCAN_QR: 'WALLET_SCAN_QR',
+  WALLET_TOKEN_RECEIVE: 'WALLET_TOKEN_RECEIVE',
   WALLET_TRANSACTION_RESULT: 'WALLET_TRANSACTION_RESULT',
   EVENT_DETAILS: 'EVENT_DETAILS',
 } as const;

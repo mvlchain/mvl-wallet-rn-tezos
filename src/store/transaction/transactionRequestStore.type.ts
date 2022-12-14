@@ -1,6 +1,4 @@
-import { TransactionRequest } from '@ethersproject/abstract-provider';
-import { BigNumberish, BytesLike, BigNumber } from 'ethers';
-import { AccessListish } from 'ethers/lib/utils';
+import { BytesLike, BigNumber } from 'ethers';
 
 export interface ITransactionRequestBody {
   to: string | null;
