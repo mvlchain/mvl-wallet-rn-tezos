@@ -19,9 +19,9 @@ import { formatBigNumber } from '@@utils/formatBigNumber';
 import { IHistory, ITokenReceiveListItem } from './WalletTokenReceiveSelect.type';
 
 export const useWalletTokenReceiveSelect = () => {
-  type SeedPhraseScreenRouteProp = RouteProp<TRootStackParamList, 'WALLET_TOKEN_RECEIVE_SELECT'>;
+  type walletTokenReceiveSelectRouteProps = RouteProp<TRootStackParamList, 'WALLET_TOKEN_RECEIVE_SELECT'>;
   const { t } = useTranslation();
-  const { params } = useRoute<SeedPhraseScreenRouteProp>();
+  const { params } = useRoute<walletTokenReceiveSelectRouteProps>();
   const { openModal, closeModal } = globalModalStore();
   const [tokenList, setTokenList] = useState<ITokenReceiveListItem[]>([]);
   const [history, setHistory] = useState<IHistory[]>();
