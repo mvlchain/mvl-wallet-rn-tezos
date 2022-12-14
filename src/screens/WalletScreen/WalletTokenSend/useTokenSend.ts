@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -51,11 +52,9 @@ const useTokenSend = () => {
     if (params?.scanData?.address) {
       setBody({ to: params.scanData.address });
     }
-    // TODO: 향후 토큰디테일 페이지에서 qr을 스캔하는것이 아니라, 월렛 메인에서 불러올 경우에 네트워크 선택은 어떻게 할 것인지에 따라서
-    // 어마운트 입력이 달라짐. 테조스는 decimal 6이고 이더는 18이니까..
-    // if (params.parsedData.amount) {
-    //   setBody({ value: params.parsedData.amount.toString() });
-    // }
+    if (params?.scanData?.amount) {
+      setBody({ value: parseUnits(params.scanData.amount.toString(), tokenDto.decimals) });
+    }
   };
 
   const clearSendInput = () => {
