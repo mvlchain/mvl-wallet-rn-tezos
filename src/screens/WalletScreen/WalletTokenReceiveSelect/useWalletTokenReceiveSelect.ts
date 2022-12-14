@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Share } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import { useReceiveQRModal } from '@@components/BasicComponents/Modals/ReceiveQRModal/useReceiveQRModal';
 import { getNetworkConfig } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useTokenQuery from '@@hooks/queries/useTokenQuery';
@@ -24,7 +25,8 @@ export const useWalletTokenReceiveSelect = () => {
   const { openModal, closeModal } = globalModalStore();
   const [tokenList, setTokenList] = useState<ITokenReceiveListItem[]>([]);
   const [history, setHistory] = useState<IHistory[]>();
-  const { selectedNetwork, selectedWalletIndex, receiveHistory } = walletPersistStore();
+  const { selectedNetwork, selectedWalletIndex, receiveHistory, addReceiveHistory } = walletPersistStore();
+  const { generateQR } = useReceiveQRModal();
   const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
   const { data } = useTokenQuery(getNetworkConfig(params?.network).networkId, {
     onSuccess: (data) => {
@@ -35,18 +37,22 @@ export const useWalletTokenReceiveSelect = () => {
   const { data: walletList } = useWalletsQuery(selectedNetwork);
 
   useEffect(() => {
-    setHistory(receiveHistory[selectedNetwork].map((_history) => ({ token: _history.token, amount: _history.amount })));
+    setHistory(receiveHistory[selectedNetwork].map((_history) => ({ token: _history.token, amount: _history.amount, cacheQR: _history.cacheQR })));
   }, [receiveHistory, selectedNetwork]);
 
-  const onPressConfirm = (amount: string, token: TokenDto, cacheQR?: string) => {
+  const onPressConfirm = async (amount: string, token: TokenDto, cacheQR?: string) => {
     if (!walletList) return;
     const address = walletList[_selectedWalletIndex]?.address;
+    const qr = cacheQR ? cacheQR : await generateQR({ token, address, value: amount });
+    const bigNumber = new BigNumber(amount);
+    const formalize = formatBigNumber(bigNumber, token.decimals);
+    addReceiveHistory(selectedNetwork, token, amount, qr);
     openModal(MODAL_TYPES.RECEIVE_QR, {
       title: t('qr_payment_send_link_title'),
-      amount,
+      amount: formalize.toString(),
       token,
       address: address,
-      cacheQR: cacheQR,
+      qr: qr,
       confirmLabel: t('qr_payment_send_link_share_qr'),
       onConfirm: onPressShare,
       onCancel: closeModal,

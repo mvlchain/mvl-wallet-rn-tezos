@@ -41,7 +41,12 @@ function WalletTokenReceiveSelect() {
         {history &&
           history?.length !== 0 &&
           history.map((item) => (
-            <TokenReceiveSelectListItem tokenItem={item.token} amount={item.amount} onPress={() => onPressConfirm(item.amount, item.token)} />
+            <TokenReceiveSelectListItem
+              key={item.token.symbol}
+              tokenItem={item.token}
+              amount={item.amount}
+              onPress={() => onPressConfirm(item.amount, item.token, item.cacheQR)}
+            />
           ))}
       </S.RecentContainer>
     </S.Container>

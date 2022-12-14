@@ -8,11 +8,9 @@ import { MODAL_TYPES } from '../GlobalModal';
 
 import * as S from './ReceiveQRModal.style';
 import { IReceiveQRModalProps } from './ReceiveQRModal.type';
-import { useReceiveQRModal } from './useReceiveQRModal';
 
-function ReceiveQRModal({ title, amount, token, address, cacheQR, cancelLabel, confirmLabel, onCancel, onConfirm }: IReceiveQRModalProps) {
+function ReceiveQRModal({ title, amount, token, qr, cancelLabel, confirmLabel, onCancel, onConfirm }: IReceiveQRModalProps) {
   const { modalType } = globalModalStore();
-  const { qr, displayAmount } = useReceiveQRModal({ token, address, value: amount, cacheQR });
   return (
     <ModalLayout
       title={title}
@@ -30,9 +28,9 @@ function ReceiveQRModal({ title, amount, token, address, cacheQR, cancelLabel, c
     >
       <S.Container>
         <S.AmountText>
-          {displayAmount} {token.symbol}
+          {amount} {token.symbol}
         </S.AmountText>
-        {qr && <QRcode qr={qr} />}
+        <QRcode qr={qr} />
       </S.Container>
     </ModalLayout>
   );
