@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
+import { parseUnits, formatUnits } from 'ethers/lib/utils';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -134,7 +134,7 @@ const useTokenSend = () => {
           hash: txHash,
           type: transactionType,
           nonce: 0,
-          value: value.toString(),
+          value: formatUnits(value, tokenDto.decimals),
         });
         if (!serverRes) {
           throw new Error('fail register history');
