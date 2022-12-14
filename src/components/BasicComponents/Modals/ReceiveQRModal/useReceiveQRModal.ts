@@ -1,25 +1,39 @@
 import { useEffect, useState } from 'react';
 
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import BigNumber from 'bignumber.js';
 import qs from 'qs';
 
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IDeepLinkParam, IUseReceiveQRModalParam } from './ReceiveQRModal.type';
 
 const domainUriPrefix = 'https://link.mvlclutch.io/short';
 
-export const useReceiveQRModal = ({ token, address, value }: IUseReceiveQRModalParam) => {
+export const useReceiveQRModal = ({ token, address, value, cacheQR }: IUseReceiveQRModalParam) => {
   const [qr, setQR] = useState<string>();
-  const { selectedNetwork } = walletPersistStore();
+  const [displayAmount, setDisplayAmount] = useState<string>();
+  const { selectedNetwork, addReceiveHistory } = walletPersistStore();
 
   useEffect(() => {
-    (async () => {
-      const qrLink = await buildReceiveLink({ token, address, value });
-      console.log('qrLink:  ', decodeURIComponent(qrLink));
-      setQR(decodeURIComponent(qrLink));
-    })();
+    if (cacheQR) {
+      setQR(cacheQR);
+    } else {
+      (async () => {
+        const bigNumber = new BigNumber(value);
+        const formalize = formatBigNumber(bigNumber, token.decimals);
+        setDisplayAmount(formalize.toString());
+        const qrLink = await buildReceiveShortLink({ token, address, value: formalize.toString() });
+        setQR(decodeURIComponent(qrLink));
+      })();
+    }
   }, []);
+
+  useEffect(() => {
+    if (!qr) return;
+    addReceiveHistory(selectedNetwork, token, value, qr);
+  }, [qr]);
 
   const buildDeepLink = ({ token, address, value }: IDeepLinkParam) => {
     const { contractAddress } = token;
@@ -48,5 +62,6 @@ export const useReceiveQRModal = ({ token, address, value }: IUseReceiveQRModalP
 
   return {
     qr,
+    displayAmount,
   };
 };

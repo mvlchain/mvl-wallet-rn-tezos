@@ -8,7 +8,7 @@ export interface IWalletPersist extends IWalletPersistState {
   setWallets: (network: Network, wallets: IPersistWallet[]) => void;
   editWalletName: (wallet: IPersistWallet, network: Network) => void;
   createWallet: (network: Network) => void;
-  addReceiveHistory: (network: Network, token: TokenDto, address: string, amount: string) => void;
+  addReceiveHistory: (network: Network, token: TokenDto, amount: string, cacheQR: string) => void;
 }
 
 export interface IWalletPersistState {
@@ -25,6 +25,6 @@ export interface IPersistWallet {
 
 export interface IReceiveHistory {
   token: TokenDto;
-  address: string;
   amount: string;
+  cacheQR: string;
 }

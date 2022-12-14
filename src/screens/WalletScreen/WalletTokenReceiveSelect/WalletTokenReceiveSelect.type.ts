@@ -11,3 +11,13 @@ export interface IRenderItem {
   data: ListRenderItemInfo<TokenDto>;
   onPress: (_: TokenDto) => void;
 }
+
+export interface IRenderHistoryItem {
+  data: ListRenderItemInfo<IHistory>;
+  onPress: (amount: string, token: TokenDto) => void;
+}
+
+export interface IHistory {
+  token: TokenDto;
+  amount: string;
+}
