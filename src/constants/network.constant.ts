@@ -154,3 +154,12 @@ export const COIN_DTO: Record<string, TokenDto> = {
     priceId: 'tezos',
   },
 };
+
+export const EXPLORER_BASE_URL: Record<Network, string> = {
+  [NETWORK.ETH]: 'https://etherscan.io/tx/',
+  [NETWORK.GOERLI]: 'https://goerli.etherscan.io/tx/',
+  [NETWORK.BSC]: 'https://bscscan.com/tx/',
+  [NETWORK.BSC_TESTNET]: 'https://testnet.bscscan.com/tx/',
+  [NETWORK.TEZOS]: 'https://tzkt.io/',
+  [NETWORK.TEZOS_GHOSTNET]: 'https://ghostnet.tzkt.io/',
+};
