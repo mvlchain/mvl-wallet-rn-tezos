@@ -17,13 +17,14 @@ export const TransactionStatusWrapper = styled.View``;
 
 export const TransactionStatus = styled.Text`
   ${({ theme }) => theme.font.Label.md};
-  font-family: ${({ theme }) => theme.fmRegular};
+  font-family: ${({ theme }) => theme.fmBold};
   line-height: ${fontSize(20)}px;
   text-align: left;
   color: ${({ theme }) => theme.color.blackWhite};
 `;
 export const TransactionDate = styled(TransactionStatus)`
   color: ${({ theme }) => theme.color.grey500};
+  font-family: ${({ theme }) => theme.fmMedium};
   margin-top: ${height * 4}px;
 `;
 
@@ -33,8 +34,8 @@ export const HistoryItemTopContent = styled.View`
   align-items: center;
 `;
 export const TransactionHistoryContentInnerWrapper = styled.View`
+  flex: 1;
   flex-direction: row;
-  width: ${width * 303}px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -52,6 +53,9 @@ export const TransactionBaseCurrency = styled(TransactionAmount)`
   color: ${({ theme }) => theme.color.grey500};
 `;
 
+export const IconWrapper = styled.View`
+  margin-left: ${height * 17}px;
+`;
 export const HistoryItemBottomContent = styled.View`
   flex-direction: row;
   width: 100%;

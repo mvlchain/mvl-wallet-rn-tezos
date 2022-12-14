@@ -9,7 +9,7 @@ export const TransactionDetailBoardContainer = styled.View`
 `;
 export const TransactionType = styled.Text`
   ${({ theme }) => theme.font.Label.lg};
-  font-family: ${({ theme }) => theme.fmRegular};
+  font-family: ${({ theme }) => theme.fmMedium};
   line-height: ${height * 24}px;
   color: ${({ theme }) => theme.color.blackWhite};
 `;
@@ -24,7 +24,7 @@ export const TransactionAmount = styled.Text`
 
 export const TransactionBaseCurrencyAmount = styled.Text`
   ${({ theme }) => theme.font.Label.md};
-  font-family: ${({ theme }) => theme.fmRegular};
+  font-family: ${({ theme }) => theme.fmMedium};
   line-height: ${height * 20}px;
   color: ${({ theme }) => theme.color.grey500};
 `;
