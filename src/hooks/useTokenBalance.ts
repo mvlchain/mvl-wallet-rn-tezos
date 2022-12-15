@@ -133,5 +133,5 @@ export const useTokenBalance = () => {
     setFormalizedBalance(formalizedArray);
   }, [price, balanceData]);
 
-  return { formalizedBalance };
+  return { formalizedBalance, getBalance };
 };
