@@ -100,12 +100,12 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  */
 export function EarnEventDetailsScreen() {
   const { t } = useTranslation();
-  const { params, path } = useRoute<TEarnEventDetailsRouteProps>();
+  const { params } = useRoute<TEarnEventDetailsRouteProps>();
   if (!params) {
     console.error('inappropriate event params!');
   }
 
-  console.log(`Details> path: ${path}, i: ${params.i}`);
+  console.log(`Details> i: ${params.i}`);
 
   const { event, phase, thirdParty, claimStatusInfo } = useEarnEventDetailsUiState(params.i, params.data);
   if (!event) {

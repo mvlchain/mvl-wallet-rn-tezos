@@ -12,12 +12,22 @@ export const CLUTCH_APP_SCHEME = 'clutchwallet';
  * React Navigation By DeepLinks
  *
  * DeepLink
+ * • clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={alias}
+ *  - f: from, UUID style app id defined by Clutch
+ *  - t: token, access token
+ *  - e?(optional): event id
+ *  - a?(optional): alias, event alias
+ *
  * • clutchwallet://screen/earn?i={eventId}
+ *  - i: event id
  */
-export const linking: LinkingOptions<TRootStackParamList> = {
+export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
   prefixes: [`${CLUTCH_APP_SCHEME}://`],
   config: {
     screens: {
+      [ROOT_STACK_ROUTE.DEEPLINK_CONNECT]: {
+        path: 'connect',
+      },
       [ROOT_STACK_ROUTE.EVENT_DETAILS]: {
         path: 'screen/earn',
       },
