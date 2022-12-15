@@ -78,7 +78,7 @@ function GasFeeBoardLayout({
           onPress={() => {
             onConfirm();
           }}
-          disabled={isValid()}
+          disabled={!isValid()}
         />
       </S.ConfirmWrapper>
     </S.Container>

@@ -93,7 +93,7 @@ const useTokenSend = () => {
   };
 
   const isValid = () => {
-    return tokenDto.contractAddress ? !to || !value || !data : !to || !value;
+    return tokenDto.contractAddress ? !!to || !!value || !!data : !!to || !!value;
   };
   //send transaction
   const send = (gasFeeInfo: IGasFeeInfo) => {
