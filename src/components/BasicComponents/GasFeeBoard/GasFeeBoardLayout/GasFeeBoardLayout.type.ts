@@ -12,4 +12,5 @@ export interface IGasFeeBoardLayoutProps {
   onConfirm: Function;
   //TODO:타입
   toggleGasAdvanced: (v: any) => void;
+  isValid: () => boolean;
 }

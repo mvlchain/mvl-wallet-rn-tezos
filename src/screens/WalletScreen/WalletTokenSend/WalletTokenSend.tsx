@@ -15,13 +15,13 @@ import useTokenSend from './useTokenSend';
 
 function WalletTokenSend() {
   const { params } = useRoute<TTokenSendRouteProps>();
-  const { amount, setAmount, address, setAddress, confirm } = useTokenSend();
+  const { amount, setAmount, address, setAddress, confirm, isValid } = useTokenSend();
   return (
     <DismissKeyboardView>
       <S.Container>
         <SendInputBoard amount={amount} setAmount={setAmount} address={address} setAddress={setAddress} />
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
-        <GasFeeBoard isRevision={false} onConfirm={confirm} tokenDto={params.tokenDto} />
+        <GasFeeBoard isRevision={false} onConfirm={confirm} tokenDto={params.tokenDto} isValid={isValid} />
       </S.Container>
     </DismissKeyboardView>
   );
