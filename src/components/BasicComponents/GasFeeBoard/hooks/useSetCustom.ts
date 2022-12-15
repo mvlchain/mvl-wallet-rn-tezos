@@ -36,13 +36,7 @@ const useSetCustom = ({
   }, [gasLevel]);
 
   useEffect(() => {
-    if (network.networkFeeType === NETWORK_FEE_TYPE.EIP1559) {
-      //basefee must greater than tip
-      const validBaseFee = leveledBaseFee && tip && tip.gt(leveledBaseFee) ? tip : leveledBaseFee;
-      setCustomBaseFee(validBaseFee);
-    } else {
-      setCustomBaseFee(leveledBaseFee);
-    }
+    setCustomBaseFee(leveledBaseFee);
   }, [leveledBaseFee]);
 
   useEffect(() => {
