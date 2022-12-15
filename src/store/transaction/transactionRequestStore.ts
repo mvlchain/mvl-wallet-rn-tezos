@@ -1,5 +1,5 @@
+import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
 
 import { ITransactionRequestStore } from './transactionRequestStore.type';
 
@@ -9,9 +9,9 @@ const INITIAL_TRANSACTION_REQUEST_BODY_STATE = {
   data: null,
   value: null,
 };
-export const transactionRequestStore = create<ITransactionRequestStore>()(
-  devtools(
-    (set, get) => ({
+export const transactionRequestStore = create<ITransactionRequestStore>(
+  zustandFlipper(
+    (set) => ({
       ...INITIAL_TRANSACTION_REQUEST_BODY_STATE,
       setBody: (newState) => {
         set(
@@ -34,6 +34,6 @@ export const transactionRequestStore = create<ITransactionRequestStore>()(
         );
       },
     }),
-    { name: 'transactionStore', enabled: __DEV__ }
+    'transactionStore'
   )
 );

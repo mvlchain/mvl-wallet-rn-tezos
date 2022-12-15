@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-export const formatTezos = (amount: BigNumber, decimals: number) => {
+export const formatBigNumber = (amount: BigNumber, decimals: number) => {
   const bigNum = new BigNumber(amount);
   if (bigNum.isNaN()) {
     return amount;

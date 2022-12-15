@@ -16,7 +16,7 @@ import * as S from './Account.style';
 import useAccount from './useAccount';
 
 function Account() {
-  const { walletName, networkName, address, onPressSwitchNetwork, onPressMore } = useAccount();
+  const { walletName, networkName, address, onPressSwitchNetwork, onPressMore, onPressReceive } = useAccount();
   const MoreIcon = useAssetFromTheme(MoreIconLight, MoreIconDark);
   return (
     <S.Container>
@@ -36,9 +36,7 @@ function Account() {
       </S.Section>
       <S.ButtonContainer>
         <PrimaryButton
-          onPress={() => {
-            console.log('receive!');
-          }}
+          onPress={onPressReceive}
           label={t('receive')}
           Icon={WhiteQrIcon}
           size={BUTTON_SIZE.SMALL}

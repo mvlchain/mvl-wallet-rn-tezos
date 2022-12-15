@@ -1,5 +1,5 @@
+import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
 
 import { TMnemonic } from '@@components/BasicComponents/Mnemonic/Mnemonic.type';
 
@@ -12,8 +12,8 @@ const initState: IAuthState = {
   focusedIndex: 0,
 };
 
-const authStore = create<IAuth>()(
-  devtools(
+const authStore = create<IAuth>(
+  zustandFlipper(
     (set) => ({
       ...initState,
       setPKey: (pKey: string) => set(() => ({ pKey: pKey }), false, 'setPkey'),
@@ -51,7 +51,7 @@ const authStore = create<IAuth>()(
       setFocusedIndex: (index: number) => set(() => ({ focusedIndex: index }), false, 'setFocusedIndex'),
       resetAuthStore: () => set(() => ({ ...initState }), false, 'resetAuthStore'),
     }),
-    { name: 'authStore', enabled: __DEV__ }
+    'authStore'
   )
 );
 

@@ -1,3 +1,5 @@
+// for firebase
+#import <Firebase.h>
 #import "AppDelegate.h"
 #import <RNCustomAuthSdk/RNTorus.h>
 
@@ -40,6 +42,8 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // for firebase
+  [FIRApp configure];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];

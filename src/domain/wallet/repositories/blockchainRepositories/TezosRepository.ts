@@ -6,7 +6,7 @@ import * as tezosCrypto from '@tezos-core-tools/crypto-utils';
 import BigNumber from 'bignumber.js';
 import { injectable } from 'tsyringe';
 
-import { formatTezos } from '@@utils/formatTezos';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
@@ -19,7 +19,7 @@ export class TezosRepository implements Type.IBlockChainRepository {
       const Tezos = new TezosToolkit(rpcUrl);
       const balance = await Tezos.tz.getBalance(selectedWalletAddress);
       const BNBalance = new BigNumber(balance.toString());
-      return formatTezos(BNBalance, decimals).toString();
+      return formatBigNumber(BNBalance, decimals).toString();
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
@@ -44,7 +44,7 @@ export class TezosRepository implements Type.IBlockChainRepository {
     const fa1_2TokenContract = await Tezos.wallet.at(contractAddress, compose(tzip12, tzip16));
     const fa1_2Balance = await fa1_2TokenContract.views.getBalance(address).read();
     const fa1_2BNBalance = new BigNumber(fa1_2Balance.toString());
-    return formatTezos(fa1_2BNBalance, decimals).toString();
+    return formatBigNumber(fa1_2BNBalance, decimals).toString();
   };
 
   _getFa2Balance = async ({ contractAddress, address, rpcUrl, decimals = 6 }: Type.IGetTokenBalance) => {
@@ -61,6 +61,6 @@ export class TezosRepository implements Type.IBlockChainRepository {
     const fa2BalanceRes = JSON.parse(JSON.stringify(balance));
     const fa2BalanceStr = fa2BalanceRes[0].balance;
     const fa2BNBalance = new BigNumber(fa2BalanceStr.toString());
-    return formatTezos(fa2BNBalance, decimals).toString();
+    return formatBigNumber(fa2BNBalance, decimals).toString();
   };
 }

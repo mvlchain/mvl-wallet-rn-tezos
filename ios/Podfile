@@ -1,3 +1,5 @@
+# for firebase
+$RNFirebaseAsStaticFramework = true
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -5,9 +7,11 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '13.0'
 install! 'cocoapods', :deterministic_uuids => false
-flipperkit_version = '0.172.0'
 
 target 'Wallet' do
+  # for firebase
+  use_frameworks! :linkage => :static
+
   config = use_native_modules!
   pod 'TouchID', :path => "../node_modules/react-native-touch-id"
 
@@ -29,6 +33,16 @@ target 'Wallet' do
   pod 'web3.swift', '0.9.3', :modular_headers => true
   pod 'secp256k1.swift', '0.1.4', :modular_headers => true
 
+  pre_install do |installer|
+    installer.pod_targets.each do |pod|
+      if pod.name.eql?('vision-camera-code-scanner') || pod.name.eql?('VisionCamera') || pod.name.eql?('react-native-quick-base64') || pod.name.eql?('RNPermissions') || pod.name.start_with?('Permission-')
+        def pod.build_type
+          Pod::BuildType.static_library
+        end
+      end
+    end
+  end
+
   use_react_native!(
     :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
@@ -36,7 +50,7 @@ target 'Wallet' do
     :fabric_enabled => flags[:fabric_enabled],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    :flipper_configuration => FlipperConfiguration.enabled(["Debug"], { 'Flipper' => flipperkit_version, 'Flipper-Folly' => '2.6.10', 'Flipper-DoubleConversion' => '3.2.0', 'Flipper-Glog' => '0.5.0.3', 'Flipper-PeerTalk' => '0.0.4', 'OpenSSL-Universal' => '1.1.1100' })
+    :flipper_configuration => FlipperConfiguration.disabled
   )
 
   target 'WalletTests' do

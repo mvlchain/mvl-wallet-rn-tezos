@@ -1,0 +1,13 @@
+diff --git a/node_modules/@react-native-community/cli-platform-ios/native_modules.rb b/node_modules/@react-native-community/cli-platform-ios/native_modules.rb
+index 1b6eece..6f214b9 100644
+--- a/node_modules/@react-native-community/cli-platform-ios/native_modules.rb
++++ b/node_modules/@react-native-community/cli-platform-ios/native_modules.rb
+@@ -44,6 +44,8 @@ def use_native_modules!(config = nil)
+ 
+   packages.each do |package_name, package|
+     next unless package_config = package["platforms"]["ios"]
++    next if package_name == "react-native-flipper"
++    next if package_name == "react-native-flipper-zustand"
+ 
+     podspec_path = package_config["podspecPath"]
+     configurations = package_config["configurations"]
