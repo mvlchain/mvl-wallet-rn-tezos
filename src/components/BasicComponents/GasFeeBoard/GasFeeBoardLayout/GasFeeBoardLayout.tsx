@@ -74,7 +74,7 @@ function GasFeeBoardLayout({
       </View>
       <S.ConfirmWrapper>
         <PrimaryButton
-          label={t('confirm')}
+          label={t('next')}
           onPress={() => {
             onConfirm();
           }}
