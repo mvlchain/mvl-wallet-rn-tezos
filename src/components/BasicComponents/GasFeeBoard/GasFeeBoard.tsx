@@ -6,7 +6,7 @@ import GasFeeInputs from './GasFeeInputs';
 import GasLevelRadioButtons from './GasLevelRadioButtons';
 import useGasFeeBoard from './useGasFeeBoard';
 
-function GasFeeBoard({ isRevision, onConfirm, tokenDto }: IGasFeeBoardProps) {
+function GasFeeBoard({ isRevision, onConfirm, tokenDto, isValid }: IGasFeeBoardProps) {
   const {
     advanced,
     gasLevel,
@@ -32,6 +32,7 @@ function GasFeeBoard({ isRevision, onConfirm, tokenDto }: IGasFeeBoardProps) {
       transactionFee={transactionFee}
       advanced={advanced}
       toggleGasAdvanced={toggleGasAdvanced}
+      isValid={isValid}
     >
       <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
       <GasFeeInputs

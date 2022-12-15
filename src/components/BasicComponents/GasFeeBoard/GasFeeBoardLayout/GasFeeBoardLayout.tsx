@@ -18,7 +18,16 @@ import { width } from '@@utils/ui';
 import * as S from './GasFeeBoardLayout.style';
 import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
-function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced, onConfirm, toggleGasAdvanced, children }: IGasFeeBoardLayoutProps) {
+function GasFeeBoardLayout({
+  isRevision,
+  estimatedTime,
+  transactionFee,
+  advanced,
+  onConfirm,
+  toggleGasAdvanced,
+  children,
+  isValid,
+}: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
@@ -69,6 +78,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
           onPress={() => {
             onConfirm();
           }}
+          disabled={isValid()}
         />
       </S.ConfirmWrapper>
     </S.Container>
