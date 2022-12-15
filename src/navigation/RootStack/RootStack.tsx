@@ -16,8 +16,9 @@ import { GlobalModal } from '@@components/BasicComponents/Modals/GlobalModal';
 import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
 import AuthStack from '@@navigation/AuthStack';
-import { linking } from '@@navigation/DeepLink';
+import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import MainTab from '@@navigation/MainTab';
+import { DeepLinkConnectProxyScreen } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
@@ -181,7 +182,7 @@ function RootStack() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <NavigationContainer ref={navigationRef} theme={routerTheme} linking={linking}>
+      <NavigationContainer ref={navigationRef} theme={routerTheme} linking={DeepLinkOptions}>
         <Navigator
           initialRouteName={ROOT_STACK_ROUTE.AUTH}
           screenOptions={() => ({
@@ -203,6 +204,7 @@ function RootStack() {
             <Screen key={props.name} {...props} />
           ))}
           <Screen name={ROOT_STACK_ROUTE.EVENT_DETAILS} component={EarnEventDetailsScreen} options={handleStackHeaderOption({ title: '' })} />
+          <Screen name={ROOT_STACK_ROUTE.DEEPLINK_CONNECT} component={DeepLinkConnectProxyScreen} options={{ headerShown: false }} />
         </Navigator>
         <LoadingIndicator />
         <PinModal />
