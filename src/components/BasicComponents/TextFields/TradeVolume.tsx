@@ -56,7 +56,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
 
   const alphaNumericDecimalRegex = () => {
     // tokenDTO에 있는 decimals를 기준으로 입력 가능하게 자름
-    return new RegExp(`^(\\d)*([.]\\d{0,${tokenDto.decimals}})*?$`);
+    return new RegExp(`^(\\d{0,60})([.]\\d{0,${tokenDto.decimals}})*?$`);
   };
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
