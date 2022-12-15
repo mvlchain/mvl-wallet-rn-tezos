@@ -27,9 +27,9 @@ export class GasRepositoryImpl implements IGasRepository {
     return { gasLimit, gasPrice };
   });
 
-  getTotalGasFee = ({ baseFee, gasLimit }: IGetTotalGasFeeParamsEthers) => {
+  getTotalGasFee = ({ baseFee, gas }: IGetTotalGasFeeParamsEthers) => {
     const baseFeeInDecimal = new Decimal(baseFee.toString());
-    const gasLimitInDecimal = new Decimal(gasLimit.toString());
+    const gasLimitInDecimal = new Decimal(gas.toString());
 
     const totalGas = baseFeeInDecimal.mul(gasLimitInDecimal);
     const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));

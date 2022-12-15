@@ -16,10 +16,10 @@ function GasFeeInputs({
   enableLimitCustom,
   customBaseFee,
   customTip,
-  customGasLimit,
+  customGas,
   setCustomBaseFee,
   setCustomTip,
-  setCustomGasLimit,
+  setCustomGas,
 }: IGasFeeInputsProps) {
   const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
@@ -44,7 +44,7 @@ function GasFeeInputs({
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_limit')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={customGasLimit} setValue={setCustomGasLimit} />
+            <GasTextField value={customGas} setValue={setCustomGas} />
           </S.InputWrapper>
         </>
       )}

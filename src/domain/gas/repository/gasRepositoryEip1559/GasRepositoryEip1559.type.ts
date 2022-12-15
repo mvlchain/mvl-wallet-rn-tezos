@@ -13,7 +13,7 @@ export interface IGasFeeInfoEip1559 {
 
 export interface IGetTotalGasFeeParamsEIP1559 {
   baseFee: BigNumber;
-  estimatedGas: BigNumber;
+  gas: BigNumber;
   tip: BigNumber;
 }
 

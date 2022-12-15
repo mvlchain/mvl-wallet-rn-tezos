@@ -10,18 +10,16 @@ function GasFeeBoard({ isRevision, onConfirm, tokenDto, isValid }: IGasFeeBoardP
   const {
     advanced,
     gasLevel,
-    gasLimit,
     enableTip,
     enableLimitCustom,
-    estimatedGas,
     customBaseFee,
     customTip,
-    customGasLimit,
+    customGas,
     transactionFee,
     setGasLevel,
     setCustomBaseFee,
     setCustomTip,
-    setCustomGasLimit,
+    setCustomGas,
     toggleGasAdvanced,
     onConfirmGasFee,
   } = useGasFeeBoard(tokenDto, onConfirm);
@@ -40,10 +38,10 @@ function GasFeeBoard({ isRevision, onConfirm, tokenDto, isValid }: IGasFeeBoardP
         enableLimitCustom={enableLimitCustom}
         customBaseFee={customBaseFee}
         customTip={customTip}
-        customGasLimit={customGasLimit}
+        customGas={customGas}
         setCustomBaseFee={setCustomBaseFee}
         setCustomTip={setCustomTip}
-        setCustomGasLimit={setCustomGasLimit}
+        setCustomGas={setCustomGas}
       />
     </GasFeeBoardLayout>
   );

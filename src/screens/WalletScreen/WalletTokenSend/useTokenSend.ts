@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
@@ -93,7 +93,7 @@ const useTokenSend = () => {
   };
 
   const isValid = () => {
-    return tokenDto.contractAddress ? !!to && !!value && !!data : !!to && !!value;
+    return tokenDto.contractAddress ? !to || !value || !data : !to || !value;
   };
   //send transaction
   const send = (gasFeeInfo: IGasFeeInfo) => {

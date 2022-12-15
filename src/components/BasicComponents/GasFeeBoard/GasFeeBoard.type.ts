@@ -1,5 +1,3 @@
-import { BigNumber } from 'ethers';
-
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 

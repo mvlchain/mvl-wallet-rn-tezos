@@ -1,9 +1,8 @@
 import { InMemorySigner } from '@taquito/signer';
-import { TezosToolkit } from '@taquito/taquito';
-import { createNewPollingBasedHeadObservable } from '@taquito/taquito/dist/types/wallet/operation-factory';
+import { Estimate, TezosToolkit } from '@taquito/taquito';
 import Decimal from 'decimal.js';
-import { BigNumber, ethers } from 'ethers';
-import { formatEther, formatUnits } from 'ethers/lib/utils';
+import { BigNumber } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
 import { injectable } from 'tsyringe';
 
 import { loadingFunction } from '@@utils/loadingHelper';
@@ -21,7 +20,7 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
     return formatUnits(totalGasInBN, 6);
   };
 
-  estimateGas = async ({ rpcUrl, walletPrivateKey, to, amount }: IEstimateGasParamsTEZ) => {
+  estimateGas = loadingFunction<Estimate | undefined>(async ({ rpcUrl, walletPrivateKey, to, amount }: IEstimateGasParamsTEZ) => {
     try {
       const Tezos = new TezosToolkit(rpcUrl);
       Tezos.setProvider({
@@ -31,5 +30,5 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
     } catch (err) {
       console.log(err);
     }
-  };
+  });
 }

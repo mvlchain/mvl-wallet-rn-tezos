@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
-import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
@@ -9,13 +9,7 @@ import { getNetworkConfig, NETWORK_FEE_TYPE, Network } from '@@constants/network
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { request } from '@@utils/request';
 
-import {
-  ITransactionService,
-  IGetHistoryParams,
-  ISendTransactionRequest,
-  IRegisterTransactionRequest,
-  IRegisterTransactionResponse,
-} from './TransactionService.type';
+import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITezosData, ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 @injectable()
@@ -72,7 +66,7 @@ export class TransactionService implements ITransactionService {
             chainId: network.chainId,
             maxFeePerGas: gasFeeInfo.baseFee.add(gasFeeInfo.tip!),
             maxPriorityFeePerGas: gasFeeInfo.tip,
-            gasLimit: gasFeeInfo.gasLimit,
+            gasLimit: gasFeeInfo.gas,
             to,
             value,
             data,
@@ -81,7 +75,7 @@ export class TransactionService implements ITransactionService {
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
             gasPrice: gasFeeInfo.baseFee,
-            gasLimit: gasFeeInfo.gasLimit,
+            gasLimit: gasFeeInfo.gas,
             to,
             value,
             data,
@@ -118,7 +112,11 @@ export class TransactionService implements ITransactionService {
         },
         data: params,
       });
-      return res.data;
+      if (res.status === 201) {
+        return res.data;
+      } else {
+        return [];
+      }
     } catch (e) {
       return [];
     }

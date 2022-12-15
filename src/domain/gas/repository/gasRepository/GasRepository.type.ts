@@ -10,7 +10,7 @@ export interface IGasFeeInfoEthers {
 
 export interface IGetTotalGasFeeParamsEthers {
   baseFee: BigNumber;
-  gasLimit: BigNumber;
+  gas: BigNumber;
 }
 
 export interface IGasRepository {

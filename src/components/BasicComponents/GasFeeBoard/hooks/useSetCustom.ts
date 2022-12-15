@@ -11,17 +11,17 @@ import { getLeveledBaseFee } from '@@utils/gas';
 const useSetCustom = ({
   setCustomBaseFee,
   setCustomTip,
-  setCustomGasLimit,
+  setCustomGas,
   gasLevel,
   baseFee,
-  estimatedGas,
+  gas,
 }: {
   setCustomBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setCustomTip: Dispatch<SetStateAction<BigNumber | null>>;
-  setCustomGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
+  setCustomGas: Dispatch<SetStateAction<BigNumber | null>>;
   gasLevel: TGasLevel;
   baseFee: BigNumber | null;
-  estimatedGas: BigNumber | null;
+  gas: BigNumber | null;
 }) => {
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
@@ -44,8 +44,8 @@ const useSetCustom = ({
   }, [tip]);
 
   useEffect(() => {
-    setCustomGasLimit(estimatedGas);
-  }, [estimatedGas]);
+    setCustomGas(gas);
+  }, [gas]);
 };
 
 export default useSetCustom;
