@@ -10,6 +10,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useEstimateGas from './hooks/useEstimateGas';
 import useGetTotalGas from './hooks/useGetTotalFee';
+import useSetAmount from './hooks/useSetAmountMax';
 import useSetCustom from './hooks/useSetCustom';
 import useSetInitial from './hooks/useSetInitial';
 
@@ -43,6 +44,7 @@ const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (param: IGasFeeInfo) => P
     setGas,
     setCustomGas,
   });
+  useSetAmount(transactionFee, tokenDto);
 
   const toggleGasAdvanced = useCallback(() => {
     setAdvanced(!advanced);
