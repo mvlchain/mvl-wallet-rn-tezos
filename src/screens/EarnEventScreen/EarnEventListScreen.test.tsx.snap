@@ -959,8 +959,19 @@ exports[`EarnEventListScreen list 1`] = `
                   "keyExtractor": [Function],
                   "numColumns": 1,
                   "refreshControl": <RefreshControlMock
+                    colors={
+                      [
+                        "transparent",
+                      ]
+                    }
                     onRefresh={[MockFunction]}
                     refreshing={false}
+                    style={
+                      {
+                        "backgroundColor": "transparent",
+                      }
+                    }
+                    tintColor="transparent"
                   />,
                   "renderItem": [Function],
                 },
@@ -984,8 +995,19 @@ exports[`EarnEventListScreen list 1`] = `
             onVisibleIndicesChanged={[Function]}
             refreshControl={
               <RefreshControlMock
+                colors={
+                  [
+                    "transparent",
+                  ]
+                }
                 onRefresh={[MockFunction]}
                 refreshing={false}
+                style={
+                  {
+                    "backgroundColor": "transparent",
+                  }
+                }
+                tintColor="transparent"
               />
             }
             removeClippedSubviews={false}
@@ -1009,8 +1031,19 @@ exports[`EarnEventListScreen list 1`] = `
                 "onLayout": [Function],
                 "onScrollBeginDrag": [Function],
                 "refreshControl": <RefreshControlMock
+                  colors={
+                    [
+                      "transparent",
+                    ]
+                  }
                   onRefresh={[MockFunction]}
                   refreshing={false}
+                  style={
+                    {
+                      "backgroundColor": "transparent",
+                    }
+                  }
+                  tintColor="transparent"
                 />,
                 "style": {
                   "minHeight": 1,
