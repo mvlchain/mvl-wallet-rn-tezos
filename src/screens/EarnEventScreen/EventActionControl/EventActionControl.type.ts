@@ -1,11 +1,11 @@
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
-import { EarnEvent } from '@@domain/model/EarnEvent';
+import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
-import { IEventThirdParty } from '@@hooks/event/useEventDetailsState';
+import { IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
 import { valueOf } from '@@utils/types';
 export interface EarnEventActionModalProps {
   phase: valueOf<typeof EventPhase>;
-  event: EarnEvent;
+  event: EarnEventDto;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
 }
