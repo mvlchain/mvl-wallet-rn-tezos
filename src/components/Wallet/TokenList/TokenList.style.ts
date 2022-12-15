@@ -1,4 +1,4 @@
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 import { width } from '@@utils/ui';
@@ -20,3 +20,9 @@ export const Title = styled.Text`
 export const TokenFlatList = styled.FlatList`
   flex: 1;
 ` as unknown as typeof FlatList;
+
+export const InlineStyle = StyleSheet.create({
+  flatlist: {
+    backgroundColor: 'transparent',
+  },
+});

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { AnimatedFlashList, FlashList, ListRenderItemInfo } from '@shopify/flash-list';
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl } from 'react-native';
 
@@ -60,7 +60,15 @@ export const EarnEventListScreen = () => {
               keyExtractor={(item) => item.id}
               renderItem={renderEarnEventContents}
               estimatedItemSize={data?.length ?? 0}
-              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={refresh}
+                  tintColor='transparent'
+                  colors={['transparent']}
+                  style={S.InlineStyle.flashlist}
+                />
+              }
             />
           )}
         </S.EventListLayout>

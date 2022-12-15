@@ -1,4 +1,4 @@
-import { FlashList } from '@shopify/flash-list';
+import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 import { width } from '@@utils/ui';
@@ -47,3 +47,9 @@ export const EventListLayout = styled.View`
   height: 100%;
   /* background-color: rgba(128, 128, 128, 0.6); */
 `;
+
+export const InlineStyle = StyleSheet.create({
+  flashlist: {
+    backgroundColor: 'transparent',
+  },
+});
