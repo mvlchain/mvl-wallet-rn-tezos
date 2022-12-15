@@ -70,7 +70,7 @@ export class TransactionService implements ITransactionService {
         case NETWORK_FEE_TYPE.EIP1559:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
-            maxFeePerGas: gasFeeInfo.baseFee,
+            maxFeePerGas: gasFeeInfo.baseFee.add(gasFeeInfo.tip!),
             maxPriorityFeePerGas: gasFeeInfo.tip,
             gasLimit: gasFeeInfo.gasLimit,
             to,
