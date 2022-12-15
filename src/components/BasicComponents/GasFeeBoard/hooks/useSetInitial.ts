@@ -34,7 +34,7 @@ const useSetInitial = ({
       if (!gasFeeData) {
         throw new Error('Fail to get gasfee data');
       }
-      console.log(gasFeeData.baseFee ? formatEther(gasFeeData.baseFee) : '..');
+
       setEnableTip(gasFeeData.enableTip);
       setEnableLimitCustom(gasFeeData.enableLimitCustom);
       setBaseFee(gasFeeData.baseFee ?? null);
