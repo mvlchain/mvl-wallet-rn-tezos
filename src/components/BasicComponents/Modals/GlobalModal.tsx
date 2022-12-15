@@ -2,8 +2,9 @@ import RewardReceiptModal from '@@screens/EarnEventScreen/RewardReceiptModal/Rew
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import ViewScanModal from '../ViewScanButton/ViewScanModal';
-
+import AmountInputModal from './AmountInputModal';
 import BottomSelectModal from './BottomSelectModal';
+import ReceiveQRModal from './ReceiveQRModal';
 import SettingSignOutModal from './SettingSignOutModal';
 import TextInputModal from './TextInputModal';
 import TextModal from './TextModal';
@@ -23,6 +24,8 @@ export const MODAL_TYPES = {
   CONFIRM_TX_PIN: 'CONFIRM_TX_PIN',
   REWARD_RECEIPT: 'REWARD_RECEIPT',
   VIEW_SCAN: 'VIEW_SCAN',
+  AMOUNT_INPUT: 'AMOUNT_INPUT',
+  RECEIVE_QR: 'RECEIVE_QR',
 } as const;
 
 export const MODAL_COMPONENTS = {
@@ -34,6 +37,8 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.TEXT_INPUT]: TextInputModal,
   [MODAL_TYPES.CONFIRM_SEND]: ConfirmSendModal,
   [MODAL_TYPES.CONFIRM_TX_PIN]: ConfirmTxPinModal,
+  [MODAL_TYPES.AMOUNT_INPUT]: AmountInputModal,
+  [MODAL_TYPES.RECEIVE_QR]: ReceiveQRModal,
   [MODAL_TYPES.REWARD_RECEIPT]: RewardReceiptModal,
   [MODAL_TYPES.VIEW_SCAN]: ViewScanModal,
 };

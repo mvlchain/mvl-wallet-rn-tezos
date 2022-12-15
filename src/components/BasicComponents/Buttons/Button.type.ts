@@ -4,7 +4,7 @@ import { SvgProps } from 'react-native-svg/lib/typescript/elements/Svg';
 import { CommonColor, ThemeColor } from '@@style/theme';
 
 //Base
-export const BUTTON_SIZE = { SMALL: 'small', DEFAULT: 'default' } as const;
+export const BUTTON_SIZE = { SMALL: 'small', FIT: 'fit', DEFAULT: 'default' } as const;
 export const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
 
 export type TButtonType = typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];

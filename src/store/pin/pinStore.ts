@@ -1,7 +1,5 @@
+import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
-
-import { PIN_LAYOUT, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 
 import { PinStore } from './pinStore.type';
 
@@ -15,8 +13,8 @@ const INITIAL_PINSTORE_STATE = {
   pinModalRejector: null,
 };
 
-export const pinStore = create<PinStore>()(
-  devtools(
+export const pinStore = create<PinStore>(
+  zustandFlipper(
     (set, get) => ({
       ...INITIAL_PINSTORE_STATE,
       setState: (newState) => {
@@ -43,6 +41,6 @@ export const pinStore = create<PinStore>()(
         get().pinModalRejector?.(message);
       },
     }),
-    { name: 'pinStore', enabled: __DEV__ }
+    'pinStore'
   )
 );

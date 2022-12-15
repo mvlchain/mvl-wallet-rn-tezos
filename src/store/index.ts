@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
+import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
 export class DeviceShareHolderDto {
   readonly postboxKeyJsonEncrypted: string;
@@ -23,19 +23,20 @@ type stateType = {
   toggle: () => void;
 };
 
-const useStore = create<stateType>()(
-  devtools(
-    persist(
+const useStore = create(
+  zustandFlipper(
+    persist<stateType>(
       (set) => ({
         isAuthenticated: false,
         deviceShare: undefined,
-        toggle: () => set((state) => ({ isAuthenticated: !state.isAuthenticated }), false, 'toggle'),
+        toggle: () => set((state) => ({ isAuthenticated: !state.isAuthenticated })),
       }),
       {
         name: 'root',
         getStorage: () => AsyncStorage,
       }
-    )
+    ),
+    'rootStore'
   )
 );
 

@@ -1,25 +1,38 @@
 import styled, { css } from 'styled-components/native';
 
-import { width } from '@@utils/ui';
+import { height, width } from '@@utils/ui';
 
 import * as Type from './Button.type';
 
 //Base
 export const BaseButtonContainer = styled.Pressable<Type.IBaseButtonWrapper>`
   ${({ size }) =>
-    size === Type.BUTTON_SIZE.SMALL
+    size === Type.BUTTON_SIZE.FIT
+      ? css`
+          flex-wrap: wrap;
+          flex-direction: row;
+          align-items: baseline;
+        `
+      : size === Type.BUTTON_SIZE.SMALL
       ? null
       : css`
           width: 100%;
         `};
 `;
 export const BaseButton = styled.View<Type.IBaseButtonProps>`
-  width: 100%;
+  ${({ size }) =>
+    size === Type.BUTTON_SIZE.FIT
+      ? null
+      : css`
+          width: 100%;
+        `};
   flex-direction: row;
   align-items: center;
   justify-content: center;
   border-radius: ${width * 8}px;
-  padding: ${({ size }) => (size === Type.BUTTON_SIZE.SMALL ? `${width * 12}` : `${width * 18}`)}px ${width * 16}px;
+  padding: ${({ size }) =>
+      size === Type.BUTTON_SIZE.SMALL ? `${height * 12}` : size === Type.BUTTON_SIZE.FIT ? `${height * 12}` : `${height * 18}`}px
+    ${width * 16}px;
   background-color: ${({ theme, pressed, disabled, bgColor, bgColorPressed, bgColorDisabled }) =>
     disabled ? theme.color[bgColorDisabled] : !disabled && pressed ? theme.color[bgColorPressed] : theme.color[bgColor]};
   opacity: ${({ pressed }) => (pressed ? 0.7 : 1)};
@@ -33,7 +46,8 @@ export const BaseButtonIconWrapper = styled.View`
 `;
 
 export const BaseButtonLabel = styled.Text<Type.IBaseButtonLabelProps>`
-  ${({ theme, size }) => (size === Type.BUTTON_SIZE.SMALL ? theme.font.Label.sm : theme.font.Label.lg)};
+  ${({ theme, size }) =>
+    size === Type.BUTTON_SIZE.SMALL ? theme.font.Label.sm : size === Type.BUTTON_SIZE.FIT ? theme.font.Label.sm : theme.font.Label.lg};
   color: ${({ theme, disabled, txColor, txColorDisabled }) => (disabled ? theme.color[txColorDisabled] : theme.color[txColor])};
   font-family: ${({ theme }) => theme.fmRegular};
 `;

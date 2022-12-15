@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { parseUnits, commify } from 'ethers/lib/utils';
+import { BigNumber } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
@@ -19,12 +20,15 @@ import * as Type from './TextField.type';
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-  const { useMax, onSelect, label, tokenDto, value, onChange, hint } = props;
+  const { useMax, onSelect, label, tokenDto, onChange, hint, disableHint, debounceTime = 1000 } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const { balance } = useOneTokenBalance(tokenDto);
   const { color } = useColor();
-  const debounceCallback = useDebounce(onChange, 1000);
+  const debounceCallback = useDebounce((value: BigNumber | null) => {
+    onChange(value);
+    setShowDelete(!!value);
+  }, debounceTime);
 
   useEffect(() => {
     debounceCallback(getUnitValue(displayValue));
@@ -50,14 +54,24 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
     setShowDelete(true);
   };
 
+  const alphaNumericDecimalRegex = () => {
+    // tokenDTO에 있는 decimals를 기준으로 입력 가능하게 자름
+    return new RegExp(`^(\\d)*([.]\\d{0,${tokenDto.decimals}})*?$`);
+  };
+
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
     let value = data.nativeEvent.text;
-    if (!value) {
-      setShowDelete(false);
-    }
+    // .으로 시작할 때 제외
+    if (value === '.') return;
+    // 숫자, 소수점만 입력 가능, 소수점 token decimals까지만 입력 가능
+    const regExp = alphaNumericDecimalRegex();
+    if (!regExp.test(value)) return;
+
+    // 0이 여러개로 시작할 때 제외
     if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
       value = value.slice(1);
     }
+    // 소수점 2개 제외
     if (value.indexOf('.') !== value.lastIndexOf('.')) {
       return;
     }
@@ -68,7 +82,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
         <S.Label>{label}</S.Label>
-        <TextButton label={'Max'} onPress={() => {}} disabled={true} />
+        {useMax && <TextButton label={'Max'} onPress={() => {}} disabled={true} />}
       </S.TradeVolumeTop>
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
@@ -89,7 +103,7 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
           {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
-      {hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`Balance: ${balance}`}</S.Balance>}
+      {!disableHint && (hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`Balance: ${balance}`}</S.Balance>)}
     </S.TradeVolumeContainer>
   );
 }

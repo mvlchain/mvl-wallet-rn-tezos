@@ -19,6 +19,7 @@ export interface IModalComponentProps {
 
 export interface IModalLayoutComponentProps extends IModalComponentProps {
   modalPosition: TModalPosition;
+  isReverseBtn?: boolean;
 }
 
 export interface IModalTypeProps {
