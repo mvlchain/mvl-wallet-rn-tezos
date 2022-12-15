@@ -20,6 +20,7 @@ export const IconWrapper = styled.View`
 `;
 
 export const Text = styled.Text`
+  flex: 1;
   padding: 0 ${width * 24}px;
   ${({ theme }) => theme.font.Label.md};
   color: ${({ theme }) => theme.color.blackWhite};
