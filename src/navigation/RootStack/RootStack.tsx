@@ -16,7 +16,9 @@ import { GlobalModal } from '@@components/BasicComponents/Modals/GlobalModal';
 import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
 import AuthStack from '@@navigation/AuthStack';
+import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import MainTab from '@@navigation/MainTab';
+import { DeepLinkConnectProxyScreen } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
@@ -40,6 +42,7 @@ import WalletTransactionResult from '@@screens/WalletScreen/WalletTransactionRes
 import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
 import { fontSize, height } from '@@utils/ui';
 
+import { navigationRef } from './RootNavigation';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from './RootStack.type';
 
 const { Navigator, Screen } = createStackNavigator<TRootStackParamList>();
@@ -171,11 +174,6 @@ function RootStack() {
       },
     },
     {
-      name: ROOT_STACK_ROUTE.EVENT_DETAILS,
-      component: EarnEventDetailsScreen,
-      options: handleStackHeaderOption({ title: '' }),
-    },
-    {
       name: ROOT_STACK_ROUTE.WALLET_TOKEN_RECEIVE_SELECT,
       component: WalletTokenReceiveSelect,
       options: handleStackHeaderOption({ title: t('receive') }),
@@ -184,7 +182,7 @@ function RootStack() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <NavigationContainer theme={routerTheme}>
+      <NavigationContainer ref={navigationRef} theme={routerTheme} linking={DeepLinkOptions}>
         <Navigator
           initialRouteName={ROOT_STACK_ROUTE.AUTH}
           screenOptions={() => ({
@@ -205,6 +203,8 @@ function RootStack() {
           {screens.map((props) => (
             <Screen key={props.name} {...props} />
           ))}
+          <Screen name={ROOT_STACK_ROUTE.EVENT_DETAILS} component={EarnEventDetailsScreen} options={handleStackHeaderOption({ title: '' })} />
+          <Screen name={ROOT_STACK_ROUTE.DEEPLINK_CONNECT} component={DeepLinkConnectProxyScreen} options={{ headerShown: false }} />
         </Navigator>
         <LoadingIndicator />
         <PinModal />

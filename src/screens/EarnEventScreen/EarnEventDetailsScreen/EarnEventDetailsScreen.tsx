@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import Webview from '@@components/BasicComponents/Webview';
-import { useEarnEventDetailsState, IEventThirdParty } from '@@hooks/event/useEventDetailsState';
+import { useEarnEventDetailsUiState, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -16,7 +16,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
 /**
  * Event details screen that displays contents to the WebView.
  * WebView: display event contents (O)
- * EventActionControl (~ing)
+ * EventActionControl (O)
  * RewardReceiptModal (O WebView based modal)
  * ThirdPartyApp (O)
  * Alert modal
@@ -33,11 +33,11 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * UseCases
  *  • useConnectThirdParty
  *  • useDisconnectThirdParty
- *  • useThirdPartyConnection (CheckThirdPartyConnection)
- *  • useUserPoints
- *  • useOnClaimEvent
- *  • useClaimInfomation (GetClaimInfomation)
- *  • useClaimStatus
+ *  • useThirdPartyConnection (O)
+ *  • useUserPoints (O)
+ *  • useClaimStatusInformation (O)
+ *    - useClaimInfomation
+ *    - useClaimStatus
  *
  * Scenario (Analysis of legacy)
  *   whenPageLoaded (event: EarnEvent)
@@ -95,7 +95,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *
  * DeepLinks
  *  clutchwallet://connect
- *  clutchwallet://screen/earn
+ *  clutchwallet://screen/earn (O)
  *  clutchwallet://screen/trade
  */
 export function EarnEventDetailsScreen() {
@@ -105,22 +105,29 @@ export function EarnEventDetailsScreen() {
     console.error('inappropriate event params!');
   }
 
-  const { phase, thirdParty, claimStatusInfo } = useEarnEventDetailsState(params?.data);
+  console.log(`Details> i: ${params.i}`);
 
-  const data = params?.data;
+  const { event, phase, thirdParty, claimStatusInfo } = useEarnEventDetailsUiState(params.i, params.data);
+  if (!event) {
+    console.log(`Details> event is null`);
+    return null;
+  }
+
+  const isThirdPartyConnected = thirdParty.thirdPartyConnection?.exists ?? false;
 
   function decorateThirdPartyApp(
-    thirdParyExists: boolean,
+    isThirdPartyConnected: boolean,
     thirdPartyDisplayName: string | null,
     thirdPartyAppName: string | undefined
   ): {
+    isThirdPartyConnected: boolean;
     connectionState: string;
     displayName: string | undefined;
   } {
     let connectionState = '';
     let displayName: string | undefined = '';
 
-    if (thirdParyExists) {
+    if (isThirdPartyConnected) {
       connectionState = t('connected_account');
       displayName = thirdPartyDisplayName ?? undefined;
     } else {
@@ -129,6 +136,7 @@ export function EarnEventDetailsScreen() {
     }
 
     return {
+      isThirdPartyConnected,
       connectionState,
       displayName,
     };
@@ -136,18 +144,20 @@ export function EarnEventDetailsScreen() {
 
   return (
     <S.Container>
-      {data ? (
+      {event ? (
         <>
-          <Webview url={data.detailPageUrl} />
+          <Webview url={event.detailPageUrl} />
 
           {thirdParty.isThirdPartySupported && thirdParty.thirdPartyConnection ? (
             <ThirdPartyApp
-              avatarUrl={data.iconUrl}
-              {...decorateThirdPartyApp(thirdParty.thirdPartyConnection.exists ?? false, thirdParty.thirdPartyConnection.displayName, data.app?.name)}
+              avatarUrl={event.iconUrl}
+              {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, event.app?.name)}
+              onConnectPress={() => {}}
+              onDisconnectPress={() => {}}
             />
           ) : null}
 
-          <EventActionControl phase={phase} event={data} thirdParty={thirdParty} claimStatusInfo={claimStatusInfo} />
+          <EventActionControl phase={phase} event={event} thirdParty={thirdParty} claimStatusInfo={claimStatusInfo} />
         </>
       ) : null}
     </S.Container>

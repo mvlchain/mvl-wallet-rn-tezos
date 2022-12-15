@@ -39,9 +39,12 @@ jest.mock('react-i18next', () => ({
 class MockEarnEventRepository implements EarnEventRepository {
   constructor() {}
 
-  getEvents(): Promise<EarnEventDto[]> {
+  getEventList(): Promise<EarnEventDto[]> {
     const res = mockApi<EarnEventDto[]>('v1/earn-event/list.json');
     return Promise.resolve(res ?? []);
+  }
+  getEvent(eventId: string): Promise<EarnEventDto> {
+    throw new UnsupportOperationError();
   }
   getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]> {
     return Promise.resolve([]);

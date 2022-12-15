@@ -64,8 +64,6 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   } else {
     rootView.backgroundColor = [UIColor whiteColor];
   }
-  
-  NSLog(@"Darby> displaying rootView's background color: %@", [UIColor systemBackgroundColor]);
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
@@ -127,12 +125,12 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
    openURL:(NSURL *)url
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  NSString *myString = url.absoluteString;
-  NSLog(@"String to handle : %@ ", myString);
-  if ([myString hasPrefix:@"clutchwallet"]) {
-    if ([myString hasPrefix:@"clutchwallet://***REMOVED***"] || [myString hasPrefix:@"clutchwallet://***REMOVED***"]) {
+  NSString *urlString = url.absoluteString;
+  NSLog(@"URL> %@ ", urlString);
+  if ([urlString hasPrefix:@"clutchwallet"]) {
+    if ([urlString hasPrefix:@"clutchwallet://***REMOVED***"] || [urlString hasPrefix:@"clutchwallet://***REMOVED***"]) {
       if (@available(iOS 13.0, *)) {
-        [RNCustomAuthSdk handle:myString];
+        [RNCustomAuthSdk handle:urlString];
         return YES;
       } else {
         // RNCustomAuthSdk can't handle earlier versions
@@ -144,6 +142,15 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   }
 
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)application
+    continueUserActivity:(NSUserActivity *)userActivity
+    restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+  return [RCTLinkingManager application:application
+                   continueUserActivity:userActivity
+                     restorationHandler:restorationHandler];
 }
 
 
