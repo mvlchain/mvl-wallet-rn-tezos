@@ -115,7 +115,7 @@ PODS:
   - PromiseKit/Foundation (6.18.1):
     - PromiseKit/CorePromise
   - PromisesObjC (2.1.1)
-  - Protobuf (3.21.11)
+  - Protobuf (3.21.9)
   - QrCode (1.0.0):
     - React
   - RCT-Folly (2021.07.22.00):
@@ -838,7 +838,7 @@ SPEC CHECKSUMS:
   Permission-PhotoLibrary: 5b34ca67279f7201ae109cef36f9806a6596002d
   PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  Protobuf: 3acb308a1e208605afd50866b98ec220141bcb8c
+  Protobuf: 02524ec14183fe08fb259741659e79683788158b
   QrCode: 703276888a8e1e5a77606392f82ce758d895a450
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
