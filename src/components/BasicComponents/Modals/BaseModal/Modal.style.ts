@@ -16,7 +16,6 @@ export const ModalTopWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  height: ${width * 40}px;
   padding-top: ${width * 8}px;
 `;
 
