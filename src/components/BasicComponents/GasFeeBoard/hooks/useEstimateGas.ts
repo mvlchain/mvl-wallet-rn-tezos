@@ -9,15 +9,13 @@ import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useEstimatedGas = ({
+const useEstimateGas = ({
   tokenDto,
-  setEstimatedGas,
-  setCustomGasLimit,
+  setGas,
   setBaseFee,
 }: {
   tokenDto: TokenDto;
-  setEstimatedGas: Dispatch<SetStateAction<BigNumber | null>>;
-  setCustomGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
+  setGas: Dispatch<SetStateAction<BigNumber | null>>;
   setBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
   const gasService = useDi('GasService');
@@ -40,8 +38,7 @@ const useEstimatedGas = ({
         console.log('fail to estimate gas');
         return;
       }
-      setEstimatedGas(estimation.gasUsage);
-      setCustomGasLimit(estimation.gasUsage);
+      setGas(estimation.gasUsage);
       //tezos return basefee after estimategas
       if (estimation.baseFee) {
         setBaseFee(estimation.baseFee);
@@ -58,4 +55,4 @@ const useEstimatedGas = ({
     debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
   }, [to, value, data]);
 };
-export default useEstimatedGas;
+export default useEstimateGas;

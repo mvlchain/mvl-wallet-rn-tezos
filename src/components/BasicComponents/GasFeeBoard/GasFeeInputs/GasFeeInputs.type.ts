@@ -7,8 +7,8 @@ export interface IGasFeeInputsProps {
   enableLimitCustom: boolean;
   customBaseFee: BigNumber | null;
   customTip: BigNumber | null;
-  customGasLimit: BigNumber | null;
+  customGas: BigNumber | null;
   setCustomBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setCustomTip: Dispatch<SetStateAction<BigNumber | null>>;
-  setCustomGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
+  setCustomGas: Dispatch<SetStateAction<BigNumber | null>>;
 }

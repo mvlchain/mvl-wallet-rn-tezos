@@ -1,13 +1,11 @@
-import { Estimate } from '@taquito/taquito';
 import { BigNumber } from 'ethers';
-import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { injectable, inject } from 'tsyringe';
 
-import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 
-import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest, TGasLevel } from './GasService.type';
+import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from './repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from './repository/gasRepositoryTezos/GasRepositoryTezos';
@@ -48,7 +46,7 @@ export class GasService implements IGasService {
     }
   };
 
-  getTotalGasFee = ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => {
+  getTotalGasFee = ({ selectedNetwork, baseFee, tip, gas }: IGetTotalGasFeeRequest) => {
     const network = getNetworkConfig(selectedNetwork);
     try {
       switch (network.networkFeeType) {
@@ -58,19 +56,19 @@ export class GasService implements IGasService {
           }
           return this.gasRepositoryTezos.getTotalGasFee({ baseFee, tip });
         case NETWORK_FEE_TYPE.EIP1559:
-          if (!tip || !baseFee || !estimatedGas) {
+          if (!tip || !baseFee || !gas) {
             throw new Error(`basefee, tip,estimatedGas is required`);
           }
           return this.gasRepositoryEip1559.getTotalGasFee({
             baseFee,
             tip,
-            estimatedGas,
+            gas,
           });
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-          if (!baseFee || !gasLimit) {
+          if (!baseFee || !gas) {
             throw new Error(`basefee,estimatedGas is required`);
           }
-          return this.gasRepository.getTotalGasFee({ baseFee, gasLimit });
+          return this.gasRepository.getTotalGasFee({ baseFee, gas });
       }
     } catch (err) {
       console.log(err);

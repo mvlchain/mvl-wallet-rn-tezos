@@ -8,14 +8,14 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useGetTotalGas = ({
   customBaseFee,
-  customGasLimit,
+  customGas,
   customTip,
-  estimatedGas,
+  gas,
 }: {
   customBaseFee: BigNumber | null;
-  customGasLimit: BigNumber | null;
+  customGas: BigNumber | null;
   customTip: BigNumber | null;
-  estimatedGas: BigNumber | null;
+  gas: BigNumber | null;
 }) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork } = walletPersistStore();
@@ -25,13 +25,13 @@ const useGetTotalGas = ({
   const isTransactionFeeReady = useMemo(() => {
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.EIP1559:
-        return customBaseFee && customGasLimit && customTip;
+        return customBaseFee && customGas && customTip;
       case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-        return customBaseFee && customGasLimit;
+        return customBaseFee && customGas;
       case NETWORK_FEE_TYPE.TEZOS:
-        return customBaseFee && customGasLimit && customTip;
+        return customBaseFee && customGas && customTip;
     }
-  }, [customBaseFee, customGasLimit, customTip]);
+  }, [customBaseFee, customGas, customTip]);
 
   const transactionFee = useMemo(() => {
     if (!isTransactionFeeReady) return '-';
@@ -39,15 +39,14 @@ const useGetTotalGas = ({
       selectedNetwork,
       baseFee: customBaseFee!,
       tip: customTip,
-      gasLimit: customGasLimit,
-      estimatedGas,
+      gas: customGas,
     });
     if (!total) {
       console.log('fail to get total');
       return '-';
     }
     return total;
-  }, [customBaseFee, customTip, customGasLimit, estimatedGas]);
+  }, [customBaseFee, customTip, customGas, gas]);
 
   return { transactionFee };
 };

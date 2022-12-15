@@ -9,7 +9,7 @@ export type TSelectedNetwork = { selectedNetwork: Network };
 export interface IGasFeeInfo {
   baseFee: BigNumber;
   tip?: BigNumber;
-  gasLimit: BigNumber;
+  gas: BigNumber;
   total: number;
 }
 
@@ -17,8 +17,7 @@ export interface IGetTotalGasFeeRequest {
   selectedNetwork: Network;
   baseFee: BigNumber;
   tip?: BigNumber | null;
-  estimatedGas?: BigNumber | null;
-  gasLimit?: BigNumber | null;
+  gas?: BigNumber | null;
 }
 
 export interface IEstimateGasRequest {
@@ -45,6 +44,6 @@ export interface IGetGasFeeResponse {
 }
 export interface IGasService {
   getGasFeeData: (selectedNetwork: Network) => Promise<IGetGasFeeResponse | undefined>;
-  getTotalGasFee: ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => string | undefined;
+  getTotalGasFee: ({ selectedNetwork, baseFee, tip, gas }: IGetTotalGasFeeRequest) => string | undefined;
   estimateGas: (args: IEstimateGasRequest) => Promise<IEstimateGasResponse | undefined>;
 }
