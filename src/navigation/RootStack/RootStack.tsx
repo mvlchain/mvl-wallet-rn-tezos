@@ -20,6 +20,7 @@ import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import MainTab from '@@navigation/MainTab';
 import { DeepLinkConnectProxyScreen } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
+import EarnEventTransferringScreen from '@@screens/EarnEventScreen/EarnEventTransferringScreen';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
 import SettingAppVersionScreen from '@@screens/SettingScreen/SettingAppVersionScreen';
@@ -187,6 +188,21 @@ function RootStack() {
       component: WalletTokenReceiveSelect,
       options: handleStackHeaderOption({ title: t('receive') }),
     },
+    {
+      name: ROOT_STACK_ROUTE.EVENT_DETAILS,
+      component: EarnEventDetailsScreen,
+      options: handleStackHeaderOption({ title: '' }),
+    },
+    {
+      name: ROOT_STACK_ROUTE.DEEPLINK_CONNECT,
+      component: DeepLinkConnectProxyScreen,
+      options: { headerShown: false },
+    },
+    {
+      name: ROOT_STACK_ROUTE.EARN_EVENT_TRNASFERRING,
+      component: EarnEventTransferringScreen,
+      options: { headerShown: false, gestureEnabled: false },
+    },
   ];
 
   return (
@@ -212,8 +228,6 @@ function RootStack() {
           {screens.map((props) => (
             <Screen key={props.name} {...props} />
           ))}
-          <Screen name={ROOT_STACK_ROUTE.EVENT_DETAILS} component={EarnEventDetailsScreen} options={handleStackHeaderOption({ title: '' })} />
-          <Screen name={ROOT_STACK_ROUTE.DEEPLINK_CONNECT} component={DeepLinkConnectProxyScreen} options={{ headerShown: false }} />
         </Navigator>
         <LoadingIndicator />
         <PinModal />
