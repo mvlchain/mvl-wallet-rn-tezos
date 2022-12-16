@@ -8,7 +8,7 @@ import { TDeepLinkConnectProxyRouteProps } from './DeepLinkConnectProxyScreen.ty
 
 /**
  * DeepLink redirection proxy
- * clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={alias}
+ * clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={eventAlias}
  */
 export const DeepLinkConnectProxyScreen = () => {
   const navigation = useNavigation<TRootStackNavigationProps<typeof ROOT_STACK_ROUTE.MAIN>>();

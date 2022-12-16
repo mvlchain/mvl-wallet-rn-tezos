@@ -1,9 +1,12 @@
 /* eslint-disable max-lines */
 import { useEffect, useState } from 'react';
 
+import Url from 'url';
+
 import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Decimal from 'decimal.js';
+import qs from 'qs';
 import { useTranslation } from 'react-i18next';
 
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
@@ -15,7 +18,8 @@ import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { useDi } from '@@hooks/useDi';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
-import { isNotBlank, format } from '@@utils/strings';
+import { assembleUrl, evaluateUrlScheme } from '@@utils/regex';
+import { isNotBlank, format, isBlank } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 /**
@@ -33,6 +37,7 @@ export interface IThirdPartyConnection {
   token: string | null;
   exists: boolean;
   displayName: string | null;
+  connectionDeepLink: string | null;
 }
 
 export interface IEventPointAmount {
@@ -113,6 +118,7 @@ export const useEarnEventDetailsUiState = (
 
         try {
           const thirdPartyConnection = await repository.checkThirdPartyConnection(appId, token);
+          const connectionDeepLink = getThirdPartyConnectionDeepLink(event, thirdPartyApp.connectionDeepLink);
 
           setThirdParty({
             isThirdPartySupported: true,
@@ -121,6 +127,7 @@ export const useEarnEventDetailsUiState = (
               token,
               exists: thirdPartyConnection.exists,
               displayName: thirdPartyConnection.displayName,
+              connectionDeepLink,
             },
             points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
             error: null,
@@ -209,6 +216,11 @@ interface ThirdPartyConnectionArgs {
   error: Error | unknown;
 }
 
+/**
+ * Parse third-party app arguments appId, token
+ * @param appId third-party app id
+ * @param deepLink optional deeplink that is given by third-party app
+ */
 function parseThirdPartyConnectionArgs(appId: string, deepLink?: ThirdPartyDeepLink): ThirdPartyConnectionArgs {
   let token: string | null = null;
 
@@ -251,4 +263,27 @@ function isEventActionButtonEnabled(
   const isAbleToClaim = phase == EventPhase.OnClaim && claimInfo.isClaimable;
 
   return (!isThirdPartySupported || isThirdPartyConnected) && (isOnEvent || isAbleToClaim);
+}
+
+/**
+ * modify third-party connectionDeepLink according to clutch policy (fallback)
+ * @param connectionDeepLink a link from event.app.connectionDeepLink field
+ * @returns
+ */
+function getThirdPartyConnectionDeepLink(event: EarnEventDto, connectionDeepLink: string | null): string | null {
+  if (isBlank(connectionDeepLink)) {
+    return null;
+  }
+
+  const scheme = evaluateUrlScheme(connectionDeepLink);
+
+  switch (scheme) {
+    case '***REMOVED***:':
+    case '***REMOVED***:':
+      const url = Url.parse(connectionDeepLink ?? '', true);
+      url.query.e = event.id;
+      return assembleUrl(url.protocol, url.host, url.pathname, qs.stringify(url.query));
+    default:
+      return connectionDeepLink ?? null;
+  }
 }

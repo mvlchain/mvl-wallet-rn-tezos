@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Linking, Alert } from 'react-native';
 
 import Webview from '@@components/BasicComponents/Webview';
 import { useEarnEventDetailsUiState, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
-import { format } from '@@utils/strings';
+import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { format, isNotBlank } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
 import { ThirdPartyApp } from '../ThirdPartyApp';
@@ -94,12 +96,13 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * • `transaction fee` will only be visible when claimInfo.fee > 0
  *
  * DeepLinks
- *  clutchwallet://connect
+ *  clutchwallet://connect (O)
  *  clutchwallet://screen/earn (O)
  *  clutchwallet://screen/trade
  */
 export function EarnEventDetailsScreen() {
   const { t } = useTranslation();
+  const navigation = useNavigation<TRootStackNavigationProps<typeof ROOT_STACK_ROUTE.EVENT_DETAILS>>();
   const { params } = useRoute<TEarnEventDetailsRouteProps>();
   if (!params) {
     console.error('inappropriate event params!');
@@ -108,6 +111,19 @@ export function EarnEventDetailsScreen() {
   console.log(`Details> i: ${params.i}`);
 
   const { event, phase, thirdParty, claimStatusInfo } = useEarnEventDetailsUiState(params.i, params.data);
+
+  const onConnectPress = useCallback(
+    async (uri: string) => {
+      const supported = await Linking.canOpenURL(uri);
+      if (supported) {
+        await Linking.openURL(uri);
+      } else {
+        Alert.alert('Inappropriate link to open!');
+      }
+    },
+    [event]
+  );
+
   if (!event) {
     console.log(`Details> event is null`);
     return null;
@@ -152,7 +168,14 @@ export function EarnEventDetailsScreen() {
             <ThirdPartyApp
               avatarUrl={event.iconUrl}
               {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, event.app?.name)}
-              onConnectPress={() => {}}
+              onConnectPress={() => {
+                // decorated deeplink
+                const connectionDeepLink = thirdParty.thirdPartyConnection!.connectionDeepLink;
+                console.log(`DeepLink> connectionDeepLink: ${connectionDeepLink}`);
+                if (connectionDeepLink) {
+                  onConnectPress(connectionDeepLink);
+                }
+              }}
               onDisconnectPress={() => {}}
             />
           ) : null}
