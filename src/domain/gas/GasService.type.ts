@@ -45,6 +45,6 @@ export interface IGetGasFeeResponse {
 }
 export interface IGasService {
   getGasFeeData: (selectedNetwork: Network) => Promise<IGetGasFeeResponse | undefined>;
-  getTotalGasFee: ({ selectedNetwork, baseFee, tip, gas }: IGetTotalGasFeeRequest) => string | undefined;
+  getTotalGasFee: ({ selectedNetwork, baseFee, tip, gas }: IGetTotalGasFeeRequest) => BigNumber | undefined;
   estimateGas: (args: IEstimateGasRequest) => Promise<IEstimateGasResponse | undefined>;
 }

@@ -5,7 +5,6 @@ import { inject, injectable } from 'tsyringe';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { WalletService } from '@@domain/wallet/services/WalletService';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 import { etherBNtoBN } from '@@utils/gas';
 import { loadingFunction } from '@@utils/loadingHelper';
 
@@ -29,7 +28,7 @@ export class GasRepositoryImpl implements IGasRepository {
 
   getTotalGasFee = ({ baseFee, gas }: IGetTotalGasFeeParamsEthers) => {
     const totalGas = baseFee.multipliedBy(gas);
-    return formatBigNumber(totalGas, 18).toString(10);
+    return new BigNumber(totalGas);
   };
 
   estimateGas = loadingFunction<BigNumber>(async (networkInfo: INetworkInfo, args: TransactionRequest) => {

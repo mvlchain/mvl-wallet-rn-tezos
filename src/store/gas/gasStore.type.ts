@@ -1,14 +1,17 @@
 import { BigNumber } from 'bignumber.js';
 
+import { TGasLevel } from '@@domain/gas/GasService.type';
+
 export interface IGasStoreState {
   baseFee: BigNumber | null;
   tip: BigNumber | null;
   gas: BigNumber | null;
   total: BigNumber | null;
+  level: TGasLevel;
 }
 
 export interface IGasStore extends IGasStoreState {
-  setGas: (newState: Partial<IGasStoreState>) => void;
-  resetGas: () => void;
-  inString: (target: keyof IGasStoreState, decimal: number) => string | null;
+  setState: (newState: Partial<IGasStoreState>) => void;
+  resetState: () => void;
+  inString: (target: keyof Omit<IGasStoreState, 'level'>, decimal: number) => string | null;
 }

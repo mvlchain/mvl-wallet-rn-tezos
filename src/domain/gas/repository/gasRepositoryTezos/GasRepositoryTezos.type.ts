@@ -12,6 +12,6 @@ export interface IEstimateGasParamsTEZ extends TransferParams {
 }
 
 export interface IGasRepositoryTezos {
-  getTotalGasFee: (args: IGetTotalGasFeeParamsTEZ) => string;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsTEZ) => BigNumber;
   estimateGas: (args: IEstimateGasParamsTEZ) => Promise<Estimate | undefined>;
 }

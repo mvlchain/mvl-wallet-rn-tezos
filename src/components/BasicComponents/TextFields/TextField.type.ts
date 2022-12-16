@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { BigNumber } from 'bignumber.js';
 import { TextInputProps } from 'react-native';
 
@@ -28,7 +26,7 @@ export interface IBaseTextFieldProps {
 export interface IGasTextFieldProps {
   defaultValue?: any;
   value?: BigNumber | null;
-  setValue?: Dispatch<SetStateAction<BigNumber | null>> | Dispatch<SetStateAction<BigNumber>>;
+  setValue?: (value: BigNumber) => void;
   hint?: string;
   style?: TextInputProps['style'];
   unit?: TGasUnit;

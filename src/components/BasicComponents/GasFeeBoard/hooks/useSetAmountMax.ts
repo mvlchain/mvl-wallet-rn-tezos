@@ -5,27 +5,28 @@ import BigNumber from 'bignumber.js';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
+import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 
-const useSetAmount = (fee: string, tokenDto: TokenDto) => {
+const useSetAmountMax = (tokenDto: TokenDto) => {
   const { value, setBody } = transactionRequestStore();
   const { balance } = useOneTokenBalance(tokenDto);
+  const { total } = gasStore();
   const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
-  const bnFee = new BigNumber(fee).shiftedBy(tokenDto.decimals);
-  const bnTotal = value ? bnFee.plus(value) : null;
+  const bnTotal = total && value ? total.plus(value) : null;
 
   useEffect(() => {
-    if (fee === '-') return;
+    if (!total) return;
     debounceFix();
-  }, [fee]);
+  }, [total]);
 
   const fixValue = () => {
-    if (!bnTotal || bnTotal.lt(bnBalance)) return;
+    if (!total || !bnTotal || bnTotal.lt(bnBalance)) return;
     setBody({
-      value: bnBalance.minus(bnFee),
+      value: bnBalance.minus(total),
     });
   };
   const debounceFix = useDebounce(fixValue, 800);
 };
 
-export default useSetAmount;
+export default useSetAmountMax;

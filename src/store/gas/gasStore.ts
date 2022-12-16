@@ -1,6 +1,7 @@
 import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
 
+import { GAS_LEVEL } from '@@constants/gas.constant';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IGasStore, IGasStoreState } from './gasStore.type';
@@ -10,12 +11,13 @@ const INITIAL_GAS_STORE_STATE = {
   tip: null,
   gas: null,
   total: null,
+  level: GAS_LEVEL.LOW,
 };
-export const transactionRequestStore = create<IGasStore>(
+const gasStore = create<IGasStore>(
   zustandFlipper(
     (set, get) => ({
       ...INITIAL_GAS_STORE_STATE,
-      setGas: (newState) => {
+      setState: (newState) => {
         set(
           (prevState) => ({
             ...prevState,
@@ -25,7 +27,7 @@ export const transactionRequestStore = create<IGasStore>(
           `setGas`
         );
       },
-      resetGas: () => {
+      resetState: () => {
         set(
           (prevState) => ({
             ...prevState,
@@ -35,7 +37,7 @@ export const transactionRequestStore = create<IGasStore>(
           'resetGas'
         );
       },
-      inString: (target: keyof IGasStoreState, decimal: number) => {
+      inString: (target: keyof Omit<IGasStoreState, 'level'>, decimal: number) => {
         const selectedTarget = get()[target];
         if (!selectedTarget) {
           return null;
@@ -46,3 +48,4 @@ export const transactionRequestStore = create<IGasStore>(
     'gasStore'
   )
 );
+export default gasStore;

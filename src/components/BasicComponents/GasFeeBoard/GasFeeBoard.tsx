@@ -7,42 +7,11 @@ import GasLevelRadioButtons from './GasLevelRadioButtons';
 import useGasFeeBoard from './useGasFeeBoard';
 
 function GasFeeBoard({ isRevision, onConfirm, tokenDto, isValid }: IGasFeeBoardProps) {
-  const {
-    advanced,
-    gasLevel,
-    enableTip,
-    enableLimitCustom,
-    customBaseFee,
-    customTip,
-    customGas,
-    transactionFee,
-    setGasLevel,
-    setCustomBaseFee,
-    setCustomTip,
-    setCustomGas,
-    toggleGasAdvanced,
-    onConfirmGasFee,
-  } = useGasFeeBoard(tokenDto, onConfirm);
+  const { advanced, enableTip, enableLimitCustom, toggleGasAdvanced } = useGasFeeBoard(tokenDto);
   return (
-    <GasFeeBoardLayout
-      isRevision={isRevision}
-      onConfirm={onConfirmGasFee}
-      transactionFee={transactionFee}
-      advanced={advanced}
-      toggleGasAdvanced={toggleGasAdvanced}
-      isValid={isValid}
-    >
-      <GasLevelRadioButtons setGasLevel={setGasLevel} gasLevel={gasLevel} />
-      <GasFeeInputs
-        enableTip={enableTip}
-        enableLimitCustom={enableLimitCustom}
-        customBaseFee={customBaseFee}
-        customTip={customTip}
-        customGas={customGas}
-        setCustomBaseFee={setCustomBaseFee}
-        setCustomTip={setCustomTip}
-        setCustomGas={setCustomGas}
-      />
+    <GasFeeBoardLayout isRevision={isRevision} onConfirm={onConfirm} advanced={advanced} toggleGasAdvanced={toggleGasAdvanced} isValid={isValid}>
+      <GasLevelRadioButtons />
+      <GasFeeInputs enableTip={enableTip} enableLimitCustom={enableLimitCustom} />
     </GasFeeBoardLayout>
   );
 }
