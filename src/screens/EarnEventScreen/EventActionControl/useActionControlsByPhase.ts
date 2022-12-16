@@ -181,6 +181,13 @@ function setUpActionControls(
       return eventControlAttrs();
   }
 }
+/**
+ * claim confirm modal에서 confirm을 눌렀을 때 wallet modal을 띄우는 법
+ * 1. event에 해당하는 Network(ETH, TEZOS 등)와 onClaim버튼을 눌렀을 때 동작할 onPressClaim 함수를 param으로 useClaimWalletListModal을 호출한다.
+ * const { wallet } = useClaimWalletListModal({ netowrk, onPressClaim });
+ * 2. claim wallet modal을 띄운다.
+ * openModal({menuList: wallet});
+ */
 
 /**
  * is event action button enabled.
