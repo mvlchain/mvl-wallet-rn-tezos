@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Linking, Alert } from 'react-native';
 
 import Webview from '@@components/BasicComponents/Webview';
+import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
-import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import { format, isNotBlank } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -102,17 +102,17 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  */
 export function EarnEventDetailsScreen() {
   const { t } = useTranslation();
-  const navigation = useNavigation<TRootStackNavigationProps<typeof ROOT_STACK_ROUTE.EVENT_DETAILS>>();
   const { params } = useRoute<TEarnEventDetailsRouteProps>();
   if (!params) {
     console.error('inappropriate event params!');
   }
+  const { disconnectThirdParty } = useDisconnectThirdParty();
 
   console.log(`Details> i: ${params.i}`);
 
-  const { event, phase, thirdParty, claimStatusInfo } = useEarnEventDetailsUiState(params.i, params.data);
+  const { event, phase, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
 
-  const onConnectPress = useCallback(
+  const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
       const supported = await Linking.canOpenURL(uri);
       if (supported) {
@@ -123,6 +123,17 @@ export function EarnEventDetailsScreen() {
     },
     [event]
   );
+
+  const onDisconnectThirdPartyPress = useCallback(async () => {
+    const res = await disconnectThirdParty(event?.app?.id);
+    if (res && res.status == 'ok') {
+      // TODO: disconnected successfully. do following tasks
+      //  1. refresh event details page.
+      //  2. third-party disconnection modal
+      console.log(`Details> disconnected and refreshing`);
+      refresh();
+    }
+  }, [event]);
 
   if (!event) {
     console.log(`Details> event is null`);
@@ -173,10 +184,12 @@ export function EarnEventDetailsScreen() {
                 const connectionDeepLink = thirdParty.thirdPartyConnection!.connectionDeepLink;
                 console.log(`DeepLink> connectionDeepLink: ${connectionDeepLink}`);
                 if (connectionDeepLink) {
-                  onConnectPress(connectionDeepLink);
+                  onConnectThirdPartyPress(connectionDeepLink);
                 }
               }}
-              onDisconnectPress={() => {}}
+              onDisconnectPress={() => {
+                onDisconnectThirdPartyPress();
+              }}
             />
           ) : null}
 
