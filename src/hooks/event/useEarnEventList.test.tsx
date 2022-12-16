@@ -13,6 +13,7 @@ import {
   EarnEventCurrentResponseDto,
   EarnEventClaimCheckResponseDto,
   EarnEventGetClaimResponseDto,
+  SimpleResponseDto,
 } from '@@generated/generated-scheme';
 import { getEventTimeDescriptionByEventPhase, useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { renderHook, waitFor, Providers } from '@@test/test-utils';
@@ -56,6 +57,12 @@ class MockEarnEventRepository implements EarnEventRepository {
     throw new UnsupportOperationError();
   }
   checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto> {
+    throw new UnsupportOperationError();
+  }
+  connectThirdParty(appId: string, token: string | null): Promise<SimpleResponseDto> {
+    throw new UnsupportOperationError();
+  }
+  disconnectThirdParty(appId: string): Promise<SimpleResponseDto> {
     throw new UnsupportOperationError();
   }
 }
