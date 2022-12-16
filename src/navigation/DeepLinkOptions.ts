@@ -12,7 +12,7 @@ export const CLUTCH_APP_SCHEME = 'clutchwallet';
  * React Navigation By DeepLinks
  *
  * DeepLink
- * • clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={alias}
+ * • clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={eventAlias}
  *  - f: from, UUID style app id defined by Clutch
  *  - t: token, access token
  *  - e?(optional): event id
