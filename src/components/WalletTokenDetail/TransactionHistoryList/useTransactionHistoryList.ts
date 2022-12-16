@@ -66,13 +66,13 @@ const useTransactionHistoryList = () => {
     }
   );
 
-  const onEndReached = () => {
+  const getHistory = () => {
     refetch();
   };
 
   return {
     filteredData,
-    onEndReached,
+    getHistory,
     filterCriteria,
   };
 };
