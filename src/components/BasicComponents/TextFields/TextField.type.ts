@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 import { TextInputProps } from 'react-native';
 
 import { TokenDto } from '@@generated/generated-scheme-clutch';

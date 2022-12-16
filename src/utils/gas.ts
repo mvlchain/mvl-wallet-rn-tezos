@@ -1,5 +1,6 @@
+import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
-import { BigNumber } from 'ethers';
+import { BigNumber as BigNumberEther } from 'ethers';
 
 import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { NetworkFeeType, NETWORK_FEE_TYPE } from '@@constants/network.constant';
@@ -12,11 +13,14 @@ export const getLeveledBaseFee = (networkFeeType: NetworkFeeType, gasLevel: TGas
       return baseFee;
     default:
       const gasWeight = GAS_LEVEL_SETTING[gasLevel].weight;
-      const baseFeeInDecimal = new Decimal(baseFee.toString()).mul(gasWeight);
-      return BigNumber.from(Math.floor(baseFeeInDecimal.toNumber()));
+      return baseFee.multipliedBy(gasWeight);
   }
 };
 
 export const getEstimateTime = (gasLevel: TGasLevel) => {
   return GAS_LEVEL_SETTING[gasLevel].waitTime;
+};
+
+export const etherBNtoBN = (value: BigNumberEther | null) => {
+  return value ? new BigNumber(value.toString()) : null;
 };

@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 

@@ -1,4 +1,5 @@
-import { BigNumber, BytesLike } from 'ethers';
+import { BigNumber } from 'bignumber.js';
+import { BytesLike } from 'ethers';
 
 import { GAS_LEVEL } from '@@constants/gas.constant';
 import { Network } from '@@constants/network.constant';

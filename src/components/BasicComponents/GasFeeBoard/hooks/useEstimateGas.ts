@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 
-import { BigNumber, BytesLike } from 'ethers';
+import { BigNumber } from 'bignumber.js';
+import { BytesLike } from 'ethers';
 
 import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';

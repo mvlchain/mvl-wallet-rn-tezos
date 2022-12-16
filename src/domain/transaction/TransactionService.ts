@@ -1,5 +1,5 @@
-import { BigNumber, ethers } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { BigNumber } from 'bignumber.js';
+import { BigNumber as BigNumberEther, ethers } from 'ethers';
 import qs from 'qs';
 import { inject, injectable } from 'tsyringe';
 
@@ -7,6 +7,7 @@ import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, NETWORK_FEE_TYPE, Network } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { request } from '@@utils/request';
 
 import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
@@ -30,7 +31,7 @@ export class TransactionService implements ITransactionService {
           const data: ITezosData = {
             from: wallet.address,
             to,
-            value: formatUnits(value, 6),
+            value: value.toString(10),
           };
           return JSON.stringify(data);
         case NETWORK_FEE_TYPE.EIP1559:
@@ -54,30 +55,37 @@ export class TransactionService implements ITransactionService {
           if (!gasFeeInfo.tip || !gasFeeInfo.total || !value || !to) {
             throw new Error('tip,value,to is required');
           }
-          const fee = parseFloat(parseUnits(gasFeeInfo.total.toString(), 6).toString());
-          const amount = parseFloat(formatUnits(value, 6));
           if (data) {
-            return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount, data: data as string });
+            return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, {
+              to,
+              fee: gasFeeInfo.total,
+              amount: value.toNumber(),
+              data: data as string,
+            });
           } else {
-            return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, { to, fee, amount });
+            return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, {
+              to,
+              fee: gasFeeInfo.total,
+              amount: value.toNumber(),
+            });
           }
         case NETWORK_FEE_TYPE.EIP1559:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
-            maxFeePerGas: gasFeeInfo.baseFee.add(gasFeeInfo.tip!),
-            maxPriorityFeePerGas: gasFeeInfo.tip,
-            gasLimit: gasFeeInfo.gas,
+            maxFeePerGas: gasFeeInfo.baseFee.plus(gasFeeInfo.tip!).toString(10),
+            maxPriorityFeePerGas: gasFeeInfo.tip!.toString(10),
+            gasLimit: gasFeeInfo.gas.toString(10),
             to,
-            value,
+            value: value ? value.toString(10) : undefined,
             data,
           });
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
-            gasPrice: gasFeeInfo.baseFee,
-            gasLimit: gasFeeInfo.gas,
+            gasPrice: gasFeeInfo.baseFee.toString(10),
+            gasLimit: gasFeeInfo.gas.toString(10),
             to,
-            value,
+            value: value ? value.toString(10) : undefined,
             data,
           });
       }

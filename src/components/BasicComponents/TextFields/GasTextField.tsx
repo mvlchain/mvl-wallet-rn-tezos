@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { BigNumber } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { BigNumber } from 'bignumber.js';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { TextFieldDelete } from '@@assets/image';
 import useDebounce from '@@hooks/useDebounce';
 import { useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
@@ -20,9 +20,9 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
     if (!value) return '0';
     switch (unit) {
       case 'gwei':
-        return formatUnits(value, 'gwei');
+        return value.shiftedBy(-9).toString(10);
       case 'mutez':
-        return formatUnits(value, 0);
+        return value.toString(10);
       default:
         return value.toString();
     }
@@ -38,11 +38,11 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   const getUnitValue = (unit: 'gwei' | 'mutez' | undefined, value: string) => {
     switch (unit) {
       case 'gwei':
-        return parseUnits(value, 'gwei');
+        return formatBigNumber(new BigNumber(value), 9);
       case 'mutez':
-        return parseUnits(value, 0);
+        return new BigNumber(value);
       default:
-        return BigNumber.from(value);
+        return new BigNumber(value);
     }
   };
   const onBlur = () => {

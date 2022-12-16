@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 
 import { GAS_LEVEL } from '@@constants/gas.constant';
 import { NETWORK_FEE_TYPE, getNetworkConfig, getNetworkName } from '@@constants/network.constant';

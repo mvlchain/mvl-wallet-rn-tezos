@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 import { ReactChildren } from 'react-native-toast-message';
 
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';

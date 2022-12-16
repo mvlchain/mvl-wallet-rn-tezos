@@ -1,7 +1,6 @@
 import { useEffect, useCallback, Dispatch, SetStateAction } from 'react';
 
-import { BigNumber } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { BigNumber } from 'bignumber.js';
 
 import { getNetworkName } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
@@ -34,7 +33,6 @@ const useSetInitial = ({
       if (!gasFeeData) {
         throw new Error('Fail to get gasfee data');
       }
-
       setEnableTip(gasFeeData.enableTip);
       setEnableLimitCustom(gasFeeData.enableLimitCustom);
       setBaseFee(gasFeeData.baseFee ?? null);

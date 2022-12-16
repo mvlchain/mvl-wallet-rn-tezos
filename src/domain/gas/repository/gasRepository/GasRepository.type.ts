@@ -1,5 +1,5 @@
 import { TransactionRequest } from '@ethersproject/abstract-provider';
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 

@@ -1,4 +1,5 @@
-import { BigNumberish, BytesLike, BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
+import { BigNumberish, BytesLike } from 'ethers';
 
 import { NETWORK, Network, NetworkId, NETWORK_FEE_TYPE, NETWORK_ID } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
