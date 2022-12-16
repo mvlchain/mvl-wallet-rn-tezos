@@ -1,8 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { FlatList } from 'react-native';
+import { RefreshControl } from 'react-native';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -14,7 +13,7 @@ import useTransactionHistoryList from './useTransactionHistoryList';
 
 function TransactionHistoryList() {
   const { openModal } = globalModalStore();
-  const { filteredData, onEndReached, filterCriteria } = useTransactionHistoryList();
+  const { filteredData, getHistory, filterCriteria } = useTransactionHistoryList();
   const { t } = useTranslation();
 
   return (
@@ -30,14 +29,14 @@ function TransactionHistoryList() {
         />
       </S.TransactionHistoryLabelWrapper>
       {filteredData && filteredData.length > 0 ? (
-        <FlatList
+        <S.HistoryList
+          refreshControl={<RefreshControl onRefresh={() => getHistory()} refreshing={false} tintColor='transparent' colors={['transparent']} />}
           data={filteredData}
           renderItem={({ item }) => <TransactionHistoryListItem {...item} />}
           keyExtractor={(item, idx) => item.hash}
-          onEndReached={onEndReached}
+          onEndReached={getHistory}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
-          bounces={false}
         />
       ) : (
         <S.EmptyHistoryLabelWrapper>

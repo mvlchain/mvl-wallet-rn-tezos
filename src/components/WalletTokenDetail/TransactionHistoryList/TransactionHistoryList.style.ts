@@ -1,8 +1,10 @@
+import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 
 import { height, width } from '@@utils/ui';
 
 export const TransactionHistoryContainer = styled.View`
+  flex: 1;
   background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 export const TransactionHistoryLabelWrapper = styled.View`
@@ -24,3 +26,7 @@ export const EmptyHistoryLabelWrapper = styled.View`
 `;
 
 export const EmptyHistoryLabel = styled.Text``;
+
+export const HistoryList = styled.FlatList`
+  flex: 1;
+` as unknown as typeof FlatList;
