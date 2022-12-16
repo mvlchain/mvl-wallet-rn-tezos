@@ -4,10 +4,12 @@ import { BigNumber } from 'bignumber.js';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { TextFieldDelete } from '@@assets/image';
+import { GAS_UNIT_DECIMAL } from '@@constants/gas.constant';
 import useDebounce from '@@hooks/useDebounce';
 import { useColor } from '@@hooks/useTheme';
 import { commonColors } from '@@style/colors';
 import { formatBigNumber } from '@@utils/formatBigNumber';
+import { inputNumberFormatter } from '@@utils/gas';
 
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
@@ -16,35 +18,16 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
   const { value, setValue, style, unit, hint, delay, disabled, defaultValue } = props;
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
-  const getInitialValue = (unit: 'gwei' | 'mutez' | undefined, value: BigNumber | null | undefined) => {
-    if (!value) return '0';
-    switch (unit) {
-      case 'gwei':
-        return value.shiftedBy(-9).toString(10);
-      case 'mutez':
-        return value.toString(10);
-      default:
-        return value.toString();
-    }
-  };
-  const initialDisplayValue = getInitialValue(unit, value);
+  const decimal = unit ? -GAS_UNIT_DECIMAL[unit] : 0;
+
+  const initialDisplayValue = value ? value.shiftedBy(decimal).toString(10) : '0';
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
   const debounceCallback = useDebounce(setValue, 1000);
 
   useEffect(() => {
-    debounceCallback(getUnitValue(unit, displayValue));
+    debounceCallback(formatBigNumber(new BigNumber(displayValue), decimal));
   }, [displayValue]);
 
-  const getUnitValue = (unit: 'gwei' | 'mutez' | undefined, value: string) => {
-    switch (unit) {
-      case 'gwei':
-        return formatBigNumber(new BigNumber(value), 9);
-      case 'mutez':
-        return new BigNumber(value);
-      default:
-        return new BigNumber(value);
-    }
-  };
   const onBlur = () => {
     setLcColor(null);
   };
@@ -54,21 +37,10 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
 
   const onChange = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
     if (!setValue) return;
-    let value = data.nativeEvent.text;
-
-    if (!value || value === '') {
-      setDisplayValue('0');
-    }
-
-    if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
-      value = value.slice(1);
-    }
-
-    if (value.indexOf('.') !== value.lastIndexOf('.')) {
-      return;
-    }
-
-    setDisplayValue(value);
+    const value = data.nativeEvent.text;
+    const formattedValue = inputNumberFormatter(value, decimal);
+    if (!formattedValue) return;
+    setDisplayValue(formattedValue);
   };
 
   const clearTextField = () => {
@@ -92,7 +64,7 @@ export function GasTextField(props: Type.IGasTextFieldProps) {
           placeholderTextColor={color.grey300Grey700}
           editable={!disabled}
         />
-        {unit && <S.Unit>{unit.toUpperCase()}</S.Unit>}
+        {unit && <S.Unit>{unit}</S.Unit>}
         <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
       </S.BaseTextFieldInputWrapper>
       {hint && <S.BaseTextFieldHint>{hint}</S.BaseTextFieldHint>}

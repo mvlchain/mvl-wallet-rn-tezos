@@ -11,7 +11,7 @@ import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { formatBigNumber } from '@@utils/formatBigNumber';
+import { inputNumberFormatter } from '@@utils/gas';
 import { height } from '@@utils/ui';
 
 import * as S from './TextField.style';
@@ -54,28 +54,11 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
     setShowDelete(true);
   };
 
-  const alphaNumericDecimalRegex = () => {
-    // tokenDTO에 있는 decimals를 기준으로 입력 가능하게 자름
-    return new RegExp(`^(\\d{0,60})([.]\\d{0,${tokenDto.decimals}})*?$`);
-  };
-
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    let value = data.nativeEvent.text;
-    // .으로 시작할 때 제외
-    if (value === '.') return;
-    // 숫자, 소수점만 입력 가능, 소수점 token decimals까지만 입력 가능
-    const regExp = alphaNumericDecimalRegex();
-    if (!regExp.test(value)) return;
-
-    // 0이 여러개로 시작할 때 제외
-    if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
-      value = value.slice(1);
-    }
-    // 소수점 2개 제외
-    if (value.indexOf('.') !== value.lastIndexOf('.')) {
-      return;
-    }
-    setDisplayValue(value);
+    const value = data.nativeEvent.text;
+    const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
+    if (!formattedValue) return;
+    setDisplayValue(formattedValue);
   };
 
   return (
