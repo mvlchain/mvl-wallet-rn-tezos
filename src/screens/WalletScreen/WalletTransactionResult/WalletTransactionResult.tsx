@@ -9,7 +9,7 @@ import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootSt
 
 import * as S from './WalletTransactionResult.style';
 
-function WalletTokenSend() {
+function WalletTransactionResult() {
   const { t } = useTranslation();
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const navigation = useNavigation<rootStackProps>();
@@ -30,4 +30,4 @@ function WalletTokenSend() {
   );
 }
 
-export default WalletTokenSend;
+export default WalletTransactionResult;

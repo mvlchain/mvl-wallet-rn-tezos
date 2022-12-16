@@ -4,6 +4,7 @@ import { height, SCREEN_HEIGHT, width } from '@@utils/ui';
 
 export const Container = styled.View`
   flex: 1;
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
 export const ListContainer = styled.View`
