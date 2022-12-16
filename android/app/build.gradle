@@ -149,7 +149,7 @@ android {
         applicationId "io.mvlchain.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 36
+        versionCode 37
         versionName "1.2.6"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         
@@ -234,15 +234,32 @@ android {
             keyAlias "debugmybrain"
             keyPassword "debugme"
         }
+        release {
+            if (!(System.getenv('WALLET_UPLOAD_STORE_FILE') ?: "").isEmpty()) {
+                storeFile file(System.getenv("WALLET_UPLOAD_STORE_FILE"))
+                storePassword System.getenv("WALLET_UPLOAD_STORE_PASSWORD")
+                keyAlias System.getenv("WALLET_UPLOAD_KEY_ALIAS")
+                keyPassword System.getenv("WALLET_UPLOAD_KEY_PASSWORD")
+            }
+        }
+
     }
     buildTypes {
         debug {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-debug"
             signingConfig signingConfigs.debug
         }
+        stage {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-stage"
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            matchingFallbacks = ['release']
+        }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
