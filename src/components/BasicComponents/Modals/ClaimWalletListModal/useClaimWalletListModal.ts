@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { NETWORK } from '@@constants/network.constant';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import authStore from '@@store/auth/authStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
