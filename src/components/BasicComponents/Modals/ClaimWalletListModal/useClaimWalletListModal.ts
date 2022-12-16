@@ -7,14 +7,11 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { IClaimWalletListMenuProps } from './ClaimWalletListMenu/ClaimWalletListMenu.type';
 import { IUseClaimWalletListModalParam } from './ClaimWalletListModal.type';
 
-const useClaimWalletListModal = ({ network }: IUseClaimWalletListModalParam) => {
+const useClaimWalletListModal = ({ network, onPressClaim }: IUseClaimWalletListModalParam) => {
   const { walletList } = walletPersistStore();
   const { data } = useWalletsQuery(network);
   const { pKey } = authStore();
   const [wallet, setWallet] = useState<IClaimWalletListMenuProps[]>([]);
-
-  // TODO: make claim function
-  const onPressClaim = () => {};
 
   useEffect(() => {
     if (!pKey || !data) return;

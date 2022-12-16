@@ -8,4 +8,6 @@ export interface IClaimWalletListModalProps {
 
 export interface IUseClaimWalletListModalParam {
   network: Network;
+  // TODO: add some param for onPressClaim
+  onPressClaim: () => void;
 }
