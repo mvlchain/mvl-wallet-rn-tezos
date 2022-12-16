@@ -11,6 +11,7 @@ import {
   EarnEventCurrentResponseDto,
   EarnEventClaimCheckResponseDto,
   EarnEventGetClaimResponseDto,
+  SimpleResponseDto,
 } from '@@generated/generated-scheme';
 import { authRequest, Response } from '@@utils/request';
 
@@ -18,12 +19,16 @@ import { authRequest, Response } from '@@utils/request';
  * /v1/earn-event api service
  */
 export interface EarnEventRepository {
+  // earn-event
   getEventList(): Promise<EarnEventDto[]>;
   getEvent(eventId: string): Promise<EarnEventDto>;
   getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
   getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto>;
   getClaimInformation(eventId: string): Promise<EarnEventGetClaimResponseDto>;
+  // third-party
   checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto>;
+  connectThirdParty(appId: string, token: string | null): Promise<SimpleResponseDto>;
+  disconnectThirdParty(appId: string): Promise<SimpleResponseDto>;
 }
 
 @injectable()
@@ -55,9 +60,9 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     if ([200, 201].includes(res.status)) {
       return res.data;
     } else {
-      // TODO define a generla type of error.
+      // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Unexpected error', res.status);
+      throw new ApiError('Api error', res.status);
     }
   };
 
@@ -75,9 +80,9 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else if (res.status == 404) {
       throw new Error('Event not found');
     } else {
-      // TODO define a generla type of error.
+      // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Unexpected error', res.status);
+      throw new ApiError('Api error', res.status);
     }
   };
 
@@ -92,9 +97,9 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     if ([200, 201].includes(res.status)) {
       return res.data;
     } else {
-      // TODO define a generla type of error.
+      // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Unexpected error', res.status);
+      throw new ApiError('Api error', res.status);
     }
   };
 
@@ -109,16 +114,16 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     if ([200, 201].includes(res.status)) {
       return res.data;
     } else {
-      // TODO define a generla type of error.
+      // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Unexpected error', res.status);
+      throw new ApiError('Api error', res.status);
     }
   };
 
   /**
    * Check ThirdParty connections state
    * @param appId third party app id
-   * @param token client token
+   * @param token third party user token
    * @returns ThirdPartyConnection
    * @throws ThirdPartyAlreadyConnectedError if there's the account already connected to this app.
    */
@@ -134,12 +139,57 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
 
     switch (res.status) {
       case 409: {
-        // warning_connect_account_description
+        // TODO: warning_connect_account_description
         throw new ThirdPartyAlreadyConnectedError();
       }
       default: {
         return res.data;
       }
+    }
+  };
+
+  /**
+   * Connect a user with third-party
+   * @param appId third party app id
+   * @param token third party user token
+   * @returns simple connecion status, 'ok' if succeeded.
+   */
+  connectThirdParty = async (appId: string, token: string | null): Promise<SimpleResponseDto> => {
+    const endpoint = `/v1/third-party/${appId}/disconnect`;
+    const body: ThirdPartyConnectCheckDto = {
+      token: token,
+    };
+    const res = await authRequest.post<SimpleResponseDto>(endpoint, {
+      data: body,
+    });
+
+    switch (res.status) {
+      case 200:
+      case 201:
+        return res.data;
+      case 400:
+        // TODO: warning_connect_account_description
+        throw new ThirdPartyAlreadyConnectedError(`appid: ${appId} is already connected by another third-party user.`);
+      default:
+        throw new ApiError('Api error', res.status);
+    }
+  };
+
+  /**
+   * Disconnect third-party from clutch
+   * @param appId third party app id
+   * @returns simple connecion status
+   */
+  disconnectThirdParty = async (appId: string): Promise<SimpleResponseDto> => {
+    const endpoint = `/v1/third-party/${appId}/disconnect`;
+    const res = await authRequest.post<SimpleResponseDto>(endpoint);
+
+    if ([200, 201].includes(res.status)) {
+      return res.data;
+    } else {
+      // TODO: define a general type of error.
+      console.error(res);
+      throw new ApiError('Api error', res.status);
     }
   };
 }

@@ -19,7 +19,7 @@ export const useEarnEventList = (): UseQueryResult<EarnEvent[], AxiosError> => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
 
   return useQuery({
-    queryKey: ['earn-events'],
+    queryKey: ['earn-event-list'],
     queryFn: () => UseCase(repository, t),
   });
 };

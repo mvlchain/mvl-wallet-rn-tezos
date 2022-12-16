@@ -78,6 +78,7 @@ export const useEarnEventDetailsUiState = (
   phase: valueOf<typeof EventPhase>;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
+  refresh: () => Promise<void>;
 } => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
 
@@ -91,14 +92,22 @@ export const useEarnEventDetailsUiState = (
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
 
+  const refresh = async () => {
+    try {
+      const res = await repository.getEvent(id);
+      setEvent(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // UseCase: useEarnEventDetails
   useEffect(() => {
     (async () => {
       console.log(`Event> useEarnEventDetails`);
 
       if (!data && isNotBlank(id)) {
-        const res = await repository.getEvent(id);
-        setEvent(res);
+        await refresh();
       }
     })();
   }, [id, data]);
@@ -196,6 +205,7 @@ export const useEarnEventDetailsUiState = (
     phase,
     thirdParty,
     claimStatusInfo,
+    refresh,
   } as const;
 };
 
