@@ -18,5 +18,5 @@ export interface IGetTotalGasFeeParamsEIP1559 {
 
 export interface IGasRepositoryEip1559 {
   getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfoEip1559>;
-  getTotalGasFee: (args: IGetTotalGasFeeParamsEIP1559) => string;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsEIP1559) => BigNumber;
 }

@@ -1,8 +1,8 @@
+import BigNumber from 'bignumber.js';
 import { inject, injectable } from 'tsyringe';
 
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 import { etherBNtoBN } from '@@utils/gas';
 import { loadingFunction } from '@@utils/loadingHelper';
 
@@ -26,6 +26,6 @@ export class GasRepositoryEip1559Impl implements IGasRepositoryEip1559 {
 
   getTotalGasFee = ({ baseFee, gas, tip }: IGetTotalGasFeeParamsEIP1559) => {
     const totalGas = baseFee.plus(tip).multipliedBy(gas);
-    return formatBigNumber(totalGas, 18).toString();
+    return new BigNumber(totalGas);
   };
 }

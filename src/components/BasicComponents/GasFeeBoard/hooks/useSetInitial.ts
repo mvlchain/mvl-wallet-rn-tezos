@@ -4,23 +4,23 @@ import { BigNumber } from 'bignumber.js';
 
 import { getNetworkName } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
+import gasStore from '@@store/gas/gasStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useSetInitial = ({
   setEnableTip,
   setEnableLimitCustom,
-  setBaseFee,
-  setGas,
-  setCustomGas,
+  setBlockBaseFee,
+  setBlockGas,
 }: {
   setEnableTip: Dispatch<SetStateAction<boolean>>;
   setEnableLimitCustom: Dispatch<SetStateAction<boolean>>;
-  setBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
-  setGas: Dispatch<SetStateAction<BigNumber | null>>;
-  setCustomGas: Dispatch<SetStateAction<BigNumber | null>>;
+  setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
+  setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork } = walletPersistStore();
+  const { setState } = gasStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
 
   useEffect(() => {
@@ -35,9 +35,9 @@ const useSetInitial = ({
       }
       setEnableTip(gasFeeData.enableTip);
       setEnableLimitCustom(gasFeeData.enableLimitCustom);
-      setBaseFee(gasFeeData.baseFee ?? null);
-      setGas(gasFeeData.gasLimit ?? null);
-      setCustomGas(gasFeeData.gasLimit ?? null);
+      setBlockBaseFee(gasFeeData.baseFee ?? null);
+      setBlockGas(gasFeeData.gasLimit ?? null);
+      setState({ gas: gasFeeData.gasLimit });
     } catch (err) {
       console.log(err);
     }

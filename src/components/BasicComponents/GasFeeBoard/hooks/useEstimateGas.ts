@@ -7,17 +7,18 @@ import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
+import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useEstimateGas = ({
   tokenDto,
-  setGas,
-  setBaseFee,
+  setBlockBaseFee,
+  setBlockGas,
 }: {
   tokenDto: TokenDto;
-  setGas: Dispatch<SetStateAction<BigNumber | null>>;
-  setBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
+  setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
+  setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
@@ -39,10 +40,10 @@ const useEstimateGas = ({
         console.log('fail to estimate gas');
         return;
       }
-      setGas(estimation.gasUsage);
+      setBlockGas(estimation.gasUsage);
       //tezos return basefee after estimategas
       if (estimation.baseFee) {
-        setBaseFee(estimation.baseFee);
+        setBlockBaseFee(estimation.baseFee);
       }
     },
     []
