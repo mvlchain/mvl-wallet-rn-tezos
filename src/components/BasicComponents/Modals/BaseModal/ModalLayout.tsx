@@ -40,6 +40,7 @@ export function ModalLayout({
       style={S.inlineStyles(modalPosition).modal}
       onBackButtonPress={closeModal}
       onBackdropPress={closeModal}
+      avoidKeyboard={true}
     >
       <DismissKeyboardView>
         <S.ModalBackDrop modalPosition={modalPosition}>
