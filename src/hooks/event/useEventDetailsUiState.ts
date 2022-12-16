@@ -47,6 +47,11 @@ export interface IEventPointAmount {
   currency: string;
 }
 
+export interface IEventDetails {
+  event: EarnEventDto | undefined;
+  phase: valueOf<typeof EventPhase>;
+}
+
 /**
  * Combination of following usecases
  *
@@ -74,20 +79,23 @@ export const useEarnEventDetailsUiState = (
   data?: EarnEventDto,
   deepLink?: ThirdPartyDeepLink
 ): {
-  event: EarnEventDto | undefined;
-  phase: valueOf<typeof EventPhase>;
+  details: IEventDetails;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
   refresh: () => Promise<void>;
 } => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
 
-  const [event, setEvent] = useState<EarnEventDto | undefined>(data);
-  const [phase, setPhase] = useState<valueOf<typeof EventPhase>>(EventPhase.NotAvailable);
+  const [details, setDetails] = useState<IEventDetails>({
+    event: data,
+    phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
+  });
+  // const [event, setEvent] = useState<EarnEventDto | undefined>(data);
+  // const [phase, setPhase] = useState<valueOf<typeof EventPhase>>(EventPhase.NotAvailable);
   const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
     thirdPartyConnection: undefined,
-    points: event?.pointInfoArr.map((data) => ({ ...data, amount: '0' })) ?? [],
+    points: details.event?.pointInfoArr.map((data) => ({ ...data, amount: '0' })) ?? [],
     error: null,
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
@@ -95,7 +103,11 @@ export const useEarnEventDetailsUiState = (
   const refresh = async () => {
     try {
       const res = await repository.getEvent(id);
-      setEvent(res);
+      // setEvent(res);
+      setDetails({
+        event: res,
+        phase: getEventPhase(res),
+      });
     } catch (e) {
       console.error(e);
     }
@@ -104,8 +116,6 @@ export const useEarnEventDetailsUiState = (
   // UseCase: useEarnEventDetails
   useEffect(() => {
     (async () => {
-      console.log(`Event> useEarnEventDetails`);
-
       if (!data && isNotBlank(id)) {
         await refresh();
       }
@@ -115,52 +125,46 @@ export const useEarnEventDetailsUiState = (
   // UseCase: useThirdPartyConnection
   useEffect(() => {
     (async () => {
+      const { event, phase } = details;
       if (!event) return;
       console.log(`Event> useThirdPartyConnection`);
 
-      setPhase(getEventPhase(event));
-
       const thirdPartyApp = event.app;
-
-      if (thirdPartyApp) {
-        const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
-
-        try {
-          const thirdPartyConnection = await repository.checkThirdPartyConnection(appId, token);
-          const connectionDeepLink = getThirdPartyConnectionDeepLink(event, thirdPartyApp.connectionDeepLink);
-
-          setThirdParty({
-            isThirdPartySupported: true,
-            thirdPartyConnection: {
-              appId,
-              token,
-              exists: thirdPartyConnection.exists,
-              displayName: thirdPartyConnection.displayName,
-              connectionDeepLink,
-            },
-            points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
-            error: null,
-          });
-        } catch (e) {
-          console.error(e);
-          setThirdParty({ ...thirdParty, error: e });
-        }
-      } else {
+      if (!thirdPartyApp) {
         setThirdParty({ ...thirdParty, isThirdPartySupported: false });
+        return;
       }
-    })();
-  }, [event, deepLink]);
 
-  // UseCase: useUserPoints
-  useEffect(() => {
-    (async () => {
-      if (!event) return;
-      console.log(`Event> useUserPoints`);
+      const machine: IEventThirdParty = {
+        ...thirdParty,
+      };
 
-      if (thirdParty.thirdPartyConnection && isPointInquiryAvailable(event, thirdParty.isThirdPartySupported)) {
+      // UseCase: useThirdPartyConnection & useUserPoints
+      const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
+      try {
+        const thirdPartyConnection = await repository.checkThirdPartyConnection(appId, token);
+        const connectionDeepLink = getThirdPartyConnectionDeepLink(event, thirdPartyApp.connectionDeepLink);
+
+        machine.isThirdPartySupported = true;
+        machine.thirdPartyConnection = {
+          appId,
+          token,
+          exists: thirdPartyConnection.exists,
+          displayName: thirdPartyConnection.displayName,
+          connectionDeepLink,
+        };
+        machine.points = event.pointInfoArr.map((data) => ({ ...data, amount: '0' }));
+      } catch (e) {
+        console.error(e);
+        setThirdParty({ ...thirdParty, error: e });
+        return;
+      }
+
+      // UseCase: useUserPoints
+      if (isPointInquiryAvailable(phase, machine.isThirdPartySupported)) {
         try {
           const res = await repository.getUserPoints(event.id);
-          setThirdParty({ ...thirdParty, points: res });
+          machine.points = res;
         } catch (e) {
           console.error(e);
           setThirdParty({
@@ -168,18 +172,22 @@ export const useEarnEventDetailsUiState = (
             points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
             error: e,
           });
+          return;
         }
       }
+
+      setThirdParty({
+        ...machine,
+      });
     })();
-  }, [thirdParty]);
+  }, [details, deepLink]);
 
   // UseCase: useClaimStatusInformation
   useEffect(() => {
     (async () => {
+      const { event, phase } = details;
       if (!event) return;
       console.log(`Event> useClaimStatusInformation`);
-
-      const phase = getEventPhase(event);
 
       const thirdPartyConnection = thirdParty.thirdPartyConnection;
       if (phase === EventPhase.OnClaim) {
@@ -201,8 +209,7 @@ export const useEarnEventDetailsUiState = (
   }, [thirdParty]);
 
   return {
-    event,
-    phase,
+    details,
     thirdParty,
     claimStatusInfo,
     refresh,
@@ -254,8 +261,7 @@ function parseThirdPartyConnectionArgs(appId: string, deepLink?: ThirdPartyDeepL
 /**
  * Check if it's avilable to make an inquiry about event points
  */
-function isPointInquiryAvailable(event: EarnEventDto, isThirdPartySupported: boolean): boolean {
-  const phase = getEventPhase(event);
+function isPointInquiryAvailable(phase: valueOf<typeof EventPhase>, isThirdPartySupported: boolean): boolean {
   return (isThirdPartySupported && phase === EventPhase.BeforeEvent) || phase === EventPhase.OnEvent || phase === EventPhase.BeforeClaim;
 }
 

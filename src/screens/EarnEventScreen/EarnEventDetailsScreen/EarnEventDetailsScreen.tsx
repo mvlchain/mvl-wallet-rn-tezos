@@ -110,7 +110,8 @@ export function EarnEventDetailsScreen() {
 
   console.log(`Details> i: ${params.i}`);
 
-  const { event, phase, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
+  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
+  const { event, phase } = details;
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
