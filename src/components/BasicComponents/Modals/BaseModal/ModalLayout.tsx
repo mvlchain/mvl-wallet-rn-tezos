@@ -5,6 +5,7 @@ import Modal from 'react-native-modal';
 
 import { CloseBlackIconLight, CloseBlackIconDark } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import DismissKeyboardView from '@@components/BasicComponents/DismissKeyboardView';
 import { THEME } from '@@constants/setting.constant';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -39,37 +40,40 @@ export function ModalLayout({
       style={S.inlineStyles(modalPosition).modal}
       onBackButtonPress={closeModal}
       onBackdropPress={closeModal}
+      avoidKeyboard={true}
     >
-      <S.ModalBackDrop modalPosition={modalPosition}>
-        <S.ModalContainer modalPosition={modalPosition} maxHeight={maxHeight}>
-          <S.ModalTopWrapper>
-            <S.ModalTitle>{title}</S.ModalTitle>
-            {/* TODO: theme 스토어추가시 추가작업 */}
-            {!!onClose && <CloseIcon onPress={() => onClose()} />}
-          </S.ModalTopWrapper>
+      <DismissKeyboardView>
+        <S.ModalBackDrop modalPosition={modalPosition}>
+          <S.ModalContainer modalPosition={modalPosition} maxHeight={maxHeight}>
+            <S.ModalTopWrapper>
+              <S.ModalTitle>{title}</S.ModalTitle>
+              {/* TODO: theme 스토어추가시 추가작업 */}
+              {!!onClose && <CloseIcon onPress={() => onClose()} />}
+            </S.ModalTopWrapper>
 
-          {children && <S.ContentWrapper>{children}</S.ContentWrapper>}
-          {!!onConfirm && (
-            <S.ButtonWrapper isReverseBtn={isReverseBtn}>
-              {!!onCancel && (
-                <SecondaryButton
-                  label={cancelLabel ? cancelLabel : t('close')}
-                  onPress={onCancel}
-                  disabled={false}
+            {children && <S.ContentWrapper>{children}</S.ContentWrapper>}
+            {!!onConfirm && (
+              <S.ButtonWrapper isReverseBtn={isReverseBtn}>
+                {!!onCancel && (
+                  <SecondaryButton
+                    label={cancelLabel ? cancelLabel : t('close')}
+                    onPress={onCancel}
+                    disabled={false}
+                    wrapperStyle={S.inlineStyles(modalPosition).halfbutton}
+                  />
+                )}
+                {!!onCancel && <S.Gap />}
+                <PrimaryButton
+                  label={confirmLabel ? confirmLabel : t('btn_confirm')}
+                  onPress={onConfirm}
+                  disabled={isConfirmDisabled}
                   wrapperStyle={S.inlineStyles(modalPosition).halfbutton}
                 />
-              )}
-              {!!onCancel && <S.Gap />}
-              <PrimaryButton
-                label={confirmLabel ? confirmLabel : t('btn_confirm')}
-                onPress={onConfirm}
-                disabled={isConfirmDisabled}
-                wrapperStyle={S.inlineStyles(modalPosition).halfbutton}
-              />
-            </S.ButtonWrapper>
-          )}
-        </S.ModalContainer>
-      </S.ModalBackDrop>
+              </S.ButtonWrapper>
+            )}
+          </S.ModalContainer>
+        </S.ModalBackDrop>
+      </DismissKeyboardView>
     </Modal>
   );
 }
