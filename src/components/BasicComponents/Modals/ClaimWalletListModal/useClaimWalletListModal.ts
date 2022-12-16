@@ -22,7 +22,7 @@ const useClaimWalletListModal = ({ network, onPressClaim }: IUseClaimWalletListM
         index,
         name: walletList[network][index]?.name,
         address,
-        onPress: () => onPressClaim(),
+        onPress: () => onPressClaim(address),
       } as unknown as IClaimWalletListMenuProps;
     });
 
