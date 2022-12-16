@@ -12,8 +12,11 @@ import {
   EarnEventClaimCheckResponseDto,
   EarnEventGetClaimResponseDto,
   SimpleResponseDto,
+  EarnEventClaimRequestDto,
 } from '@@generated/generated-scheme';
 import { authRequest, Response } from '@@utils/request';
+
+import { IEarnEventMutation } from './EarnEventRepository.type';
 
 /**
  * /v1/earn-event api service
@@ -23,6 +26,7 @@ export interface EarnEventRepository {
   getEventList(): Promise<EarnEventDto[]>;
   getEvent(eventId: string): Promise<EarnEventDto>;
   getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]>;
+  requestClaim({ eventId, address }: IEarnEventMutation): Promise<SimpleResponseDto>;
   getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto>;
   getClaimInformation(eventId: string): Promise<EarnEventGetClaimResponseDto>;
   // third-party
@@ -80,14 +84,39 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else if (res.status == 404) {
       throw new Error('Event not found');
     } else {
-      // TODO: define a general type of error.
+      // TODO define a generla type of error.
       console.error(res);
-      throw new ApiError('Api error', res.status);
+      throw new ApiError('Unexpected error', res.status);
     }
   };
 
   /**
-   * Get current event ongoing status from server side.
+   * Request Claim this event.
+   * @param eventId an event id
+   * @param address an address
+   * @returns SimpleResponseDto
+   */
+  requestClaim = async ({ eventId, address }: IEarnEventMutation): Promise<SimpleResponseDto> => {
+    const endpoint = `/v1/earn-event/${eventId}/claim/request`;
+    const body: EarnEventClaimRequestDto = {
+      address,
+    };
+
+    const res = await authRequest.post<SimpleResponseDto>(endpoint, {
+      data: body,
+    });
+
+    if ([200, 201].includes(res.status)) {
+      return res.data;
+    } else {
+      // TODO define a generla type of error.
+      console.error(res);
+      throw new ApiError('Unexpected error', res.status);
+    }
+  };
+
+  /**
+   * Request Claim this event.
    * @param eventId an event id
    */
   getClaimStatus = async (eventId: string): Promise<EarnEventClaimCheckResponseDto> => {
