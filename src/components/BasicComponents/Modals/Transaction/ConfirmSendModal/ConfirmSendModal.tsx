@@ -1,8 +1,7 @@
 import React from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
-import { BigNumber } from 'ethers';
-import { formatEther, formatUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 import Divider from '@@components/BasicComponents/Divider';
@@ -13,6 +12,7 @@ import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { height } from '@@utils/ui';
 
 import { MODAL_TYPES } from '../../GlobalModal';
@@ -28,21 +28,13 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }
   const network = getNetworkConfig(selectedNetwork);
   const { settedCurrency } = settingPersistStore();
 
-  const getAmountString = (amount: BigNumber) => {
-    switch (network.networkFeeType) {
-      case NETWORK_FEE_TYPE.TEZOS:
-        return formatUnits(amount, 6);
-      default:
-        return formatEther(amount);
-    }
-  };
-  const amountStr = getAmountString(amount);
+  const amountStr = formatBigNumber(amount, tokenDto.decimals).toString(10);
   const { price: tokenPrice } = useOneTokenPrice(tokenDto, amountStr);
   const { price: coinPrice } = useOneTokenPrice(COIN_DTO[network.coin], fee);
   const tokenPriceInDeciaml = new Decimal(tokenPrice);
   const coinPriceInDecimal = new Decimal(coinPrice);
 
-  const feeAmountTotal = tokenPriceInDeciaml.add(coinPriceInDecimal);
+  const feeAmountTotal = tokenPriceInDeciaml.add(coinPriceInDecimal).toString();
 
   return (
     <ModalLayout
@@ -81,7 +73,7 @@ function ConfirmSendModal({ recipientAddress, amount, fee, onConfirm, tokenDto }
           <S.BlackText>{t('total')}</S.BlackText>
           <S.RightAlign>
             <S.BlackText>{amount && fee && `${amountStr} ${tokenDto.symbol} + ${fee} ${network.coin}`}</S.BlackText>
-            <S.GreyText>{`${feeAmountTotal.toString()} ${settedCurrency}`}</S.GreyText>
+            <S.GreyText>{`${feeAmountTotal} ${settedCurrency}`}</S.GreyText>
           </S.RightAlign>
         </S.Row>
       </S.MiddleContainer>

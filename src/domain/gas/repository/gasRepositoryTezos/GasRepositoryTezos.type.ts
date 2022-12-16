@@ -1,5 +1,5 @@
 import { Estimate, TransferParams } from '@taquito/taquito';
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 
 export interface IGetTotalGasFeeParamsTEZ {
   tip: BigNumber;

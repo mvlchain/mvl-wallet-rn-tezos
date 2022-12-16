@@ -1,4 +1,5 @@
-import { BytesLike, BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
+import { BytesLike } from 'ethers';
 
 export interface ITransactionRequestBody {
   to: string | null;

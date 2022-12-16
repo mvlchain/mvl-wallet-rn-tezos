@@ -1,6 +1,5 @@
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 
-import { TGasLevel } from '@@domain/gas/GasService.type';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
 export interface IGasFeeInfoEip1559 {

@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { BigNumber } from 'ethers';
-import { parseUnits, formatUnits } from 'ethers/lib/utils';
+import { BigNumber } from 'bignumber.js';
 import { BackHandler } from 'react-native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -16,6 +15,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { TTransactionResultRootStackProps } from '../WalletTransactionResult/WalletTransactionResult.type';
 
@@ -53,7 +53,7 @@ const useTokenSend = () => {
       setBody({ to: params.scanData.address });
     }
     if (params?.scanData?.amount) {
-      setBody({ value: parseUnits(params.scanData.amount.toString(), tokenDto.decimals) });
+      setBody({ value: new BigNumber(params.scanData.amount.toString()).shiftedBy(18) });
     }
   };
 
@@ -137,7 +137,7 @@ const useTokenSend = () => {
           hash: txHash,
           type: transactionType,
           nonce: 0,
-          value: formatUnits(value, tokenDto.decimals),
+          value: formatBigNumber(value, tokenDto.decimals).toString(10),
         });
         if (!serverRes) {
           throw new Error('fail register history');

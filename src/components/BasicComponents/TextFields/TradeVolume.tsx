@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { BigNumber } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
+import { BigNumber } from 'bignumber.js';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
@@ -12,6 +11,7 @@ import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { height } from '@@utils/ui';
 
 import * as S from './TextField.style';
@@ -38,9 +38,9 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
     if (!value) return null;
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.TEZOS:
-        return parseUnits(value, 6);
+        return new BigNumber(value).shiftedBy(6);
       default:
-        return parseUnits(value, 'ether');
+        return new BigNumber(value).shiftedBy(18);
     }
   };
 

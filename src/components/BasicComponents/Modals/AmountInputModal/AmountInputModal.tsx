@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
