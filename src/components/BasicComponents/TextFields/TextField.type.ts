@@ -3,13 +3,14 @@ import { Dispatch, SetStateAction } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { TextInputProps } from 'react-native';
 
+import { TGasUnit } from '@@constants/gas.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import { KeyboardTypeByInputType } from './BaseTextField';
 //Base
 export interface IBaseTextFieldComponentProps extends IBaseTextFieldProps {
   style?: TextInputProps['style'];
-  unit?: 'GWEI';
+  unit?: TGasUnit;
   type: keyof typeof KeyboardTypeByInputType;
 }
 
@@ -30,8 +31,7 @@ export interface IGasTextFieldProps {
   setValue?: Dispatch<SetStateAction<BigNumber | null>> | Dispatch<SetStateAction<BigNumber>>;
   hint?: string;
   style?: TextInputProps['style'];
-  //TODO: ticker 관련되서 정리되면 나중에 상수 및 타입 처리하기
-  unit?: 'gwei' | 'mutez';
+  unit?: TGasUnit;
   delay?: number;
   disabled?: boolean;
 }

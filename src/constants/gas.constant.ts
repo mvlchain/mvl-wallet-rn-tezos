@@ -7,6 +7,20 @@ export const GAS_LEVEL = {
   MID: 'MID',
   HIGH: 'HIGH',
 } as const;
+
+export const GAS_UNIT = {
+  GWEI: 'GWEI',
+  MUTEZ: 'MUTEZ',
+} as const;
+
+export const GAS_UNIT_DECIMAL = {
+  [GAS_UNIT.GWEI]: 9,
+  [GAS_UNIT.MUTEZ]: 0,
+} as const;
+
+export type TGasUnit = keyof typeof GAS_UNIT;
+export type TGasUnitDecimal = typeof GAS_UNIT_DECIMAL[keyof typeof GAS_UNIT];
+
 export const GAS_LEVEL_SETTING = {
   [GAS_LEVEL.LOW]: {
     weight: '1',
