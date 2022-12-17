@@ -33,6 +33,8 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
         <data android:scheme="clutchwallet" />
+        <data android:host="connect" />
+        <data android:host="screen" android:pathPattern="/*" />
       </intent-filter>
     </activity>
     <activity

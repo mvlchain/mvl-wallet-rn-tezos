@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Linking, Alert } from 'react-native';
 
 import Webview from '@@components/BasicComponents/Webview';
+import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
-import { format } from '@@utils/strings';
+import { format, isNotBlank } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
 import { ThirdPartyApp } from '../ThirdPartyApp';
@@ -94,7 +96,7 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * • `transaction fee` will only be visible when claimInfo.fee > 0
  *
  * DeepLinks
- *  clutchwallet://connect
+ *  clutchwallet://connect (O)
  *  clutchwallet://screen/earn (O)
  *  clutchwallet://screen/trade
  */
@@ -104,10 +106,36 @@ export function EarnEventDetailsScreen() {
   if (!params) {
     console.error('inappropriate event params!');
   }
+  const { disconnectThirdParty } = useDisconnectThirdParty();
 
   console.log(`Details> i: ${params.i}`);
 
-  const { event, phase, thirdParty, claimStatusInfo } = useEarnEventDetailsUiState(params.i, params.data);
+  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
+  const { event, phase } = details;
+
+  const onConnectThirdPartyPress = useCallback(
+    async (uri: string) => {
+      const supported = await Linking.canOpenURL(uri);
+      if (supported) {
+        await Linking.openURL(uri);
+      } else {
+        Alert.alert('Inappropriate link to open!');
+      }
+    },
+    [event]
+  );
+
+  const onDisconnectThirdPartyPress = useCallback(async () => {
+    const res = await disconnectThirdParty(event?.app?.id);
+    if (res && res.status == 'ok') {
+      // TODO: disconnected successfully. do following tasks
+      //  1. refresh event details page.
+      //  2. third-party disconnection modal
+      console.log(`Details> disconnected and refreshing`);
+      refresh();
+    }
+  }, [event]);
+
   if (!event) {
     console.log(`Details> event is null`);
     return null;
@@ -152,8 +180,17 @@ export function EarnEventDetailsScreen() {
             <ThirdPartyApp
               avatarUrl={event.iconUrl}
               {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, event.app?.name)}
-              onConnectPress={() => {}}
-              onDisconnectPress={() => {}}
+              onConnectPress={() => {
+                // decorated deeplink
+                const connectionDeepLink = thirdParty.thirdPartyConnection!.connectionDeepLink;
+                console.log(`DeepLink> connectionDeepLink: ${connectionDeepLink}`);
+                if (connectionDeepLink) {
+                  onConnectThirdPartyPress(connectionDeepLink);
+                }
+              }}
+              onDisconnectPress={() => {
+                onDisconnectThirdPartyPress();
+              }}
             />
           ) : null}
 
