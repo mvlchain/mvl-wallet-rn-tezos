@@ -11,7 +11,7 @@ export interface IGasFeeInfo {
   baseFee: BigNumber;
   tip?: BigNumber;
   gas: BigNumber;
-  total: number;
+  total: BigNumber;
 }
 
 export interface IGetTotalGasFeeRequest {

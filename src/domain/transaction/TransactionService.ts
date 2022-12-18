@@ -58,14 +58,14 @@ export class TransactionService implements ITransactionService {
           if (data) {
             return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, {
               to,
-              fee: gasFeeInfo.total,
+              fee: gasFeeInfo.total.toNumber(),
               amount: value.toNumber(),
               data: data as string,
             });
           } else {
             return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, {
               to,
-              fee: gasFeeInfo.total,
+              fee: gasFeeInfo.total.toNumber(),
               amount: value.toNumber(),
             });
           }

@@ -18,7 +18,8 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
   const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-  const tezosFeeType = network.networkFeeType === NETWORK_FEE_TYPE.TEZOS;
+  const unit = network.networkFeeType === NETWORK_FEE_TYPE.TEZOS ? GAS_UNIT.MUTEZ : GAS_UNIT.GWEI;
+
   const { baseFee, gas, tip, setState } = gasStore();
 
   const setBaseFee = (baseFee: BigNumber) => {
@@ -35,13 +36,13 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
     <S.Container>
       <S.Label>{t('gas_price')}</S.Label>
       <S.InputWrapper>
-        <GasTextField value={baseFee} setValue={setBaseFee} unit={tezosFeeType ? GAS_UNIT.MUTEZ : GAS_UNIT.GWEI} />
+        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} />
       </S.InputWrapper>
       {enableTip && (
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={tip} setValue={setTip} unit={tezosFeeType ? GAS_UNIT.MUTEZ : GAS_UNIT.GWEI} />
+            <GasTextField value={tip} setValue={setTip} unit={unit} />
           </S.InputWrapper>
         </>
       )}

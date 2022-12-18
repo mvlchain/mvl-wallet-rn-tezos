@@ -25,12 +25,15 @@ import { TTokenSendRouteProps } from './WalletTokenSend.type';
 const useTokenSend = () => {
   const transactionService = useDi('TransactionService');
   const walletService = useDi('WalletService');
+
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
+
   const { openModal, closeModal } = globalModalStore();
   const { setState: pinSet } = pinStore();
   const { to, data, value, setBody, resetBody } = transactionRequestStore();
   const { baseFee, tip, gas, total } = gasStore();
+
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
 
@@ -88,9 +91,9 @@ const useTokenSend = () => {
     openModal(MODAL_TYPES.CONFIRM_SEND, {
       recipientAddress: to,
       amount: value,
-      fee: total.toString(10),
+      fee: formatBigNumber(total, tokenDto.decimals).toString(10),
       tokenDto,
-      onConfirm: send(),
+      onConfirm: send,
     });
   };
 
@@ -102,7 +105,10 @@ const useTokenSend = () => {
   const send = async () => {
     try {
       if (!to || !value) {
-        throw new Error('to address and value is required');
+        throw new Error('address, value is required');
+      }
+      if (!baseFee || !gas || !total) {
+        throw new Error('baseFee, gas, total is required');
       }
       closeModal();
       //pin mode setting
@@ -121,7 +127,7 @@ const useTokenSend = () => {
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
         gasFeeInfo: {
           baseFee,
-          tip,
+          tip: tip ?? undefined,
           gas,
           total,
         },
@@ -147,7 +153,7 @@ const useTokenSend = () => {
         value: formatBigNumber(value, tokenDto.decimals).toString(10),
       });
       if (!serverRes) {
-        throw new Error('fail register history');
+        console.log('fail register history');
       }
       resetBody();
       navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);

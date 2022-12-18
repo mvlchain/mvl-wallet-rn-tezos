@@ -13,19 +13,30 @@ import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import gasStore from '@@store/gas/gasStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { width } from '@@utils/ui';
 
 import * as S from './GasFeeBoardLayout.style';
 import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
-function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, toggleGasAdvanced, children, isValid }: IGasFeeBoardLayoutProps) {
+function GasFeeBoardLayout({
+  isRevision,
+  estimatedTime,
+  advanced,
+  onConfirm,
+  toggleGasAdvanced,
+  children,
+  tokenDto,
+  isValid,
+}: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
   const coin = NETWORK_CONFIGS[selectedNetwork].coin;
-  const { total, inString } = gasStore();
-  const { price } = useOneTokenPrice(COIN_DTO[coin], total?.toString(10) ?? '-');
+  const { total } = gasStore();
+  const totalStr = total ? formatBigNumber(total, tokenDto.decimals).toString(10) : '-';
+  const { price } = useOneTokenPrice(COIN_DTO[coin], totalStr);
   return (
     <S.Container>
       <View>
@@ -49,7 +60,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, tog
           )}
           <S.MarginRow>
             <S.Label>{`${isRevision ? t('new') + ' ' : ''}${t('transaction_fee')}`}</S.Label>
-            <S.Value>{`${total?.toString(10) ?? '-'} ${coin}`}</S.Value>
+            <S.Value>{`${totalStr} ${coin}`}</S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{`${price} ${settedCurrency}`}</S.BaseCurrency>
           {!total && (
