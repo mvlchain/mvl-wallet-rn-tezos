@@ -8,17 +8,18 @@ import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { TTokenSendRouteProps } from './WalletTokenSend.type';
 import useSetSendData from './useSetSendData';
+import useSetSendFunction from './useSetSendFunction';
 
 const useTokenSend = () => {
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
 
   const { openModal } = globalModalStore();
-  const { to, data, value, resetBody } = transactionRequestStore();
+  const { to, value } = transactionRequestStore();
   const { total } = gasStore();
 
   const { setAmount, setAddress } = useSetSendData();
-  const { send } = useSetSendData();
+  const { send } = useSetSendFunction();
 
   const confirm = async () => {
     if (!to || !value || !total) return;
@@ -31,10 +32,6 @@ const useTokenSend = () => {
     });
   };
 
-  const isValid = () => {
-    return tokenDto.contractAddress ? !!to || !!value || !!data : !!to || !!value;
-  };
-
-  return { amount: value, setAmount, address: to, setAddress, confirm, isValid };
+  return { amount: value, setAmount, address: to, setAddress, confirm };
 };
 export default useTokenSend;

@@ -44,7 +44,8 @@ const useSetTotal = ({ blockGas }: { blockGas: BigNumber | null }) => {
       console.log('fail to get total');
       return;
     }
-    setState({ total });
+    // getTotal result means all gas value is valid
+    setState({ total, gasValid: true, baseFeeValid: true, tipValid: true });
   };
 };
 

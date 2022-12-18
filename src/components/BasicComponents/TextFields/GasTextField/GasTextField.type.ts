@@ -14,4 +14,5 @@ export interface IGasTextFieldProps {
   unit?: TGasUnit;
   delay?: number;
   disabled?: boolean;
+  setParentValid: (valid: boolean) => void;
 }

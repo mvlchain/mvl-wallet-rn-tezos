@@ -6,8 +6,10 @@ export interface ITransactionRequestBody {
   from: string | null;
   data: BytesLike | null;
   value: BigNumber | null;
+  toValid: boolean;
+  valueValid: boolean;
 }
 export interface ITransactionRequestStore extends ITransactionRequestBody {
-  setBody: (newState: Partial<ITransactionRequestBody>) => void;
+  setState: (newState: Partial<ITransactionRequestBody>) => void;
   resetBody: () => void;
 }

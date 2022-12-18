@@ -20,7 +20,7 @@ import * as S from '../TextField.style';
 import { ITradeVolumeComponentProps } from './TradeVolume.type';
 
 export function TradeVolume(props: ITradeVolumeComponentProps) {
-  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000 } = props;
+  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000, setParentValid } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const { balance } = useOneTokenBalance(tokenDto);
@@ -47,6 +47,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     onChange(null);
     setDisplayValue(null);
     setShowDelete(false);
+    setHint(null);
   };
 
   const onKeyPress = () => {
@@ -83,6 +84,15 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       setHint(t('msg_insufficient_amount'));
     }
   }, [value, disableHint, bnBalance]);
+
+  useEffect(() => {
+    if (!setParentValid) return;
+    if (hint) {
+      setParentValid(false);
+    } else {
+      setParentValid(true);
+    }
+  }, [hint]);
 
   return (
     <S.TradeVolumeContainer>

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { validateAddress } from '@taquito/utils';
-import { isAddress } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 import { getNetworkConfig } from '@@constants/network.constant';
@@ -13,50 +12,47 @@ import { BaseTextField } from '../BaseTextField';
 import { IAddressTextFieldProps } from './AddressTextField.type';
 
 function AddressTextField(props: IAddressTextFieldProps) {
-  const { placeholder, value, onChange, gotoScan, label } = props;
+  const { placeholder, value, onChange, gotoScan, label, setParentValid } = props;
   const { t } = useTranslation();
-  const errorMsg = t('msg_error_invalid_address');
-  const [showHint, setShowHint] = useState<boolean>(false);
+
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-
   //TODO: 검사당연히 해줘야한다고 생각했는데 원래 클러치 앱에서는 안함..
-  useEffect(() => {
-    handleHint();
-  }, [value]);
-
-  const handleHint = useDebounce(() => {
+  const hint = useMemo(() => {
+    const errorMsg = t('msg_error_invalid_address');
     if (!value) {
-      setShowHint(false);
-      return;
+      return null;
     }
     switch (network.bip44) {
       case 60:
-        if (isAddress(value)) {
-          setShowHint(false);
+        const addressReg = /^0x[a-fA-F0-9]{40}$/g;
+        if (addressReg.test(value)) {
+          return null;
         } else {
-          setShowHint(true);
+          return errorMsg;
         }
       case 1729:
         if (validateAddress(value)) {
-          setShowHint(false);
+          return null;
         } else {
-          setShowHint(true);
+          return errorMsg;
         }
     }
-  }, 800);
+  }, [value]);
 
-  return (
-    <BaseTextField
-      placeholder={placeholder}
-      onChange={onChange}
-      gotoScan={gotoScan}
-      label={label}
-      value={value}
-      hint={showHint ? errorMsg : null}
-      scanable={true}
-    />
-  );
+  useEffect(() => {
+    handleParentValid();
+  }, [hint, value]);
+
+  const handleParentValid = useDebounce(() => {
+    if (!hint && value) {
+      setParentValid(true);
+    } else {
+      setParentValid(false);
+    }
+  }, 500);
+
+  return <BaseTextField placeholder={placeholder} onChange={onChange} gotoScan={gotoScan} label={label} value={value} hint={hint} scanable={true} />;
 }
 
 export default AddressTextField;
