@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { BigNumber as BigNumberEther } from 'ethers';
 import { injectable, inject } from 'tsyringe';
 
-import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
+import { NETWORK_FEE_TYPE, getNetworkConfig, Network, COIN_DTO } from '@@constants/network.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
@@ -92,7 +92,7 @@ export class GasService implements IGasService {
             rpcUrl: network.rpcUrl,
             walletPrivateKey: wallet.privateKey,
             to,
-            amount: value.toNumber(),
+            amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
           });
           if (!estimationTezos) {
             throw new Error('fail to estimate');

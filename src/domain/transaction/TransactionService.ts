@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, NETWORK_FEE_TYPE, Network } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE, Network, COIN_DTO } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { request } from '@@utils/request';
@@ -31,7 +31,7 @@ export class TransactionService implements ITransactionService {
           const data: ITezosData = {
             from: wallet.address,
             to,
-            value: value.toString(10),
+            value: formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
           };
           return JSON.stringify(data);
         case NETWORK_FEE_TYPE.EIP1559:
@@ -56,17 +56,18 @@ export class TransactionService implements ITransactionService {
             throw new Error('tip,value,to is required');
           }
           if (data) {
+            //fee unit mutez, amount unit tez, so only amount use formatBigNumber
             return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, {
               to,
               fee: gasFeeInfo.total.toNumber(),
-              amount: value.toNumber(),
+              amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
               data: data as string,
             });
           } else {
             return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, {
               to,
               fee: gasFeeInfo.total.toNumber(),
-              amount: value.toNumber(),
+              amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
             });
           }
         case NETWORK_FEE_TYPE.EIP1559:
