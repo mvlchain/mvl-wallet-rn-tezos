@@ -4,7 +4,7 @@ import React from 'react';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField';
+import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField/GasTextField';
 import { GAS_UNIT } from '@@constants/gas.constant';
 import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import gasStore from '@@store/gas/gasStore';

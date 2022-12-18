@@ -15,10 +15,11 @@ import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
 import { height } from '@@utils/ui';
 
-import * as S from './TextField.style';
-import * as Type from './TextField.type';
+import * as S from '../TextField.style';
 
-export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
+import { ITradeVolumeComponentProps } from './TradeVolume.type';
+
+export function TradeVolume(props: ITradeVolumeComponentProps) {
   const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000 } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
@@ -105,8 +106,6 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
         <S.SymbolWrapper>
           <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />
           <S.Token>{tokenDto.symbol}</S.Token>
-          {/* TODO: 향후 trade를 위함 */}
-          {/* {!!onSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} onPress={() => {}} />} */}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
       {!disableHint && (hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`${t('balance')}: ${balance}`}</S.Balance>)}
