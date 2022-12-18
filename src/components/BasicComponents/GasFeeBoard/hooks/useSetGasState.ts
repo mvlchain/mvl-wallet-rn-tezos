@@ -8,7 +8,7 @@ import gasStore from '@@store/gas/gasStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { getLeveledBaseFee } from '@@utils/gas';
 
-const useSetGasState = ({ blockBaseFee, blockGas }: { blockBaseFee: BigNumber | null; blockGas: BigNumber | null }) => {
+const useSetGasState = ({ blockBaseFee, blockGas, advanced }: { blockBaseFee: BigNumber | null; blockGas: BigNumber | null; advanced: boolean }) => {
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
@@ -24,15 +24,15 @@ const useSetGasState = ({ blockBaseFee, blockGas }: { blockBaseFee: BigNumber | 
 
   useEffect(() => {
     setState({ baseFee: leveledBaseFee });
-  }, [leveledBaseFee]);
+  }, [leveledBaseFee, advanced]);
 
   useEffect(() => {
     setState({ tip: leveledTip });
-  }, [leveledTip]);
+  }, [leveledTip, advanced]);
 
   useEffect(() => {
     setState({ gas: blockGas });
-  }, [blockGas]);
+  }, [blockGas, advanced]);
 };
 
 export default useSetGasState;

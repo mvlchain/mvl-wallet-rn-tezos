@@ -12,5 +12,5 @@ export interface ITradeVolumeComponentProps {
   iconUrl?: string;
   disableHint?: boolean;
   debounceTime?: number;
-  setParentValid: (valid: boolean) => void;
+  setParentValid?: (valid: boolean) => void;
 }
