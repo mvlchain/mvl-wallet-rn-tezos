@@ -5,7 +5,6 @@ import { BigNumber } from 'bignumber.js';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
 import useEstimateGas from './hooks/useEstimateGas';
-import useSetAmountMax from './hooks/useSetAmountMax';
 import useSetGasState from './hooks/useSetGasState';
 import useSetInitial from './hooks/useSetInitial';
 import useSetTotal from './hooks/useSetTotal';
@@ -29,7 +28,6 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
     setBlockBaseFee,
     setBlockGas,
   });
-  useSetAmountMax(tokenDto);
 
   const toggleGasAdvanced = useCallback(() => {
     setAdvanced(!advanced);
