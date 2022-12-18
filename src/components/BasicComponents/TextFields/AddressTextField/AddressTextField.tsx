@@ -20,6 +20,7 @@ function AddressTextField(props: IAddressTextFieldProps) {
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
 
+  //TODO: 검사당연히 해줘야한다고 생각했는데 원래 클러치 앱에서는 안함..
   useEffect(() => {
     handleHint();
   }, [value]);
@@ -32,15 +33,15 @@ function AddressTextField(props: IAddressTextFieldProps) {
     switch (network.bip44) {
       case 60:
         if (isAddress(value)) {
-          setShowHint(true);
-        } else {
           setShowHint(false);
+        } else {
+          setShowHint(true);
         }
       case 1729:
         if (validateAddress(value)) {
-          setShowHint(true);
-        } else {
           setShowHint(false);
+        } else {
+          setShowHint(true);
         }
     }
   }, 800);
