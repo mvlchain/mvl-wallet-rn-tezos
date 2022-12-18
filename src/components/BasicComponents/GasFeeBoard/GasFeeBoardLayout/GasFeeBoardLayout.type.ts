@@ -1,5 +1,7 @@
 import { ReactChildren } from 'react-native-toast-message';
 
+import { TokenDto } from '@@generated/generated-scheme-clutch';
+
 export interface IGasFeeBoardLayoutProps {
   isRevision: boolean;
   estimatedTime?: string;
@@ -10,4 +12,5 @@ export interface IGasFeeBoardLayoutProps {
   //TODO:타입
   toggleGasAdvanced: (v: any) => void;
   isValid: () => boolean;
+  tokenDto: TokenDto;
 }
