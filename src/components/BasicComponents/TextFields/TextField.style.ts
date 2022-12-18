@@ -44,7 +44,7 @@ export const BaseTextFieldLabel = styled.Text`
 `;
 
 export const BaseTextFieldHint = styled.Text`
-  color: ${({ theme }) => theme.color.grey500};
+  color: ${({ theme }) => theme.color.red};
   line-height: ${height * 20}px;
   margin-top: ${height * 8}px;
 `;
