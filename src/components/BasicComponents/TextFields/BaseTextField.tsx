@@ -51,7 +51,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
       {label && <S.BaseTextFieldLabel>{label}</S.BaseTextFieldLabel>}
       <S.BaseTextFieldInputWrapper lcColor={lcColor} editable={true}>
         <S.BaseInput
-          keyboardType={KeyboardTypeByInputType[type]}
+          keyboardType={'default'}
           placeholder={placeholder}
           placeholderTextColor={color.grey300Grey700}
           isValid={isValid}
@@ -65,8 +65,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
           onKeyPress={onKeyPress}
         />
         {unit && <S.Unit>{unit}</S.Unit>}
-        {/* TODO: 약간 늦게 아이콘 없어짐 디바운스떄문에.. 어떻게 할지 고민*/}
-        {(showDelete || displayValue || value) && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
+        {(showDelete || displayValue) && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         {scanable && gotoScan && (
           <ScanIcon
             onPress={() => {
