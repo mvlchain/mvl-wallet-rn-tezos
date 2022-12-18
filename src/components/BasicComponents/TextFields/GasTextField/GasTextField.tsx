@@ -11,11 +11,12 @@ import { commonColors } from '@@style/colors';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
 
-import * as S from './TextField.style';
-import * as Type from './TextField.type';
+import * as S from '../TextField.style';
 
-export function GasTextField(props: Type.IGasTextFieldProps) {
-  const { value, setValue, style, unit, hint, delay, disabled, defaultValue } = props;
+import { IGasTextFieldProps } from './GasTextField.type';
+
+export function GasTextField(props: IGasTextFieldProps) {
+  const { value, setValue, style, unit, hint, disabled, defaultValue } = props;
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const decimal = unit ? -GAS_UNIT_DECIMAL[unit] : 0;

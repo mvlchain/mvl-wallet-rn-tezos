@@ -10,14 +10,8 @@ import { commonColors } from '@@style/colors';
 import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
-export const KeyboardTypeByInputType = {
-  address: 'default',
-  gas: 'numeric',
-  search: 'default',
-} as const;
-
 export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
-  const { placeholder, isValid, value, onChange, scanable, gotoScan, style, unit, type, label, hint } = props;
+  const { placeholder, isValid, value, onChange, scanable, gotoScan, style, unit, label, hint } = props;
   const ScanIcon = useAssetFromTheme(BlackScanIcon, WhiteScanIcon);
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);

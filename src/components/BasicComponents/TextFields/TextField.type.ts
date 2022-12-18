@@ -1,15 +1,10 @@
-import { BigNumber } from 'bignumber.js';
 import { TextInputProps } from 'react-native';
 
 import { TGasUnit } from '@@constants/gas.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 
-import { KeyboardTypeByInputType } from './BaseTextField';
-//Base
 export interface IBaseTextFieldComponentProps extends IBaseTextFieldProps {
   style?: TextInputProps['style'];
   unit?: TGasUnit;
-  type: keyof typeof KeyboardTypeByInputType;
 }
 
 export interface IBaseTextFieldProps {
@@ -17,37 +12,12 @@ export interface IBaseTextFieldProps {
   onChange: (value: any) => void;
   placeholder?: string;
   label?: string;
-  hint?: string;
+  hint?: string | null;
   isValid?: boolean;
   scanable?: boolean;
   gotoScan?: Function;
 }
-
-export interface IGasTextFieldProps {
-  defaultValue?: any;
-  value?: BigNumber | null;
-  setValue?: (value: BigNumber) => void;
-  hint?: string;
-  style?: TextInputProps['style'];
-  unit?: TGasUnit;
-  delay?: number;
-  disabled?: boolean;
-}
-
 export interface ITextFieldContainerProps {
   lcColor: string | null;
   editable?: boolean;
-}
-
-//TradeVolume
-export interface ITradeVolumeComponentProps {
-  useMax?: boolean;
-  onSelect?: () => void;
-  label?: string;
-  tokenDto: TokenDto;
-  value?: BigNumber | null;
-  onChange: (amount: any) => void;
-  iconUrl?: string;
-  disableHint?: boolean;
-  debounceTime?: number;
 }
