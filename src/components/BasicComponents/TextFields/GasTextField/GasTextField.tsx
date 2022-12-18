@@ -20,8 +20,8 @@ export function GasTextField(props: IGasTextFieldProps) {
   const { value, setValue, style, unit, disabled, defaultValue, setParentValid } = props;
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
-  const decimal = unit ? -GAS_UNIT_DECIMAL[unit] : 0;
-  const initialDisplayValue = value ? value.shiftedBy(-decimal).toString(10) : '';
+  const decimal = unit ? GAS_UNIT_DECIMAL[unit] : 0;
+  const initialDisplayValue = value ? formatBigNumber(value, decimal).toString(10) : '';
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
   const { t } = useTranslation();
   const debounceCallback = useDebounce(setValue, 1000);
@@ -58,6 +58,7 @@ export function GasTextField(props: IGasTextFieldProps) {
     handleHint();
   }, [value]);
 
+  //TODO: 렌더링 체크
   const handleHint = useDebounce(() => {
     if (!value) {
       setShowHint(false);
@@ -77,7 +78,7 @@ export function GasTextField(props: IGasTextFieldProps) {
           setParentValid(false);
         }
       case undefined:
-        if (value.gt(new BigNumber(21000))) {
+        if (value.gte(new BigNumber(21000))) {
           setShowHint(false);
           setParentValid(true);
         } else {
@@ -106,7 +107,7 @@ export function GasTextField(props: IGasTextFieldProps) {
         {unit && <S.Unit>{unit}</S.Unit>}
         <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
       </S.BaseTextFieldInputWrapper>
-      {showHint && <S.BaseTextFieldHint>{unit ? errorMsgZero : errorMsgLimit}</S.BaseTextFieldHint>}
+      {showHint && value && <S.BaseTextFieldHint>{unit ? errorMsgZero : errorMsgLimit}</S.BaseTextFieldHint>}
     </S.BaseTextFieldContainer>
   );
 }

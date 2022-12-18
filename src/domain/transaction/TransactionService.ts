@@ -35,10 +35,10 @@ export class TransactionService implements ITransactionService {
           };
           return JSON.stringify(data);
         case NETWORK_FEE_TYPE.EIP1559:
-          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value]);
+          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value.toString(10)]);
 
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value]);
+          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value.toString(10)]);
       }
     } catch (err) {
       console.log(err);
@@ -83,10 +83,10 @@ export class TransactionService implements ITransactionService {
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
-            gasPrice: gasFeeInfo.baseFee.toString(10),
-            gasLimit: gasFeeInfo.gas.toString(10),
+            gasPrice: '0x' + gasFeeInfo.baseFee.toString(10),
+            gasLimit: '0x' + gasFeeInfo.gas.toString(10),
             to,
-            value: value ? value.toString(10) : undefined,
+            value: value ? '0x' + value.toString(10) : undefined,
             data,
           });
       }

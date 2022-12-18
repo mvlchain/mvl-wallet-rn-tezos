@@ -20,7 +20,7 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
   const [blockGas, setBlockGas] = useState<BigNumber | null>(null);
 
   useSetTotal({ blockGas });
-  useSetGasState({ blockBaseFee, blockGas });
+  useSetGasState({ blockBaseFee, blockGas, advanced });
   useEstimateGas({ tokenDto, setBlockBaseFee, setBlockGas });
   useSetInitial({
     setEnableTip,
