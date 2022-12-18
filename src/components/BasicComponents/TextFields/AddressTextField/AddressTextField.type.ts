@@ -4,4 +4,5 @@ export interface IAddressTextFieldProps {
   placeholder?: string;
   label?: string;
   gotoScan?: Function;
+  setParentValid: (valid: boolean) => void;
 }

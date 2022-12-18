@@ -8,10 +8,12 @@ export interface IGasStoreState {
   gas: BigNumber | null;
   total: BigNumber | null;
   level: TGasLevel;
+  baseFeeValid: boolean;
+  tipValid: boolean;
+  gasValid: boolean;
 }
 
 export interface IGasStore extends IGasStoreState {
   setState: (newState: Partial<IGasStoreState>) => void;
   resetState: () => void;
-  inString: (target: keyof Omit<IGasStoreState, 'level'>, decimal: number) => string | null;
 }

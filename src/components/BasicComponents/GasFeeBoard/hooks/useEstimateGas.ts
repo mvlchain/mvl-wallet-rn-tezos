@@ -24,10 +24,11 @@ const useEstimateGas = ({
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
 
-  const { to, value, data } = transactionRequestStore();
+  const { to, value, data, toValid, valueValid } = transactionRequestStore();
 
   const estimateGas = useCallback(
     async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
+      if (!toValid || !valueValid) return;
       const estimation = await gasService.estimateGas({
         selectedNetwork,
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -46,7 +47,7 @@ const useEstimateGas = ({
         setBlockBaseFee(estimation.baseFee);
       }
     },
-    []
+    [toValid, valueValid]
   );
 
   const debounceEstimate = useDebounce(estimateGas, 800);

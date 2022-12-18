@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRoute } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
@@ -6,6 +6,7 @@ import { BackHandler } from 'react-native';
 
 import { getNetworkName } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
+import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
@@ -16,7 +17,8 @@ const useSetSendData = () => {
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
 
-  const { to, value, setBody, resetBody } = transactionRequestStore();
+  const { to, value, setState: setBody, resetBody } = transactionRequestStore();
+  const { resetState: resetGas } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
@@ -45,6 +47,7 @@ const useSetSendData = () => {
 
   const clearSendInput = () => {
     resetBody();
+    resetGas();
     return true;
   };
 

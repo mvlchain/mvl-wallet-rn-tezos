@@ -18,7 +18,8 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
   const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
-  const unit = network.networkFeeType === NETWORK_FEE_TYPE.TEZOS ? GAS_UNIT.MUTEZ : GAS_UNIT.GWEI;
+  const isTezos = network.networkFeeType === NETWORK_FEE_TYPE.TEZOS;
+  const unit = isTezos ? GAS_UNIT.MUTEZ : GAS_UNIT.GWEI;
 
   const { baseFee, gas, tip, setState } = gasStore();
 
@@ -32,17 +33,27 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
     setState({ gas });
   };
 
+  const setBaseFeeValid = (valid: boolean) => {
+    setState({ baseFeeValid: valid });
+  };
+  const setTipValid = (valid: boolean) => {
+    setState({ tipValid: valid });
+  };
+  const setGasValid = (valid: boolean) => {
+    setState({ gasValid: valid });
+  };
+
   return (
     <S.Container>
       <S.Label>{t('gas_price')}</S.Label>
       <S.InputWrapper>
-        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} />
+        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} disabled={isTezos} setParentValid={setBaseFeeValid} />
       </S.InputWrapper>
       {enableTip && (
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={tip} setValue={setTip} unit={unit} />
+            <GasTextField value={tip} setValue={setTip} unit={unit} setParentValid={setTipValid} />
           </S.InputWrapper>
         </>
       )}
@@ -50,7 +61,7 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_limit')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={gas} setValue={setGas} />
+            <GasTextField value={gas} setValue={setGas} setParentValid={setGasValid} />
           </S.InputWrapper>
         </>
       )}

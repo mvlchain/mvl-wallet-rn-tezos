@@ -12,6 +12,9 @@ const INITIAL_GAS_STORE_STATE = {
   gas: null,
   total: null,
   level: GAS_LEVEL.LOW,
+  baseFeeValid: false,
+  tipValid: false,
+  gasValid: false,
 };
 const gasStore = create<IGasStore>(
   zustandFlipper(
@@ -36,13 +39,6 @@ const gasStore = create<IGasStore>(
           false,
           'resetGas'
         );
-      },
-      inString: (target: keyof Omit<IGasStoreState, 'level'>, decimal: number) => {
-        const selectedTarget = get()[target];
-        if (!selectedTarget) {
-          return null;
-        }
-        return formatBigNumber(selectedTarget, decimal).toString(10);
       },
     }),
     'gasStore'

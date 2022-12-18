@@ -12,6 +12,7 @@ import { COIN_DTO, NETWORK_CONFIGS, getNetworkName } from '@@constants/network.c
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import gasStore from '@@store/gas/gasStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { width } from '@@utils/ui';
@@ -19,16 +20,7 @@ import { width } from '@@utils/ui';
 import * as S from './GasFeeBoardLayout.style';
 import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
-function GasFeeBoardLayout({
-  isRevision,
-  estimatedTime,
-  advanced,
-  onConfirm,
-  toggleGasAdvanced,
-  children,
-  tokenDto,
-  isValid,
-}: IGasFeeBoardLayoutProps) {
+function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, toggleGasAdvanced, children, tokenDto }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
@@ -37,6 +29,9 @@ function GasFeeBoardLayout({
   const { total } = gasStore();
   const totalStr = total ? formatBigNumber(total, tokenDto.decimals).toString(10) : '-';
   const { price } = useOneTokenPrice(COIN_DTO[coin], totalStr);
+  const { toValid, valueValid } = transactionRequestStore();
+  const { baseFeeValid, tipValid, gasValid } = gasStore();
+  const isValid = toValid && valueValid && baseFeeValid && tipValid && gasValid;
   return (
     <S.Container>
       <View>
@@ -81,7 +76,7 @@ function GasFeeBoardLayout({
           onPress={() => {
             onConfirm();
           }}
-          disabled={!isValid()}
+          disabled={!isValid}
         />
       </S.ConfirmWrapper>
     </S.Container>

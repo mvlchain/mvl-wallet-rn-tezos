@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -26,8 +28,8 @@ const useSetSendFunction = () => {
 
   const { openModal, closeModal } = globalModalStore();
   const { setState: pinSet } = pinStore();
-  const { to, data, value, resetBody } = transactionRequestStore();
-  const { baseFee, tip, gas, total } = gasStore();
+  const { to, data, value, resetBody, toValid, valueValid } = transactionRequestStore();
+  const { baseFee, tip, gas, total, resetState: resetGas } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
@@ -102,14 +104,18 @@ const useSetSendFunction = () => {
 
   const send = async () => {
     try {
+      if (!toValid || !valueValid) return;
+      //close confirm tx modal
       closeModal();
       await checkPin();
+      closeModal();
       const hash = await sendToBlockChain();
       if (!hash) {
         throw new Error('fail send to blockChain');
       }
       await registerHistoryToServer(hash);
       resetBody();
+      resetGas();
       navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
     } catch (err) {
       console.log(err);
