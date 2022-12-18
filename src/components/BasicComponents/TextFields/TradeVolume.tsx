@@ -10,6 +10,8 @@ import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
+import gasStore from '@@store/gas/gasStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
 import { height } from '@@utils/ui';
 
@@ -17,12 +19,20 @@ import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
-  const { useMax, onSelect, label, tokenDto, onChange, hint, disableHint, debounceTime = 1000 } = props;
+  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000 } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const { balance } = useOneTokenBalance(tokenDto);
   const { color } = useColor();
   const { t } = useTranslation();
+
+  const { total } = gasStore();
+  const [usingMax, setUsingMax] = useState(false);
+  const [hint, setHint] = useState<string | null>(null);
+
+  const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
+  const bnValidStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toString(10) : null;
+
   const debounceCallback = useDebounce((value: BigNumber | null) => {
     onChange(value);
     setShowDelete(!!value);
@@ -43,17 +53,41 @@ export function TradeVolume(props: Type.ITradeVolumeComponentProps) {
   };
 
   const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    if (usingMax) {
+      setUsingMax(false);
+    }
     const value = data.nativeEvent.text;
     const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
     if (!formattedValue) return;
     setDisplayValue(formattedValue);
   };
 
+  const onPressMax = () => {
+    if (tokenDto.contractAddress) {
+      setDisplayValue(balance);
+    } else {
+      setUsingMax(true);
+      setDisplayValue(bnValidStrBalance);
+    }
+  };
+
+  useEffect(() => {
+    if (!usingMax || disableHint || !total || tokenDto.contractAddress) return;
+    setDisplayValue(bnValidStrBalance);
+  }, [disableHint, usingMax, total, value, tokenDto]);
+
+  useEffect(() => {
+    if (!value || disableHint) return;
+    if (value.gt(bnBalance)) {
+      setHint(t('msg_insufficient_amount'));
+    }
+  }, [value, disableHint, bnBalance]);
+
   return (
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
         <S.Label>{label}</S.Label>
-        {useMax && <TextButton label={'Max'} onPress={() => {}} disabled={true} />}
+        {useMax && <TextButton label={'Max'} onPress={onPressMax} disabled={true} />}
       </S.TradeVolumeTop>
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
