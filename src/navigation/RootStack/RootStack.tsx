@@ -86,8 +86,8 @@ function RootStack() {
           <Screen key={ROOT_STACK_ROUTE.AUTH} name={ROOT_STACK_ROUTE.AUTH} component={AuthStack} options={{ headerShown: false }} />
           <Screen key={ROOT_STACK_ROUTE.SEED_PHRASE} name={ROOT_STACK_ROUTE.SEED_PHRASE} component={SeedPhraseScreen} />
           <Screen
-            key={ROOT_STACK_ROUTE.SEED_PHRASE}
-            name={ROOT_STACK_ROUTE.SEED_PHRASE}
+            key={ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM}
+            name={ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM}
             component={ConfirmSeedPhraseScreen}
             options={handleStackHeaderOption({ title: t('confirm_seed_phrase_lbl_title') })}
           />
