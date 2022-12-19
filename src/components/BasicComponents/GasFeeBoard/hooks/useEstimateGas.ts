@@ -63,6 +63,6 @@ const useEstimateGas = ({
     if (!to || !value) return;
     if (!!tokenDto.contractAddress && !data) return;
     debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
-  }, 18000);
+  }, 20000);
 };
 export default useEstimateGas;

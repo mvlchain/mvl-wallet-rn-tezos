@@ -4,7 +4,7 @@ const useInterval = (callback: any, delay: number) => {
   const savedCallback = useRef<Function | null>(null);
   useEffect(() => {
     savedCallback.current = callback;
-  }, callback);
+  }, [callback]);
 
   useEffect(() => {
     const tick = () => {
