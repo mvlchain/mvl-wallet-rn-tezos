@@ -31,7 +31,7 @@ export function GasTextField(props: IGasTextFieldProps) {
   const [showHint, setShowHint] = useState<boolean>(false);
 
   useEffect(() => {
-    debounceCallback(formatBigNumber(new BigNumber(displayValue), decimal));
+    debounceCallback(new BigNumber(displayValue).shiftedBy(decimal));
   }, [displayValue]);
 
   const onBlur = () => {
