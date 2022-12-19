@@ -8,6 +8,7 @@ import useEstimateGas from './hooks/useEstimateGas';
 import useSetGasState from './hooks/useSetGasState';
 import useSetInitial from './hooks/useSetInitial';
 import useSetTotal from './hooks/useSetTotal';
+import useSetValidCheck from './hooks/useSetValidCheck';
 
 const useGasFeeBoard = (tokenDto: TokenDto) => {
   //The setted value
@@ -28,6 +29,7 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
     setBlockBaseFee,
     setBlockGas,
   });
+  const { baseFeeCheck, tipCheck, gasCheck } = useSetValidCheck(tokenDto, blockBaseFee);
 
   const toggleGasAdvanced = useCallback(() => {
     setAdvanced(!advanced);
@@ -37,6 +39,9 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
     advanced,
     enableTip,
     enableLimitCustom,
+    baseFeeCheck,
+    tipCheck,
+    gasCheck,
     toggleGasAdvanced,
   };
 };

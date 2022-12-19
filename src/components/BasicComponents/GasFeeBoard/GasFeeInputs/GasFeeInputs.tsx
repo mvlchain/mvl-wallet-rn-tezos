@@ -14,7 +14,7 @@ import { height } from '@@utils/ui';
 import * as S from './GasFeeInputs.style';
 import { IGasFeeInputsProps } from './GasFeeInputs.type';
 
-function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
+function GasFeeInputs({ enableTip, enableLimitCustom, baseFeeCheck, tipCheck, gasCheck }: IGasFeeInputsProps) {
   const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
@@ -33,27 +33,17 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
     setState({ gas });
   };
 
-  const setBaseFeeValid = (valid: boolean) => {
-    setState({ baseFeeValid: valid });
-  };
-  const setTipValid = (valid: boolean) => {
-    setState({ tipValid: valid });
-  };
-  const setGasValid = (valid: boolean) => {
-    setState({ gasValid: valid });
-  };
-
   return (
     <S.Container>
       <S.Label>{t('gas_price')}</S.Label>
       <S.InputWrapper>
-        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} disabled={isTezos} setParentValid={setBaseFeeValid} />
+        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} disabled={isTezos} hint={baseFeeCheck} />
       </S.InputWrapper>
       {enableTip && (
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_tip')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={tip} setValue={setTip} unit={unit} setParentValid={setTipValid} />
+            <GasTextField value={tip} setValue={setTip} unit={unit} hint={tipCheck} />
           </S.InputWrapper>
         </>
       )}
@@ -61,7 +51,7 @@ function GasFeeInputs({ enableTip, enableLimitCustom }: IGasFeeInputsProps) {
         <>
           <S.Label style={{ marginTop: height * 24 }}>{t('gas_limit')}</S.Label>
           <S.InputWrapper>
-            <GasTextField value={gas} setValue={setGas} setParentValid={setGasValid} />
+            <GasTextField value={gas} setValue={setGas} hint={gasCheck} />
           </S.InputWrapper>
         </>
       )}
