@@ -29,4 +29,17 @@ export class TransactionServiceEthers implements ITransactionServiceEthers {
       }
     }
   );
+
+  getTransaction = loadingFunction<number | undefined>(async (selectedNetwork: Network, hash: string) => {
+    try {
+      const network = getNetworkConfig(selectedNetwork);
+      const provider = this.evmJsonRpcProviderHolder.getProvider(network.rpcUrl);
+
+      const transactionInfo = await provider.getTransaction(hash);
+
+      return transactionInfo.nonce;
+    } catch (err) {
+      console.log(err);
+    }
+  });
 }

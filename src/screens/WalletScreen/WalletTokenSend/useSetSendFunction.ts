@@ -77,7 +77,7 @@ const useSetSendFunction = () => {
     }
   };
 
-  const registerHistoryToServer = async (txHash: string) => {
+  const registerHistoryToServer = async (txHash: string, nonce: number) => {
     try {
       if (!to || !value) {
         throw new Error('to,value is required');
@@ -91,7 +91,7 @@ const useSetSendFunction = () => {
         data,
         hash: txHash,
         type: transactionType,
-        nonce: 0,
+        nonce,
         value: value.toString(10),
       });
       if (!serverRes) {
@@ -113,7 +113,9 @@ const useSetSendFunction = () => {
       if (!hash) {
         throw new Error('fail send to blockChain');
       }
-      await registerHistoryToServer(hash);
+      //TODO: nonce조회를 일시적으로 하지 못하는 경우 어떤 값으로 처리해줄 것인가?
+      const nonce = (await transactionService.getNonce(selectedNetwork, hash)) ?? 0;
+      await registerHistoryToServer(hash, nonce);
       resetBody();
       resetGas();
       navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);

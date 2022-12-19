@@ -113,7 +113,7 @@ export interface IRegisterTransactionRequest {
   to: string;
   hash: string;
   data?: BytesLike | null;
-  nonce: 0;
+  nonce: number;
 }
 
 export interface IRegisterTransactionResponse {
@@ -144,4 +144,5 @@ export interface ITransactionService {
   }: ISendTransactionRequest) => Promise<string | undefined>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
   registerHistory: (params: IRegisterTransactionRequest) => Promise<IRegisterTransactionResponse>;
+  getNonce: (selectedNetwork: Network, hash: string) => Promise<number | undefined>;
 }
