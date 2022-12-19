@@ -87,12 +87,12 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
 
   useEffect(() => {
     if (!setParentValid) return;
-    if (hint) {
+    if (!value || hint) {
       setParentValid(false);
     } else {
       setParentValid(true);
     }
-  }, [hint]);
+  }, [hint, !value]);
 
   return (
     <S.TradeVolumeContainer>
