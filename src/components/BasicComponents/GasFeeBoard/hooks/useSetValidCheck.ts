@@ -24,7 +24,9 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
   const { value } = transactionRequestStore();
   const { color } = useColor();
 
-  const remainBalance = value && tokenDto.contractAddress ? bnBalnce.minus(value) : bnBalnce;
+  const remainBalance = useMemo(() => {
+    return value && tokenDto.contractAddress ? bnBalnce.minus(value) : bnBalnce;
+  }, [tokenDto, balance]);
 
   //TODO: 다국어 등록 및 문구 논의 필요
   const baseFeeCheck = useMemo(() => {
