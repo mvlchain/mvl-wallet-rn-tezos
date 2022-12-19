@@ -60,6 +60,9 @@ export const useEarnEventDetailsUiState = (
   const repository: EarnEventRepository = useDi('EarnEventRepository');
 
   const { t } = useTranslation();
+  const { openModal, closeModal } = globalModalStore();
+  const { connectThirdParty } = useConnectThirdParty();
+
   const [details, setDetails] = useState<IEventDetails>({
     event: data,
     phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
@@ -73,12 +76,11 @@ export const useEarnEventDetailsUiState = (
     error: null,
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
-  const { openModal, closeModal } = globalModalStore();
 
   const onThirdPartyConnectionConfirm = useCallback(async (appId: string, token: string | null) => {
     if (token) {
       if (appId) {
-        const res = await repository.connectThirdParty(appId, token);
+        const res = await connectThirdParty(appId, token);
         if (res && res.status === 'ok') {
           refreshThirdParty();
         }
@@ -87,7 +89,7 @@ export const useEarnEventDetailsUiState = (
   }, []);
   // const onThirdPartyConnectionConfirm = async (appId: string, token: string | null) => {
   //   if (token) {
-  //     const { connectThirdParty } = useConnectThirdParty();
+  //
   //     const res = await connectThirdParty(appId, token);
   //     if (res && res.status === 'ok') {
   //       refreshThirdParty();
