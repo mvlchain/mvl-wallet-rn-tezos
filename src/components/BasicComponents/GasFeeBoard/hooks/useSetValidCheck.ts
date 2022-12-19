@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { COIN_DTO, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
@@ -34,34 +34,47 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
       case NETWORK_FEE_TYPE.EIP1559:
         if (!gas || !tip || !baseFee || !blockBaseFee) {
           setState({ baseFeeValid: false });
-          return { text: 'Maximum' + remainBalance, color: color.grey500 };
+          return {
+            text: 'Maximum: ' + formatBigNumber(remainBalance, tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         } else if (baseFee.eq(new BigNumber(0))) {
           setState({ baseFeeValid: false });
           return { text: 'zero warn', color: color.red };
         } else if (baseFee?.lt(blockBaseFee)) {
           setState({ baseFeeValid: true });
           return { text: 'low than network', color: color.red };
-        } else if (remainBalance.dividedBy(gas).minus(tip).gt(baseFee)) {
+        } else if (remainBalance.dividedBy(gas).minus(tip).lt(baseFee)) {
           setState({ baseFeeValid: false });
           return { text: 'balance lack', color: color.red };
         } else {
           setState({ baseFeeValid: true });
-          return { text: 'Maximum' + formatBigNumber(remainBalance.dividedBy(gas).minus(tip), tokenDto.decimals).toString(), color: color.grey500 };
+          return {
+            text:
+              'Maximum: ' + formatBigNumber(remainBalance.dividedBy(gas).minus(tip), tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         }
 
       case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-        if (!gas || !tip || !baseFee) {
+        if (!gas || !baseFee) {
           setState({ baseFeeValid: false });
-          return { text: 'Maximum' + remainBalance, color: color.grey500 };
+          return {
+            text: 'Maximum: ' + formatBigNumber(remainBalance, tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         } else if (baseFee.eq(new BigNumber(0))) {
           setState({ baseFeeValid: false });
           return { text: 'zero warn', color: color.red };
-        } else if (remainBalance.dividedBy(gas).gt(baseFee)) {
+        } else if (remainBalance.dividedBy(gas).lt(baseFee)) {
           setState({ baseFeeValid: false });
           return { text: 'balance lack', color: color.red };
         } else {
           setState({ baseFeeValid: true });
-          return { text: 'Maximum: ' + formatBigNumber(remainBalance.dividedBy(gas), tokenDto.decimals).toString(), color: color.grey500 };
+          return {
+            text: 'Maximum: : ' + formatBigNumber(remainBalance.dividedBy(gas), tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         }
 
       case NETWORK_FEE_TYPE.TEZOS:
@@ -75,20 +88,26 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
       case NETWORK_FEE_TYPE.EIP1559:
         if (!gas || !tip || !baseFee) {
           setState({ tipValid: false });
-          return { text: 'Maximum' + remainBalance, color: color.grey500 };
+          return {
+            text: 'Maximum: ' + formatBigNumber(remainBalance, tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         } else if (tip.eq(new BigNumber(0))) {
           setState({ tipValid: false });
           return { text: 'zero warn', color: color.red };
         } else if (tip.lt(GAS_LEVEL_SETTING.LOW.tip.EIP1559)) {
           setState({ tipValid: true });
           return { text: 'low than network', color: color.red };
-        } else if (remainBalance.dividedBy(gas).minus(baseFee).gt(tip)) {
+        } else if (remainBalance.dividedBy(gas).minus(baseFee).lt(tip)) {
           setState({ tipValid: false });
           return { text: 'balance lack', color: color.red };
         } else {
           setState({ tipValid: true });
           return {
-            text: 'Maximum: ' + formatBigNumber(remainBalance.dividedBy(gas).minus(baseFee), tokenDto.decimals).toString(),
+            text:
+              'Maximum: : ' +
+              formatBigNumber(remainBalance.dividedBy(gas).minus(baseFee), tokenDto.decimals).toString(10) +
+              COIN_DTO[network.coin].symbol,
             color: color.grey500,
           };
         }
@@ -100,16 +119,22 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
       case NETWORK_FEE_TYPE.TEZOS:
         if (!gas || !tip || !baseFee) {
           setState({ tipValid: false });
-          return { text: 'Maximum' + remainBalance, color: color.grey500 };
+          return {
+            text: 'Maximum: ' + formatBigNumber(remainBalance, tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         } else if (tip.eq(new BigNumber(0))) {
           setState({ tipValid: false });
           return { text: 'zero warn', color: color.red };
-        } else if (remainBalance.minus(baseFee).gt(tip)) {
+        } else if (remainBalance.minus(baseFee).lt(tip)) {
           setState({ tipValid: false });
           return { text: 'balance lack', color: color.red };
         } else {
           setState({ tipValid: true });
-          return { text: 'Maximum: ' + formatBigNumber(remainBalance.minus(baseFee), tokenDto.decimals).toString(), color: color.grey500 };
+          return {
+            text: 'Maximum: : ' + formatBigNumber(remainBalance.minus(baseFee), tokenDto.decimals).toString(10) + COIN_DTO[network.coin].symbol,
+            color: color.grey500,
+          };
         }
     }
   }, [baseFee, gas, tip, remainBalance]);
