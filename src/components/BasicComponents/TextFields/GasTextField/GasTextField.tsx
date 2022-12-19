@@ -21,12 +21,9 @@ export function GasTextField(props: IGasTextFieldProps) {
   const [lcColor, setLcColor] = useState<string | null>(null);
   const decimal = unit ? GAS_UNIT_DECIMAL[unit] : 0;
   const initialDisplayValue = value ? formatBigNumber(value, decimal).toString(10) : '';
+
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
   const debounceCallback = useDebounce(setValue, 1000);
-
-  useEffect(() => {
-    debounceCallback(new BigNumber(displayValue).shiftedBy(decimal));
-  }, [displayValue]);
 
   const onBlur = () => {
     setLcColor(null);
@@ -39,13 +36,15 @@ export function GasTextField(props: IGasTextFieldProps) {
     if (!setValue) return;
     const value = data.nativeEvent.text;
     const formattedValue = inputNumberFormatter(value, decimal);
-    if (!formattedValue) return;
-    setDisplayValue(formattedValue);
+
+    setDisplayValue(formattedValue ?? '');
+    debounceCallback(formattedValue ? new BigNumber(formattedValue).shiftedBy(decimal) : null);
   };
 
   const clearTextField = () => {
     if (!setValue) return;
     setDisplayValue('');
+    debounceCallback(null);
   };
 
   return (
