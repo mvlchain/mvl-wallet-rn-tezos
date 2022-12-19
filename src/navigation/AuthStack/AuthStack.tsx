@@ -8,15 +8,6 @@ import { AUTH_STACK_ROUTE, TAuthStackParamList } from './AuthStack.type';
 
 const { Navigator, Screen } = createNativeStackNavigator<TAuthStackParamList>();
 
-type ScreenProps = Parameters<typeof Screen>[0];
-
-const screens: Array<ScreenProps> = [
-  {
-    name: AUTH_STACK_ROUTE.SIGN_IN,
-    component: SignInScreen,
-  },
-];
-
 function AuthStack() {
   return (
     <Navigator
@@ -24,9 +15,7 @@ function AuthStack() {
         headerShown: false,
       }}
     >
-      {screens.map((props) => (
-        <Screen key={props.name} {...props} />
-      ))}
+      <Screen key={AUTH_STACK_ROUTE.SIGN_IN} name={AUTH_STACK_ROUTE.SIGN_IN} component={SignInScreen} />
     </Navigator>
   );
 }
