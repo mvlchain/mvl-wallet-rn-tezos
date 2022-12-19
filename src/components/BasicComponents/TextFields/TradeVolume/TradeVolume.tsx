@@ -60,7 +60,6 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     }
     const value = data.nativeEvent.text;
     const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
-    if (!formattedValue) return;
     setDisplayValue(formattedValue);
   };
 
@@ -73,6 +72,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     }
   };
 
+  //max사용할 경우
   useEffect(() => {
     if (!usingMax || disableHint || !total || tokenDto.contractAddress) return;
     setDisplayValue(bnValidStrBalance);
@@ -98,7 +98,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     <S.TradeVolumeContainer>
       <S.TradeVolumeTop>
         <S.Label>{label}</S.Label>
-        {useMax && <TextButton label={'Max'} onPress={onPressMax} disabled={true} />}
+        {useMax && <TextButton label={'Max'} onPress={onPressMax} disabled={false} />}
       </S.TradeVolumeTop>
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
