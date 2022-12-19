@@ -2,7 +2,6 @@ import { InMemorySigner } from '@taquito/signer';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import { tzip12, Tzip12Module } from '@taquito/tzip12';
 import Decimal from 'decimal.js';
-import qs from 'qs';
 import { injectable } from 'tsyringe';
 
 import { Network, getNetworkConfig } from '@@constants/network.constant';
@@ -20,12 +19,15 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
     Tezos.setProvider({
       signer: new InMemorySigner(selectedWalletPrivateKey),
     });
-    return await Tezos.wallet
+
+    const op = await Tezos.wallet
       .transfer({
         ...params,
       })
-      .send()
-      .then((op) => op.confirmation(1).then(() => op.opHash));
+      .send();
+    return op.opHash;
+
+    // .then((op) => op.confirmation(1).then(() => op.opHash));
   });
 
   sendContractTransaction = loadingFunction<string>(
@@ -43,8 +45,9 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
       const data: ITezosData = JSON.parse(params.data);
       const amount = new Decimal(data.value).mul(Decimal.pow(10, decimals)).toFixed();
       const op = await fa1_2TokenContract.methods.transfer(data.from, data.to, amount).send();
-      await op.confirmation();
       return op.opHash;
+      // await op.confirmation();
+      // return op.opHash;
     }
   );
 }

@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, NETWORK_FEE_TYPE, Network, COIN_DTO } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE, Network, COIN_DTO, NETWORK_ID } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { BnToEtherBn, formatBigNumber } from '@@utils/formatBigNumber';
 import { request } from '@@utils/request';
@@ -128,6 +128,27 @@ export class TransactionService implements ITransactionService {
       }
     } catch (e) {
       return [];
+    }
+  };
+
+  getNonce = async (selectedNetwork: Network, hash: string) => {
+    try {
+      const network = getNetworkConfig(selectedNetwork);
+      switch (network.networkId) {
+        case NETWORK_ID.ETHEREUM:
+          return await this.etherService.getTransaction(selectedNetwork, hash);
+        case NETWORK_ID.BSC:
+          return await this.etherService.getTransaction(selectedNetwork, hash);
+        case NETWORK_ID.XTZ:
+          //TODO: register history 할때 해당 api를 사용하는데,
+          //테조스 서버요청외에 따로 해시로 트랜잭션정보를 조회할 수 있는 api를 타퀴토에서 찾지 못하였음
+          //테조스의 경우 nonce값이 0으로 가도 문제가 없으며, tranasaction refresh시 재반영 되므로 일단 0으로 할당한다.
+          //sendtransaction 이후에 값을 가져오는 방법도 있긴하지만
+          // 그렇게 작업할 경우 이더와 테조스 각 sendTransaction의 return값이 통일되지 못하는것 같아 고민임
+          return 0;
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 }
