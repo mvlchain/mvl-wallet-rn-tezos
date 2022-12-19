@@ -16,9 +16,9 @@ import { valueOf } from '@@utils/types';
 import { TGasHint } from '../GasFeeInputs/GasFeeInputs.type';
 
 const GAS_CHECK_TYPE = {
-  BASEFEE: 'baseFee',
-  TIP: 'tip',
-  GAS: 'gas',
+  BASEFEE: 'baseFeeValid',
+  TIP: 'tipValid',
+  GAS: 'gasValid',
 } as const;
 
 const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) => {
@@ -80,7 +80,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
   useEffect(() => {
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.EIP1559:
-        if (!gas || !tip || !baseFee || !blockBaseFee) {
+        if (!BigNumber.isBigNumber(gas) || !BigNumber.isBigNumber(tip) || !BigNumber.isBigNumber(baseFee) || !BigNumber.isBigNumber(blockBaseFee)) {
           showRemainBalance(GAS_CHECK_TYPE.BASEFEE);
           return;
         } else if (baseFee.eq(0)) {
@@ -98,7 +98,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
         }
 
       case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-        if (!gas || !baseFee) {
+        if (!BigNumber.isBigNumber(gas) || !BigNumber.isBigNumber(baseFee)) {
           showRemainBalance(GAS_CHECK_TYPE.BASEFEE);
           return;
         } else if (baseFee.eq(0)) {
@@ -122,7 +122,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
   useEffect(() => {
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.EIP1559:
-        if (!gas || !tip || !baseFee) {
+        if (!BigNumber.isBigNumber(gas) || !BigNumber.isBigNumber(tip) || !BigNumber.isBigNumber(baseFee)) {
           showRemainBalance(GAS_CHECK_TYPE.TIP);
           return;
         } else if (tip.eq(0)) {
@@ -145,7 +145,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
         return;
 
       case NETWORK_FEE_TYPE.TEZOS:
-        if (!gas || !tip || !baseFee) {
+        if (!BigNumber.isBigNumber(gas) || !BigNumber.isBigNumber(tip) || !BigNumber.isBigNumber(baseFee)) {
           showRemainBalance(GAS_CHECK_TYPE.TIP);
           return;
         } else if (tip.eq(0)) {
