@@ -7,6 +7,7 @@ import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
+import useInterval from '@@hooks/useInterval';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -57,5 +58,11 @@ const useEstimateGas = ({
     if (!!tokenDto.contractAddress && !data) return;
     debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
   }, [to, value, data]);
+
+  useInterval(() => {
+    if (!to || !value) return;
+    if (!!tokenDto.contractAddress && !data) return;
+    debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
+  }, 18000);
 };
 export default useEstimateGas;
