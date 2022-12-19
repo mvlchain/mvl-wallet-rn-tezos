@@ -77,6 +77,7 @@ export function GasTextField(props: IGasTextFieldProps) {
           setShowHint(true);
           setParentValid(false);
         }
+        return;
       case undefined:
         if (value.gte(new BigNumber(21000))) {
           setShowHint(false);
@@ -85,6 +86,7 @@ export function GasTextField(props: IGasTextFieldProps) {
           setShowHint(true);
           setParentValid(false);
         }
+        return;
     }
   }, 800);
 
@@ -107,7 +109,7 @@ export function GasTextField(props: IGasTextFieldProps) {
         {unit && <S.Unit>{unit}</S.Unit>}
         <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
       </S.BaseTextFieldInputWrapper>
-      {showHint && value && <S.BaseTextFieldHint>{unit ? errorMsgZero : errorMsgLimit}</S.BaseTextFieldHint>}
+      {showHint && value ? <S.BaseTextFieldHint>{unit ? errorMsgZero : errorMsgLimit}</S.BaseTextFieldHint> : null}
     </S.BaseTextFieldContainer>
   );
 }
