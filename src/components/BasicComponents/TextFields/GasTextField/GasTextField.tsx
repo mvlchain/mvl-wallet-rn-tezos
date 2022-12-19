@@ -26,6 +26,7 @@ export function GasTextField(props: IGasTextFieldProps) {
   const { t } = useTranslation();
   const debounceCallback = useDebounce(setValue, 1000);
 
+  //TODO: 임의 설정, figma엔 문구안내 없음. 기존 클러치엔 없는 화면이라.
   const errorMsgZero = t('must_greater_than_zero');
   const errorMsgLimit = t('must_greater_than_21000');
   const [showHint, setShowHint] = useState<boolean>(false);
