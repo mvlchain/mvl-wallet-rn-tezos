@@ -3,16 +3,15 @@ import { TextInputProps } from 'react-native';
 
 import { TGasUnit } from '@@constants/gas.constant';
 
-//Base
+import { TGasHint } from '../../GasFeeBoard/GasFeeInputs/GasFeeInputs.type';
 
 export interface IGasTextFieldProps {
   defaultValue?: any;
   value?: BigNumber | null;
   setValue?: (value: BigNumber) => void;
-  hint?: string;
+  hint?: TGasHint;
   style?: TextInputProps['style'];
   unit?: TGasUnit;
   delay?: number;
   disabled?: boolean;
-  setParentValid: (valid: boolean) => void;
 }

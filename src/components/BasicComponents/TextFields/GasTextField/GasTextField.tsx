@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from 'react-i18next';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 import { TextFieldDelete } from '@@assets/image';
@@ -17,19 +16,13 @@ import * as S from '../TextField.style';
 import { IGasTextFieldProps } from './GasTextField.type';
 
 export function GasTextField(props: IGasTextFieldProps) {
-  const { value, setValue, style, unit, disabled, defaultValue, setParentValid } = props;
+  const { value, setValue, style, unit, disabled, defaultValue, hint } = props;
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const decimal = unit ? GAS_UNIT_DECIMAL[unit] : 0;
   const initialDisplayValue = value ? formatBigNumber(value, decimal).toString(10) : '';
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
-  const { t } = useTranslation();
   const debounceCallback = useDebounce(setValue, 1000);
-
-  //TODO: 임의 설정, figma엔 문구안내 없음. 기존 클러치엔 없는 화면이라.
-  const errorMsgZero = t('must_greater_than_zero');
-  const errorMsgLimit = t('must_greater_than_21000');
-  const [showHint, setShowHint] = useState<boolean>(false);
 
   useEffect(() => {
     debounceCallback(new BigNumber(displayValue).shiftedBy(decimal));
@@ -55,42 +48,6 @@ export function GasTextField(props: IGasTextFieldProps) {
     setDisplayValue('');
   };
 
-  useEffect(() => {
-    handleHint();
-  }, [value]);
-
-  //TODO: 렌더링 체크
-  const handleHint = useDebounce(() => {
-    if (!value) {
-      setShowHint(false);
-      setParentValid(false);
-      return;
-    }
-    switch (unit) {
-      case GAS_UNIT.MUTEZ:
-        setParentValid(true);
-        return;
-      case GAS_UNIT.GWEI:
-        if (value.gt(new BigNumber(0))) {
-          setShowHint(false);
-          setParentValid(true);
-        } else {
-          setShowHint(true);
-          setParentValid(false);
-        }
-        return;
-      case undefined:
-        if (value.gte(new BigNumber(21000))) {
-          setShowHint(false);
-          setParentValid(true);
-        } else {
-          setShowHint(true);
-          setParentValid(false);
-        }
-        return;
-    }
-  }, 800);
-
   return (
     <S.BaseTextFieldContainer>
       <S.BaseTextFieldInputWrapper lcColor={lcColor} editable={!disabled}>
@@ -110,7 +67,7 @@ export function GasTextField(props: IGasTextFieldProps) {
         {unit && <S.Unit>{unit}</S.Unit>}
         <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />
       </S.BaseTextFieldInputWrapper>
-      {showHint && value ? <S.BaseTextFieldHint>{unit ? errorMsgZero : errorMsgLimit}</S.BaseTextFieldHint> : null}
+      {hint ? <S.GasHint color={hint.color}>{hint.text}</S.GasHint> : null}
     </S.BaseTextFieldContainer>
   );
 }

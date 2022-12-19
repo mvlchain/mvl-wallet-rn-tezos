@@ -1,6 +1,4 @@
 import { BigNumber } from 'bignumber.js';
-import Decimal from 'decimal.js';
-import { BigNumber as BigNumberEther } from 'ethers';
 
 import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { NetworkFeeType, NETWORK_FEE_TYPE } from '@@constants/network.constant';
