@@ -7,7 +7,7 @@ import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, NETWORK_FEE_TYPE, Network, COIN_DTO } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
-import { formatBigNumber } from '@@utils/formatBigNumber';
+import { BnToEtherBn, formatBigNumber } from '@@utils/formatBigNumber';
 import { request } from '@@utils/request';
 
 import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
@@ -83,10 +83,10 @@ export class TransactionService implements ITransactionService {
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
-            gasPrice: '0x' + gasFeeInfo.baseFee.toString(10),
-            gasLimit: '0x' + gasFeeInfo.gas.toString(10),
+            gasPrice: BnToEtherBn(gasFeeInfo.baseFee),
+            gasLimit: BnToEtherBn(gasFeeInfo.gas),
             to,
-            value: value ? '0x' + value.toString(10) : undefined,
+            value: value ? BnToEtherBn(value) : undefined,
             data,
           });
       }
