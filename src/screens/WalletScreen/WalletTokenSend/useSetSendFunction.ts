@@ -92,7 +92,7 @@ const useSetSendFunction = () => {
         hash: txHash,
         type: transactionType,
         nonce: 0,
-        value: formatBigNumber(value, tokenDto.decimals).toString(10),
+        value: value.toString(10),
       });
       if (!serverRes) {
         throw new Error('fail register history');
