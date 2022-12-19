@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
-import { etherBNtoBN } from '@@utils/gas';
+import { etherBNtoBN } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import { IGasFeeInfoEip1559, IGasRepositoryEip1559, IGetTotalGasFeeParamsEIP1559 } from './GasRepositoryEip1559.type';

@@ -21,10 +21,6 @@ export const getEstimateTime = (gasLevel: TGasLevel) => {
   return GAS_LEVEL_SETTING[gasLevel].waitTime;
 };
 
-export const etherBNtoBN = (value: BigNumberEther | null) => {
-  return value ? new BigNumber(value.toString()) : null;
-};
-
 export const alphaNumericDecimalRegex = (decimal: number) => {
   // tokenDTO에 있는 decimals를 기준으로 입력 가능하게 자름
   return new RegExp(`^(\\d{0,60})([.]\\d{0,${decimal}})*?$`);

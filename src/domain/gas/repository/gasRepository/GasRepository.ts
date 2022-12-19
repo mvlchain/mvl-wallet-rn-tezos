@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { WalletService } from '@@domain/wallet/services/WalletService';
-import { etherBNtoBN } from '@@utils/gas';
+import { etherBNtoBN } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import { IGasFeeInfoEthers, IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
