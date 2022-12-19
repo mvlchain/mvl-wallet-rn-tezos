@@ -32,7 +32,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   const [hint, setHint] = useState<string | null>(null);
 
   const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
-  const bnValidStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toString(10) : null;
+  const validStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toString(10) : balance;
 
   const debounceCallback = useDebounce((value: BigNumber | null) => {
     onChange(value);
@@ -64,18 +64,19 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   };
 
   const onPressMax = () => {
+    console.log('???');
     if (tokenDto.contractAddress) {
       setDisplayValue(balance);
     } else {
       setUsingMax(true);
-      setDisplayValue(bnValidStrBalance);
+      setDisplayValue(validStrBalance);
     }
   };
 
   //max사용할 경우
   useEffect(() => {
     if (!usingMax || disableHint || !total || tokenDto.contractAddress) return;
-    setDisplayValue(bnValidStrBalance);
+    setDisplayValue(validStrBalance);
   }, [disableHint, usingMax, total, value, tokenDto]);
 
   useEffect(() => {
