@@ -11,7 +11,7 @@ import { TTransactionHistoryRouteProps } from './EarnEventTransferringScreen.typ
 
 const useEarnEventTransferringScreen = () => {
   const { params } = useRoute<TTransactionHistoryRouteProps>();
-  const { setIsShowLoading } = utilStore();
+  const { turnOffGlobalLoading } = utilStore();
 
   const [isEndMutation, setIsEndMutation] = useState(true);
 
@@ -53,14 +53,14 @@ const useEarnEventTransferringScreen = () => {
   useEffect(() => {
     const { eventId, address } = params;
     // loading indicator 끄기
-    setIsShowLoading(false);
+    const restoreLoading = turnOffGlobalLoading();
     indicatorAnimation.start();
     BackHandler.addEventListener('hardwareBackPress', preventBack);
 
     mutate({ eventId, address });
 
     return () => {
-      setIsShowLoading(true);
+      restoreLoading();
       indicatorAnimation.stop();
       lottieProgress.setValue(0);
       BackHandler.removeEventListener('hardwareBackPress', preventBack);
