@@ -97,7 +97,7 @@
   "delete_account_agreement": "I have checked the contents and I agree to delete account",
   "delete_account_description": "This account will be removed from your wallet. Please make sure you have the original Seed Phrase or private keys for this account before continuing. By continuing, you acknowledge that MVL Foundation is not responsible for any loss arising from your failure to keep your Seed Phrase or private keys safely.",
   "delete_account_successfully": "Your account has been deleted successfully.",
-  "dialog_claim_confirm_description": "Only 1 {{appName}} account from 1 Clutch account can receive the rewards. Please check whether your clutch account and {{appName}} account are properly linked.",
+  "dialog_claim_confirm_description": "Only 1 %s account from 1 Clutch account can receive the rewards. Please check whether your clutch account and %s account are properly linked.",
   "dialog_claim_failed_description": "You cannot claim rewards because the amount of rewards is less than the fees.",
   "dialog_claim_failed_title": "Failed Claim",
   "dialog_leave_lbl_title": "Leave without setting PIN number?",
