@@ -5,4 +5,5 @@ export interface ITextModalProps {
   cancelLabel?: string;
   onConfirm?: Function;
   confirmLabel?: string;
+  disableCloseByConfirm?: boolean;
 }
