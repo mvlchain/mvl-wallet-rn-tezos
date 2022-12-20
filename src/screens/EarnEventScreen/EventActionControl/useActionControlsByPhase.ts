@@ -11,12 +11,11 @@ import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
 import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
-import { IThirdPartyConnection, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
+import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { extension, format } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
-
 import { IActionControlAttrs } from './EventActionControl.type';
 
 /**
@@ -35,6 +34,15 @@ export const useActionControlsByPhase = (
   const [actionControlAttrs, setActionControlAttrs] = useState<IActionControlAttrs>(
     getInitialActionControls(phase, event, thirdParty, claimStatusInfo)
   );
+
+  const onPressClaim = (address: string) => {
+    rootNavigation.navigate('EARN_EVENT_TRNASFERRING', { address, eventId: event.id });
+  };
+
+  const { wallet } = useClaimWalletListModal({ network: event.network as Network, onPressClaim });
+  const openClaimWalletListModal = () => {
+    openModal(MODAL_TYPES.CLAIM_WALLET_LIST, { menuList: wallet });
+  };
 
   useEffect(() => {
     const attrs = setUpActionControls(phase, event, thirdParty, claimStatusInfo, t);
@@ -63,15 +71,6 @@ export const useActionControlsByPhase = (
     }
   };
 
-  const openClaimWalletListModal = () => {
-    openModal(MODAL_TYPES.CLAIM_WALLET_LIST, { menuList: wallet });
-  };
-
-  const onPressClaim = (address: string) => {
-    rootNavigation.navigate('EARN_EVENT_TRNASFERRING', { address, eventId: event.id });
-  };
-
-  const { wallet } = useClaimWalletListModal({ network: event.network as Network, onPressClaim });
   /**
    * Set default ActionControl attributes
    */
@@ -81,7 +80,7 @@ export const useActionControlsByPhase = (
     thirdParty: IEventThirdParty,
     claimStatusInfo: ClaimStatusInformation | undefined
   ): IActionControlAttrs {
-    const isButtonEnabled = isActionButtonEnabled(phase, thirdParty.thirdPartyConnection, claimStatusInfo, thirdParty.isThirdPartySupported);
+    const isButtonEnabled = isActionButtonEnabled(phase, thirdParty.connection, claimStatusInfo, thirdParty.isThirdPartySupported);
 
     let avatarUrl = '';
     if (phase === EventPhase.OnClaim && claimStatusInfo) {
@@ -112,7 +111,7 @@ export const useActionControlsByPhase = (
     claimStatusInfo: ClaimStatusInformation | undefined,
     t: (key: string) => string
   ): IActionControlAttrs {
-    const isButtonEnabled = isActionButtonEnabled(phase, thirdParty.thirdPartyConnection, claimStatusInfo, thirdParty.isThirdPartySupported);
+    const isButtonEnabled = isActionButtonEnabled(phase, thirdParty.connection, claimStatusInfo, thirdParty.isThirdPartySupported);
 
     const eventControlAttrs = (): IActionControlAttrs => ({
       isSvgAvatar: isSvg(event.pointIconUrl),
