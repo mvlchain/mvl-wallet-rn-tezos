@@ -77,19 +77,22 @@ export const useEarnEventDetailsUiState = (
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
 
-  const onThirdPartyConnectionConfirm = useCallback(async (appId: string, token: string | null) => {
-    if (token) {
-      if (appId) {
-        const res = await connectThirdParty(appId, token);
-        if (res && res.status === 'ok') {
-          refreshThirdParty();
+  const onThirdPartyConnectionConfirm = useCallback(
+    async (appId: string, token: string | null) => {
+      if (token) {
+        if (appId) {
+          const res = await connectThirdParty(appId, token);
+          if (res && res.status === 'ok') {
+            refreshThirdParty();
+          }
         }
       }
-    }
-  }, []);
+    },
+    [details]
+  );
   // const onThirdPartyConnectionConfirm = async (appId: string, token: string | null) => {
   //   if (token) {
-  //
+
   //     const res = await connectThirdParty(appId, token);
   //     if (res && res.status === 'ok') {
   //       refreshThirdParty();
