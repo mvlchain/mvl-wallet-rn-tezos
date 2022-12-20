@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -112,6 +112,12 @@ export function EarnEventDetailsScreen() {
 
   const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
   const { event, phase } = details;
+
+  useEffect(() => {
+    console.log('details:  ', details);
+    console.log('thirdParty:  ', thirdParty);
+    console.log('claimStatusInfo:  ', claimStatusInfo);
+  }, []);
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
