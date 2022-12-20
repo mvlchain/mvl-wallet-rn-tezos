@@ -1,14 +1,15 @@
 /* eslint-disable max-lines */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Url from 'url';
 
-import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Decimal from 'decimal.js';
 import qs from 'qs';
 import { useTranslation } from 'react-i18next';
 
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { InvalidThirdPartyDeepLinkConnectionError } from '@@domain/error/InvalidThirdPartyConnectionRequestError';
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
@@ -16,48 +17,20 @@ import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
+import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useDi } from '@@hooks/useDi';
+import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
+import globalModalStore from '@@store/globalModal/globalModalStore';
 import { assembleUrl, evaluateUrlScheme } from '@@utils/regex';
 import { isNotBlank, format, isBlank } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 /**
- * UiState for EarnEventDetailsScreen
- */
-export interface IEventThirdParty {
-  isThirdPartySupported: boolean;
-  thirdPartyConnection?: IThirdPartyConnection;
-  points: IEventPointAmount[];
-  error: Error | unknown;
-}
-
-export interface IThirdPartyConnection {
-  appId: string;
-  token: string | null;
-  exists: boolean;
-  displayName: string | null;
-  connectionDeepLink: string | null;
-}
-
-export interface IEventPointAmount {
-  amount: string;
-  key: string;
-  title: string;
-  currency: string;
-}
-
-export interface IEventDetails {
-  event: EarnEventDto | undefined;
-  phase: valueOf<typeof EventPhase>;
-}
-
-/**
  * Combination of following usecases
  *
  * UseCases
- *  • useThirdPartyConnection
- *  • useUserPoints
+ *  • useThirdPartyConnection & useUserPoints
  *  • useClaimStatusInformation
  *    - useClaimInfomation
  *    - useClaimStatus
@@ -82,38 +55,66 @@ export const useEarnEventDetailsUiState = (
   details: IEventDetails;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
-  refresh: () => Promise<void>;
+  refresh: (clearDeepLink: boolean) => Promise<void>;
 } => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
+
+  const { t } = useTranslation();
+  const { openModal, closeModal } = globalModalStore();
+  const { connectThirdParty } = useConnectThirdParty();
 
   const [details, setDetails] = useState<IEventDetails>({
     event: data,
     phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
+    deepLink: deepLink,
   });
-  // const [event, setEvent] = useState<EarnEventDto | undefined>(data);
-  // const [phase, setPhase] = useState<valueOf<typeof EventPhase>>(EventPhase.NotAvailable);
+
   const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
-    thirdPartyConnection: undefined,
+    connection: undefined,
     points: details.event?.pointInfoArr.map((data) => ({ ...data, amount: '0' })) ?? [],
     error: null,
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
 
-  const refresh = async () => {
+  const onThirdPartyConnectionConfirm = useCallback(
+    async (appId: string, token: string | null) => {
+      if (token) {
+        if (appId) {
+          const res = await connectThirdParty(appId, token);
+          if (res && res.status === 'ok') {
+            refreshThirdParty();
+          }
+        }
+      }
+    },
+    [details]
+  );
+  // const onThirdPartyConnectionConfirm = async (appId: string, token: string | null) => {
+  //   if (token) {
+
+  //     const res = await connectThirdParty(appId, token);
+  //     if (res && res.status === 'ok') {
+  //       refreshThirdParty();
+  //     }
+  //   }
+  // };
+
+  // refresh State<Details>
+  const refresh = async (clearDeepLink: boolean = false) => {
     try {
       const res = await repository.getEvent(id);
-      // setEvent(res);
       setDetails({
         event: res,
         phase: getEventPhase(res),
+        deepLink: clearDeepLink ? undefined : details.deepLink,
       });
     } catch (e) {
       console.error(e);
     }
   };
 
-  // UseCase: useEarnEventDetails
+  // UseCase: useEarnEventDetails, State<Details>
   useEffect(() => {
     (async () => {
       if (!data && isNotBlank(id)) {
@@ -122,77 +123,96 @@ export const useEarnEventDetailsUiState = (
     })();
   }, [id, data]);
 
-  // UseCase: useThirdPartyConnection
-  useEffect(() => {
-    (async () => {
-      const { event, phase } = details;
-      if (!event) return;
-      console.log(`Event> useThirdPartyConnection`);
+  // refresh State<ThirdParty>
+  const refreshThirdParty = async () => {
+    const { event, phase, deepLink } = details;
+    if (!event) return;
+    console.log(`Event> useThirdPartyConnection`);
 
-      const thirdPartyApp = event.app;
-      if (!thirdPartyApp) {
-        setThirdParty({ ...thirdParty, isThirdPartySupported: false });
-        return;
-      }
+    const thirdPartyApp = event.app;
+    if (!thirdPartyApp) {
+      setThirdParty({ ...thirdParty, isThirdPartySupported: false });
+      return;
+    }
 
-      const machine: IEventThirdParty = {
-        ...thirdParty,
+    // result state machine
+    const machine: IEventThirdParty = {
+      ...thirdParty,
+    };
+
+    // UseCase: useThirdPartyConnection & useUserPoints
+    const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
+    try {
+      const connection = await repository.checkThirdPartyConnection(appId, token);
+      const connectionDeepLink = getThirdPartyConnectionDeepLink(event, thirdPartyApp.connectionDeepLink);
+
+      machine.isThirdPartySupported = true;
+      machine.connection = {
+        appId,
+        token,
+        exists: connection.exists,
+        displayName: connection.displayName,
+        connectionDeepLink,
       };
+      machine.points = event.pointInfoArr.map((data) => ({ ...data, amount: '0' }));
 
-      // UseCase: useThirdPartyConnection & useUserPoints
-      const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
+      // ThirdPartyConnection modal
+      if (!connection.exists && !!token) {
+        openModal(MODAL_TYPES.TEXT_MODAL, {
+          title: format(t('connect_thirdparty_dialog_title'), thirdPartyApp.name),
+          label: format(t('connect_thirdparty_dialog_description'), thirdPartyApp.name),
+          confirmLabel: t('connect'),
+          onConfirm: async () => await onThirdPartyConnectionConfirm(appId, token),
+          cancelLabel: t('btn_cancel'),
+          onCancel: () => {
+            closeModal();
+          },
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      setThirdParty({ ...thirdParty, error: e });
+      return;
+    }
+
+    // UseCase: useUserPoints
+    if (isPointInquiryAvailable(phase, machine.isThirdPartySupported)) {
       try {
-        const thirdPartyConnection = await repository.checkThirdPartyConnection(appId, token);
-        const connectionDeepLink = getThirdPartyConnectionDeepLink(event, thirdPartyApp.connectionDeepLink);
-
-        machine.isThirdPartySupported = true;
-        machine.thirdPartyConnection = {
-          appId,
-          token,
-          exists: thirdPartyConnection.exists,
-          displayName: thirdPartyConnection.displayName,
-          connectionDeepLink,
-        };
-        machine.points = event.pointInfoArr.map((data) => ({ ...data, amount: '0' }));
+        const res = await repository.getUserPoints(event.id);
+        machine.points = res;
       } catch (e) {
         console.error(e);
-        setThirdParty({ ...thirdParty, error: e });
+        setThirdParty({
+          ...thirdParty,
+          points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
+          error: e,
+        });
         return;
       }
+    }
 
-      // UseCase: useUserPoints
-      if (isPointInquiryAvailable(phase, machine.isThirdPartySupported)) {
-        try {
-          const res = await repository.getUserPoints(event.id);
-          machine.points = res;
-        } catch (e) {
-          console.error(e);
-          setThirdParty({
-            ...thirdParty,
-            points: event.pointInfoArr.map((data) => ({ ...data, amount: '0' })),
-            error: e,
-          });
-          return;
-        }
-      }
+    setThirdParty({
+      ...machine,
+    });
+  };
 
-      setThirdParty({
-        ...machine,
-      });
+  // State<ThirdParty>
+  useEffect(() => {
+    (async () => {
+      await refreshThirdParty();
     })();
   }, [details, deepLink]);
 
-  // UseCase: useClaimStatusInformation
+  // UseCase: useClaimStatusInformation, State<ClaimStatusInfo>
   useEffect(() => {
     (async () => {
       const { event, phase } = details;
       if (!event) return;
       console.log(`Event> useClaimStatusInformation`);
 
-      const thirdPartyConnection = thirdParty.thirdPartyConnection;
+      const thirdPartyConnection = thirdParty.connection;
       if (phase === EventPhase.OnClaim) {
         // get an OnClaim phase event id.
-        console.log(`Events> claim status starts`);
         const claimStatus = await repository.getClaimStatus(event.id);
         const claimInfo = await repository.getClaimInformation(event.id);
         const fee = new Decimal(claimInfo.fee);

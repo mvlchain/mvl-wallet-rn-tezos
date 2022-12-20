@@ -13,7 +13,7 @@
     android:allowBackup="false"
     android:icon="@drawable/ic_icon"
     android:label="@string/app_name"
-    android:name=".MainApplication"
+    android:name="io.mvlchain.wallet.MainApplication"
     android:roundIcon="@drawable/ic_icon"
     android:theme="@style/SplashTheme">
     <activity
@@ -21,7 +21,7 @@
       android:exported="true"
       android:label="@string/app_name"
       android:launchMode="singleTask"
-      android:name=".MainActivity"
+      android:name="io.mvlchain.wallet.MainActivity"
       android:windowSoftInputMode="adjustResize">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -31,12 +31,15 @@
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="clutchwallet" />
-        <data android:host="connect" />
-        <data android:host="screen" android:pathPattern="/*" />
+        <data android:scheme="clutchwallet" android:host="connect" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="clutchwallet" android:host="screen" android:pathPattern="/.*" />
       </intent-filter>
     </activity>
+
     <activity
       android:exported="true"
       android:launchMode="singleTop"
@@ -45,10 +48,8 @@
       >
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data
           android:host="${torusRedirectHost}"
           android:pathPattern="/*"

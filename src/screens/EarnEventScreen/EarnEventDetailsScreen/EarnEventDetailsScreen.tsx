@@ -4,10 +4,13 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Linking, Alert } from 'react-native';
 
+import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import Webview from '@@components/BasicComponents/Webview';
+import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
-import { useEarnEventDetailsUiState, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
-import { format, isNotBlank } from '@@utils/strings';
+import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
+import globalModalStore from '@@store/globalModal/globalModalStore';
+import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
 import { ThirdPartyApp } from '../ThirdPartyApp';
@@ -106,11 +109,13 @@ export function EarnEventDetailsScreen() {
   if (!params) {
     console.error('inappropriate event params!');
   }
+
   const { disconnectThirdParty } = useDisconnectThirdParty();
+  const { openModal } = globalModalStore();
 
   console.log(`Details> i: ${params.i}`);
 
-  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
+  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data, params.deepLink);
   const { event, phase } = details;
 
   const onConnectThirdPartyPress = useCallback(
@@ -129,10 +134,9 @@ export function EarnEventDetailsScreen() {
     const res = await disconnectThirdParty(event?.app?.id);
     if (res && res.status == 'ok') {
       // TODO: disconnected successfully. do following tasks
-      //  1. refresh event details page.
-      //  2. third-party disconnection modal
+      //  1. third-party disconnection modal
       console.log(`Details> disconnected and refreshing`);
-      refresh();
+      refresh(true);
     }
   }, [event]);
 
@@ -141,7 +145,7 @@ export function EarnEventDetailsScreen() {
     return null;
   }
 
-  const isThirdPartyConnected = thirdParty.thirdPartyConnection?.exists ?? false;
+  const isThirdPartyConnected = thirdParty.connection?.exists ?? false;
 
   function decorateThirdPartyApp(
     isThirdPartyConnected: boolean,
@@ -176,13 +180,13 @@ export function EarnEventDetailsScreen() {
         <>
           <Webview url={event.detailPageUrl} />
 
-          {thirdParty.isThirdPartySupported && thirdParty.thirdPartyConnection ? (
+          {thirdParty.isThirdPartySupported && thirdParty.connection ? (
             <ThirdPartyApp
               avatarUrl={event.iconUrl}
-              {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.thirdPartyConnection.displayName, event.app?.name)}
+              {...decorateThirdPartyApp(isThirdPartyConnected, thirdParty.connection.displayName, event.app?.name)}
               onConnectPress={() => {
                 // decorated deeplink
-                const connectionDeepLink = thirdParty.thirdPartyConnection!.connectionDeepLink;
+                const connectionDeepLink = thirdParty.connection!.connectionDeepLink;
                 console.log(`DeepLink> connectionDeepLink: ${connectionDeepLink}`);
                 if (connectionDeepLink) {
                   onConnectThirdPartyPress(connectionDeepLink);
