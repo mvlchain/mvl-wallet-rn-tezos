@@ -8,7 +8,7 @@ import { MODAL_TYPES } from '../GlobalModal';
 import * as S from './TextModal.style';
 import { ITextModalProps } from './TextModal.type';
 
-function TextModal({ title, label, cancelLabel, confirmLabel, onCancel, onConfirm }: ITextModalProps) {
+function TextModal({ title, label, cancelLabel, confirmLabel, onCancel, onConfirm, disableCloseByConfirm = false }: ITextModalProps) {
   const { modalType, closeModal } = globalModalStore();
   return (
     <ModalLayout
@@ -19,7 +19,9 @@ function TextModal({ title, label, cancelLabel, confirmLabel, onCancel, onConfir
         if (onConfirm) {
           onConfirm();
         }
-        closeModal();
+        if (!disableCloseByConfirm) {
+          closeModal();
+        }
       }}
       onCancel={onCancel}
       cancelLabel={cancelLabel}

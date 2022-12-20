@@ -25,7 +25,6 @@ const useClaimWalletListModal = ({ network, onPressClaim }: IUseClaimWalletListM
         onPress: () => onPressClaim(address),
       } as unknown as IClaimWalletListMenuProps;
     });
-
     setWallet(walletArr);
   }, [data, walletList]);
 
