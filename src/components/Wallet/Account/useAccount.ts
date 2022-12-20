@@ -3,7 +3,6 @@ import { useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import useClaimWalletListModal from '@@components/BasicComponents/Modals/ClaimWalletListModal/useClaimWalletListModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
