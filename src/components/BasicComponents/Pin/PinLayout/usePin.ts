@@ -12,6 +12,7 @@ import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
 function usePin() {
   const keyClient = useDi('KeyClient');
+  const authService = useDi('AuthService');
   const { stage, setStage } = authPersistStore();
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
@@ -114,11 +115,17 @@ function usePin() {
     setInput(input.slice(0, -1));
   };
 
+  const reset = async () => {
+    const newPincode = await authService.resetPin();
+    success(newPincode);
+  };
+
   return {
     current: input.length,
     bioAuth,
     setPassword,
     backSpace,
+    reset,
   };
 }
 

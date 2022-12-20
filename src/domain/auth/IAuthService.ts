@@ -6,7 +6,7 @@ export interface AuthService {
   signUp: (pincode: string) => Promise<string>;
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<void>;
-  resetPin: () => Promise<void>;
+  resetPin: () => Promise<string>;
   getMnemonicByPkey: () => string;
 }
 export const AUTH_PROVIDER = {
