@@ -8,6 +8,7 @@ import { Pressable } from 'react-native';
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { TTransactionStatus, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import useRefreshTransactionQuery from '@@hooks/queries/useRefreshTransactionQuery';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { useAssetFromTheme } from '@@hooks/useTheme';
@@ -26,6 +27,8 @@ import * as S from './TransactionHistoryListItem.style';
 function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const { params } = useRoute<TTokenDetailRouteProps>();
   const [valueSign, setValueSign] = useState('');
+  const [refreshHash, setRefreshHash] = useState<string>('');
+  const [displayStatus, setDisplayStatus] = useState<TTransactionStatus>(props.status);
   const { status, updatedAt, value: bnValue, from } = props;
   const value = formatBigNumber(new BigNumber(bnValue), params.tokenDto.decimals).toString(10);
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
@@ -38,12 +41,28 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const { settedCurrency } = settingPersistStore();
   const network = getNetworkConfig(selectedNetwork);
   const { price } = useOneTokenPrice(params.tokenDto, value);
+  useRefreshTransactionQuery(
+    { network: network.networkId, hash: refreshHash },
+    {
+      enabled: !!refreshHash,
+      onSuccess: (data) => {
+        setDisplayStatus(data.status as TTransactionStatus);
+      },
+    }
+  );
 
   const setSign = async () => {
     const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
     const valueSign = from === wallet.address ? '-' : '';
     setValueSign(valueSign);
   };
+
+  useEffect(() => {
+    if (status === TTransactionStatus.PENDING) {
+      setRefreshHash(props.hash);
+    }
+  }, [status]);
+
   useEffect(() => {
     setSign();
   }, []);
@@ -59,14 +78,18 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, { ...props, tokenDto: params.tokenDto });
+        navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY, {
+          ...props,
+          status: displayStatus,
+          tokenDto: params.tokenDto,
+        });
       }}
     >
       <S.TransactionHistoryListItem>
         <S.HistoryItemTopContent>
           <S.TransactionHistoryContentInnerWrapper>
             <S.TransactionStatusWrapper>
-              <S.TransactionStatus>{status}</S.TransactionStatus>
+              <S.TransactionStatus>{displayStatus}</S.TransactionStatus>
               <S.TransactionDate>{getDateFormat(updatedAt)}</S.TransactionDate>
             </S.TransactionStatusWrapper>
             <S.TransactionAmountWrapper>

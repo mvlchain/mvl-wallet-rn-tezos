@@ -59,9 +59,6 @@ const useTransactionHistoryList = () => {
           setHistory([...history, ...list]);
           setBeforeBlock(list[list.length - 1].blockNumber);
           setBeforeIndex(list[list.length - 1].index);
-          const pendingHistory = list.filter((history) => history.status === TTransactionStatus.SUCCESS);
-          const hashBulk = pendingHistory.map((history) => history.hash).join(',');
-          console.log('hashBulk', hashBulk);
         }
       },
       keepPreviousData: true,
