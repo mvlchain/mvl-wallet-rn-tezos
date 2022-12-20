@@ -16,7 +16,7 @@ function usePin() {
   const { stage, setStage } = authPersistStore();
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, error, step, setState, success, resetStore } = pinStore();
+  const { pinMode, error, step, setState, success, resetStore, pinModalResolver, pinModalRejector } = pinStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -116,8 +116,11 @@ function usePin() {
   };
 
   const reset = async () => {
-    const newPincode = await authService.resetPin();
-    success(newPincode);
+    if (!pinModalResolver || !pinModalRejector) {
+      console.log('can not reset');
+      return;
+    }
+    await authService.resetPin(pinModalResolver, pinModalRejector);
   };
 
   return {

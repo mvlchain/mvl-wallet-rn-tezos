@@ -9,6 +9,7 @@ export interface UIService {
   triggerGetPincode: () => Promise<string>;
   triggerSetPincode: (stage?: keyof typeof AUTH_STAGE) => Promise<string>;
   triggerResetPincode: () => Promise<string>;
+  currentPinUpdateToReset: (pinMode: TPinMode, pinModalResolver: Function, pinModalRejector: Function) => void;
 }
 
 export class UIServiceImpl implements UIService {
@@ -54,7 +55,7 @@ export class UIServiceImpl implements UIService {
     return password as string;
   };
 
-  private _currentPinUpdate = async (pinMode: TPinMode) => {
-    pinStore.getState().setState({ pinMode, step: PIN_STEP.ENTER });
+  currentPinUpdateToReset = (pinMode: TPinMode, pinModalResolver: Function, pinModalRejector: Function) => {
+    pinStore.getState().setState({ pinMode, step: PIN_STEP.ENTER, pinModalResolver, pinModalRejector });
   };
 }
