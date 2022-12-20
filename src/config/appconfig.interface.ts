@@ -1,6 +1,10 @@
 import { AuthProvider } from '@@domain/auth/IAuthService';
 
+type BaseNetworkType = 'testnet' | 'mainnet';
+
 export interface WalletAppConfig {
+  baseUrl: string;
+  baseNetwork: BaseNetworkType;
   auth: AuthConfig;
 }
 
@@ -16,7 +20,7 @@ export interface AuthConfig {
     verifier: {
       [key in AuthProvider]: string;
     };
-    network: 'testnet' | 'mainnet';
+    network: BaseNetworkType;
     nativeNetwork: 'ropsten' | 'mainnet';
     logging: boolean;
   };

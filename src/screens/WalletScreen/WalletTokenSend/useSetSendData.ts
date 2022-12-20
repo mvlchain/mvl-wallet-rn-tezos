@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
 import { BackHandler } from 'react-native';
 
-import { getNetworkName } from '@@constants/network.constant';
+import { getNetworkByBase } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -21,7 +21,7 @@ const useSetSendData = () => {
   const { resetState: resetGas } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
 
   useEffect(() => {
     setInitialFromRouteProps();

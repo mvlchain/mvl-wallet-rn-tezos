@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { EXPLORER_BASE_URL, getNetworkName, NETWORK } from '@@constants/network.constant';
+import { EXPLORER_BASE_URL, getNetworkByBase, NETWORK } from '@@constants/network.constant';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
@@ -13,7 +13,7 @@ const ViewScanButton = ({ txHash }: { txHash: string }) => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
   const onPress = () => {
     if (!txHash) {
       return;

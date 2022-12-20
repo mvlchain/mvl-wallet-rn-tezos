@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, getNetworkName, Network, NETWORK_ID } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID } from '@@constants/network.constant';
 import { IBlockChainRepository } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
@@ -34,7 +34,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
   };
 
   getBalanceFromNetwork = async (index: number, network: Network, tokenList: TokenDto[]) => {
-    const { rpcUrl } = getNetworkConfig(getNetworkName(false, network));
+    const { rpcUrl } = getNetworkConfig(getNetworkByBase(network));
     let balanceList: IBalance = {};
     const wallet = await this.walletService.getWalletInfo({ index, network });
     const blockchainRepository = this.setBlockChainRepository(network);
@@ -67,7 +67,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
   };
 
   getOneBalanceFromNetwork = async (index: number, network: Network, token: TokenDto) => {
-    const { rpcUrl } = getNetworkConfig(getNetworkName(false, network));
+    const { rpcUrl } = getNetworkConfig(getNetworkByBase(network));
     const wallet = await this.walletService.getWalletInfo({ index, network });
     const blockchainRepository = this.setBlockChainRepository(network);
     let balance;

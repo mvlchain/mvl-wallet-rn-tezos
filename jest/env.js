@@ -10,4 +10,6 @@ export default {
   WEB3_AUTH_NETWORK: 'mainnet',
   WEB3_AUTH_NATIVE_NETWORK: 'mainnet',
   WEB3_AUTH_LOGGING: 'true',
+  BASE_URL: '***REMOVED***',
+  BASE_NETWORK: 'testnet',
 };

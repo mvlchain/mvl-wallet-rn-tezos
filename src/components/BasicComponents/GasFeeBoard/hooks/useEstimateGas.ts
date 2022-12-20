@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { BytesLike } from 'ethers';
 
-import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
@@ -23,7 +23,7 @@ const useEstimateGas = ({
 }) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
 
   const { to, value, data, toValid, valueValid } = transactionRequestStore();
 
