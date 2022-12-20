@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -41,14 +42,24 @@ export const useActionControlsByPhase = (
   }, [phase, event, thirdParty, claimStatusInfo]);
 
   const openConfirmClaimModal = () => {
-    // TODO: amount 계산하기
-    openModal(MODAL_TYPES.TEXT_MODAL, {
-      title: t('btn_confirm'),
-      label: t('dialog_claim_confirm_description', { appName: event.app?.name.toUpperCase() }),
-      onConfirm: openClaimWalletListModal,
-      confirmLabel: t('claim'),
-      onCancel: closeModal,
-    });
+    if (!claimStatusInfo) return;
+    if (parseFloat(claimStatusInfo?.amount) > parseFloat(claimStatusInfo?.fee)) {
+      openModal(MODAL_TYPES.TEXT_MODAL, {
+        title: t('btn_confirm'),
+        label: t('dialog_claim_confirm_description', { appName: event.app?.name.toUpperCase() }),
+        onConfirm: openClaimWalletListModal,
+        confirmLabel: t('claim'),
+        onCancel: closeModal,
+        disableCloseByConfirm: true,
+      });
+    } else {
+      openModal(MODAL_TYPES.TEXT_MODAL, {
+        title: t('dialog_claim_failed_title'),
+        label: t('dialog_claim_failed_description'),
+        onConfirm: closeModal,
+        confirmLabel: t('btn_confirm'),
+      });
+    }
   };
 
   const openClaimWalletListModal = () => {
@@ -185,7 +196,6 @@ export const useActionControlsByPhase = (
           isClaimCompleted,
           onActionButtonPress: openConfirmClaimModal,
         };
-        // onActionButtonPress -> do claim request by alerting claim confirm modal
       }
 
       default:

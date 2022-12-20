@@ -113,12 +113,6 @@ export function EarnEventDetailsScreen() {
   const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data);
   const { event, phase } = details;
 
-  useEffect(() => {
-    console.log('details:  ', details);
-    console.log('thirdParty:  ', thirdParty);
-    console.log('claimStatusInfo:  ', claimStatusInfo);
-  }, []);
-
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
       const supported = await Linking.canOpenURL(uri);
