@@ -16,6 +16,7 @@ function usePin() {
   const { stage, setStage } = authPersistStore();
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
+  const [preSuccessCallback, setPreSuccessCallback] = useState<Function | null>(null);
   const { pinMode, error, step, setState, success, resetStore, pinModalResolver, pinModalRejector } = pinStore();
   const { t } = useTranslation();
 
@@ -48,8 +49,6 @@ function usePin() {
       case PIN_MODE.RESET:
         await checkSetUp();
         break;
-      default:
-        break;
     }
   };
 
@@ -77,6 +76,9 @@ function usePin() {
         }
         if (stage[_postboxKey] === AUTH_STAGE.PIN_SETUP_STAGE) {
           setStage(_postboxKey, AUTH_STAGE.BACKUP_SEED_PHRASE_STAGE);
+        }
+        if (preSuccessCallback) {
+          await preSuccessCallback(input);
         }
         success(input);
         setState({ step: PIN_STEP.FINISH });
@@ -120,7 +122,12 @@ function usePin() {
       console.log('can not reset');
       return;
     }
-    await authService.resetPin(pinModalResolver, pinModalRejector);
+    const callback = await authService.resetPinOnScreen();
+    if (!callback) {
+      console.log('fail to reset');
+      return;
+    }
+    setPreSuccessCallback(callback);
   };
 
   return {

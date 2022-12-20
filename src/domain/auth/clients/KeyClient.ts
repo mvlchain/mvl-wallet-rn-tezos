@@ -51,6 +51,7 @@ export interface KeyClient {
   signOut: () => void;
   findDeviceShareByServerShare: () => void;
   compareKey: (postboxKey: string) => Promise<boolean>;
+  getDeviceProvider: () => Promise<AuthProvider>;
 }
 
 @injectable()
@@ -283,5 +284,10 @@ export class KeyClientImpl implements KeyClient {
       this.deviceShare = deviceShare;
     }
     return compareResult;
+  };
+
+  getDeviceProvider = async () => {
+    const share = await this.deviceShareRepository.fetchDeviceShare();
+    return share.providerToken.provider;
   };
 }
