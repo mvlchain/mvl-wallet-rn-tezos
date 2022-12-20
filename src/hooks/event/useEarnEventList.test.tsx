@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
+import { IEarnEventMutation } from '@@domain/auth/repositories/EarnEventRepository.type';
 import { UnsupportOperationError } from '@@domain/error/UnsupportOperationError';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import {
@@ -49,6 +50,9 @@ class MockEarnEventRepository implements EarnEventRepository {
   }
   getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]> {
     return Promise.resolve([]);
+  }
+  requestClaim({ eventId, address }: IEarnEventMutation): Promise<SimpleResponseDto> {
+    throw new UnsupportOperationError();
   }
   getClaimStatus(eventId: string): Promise<EarnEventClaimCheckResponseDto> {
     throw new UnsupportOperationError();

@@ -88,7 +88,8 @@ export const EventActionControl = ({ phase, event, thirdParty, claimStatusInfo }
             label={actionControlAttrs.actionButtonTitle}
             disabled={!actionControlAttrs.isActionButtonEnabled}
             onPress={() => {
-              // onActionButtonPress
+              if (!actionControlAttrs.onActionButtonPress) return;
+              actionControlAttrs.onActionButtonPress();
             }}
           />
         ) : null}

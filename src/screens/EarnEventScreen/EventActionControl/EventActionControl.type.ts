@@ -9,3 +9,21 @@ export interface EarnEventActionModalProps {
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
 }
+
+export interface IActionControlAttrs {
+  isSvgAvatar: boolean;
+  avatarUrl: string;
+  actionButtonTitle: string;
+  isActionButtonEnabled: boolean;
+  eventPointInfoList: IEventPointInfo[];
+  isClaimCompleted?: boolean;
+  onActionButtonPress?: Function;
+}
+
+export interface IEventPointInfo {
+  title: string;
+  amount: string;
+  currency: string;
+  subAmount?: string;
+  subCurrency?: string;
+}

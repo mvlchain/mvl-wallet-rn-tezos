@@ -8,13 +8,25 @@ import { IClaimWalletListMenuProps } from './ClaimWalletListMenu/ClaimWalletList
 import { IUseClaimWalletListModalParam } from './ClaimWalletListModal.type';
 
 const useClaimWalletListModal = ({ network, onPressClaim }: IUseClaimWalletListModalParam) => {
-  const { walletList } = walletPersistStore();
+  const { walletList, setWallets } = walletPersistStore();
   const { data } = useWalletsQuery(network);
-  const { pKey } = authStore();
   const [wallet, setWallet] = useState<IClaimWalletListMenuProps[]>([]);
 
+  const checkNetworkDefault = () => {
+    return walletList[network][0].index === -1;
+  };
+
   useEffect(() => {
-    if (!pKey || !data) return;
+    if (checkNetworkDefault() && data) {
+      setWallets(
+        network,
+        data.map((wallet) => ({ index: wallet.index, name: wallet.name }))
+      );
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!data) return;
     const walletArr: IClaimWalletListMenuProps[] = data.map((walletItem) => {
       const { index, address } = walletItem;
 
@@ -25,7 +37,6 @@ const useClaimWalletListModal = ({ network, onPressClaim }: IUseClaimWalletListM
         onPress: () => onPressClaim(address),
       } as unknown as IClaimWalletListMenuProps;
     });
-
     setWallet(walletArr);
   }, [data, walletList]);
 

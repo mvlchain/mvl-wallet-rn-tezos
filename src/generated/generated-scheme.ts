@@ -500,14 +500,13 @@ export interface components {
       identifiers?: components["schemas"]["UserIdentifierEntity"][];
       wallet: components["schemas"]["WalletEntity"] | null;
     };
-    AuthSessionDtoWithRefreshToken: {
+    OmittedAuthClient: {
       id: string;
-      authNonce: string;
-      userIdentifierId: string;
-      userId: string;
-      country: string | null;
-      tokenRefreshable: boolean;
-      issuedIpAddress: string | null;
+      name: string;
+      tokenRefreshableDurationMs: string | null;
+    };
+    AuthSessionDtoWithRefreshToken: {
+      refreshToken?: string;
       /** Format: date-time */
       issuedAt: string;
       /** Format: date-time */
@@ -516,14 +515,16 @@ export interface components {
       lastRefreshedAt: string | null;
       /** Format: date-time */
       deletedAt: string | null;
+      authClient: components["schemas"]["OmittedAuthClient"] | null;
+      id: string;
+      authNonce: string;
+      deferredAuthNonce: string | null;
+      userIdentifierId: string;
+      userId: string;
+      country: string | null;
+      tokenRefreshable: boolean;
+      issuedIpAddress: string | null;
       authClientId: string;
-      /** @description Token for renew Access Token. */
-      refreshToken?: string;
-      authClient: {
-        id?: string;
-        name?: string;
-        tokenRefreshableDurationMs?: string | null;
-      };
     };
     SignedUserIdentifierWithAccessTokenDto: {
       type: components["schemas"]["UserIdentifierType"];
@@ -552,6 +553,7 @@ export interface components {
     AuthSessionEntity: {
       id: string;
       authNonce: string;
+      deferredAuthNonce: string | null;
       userIdentifierId: string;
       userIdentifier?: components["schemas"]["UserIdentifierEntity"];
       userId: string;
@@ -863,6 +865,8 @@ export interface components {
       alias: string;
       /** @description Flag That determines whether to allow or not earn point within a claim period. */
       isAllowParticipationInClaim: boolean;
+      /** @description BlockChain Network supported by this earn event. */
+      network: string;
     };
     EarnEventCurrentResponseDto: {
       /** @description current amount */
@@ -2183,7 +2187,11 @@ export interface operations {
     };
   };
   AuthController_invalidate: {
-    parameters: {};
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     responses: {
       200: {
         content: {
@@ -4906,6 +4914,7 @@ export type WalletEntity = components['schemas']['WalletEntity'];
 export type UserEntity = components['schemas']['UserEntity'];
 export type UserIdentifierEntity = components['schemas']['UserIdentifierEntity'];
 export type UserWithWalletDto = components['schemas']['UserWithWalletDto'];
+export type OmittedAuthClient = components['schemas']['OmittedAuthClient'];
 export type AuthSessionDtoWithRefreshToken = components['schemas']['AuthSessionDtoWithRefreshToken'];
 export type SignedUserIdentifierWithAccessTokenDto = components['schemas']['SignedUserIdentifierWithAccessTokenDto'];
 export type AuthClientEntity = components['schemas']['AuthClientEntity'];

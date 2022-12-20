@@ -8,7 +8,7 @@ import utilStore from '@@store/util/utilStore';
 const useLoadingIndicator = () => {
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
-  const { isLoadingCnt } = utilStore();
+  const { isLoadingCnt, isShowLoading } = utilStore();
   const [isLoading, setIsLoading] = useState(false);
   const lottieProgress = useRef(new Animated.Value(0)).current;
   const indicatorAnimation = Animated.loop(
@@ -53,6 +53,7 @@ const useLoadingIndicator = () => {
   return {
     isLoading,
     lottieProgress,
+    isShowLoading,
   };
 };
 
