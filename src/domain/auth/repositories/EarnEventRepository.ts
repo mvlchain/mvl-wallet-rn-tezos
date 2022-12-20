@@ -66,7 +66,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else {
       // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Api error', res.status);
+      throw new ApiError(`Api error: ${endpoint}`, res.status);
     }
   };
 
@@ -86,7 +86,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else {
       // TODO define a generla type of error.
       console.error(res);
-      throw new ApiError('Unexpected error', res.status);
+      throw new ApiError(`Api error: ${endpoint}`, res.status);
     }
   };
 
@@ -128,7 +128,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else {
       // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Api error', res.status);
+      throw new ApiError(`Api error: ${endpoint}`, res.status);
     }
   };
 
@@ -145,7 +145,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else {
       // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Api error', res.status);
+      throw new ApiError(`Api error: ${endpoint}`, res.status);
     }
   };
 
@@ -184,7 +184,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
    * @returns simple connecion status, 'ok' if succeeded.
    */
   connectThirdParty = async (appId: string, token: string | null): Promise<SimpleResponseDto> => {
-    const endpoint = `/v1/third-party/${appId}/disconnect`;
+    const endpoint = `/v1/third-party/${appId}/connect`;
     const body: ThirdPartyConnectCheckDto = {
       token: token,
     };
@@ -200,7 +200,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
         // TODO: warning_connect_account_description
         throw new ThirdPartyAlreadyConnectedError(`appid: ${appId} is already connected by another third-party user.`);
       default:
-        throw new ApiError('Api error', res.status);
+        throw new ApiError(`Api error: ${endpoint}`, res.status);
     }
   };
 
@@ -218,7 +218,7 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
     } else {
       // TODO: define a general type of error.
       console.error(res);
-      throw new ApiError('Api error', res.status);
+      throw new ApiError(`Api error: ${endpoint}`, res.status);
     }
   };
 }

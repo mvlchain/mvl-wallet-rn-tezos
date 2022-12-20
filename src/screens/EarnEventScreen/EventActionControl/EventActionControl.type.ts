@@ -1,7 +1,7 @@
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
-import { IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
+import { IEventThirdParty } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { valueOf } from '@@utils/types';
 export interface EarnEventActionModalProps {
   phase: valueOf<typeof EventPhase>;

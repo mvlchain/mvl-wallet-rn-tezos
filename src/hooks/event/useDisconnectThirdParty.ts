@@ -1,6 +1,3 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { SimpleResponseDto } from '@@generated/generated-scheme';
 import { useDi } from '@@hooks/useDi';
