@@ -1,12 +1,11 @@
 import { TransactionRequest } from '@ethersproject/abstract-provider';
-import Decimal from 'decimal.js';
-import { BigNumber } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import BigNumber from 'bignumber.js';
 import { inject, injectable } from 'tsyringe';
 
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 import { WalletService } from '@@domain/wallet/services/WalletService';
+import { etherBNtoBN } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import { IGasFeeInfoEthers, IGasRepository, IGetTotalGasFeeParamsEthers } from './GasRepository.type';
@@ -24,21 +23,17 @@ export class GasRepositoryImpl implements IGasRepository {
     const block = await provider.getBlock('latest');
     const gasLimit = block.gasLimit;
     const gasPrice = await provider.getGasPrice();
-    return { gasLimit, gasPrice };
+    return { gasLimit: etherBNtoBN(gasLimit), gasPrice: etherBNtoBN(gasPrice) };
   });
 
-  getTotalGasFee = ({ baseFee, gasLimit }: IGetTotalGasFeeParamsEthers) => {
-    const baseFeeInDecimal = new Decimal(baseFee.toString());
-    const gasLimitInDecimal = new Decimal(gasLimit.toString());
-
-    const totalGas = baseFeeInDecimal.mul(gasLimitInDecimal);
-    const totalGasInBN = BigNumber.from(Math.floor(totalGas.toNumber()));
-
-    return formatEther(totalGasInBN);
+  getTotalGasFee = ({ baseFee, gas }: IGetTotalGasFeeParamsEthers) => {
+    const totalGas = baseFee.multipliedBy(gas);
+    return new BigNumber(totalGas);
   };
 
   estimateGas = loadingFunction<BigNumber>(async (networkInfo: INetworkInfo, args: TransactionRequest) => {
     const provider = this.evmJsonRpcProviderHolder.getProvider(networkInfo.rpcUrl);
-    return await provider.estimateGas(args);
+    const gas = await provider.estimateGas(args);
+    return etherBNtoBN(gas);
   });
 }

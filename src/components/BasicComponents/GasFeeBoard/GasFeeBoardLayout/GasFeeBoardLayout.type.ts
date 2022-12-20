@@ -1,15 +1,15 @@
-import { BigNumber } from 'ethers';
 import { ReactChildren } from 'react-native-toast-message';
 
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import { TokenDto } from '@@generated/generated-scheme-clutch';
+
 export interface IGasFeeBoardLayoutProps {
   isRevision: boolean;
   estimatedTime?: string;
-  transactionFee: string;
   advanced: boolean;
   children: ReactChildren[];
   //TODO: 타입
   onConfirm: Function;
   //TODO:타입
   toggleGasAdvanced: (v: any) => void;
+  tokenDto: TokenDto;
 }

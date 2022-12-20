@@ -39,7 +39,7 @@ function TextInputModal({ title, defaultValue, cancelLabel, confirmLabel, onCanc
       confirmLabel={confirmLabel}
       isConfirmDisabled={value.length === 0}
     >
-      <BaseTextField value={value} onChange={onChangeInput} type={'search'} />
+      <BaseTextField value={value} onChange={onChangeInput} />
     </ModalLayout>
   );
 }

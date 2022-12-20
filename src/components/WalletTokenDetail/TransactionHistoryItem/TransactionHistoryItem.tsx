@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
@@ -18,13 +19,15 @@ import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransaction
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { getDateFormat } from '@@utils/dateFormatter';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import * as S from './TransactionHistoryListItem.style';
 
 function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const { params } = useRoute<TTokenDetailRouteProps>();
   const [valueSign, setValueSign] = useState('');
-  const { status, updatedAt, value, from } = props;
+  const { status, updatedAt, value: bnValue, from } = props;
+  const value = formatBigNumber(new BigNumber(bnValue), params.tokenDto.decimals).toString(10);
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TTransactionStatus.FAIL;
 

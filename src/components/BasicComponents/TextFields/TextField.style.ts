@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
+import { Color } from '@@style/colors';
 import { width, height, fontSize } from '@@utils/ui';
 
 import * as Type from './TextField.type';
@@ -44,7 +45,13 @@ export const BaseTextFieldLabel = styled.Text`
 `;
 
 export const BaseTextFieldHint = styled.Text`
-  color: ${({ theme }) => theme.color.grey500};
+  color: ${({ theme }) => theme.color.red};
+  line-height: ${height * 20}px;
+  margin-top: ${height * 8}px;
+`;
+
+export const GasHint = styled.Text<{ color: string }>`
+  color: ${({ color }) => color};
   line-height: ${height * 20}px;
   margin-top: ${height * 8}px;
 `;

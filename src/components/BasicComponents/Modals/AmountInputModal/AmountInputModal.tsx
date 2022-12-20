@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { TradeVolume } from '@@components/BasicComponents/TextFields/TradeVolume';
+import { TradeVolume } from '@@components/BasicComponents/TextFields/TradeVolume/TradeVolume';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import { MODAL_TYPES } from '../GlobalModal';

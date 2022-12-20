@@ -1,4 +1,5 @@
-import { BigNumberish, BytesLike, BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js';
+import { BigNumberish, BytesLike } from 'ethers';
 
 import { NETWORK, Network, NetworkId, NETWORK_FEE_TYPE, NETWORK_ID } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
@@ -112,7 +113,7 @@ export interface IRegisterTransactionRequest {
   to: string;
   hash: string;
   data?: BytesLike | null;
-  nonce: 0;
+  nonce: number;
 }
 
 export interface IRegisterTransactionResponse {
@@ -143,4 +144,5 @@ export interface ITransactionService {
   }: ISendTransactionRequest) => Promise<string | undefined>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
   registerHistory: (params: IRegisterTransactionRequest) => Promise<IRegisterTransactionResponse>;
+  getNonce: (selectedNetwork: Network, hash: string) => Promise<number | undefined>;
 }

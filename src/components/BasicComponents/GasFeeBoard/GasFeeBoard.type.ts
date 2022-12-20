@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { Dispatch, SetStateAction } from 'react';
 
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@generated/generated-scheme-clutch';

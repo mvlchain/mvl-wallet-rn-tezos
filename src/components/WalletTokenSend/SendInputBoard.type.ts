@@ -1,4 +1,6 @@
-import { BigNumber, BigNumberish } from 'ethers';
+import { Dispatch, SetStateAction } from 'react';
+
+import BigNumber from 'bignumber.js';
 
 export interface ISendInputBoardProps {
   amount: BigNumber | null;

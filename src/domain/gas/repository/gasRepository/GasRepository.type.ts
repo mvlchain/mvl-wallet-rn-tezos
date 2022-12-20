@@ -1,5 +1,5 @@
 import { TransactionRequest } from '@ethersproject/abstract-provider';
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
@@ -10,11 +10,11 @@ export interface IGasFeeInfoEthers {
 
 export interface IGetTotalGasFeeParamsEthers {
   baseFee: BigNumber;
-  gasLimit: BigNumber;
+  gas: BigNumber;
 }
 
 export interface IGasRepository {
   getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfoEthers>;
-  getTotalGasFee: (args: IGetTotalGasFeeParamsEthers) => string;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsEthers) => BigNumber;
   estimateGas: (networkInfo: INetworkInfo, args: TransactionRequest) => Promise<BigNumber>;
 }

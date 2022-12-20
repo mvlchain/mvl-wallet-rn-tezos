@@ -1,5 +1,4 @@
 import { TransferParams } from '@taquito/taquito';
-import { BytesLike } from 'ethers';
 
 import { Network } from '@@constants/network.constant';
 

@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { View, Keyboard } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { View } from 'react-native';
 
 import { WarningIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
@@ -11,20 +10,28 @@ import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.
 import Toggle from '@@components/BasicComponents/Form/Toggle';
 import { COIN_DTO, NETWORK_CONFIGS, getNetworkName } from '@@constants/network.constant';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
+import gasStore from '@@store/gas/gasStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { width } from '@@utils/ui';
 
 import * as S from './GasFeeBoardLayout.style';
 import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
-function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced, onConfirm, toggleGasAdvanced, children }: IGasFeeBoardLayoutProps) {
+function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, toggleGasAdvanced, children, tokenDto }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkName(false, pickNetwork);
   const coin = NETWORK_CONFIGS[selectedNetwork].coin;
-  const { price } = useOneTokenPrice(COIN_DTO[coin], transactionFee);
+  const { total } = gasStore();
+  const totalStr = total ? formatBigNumber(total, tokenDto.decimals).toString(10) : '-';
+  const { price } = useOneTokenPrice(COIN_DTO[coin], totalStr);
+  const { toValid, valueValid } = transactionRequestStore();
+  const { baseFeeValid, tipValid, gasValid } = gasStore();
+  const isValid = toValid && valueValid && baseFeeValid && tipValid && gasValid;
   return (
     <S.Container>
       <View>
@@ -48,10 +55,10 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
           )}
           <S.MarginRow>
             <S.Label>{`${isRevision ? t('new') + ' ' : ''}${t('transaction_fee')}`}</S.Label>
-            <S.Value>{`${transactionFee} ${coin}`}</S.Value>
+            <S.Value>{`${totalStr} ${coin}`}</S.Value>
           </S.MarginRow>
           <S.BaseCurrency>{`${price} ${settedCurrency}`}</S.BaseCurrency>
-          {transactionFee === '-' && (
+          {!total && (
             <S.Warning>
               <S.WarningIconWrapper>
                 <WarningIcon />
@@ -65,10 +72,11 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, transactionFee, advanced
       </View>
       <S.ConfirmWrapper>
         <PrimaryButton
-          label={t('confirm')}
+          label={t('next')}
           onPress={() => {
             onConfirm();
           }}
+          disabled={!isValid}
         />
       </S.ConfirmWrapper>
     </S.Container>
