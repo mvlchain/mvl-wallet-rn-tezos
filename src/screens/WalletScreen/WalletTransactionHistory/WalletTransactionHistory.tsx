@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
@@ -12,8 +12,18 @@ import TransactionHashBoard from '@@components/WalletTransactionHistory/Transact
 import * as S from './WalletTransactionHistory.style';
 
 function WalletTransactionHistory() {
+  // TODO: call getSingleHistory query when onRefresh
   return (
-    <S.Container>
+    <S.Container
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={() => {
+            console.log('good?');
+          }}
+        />
+      }
+    >
       <View>
         <TransactionHashBoard />
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
