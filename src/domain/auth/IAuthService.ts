@@ -6,7 +6,8 @@ export interface AuthService {
   signUp: (pincode: string) => Promise<string>;
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<void>;
-  resetPin: () => Promise<void>;
+  resetPin: () => Promise<string | undefined>;
+  resetPinOnScreen: () => Promise<(input: string) => Promise<void> | undefined>;
   getMnemonicByPkey: () => string;
 }
 export const AUTH_PROVIDER = {
@@ -21,6 +22,7 @@ export type RequirePassword = () => Promise<string>;
 export type ProviderToken = {
   idToken?: string;
   accessToken?: string;
+  provider: AuthProvider;
 };
 
 export class DeviceShareHolder {
