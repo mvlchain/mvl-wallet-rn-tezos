@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
-import authStore from '@@store/auth/authStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import { IClaimWalletListMenuProps } from './ClaimWalletListMenu/ClaimWalletListMenu.type';

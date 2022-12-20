@@ -8,6 +8,8 @@ import { TPinMode } from '@@store/pin/pinStore.type';
 export interface UIService {
   triggerGetPincode: () => Promise<string>;
   triggerSetPincode: (stage?: keyof typeof AUTH_STAGE) => Promise<string>;
+  triggerResetPincode: () => Promise<string>;
+  currentPinUpdateToReset: () => void;
 }
 
 export class UIServiceImpl implements UIService {
@@ -21,6 +23,10 @@ export class UIServiceImpl implements UIService {
     return await this._triggerPincode(PIN_MODE.SETUP, stage);
   };
 
+  triggerResetPincode = async () => {
+    return await this._triggerPincode(PIN_MODE.RESET);
+  };
+
   private _triggerPincode = async (pinMode: TPinMode, stage?: keyof typeof AUTH_STAGE) => {
     let pinModalResolver, pinModalRejector;
     const pinModalObserver = new Promise((resolve, reject) => {
@@ -29,8 +35,8 @@ export class UIServiceImpl implements UIService {
     });
 
     pinStore.getState().setState({ pinMode, pinModalResolver, pinModalRejector, layout: PIN_LAYOUT.FULLSCREEN, step: PIN_STEP.ENTER });
-    // TODO: reset pin일 때 화면 처리 추가
-    if (!stage || pinMode === PIN_MODE.CONFIRM) {
+
+    if (!stage) {
       authModalStore.getState().open(AUTH_MODAL_NAME.PIN);
     } else {
       /**
@@ -47,5 +53,9 @@ export class UIServiceImpl implements UIService {
     }
     const password = await pinModalObserver;
     return password as string;
+  };
+
+  currentPinUpdateToReset = () => {
+    pinStore.getState().setState({ pinMode: PIN_MODE.RESET, step: PIN_STEP.ENTER });
   };
 }

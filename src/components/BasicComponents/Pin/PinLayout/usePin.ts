@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import TouchID from 'react-native-touch-id';
@@ -12,10 +12,12 @@ import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
 
 function usePin() {
   const keyClient = useDi('KeyClient');
+  const authService = useDi('AuthService');
   const { stage, setStage } = authPersistStore();
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
-  const { pinMode, error, step, setState, success, resetStore } = pinStore();
+  const preSuccessCallbackRef = useRef<(input: string) => Promise<void> | undefined>();
+  const { pinMode, error, step, setState, success, resetStore, pinModalResolver, pinModalRejector } = pinStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -47,8 +49,6 @@ function usePin() {
       case PIN_MODE.RESET:
         await checkSetUp();
         break;
-      default:
-        break;
     }
   };
 
@@ -76,6 +76,9 @@ function usePin() {
         }
         if (stage[_postboxKey] === AUTH_STAGE.PIN_SETUP_STAGE) {
           setStage(_postboxKey, AUTH_STAGE.BACKUP_SEED_PHRASE_STAGE);
+        }
+        if (preSuccessCallbackRef.current) {
+          await preSuccessCallbackRef.current(input);
         }
         success(input);
         setState({ step: PIN_STEP.FINISH });
@@ -114,11 +117,25 @@ function usePin() {
     setInput(input.slice(0, -1));
   };
 
+  const reset = async () => {
+    if (!pinModalResolver || !pinModalRejector) {
+      console.log('can not reset');
+      return;
+    }
+    const callback = await authService.resetPinOnScreen();
+    if (!callback) {
+      console.log('fail to reset');
+      return;
+    }
+    preSuccessCallbackRef.current = callback;
+  };
+
   return {
     current: input.length,
     bioAuth,
     setPassword,
     backSpace,
+    reset,
   };
 }
 

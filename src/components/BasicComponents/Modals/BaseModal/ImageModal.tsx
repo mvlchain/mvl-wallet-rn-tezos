@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { GestureResponderEvent } from 'react-native';
 import Modal from 'react-native-modal';
 
 import { CloseBlackIconDark } from '@@assets/image';
@@ -21,7 +22,7 @@ export function ImageModal(props: Type.IImageModalComponentProps) {
           {image}
           <S.ImageModalTopWrapper>
             <S.ImageModalTitle>{title}</S.ImageModalTitle>
-            {!!onClose && <CloseBlackIconDark onPress={onClose} />}
+            {!!onClose && <CloseBlackIconDark onPress={(event: GestureResponderEvent) => onClose(event)} />}
           </S.ImageModalTopWrapper>
         </S.ImageWrapper>
         <S.ImageModalContainer modalPosition={modalPosition}>
