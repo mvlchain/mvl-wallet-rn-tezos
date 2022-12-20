@@ -9,12 +9,16 @@ import {
   WEB3_AUTH_NETWORK,
   WEB3_AUTH_NATIVE_NETWORK,
   WEB3_AUTH_LOGGING,
+  BASE_URL,
+  BASE_NETWORK,
 } from '@env';
 
 import { WalletAppConfig } from '@@config/appconfig.interface';
 import { AUTH_PROVIDER } from '@@domain/auth/IAuthService';
 
 const walletAppConfig: WalletAppConfig = {
+  baseUrl: BASE_URL,
+  baseNetwork: BASE_NETWORK,
   auth: {
     basic: {
       username: BASIC_USERNAME,

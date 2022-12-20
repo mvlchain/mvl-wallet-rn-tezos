@@ -2,7 +2,7 @@ import { ShareStore } from '@tkey/common-types';
 import { inject, injectable } from 'tsyringe';
 
 import { AUTH_PROVIDER, AuthProvider } from '@@constants/auth.constant';
-import { getNetworkConfig, NETWORK, NETWORK_CONFIGS } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
@@ -130,7 +130,7 @@ export class KeyClientImpl implements KeyClient {
   };
   getExtendPublicKey = async () => {
     const privateKey = await this.getPrivateKey();
-    return Clutch.extendedPublicKey(privateKey, extendedKeyPath(NETWORK_CONFIGS[NETWORK.ETH].bip44));
+    return Clutch.extendedPublicKey(privateKey, extendedKeyPath(getNetworkConfig(NETWORK.ETH).bip44));
   };
   setDevice = async (pincode: string) => {
     if (!this.postboxKeyHolder || !this.deviceShare) {

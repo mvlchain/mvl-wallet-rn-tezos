@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { getNetworkConfig, getNetworkName, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -11,7 +11,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 const useSetTotal = ({ blockGas }: { blockGas: BigNumber | null }) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
   const { to, value } = transactionRequestStore();
   const { baseFee, tip, gas, setState } = gasStore();

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 
 import { useRoute } from '@react-navigation/native';
 
-import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
 import useTransactionHistoryQuery from '@@hooks/queries/useTransactionHistoryQuery';
@@ -16,7 +16,7 @@ const useTransactionHistoryList = () => {
   const { params } = useRoute<TTokenDetailRouteProps>();
   const walletService = useDi('WalletService');
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
   const [history, setHistory] = useState<IGetTransactionHistoryResponse[]>([]);
   const [beforeblock, setBeforeBlock] = useState(2147483647);
