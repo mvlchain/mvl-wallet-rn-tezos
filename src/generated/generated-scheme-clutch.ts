@@ -28,9 +28,14 @@ export interface paths {
     /** Get price from coingecko. */
     get: operations['WalletV2Controller_simplePrice'];
   };
-  '/v2/wallets/transactions': {
+  '/v2/wallets/transaction/history/{id}': {
+    get: operations['WalletV2Controller_getOneTransaction'];
+  };
+  '/v2/wallets/transaction/history': {
     /** Get transaction list of a given wallet address */
     get: operations['WalletV2Controller_transactions'];
+  };
+  '/v2/wallets/transaction': {
     /** Register wallet made transaction for tracking */
     post: operations['WalletV2Controller_registerTransaction'];
   };
@@ -42,6 +47,9 @@ export interface paths {
   };
   '/v1/transactions/refresh-bulk': {
     get: operations['TransactionController_refreshBulkTransaction'];
+  };
+  '/v2/transactions/refresh': {
+    get: operations['TransactionV2Controller_refreshTransaction'];
   };
   '/v1/native-swap/{network}/approve/spender': {
     get: operations['NativeSwapController_approveSpender'];
@@ -96,9 +104,6 @@ export interface paths {
   };
   '/v1.1/link-transfer/receive': {
     get: operations['LinkTransferController_getReceive'];
-  };
-  '/v1.1/link-transfer/log': {
-    post: operations['LinkTransferController_log'];
   };
   '/v2/link-transfer/log': {
     /** Logging for Qr Tranfer Event in Client */
@@ -162,6 +167,8 @@ export interface components {
       fee: string;
       updatedAt: string;
       ticker?: string;
+      logIndex: number;
+      blockNumber: number;
     };
     TransactionDetailDto: { [key: string]: unknown };
     RefreshTransactionResponseDto: {
@@ -423,6 +430,20 @@ export interface operations {
       };
     };
   };
+  WalletV2Controller_getOneTransaction: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['TransferTransactionHistoryResponseDto'];
+        };
+      };
+    };
+  };
   /** Get transaction list of a given wallet address */
   WalletV2Controller_transactions: {
     parameters: {
@@ -430,7 +451,8 @@ export interface operations {
         network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         filter: 'ALL' | 'SEND' | 'RECEIVE';
         address: string;
-        page: number;
+        blockNumber?: number;
+        logIndex?: number;
         ticker?: string;
       };
     };
@@ -448,7 +470,7 @@ export interface operations {
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['TransactionsResponseDto'];
+          'application/json': components['schemas']['TransferTransactionHistoryResponseDto'];
         };
       };
       400: {
@@ -516,6 +538,20 @@ export interface operations {
     };
   };
   TransactionController_refreshBulkTransaction: {
+    parameters: {
+      query: {
+        hash: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['RefreshTransactionResponseDto'];
+        };
+      };
+    };
+  };
+  TransactionV2Controller_refreshTransaction: {
     parameters: {
       query: {
         hash: string;
@@ -900,27 +936,6 @@ export interface operations {
     parameters: {};
     responses: {
       200: unknown;
-    };
-  };
-  LinkTransferController_log: {
-    parameters: {};
-    responses: {
-      /** success */
-      200: {
-        content: {
-          'application/json': components['schemas']['SimpleResponseDto'];
-        };
-      };
-      201: {
-        content: {
-          'application/json': components['schemas']['SimpleResponseDto'];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LinkTransferLogDto'];
-      };
     };
   };
   /** Logging for Qr Tranfer Event in Client */
