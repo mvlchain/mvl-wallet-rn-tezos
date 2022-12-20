@@ -14,7 +14,7 @@ import { KeyClientUtil } from './KeyClientUtil';
 
 export interface PostboxKeyHolder {
   postboxKey: string;
-  provider?: AuthProvider;
+  provider: AuthProvider;
   providerIdToken?: string;
   providerAccessToken?: string;
   providerUserIdentifier?: string;
@@ -138,6 +138,7 @@ export class KeyClientImpl implements KeyClient {
       this.postboxKeyHolder.postboxKey,
       this.deviceShare,
       pincode,
+      this.postboxKeyHolder.provider,
       this.postboxKeyHolder.providerIdToken,
       this.postboxKeyHolder.providerAccessToken
     );
@@ -158,8 +159,8 @@ export class KeyClientImpl implements KeyClient {
     });
   };
   setKeyFromDevice = async () => {
-    const { postboxKey, share } = await this.deviceShareRepository.fetchDeviceShare();
-    this.postboxKeyHolder = { postboxKey };
+    const { postboxKey, share, providerToken } = await this.deviceShareRepository.fetchDeviceShare();
+    this.postboxKeyHolder = { postboxKey, provider: providerToken.provider };
     await this.torusShareRepository.init(postboxKey, true);
     await this.torusShareRepository.assembleShares(share);
   };

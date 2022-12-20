@@ -21,6 +21,7 @@ export type RequirePassword = () => Promise<string>;
 export type ProviderToken = {
   idToken?: string;
   accessToken?: string;
+  provider: AuthProvider;
 };
 
 export class DeviceShareHolder {
