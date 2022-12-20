@@ -52,6 +52,8 @@ export class KeyClientImpl implements KeyClient {
   delete!: () => Promise<void>;
   signOut!: () => void;
   findDeviceShareByServerShare!: () => void;
+  compareKey!: (postboxKey: string) => Promise<boolean>;
+  getDeviceProvider!: () => Promise<AuthProvider>;
 }
 
 class WalletServiceImpl implements WalletService {
