@@ -20,6 +20,7 @@ import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import MainTab from '@@navigation/MainTab';
 import { DeepLinkConnectProxyScreen } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
+import EarnEventTransferSuccessScreen from '@@screens/EarnEventScreen/EarnEventTransferSuccessScreen';
 import EarnEventTransferringScreen from '@@screens/EarnEventScreen/EarnEventTransferringScreen';
 import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
@@ -217,6 +218,12 @@ function RootStack() {
             key={ROOT_STACK_ROUTE.EARN_EVENT_TRNASFERRING}
             name={ROOT_STACK_ROUTE.EARN_EVENT_TRNASFERRING}
             component={EarnEventTransferringScreen}
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Screen
+            key={ROOT_STACK_ROUTE.EARN_EVENT_TRANSFER_SUCCESS}
+            name={ROOT_STACK_ROUTE.EARN_EVENT_TRANSFER_SUCCESS}
+            component={EarnEventTransferSuccessScreen}
             options={{ headerShown: false, gestureEnabled: false }}
           />
         </Navigator>

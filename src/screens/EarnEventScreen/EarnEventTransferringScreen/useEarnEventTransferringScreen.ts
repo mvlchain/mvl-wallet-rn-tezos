@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Animated, BackHandler, Easing } from 'react-native';
 
 import useEarnEventMutation from '@@hooks/queries/useEarnEventMutation';
 import useEarnEventStatusQuery from '@@hooks/queries/useEarnEventStatusQuery';
+import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import utilStore from '@@store/util/utilStore';
 
 import { TTransactionHistoryRouteProps } from './EarnEventTransferringScreen.type';
 
 const useEarnEventTransferringScreen = () => {
   const { params } = useRoute<TTransactionHistoryRouteProps>();
+  type rootStackProps = TRootStackNavigationProps<'MAIN'>;
+  const rootNavigation = useNavigation<rootStackProps>();
   const { turnOffGlobalLoading } = utilStore();
 
   const [isEndMutation, setIsEndMutation] = useState(true);
@@ -19,7 +22,7 @@ const useEarnEventTransferringScreen = () => {
     enabled: isEndMutation,
     refetchInterval: (data) => {
       if (data?.status === 'COMPLETED_TRANSFER') {
-        // TODO: navigate to EarnEventSuccessScreen
+        rootNavigation.navigate('EARN_EVENT_TRANSFER_SUCCESS');
         console.log('success transfer. move to EarnEventSuccessScreen');
         return false;
       } else {

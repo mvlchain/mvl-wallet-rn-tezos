@@ -62,6 +62,7 @@ export type TRootStackParamList = {
     eventId: string;
     address: string;
   };
+  EARN_EVENT_TRANSFER_SUCCESS: undefined;
 };
 
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
@@ -92,6 +93,7 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   EVENT_DETAILS: 'EVENT_DETAILS',
   EARN_EVENT_TRNASFERRING: 'EARN_EVENT_TRNASFERRING',
   DEEPLINK_CONNECT: 'DEEPLINK_CONNECT',
+  EARN_EVENT_TRANSFER_SUCCESS: 'EARN_EVENT_TRANSFER_SUCCESS',
 } as const;
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;
