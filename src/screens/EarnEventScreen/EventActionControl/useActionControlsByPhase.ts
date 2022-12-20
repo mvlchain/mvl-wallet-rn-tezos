@@ -14,7 +14,7 @@ import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { IThirdPartyConnection, IEventThirdParty } from '@@hooks/event/useEventDetailsUiState';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { extension } from '@@utils/strings';
+import { extension, format } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 import { IActionControlAttrs } from './EventActionControl.type';
@@ -44,9 +44,10 @@ export const useActionControlsByPhase = (
   const openConfirmClaimModal = () => {
     if (!claimStatusInfo) return;
     if (parseFloat(claimStatusInfo?.amount) > parseFloat(claimStatusInfo?.fee)) {
+      const appName = event.app?.name.toUpperCase() ?? '';
       openModal(MODAL_TYPES.TEXT_MODAL, {
         title: t('btn_confirm'),
-        label: t('dialog_claim_confirm_description', { appName: event.app?.name.toUpperCase() }),
+        label: format(t('dialog_claim_confirm_description'), appName, appName),
         onConfirm: openClaimWalletListModal,
         confirmLabel: t('claim'),
         onCancel: closeModal,
