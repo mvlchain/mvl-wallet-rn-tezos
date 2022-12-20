@@ -7,7 +7,7 @@ export interface AuthService {
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<void>;
   resetPin: () => Promise<string | undefined>;
-  resetPinOnScreen: () => Promise<Function | undefined>;
+  resetPinOnScreen: () => Promise<(input: string) => Promise<void> | undefined>;
   getMnemonicByPkey: () => string;
 }
 export const AUTH_PROVIDER = {

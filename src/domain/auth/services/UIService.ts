@@ -56,6 +56,6 @@ export class UIServiceImpl implements UIService {
   };
 
   currentPinUpdateToReset = () => {
-    pinStore.getState().setState({ pinMode: PIN_MODE.RESET, step: PIN_STEP.ENTER, layout: PIN_LAYOUT.FULLSCREEN });
+    pinStore.getState().setState({ pinMode: PIN_MODE.RESET, step: PIN_STEP.ENTER });
   };
 }
