@@ -47,6 +47,10 @@ export interface EarnEventDto {
    * A flag that determines whether to allow or not earn point within a claim period
    */
   isAllowParticipationInClaim: boolean;
+  /**
+   * @description BlockChain Network supported by this earn event.
+   * */
+  network: string;
 }
 
 export interface EarnEventPoint {
