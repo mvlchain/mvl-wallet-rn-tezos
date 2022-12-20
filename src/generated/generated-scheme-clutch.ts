@@ -173,12 +173,12 @@ export interface components {
     TransactionDetailDto: { [key: string]: unknown };
     RefreshTransactionResponseDto: {
       hash: string;
-      network: { [key: string]: unknown };
-      status: { [key: string]: unknown };
+      network: string;
+      status: string;
       from: string;
       to: string | null;
       value: string;
-      type: { [key: string]: unknown };
+      type: string;
       fee: string;
       data: string;
       nonce: number;
@@ -526,6 +526,8 @@ export interface operations {
   TransactionController_refreshTransaction: {
     parameters: {
       query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         hash: string;
       };
     };
@@ -540,6 +542,8 @@ export interface operations {
   TransactionController_refreshBulkTransaction: {
     parameters: {
       query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         hash: string;
       };
     };
@@ -554,6 +558,8 @@ export interface operations {
   TransactionV2Controller_refreshTransaction: {
     parameters: {
       query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         hash: string;
       };
     };
