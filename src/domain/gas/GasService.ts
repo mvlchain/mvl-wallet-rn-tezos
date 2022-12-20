@@ -1,13 +1,12 @@
-import { Estimate } from '@taquito/taquito';
-import { BigNumber } from 'ethers';
-import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
+import { BigNumber } from 'bignumber.js';
+import { BigNumber as BigNumberEther } from 'ethers';
 import { injectable, inject } from 'tsyringe';
 
-import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
-import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
+import { NETWORK_FEE_TYPE, getNetworkConfig, Network, COIN_DTO } from '@@constants/network.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 
-import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest, TGasLevel } from './GasService.type';
+import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
 import { GasRepositoryEip1559Impl } from './repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from './repository/gasRepositoryTezos/GasRepositoryTezos';
@@ -29,10 +28,10 @@ export class GasService implements IGasService {
         case NETWORK_FEE_TYPE.EIP1559:
           const gasFeeDataEip1559 = await this.gasRepositoryEip1559.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
           return {
-            baseFee: gasFeeDataEip1559.lastBaseFeePerGas,
+            baseFee: gasFeeDataEip1559.lastBaseFeePerGas ?? null,
             enableTip: true,
             enableLimitCustom: true,
-            gasLimit: BigNumber.from(21000),
+            gasLimit: new BigNumber(21000),
           };
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           const gasFeeData = await this.gasRepository.getGasFeeData({ rpcUrl: network.rpcUrl, chainId: network.chainId });
@@ -40,7 +39,7 @@ export class GasService implements IGasService {
             baseFee: gasFeeData.gasPrice,
             enableTip: false,
             enableLimitCustom: true,
-            gasLimit: BigNumber.from(21000),
+            gasLimit: new BigNumber(21000),
           };
       }
     } catch (err) {
@@ -48,7 +47,7 @@ export class GasService implements IGasService {
     }
   };
 
-  getTotalGasFee = ({ selectedNetwork, baseFee, tip, estimatedGas, gasLimit }: IGetTotalGasFeeRequest) => {
+  getTotalGasFee = ({ selectedNetwork, baseFee, tip, gas }: IGetTotalGasFeeRequest) => {
     const network = getNetworkConfig(selectedNetwork);
     try {
       switch (network.networkFeeType) {
@@ -58,19 +57,22 @@ export class GasService implements IGasService {
           }
           return this.gasRepositoryTezos.getTotalGasFee({ baseFee, tip });
         case NETWORK_FEE_TYPE.EIP1559:
-          if (!tip || !baseFee || !estimatedGas) {
+          if (!tip || !baseFee || !gas) {
             throw new Error(`basefee, tip,estimatedGas is required`);
           }
           return this.gasRepositoryEip1559.getTotalGasFee({
             baseFee,
             tip,
-            estimatedGas,
+            gas,
           });
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-          if (!baseFee || !gasLimit) {
+          if (!baseFee || !gas) {
             throw new Error(`basefee,estimatedGas is required`);
           }
-          return this.gasRepository.getTotalGasFee({ baseFee, gasLimit });
+          return this.gasRepository.getTotalGasFee({
+            baseFee,
+            gas,
+          });
       }
     } catch (err) {
       console.log(err);
@@ -86,30 +88,29 @@ export class GasService implements IGasService {
           if (!value) {
             throw new Error('value is required');
           }
-          const valueTezos = parseFloat(formatUnits(value, 6));
           const estimationTezos = await this.gasRepositoryTezos.estimateGas({
             rpcUrl: network.rpcUrl,
             walletPrivateKey: wallet.privateKey,
             to,
-            amount: valueTezos,
+            amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
           });
           if (!estimationTezos) {
             throw new Error('fail to estimate');
           }
           return {
-            baseFee: parseUnits(estimationTezos.totalCost.toString(), 0),
-            gasUsage: BigNumber.from(estimationTezos.gasLimit.toString()),
+            baseFee: new BigNumber(estimationTezos.totalCost),
+            gasUsage: new BigNumber(estimationTezos.gasLimit),
           };
         case NETWORK_FEE_TYPE.EIP1559:
           const estimationEip1559 = await this.gasRepository.estimateGas(
             { rpcUrl: network.rpcUrl, chainId: network.chainId },
-            { from: wallet.address, to, value, data }
+            { from: wallet.address, to, value: value ? value.toString() : undefined, data }
           );
           return { gasUsage: estimationEip1559 };
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           const estimationLegacy = await this.gasRepository.estimateGas(
             { rpcUrl: network.rpcUrl, chainId: network.chainId },
-            { from: wallet.address, to, value, data }
+            { from: wallet.address, to, value: value ? value.toString() : undefined, data }
           );
           return { gasUsage: estimationLegacy };
       }

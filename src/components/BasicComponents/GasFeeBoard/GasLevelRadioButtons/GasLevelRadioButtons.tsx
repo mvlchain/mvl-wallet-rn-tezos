@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Pressable } from 'react-native';
 
 import CustomRadio from '@@components/BasicComponents/Form/CustomRadio';
 import { GAS_LEVEL } from '@@constants/gas.constant';
+import gasStore from '@@store/gas/gasStore';
 
 import * as S from './GasLevelRadioButtons.style';
-import { IGasLevelRadioButtonsProps } from './GasLevelRadioButtons.type';
 
-function GasLevelRadioButtons({ setGasLevel, gasLevel }: IGasLevelRadioButtonsProps) {
+function GasLevelRadioButtons() {
   const { t } = useTranslation();
+  const { level, setState } = gasStore();
 
   const options = [
     {
       label: t('speed_low'),
       level: GAS_LEVEL.LOW,
       onPress: () => {
-        setGasLevel(GAS_LEVEL.LOW);
+        setState({ level: GAS_LEVEL.LOW });
       },
     },
     {
       label: t('speed_mid'),
       level: GAS_LEVEL.MID,
       onPress: () => {
-        setGasLevel(GAS_LEVEL.MID);
+        setState({ level: GAS_LEVEL.MID });
       },
     },
     {
       label: t('speed_high'),
       level: GAS_LEVEL.HIGH,
       onPress: () => {
-        setGasLevel(GAS_LEVEL.HIGH);
+        setState({ level: GAS_LEVEL.HIGH });
       },
     },
   ];
@@ -40,7 +40,7 @@ function GasLevelRadioButtons({ setGasLevel, gasLevel }: IGasLevelRadioButtonsPr
     <>
       <S.Label>{t('speed')}</S.Label>
       <S.ButtonWrapper>
-        <CustomRadio options={options} defaultIdx={options.findIndex((v, i) => v.level === gasLevel)} />
+        <CustomRadio options={options} defaultIdx={options.findIndex((v, i) => v.level === level)} />
       </S.ButtonWrapper>
     </>
   );

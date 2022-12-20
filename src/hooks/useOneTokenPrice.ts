@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
-import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 
 import { TokenDto } from '@@generated/generated-scheme-clutch';

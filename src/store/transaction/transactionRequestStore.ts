@@ -8,19 +8,21 @@ const INITIAL_TRANSACTION_REQUEST_BODY_STATE = {
   from: null,
   data: null,
   value: null,
+  toValid: false,
+  valueValid: false,
 };
 export const transactionRequestStore = create<ITransactionRequestStore>(
   zustandFlipper(
     (set) => ({
       ...INITIAL_TRANSACTION_REQUEST_BODY_STATE,
-      setBody: (newState) => {
+      setState: (newState) => {
         set(
           (prevState) => ({
             ...prevState,
             ...newState,
           }),
           false,
-          `setBody`
+          `setState`
         );
       },
       resetBody: () => {

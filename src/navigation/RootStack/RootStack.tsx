@@ -40,11 +40,12 @@ import WalletTransactionCancel from '@@screens/WalletScreen/WalletTransactionCan
 import WalletTransactionHistory from '@@screens/WalletScreen/WalletTransactionHistory';
 import WalletTransactionResult from '@@screens/WalletScreen/WalletTransactionResult';
 import WalletTransactionSpeedUp from '@@screens/WalletScreen/WalletTransactionSpeedUp';
+import gasStore from '@@store/gas/gasStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import { fontSize, height } from '@@utils/ui';
 
 import { navigationRef } from './RootNavigation';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from './RootStack.type';
-
 const { Navigator, Screen } = createStackNavigator<TRootStackParamList>();
 type ScreenProps = Parameters<typeof Screen>[0];
 const routerTheme = {
@@ -59,6 +60,8 @@ function RootStack() {
   const { t } = useTranslation();
   const { handleStackHeaderOption } = useHeader();
   const { color } = useColor();
+  const { resetState } = gasStore();
+  const { resetBody } = transactionRequestStore();
 
   const screens: Array<ScreenProps> = [
     {
@@ -138,7 +141,13 @@ function RootStack() {
     {
       name: ROOT_STACK_ROUTE.WALLET_TOKEN_SEND,
       component: WalletTokenSend,
-      options: handleStackHeaderOption({ title: t('send') }),
+      options: handleStackHeaderOption({
+        title: t('send'),
+        onPressBack: () => {
+          resetState();
+          resetBody();
+        },
+      }),
     },
     {
       name: ROOT_STACK_ROUTE.WALLET_TRANSACTION_HISTORY,

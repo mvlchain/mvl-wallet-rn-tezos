@@ -1,6 +1,5 @@
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 
-import { TGasLevel } from '@@domain/gas/GasService.type';
 import { INetworkInfo } from '@@domain/transaction/TransactionService.type';
 
 export interface IGasFeeInfoEip1559 {
@@ -13,11 +12,11 @@ export interface IGasFeeInfoEip1559 {
 
 export interface IGetTotalGasFeeParamsEIP1559 {
   baseFee: BigNumber;
-  estimatedGas: BigNumber;
+  gas: BigNumber;
   tip: BigNumber;
 }
 
 export interface IGasRepositoryEip1559 {
   getGasFeeData: (networkInfo: INetworkInfo) => Promise<IGasFeeInfoEip1559>;
-  getTotalGasFee: (args: IGetTotalGasFeeParamsEIP1559) => string;
+  getTotalGasFee: (args: IGetTotalGasFeeParamsEIP1559) => BigNumber;
 }
