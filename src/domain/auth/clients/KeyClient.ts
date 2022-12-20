@@ -50,6 +50,7 @@ export interface KeyClient {
   delete: () => Promise<void>;
   signOut: () => void;
   findDeviceShareByServerShare: () => void;
+  compareKey: (postboxKey: string) => Promise<boolean>;
 }
 
 @injectable()
@@ -274,5 +275,13 @@ export class KeyClientImpl implements KeyClient {
       throw serverShareRequiredError;
     }
     this.deviceShare = await this.torusShareRepository.findUknownShareByKnown(this.serverShare);
+  };
+
+  compareKey = async (postboxKey: string) => {
+    const { compareResult, deviceShare } = await this.deviceShareRepository.comparePostboxKeyInDeviceShare(postboxKey);
+    if (compareResult && deviceShare) {
+      this.deviceShare = deviceShare;
+    }
+    return compareResult;
   };
 }
