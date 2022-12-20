@@ -39,6 +39,24 @@
         <data android:scheme="clutchwallet" android:host="screen" android:pathPattern="/*" />
       </intent-filter>
     </activity>
+
+    <activity
+      android:exported="true"
+      android:launchMode="singleTop"
+      android:name="org.torusresearch.customauth.activity.StartUpActivity"
+      android:theme="@style/Theme.AppCompat"
+      >
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+          android:host="${torusRedirectHost}"
+          android:pathPattern="/*"
+          android:pathPrefix="${torusRedirectPathPrefix}"
+          android:scheme="${torusRedirectScheme}" />
+      </intent-filter>
+    </activity>
   </application>
 
   <queries>
