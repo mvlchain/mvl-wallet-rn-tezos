@@ -10,26 +10,29 @@ import TransactionFeeBoard from '@@components/WalletTransactionHistory/Transacti
 import TransactionHashBoard from '@@components/WalletTransactionHistory/TransactionHashBoard';
 
 import * as S from './WalletTransactionHistory.style';
+import { useWalletTransactionHistory } from './useWalletTransactionHistory';
 
 function WalletTransactionHistory() {
   // TODO: call getSingleHistory query when onRefresh
+  const { price, fee, settedCurrency, type, valueSign, value, ticker, updatedAt, status, to, hash, refetch } = useWalletTransactionHistory();
   return (
-    <S.Container
-      refreshControl={
-        <RefreshControl
-          refreshing={false}
-          onRefresh={() => {
-            console.log('good?');
-          }}
-        />
-      }
-    >
+    <S.Container refreshControl={<RefreshControl refreshing={false} onRefresh={refetch} />}>
       <View>
-        <TransactionHashBoard />
+        <TransactionHashBoard hash={hash} />
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
-        <TransactionDetailBoard />
+        <TransactionDetailBoard
+          type={type}
+          value={value}
+          valueSign={valueSign}
+          ticker={ticker}
+          price={price}
+          settedCurrency={settedCurrency}
+          updatedAt={updatedAt}
+          to={to}
+          status={status}
+        />
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
-        <TransactionFeeBoard />
+        <TransactionFeeBoard fee={fee} ticker={ticker} />
       </View>
       {/* <PendingTransactionButtons /> */}
     </S.Container>
