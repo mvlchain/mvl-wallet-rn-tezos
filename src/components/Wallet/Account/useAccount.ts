@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase, NETWORK } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { useNetworkList } from '@@hooks/useNetworkList';
@@ -94,7 +94,7 @@ const useAccount = () => {
 
   return {
     walletName: walletList[selectedNetwork][_selectedWalletIndex]?.name ?? 'default wallet',
-    networkName: getNetworkConfig(getNetworkName(false, selectedNetwork)).name,
+    networkName: getNetworkConfig(getNetworkByBase(selectedNetwork)).name,
     address: (data && data[_selectedWalletIndex]?.address) ?? 'default address',
     onPressSwitchNetwork,
     onPressMore,

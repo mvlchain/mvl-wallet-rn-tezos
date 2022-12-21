@@ -2,7 +2,7 @@ import { useEffect, useCallback, Dispatch, SetStateAction } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { getNetworkName } from '@@constants/network.constant';
+import { getNetworkByBase } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -21,7 +21,7 @@ const useSetInitial = ({
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const { setState } = gasStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
 
   useEffect(() => {
     setInitialGas();

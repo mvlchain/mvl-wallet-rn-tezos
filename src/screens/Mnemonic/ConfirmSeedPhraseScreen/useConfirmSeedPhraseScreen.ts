@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkName, NETWORK } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase, NETWORK } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';

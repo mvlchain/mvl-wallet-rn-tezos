@@ -3,14 +3,14 @@ import { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
-import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import gasStore from '@@store/gas/gasStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { getLeveledBaseFee } from '@@utils/gas';
 
 const useSetGasState = ({ blockBaseFee, blockGas, advanced }: { blockBaseFee: BigNumber | null; blockGas: BigNumber | null; advanced: boolean }) => {
   const { selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
   const network = getNetworkConfig(selectedNetwork);
   const { setState, level } = gasStore();
 

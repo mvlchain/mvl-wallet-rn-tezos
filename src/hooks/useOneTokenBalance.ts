@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getNetworkName } from '@@constants/network.constant';
+import { getNetworkByBase } from '@@constants/network.constant';
 import { WALLET_TOKEN } from '@@constants/token.constant';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
