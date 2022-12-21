@@ -4,11 +4,13 @@ import { BigNumber } from 'bignumber.js';
 
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 
+import useBaseFeeValidation from './hooks/useBaseFeeValidation';
 import useEstimateGas from './hooks/useEstimateGas';
+import useGasValidation from './hooks/useGasValidation';
 import useSetGasState from './hooks/useSetGasState';
 import useSetInitial from './hooks/useSetInitial';
 import useSetTotal from './hooks/useSetTotal';
-import useSetValidCheck from './hooks/useSetValidCheck';
+import useTipValidation from './hooks/useTipValidation';
 
 const useGasFeeBoard = (tokenDto: TokenDto) => {
   //The setted value
@@ -22,14 +24,17 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
 
   useSetTotal({ blockGas });
   useSetGasState({ blockBaseFee, blockGas, advanced });
-  useEstimateGas({ tokenDto, setBlockBaseFee, setBlockGas });
+  useEstimateGas({ tokenDto, advanced, setBlockBaseFee, setBlockGas });
   useSetInitial({
     setEnableTip,
     setEnableLimitCustom,
     setBlockBaseFee,
     setBlockGas,
   });
-  const { baseFeeCheck, tipCheck, gasCheck } = useSetValidCheck(tokenDto, blockBaseFee);
+
+  const { baseFeeCheck } = useBaseFeeValidation(tokenDto, blockBaseFee);
+  const { tipCheck } = useTipValidation(tokenDto);
+  const { gasCheck } = useGasValidation();
 
   const toggleGasAdvanced = useCallback(() => {
     setAdvanced(!advanced);
