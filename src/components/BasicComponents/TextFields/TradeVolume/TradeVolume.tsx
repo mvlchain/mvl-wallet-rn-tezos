@@ -39,15 +39,11 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     setShowDelete(!!value);
   }, debounceTime);
 
-  useEffect(() => {
-    debounceCallback(displayValue ? new BigNumber(displayValue).shiftedBy(tokenDto.decimals) : null);
-  }, [displayValue]);
-
   const clearTextField = () => {
     onChange(null);
     setDisplayValue(null);
-    setShowDelete(false);
     setHint(null);
+    debounceCallback(null);
   };
 
   const onKeyPress = () => {
@@ -61,10 +57,10 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     const value = data.nativeEvent.text;
     const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
     setDisplayValue(formattedValue);
+    debounceCallback(formattedValue ? new BigNumber(formattedValue).shiftedBy(tokenDto.decimals) : null);
   };
 
   const onPressMax = () => {
-    console.log('???');
     if (tokenDto.contractAddress) {
       setDisplayValue(balance);
     } else {
@@ -88,12 +84,12 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
 
   useEffect(() => {
     if (!setParentValid) return;
-    if (!value || hint) {
+    if (!displayValue || hint) {
       setParentValid(false);
     } else {
       setParentValid(true);
     }
-  }, [hint, !value]);
+  }, [hint, !displayValue]);
 
   return (
     <S.TradeVolumeContainer>

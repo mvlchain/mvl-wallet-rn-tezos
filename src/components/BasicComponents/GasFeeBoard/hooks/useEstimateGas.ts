@@ -14,10 +14,12 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useEstimateGas = ({
   tokenDto,
+  advanced,
   setBlockBaseFee,
   setBlockGas,
 }: {
   tokenDto: TokenDto;
+  advanced: boolean;
   setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
@@ -51,7 +53,7 @@ const useEstimateGas = ({
     [toValid, valueValid]
   );
 
-  const debounceEstimate = useDebounce(estimateGas, 800);
+  const debounceEstimate = useDebounce(estimateGas, 100);
 
   useEffect(() => {
     if (!to || !value) return;

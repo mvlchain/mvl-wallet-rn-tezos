@@ -17,7 +17,7 @@ export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
   const [lcColor, setLcColor] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
-  const debounceCallback = useDebounce(onChange, 1000);
+  const debounceCallback = useDebounce(onChange, 800);
   const clearTextField = () => {
     setDisplayValue('');
     debounceCallback(null);

@@ -50,7 +50,7 @@ function AddressTextField(props: IAddressTextFieldProps) {
     } else {
       setParentValid(false);
     }
-  }, 500);
+  }, 100);
 
   return <BaseTextField placeholder={placeholder} onChange={onChange} gotoScan={gotoScan} label={label} value={value} hint={hint} scanable={true} />;
 }
