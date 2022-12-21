@@ -16,6 +16,7 @@ function usePin() {
   const { stage, setStage } = authPersistStore();
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
+  const [visible, setVisible] = useState(true);
   const preSuccessCallbackRef = useRef<(input: string) => Promise<void> | undefined>();
   const { pinMode, error, step, setState, success, resetStore } = pinStore();
   const { t } = useTranslation();
@@ -118,7 +119,9 @@ function usePin() {
   };
 
   const reset = async () => {
+    setVisible(false);
     const callback = await authService.resetPinOnScreen();
+    setVisible(true);
     if (!callback) {
       console.log('can not reset');
       return;
@@ -132,6 +135,7 @@ function usePin() {
     setPassword,
     backSpace,
     reset,
+    visible,
   };
 }
 
