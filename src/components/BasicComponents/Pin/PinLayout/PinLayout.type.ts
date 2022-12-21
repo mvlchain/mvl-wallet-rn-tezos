@@ -7,5 +7,5 @@ export interface IPinLayoutProps {
 }
 
 export interface IPinPasswordMonitorStyleProps {
-  isSetup: boolean;
+  isConfirm: boolean;
 }

@@ -17,7 +17,7 @@ function usePin() {
   const [input, setInput] = useState('');
   const [inputCheck, setInputCheck] = useState('');
   const preSuccessCallbackRef = useRef<(input: string) => Promise<void> | undefined>();
-  const { pinMode, error, step, setState, success, resetStore, pinModalResolver, pinModalRejector } = pinStore();
+  const { pinMode, error, step, setState, success, resetStore } = pinStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -118,13 +118,9 @@ function usePin() {
   };
 
   const reset = async () => {
-    if (!pinModalResolver || !pinModalRejector) {
-      console.log('can not reset');
-      return;
-    }
     const callback = await authService.resetPinOnScreen();
     if (!callback) {
-      console.log('fail to reset');
+      console.log('can not reset');
       return;
     }
     preSuccessCallbackRef.current = callback;
