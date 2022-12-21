@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
+import { useTranslation } from 'react-i18next';
 
 import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
 import { COIN_DTO, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
@@ -11,6 +12,7 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { commonColors } from '@@style/colors';
 import { formatBigNumber } from '@@utils/formatBigNumber';
+import { format } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 import { TGasHint } from '../GasFeeInputs/GasFeeInputs.type';
@@ -22,6 +24,7 @@ const GAS_CHECK_TYPE = {
 } as const;
 
 const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) => {
+  const { t } = useTranslation();
   const { selectedNetwork } = walletPersistStore();
   const network = getNetworkConfig(selectedNetwork);
   const { balance } = useOneTokenBalance(tokenDto);
@@ -42,7 +45,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
 
   const check = (valid: boolean, target: valueOf<typeof GAS_CHECK_TYPE>, color: string, text: string, useMaximumPrefix: boolean) => {
     setState({ [target]: valid });
-    const textForm = useMaximumPrefix ? `Maximum: ${text} ${COIN_DTO[network.coin].symbol}` : text;
+    const textForm = useMaximumPrefix ? `${t('maximum')} ${text} ${COIN_DTO[network.coin].symbol}` : text;
     const state = {
       text: textForm,
       color,
@@ -61,22 +64,21 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
   };
 
   const zeroWarn = (target: valueOf<typeof GAS_CHECK_TYPE>) => {
-    check(false, target, red, 'zero warn', false);
+    check(false, target, red, t('warning_zero_input'), false);
   };
 
   const balanceLack = (target: valueOf<typeof GAS_CHECK_TYPE>) => {
-    check(false, target, red, 'balance lack', false);
+    check(false, target, red, t('msg_insufficient_funds'), false);
   };
 
   const lowerThanNetwork = (target: valueOf<typeof GAS_CHECK_TYPE>) => {
-    check(true, target, red, 'lower than network', false);
+    check(true, target, red, t('warning _lower_than_network'), false);
   };
 
   const showRemainBalance = (target: valueOf<typeof GAS_CHECK_TYPE>) => {
     check(false, target, grey, formatBigNumber(remainBalance, tokenDto.decimals).toString(10), true);
   };
 
-  //TODO: 다국어 등록 및 문구 논의 필요
   useEffect(() => {
     switch (network.networkFeeType) {
       case NETWORK_FEE_TYPE.EIP1559:
@@ -113,7 +115,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
         }
 
       case NETWORK_FEE_TYPE.TEZOS:
-        check(true, GAS_CHECK_TYPE.BASEFEE, grey, 'can not change', false);
+        // check(true, GAS_CHECK_TYPE.BASEFEE, grey, 'can not change', false);
         setBaseFeeCheck(null);
         return;
     }
@@ -166,7 +168,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
       case NETWORK_FEE_TYPE.EIP1559:
         if (gas?.lt(new BigNumber(21000))) {
           setState({ gasValid: false });
-          setGasCheck({ text: 'must 20999 above', color: red });
+          setGasCheck({ text: format(t('verification_gas_limit'), '21000'), color: red });
           return;
         } else {
           setState({ gasValid: true });
@@ -177,7 +179,7 @@ const useSetValidCheck = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) =>
       case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
         if (gas?.lt(new BigNumber(21000))) {
           setState({ gasValid: false });
-          setGasCheck({ text: 'must 20999 above', color: red });
+          setGasCheck({ text: format(t('verification_gas_limit'), '21000'), color: red });
           return;
         } else {
           setState({ gasValid: true });
