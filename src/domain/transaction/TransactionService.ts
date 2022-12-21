@@ -7,10 +7,17 @@ import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, NETWORK_FEE_TYPE, Network, COIN_DTO, NETWORK_ID } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
+import { RefreshTransactionResponseDto } from '@@generated/generated-scheme-clutch';
 import { BnToEtherBn, formatBigNumber } from '@@utils/formatBigNumber';
 import { request } from '@@utils/request';
 
-import { ITransactionService, IGetHistoryParams, ISendTransactionRequest, IRegisterTransactionRequest } from './TransactionService.type';
+import {
+  ITransactionService,
+  IGetHistoryParams,
+  ISendTransactionRequest,
+  IRegisterTransactionRequest,
+  IHistoryParams,
+} from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITezosData, ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 @injectable()
@@ -107,6 +114,18 @@ export class TransactionService implements ITransactionService {
     } catch (e) {
       return [];
     }
+  };
+
+  getSingleHistory = async (params: IHistoryParams) => {
+    const endpoint = `/v1/transactions?${qs.stringify(params)}`;
+    const res = await request.get<RefreshTransactionResponseDto>(endpoint);
+    return res.data;
+  };
+
+  refreshHistory = async (params: IHistoryParams) => {
+    const endpoint = `/v1/transactions/refresh?${qs.stringify(params)}`;
+    const res = await request.get<RefreshTransactionResponseDto>(endpoint);
+    return res.data;
   };
 
   registerHistory = async (params: IRegisterTransactionRequest) => {
