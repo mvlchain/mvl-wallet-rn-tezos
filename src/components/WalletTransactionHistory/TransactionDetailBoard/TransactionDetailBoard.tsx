@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { getDateFormat } from '@@utils/dateFormatter';
+import { dateFormatter } from '@@utils/dateFormatter';
 
 import * as S from './TransactionDetailBoard.style';
 import { ITransactionDetailBoardProps } from './TransactionDetailBoard.type';
@@ -24,7 +24,7 @@ function TransactionDetailBoard({ type, value, valueSign, ticker, price, settedC
       <S.TransactionDetailBoardContainer>
         <S.Row>
           <S.Label>{t('date')}</S.Label>
-          <S.Value>{getDateFormat(updatedAt, true)}</S.Value>
+          <S.Value>{dateFormatter(updatedAt)}</S.Value>
         </S.Row>
         <S.Row isMiddle={true}>
           <S.Label>{t('status')}</S.Label>
