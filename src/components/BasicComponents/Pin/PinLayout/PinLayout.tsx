@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 
 import { BackIconDark, BackIconLight } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
@@ -42,10 +43,10 @@ function PinLayout({ back }: IPinLayoutProps) {
         ) : (
           <S.PinLayoutAssistant />
         )}
-        <S.PinPasswordMonitorContainer isSetup={pinMode === PIN_MODE.SETUP}>
+        <S.PinPasswordMonitorContainer isConfirm={pinMode === PIN_MODE.CONFIRM}>
           <PinInstruction />
           <Blurs current={current} />
-          {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={reset} disabled={false} />}
+          <View>{pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={reset} disabled={false} />}</View>
         </S.PinPasswordMonitorContainer>
         <S.PinNumpadContainer>
           <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
