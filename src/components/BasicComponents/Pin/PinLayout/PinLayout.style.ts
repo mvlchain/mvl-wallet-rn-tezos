@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
-import { height, width } from '@@utils/ui';
+import { fontSize, height, width } from '@@utils/ui';
 
 import { IPinLayoutStyleProps, IPinPasswordMonitorStyleProps } from './PinLayout.type';
 
@@ -39,7 +39,11 @@ export const PinPasswordMonitorContainer = styled.View<IPinPasswordMonitorStyleP
   height: ${height * 168}px;
   padding: ${height * 24}px;
   padding-bottom: ${height * 24}px;
-  padding-top: ${({ isConfirm }) => (isConfirm ? `${height * 24}px` : `${height * 54}px`)};
+  padding-top: ${height * 24}px;
+`;
+
+export const TextButtonWrapper = styled.View`
+  height: ${fontSize(18)}px;
 `;
 
 export const PinNumpadContainer = styled.View`

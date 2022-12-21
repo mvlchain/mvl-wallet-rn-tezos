@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import FadeInOut from 'react-native-fade-in-out';
 
 import { BackIconDark, BackIconLight } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
@@ -19,7 +19,7 @@ import * as S from './PinLayout.style';
 import { IPinLayoutProps } from './PinLayout.type';
 
 function PinLayout({ back }: IPinLayoutProps) {
-  const { backSpace, bioAuth, setPassword, current, reset } = usePin();
+  const { backSpace, bioAuth, setPassword, current, reset, visible } = usePin();
   const { pinMode, layout } = pinStore();
   const { t } = useTranslation();
   const { settedBioAuth } = settingPersistStore();
@@ -43,11 +43,17 @@ function PinLayout({ back }: IPinLayoutProps) {
         ) : (
           <S.PinLayoutAssistant />
         )}
+
         <S.PinPasswordMonitorContainer isConfirm={pinMode === PIN_MODE.CONFIRM}>
           <PinInstruction />
           <Blurs current={current} />
-          <View>{pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={reset} disabled={false} />}</View>
+          <S.TextButtonWrapper>
+            <FadeInOut visible={visible} duration={400}>
+              {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={reset} disabled={false} />}
+            </FadeInOut>
+          </S.TextButtonWrapper>
         </S.PinPasswordMonitorContainer>
+
         <S.PinNumpadContainer>
           <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
         </S.PinNumpadContainer>
