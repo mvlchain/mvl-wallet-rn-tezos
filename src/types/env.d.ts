@@ -11,4 +11,6 @@ declare module '@env' {
   export const WEB3_AUTH_NETWORK: 'testnet' | 'mainnet';
   export const WEB3_AUTH_NATIVE_NETWORK: 'ropsten' | 'mainnet';
   export const WEB3_AUTH_LOGGING: string;
+  export const BASE_URL: string;
+  export const BASE_NETWORK: 'testnet' | 'mainnet';
 }

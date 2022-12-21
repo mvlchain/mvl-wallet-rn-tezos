@@ -6,16 +6,17 @@ import { useTranslation } from 'react-i18next';
 
 import useClaimWalletListModal from '@@components/BasicComponents/Modals/ClaimWalletListModal/useClaimWalletListModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { Network } from '@@constants/network.constant';
+import { NetworkId, networkIdToNetworkByBase } from '@@constants/network.constant';
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
 import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
-import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { extension, format } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
+
 import { IActionControlAttrs } from './EventActionControl.type';
 
 /**
@@ -39,7 +40,10 @@ export const useActionControlsByPhase = (
     rootNavigation.navigate('EARN_EVENT_TRNASFERRING', { address, eventId: event.id });
   };
 
-  const { wallet } = useClaimWalletListModal({ network: event.network as Network, onPressClaim });
+  const networkId = event.network as NetworkId;
+
+  const network = networkIdToNetworkByBase(networkId);
+  const { wallet } = useClaimWalletListModal({ network: network, onPressClaim });
   const openClaimWalletListModal = () => {
     openModal(MODAL_TYPES.CLAIM_WALLET_LIST, { menuList: wallet });
   };
@@ -221,5 +225,6 @@ export const useActionControlsByPhase = (
   function isSvg(file: string): boolean {
     return extension(file) === 'svg';
   }
+
   return actionControlAttrs;
 };

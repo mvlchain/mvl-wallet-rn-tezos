@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { IWalletListMenuProps } from '@@components/BasicComponents/Modals/WalletListModal/WalletListMenu/WalletListMenu.type';
-import { getNetworkConfig, getNetworkName, NETWORK, Network, SUPPORTED_NETWORKS } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase, NETWORK, Network, SUPPORTED_NETWORKS } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { useDi } from '@@hooks/useDi';
@@ -65,7 +65,7 @@ const useSettingPrivateKeyScreen = () => {
     SUPPORTED_NETWORKS.forEach((network) => {
       _networkList.push({
         id: network,
-        title: getNetworkConfig(getNetworkName(false, network)).name,
+        title: getNetworkConfig(getNetworkByBase(network)).name,
         isSelected: pkeySelectedNetwork === network,
         onPress: () => setPkeySelectedNetwork(network),
       });

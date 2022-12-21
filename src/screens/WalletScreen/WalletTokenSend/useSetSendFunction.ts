@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkName } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
 import { getTransactionType } from '@@domain/transaction/TransactionService.type';
 import { useDi } from '@@hooks/useDi';
@@ -32,7 +32,7 @@ const useSetSendFunction = () => {
   const { baseFee, tip, gas, total, resetState: resetGas } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkName(false, pickNetwork);
+  const selectedNetwork = getNetworkByBase(pickNetwork);
 
   const network = getNetworkConfig(selectedNetwork);
   const navigation = useNavigation<TTransactionResultRootStackProps>();

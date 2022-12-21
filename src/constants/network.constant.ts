@@ -1,3 +1,4 @@
+import appconfig from '@@config/appconfig';
 import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { valueOf } from '@@utils/types';
 
@@ -39,7 +40,7 @@ export type NetworkConfig = {
   coin: string;
 };
 
-export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
+const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
   [NETWORK.ETH]: {
     name: 'Ethereum Main Network',
     shortName: 'Ethereum',
@@ -104,25 +105,43 @@ export const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
 
 export const SUPPORTED_NETWORKS = [NETWORK.ETH, NETWORK.BSC, NETWORK.TEZOS];
 
-// TODO: inMainnet을 체크하는 부분 False로 하드코딩 되어있는 부분 수정 필요
-export const getNetworkName = (isMainnet: boolean, network: Network) => {
-  let networkName: Network = network;
+const baseNetwork = appconfig().baseNetwork;
+
+export const networkIdToNetworkByBase = (networkId: NetworkId): Network => {
+  let network: Network;
+  switch (networkId) {
+    case NETWORK_ID.ETHEREUM:
+      network = NETWORK.ETH;
+      break;
+    case NETWORK_ID.BSC:
+      network = NETWORK.BSC;
+      break;
+    case NETWORK_ID.XTZ:
+      network = NETWORK.TEZOS;
+      break;
+  }
+  return getNetworkByBase(network);
+};
+
+export const getNetworkByBase = (network: Network): Network => {
+  let networkByBase: Network = network;
+  const isMainnet = baseNetwork === 'mainnet';
   if (!isMainnet) {
     switch (network) {
       case NETWORK.ETH:
-        networkName = NETWORK.GOERLI;
+        networkByBase = NETWORK.GOERLI;
         break;
       case NETWORK.BSC:
-        networkName = NETWORK.BSC_TESTNET;
+        networkByBase = NETWORK.BSC_TESTNET;
         break;
       case NETWORK.TEZOS:
-        networkName = NETWORK.TEZOS_GHOSTNET;
+        networkByBase = NETWORK.TEZOS_GHOSTNET;
         break;
       default:
-        networkName = NETWORK.GOERLI;
+        networkByBase = NETWORK.GOERLI;
     }
   }
-  return networkName;
+  return networkByBase;
 };
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
