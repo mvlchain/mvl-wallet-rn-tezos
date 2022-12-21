@@ -35,11 +35,11 @@ export const PinLayoutAssistant = styled.View`
 export const PinPasswordMonitorContainer = styled.View<IPinPasswordMonitorStyleProps>`
   width: 100%;
   align-items: center;
-  justify-content: ${({ isSetup }) => (isSetup ? 'center' : 'space-between')};
+  justify-content: space-between;
   height: ${height * 168}px;
   padding: ${height * 24}px;
   padding-bottom: ${height * 24}px;
-  padding-top: ${height * 24}px;
+  padding-top: ${({ isConfirm }) => (isConfirm ? `${height * 24}px` : `${height * 54}px`)};
 `;
 
 export const PinNumpadContainer = styled.View`
