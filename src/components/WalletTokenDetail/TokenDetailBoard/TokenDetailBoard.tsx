@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
@@ -13,7 +13,7 @@ import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail
 import { TTokenReceiveRootStackProps } from '@@screens/WalletScreen/WalletTokenReceive/WalletTokenRecieve.type';
 import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { fontSize, width, height } from '@@utils/ui';
+import { fontSize, width } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';
 
@@ -51,10 +51,16 @@ function TokenDetailBoard() {
           onPress={gotoReceive}
           size={'small'}
           wrapperStyle={{ flex: 1 }}
-          textStyle={{ lineHeight: fontSize(14) }}
+          textStyle={Platform.OS === 'ios' && { lineHeight: fontSize(15) }}
         />
         <S.Gap />
-        <PrimaryButton label={t('send')} onPress={gotoSend} size={'small'} wrapperStyle={{ flex: 1 }} textStyle={{ lineHeight: fontSize(14) }} />
+        <PrimaryButton
+          label={t('send')}
+          onPress={gotoSend}
+          size={'small'}
+          wrapperStyle={{ flex: 1 }}
+          textStyle={Platform.OS === 'ios' && { lineHeight: fontSize(15) }}
+        />
       </S.ReceiveSendContainer>
     </View>
   );
