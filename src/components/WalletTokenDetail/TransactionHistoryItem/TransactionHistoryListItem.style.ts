@@ -39,7 +39,10 @@ export const TransactionHistoryContentInnerWrapper = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
-export const TransactionAmountWrapper = styled.View``;
+
+export const TransactionAmountWrapper = styled.View`
+  flex: 1;
+`;
 
 export const TransactionAmount = styled.Text<IAmountStyleProps>`
   ${({ theme }) => theme.font.Label.md};

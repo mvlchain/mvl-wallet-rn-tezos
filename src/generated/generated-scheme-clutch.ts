@@ -170,15 +170,32 @@ export interface components {
       logIndex: number;
       blockNumber: number;
     };
-    TransactionDetailDto: { [key: string]: unknown };
+    TransactionDetailDto: {
+      /** @enum {string} */
+      network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
+      /** @enum {string} */
+      status: 'PENDING' | 'SUCCESS' | 'FAIL';
+      /** @enum {string} */
+      type: 'SEND_ETH' | 'SEND_ERC20' | 'SEND_ERC721' | 'SEND_BEP20' | 'SEND_BEP20_BTCB' | 'SEND_BNB' | 'SEND_XTZ';
+      hash: string;
+      from: string;
+      to: string;
+      value: string;
+      fee: string;
+      data: string;
+      nonce: number;
+    };
     RefreshTransactionResponseDto: {
       hash: string;
-      network: { [key: string]: unknown };
-      status: { [key: string]: unknown };
+      /** @enum {string} */
+      network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
+      /** @enum {string} */
+      status: 'PENDING' | 'SUCCESS' | 'FAIL';
       from: string;
       to: string | null;
       value: string;
-      type: { [key: string]: unknown };
+      /** @enum {string} */
+      type: 'SEND_ETH' | 'SEND_ERC20' | 'SEND_ERC721' | 'SEND_BEP20' | 'SEND_BEP20_BTCB' | 'SEND_BNB' | 'SEND_XTZ';
       fee: string;
       data: string;
       nonce: number;
@@ -526,6 +543,8 @@ export interface operations {
   TransactionController_refreshTransaction: {
     parameters: {
       query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         hash: string;
       };
     };
@@ -540,6 +559,8 @@ export interface operations {
   TransactionController_refreshBulkTransaction: {
     parameters: {
       query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         hash: string;
       };
     };
@@ -554,6 +575,8 @@ export interface operations {
   TransactionV2Controller_refreshTransaction: {
     parameters: {
       query: {
+        /** Only BITCOIN, ETHEREUM, BSC, XTZ */
+        network: 'BITCOIN' | 'ETHEREUM' | 'BSC' | 'XTZ';
         hash: string;
       };
     };

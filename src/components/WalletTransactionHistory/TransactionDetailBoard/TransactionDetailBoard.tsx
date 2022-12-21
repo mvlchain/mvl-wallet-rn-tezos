@@ -1,39 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
-import { useDi } from '@@hooks/useDi';
-import useOneTokenPrice from '@@hooks/useOneTokenPrice';
-import { TTransactionHistoryRouteProps } from '@@screens/WalletScreen/WalletTransactionHistory/WalletTransactionHistory.type';
-import settingPersistStore from '@@store/setting/settingPersistStore';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { getDateFormat } from '@@utils/dateFormatter';
 
 import * as S from './TransactionDetailBoard.style';
+import { ITransactionDetailBoardProps } from './TransactionDetailBoard.type';
 
-function TransactionDetailBoard() {
-  const { params } = useRoute<TTransactionHistoryRouteProps>();
-  const { type, status, value, ticker, updatedAt, to, from } = params;
+function TransactionDetailBoard({ type, value, valueSign, ticker, price, settedCurrency, updatedAt, to, status }: ITransactionDetailBoardProps) {
   const { t } = useTranslation();
-  const walletService = useDi('WalletService');
-  const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
-  const selectedNetwork = getNetworkByBase(pickNetwork);
-  const { settedCurrency } = settingPersistStore();
-  const { price } = useOneTokenPrice(params.tokenDto, value);
-  const [valueSign, setValueSign] = useState('');
-  const network = getNetworkConfig(selectedNetwork);
-
-  const setSign = async () => {
-    const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
-    const valueSign = from === wallet.address ? '-' : '';
-    setValueSign(valueSign);
-  };
-  useEffect(() => {
-    setSign();
-  }, []);
 
   return (
     <>

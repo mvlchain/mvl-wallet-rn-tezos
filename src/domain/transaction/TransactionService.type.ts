@@ -3,8 +3,7 @@ import { BigNumberish, BytesLike } from 'ethers';
 
 import { NETWORK, Network, NetworkId, NETWORK_FEE_TYPE, NETWORK_ID } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
-//TODO: generatedscheme에 있는지 확인하기
+import { RefreshTransactionResponseDto, TokenDto } from '@@generated/generated-scheme-clutch';
 export enum TTransactionStatus {
   PENDING = 'PENDING',
   SUCCESS = 'SUCCESS',
@@ -65,6 +64,12 @@ export interface IGetHistoryParams {
   beforeindex?: number;
   limit?: number;
 }
+
+export interface IHistoryParams {
+  network: NetworkId;
+  hash: string;
+}
+
 export interface IGetTransactionHistoryResponse {
   type: TTransactionType;
   status: TTransactionStatus;
@@ -143,6 +148,8 @@ export interface ITransactionService {
     data,
   }: ISendTransactionRequest) => Promise<string | undefined>;
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
+  getSingleHistory: (params: IHistoryParams) => Promise<RefreshTransactionResponseDto>;
+  refreshHistory: (params: IHistoryParams) => Promise<RefreshTransactionResponseDto>;
   registerHistory: (params: IRegisterTransactionRequest) => Promise<IRegisterTransactionResponse>;
   getNonce: (selectedNetwork: Network, hash: string) => Promise<number | undefined>;
 }
