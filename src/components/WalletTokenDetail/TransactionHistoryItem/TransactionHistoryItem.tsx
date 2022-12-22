@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
@@ -19,7 +18,7 @@ import { TTransactionHistoryRootStackProps } from '@@screens/WalletScreen/Wallet
 import { TSpeedUpRootStackProps } from '@@screens/WalletScreen/WalletTransactionSpeedUp/WalletTransactionSpeedUp.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { getDateFormat } from '@@utils/dateFormatter';
+import { dateFormatter } from '@@utils/dateFormatter';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import * as S from './TransactionHistoryListItem.style';
@@ -41,6 +40,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const { settedCurrency } = settingPersistStore();
   const network = getNetworkConfig(selectedNetwork);
   const { price } = useOneTokenPrice(params.tokenDto, value);
+
   useRefreshTransactionQuery(
     { network: network.networkId, hash: refreshHash },
     {
@@ -90,7 +90,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
           <S.TransactionHistoryContentInnerWrapper>
             <S.TransactionStatusWrapper>
               <S.TransactionStatus>{displayStatus}</S.TransactionStatus>
-              <S.TransactionDate>{getDateFormat(updatedAt)}</S.TransactionDate>
+              <S.TransactionDate>{dateFormatter(updatedAt)}</S.TransactionDate>
             </S.TransactionStatusWrapper>
             <S.TransactionAmountWrapper>
               <S.TransactionAmount isCanceled={isCanceled}>

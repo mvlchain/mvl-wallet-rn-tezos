@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import Animated, { useAnimatedStyle, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
 import { WarningIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
@@ -32,6 +33,13 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, tog
   const { toValid, valueValid } = transactionRequestStore();
   const { baseFeeValid, tipValid, gasValid } = gasStore();
   const isValid = toValid && valueValid && baseFeeValid && tipValid && gasValid;
+
+  const opacityAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: withSequence(withTiming(0, { duration: 500 }), withSpring(1)),
+    };
+  }, [total]);
+
   return (
     <S.Container>
       <View>
@@ -55,9 +63,13 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, tog
           )}
           <S.MarginRow>
             <S.Label>{`${isRevision ? t('new') + ' ' : ''}${t('transaction_fee')}`}</S.Label>
-            <S.Value>{`${totalStr} ${coin}`}</S.Value>
+            <Animated.View style={[opacityAnimation]}>
+              <S.Value>{`${totalStr} ${coin}`}</S.Value>
+            </Animated.View>
           </S.MarginRow>
-          <S.BaseCurrency>{`${price} ${settedCurrency}`}</S.BaseCurrency>
+          <Animated.View style={[opacityAnimation]}>
+            <S.BaseCurrency>{`${price} ${settedCurrency}`}</S.BaseCurrency>
+          </Animated.View>
           {!total && (
             <S.Warning>
               <S.WarningIconWrapper>

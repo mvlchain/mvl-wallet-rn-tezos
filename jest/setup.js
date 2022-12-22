@@ -257,3 +257,10 @@ jest.mock('react-native-vision-camera', () => {
     Camera,
   };
 });
+
+jest.mock('react-native-localize', () => {
+  const getTimeZone = jest.fn();
+  return {
+    getTimeZone,
+  };
+});
