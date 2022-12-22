@@ -37,7 +37,7 @@ function GasFeeInputs({ enableTip, enableLimitCustom, baseFeeCheck, tipCheck, ga
     <S.Container>
       <S.Label>{isTezos ? t('base_fee') : t('gas_price')}</S.Label>
       <S.InputWrapper>
-        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} disabled={isTezos} hint={baseFeeCheck} />
+        <GasTextField value={baseFee} setValue={setBaseFee} unit={unit} hint={baseFeeCheck} />
       </S.InputWrapper>
       {enableTip && (
         <>
