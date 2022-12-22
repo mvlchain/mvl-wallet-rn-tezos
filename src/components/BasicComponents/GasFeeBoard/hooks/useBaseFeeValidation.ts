@@ -87,9 +87,23 @@ const useBaseFeeValidation = (tokenDto: TokenDto, blockBaseFee: BigNumber | null
         }
 
       case NETWORK_FEE_TYPE.TEZOS:
-        // check(true, GAS_CHECK_TYPE.BASEFEE, grey, 'can not change', false);
-        setBaseFeeCheck(null);
-        return;
+        if (!BigNumber.isBigNumber(blockBaseFee) || !BigNumber.isBigNumber(baseFee) || !BigNumber.isBigNumber(tip)) {
+          setState({ baseFeeValid: false });
+          setBaseFeeCheck({ text: textForm(remainBalanceStr), color: grey });
+          return;
+        } else if (baseFee.eq(0)) {
+          setState({ baseFeeValid: false });
+          setBaseFeeCheck({ text: t('warning_zero_input'), color: red });
+          return;
+        } else if (baseFee.lt(blockBaseFee)) {
+          setState({ baseFeeValid: true });
+          setBaseFeeCheck({ text: t('warning _lower_than_network'), color: red });
+          return;
+        } else {
+          setState({ tipValid: true });
+          setBaseFeeCheck({ text: textForm(formatBigNumber(remainBalance.minus(tip), tokenDto.decimals).toString(10)), color: grey });
+          return;
+        }
     }
   }, 100);
 
