@@ -74,7 +74,7 @@ function MainTab() {
           tabBarIcon: ({ size, focused }) => (focused ? <HomeSelected width={size} height={size} /> : <HomeNormal width={size} height={size} />),
         }}
       />
-      <Screen
+      {/* <Screen
         key={MAIN_TAB_ROUTE.BROWSER}
         name={MAIN_TAB_ROUTE.BROWSER}
         component={Browser}
@@ -82,7 +82,7 @@ function MainTab() {
           tabBarIcon: ({ size, focused }) =>
             focused ? <BrowserSelected width={size} height={size} /> : <BrowserNormal width={size} height={size} />,
         }}
-      />
+      /> */}
       <Screen
         key={MAIN_TAB_ROUTE.EVENT}
         name={MAIN_TAB_ROUTE.EVENT}
@@ -91,14 +91,14 @@ function MainTab() {
           tabBarIcon: ({ size, focused }) => (focused ? <EventSelected width={size} height={size} /> : <EventNormal width={size} height={size} />),
         }}
       />
-      <Screen
+      {/* <Screen
         key={MAIN_TAB_ROUTE.TRADE}
         name={MAIN_TAB_ROUTE.TRADE}
         component={Trade}
         options={{
           tabBarIcon: ({ size, focused }) => (focused ? <TradeSelected width={size} height={size} /> : <TradeNormal width={size} height={size} />),
         }}
-      />
+      /> */}
       <Screen
         key={MAIN_TAB_ROUTE.SETTING_MAIN}
         name={MAIN_TAB_ROUTE.SETTING_MAIN}
