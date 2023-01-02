@@ -293,7 +293,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
-    implementation 'org.torusresearch:customauth-android-sdk:2.1.0'
+    implementation 'org.torusresearch:customauth-android-sdk:5.0.1'
 
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "androidx.security:security-crypto:1.1.0-alpha03"
