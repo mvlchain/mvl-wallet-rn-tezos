@@ -5,18 +5,23 @@ import { fontSize, height, width } from '@@utils/ui';
 
 import { IPinLayoutStyleProps, IPinPasswordMonitorStyleProps } from './PinLayout.type';
 
-export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
+export const PinLayoutWrapper = styled.SafeAreaView<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: flex-end;
-  padding-top: ${({ isFull }) => (isFull ? `0px` : `${height * 60}px`)};
-  //TODO: 수정필요
-  background-color: gray;
+  margin-top: ${({ isFull }) => (isFull ? `0px` : `${height * 14}px`)};
+`;
+
+export const BackDrop = styled.View`
+  background-color: ${({ theme }) => theme.color.blackWhite};
+  opacity: 0.25;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 `;
 
 export const PinContainer = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: space-between;
-  padding-top: ${Platform.OS === 'android' ? 0 : `${height * 44}px`};
   border-top-left-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
   border-top-right-radius: ${({ isFull }) => (isFull ? 0 : `${width * 24}px`)};
   background-color: ${({ theme }) => theme.color.whiteBlack};

@@ -33,32 +33,35 @@ function PinLayout({ back }: IPinLayoutProps) {
   }, []);
 
   return (
-    <S.PinLayoutWrapper isFull={isFull}>
-      <S.PinContainer isFull={isFull}>
-        {isFull ? (
-          //TODO: back버튼 추가
-          <S.PinBackButtonHeaderWrapper onPress={back}>
-            <BackIcon />
-          </S.PinBackButtonHeaderWrapper>
-        ) : (
-          <S.PinLayoutAssistant />
-        )}
+    <>
+      <S.BackDrop />
+      <S.PinLayoutWrapper isFull={isFull}>
+        <S.PinContainer isFull={isFull}>
+          {isFull ? (
+            //TODO: back버튼 추가
+            <S.PinBackButtonHeaderWrapper onPress={back}>
+              <BackIcon />
+            </S.PinBackButtonHeaderWrapper>
+          ) : (
+            <S.PinLayoutAssistant />
+          )}
 
-        <S.PinPasswordMonitorContainer isConfirm={pinMode === PIN_MODE.CONFIRM}>
-          <PinInstruction />
-          <Blurs current={current} />
-          <S.TextButtonWrapper>
-            <FadeInOut visible={visible} duration={400}>
-              {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={reset} disabled={false} />}
-            </FadeInOut>
-          </S.TextButtonWrapper>
-        </S.PinPasswordMonitorContainer>
+          <S.PinPasswordMonitorContainer isConfirm={pinMode === PIN_MODE.CONFIRM}>
+            <PinInstruction />
+            <Blurs current={current} />
+            <S.TextButtonWrapper>
+              <FadeInOut visible={visible} duration={400}>
+                {pinMode === PIN_MODE.CONFIRM && <TextButton label={t('password_forgot_pin')} onPress={reset} disabled={false} />}
+              </FadeInOut>
+            </S.TextButtonWrapper>
+          </S.PinPasswordMonitorContainer>
 
-        <S.PinNumpadContainer>
-          <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
-        </S.PinNumpadContainer>
-      </S.PinContainer>
-    </S.PinLayoutWrapper>
+          <S.PinNumpadContainer>
+            <NumPads backSpace={backSpace} bioAuth={bioAuth} setPassword={setPassword} />
+          </S.PinNumpadContainer>
+        </S.PinContainer>
+      </S.PinLayoutWrapper>
+    </>
   );
 }
 
