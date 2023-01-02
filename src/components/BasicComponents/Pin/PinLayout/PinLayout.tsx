@@ -34,7 +34,7 @@ function PinLayout({ back }: IPinLayoutProps) {
 
   return (
     <>
-      <S.BackDrop />
+      <S.BackDrop onPress={back} />
       <S.PinLayoutWrapper isFull={isFull}>
         <S.PinContainer isFull={isFull}>
           {isFull ? (
