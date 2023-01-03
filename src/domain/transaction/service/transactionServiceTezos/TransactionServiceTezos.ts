@@ -61,3 +61,31 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
 //     fee: Number(this.selectedGasFeeInfo.gasPrice),
 //   })
 //   .then((op) => op.confirmation(1).then(() => op.hash));
+// it('send fa2 token', async () => {
+//   return;
+//   jest.setTimeout(50000);
+
+//   const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
+//   Tezos.addExtension(new Tzip12Module());
+//   const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(MNEMONIC, '', true);
+//   expect(mnemonicToSeed.length).toBe(64);
+//   const keyPair = tezosCrypto.hd.keyPairFromAccountIndex(mnemonicToSeed, 0);
+//   const tzAddress0 = keyPair.pkh;
+//   await importKey(Tezos, keyPair.sk);
+
+//   const fa2TokenContractAddress = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'; // QUIPU
+//   const fa2TokenContract = await Tezos.wallet.at(fa2TokenContractAddress, tzip12);
+//   console.log('before transfer');
+//   const metadata = await fa2TokenContract.tzip12().getTokenMetadata(0);
+//   console.log(`metadata`, metadata);
+//   const tokenId = metadata.token_id;
+//   const decimals = metadata.decimals;
+//   const tokenAmount = '1';
+//   const pennyAmount = new Decimal(tokenAmount).mul(Decimal.pow(10, decimals)).toFixed();
+//   const op = await fa2TokenContract.methods
+//     .transfer([{ from_: tzAddress0, txs: [{ to_: tzDestAddress, token_id: tokenId, amount: pennyAmount }] }])
+//     .send();
+//   console.log('op send finished');
+//   await op.confirmation();
+//   console.log(op.opHash);
+// });
