@@ -43,7 +43,8 @@ export function ModalLayout({
       avoidKeyboard={true}
     >
       <DismissKeyboardView>
-        <S.ModalBackDrop modalPosition={modalPosition}>
+        <S.ModalContentWrapper modalPosition={modalPosition}>
+          <S.ModalBackDrop onPress={closeModal} />
           <S.ModalContainer modalPosition={modalPosition} maxHeight={maxHeight}>
             <S.ModalTopWrapper>
               <S.ModalTitle>{title}</S.ModalTitle>
@@ -72,7 +73,7 @@ export function ModalLayout({
               </S.ButtonWrapper>
             )}
           </S.ModalContainer>
-        </S.ModalBackDrop>
+        </S.ModalContentWrapper>
       </DismissKeyboardView>
     </Modal>
   );
