@@ -1,11 +1,12 @@
 import { compose, TezosToolkit } from '@taquito/taquito';
-import { tzip12 } from '@taquito/tzip12';
+import { tzip12, Tzip12Module } from '@taquito/tzip12';
 import { tzip16 } from '@taquito/tzip16';
 // @ts-ignore
 import * as tezosCrypto from '@tezos-core-tools/crypto-utils';
 import BigNumber from 'bignumber.js';
 import { injectable } from 'tsyringe';
 
+import { faType } from '@@utils/faType';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
@@ -28,7 +29,7 @@ export class TezosRepository implements Type.IBlockChainRepository {
   getContractBalance = loadingFunction<string>(async ({ contractAddress, address, rpcUrl, standardType, decimals }: Type.IGetTokenBalance) => {
     try {
       // api나오기 전 임시 작업
-      if (standardType === 'fa1.2') {
+      if (faType(contractAddress) === 'fa12') {
         return this._getFa1_2Balance({ contractAddress, address, rpcUrl, decimals });
       } else {
         // fa2
@@ -38,6 +39,19 @@ export class TezosRepository implements Type.IBlockChainRepository {
       throw new Error(`Error:  ${e}`);
     }
   });
+
+  getTokenMetadata = async (rpcUrl: string, contractAddress: string) => {
+    const Tezos = new TezosToolkit(rpcUrl);
+    Tezos.addExtension(new Tzip12Module());
+    const fa1_2TokenContract = await Tezos.wallet.at(contractAddress, tzip12);
+    const { name, decimals, symbol } = await fa1_2TokenContract.tzip12().getTokenMetadata(0);
+    const metadata = {
+      name,
+      decimals,
+      symbol,
+    };
+    return metadata;
+  };
 
   _getFa1_2Balance = async ({ contractAddress, address, rpcUrl, decimals = 6 }: Type.IGetTokenBalance) => {
     const Tezos = new TezosToolkit(rpcUrl);
