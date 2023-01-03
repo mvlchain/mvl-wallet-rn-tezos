@@ -1,16 +1,17 @@
 import { Network } from '@@constants/network.constant';
 
 export interface ITokenPersist extends ITokenPersistState {
-  setToken: (network: Network, tokenDto: TokenDTO) => void;
+  // TODO: addPriceId, addLogoURI
+  setToken: (network: Network, tokenDto: TokenDto) => void;
 }
 
 export interface ITokenPersistState {
   tokenList: {
-    [network: string]: TokenDTO[];
+    [network: string]: TokenDto[];
   };
 }
 
-export interface TokenDTO {
+export interface TokenDto {
   symbol: string;
   name: string;
   decimals: number;

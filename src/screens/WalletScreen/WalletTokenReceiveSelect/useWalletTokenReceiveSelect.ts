@@ -8,11 +8,12 @@ import { Share } from 'react-native';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { useReceiveQRModal } from '@@components/BasicComponents/Modals/ReceiveQRModal/useReceiveQRModal';
 import { getNetworkConfig } from '@@constants/network.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useTokenQuery from '@@hooks/queries/useTokenQuery';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 

@@ -13,7 +13,7 @@ import {
   BSC_TESTNET_TOKEN_LIST,
   TEZOS_GHOSTNET_TOKEN_LIST,
 } from './tokenPersistStore.constant';
-import { ITokenPersist, ITokenPersistState, TokenDTO } from './tokenPersistStore.type';
+import { ITokenPersist, ITokenPersistState, TokenDto } from './tokenPersistStore.type';
 
 const initState: ITokenPersistState = {
   tokenList: {
@@ -31,7 +31,7 @@ const tokenPersistStore = create(
     persist<ITokenPersist>(
       (set) => ({
         ...initState,
-        setToken: (network: Network, tokenDto: TokenDTO) =>
+        setToken: (network: Network, tokenDto: TokenDto) =>
           set((state) => {
             const uniqueTokenList = new Set([...state.tokenList[network]]);
             uniqueTokenList.add(tokenDto);

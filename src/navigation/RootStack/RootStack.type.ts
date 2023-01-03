@@ -4,7 +4,8 @@ import { Network } from '@@constants/network.constant';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+// import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
