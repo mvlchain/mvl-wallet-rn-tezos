@@ -36,7 +36,7 @@ function PinLayout({ back }: IPinLayoutProps) {
 
   return (
     <>
-      <S.BackDrop onPress={back} />
+      <S.BackDrop onPress={back} isFull={isFull} />
       <S.PinLayoutWrapper isFull={isFull}>
         {isFull ? null : <StatusBar backgroundColor={color.opacityBlackWhite} />}
         <S.PinContainer isFull={isFull}>
