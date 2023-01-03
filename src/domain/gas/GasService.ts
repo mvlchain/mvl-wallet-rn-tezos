@@ -98,8 +98,10 @@ export class GasService implements IGasService {
             throw new Error('fail to estimate');
           }
           return {
-            baseFee: new BigNumber(estimationTezos.totalCost),
-            gasUsage: new BigNumber(estimationTezos.gasLimit),
+            baseFee: new BigNumber(estimationTezos.minimalFeeMutez),
+            storageFee: new BigNumber(estimationTezos.burnFeeMutez), //새로운 토큰 처음 보낼 때만 쓰임, 고정값
+            storageLimit: new BigNumber(estimationTezos.storageLimit),
+            gasUsage: new BigNumber(estimationTezos.gasLimit), //사실상 사용안함
           };
         case NETWORK_FEE_TYPE.EIP1559:
           const estimationEip1559 = await this.gasRepository.estimateGas(
