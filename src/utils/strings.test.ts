@@ -1,5 +1,3 @@
-import { exp } from 'react-native-reanimated';
-
 import { format, extension } from './strings';
 
 it('format string', () => {

@@ -13,6 +13,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		3332C4B2296E63ED00EF7B5C /* InpageBridgeWeb3.js in Resources */ = {isa = PBXBuildFile; fileRef = 3332C4B1296E63ED00EF7B5C /* InpageBridgeWeb3.js */; };
 		33906B53293F2A05009CDA3D /* Wallet.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 33906B4E293F2A05009CDA3D /* Wallet.debug.xcconfig */; };
 		33906B54293F2A05009CDA3D /* Wallet.staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 33906B4F293F2A05009CDA3D /* Wallet.staging.xcconfig */; };
 		33906B55293F2A05009CDA3D /* Wallet.common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 33906B50293F2A05009CDA3D /* Wallet.common.xcconfig */; };
@@ -66,6 +67,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Wallet/main.m; sourceTree = "<group>"; };
 		18DACA10B38FA5681CA4A927 /* Pods_Wallet_WalletTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wallet_WalletTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A8500FE7336A96128A78E88 /* Pods-Wallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wallet.release.xcconfig"; path = "Target Support Files/Pods-Wallet/Pods-Wallet.release.xcconfig"; sourceTree = "<group>"; };
+		3332C4B1296E63ED00EF7B5C /* InpageBridgeWeb3.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = InpageBridgeWeb3.js; path = ../src/assets/js/InpageBridgeWeb3.js; sourceTree = "<group>"; };
 		335E7C3A28B3713D001A43E1 /* Wallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Wallet.entitlements; path = Wallet/Wallet.entitlements; sourceTree = "<group>"; };
 		33906B4E293F2A05009CDA3D /* Wallet.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Wallet.debug.xcconfig; path = XCConfig/Wallet/Wallet.debug.xcconfig; sourceTree = "<group>"; };
 		33906B4F293F2A05009CDA3D /* Wallet.staging.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Wallet.staging.xcconfig; path = XCConfig/Wallet/Wallet.staging.xcconfig; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		13B07FAE1A68108700A75B9A /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				3332C4B1296E63ED00EF7B5C /* InpageBridgeWeb3.js */,
 				33906B4C293F29EF009CDA3D /* XCConfig */,
 				335E7C3A28B3713D001A43E1 /* Wallet.entitlements */,
 				479E0C5929236DDD0078C3FF /* Resources */,
@@ -394,6 +397,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3332C4B2296E63ED00EF7B5C /* InpageBridgeWeb3.js in Resources */,
 				33906B55293F2A05009CDA3D /* Wallet.common.xcconfig in Resources */,
 				47D7C2CE296E7AC90088339A /* GoogleService-Info-dev.plist in Resources */,
 				08410C4E294714FE0076E11C /* GoogleService-Info-prod.plist in Resources */,

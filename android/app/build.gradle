@@ -152,6 +152,7 @@ android {
         versionCode 38
         versionName "1.2.6"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        multiDexEnabled true
         
         manifestPlaceholders = [
             'torusRedirectScheme': 'clutchwallet',
