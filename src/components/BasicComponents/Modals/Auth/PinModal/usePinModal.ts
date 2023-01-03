@@ -27,7 +27,6 @@ const usePinModal = () => {
 
   useEffect(() => {
     if (step !== PIN_STEP.FINISH) return;
-    close(AUTH_MODAL_NAME.PIN);
   }, [step]);
 
   return {

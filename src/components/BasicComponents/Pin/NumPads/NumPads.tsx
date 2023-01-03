@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { NUMPAD, PIN_MODE } from '@@constants/pin.constant';
+import { NUMPAD, PIN_MODE, PIN_STEP } from '@@constants/pin.constant';
 import { pinStore } from '@@store/pin/pinStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
@@ -12,12 +12,18 @@ import * as S from './Numpads.style';
 function NumPads({ backSpace, bioAuth, setPassword }: INumPadsProps) {
   const { pinMode, step } = pinStore();
   const { settedBioAuth } = settingPersistStore();
+  const [numpads, setNumpads] = useState<{ rows: string[][]; leftOver: string }>({ rows: [[], [], []], leftOver: '' });
   const showBio = pinMode === PIN_MODE.CONFIRM && settedBioAuth;
 
-  const numpads = useMemo(() => {
-    const numpads = Array.from({ length: 10 }, (v, i) => i.toString()).sort(() => Math.random() - 0.5);
-    const randomNum = numpads.pop();
-    return { rows: [numpads.slice(0, 3), numpads.slice(3, 6), numpads.slice(6)], leftOver: randomNum };
+  const generateNums = () => {
+    const randomNums = Array.from({ length: 10 }, (v, i) => i.toString()).sort(() => Math.random() - 0.5);
+    const randomNum = randomNums.pop();
+    setNumpads({ rows: [randomNums.slice(0, 3), randomNums.slice(3, 6), randomNums.slice(6)], leftOver: randomNum! });
+  };
+
+  useEffect(() => {
+    if (step === PIN_STEP.FINISH) return;
+    generateNums();
   }, [step]);
 
   return (
