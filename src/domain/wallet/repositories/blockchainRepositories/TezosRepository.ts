@@ -42,6 +42,7 @@ export class TezosRepository implements Type.IBlockChainRepository {
     const Tezos = new TezosToolkit(rpcUrl);
     Tezos.addExtension(new Tzip12Module());
     const contract = await Tezos.wallet.at(contractAddress, tzip12);
+    // TODO: tzip12는 fa2.0의 metadata만 가져올 수 있음.
     const { name, decimals, symbol } = await contract.tzip12().getTokenMetadata(0);
     const metadata = {
       name,
