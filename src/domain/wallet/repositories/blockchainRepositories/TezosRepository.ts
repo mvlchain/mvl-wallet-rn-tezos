@@ -1,8 +1,6 @@
 import { compose, TezosToolkit } from '@taquito/taquito';
 import { tzip12, Tzip12Module } from '@taquito/tzip12';
 import { tzip16 } from '@taquito/tzip16';
-// @ts-ignore
-import * as tezosCrypto from '@tezos-core-tools/crypto-utils';
 import BigNumber from 'bignumber.js';
 import { injectable } from 'tsyringe';
 
@@ -43,8 +41,8 @@ export class TezosRepository implements Type.IBlockChainRepository {
   getTokenMetadata = async (rpcUrl: string, contractAddress: string) => {
     const Tezos = new TezosToolkit(rpcUrl);
     Tezos.addExtension(new Tzip12Module());
-    const fa1_2TokenContract = await Tezos.wallet.at(contractAddress, tzip12);
-    const { name, decimals, symbol } = await fa1_2TokenContract.tzip12().getTokenMetadata(0);
+    const contract = await Tezos.wallet.at(contractAddress, tzip12);
+    const { name, decimals, symbol } = await contract.tzip12().getTokenMetadata(0);
     const metadata = {
       name,
       decimals,
