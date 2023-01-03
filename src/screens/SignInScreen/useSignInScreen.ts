@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
+import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AuthProvider } from '@@domain/auth/IAuthService';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { authModalStore } from '@@store/auth/authModalStore';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
 
@@ -14,6 +16,7 @@ const useSignInScreen = () => {
   const keyClient = useDi('KeyClient');
   const { pKey, setPKey } = authStore();
   const { stage } = authPersistStore();
+  const { close } = authModalStore();
 
   const auth = useDi('AuthService');
   const legacyAuthMigrationService = useDi('LegacyAuthMigrationService');
@@ -66,6 +69,12 @@ const useSignInScreen = () => {
       }
     }
   }, [pKey]);
+
+  useEffect(() => {
+    return () => {
+      close(AUTH_MODAL_NAME.PIN);
+    };
+  }, []);
 
   return {
     signIn,

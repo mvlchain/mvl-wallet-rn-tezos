@@ -10,6 +10,8 @@ export const mono = {
   grey800: '#333333',
   grey900: '#1A1A1A',
   black: '#000000',
+  opacityWhite: 'rgba(255,255,255,0.25)',
+  opacityBlack: 'rgba(0,0,0,0.25)',
 } as const;
 
 export const primary = {
@@ -30,11 +32,12 @@ export const solid = {
 
 const transparent = 'transparent';
 
-const { white, grey100, grey200, grey300, grey400, grey500, grey600, grey700, grey800, grey900, black } = mono;
+const { white, grey100, grey200, grey300, grey400, grey500, grey600, grey700, grey800, grey900, black, opacityWhite, opacityBlack } = mono;
 export const colorCombine = {
   whiteGrey300: [white, grey300],
   whiteGrey800: [white, grey800],
   whiteBlack: [white, black],
+  opacityBlackWhite: [opacityBlack, opacityWhite],
 
   grey100Transparent: [grey100, transparent],
   grey100Grey900: [grey100, grey900],
