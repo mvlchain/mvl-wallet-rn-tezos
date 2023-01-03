@@ -50,10 +50,16 @@ export const ModalContainer = styled.View<Type.IModalTypeProps & { maxHeight?: s
   padding-bottom: ${({ modalPosition }) => (modalPosition === Type.Center ? '0' : `${width * 34}px`)};
 `;
 
-export const ModalBackDrop = styled.View<Type.IModalTypeProps>`
+export const ModalContentWrapper = styled.View<Type.IModalTypeProps>`
   flex: 1;
   justify-content: ${({ modalPosition }) => (modalPosition === Type.Center ? 'center' : 'flex-end')};
   margin: 0;
+`;
+
+export const ModalBackDrop = styled.Pressable`
+  position: absolute;
+  width: 100%;
+  height: 100%;
 `;
 
 export const inlineStyles = (modalPosition: Type.TModalPosition) =>

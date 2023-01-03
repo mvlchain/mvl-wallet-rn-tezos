@@ -11,8 +11,8 @@ export const PinLayoutWrapper = styled.SafeAreaView<IPinLayoutStyleProps>`
   margin-top: ${({ isFull }) => (isFull ? `0px` : `${height * 14}px`)};
 `;
 
-export const BackDrop = styled.Pressable`
-  background-color: ${({ theme }) => theme.color.blackWhite};
+export const BackDrop = styled.Pressable<IPinLayoutStyleProps>`
+  background-color: ${({ theme, isFull }) => (isFull ? 'transaparent' : theme.color.blackWhite)};
   opacity: 0.25;
   position: absolute;
   width: 100%;
