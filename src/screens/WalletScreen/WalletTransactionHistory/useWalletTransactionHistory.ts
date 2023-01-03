@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useRoute } from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
 
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import { TTransactionStatus } from '@@domain/transaction/TransactionService.type';
@@ -48,13 +49,16 @@ export const useWalletTransactionHistory = () => {
     setSign();
   }, []);
 
+  const formattedValue = new BigNumber(value).shiftedBy(-params.tokenDto.decimals).toString(10);
+  const formattedDisplayFee = new BigNumber(displayFee).shiftedBy(-params.tokenDto.decimals).toString(10);
+
   return {
     price,
-    fee: displayFee,
+    fee: formattedDisplayFee,
     settedCurrency,
     type,
     valueSign,
-    value,
+    value: formattedValue,
     ticker,
     updatedAt,
     status: displayStatus,
