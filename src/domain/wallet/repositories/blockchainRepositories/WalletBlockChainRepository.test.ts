@@ -3,7 +3,8 @@ import { container, instanceCachingFactory } from 'tsyringe';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig } from '@@constants/network.constant';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+// import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import { ETH_TOKENLIST, BSC_TOKENLIST, TestData } from '../TestData';
 

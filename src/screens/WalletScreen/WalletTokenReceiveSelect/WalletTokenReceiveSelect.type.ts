@@ -1,10 +1,11 @@
 import { ListRenderItemInfo } from '@shopify/flash-list';
 
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+// import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export interface ITokenReceiveListItem {
   title: string;
-  logoURI: string;
+  logoURI: string | undefined;
 }
 
 export interface IRenderItem {
