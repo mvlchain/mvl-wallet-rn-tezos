@@ -1,5 +1,8 @@
 import 'react-native-gesture-handler/jestSetup';
 import 'reflect-metadata';
+import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
+import mockRNLocalize from 'react-native-localize/mock';
+
 import mockLegacyAuthManager from '../__mocks__/@@store/LegacyAuthManager';
 import mockSecureKeychain from '../__mocks__/@@utils/SecureKeychain';
 
@@ -258,9 +261,8 @@ jest.mock('react-native-vision-camera', () => {
   };
 });
 
-jest.mock('react-native-localize', () => {
-  const getTimeZone = jest.fn();
-  return {
-    getTimeZone,
-  };
-});
+jest.mock('react-native-localize', () => mockRNLocalize);
+
+jest.mock('react-native-device-info', () => mockRNDeviceInfo);
+
+jest.mock('react-native-fs', () => {});
