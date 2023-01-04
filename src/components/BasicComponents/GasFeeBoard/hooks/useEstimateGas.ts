@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import { BytesLike } from 'ethers';
 
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
-// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
 import useInterval from '@@hooks/useInterval';

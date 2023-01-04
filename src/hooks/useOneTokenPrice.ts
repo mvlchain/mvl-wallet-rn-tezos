@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
 import { formatEther } from 'ethers/lib/utils';
 
-// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 

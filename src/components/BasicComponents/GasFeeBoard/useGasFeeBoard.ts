@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import useBaseFeeValidation from './hooks/useBaseFeeValidation';

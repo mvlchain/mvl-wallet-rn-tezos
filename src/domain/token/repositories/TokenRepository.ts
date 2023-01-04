@@ -1,7 +1,6 @@
 import { injectable } from 'tsyringe';
 
 import { NetworkId } from '@@constants/network.constant';
-// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { request } from '@@utils/request';
 
