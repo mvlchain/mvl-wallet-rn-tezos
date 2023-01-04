@@ -17,3 +17,9 @@ export const MenuText = styled.Text`
   ${({ theme }) => theme.font.Label.md};
   color: ${({ theme }) => theme.color.blackWhite};
 `;
+
+export const IconWrapper = styled.View`
+  width: ${width * 36}px;
+  height: ${width * 36}px;
+  margin-right: ${width * 16}px;
+`;
