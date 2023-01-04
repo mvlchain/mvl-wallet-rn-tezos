@@ -136,8 +136,17 @@ export interface IRegisterTransactionResponse {
   ticker: string;
 }
 
+export interface IGetTransferData {
+  selectedNetwork: Network;
+  selectedWalletIndex: number;
+  to: string;
+  value: BigNumber;
+  contractAddress?: string;
+  decimals?: number;
+}
+
 export interface ITransactionService {
-  getTransferData: (network: Network, selectedWalletIndex: number, to: string, value: BigNumber) => Promise<BytesLike | undefined>;
+  getTransferData: (params: IGetTransferData) => Promise<BytesLike | undefined>;
   sendTransaction: ({
     selectedNetwork,
     selectedWalletIndex,

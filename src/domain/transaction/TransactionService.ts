@@ -1,3 +1,4 @@
+import { TransferParams } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 import { BigNumber as BigNumberEther, ethers } from 'ethers';
 import qs from 'qs';
@@ -17,9 +18,10 @@ import {
   ISendTransactionRequest,
   IRegisterTransactionRequest,
   IHistoryParams,
+  IGetTransferData,
 } from './TransactionService.type';
 import { ITransactionServiceEthers } from './service/transactionServiceEthers/TransactionServiceEthers.type';
-import { ITezosData, ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
+import { ITransactionServiceTezos } from './service/transactionServiceTezos/TransactionServiceTezos.type';
 @injectable()
 export class TransactionService implements ITransactionService {
   constructor(
@@ -28,19 +30,18 @@ export class TransactionService implements ITransactionService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
-  getTransferData = async (selectedNetwork: Network, selectedWalletIndex: number, to: string, value: BigNumber) => {
+  getTransferData = async ({ selectedNetwork, selectedWalletIndex, to, value, contractAddress, decimals }: IGetTransferData) => {
     try {
       const network = getNetworkConfig(selectedNetwork);
       const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
 
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          const data: ITezosData = {
-            from: wallet.address,
-            to,
-            value: formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
-          };
-          return JSON.stringify(data);
+          if (!contractAddress || !decimals) {
+            throw new Error('contractAddress and decimals is required in tezos');
+          }
+          const amount = value.toNumber();
+          return this.tezosService.getTransferData(selectedNetwork, wallet.privateKey, wallet.address, to, amount, contractAddress);
         case NETWORK_FEE_TYPE.EIP1559:
           return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value.toString(10)]);
 
@@ -59,18 +60,20 @@ export class TransactionService implements ITransactionService {
 
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          if (!gasFeeInfo.tip || !gasFeeInfo.total || !value || !to) {
-            throw new Error('tip,value,to is required');
+          if (!gasFeeInfo.tip || !gasFeeInfo.total) {
+            throw new Error('gasFeeInfo is required');
           }
           if (data) {
             //fee unit mutez, amount unit tez, so only amount use formatBigNumber
-            return await this.tezosService.sendContractTransaction(selectedNetwork, wallet.privateKey, {
-              to,
+            const transferParams: TransferParams = JSON.parse(data as string);
+            return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, {
+              ...transferParams,
               fee: gasFeeInfo.total.toNumber(),
-              amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
-              data: data as string,
             });
           } else {
+            if (!value || !to) {
+              throw new Error('value,to is required');
+            }
             return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, {
               to,
               fee: gasFeeInfo.total.toNumber(),
