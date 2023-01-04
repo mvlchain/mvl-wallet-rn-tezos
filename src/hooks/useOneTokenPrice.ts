@@ -4,8 +4,8 @@ import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
 import { formatEther } from 'ethers/lib/utils';
 
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 import settingPersistStore from '@@store/setting/settingPersistStore';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import usePriceQuery from './queries/usePriceQuery';
 
@@ -15,6 +15,7 @@ const useOneTokenPrice = (tokenDto: TokenDto, amount: string) => {
   const { data } = usePriceQuery(
     { ids: tokenDto.priceId, vsCurrencies: settedCurrency },
     {
+      enabled: !!tokenDto.priceId,
       keepPreviousData: true,
     }
   );

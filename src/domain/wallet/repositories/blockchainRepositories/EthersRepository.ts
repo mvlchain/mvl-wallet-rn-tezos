@@ -34,4 +34,19 @@ export class EthersRepository implements Type.IBlockChainRepository {
       throw new Error(`Error:  ${e}`);
     }
   });
+
+  getTokenMetadata = async (rpcUrl: string, contractAddress: string, abi?: string) => {
+    if (!abi) return;
+    const provider = this.evmJsonRpcProviderHolder.getProvider(rpcUrl);
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const name = await contract.name();
+    const symbol = await contract.symbol();
+    const decimals = await contract.decimals();
+    const metaData = {
+      name,
+      symbol,
+      decimals: decimals.toString(),
+    };
+    return metaData;
+  };
 }

@@ -4,7 +4,7 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import { Network, NETWORK } from '@@constants/network.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import * as Type from './walletPersistStore.type';
 

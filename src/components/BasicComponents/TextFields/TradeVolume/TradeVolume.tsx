@@ -111,7 +111,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper>
-          <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />
+          {tokenDto.logoURI && <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />}
           <S.Token>{tokenDto.symbol}</S.Token>
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>

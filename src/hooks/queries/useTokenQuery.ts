@@ -1,8 +1,8 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { NetworkId } from '@@constants/network.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export default function useTokenQuery(network: NetworkId, options: UseQueryOptions<TokenDto[], unknown, TokenDto[]> = {}) {
   const TokenRepository = useDi('TokenRepository');

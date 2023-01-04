@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID } from '@@constants/network.constant';
 import { IBlockChainRepository } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import { IBalance } from './WalletBlockChainService.type';
 import { WalletService } from './WalletService';

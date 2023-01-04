@@ -30,7 +30,7 @@ function WalletTokenReceive() {
     <S.Container>
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
-          <SvgUri uri={params.tokenDto.logoURI} width={`${width * 38}`} height={`${width * 38}`} />
+          {params.tokenDto.logoURI && <SvgUri uri={params.tokenDto.logoURI} width={`${width * 38}`} height={`${width * 38}`} />}
           <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>

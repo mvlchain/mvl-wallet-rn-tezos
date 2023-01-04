@@ -35,7 +35,7 @@ function TokenDetailBoard() {
     <View>
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
-          <SvgUri uri={params.tokenDto.logoURI} width={`${width * 32}`} height={`${width * 32}`} />
+          {params.tokenDto.logoURI && <SvgUri uri={params.tokenDto.logoURI} width={`${width * 32}`} height={`${width * 32}`} />}
           <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>
