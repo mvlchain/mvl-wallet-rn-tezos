@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
-import useBottomSelectModal from '@@components/BasicComponents/Modals/BottomSelectModal/useBottomSelectModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkByBase } from '@@constants/network.constant';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -44,6 +43,7 @@ export const useTradeScreen = () => {
         id: token.symbol,
         title: token.symbol,
         isSelected: token.symbol === selectedToken.from,
+        logo: token.logoURI,
         onPress: () => {
           onPressSelectToken(token.symbol, 'from');
         },
@@ -57,6 +57,7 @@ export const useTradeScreen = () => {
         id: token.symbol,
         title: token.symbol,
         isSelected: token.symbol === selectedToken.to,
+        logo: token.logoURI,
         onPress: () => {
           onPressSelectToken(token.symbol, 'to');
         },
