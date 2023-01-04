@@ -39,5 +39,7 @@
     "valarray": "cpp",
     "vector": "cpp",
     "*.ipp": "cpp"
-  }
+  },
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true
 }

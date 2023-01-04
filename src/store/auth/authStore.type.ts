@@ -12,6 +12,7 @@ export interface IAuth extends IAuthState {
 
 export interface IAuthState {
   pKey: string | null;
+  isSignedIn: boolean;
   mnemonic: string | null;
   mnemonicList: TMnemonic[];
   focusedIndex: number;
