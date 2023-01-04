@@ -33,7 +33,7 @@ function ConfirmSendModal({ onConfirm, tokenDto }: IConfirmSendModalProps) {
   const { total } = gasStore();
   const { value, to } = transactionRequestStore();
 
-  const totalStr = formatBigNumber(total!, tokenDto.decimals).toString(10);
+  const totalStr = formatBigNumber(total!, COIN_DTO[network.coin].decimals).toString(10);
   const amountStr = formatBigNumber(value!, tokenDto.decimals).toString(10);
   const { price: tokenPrice } = useOneTokenPrice(tokenDto, amountStr);
   const { price: coinPrice } = useOneTokenPrice(COIN_DTO[network.coin], totalStr);
