@@ -86,4 +86,28 @@ export const TEZOS_GHOSTNET_TOKEN_LIST = [
     priceId: 'tezos',
     symbol: 'XTZ',
   },
+  {
+    contractAddress: 'KT1Wdq6sj3ZkNqQ7CeE6kTNbJXfobMX7Eqpz',
+    decimals: 8,
+    logoURI: undefined,
+    name: 'Test tzBTC',
+    priceId: 'tzbtc',
+    symbol: 'tzBTC',
+  },
+  {
+    contractAddress: 'KT1GG8Zd5rUp1XV8nMPRBY2tSyVn6NR5F4Q1',
+    decimals: 6,
+    logoURI: undefined,
+    name: 'Test Kolibri USD',
+    priceId: 'kolibri-usd',
+    symbol: 'kUSD',
+  },
+  {
+    contractAddress: 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c',
+    decimals: 6,
+    logoURI: undefined,
+    name: 'Quipuswap Governance Token',
+    priceId: 'quipuswap-governance-token',
+    symbol: 'QUIPU',
+  },
 ];
