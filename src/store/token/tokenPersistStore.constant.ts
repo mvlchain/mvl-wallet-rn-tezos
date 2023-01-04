@@ -96,7 +96,7 @@ export const TEZOS_GHOSTNET_TOKEN_LIST = [
   },
   {
     contractAddress: 'KT1GG8Zd5rUp1XV8nMPRBY2tSyVn6NR5F4Q1',
-    decimals: 6,
+    decimals: 18,
     logoURI: undefined,
     name: 'Test Kolibri USD',
     priceId: 'kolibri-usd',
