@@ -28,7 +28,7 @@ import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
 import { EarnEventListScreen } from '@@screens/EarnEventScreen';
 import SettingScreen from '@@screens/SettingScreen';
-import Trade from '@@screens/Trade';
+import TradeScreen from '@@screens/TradeScreen';
 import WalletScreen from '@@screens/WalletScreen';
 import { height } from '@@utils/ui';
 
@@ -91,14 +91,14 @@ function MainTab() {
           tabBarIcon: ({ size, focused }) => (focused ? <EventSelected width={size} height={size} /> : <EventNormal width={size} height={size} />),
         }}
       />
-      {/* <Screen
+      <Screen
         key={MAIN_TAB_ROUTE.TRADE}
         name={MAIN_TAB_ROUTE.TRADE}
-        component={Trade}
+        component={TradeScreen}
         options={{
           tabBarIcon: ({ size, focused }) => (focused ? <TradeSelected width={size} height={size} /> : <TradeNormal width={size} height={size} />),
         }}
-      /> */}
+      />
       <Screen
         key={MAIN_TAB_ROUTE.SETTING_MAIN}
         name={MAIN_TAB_ROUTE.SETTING_MAIN}
