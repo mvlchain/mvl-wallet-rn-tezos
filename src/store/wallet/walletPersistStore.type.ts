@@ -1,5 +1,5 @@
 import { Network } from '@@constants/network.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export interface IWalletPersist extends IWalletPersistState {
   initWallet: () => void;

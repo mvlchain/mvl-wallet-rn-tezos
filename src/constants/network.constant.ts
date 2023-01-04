@@ -1,5 +1,5 @@
 import appconfig from '@@config/appconfig';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
 
 export const NETWORK = {

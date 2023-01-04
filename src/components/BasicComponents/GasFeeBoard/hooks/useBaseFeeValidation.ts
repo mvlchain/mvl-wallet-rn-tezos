@@ -4,10 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { COIN_DTO, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import gasStore from '@@store/gas/gasStore';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { commonColors } from '@@style/colors';

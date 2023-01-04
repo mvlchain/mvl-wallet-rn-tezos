@@ -1,6 +1,7 @@
 export interface IBlockChainRepository {
   getBalance: ({ selectedWalletAddress, rpcUrl }: IGetCoinBalance) => Promise<string>;
   getContractBalance: ({ contractAddress, abi, address }: IGetTokenBalance) => Promise<string>;
+  getTokenMetadata: (rpcUrl: string, contractAddress: string, abi?: string) => Promise<any>;
 }
 
 export interface IGetCoinBalance {
