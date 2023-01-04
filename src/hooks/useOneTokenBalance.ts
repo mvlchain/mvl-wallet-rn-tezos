@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { getNetworkByBase } from '@@constants/network.constant';
 import { WALLET_TOKEN } from '@@constants/token.constant';
-// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { useDi } from '@@hooks/useDi';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';

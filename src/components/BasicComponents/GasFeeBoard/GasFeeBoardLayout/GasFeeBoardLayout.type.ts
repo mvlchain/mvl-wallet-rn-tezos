@@ -1,6 +1,5 @@
 import { ReactChildren } from 'react-native-toast-message';
 
-// import { TokenDto } from '@@generated/generated-scheme-clutch';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export interface IGasFeeBoardLayoutProps {
