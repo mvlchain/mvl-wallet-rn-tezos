@@ -5,6 +5,7 @@ export interface IAuthModalStore {
 }
 
 export type TAuthModal = {
+  // terms of service
   tos: boolean;
   guide: boolean;
   pin: boolean;

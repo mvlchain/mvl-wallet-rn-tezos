@@ -24,6 +24,7 @@ export const CLUTCH_APP_SCHEME = 'clutchwallet';
 export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
   prefixes: [`${CLUTCH_APP_SCHEME}://`],
   config: {
+    initialRouteName: ROOT_STACK_ROUTE.MAIN,
     screens: {
       [ROOT_STACK_ROUTE.DEEPLINK_CONNECT]: {
         path: 'connect',
@@ -41,6 +42,10 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
       // alternatives to deeplink redirectiopn
       // if (event.url == 'clutchwallet://screen/earn') {
       //   R.navigate(ROOT_STACK_ROUTE.SETTING_APP_VERSION);
+      // }
+
+      // if (!event.url.startsWith(`${CLUTCH_APP_SCHEME}://connect`)) {
+
       // }
 
       listener(event.url);

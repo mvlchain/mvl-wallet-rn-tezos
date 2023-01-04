@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -24,6 +24,7 @@ import {
   TradeNormalDark,
   TradeSelectedDark,
 } from '@@assets/image';
+import { useAuthStateCheck } from '@@hooks/useAuthStateCheck';
 import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
 import { EarnEventListScreen } from '@@screens/EarnEventScreen';
@@ -36,6 +37,8 @@ import { MAIN_TAB_ROUTE, TMainTabParamList } from './MainTab.type';
 
 function MainTab() {
   const { Navigator, Screen } = createBottomTabNavigator<TMainTabParamList>();
+
+  useAuthStateCheck();
 
   const { color } = useColor();
   const backgorundColor = color.whiteBlack;
