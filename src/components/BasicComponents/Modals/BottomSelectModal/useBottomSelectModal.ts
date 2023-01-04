@@ -1,9 +1,15 @@
+import { useEffect, useMemo, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { Appearance } from 'react-native';
 
+import { getNetworkByBase } from '@@constants/network.constant';
 import { CURRENCY, LANGUAGE_CODE, THEME, THEME_NAME } from '@@constants/setting.constant';
 import RTNSettings from '@@store/RTNSetting';
 import settingPersistStore from '@@store/setting/settingPersistStore';
+import tokenPersistStore from '@@store/token/tokenPersistStore';
+import tradeStore from '@@store/trade/tradeStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import { IBottomSelectMenuProps } from './BottomSelectMenu/BottomSelectMenu.type';
 
@@ -11,6 +17,11 @@ const useBottomSelectModal = () => {
   const { t } = useTranslation();
 
   const { appTheme, settedCurrency, settedLanguage, setAppTheme, setCurrency, setLanguage } = settingPersistStore();
+  const { selectedNetwork } = walletPersistStore();
+  const { tokenList } = tokenPersistStore();
+  const { selectedToken, selectToken } = tradeStore();
+  const selectedTokenList = useMemo(() => tokenList[getNetworkByBase(selectedNetwork)], [selectedNetwork]);
+  const [tradeMenu, setTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const currencyMenu: IBottomSelectMenuProps[] = [
     {
       id: CURRENCY.USD,
@@ -106,10 +117,43 @@ const useBottomSelectModal = () => {
     },
   ];
 
+  const onPressSelectToken = (symbol: string, type: 'from' | 'to') => {
+    const anotherToken = type === 'from' ? selectedToken.from : selectedToken.to;
+    if (anotherToken === symbol) {
+      const symbolIndex = selectedTokenList.map((token) => token.symbol).indexOf(symbol);
+      const anotherType = type === 'from' ? 'to' : 'from';
+      selectToken(symbol, type);
+      selectToken(selectedTokenList[(symbolIndex + 1) % selectedTokenList.length].symbol, anotherType);
+    } else {
+      selectToken(symbol, type);
+    }
+  };
+
+  useEffect(() => {
+    setTradeMenu(
+      selectedTokenList.map((token) => ({
+        id: token.symbol,
+        title: token.symbol,
+        isSelected: token.symbol === selectedToken,
+        onPress: () => {
+          selectToken(token.symbol);
+        },
+      }))
+    );
+  }, [selectedTokenList]);
+
+  useEffect(() => {
+    selectToken(selectedTokenList[0].symbol, 'from');
+    if (selectedTokenList.length > 2) {
+      selectToken(selectedTokenList[1].symbol, 'to');
+    }
+  }, []);
+
   return {
     currencyMenu,
     languageMenu,
     themeMenu,
+    tradeMenu,
   };
 };
 

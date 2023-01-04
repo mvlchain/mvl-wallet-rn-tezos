@@ -22,7 +22,7 @@ const useOneTokenBalance = (tokenDto: TokenDto) => {
 
   useEffect(() => {
     getBalance();
-  }, []);
+  }, [tokenDto]);
 
   return { balance };
 };

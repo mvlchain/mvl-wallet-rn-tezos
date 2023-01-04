@@ -20,9 +20,10 @@ import * as S from '../TextField.style';
 import { ITradeVolumeComponentProps } from './TradeVolume.type';
 
 export function TradeVolume(props: ITradeVolumeComponentProps) {
-  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000, setParentValid } = props;
+  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000, setParentValid, handleTokenSelect } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
+
   const { balance } = useOneTokenBalance(tokenDto);
   const { color } = useColor();
   const { t } = useTranslation();
@@ -93,10 +94,12 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
 
   return (
     <S.TradeVolumeContainer>
-      <S.TradeVolumeTop>
-        <S.Label>{label}</S.Label>
-        {useMax && <TextButton label={'Max'} onPress={onPressMax} disabled={false} />}
-      </S.TradeVolumeTop>
+      {(label || useMax) && (
+        <S.TradeVolumeTop>
+          {label && <S.Label>{label}</S.Label>}
+          {useMax && <TextButton label={'Max'} onPress={onPressMax} disabled={false} />}
+        </S.TradeVolumeTop>
+      )}
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
           <S.TradeVolumeInput
@@ -110,9 +113,15 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
           />
           {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
-        <S.SymbolWrapper>
+        <S.SymbolWrapper
+          onPress={() => {
+            if (!handleTokenSelect) return;
+            handleTokenSelect();
+          }}
+        >
           {tokenDto.logoURI && <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />}
           <S.Token>{tokenDto.symbol}</S.Token>
+          {handleTokenSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
       {!disableHint && (hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`${t('balance')}: ${balance}`}</S.Balance>)}

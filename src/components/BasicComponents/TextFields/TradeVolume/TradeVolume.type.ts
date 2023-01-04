@@ -13,4 +13,5 @@ export interface ITradeVolumeComponentProps {
   disableHint?: boolean;
   debounceTime?: number;
   setParentValid?: (valid: boolean) => void;
+  handleTokenSelect?: () => void;
 }

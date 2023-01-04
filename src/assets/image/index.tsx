@@ -69,3 +69,4 @@ export { default as WarningIcon } from './ic-warning.svg';
 export { default as ArrangeIcon } from './ic-arrange-black.svg';
 
 export { default as EmptyEvent } from './img-emptyevent.svg';
+export { default as ChangeIconLight } from './ic-change-light.svg';
