@@ -30,6 +30,17 @@ const authStore = create<IAuth>(
           'setPkey'
         ),
       setAppScreen: (appScreen: AppScreen) => set(() => ({ appScreen: appScreen }), false, 'setAppScreen'),
+      setPKeyAppScreen: (pKey: string, appScreen: AppScreen) =>
+        set(
+          (state) => ({
+            ...state,
+            pKey: pKey,
+            isSignedIn: isNotBlank(pKey),
+            appScreen: appScreen,
+          }),
+          false,
+          'setPKeyAppScreen'
+        ),
       setMnemonic: (mnemonic: string) => set(() => ({ mnemonic: mnemonic }), false, 'setMnemonic'),
       initMnemonic: (mnemonicArr: TMnemonic[]) => set(() => ({ mnemonicList: mnemonicArr }), false, 'initMnemonic'),
       setMnemonicList: (typedMnemonic: TMnemonic) =>

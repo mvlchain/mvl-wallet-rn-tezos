@@ -14,7 +14,7 @@ import { AppScreen } from '@@store/auth/authStore.type';
 const useSignInScreen = () => {
   const navigation = useNavigation<TAppStackNavigationProps<'AUTH'>>();
   const keyClient = useDi('KeyClient');
-  const { pKey, setPKey, setAppScreen } = authStore();
+  const { pKey, setPKey, setAppScreen, setPKeyAppScreen } = authStore();
   const { stage } = authPersistStore();
   const { close } = authModalStore();
 
@@ -34,12 +34,10 @@ const useSignInScreen = () => {
   useEffect(() => {
     (async () => {
       const pKey = await auth.autoSignIn();
-      console.log(`auto signin: ${pKey}`);
       if (pKey === null) {
         return;
       }
-      setPKey(pKey);
-      setAppScreen(AppScreen.Root);
+      setPKeyAppScreen(pKey, AppScreen.Root);
     })();
   }, []);
 
@@ -47,46 +45,31 @@ const useSignInScreen = () => {
   const signIn = async (provider: AuthProvider) => {
     try {
       const { privateKey, isNewUser } = await auth.signIn(provider);
-      console.log(`manual signin: ${privateKey}, stage: ${stage}`);
-      setPKey(privateKey);
 
-      if (!navigateToSeedPhrase(privateKey, isNewUser) && privateKey) {
-        setAppScreen(AppScreen.Root);
+      // setPKey(privateKey);
+      // if (!navigateToSeedPhrase(privateKey, isNewUser) && privateKey) {
+      //   setAppScreen(AppScreen.Root);
+      // }
+
+      if (isSeedPhraseNavigatable(privateKey, isNewUser)) {
+        setPKey(privateKey);
+        navigateToSeedPhrase();
+      } else if (privateKey) {
+        setPKeyAppScreen(privateKey, AppScreen.Root);
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  // useEffect(() => {
-  //   if (!navigateToSeedPhrase(pKey)) {
-  //     if (pKey && !stage) {
-  //       setAppScreen(AppScreen.Root);
-  //     }
-  //   }
-  // }, [pKey, stage]);
+  const isSeedPhraseNavigatable = (pkey: string | null, isNewUser: boolean | undefined): boolean => {
+    const postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
+    return pkey && isNewUser && !!postboxKey ? true : false;
+  };
 
-  /**
-   * @return true if current screen navigates to SeedPhrase otherwise false
-   */
-  const navigateToSeedPhrase = (pkey: string | null, isNewUser: boolean | undefined): boolean => {
-    if (pkey) {
-      /**
-       * TODO: postboxkey없을 때 예외처리
-       */
-      const _postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
-      if (!_postboxKey) {
-        throw new Error('postboxkey is required');
-      }
-      console.log(`Route> navigating to SEED_PHRASE from SignInScreen, pkey: ${_postboxKey}, stage: ${JSON.stringify(stage)}`);
-
-      if (isNewUser) {
-        console.log(`Route> navigating to SeedPhraseScreen, navigation id: ${navigation.getId}`);
-        navigation.push(APP_STACK_ROUTE.SEED_PHRASE);
-        return true;
-      }
-    }
-    return false;
+  const navigateToSeedPhrase = () => {
+    navigation.navigate(APP_STACK_ROUTE.SEED_PHRASE);
+    close(AUTH_MODAL_NAME.PIN);
   };
 
   useEffect(() => {
