@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { TAppStackNavigationProps } from 'App.type';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -15,9 +16,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useConfirmSeedPhraseScreen = () => {
-  // type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE_CONFIRM'>;
-  // const navigation = useNavigation<rootStackProps>();
-
+  const navigation = useNavigation<TAppStackNavigationProps<'SEED_PHRASE_CONFIRM'>>();
   const { t } = useTranslation();
   const { removeStageByPostboxKey } = authPersistStore();
   const { initWallet } = walletPersistStore();
@@ -37,14 +36,14 @@ const useConfirmSeedPhraseScreen = () => {
 
   const checkMnemonic = () => {
     // mnemonic 없을 때 예외처리(에러처리)추가
-    // if (disabled || !mnemonic) return;
-    // const mnemonicArr = mnemonic.split(' ');
-    // for (let i = 0; i < mnemonicList.length; i += 1) {
-    //   const typedMnemonic = mnemonicList[i];
-    //   if (!(mnemonicArr[typedMnemonic.index - 1] === typedMnemonic.word)) {
-    //     return false;
-    //   }
-    // }
+    if (disabled || !mnemonic) return;
+    const mnemonicArr = mnemonic.split(' ');
+    for (let i = 0; i < mnemonicList.length; i += 1) {
+      const typedMnemonic = mnemonicList[i];
+      if (!(mnemonicArr[typedMnemonic.index - 1] === typedMnemonic.word)) {
+        return false;
+      }
+    }
     return true;
   };
 
@@ -53,20 +52,20 @@ const useConfirmSeedPhraseScreen = () => {
     if (checkMnemonic()) {
       /**
        * TODO: postboxkey 없을 때 예외처리
-       *  */
+       */
       const _postboxKey = keyClient?.postboxKeyHolder?.postboxKey;
       if (!_postboxKey || !pKey) {
         throw new Error('postboxkey and pKey is required');
       }
+
+      // TODO:  추후 지갑을 생성하는 아래의 코드는 별도로 리팩터링 할 것.
       removeStageByPostboxKey(_postboxKey);
       initWallet();
       mutate({ index: 0, network: NETWORK.ETH });
       mutate({ index: 0, network: NETWORK.TEZOS });
 
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
-      // });
+      // reset AuthStack navigation
+      navigation.popToTop();
       setAppScreen(AppScreen.Root);
     } else {
       // TODO: 다국어 요청

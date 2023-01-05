@@ -2,20 +2,15 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
-import { DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
-import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
-import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
-import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
 import { ToastPopup } from '@@components/BasicComponents/Modals/BaseModal/ToastPopup';
 import { GlobalModal } from '@@components/BasicComponents/Modals/GlobalModal';
 import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
-import AuthStack from '@@navigation/AuthStack';
 import MainTab from '@@navigation/MainTab';
 import { DeepLinkConnectProxy } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
@@ -209,10 +204,8 @@ function RootStack() {
           options={{ headerShown: false, gestureEnabled: false }}
         />
       </Navigator>
+
       <LoadingIndicator />
-      {/* <PinModal /> */}
-      {/* <TermsOfServicesModal />
-      <PincodeGuideModal /> */}
       <GlobalModal />
       <ToastPopup />
     </SafeAreaView>

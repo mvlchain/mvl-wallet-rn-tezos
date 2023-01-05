@@ -22,6 +22,7 @@ import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeG
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
 import useHeader from '@@hooks/useHeader';
 import { useSplashScreenTransition } from '@@hooks/useSplashScreenTransition';
+import { useColor } from '@@hooks/useTheme';
 import AuthStack from '@@navigation/AuthStack';
 import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import RootStack from '@@navigation/RootStack';
@@ -31,9 +32,10 @@ import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen'
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
 import SignInScreen from '@@screens/SignInScreen';
 import authStore from '@@store/auth/authStore';
+import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
-import { AppScreen } from '@@store/auth/authStore.type';
+import { fontSize, height } from '@@utils/ui';
 
 const queryClient = new QueryClient();
 
@@ -51,6 +53,7 @@ function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
 
   const { appTheme } = useApp();
+  const { color } = useColor();
   const { t } = useTranslation();
   const { handleStackHeaderOption } = useHeader();
   useSplashScreenTransition();
@@ -69,16 +72,36 @@ function App(props: { foxCode?: string }) {
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme[appTheme.value]}>
-          <NavigationContainer ref={navigationRef} theme={ROUTER_THEME} linking={DeepLinkOptions}>
+          <NavigationContainer
+            ref={navigationRef}
+            theme={ROUTER_THEME}
+            linking={DeepLinkOptions}
+            onStateChange={(state) => {
+              if (state) {
+                console.log(`Screen> current screen: ${state.routeNames[state.index]}, index; ${state.index}`);
+              }
+            }}
+          >
             {/* {(!isSignedIn && appScreen === AppScreen.Auth) ? <SignInScreen /> : <RootStack />} */}
             {!isSignedIn || appScreen === AppScreen.Auth ? (
               <Navigator
                 initialRouteName={APP_STACK_ROUTE.AUTH}
                 screenOptions={() => ({
-                  headerShown: false,
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontSize: fontSize(20),
+                    fontFamily: 'AppleSDGothicNeoH00',
+                    fontWeight: '800',
+                    color: color.blackWhite,
+                  },
+                  headerShadowVisible: false,
+                  headerStyle: {
+                    backgroundColor: color.whiteBlack,
+                    height: height * 56,
+                  },
                 })}
               >
-                <Screen key={APP_STACK_ROUTE.AUTH} name={APP_STACK_ROUTE.AUTH} component={SignInScreen} />
+                <Screen key={APP_STACK_ROUTE.AUTH} name={APP_STACK_ROUTE.AUTH} component={SignInScreen} options={() => ({ headerShown: false })} />
                 <Screen key={APP_STACK_ROUTE.SEED_PHRASE} name={APP_STACK_ROUTE.SEED_PHRASE} component={SeedPhraseScreen} />
                 <Screen
                   key={APP_STACK_ROUTE.SEED_PHRASE_CONFIRM}

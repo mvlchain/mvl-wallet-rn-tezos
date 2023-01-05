@@ -3,6 +3,7 @@ import { TMnemonic } from '@@components/BasicComponents/Mnemonic/Mnemonic.type';
 export interface IAuth extends IAuthState {
   setPKey: (pKey: string) => void;
   setAppScreen: (appScreen: AppScreen) => void;
+  setPKeyAppScreen: (pKey: string, appScreen: AppScreen) => void;
   setMnemonic: (mnemonic: string) => void;
   initMnemonic: (mnemonicArr: TMnemonic[]) => void;
   setMnemonicList: (typedMnemonic: TMnemonic) => void;
