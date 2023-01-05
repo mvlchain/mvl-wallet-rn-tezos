@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { getNetworkByBase } from '@@constants/network.constant';
-import { WALLET_TOKEN } from '@@constants/token.constant';
 import { useDi } from '@@hooks/useDi';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -22,7 +20,7 @@ const useOneTokenBalance = (tokenDto: TokenDto) => {
 
   useEffect(() => {
     getBalance();
-  }, [tokenDto]);
+  }, [tokenDto, selectedNetwork, selectedWalletIndex]);
 
   return { balance };
 };

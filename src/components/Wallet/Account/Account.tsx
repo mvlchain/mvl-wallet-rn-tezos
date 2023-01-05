@@ -21,7 +21,7 @@ function Account() {
   return (
     <S.Container>
       <S.Header>
-        <Jdenticon value='sample data' />
+        <Jdenticon value={address} />
         <Pressable onPress={onPressMore}>
           <MoreIcon />
         </Pressable>
