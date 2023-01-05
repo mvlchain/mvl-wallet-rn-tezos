@@ -1,17 +1,17 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
-import { ChangeIconLight } from '@@assets/image';
+import { ChangeIconLight, QuestionMarkIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { TradeVolume } from '@@components/BasicComponents/TextFields/TradeVolume/TradeVolume';
 
 import * as S from './TradeScreen.style';
 import { useTradeScreen } from './useTradeScreen';
-
 function TradeScreen() {
   const { t } = useTranslation();
-  const { fromToken, toToken, onPressToken, onPressChange } = useTradeScreen();
+  const { fromToken, toToken, showTip, setShowTip, onPressToken, onPressChange } = useTradeScreen();
   return (
     <S.Container>
       <S.Header>
@@ -44,7 +44,19 @@ function TradeScreen() {
         <PrimaryButton onPress={() => console.log('')} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
         <S.PriceImpactContainer>
           <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
-          <S.PriceImpactHelp>?</S.PriceImpactHelp>
+          <Tooltip
+            isVisible={showTip}
+            content={<S.PriceImpactHelp>{t('price_impact_explanation')}</S.PriceImpactHelp>}
+            onClose={() => setShowTip(false)}
+            placement='top'
+            backgroundColor='transparent'
+            contentStyle={S.InlineStyle.tooltip}
+            arrowStyle={S.InlineStyle.tooltipArrow}
+          >
+            <S.PriceImpactHelpButton onPress={() => setShowTip(true)}>
+              <QuestionMarkIcon />
+            </S.PriceImpactHelpButton>
+          </Tooltip>
         </S.PriceImpactContainer>
       </S.InputContainer>
     </S.Container>

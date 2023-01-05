@@ -70,3 +70,4 @@ export { default as ArrangeIcon } from './ic-arrange-black.svg';
 
 export { default as EmptyEvent } from './img-emptyevent.svg';
 export { default as ChangeIconLight } from './ic-change-light.svg';
+export { default as QuestionMarkIcon } from './ic-question-mark.svg';
