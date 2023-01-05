@@ -21,6 +21,7 @@ import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepo
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
+import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
 import { TransactionService } from '@@domain/transaction/TransactionService';
 import { TransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers';
 import { TransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos';
@@ -138,4 +139,8 @@ container.register('LegacyAuthMigrationService', {
 
 container.register('EvmJsonRpcProviderHolder', {
   useFactory: instancePerContainerCachingFactory<EvmJsonRpcProviderHolder>((container) => container.resolve(EvmJsonRpcProviderHolder)),
+});
+
+container.register('TradeRepository', {
+  useFactory: instancePerContainerCachingFactory<TradeRepository>((container) => container.resolve(TradeRepository)),
 });
