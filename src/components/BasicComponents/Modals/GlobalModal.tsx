@@ -6,6 +6,7 @@ import ViewScanModal from '../ViewScanButton/ViewScanModal';
 import AmountInputModal from './AmountInputModal';
 import BottomSelectModal from './BottomSelectModal';
 import ClaimWalletListModal from './ClaimWalletListModal';
+import GasFeeModal from './GasFeeModal';
 import ReceiveQRModal from './ReceiveQRModal';
 import SettingSignOutModal from './SettingSignOutModal';
 import TextInputModal from './TextInputModal';
@@ -29,6 +30,7 @@ export const MODAL_TYPES = {
   AMOUNT_INPUT: 'AMOUNT_INPUT',
   RECEIVE_QR: 'RECEIVE_QR',
   CLAIM_WALLET_LIST: 'CLAIM_WALLET_LIST',
+  GAS_FEE: 'GAS_FEE',
 } as const;
 
 export const MODAL_COMPONENTS = {
@@ -45,6 +47,7 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.REWARD_RECEIPT]: RewardReceiptModal,
   [MODAL_TYPES.VIEW_SCAN]: ViewScanModal,
   [MODAL_TYPES.CLAIM_WALLET_LIST]: ClaimWalletListModal,
+  [MODAL_TYPES.GAS_FEE]: GasFeeModal,
 };
 
 export const GlobalModal = () => {
