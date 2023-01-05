@@ -6,9 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import SettingMenu from '@@components/Setting/SettingMenu';
 import SettingToggleMenu from '@@components/Setting/SettingToggleMenu';
+import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import useCommonSetting from '@@hooks/useCommonSetting';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { authModalStore } from '@@store/auth/authModalStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
@@ -18,6 +20,7 @@ function SettingSecurityScreen() {
   const { t } = useTranslation();
   const { onPressSettingMenu } = useCommonSetting();
   const { openModal, closeModal } = globalModalStore();
+  const { close } = authModalStore();
   const { settedBioAuth, toggleBioAuth } = settingPersistStore();
   const navigation = useNavigation<TRootStackNavigationProps<'SETTING_SECURITY'>>();
   const auth = useDi('AuthService');
@@ -31,7 +34,12 @@ function SettingSecurityScreen() {
             title: t('reset_pin_number'),
             label: t('dialog_reset_pin_lbl_description'),
             confirmLabel: t('btn_reset'),
-            onConfirm: () => auth.resetPin(),
+            onConfirm: async () => {
+              const pin = await auth.resetPin();
+              if (pin) {
+                close(AUTH_MODAL_NAME.PIN);
+              }
+            },
             onCancel: () => closeModal(),
           });
         }}
