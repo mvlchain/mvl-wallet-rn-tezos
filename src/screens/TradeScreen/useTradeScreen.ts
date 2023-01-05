@@ -23,6 +23,7 @@ export const useTradeScreen = () => {
   const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>(tokenList[getNetworkByBase(selectedNetwork)]);
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const [toTradeMenu, setToTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
+  const [showTip, setShowTip] = useState(false);
 
   const onPressToken = (type: string) => {
     const menuList = type === 'from' ? fromTradeMenu : toTradeMenu;
@@ -99,6 +100,8 @@ export const useTradeScreen = () => {
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
     toToken: selectedTokenList.find((token) => token.symbol === selectedToken.to),
+    showTip,
+    setShowTip,
     onPressToken,
     onPressChange,
   };

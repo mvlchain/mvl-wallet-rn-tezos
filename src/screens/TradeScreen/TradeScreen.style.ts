@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
+import { primary } from '@@style/colors';
 import { width } from '@@utils/ui';
 
 export const Container = styled.View`
@@ -41,10 +42,23 @@ export const PriceImpactText = styled.Text`
   color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
-export const PriceImpactHelp = styled.Text``;
+export const PriceImpactHelp = styled.Text`
+  ${({ theme }) => theme.font.Paragraph.md};
+  color: ${({ theme }) => theme.color.black};
+`;
+
+export const PriceImpactHelpButton = styled.Pressable`
+  margin-left: ${width * 8}px;
+`;
 
 export const InlineStyle = StyleSheet.create({
   button: {
     marginTop: width * 16,
+  },
+  tooltip: {
+    backgroundColor: primary.lightest,
+  },
+  tooltipArrow: {
+    marginLeft: width * 4,
   },
 });
