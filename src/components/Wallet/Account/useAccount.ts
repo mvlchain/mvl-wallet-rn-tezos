@@ -34,7 +34,9 @@ const useAccount = () => {
 
   // TODO: 추후 네트워크 추가 시 walletList에 해당 네트워크 name object추가하기
   const checkNetworkDefault = () => {
-    return walletList[selectedNetwork][0].index === -1;
+    return false;
+    // console.log(`NETWORK: ${selectedNetwork}, walletList: ${JSON.stringify(walletList)}`);
+    // return walletList[selectedNetwork][0].index === -1;
   };
 
   useEffect(() => {
