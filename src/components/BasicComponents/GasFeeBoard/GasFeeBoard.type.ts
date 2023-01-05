@@ -7,4 +7,6 @@ export interface IGasFeeBoardProps {
   isRevision: boolean;
   onConfirm: (param: IGasFeeInfo) => Promise<void>;
   tokenDto: TokenDto;
+  onConfirmTitle?: string;
+  hideDivider?: boolean;
 }

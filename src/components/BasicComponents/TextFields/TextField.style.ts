@@ -116,7 +116,7 @@ export const TradeVolumeInput = styled.TextInput`
   ${({ theme }) => theme.font.Label.md};
   line-height: ${height * 20}px;
 `;
-export const SymbolWrapper = styled.View`
+export const SymbolWrapper = styled.Pressable`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;

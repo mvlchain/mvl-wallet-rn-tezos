@@ -21,14 +21,23 @@ import { width } from '@@utils/ui';
 import * as S from './GasFeeBoardLayout.style';
 import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
 
-function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, toggleGasAdvanced, children, tokenDto }: IGasFeeBoardLayoutProps) {
+function GasFeeBoardLayout({
+  isRevision,
+  estimatedTime,
+  advanced,
+  onConfirm,
+  toggleGasAdvanced,
+  children,
+  onConfirmTitle,
+  hideDivider,
+}: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkByBase(pickNetwork);
   const coin = getNetworkConfig(selectedNetwork).coin;
   const { total } = gasStore();
-  const totalStr = total ? formatBigNumber(total, tokenDto.decimals).toString(10) : '-';
+  const totalStr = total ? formatBigNumber(total, COIN_DTO[coin].decimals).toString(10) : '-';
   const { price } = useOneTokenPrice(COIN_DTO[coin], totalStr);
   const { toValid, valueValid } = transactionRequestStore();
   const { baseFeeValid, tipValid, gasValid } = gasStore();
@@ -53,7 +62,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, tog
           </S.Row>
           {advanced ? children[1] : children[0]}
         </S.InnerContainer>
-        <Divider thickness={DIVIDER_THICKNESS.THIN} />
+        {!hideDivider && <Divider thickness={DIVIDER_THICKNESS.THIN} />}
         <S.InnerContainer>
           {estimatedTime && (
             <S.Row>
@@ -84,7 +93,7 @@ function GasFeeBoardLayout({ isRevision, estimatedTime, advanced, onConfirm, tog
       </View>
       <S.ConfirmWrapper>
         <PrimaryButton
-          label={t('next')}
+          label={onConfirmTitle ? onConfirmTitle : t('next')}
           onPress={() => {
             onConfirm();
           }}

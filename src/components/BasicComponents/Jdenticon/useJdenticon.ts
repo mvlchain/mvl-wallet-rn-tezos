@@ -12,7 +12,7 @@ const useJdenticon = ({ value }: IUseJdenticonProps) => {
   useEffect(() => {
     const icon = toSvg(value, width * 36);
     setJdenticon(icon);
-  }, []);
+  }, [value]);
 
   return {
     jdenticon,

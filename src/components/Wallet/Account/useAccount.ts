@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ const useAccount = () => {
   const { openModal, closeModal } = globalModalStore();
   const { pKey } = authStore();
   const { networkList } = useNetworkList();
-  const _selectedWalletIndex = useMemo(() => selectedWalletIndex[selectedNetwork], [selectedWalletIndex, selectedNetwork]);
+  const [_selectedWalletIndex, _setSelectedWalletIndex] = useState(selectedWalletIndex[selectedNetwork]);
   const { mutate } = useWalletMutation();
   const { data } = useWalletsQuery(selectedNetwork, {
     onSuccess: (result) => {
@@ -36,6 +36,10 @@ const useAccount = () => {
   const checkNetworkDefault = () => {
     return walletList[selectedNetwork][0].index === -1;
   };
+
+  useEffect(() => {
+    _setSelectedWalletIndex(selectedWalletIndex[selectedNetwork]);
+  }, [selectedWalletIndex, selectedNetwork]);
 
   useEffect(() => {
     if (checkNetworkDefault() && data && pKey) {
