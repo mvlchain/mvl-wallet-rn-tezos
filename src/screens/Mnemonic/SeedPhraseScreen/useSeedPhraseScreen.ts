@@ -6,10 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { BackHandler } from 'react-native';
 import Toast from 'react-native-toast-message';
 
+import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { useDi } from '@@hooks/useDi';
 import useHeader from '@@hooks/useHeader';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
+import { authModalStore } from '@@store/auth/authModalStore';
 import authStore from '@@store/auth/authStore';
 
 const useSeedPhraseScreen = () => {
@@ -25,6 +27,7 @@ const useSeedPhraseScreen = () => {
   const uiService = useDi('UIService');
   const { handleStackHeaderOption } = useHeader();
   const { mnemonic, setMnemonic } = authStore();
+  const { close } = authModalStore();
 
   const [type, setType] = useState<'show' | 'hide'>('hide');
 
@@ -73,7 +76,10 @@ const useSeedPhraseScreen = () => {
 
   const onPressViewSeedPhrase = async () => {
     // TODO: pincode입력 안했을 때 정상적으로 진행 안되고 빠져나가는지 테스트 필요
-    await uiService.triggerGetPincode();
+    const pincode = await uiService.triggerGetPincode();
+    if (pincode) {
+      close(AUTH_MODAL_NAME.PIN);
+    }
     setType('show');
   };
 
