@@ -117,38 +117,6 @@ const useBottomSelectModal = () => {
     },
   ];
 
-  const onPressSelectToken = (symbol: string, type: 'from' | 'to') => {
-    const anotherToken = type === 'from' ? selectedToken.from : selectedToken.to;
-    if (anotherToken === symbol) {
-      const symbolIndex = selectedTokenList.map((token) => token.symbol).indexOf(symbol);
-      const anotherType = type === 'from' ? 'to' : 'from';
-      selectToken(symbol, type);
-      selectToken(selectedTokenList[(symbolIndex + 1) % selectedTokenList.length].symbol, anotherType);
-    } else {
-      selectToken(symbol, type);
-    }
-  };
-
-  useEffect(() => {
-    setTradeMenu(
-      selectedTokenList.map((token) => ({
-        id: token.symbol,
-        title: token.symbol,
-        isSelected: token.symbol === selectedToken,
-        onPress: () => {
-          selectToken(token.symbol);
-        },
-      }))
-    );
-  }, [selectedTokenList]);
-
-  useEffect(() => {
-    selectToken(selectedTokenList[0].symbol, 'from');
-    if (selectedTokenList.length > 2) {
-      selectToken(selectedTokenList[1].symbol, 'to');
-    }
-  }, []);
-
   return {
     currencyMenu,
     languageMenu,
