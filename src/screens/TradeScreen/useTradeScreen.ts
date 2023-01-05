@@ -1,22 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-toast-message';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkByBase } from '@@constants/network.constant';
+import { getNetworkByBase, NETWORK } from '@@constants/network.constant';
+import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import tokenPersistStore from '@@store/token/tokenPersistStore';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 export const useTradeScreen = () => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
-  const { selectedNetwork } = walletPersistStore();
+  const { selectedNetwork, selectNetwork } = walletPersistStore();
   const { tokenList } = tokenPersistStore();
   const { selectedToken, selectToken } = tradeStore();
-  const selectedTokenList = useMemo(() => tokenList[getNetworkByBase(selectedNetwork)], [selectedNetwork]);
+  const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>(tokenList[getNetworkByBase(selectedNetwork)]);
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const [toTradeMenu, setToTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
 
@@ -66,11 +70,26 @@ export const useTradeScreen = () => {
   }, [selectedToken.to]);
 
   useEffect(() => {
+    setSelectedTokenList(tokenList[getNetworkByBase(selectedNetwork)]);
+  }, [selectedNetwork]);
+
+  useEffect(() => {
     selectToken(selectedTokenList[0].symbol, 'from');
-    if (selectedTokenList.length > 2) {
+    if (selectedTokenList.length > 1) {
       selectToken(selectedTokenList[1].symbol, 'to');
     }
-  }, []);
+  }, [selectedTokenList]);
+
+  useFocusEffect(() => {
+    if (selectedNetwork !== NETWORK.BSC) {
+      selectNetwork(NETWORK.BSC);
+      Toast.show({
+        ...TOAST_DEFAULT_OPTION,
+        type: 'basic',
+        text1: t('trade_noitce_network_change'),
+      });
+    }
+  });
 
   const onPressChange = () => {
     selectToken(selectedToken.to, 'from');
