@@ -10,8 +10,12 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
   padding: ${width * 24}px;
 `;
+
+export const WallerSelectButton = styled.Pressable``;
 
 export const HeaderTitle = styled.Text`
   ${({ theme }) => theme.font.Title.md};
@@ -34,6 +38,8 @@ export const SwapButton = styled.Pressable``;
 
 export const PriceImpactContainer = styled.View`
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   margin-top: ${width * 24}px;
 `;
 
@@ -49,6 +55,11 @@ export const PriceImpactHelp = styled.Text`
 
 export const PriceImpactHelpButton = styled.Pressable`
   margin-left: ${width * 8}px;
+`;
+
+export const HelpWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const InlineStyle = StyleSheet.create({
