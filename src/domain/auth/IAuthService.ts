@@ -2,7 +2,7 @@ import { ShareStore } from '@tkey/common-types';
 
 export interface AuthService {
   autoSignIn: () => Promise<string | null>;
-  signIn: (provider: AuthProvider) => Promise<string>;
+  signIn: (provider: AuthProvider) => Promise<SignInCredential>;
   signUp: (pincode: string) => Promise<string>;
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<void>;
@@ -23,6 +23,11 @@ export type ProviderToken = {
   idToken?: string;
   accessToken?: string;
   provider: AuthProvider;
+};
+
+export type SignInCredential = {
+  privateKey: string;
+  isNewUser?: boolean;
 };
 
 export class DeviceShareHolder {

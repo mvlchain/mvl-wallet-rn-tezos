@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authStore from '@@store/auth/authStore';
+import { AppScreen } from '@@store/auth/authStore.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -26,17 +27,13 @@ const useSettingSignOutModall = () => {
     }
   };
 
-  const resetState = () => {
-    resetAuthStore();
+  const resetAuthState = () => {
+    resetAuthStore(AppScreen.Auth);
     initWallet();
   };
 
   const onSuccessSignOut = () => {
-    resetState();
-    rootNavigation.reset({
-      index: 0,
-      routes: [{ name: ROOT_STACK_ROUTE.AUTH }],
-    });
+    resetAuthState();
     closeModal();
   };
 

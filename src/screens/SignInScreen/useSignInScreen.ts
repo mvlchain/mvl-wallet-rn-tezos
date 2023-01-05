@@ -1,20 +1,20 @@
 import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { APP_STACK_ROUTE, TAppStackNavigationProps } from 'App.type';
 
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AuthProvider } from '@@domain/auth/IAuthService';
 import { useDi } from '@@hooks/useDi';
-import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import { authModalStore } from '@@store/auth/authModalStore';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
+import { AppScreen } from '@@store/auth/authStore.type';
 
 const useSignInScreen = () => {
-  type StackProps = TRootStackNavigationProps<'AUTH'>;
-  const navigation = useNavigation<StackProps>();
+  const navigation = useNavigation<TAppStackNavigationProps<'AUTH'>>();
   const keyClient = useDi('KeyClient');
-  const { pKey, setPKey } = authStore();
+  const { pKey, setPKey, setAppScreen } = authStore();
   const { stage } = authPersistStore();
   const { close } = authModalStore();
 
@@ -30,28 +30,47 @@ const useSignInScreen = () => {
     checkNeedsMigrationAndExec();
   }, []);
 
+  // auto signIn
   useEffect(() => {
-    const getPinCodeAndAutoSignIn = async () => {
+    (async () => {
       const pKey = await auth.autoSignIn();
+      console.log(`auto signin: ${pKey}`);
       if (pKey === null) {
         return;
       }
       setPKey(pKey);
-    };
-    getPinCodeAndAutoSignIn();
+      setAppScreen(AppScreen.Root);
+    })();
   }, []);
 
+  // manual signIn
   const signIn = async (provider: AuthProvider) => {
     try {
-      const key = await auth.signIn(provider);
-      setPKey(key);
+      const { privateKey, isNewUser } = await auth.signIn(provider);
+      console.log(`manual signin: ${privateKey}, stage: ${stage}`);
+      setPKey(privateKey);
+
+      if (!navigateToSeedPhrase(privateKey, isNewUser) && privateKey) {
+        setAppScreen(AppScreen.Root);
+      }
     } catch (e) {
       console.error(e);
     }
   };
 
-  useEffect(() => {
-    if (pKey) {
+  // useEffect(() => {
+  //   if (!navigateToSeedPhrase(pKey)) {
+  //     if (pKey && !stage) {
+  //       setAppScreen(AppScreen.Root);
+  //     }
+  //   }
+  // }, [pKey, stage]);
+
+  /**
+   * @return true if current screen navigates to SeedPhrase otherwise false
+   */
+  const navigateToSeedPhrase = (pkey: string | null, isNewUser: boolean | undefined): boolean => {
+    if (pkey) {
       /**
        * TODO: postboxkey없을 때 예외처리
        */
@@ -59,16 +78,16 @@ const useSignInScreen = () => {
       if (!_postboxKey) {
         throw new Error('postboxkey is required');
       }
-      if (stage[_postboxKey] === 'BACKUP_SEED_PHRASE_STAGE') {
-        navigation.navigate(ROOT_STACK_ROUTE.SEED_PHRASE);
-      } else {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
-        });
+      console.log(`Route> navigating to SEED_PHRASE from SignInScreen, pkey: ${_postboxKey}, stage: ${JSON.stringify(stage)}`);
+
+      if (isNewUser) {
+        console.log(`Route> navigating to SeedPhraseScreen, navigation id: ${navigation.getId}`);
+        navigation.push(APP_STACK_ROUTE.SEED_PHRASE);
+        return true;
       }
     }
-  }, [pKey]);
+    return false;
+  };
 
   useEffect(() => {
     return () => {

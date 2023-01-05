@@ -8,11 +8,9 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
 
 export type TRootStackParamList = {
-  AUTH: undefined;
   SEED_PHRASE: {
     onlyCopy?: boolean;
   };
-  SEED_PHRASE_CONFIRM: undefined;
   MAIN: undefined;
   WALLET_EDIT_TOKEN_LIST: undefined;
   SETTING_SECURITY: undefined;
@@ -68,9 +66,7 @@ export type TRootStackParamList = {
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
 
 export const ROOT_STACK_ROUTE: RootStackRouteType = {
-  AUTH: 'AUTH',
   SEED_PHRASE: 'SEED_PHRASE',
-  SEED_PHRASE_CONFIRM: 'SEED_PHRASE_CONFIRM',
   MAIN: 'MAIN',
   WALLET_EDIT_TOKEN_LIST: 'WALLET_EDIT_TOKEN_LIST',
   SETTING_SECURITY: 'SETTING_SECURITY',

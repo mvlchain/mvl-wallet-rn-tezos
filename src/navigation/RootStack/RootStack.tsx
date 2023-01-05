@@ -21,7 +21,6 @@ import { DeepLinkConnectProxy } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
 import EarnEventTransferSuccessScreen from '@@screens/EarnEventScreen/EarnEventTransferSuccessScreen';
 import EarnEventTransferringScreen from '@@screens/EarnEventScreen/EarnEventTransferringScreen';
-import ConfirmSeedPhraseScreen from '@@screens/Mnemonic/ConfirmSeedPhraseScreen';
 import SeedPhraseScreen from '@@screens/Mnemonic/SeedPhraseScreen';
 import SettingAppVersionScreen from '@@screens/SettingScreen/SettingAppVersionScreen';
 import SettingDeleteAccountScreen from '@@screens/SettingScreen/SettingDeleteAccountScreen';
@@ -58,7 +57,7 @@ function RootStack() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Navigator
-        initialRouteName={ROOT_STACK_ROUTE.AUTH}
+        initialRouteName={ROOT_STACK_ROUTE.MAIN}
         screenOptions={() => ({
           headerTitleAlign: 'center',
           headerTitleStyle: {
@@ -74,14 +73,7 @@ function RootStack() {
           },
         })}
       >
-        <Screen key={ROOT_STACK_ROUTE.AUTH} name={ROOT_STACK_ROUTE.AUTH} component={AuthStack} options={{ headerShown: false }} />
         <Screen key={ROOT_STACK_ROUTE.SEED_PHRASE} name={ROOT_STACK_ROUTE.SEED_PHRASE} component={SeedPhraseScreen} />
-        <Screen
-          key={ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM}
-          name={ROOT_STACK_ROUTE.SEED_PHRASE_CONFIRM}
-          component={ConfirmSeedPhraseScreen}
-          options={handleStackHeaderOption({ title: t('confirm_seed_phrase_lbl_title') })}
-        />
         <Screen key={ROOT_STACK_ROUTE.MAIN} name={ROOT_STACK_ROUTE.MAIN} component={MainTab} options={{ headerShown: false }} />
         <Screen
           key={ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST}
@@ -218,9 +210,9 @@ function RootStack() {
         />
       </Navigator>
       <LoadingIndicator />
-      <PinModal />
-      <TermsOfServicesModal />
-      <PincodeGuideModal />
+      {/* <PinModal /> */}
+      {/* <TermsOfServicesModal />
+      <PincodeGuideModal /> */}
       <GlobalModal />
       <ToastPopup />
     </SafeAreaView>

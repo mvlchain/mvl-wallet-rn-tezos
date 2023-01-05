@@ -75,12 +75,18 @@ function usePin() {
         if (!_postboxKey) {
           throw new Error('postboxkey is required');
         }
+
+        console.log(`Route> pkey: ${_postboxKey} stage: ${JSON.stringify(stage)}`);
+
         if (stage[_postboxKey] === AUTH_STAGE.PIN_SETUP_STAGE) {
+          console.log('Route> settings a auth stage to BACKUP_SEED_PHRASE_STAGE');
           setStage(_postboxKey, AUTH_STAGE.BACKUP_SEED_PHRASE_STAGE);
         }
         if (preSuccessCallbackRef.current) {
+          console.log('Route> authStage: preSuccessCallbackRef');
           await preSuccessCallbackRef.current(input);
         }
+
         success(input);
         setState({ step: PIN_STEP.FINISH });
       } else {

@@ -10,16 +10,18 @@ import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
+import { AppScreen } from '@@store/auth/authStore.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useConfirmSeedPhraseScreen = () => {
-  type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE_CONFIRM'>;
-  const navigation = useNavigation<rootStackProps>();
+  // type rootStackProps = TRootStackNavigationProps<'SEED_PHRASE_CONFIRM'>;
+  // const navigation = useNavigation<rootStackProps>();
+
   const { t } = useTranslation();
   const { removeStageByPostboxKey } = authPersistStore();
   const { initWallet } = walletPersistStore();
-  const { mnemonic, mnemonicList, pKey } = authStore();
+  const { mnemonic, mnemonicList, pKey, setAppScreen } = authStore();
   const { openModal } = globalModalStore();
   const keyClient = useDi('KeyClient');
   const { mutate } = useWalletMutation();
@@ -35,18 +37,19 @@ const useConfirmSeedPhraseScreen = () => {
 
   const checkMnemonic = () => {
     // mnemonic 없을 때 예외처리(에러처리)추가
-    if (disabled || !mnemonic) return;
-    const mnemonicArr = mnemonic.split(' ');
-    for (let i = 0; i < mnemonicList.length; i += 1) {
-      const typedMnemonic = mnemonicList[i];
-      if (!(mnemonicArr[typedMnemonic.index - 1] === typedMnemonic.word)) {
-        return false;
-      }
-    }
+    // if (disabled || !mnemonic) return;
+    // const mnemonicArr = mnemonic.split(' ');
+    // for (let i = 0; i < mnemonicList.length; i += 1) {
+    //   const typedMnemonic = mnemonicList[i];
+    //   if (!(mnemonicArr[typedMnemonic.index - 1] === typedMnemonic.word)) {
+    //     return false;
+    //   }
+    // }
     return true;
   };
 
   const onPressConfirmMnemonic = () => {
+    console.log('onPressConfirmMnemonic');
     if (checkMnemonic()) {
       /**
        * TODO: postboxkey 없을 때 예외처리
@@ -60,10 +63,11 @@ const useConfirmSeedPhraseScreen = () => {
       mutate({ index: 0, network: NETWORK.ETH });
       mutate({ index: 0, network: NETWORK.TEZOS });
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
-      });
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{ name: ROOT_STACK_ROUTE.MAIN }],
+      // });
+      setAppScreen(AppScreen.Root);
     } else {
       // TODO: 다국어 요청
       openModal(MODAL_TYPES.TEXT_MODAL, {
