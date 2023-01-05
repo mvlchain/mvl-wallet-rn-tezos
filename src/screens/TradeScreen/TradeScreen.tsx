@@ -15,7 +15,7 @@ import { useTradeScreen } from './useTradeScreen';
 
 function TradeScreen() {
   const { t } = useTranslation();
-  const { fromToken, toToken, showTip, setShowTip, onPressToken, onPressChange } = useTradeScreen();
+  const { fromToken, toToken, showTip, setShowTip, onPressToken, onPressChange, onPressTrade } = useTradeScreen();
   const { onPressWalletList } = useWalletSelector();
   const { address } = useAccount();
 
@@ -51,7 +51,7 @@ function TradeScreen() {
             handleTokenSelect={() => onPressToken('to')}
           />
         )}
-        <PrimaryButton onPress={() => console.log('')} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
+        <PrimaryButton onPress={onPressTrade} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
         <S.PriceImpactContainer>
           <S.HelpWrapper>
             <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>

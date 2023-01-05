@@ -8,6 +8,7 @@ import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/Bott
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkByBase, NETWORK } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
+import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
@@ -97,6 +98,10 @@ export const useTradeScreen = () => {
     selectToken(selectedToken.from, 'to');
   };
 
+  const onPressTrade = () => {
+    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: selectedTokenList[0], trade: async (gasfee: IGasFeeInfo) => {} });
+  };
+
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
     toToken: selectedTokenList.find((token) => token.symbol === selectedToken.to),
@@ -104,5 +109,6 @@ export const useTradeScreen = () => {
     setShowTip,
     onPressToken,
     onPressChange,
+    onPressTrade,
   };
 };
