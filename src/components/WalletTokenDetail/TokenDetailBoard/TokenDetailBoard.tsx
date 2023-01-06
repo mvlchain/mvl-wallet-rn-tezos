@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { useRoute, useNavigation } from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
+import { commify } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { View, Platform } from 'react-native';
 import { SvgUri } from 'react-native-svg';
@@ -39,9 +41,9 @@ function TokenDetailBoard() {
           <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>
-          <S.TokenAmount>{balance}</S.TokenAmount>
+          <S.TokenAmount>{commify(balance)}</S.TokenAmount>
           <S.TokenBaseCurrency>
-            {price} {settedCurrency}
+            {commify(new BigNumber(price).toString(10))} {settedCurrency}
           </S.TokenBaseCurrency>
         </S.TokenAmountWrapper>
       </S.TokenInfoContainer>
