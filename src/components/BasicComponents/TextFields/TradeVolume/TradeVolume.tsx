@@ -3,17 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import SymbolImage from '@@components/BasicComponents/SymbolImage';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
 import gasStore from '@@store/gas/gasStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
-import { height } from '@@utils/ui';
 
 import * as S from '../TextField.style';
 
@@ -119,7 +118,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
             handleTokenSelect();
           }}
         >
-          {tokenDto.logoURI && <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />}
+          {tokenDto?.logoURI && <SymbolImage symbolURI={tokenDto.logoURI} size={32} />}
           <S.Token>{tokenDto.symbol}</S.Token>
           {handleTokenSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} />}
         </S.SymbolWrapper>
