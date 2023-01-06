@@ -69,6 +69,14 @@ export const useEarnEventDetailsUiState = (
     deepLink: deepLink,
   });
 
+  useEffect(() => {
+    setDetails({
+      event: data,
+      phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
+      deepLink: deepLink,
+    });
+  }, [data, deepLink]);
+
   const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
     connection: undefined,
@@ -92,7 +100,6 @@ export const useEarnEventDetailsUiState = (
   );
   // const onThirdPartyConnectionConfirm = async (appId: string, token: string | null) => {
   //   if (token) {
-
   //     const res = await connectThirdParty(appId, token);
   //     if (res && res.status === 'ok') {
   //       refreshThirdParty();
@@ -127,7 +134,6 @@ export const useEarnEventDetailsUiState = (
   const refreshThirdParty = async () => {
     const { event, phase, deepLink } = details;
     if (!event) return;
-    console.log(`Event> useThirdPartyConnection`);
 
     const thirdPartyApp = event.app;
     if (!thirdPartyApp) {
@@ -201,14 +207,13 @@ export const useEarnEventDetailsUiState = (
     (async () => {
       await refreshThirdParty();
     })();
-  }, [details, deepLink]);
+  }, [details]);
 
   // UseCase: useClaimStatusInformation, State<ClaimStatusInfo>
   useEffect(() => {
     (async () => {
       const { event, phase } = details;
       if (!event) return;
-      console.log(`Event> useClaimStatusInformation`);
 
       const thirdPartyConnection = thirdParty.connection;
       if (phase === EventPhase.OnClaim) {
