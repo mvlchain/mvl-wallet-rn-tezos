@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
 import { commify } from 'ethers/lib/utils';
 import { Pressable } from 'react-native';
 import { SvgUri } from 'react-native-svg';
@@ -37,7 +38,7 @@ function TokenListItem({ ticker, balance, valuatedPrice, logoURI, tokenDto }: IT
             {commify(balance)} {ticker}
           </S.Text>
           <S.AmountUSD>
-            {commify(valuatedPrice.toFixed(10))} {settedCurrency}
+            {commify(new BigNumber(valuatedPrice).toString(10))} {settedCurrency}
           </S.AmountUSD>
         </S.ValueContainer>
       </S.Container>
