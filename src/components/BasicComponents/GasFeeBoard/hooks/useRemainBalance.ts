@@ -15,7 +15,7 @@ const useRemainBalance = (isCoin: boolean) => {
 
   const remainBalance = useMemo(() => {
     return value && isCoin ? bnBalnce.minus(value) : bnBalnce;
-  }, [balance]);
+  }, [balance, value]);
 
   const remainBalanceStr = formatBigNumber(remainBalance, coinDto.decimals).toString(10);
   return { remainBalanceStr, remainBalance };
