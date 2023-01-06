@@ -6,9 +6,10 @@ import { inject, injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, NETWORK_FEE_TYPE, Network, COIN_DTO, NETWORK_ID } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE, Network, NETWORK_ID } from '@@constants/network.constant';
 import { WalletService } from '@@domain/wallet/services/WalletService';
 import { RefreshTransactionResponseDto } from '@@generated/generated-scheme-clutch';
+import { TEZOS_TOKEN_LIST } from '@@store/token/tokenPersistStore.constant';
 import { BnToEtherBn, formatBigNumber } from '@@utils/formatBigNumber';
 import { request } from '@@utils/request';
 
@@ -77,7 +78,7 @@ export class TransactionService implements ITransactionService {
             return await this.tezosService.sendTransaction(selectedNetwork, wallet.privateKey, {
               to,
               fee: gasFeeInfo.total.toNumber(),
-              amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
+              amount: +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10),
             });
           }
         case NETWORK_FEE_TYPE.EIP1559:

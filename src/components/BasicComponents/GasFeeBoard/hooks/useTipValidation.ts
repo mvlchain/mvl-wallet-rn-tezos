@@ -4,7 +4,8 @@ import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
-import { COIN_DTO, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import useCoinDto from '@@hooks/useCoinDto';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import gasStore from '@@store/gas/gasStore';
@@ -22,6 +23,7 @@ const useTipValidation = (tokenDto: TokenDto) => {
   const network = getNetworkConfig(selectedNetwork);
   const { balance } = useOneTokenBalance(tokenDto);
   const bnBalnce = new BigNumber(balance).shiftedBy(tokenDto.decimals);
+  const { coinDto } = useCoinDto();
 
   const { baseFee, tip, gas, setState } = gasStore();
   const { value } = transactionRequestStore();
@@ -37,7 +39,7 @@ const useTipValidation = (tokenDto: TokenDto) => {
   const remainBalanceStr = formatBigNumber(remainBalance, tokenDto.decimals).toString(10);
 
   const textForm = (text: string) => {
-    return `${t('maximum')} ${text} ${COIN_DTO[network.coin].symbol}`;
+    return `${t('maximum')} ${text} ${coinDto.symbol}`;
   };
 
   const getTipCheck = useDebounce(() => {

@@ -148,12 +148,6 @@ export const getNetworkByBase = (network: Network): Network => {
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
 
-export const COIN_DTO: Record<string, TokenDto> = {
-  BNB: BSC_TOKENLIST[0],
-  ETH: ETHEREUM_TOKEN_LIST[0],
-  XTZ: TEZOS_TOKEN_LIST[0],
-};
-
 export const EXPLORER_BASE_URL: Record<Network, string> = {
   [NETWORK.ETH]: 'https://etherscan.io/tx/',
   [NETWORK.GOERLI]: 'https://goerli.etherscan.io/tx/',

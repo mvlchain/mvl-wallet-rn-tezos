@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
 import { useTranslation } from 'react-i18next';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { COIN_DTO, getNetworkConfig, getNetworkByBase, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
+import useCoinDto from '@@hooks/useCoinDto';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import gasStore from '@@store/gas/gasStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -32,11 +32,12 @@ function ConfirmSendModal({ onConfirm, tokenDto }: IConfirmSendModalProps) {
 
   const { total } = gasStore();
   const { value, to } = transactionRequestStore();
+  const { coinDto } = useCoinDto();
 
-  const totalStr = formatBigNumber(total!, COIN_DTO[network.coin].decimals).toString(10);
+  const totalStr = formatBigNumber(total!, coinDto.decimals).toString(10);
   const amountStr = formatBigNumber(value!, tokenDto.decimals).toString(10);
   const { price: tokenPrice } = useOneTokenPrice(tokenDto, amountStr);
-  const { price: coinPrice } = useOneTokenPrice(COIN_DTO[network.coin], totalStr);
+  const { price: coinPrice } = useOneTokenPrice(coinDto, totalStr);
   const tokenPriceInDeciaml = new Decimal(tokenPrice);
   const coinPriceInDecimal = new Decimal(coinPrice);
 

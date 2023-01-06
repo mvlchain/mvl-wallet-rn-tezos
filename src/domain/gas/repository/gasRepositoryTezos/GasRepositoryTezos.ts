@@ -4,7 +4,7 @@ import { Tzip12Module, tzip12 } from '@taquito/tzip12';
 import BigNumber from 'bignumber.js';
 import { injectable } from 'tsyringe';
 
-import { COIN_DTO } from '@@constants/network.constant';
+import { TEZOS_TOKEN_LIST } from '@@store/token/tokenPersistStore.constant';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
@@ -30,7 +30,7 @@ export class GasRepositoryTezosImpl implements IGasRepositoryTezos {
         if (!value) {
           throw new Error('value is required');
         }
-        const valueInNumber = +formatBigNumber(value, COIN_DTO.XTZ.decimals).toString(10);
+        const valueInNumber = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10);
         return await Tezos.estimate.transfer({ to, amount: valueInNumber });
       }
     } catch (err) {
