@@ -4,10 +4,10 @@ import { tzip12, Tzip12Module } from '@taquito/tzip12';
 import { injectable } from 'tsyringe';
 
 import { Network, getNetworkConfig } from '@@constants/network.constant';
+import { faType } from '@@utils/faType';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import { ITransactionServiceTezos } from './TransactionServiceTezos.type';
-
 @injectable()
 export class TransactionServiceTezos implements ITransactionServiceTezos {
   constructor() {}
@@ -25,10 +25,27 @@ export class TransactionServiceTezos implements ITransactionServiceTezos {
     Tezos.setProvider({
       signer: new InMemorySigner(selectedWalletPrivateKey),
     });
-
-    Tezos.addExtension(new Tzip12Module());
     const contract = await Tezos.wallet.at(contractAddress, tzip12);
-    const params = contract.methods.transfer(from, to, amount).toTransferParams();
+    Tezos.addExtension(new Tzip12Module());
+    let params;
+    if (faType(contractAddress) === 'fa12') {
+      params = contract.methods.transfer(from, to, amount).toTransferParams();
+    } else {
+      params = contract.methods
+        .transfer([
+          {
+            from_: from,
+            txs: [
+              {
+                to_: to,
+                token_id: 0,
+                amount: amount,
+              },
+            ],
+          },
+        ])
+        .toTransferParams();
+    }
     return JSON.stringify(params);
   };
   // Tezos는 general한 sendTransaction을 raw string data를 활용하는 방식으로 구현하기 어려워서 transfer 기준으로 일단 구현
