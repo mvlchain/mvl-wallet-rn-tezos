@@ -1,4 +1,6 @@
 import appconfig from '@@config/appconfig';
+import { BSC_TOKENLIST } from '@@domain/wallet/repositories/TestData';
+import { ETHEREUM_TOKEN_LIST, TEZOS_TOKEN_LIST } from '@@store/token/tokenPersistStore.constant';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
 
@@ -145,34 +147,6 @@ export const getNetworkByBase = (network: Network): Network => {
 };
 
 export const getNetworkConfig = (network: Network): NetworkConfig => NETWORK_CONFIGS[network];
-
-//TODO: 네트워크 코인들의 경우 이렇게말고 list받아올때 contranctaddress가없는 코인을 어떻게 같이 넘겨주는 방법 고민..
-export const COIN_DTO: Record<string, TokenDto> = {
-  BNB: {
-    symbol: 'BNB',
-    name: 'BNB',
-    decimals: 18,
-    contractAddress: null,
-    logoURI: 'https://exchange.biswap.org/images/coins/bnb.svg',
-    priceId: 'binancecoin',
-  },
-  ETH: {
-    symbol: 'ETH',
-    name: 'Ethereum Token',
-    decimals: 18,
-    contractAddress: null,
-    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/eth.svg',
-    priceId: 'ethereum',
-  },
-  XTZ: {
-    symbol: 'XTZ',
-    name: 'Tezos',
-    decimals: 6,
-    contractAddress: null,
-    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/xtz.svg',
-    priceId: 'tezos',
-  },
-};
 
 export const EXPLORER_BASE_URL: Record<Network, string> = {
   [NETWORK.ETH]: 'https://etherscan.io/tx/',

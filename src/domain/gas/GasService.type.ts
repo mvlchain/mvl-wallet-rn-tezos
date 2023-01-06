@@ -32,6 +32,8 @@ export interface IEstimateGasRequest {
 export interface IEstimateGasResponse {
   baseFee?: BigNumber;
   gasUsage: BigNumber;
+  storageFee?: BigNumber;
+  storageLimit?: BigNumber;
 }
 
 export interface IGetGasFeeResponse {
