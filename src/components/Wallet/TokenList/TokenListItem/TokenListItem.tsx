@@ -34,10 +34,10 @@ function TokenListItem({ ticker, balance, valuatedPrice, logoURI, tokenDto }: IT
         </S.LabelContainer>
         <S.ValueContainer>
           <S.Text>
-            {commify(balance.toString())} {ticker}
+            {commify(balance)} {ticker}
           </S.Text>
           <S.AmountUSD>
-            {commify(valuatedPrice)} {settedCurrency}
+            {commify(valuatedPrice.toFixed(10))} {settedCurrency}
           </S.AmountUSD>
         </S.ValueContainer>
       </S.Container>
