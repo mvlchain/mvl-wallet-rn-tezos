@@ -3,28 +3,23 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import useDebounce from '@@hooks/useDebounce';
 import gasStore from '@@store/gas/gasStore';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { commonColors } from '@@style/colors';
 import { format } from '@@utils/strings';
 
 import { TGasHint } from '../GasFeeInputs/GasFeeInputs.type';
 
+import useGasUtil from './useGasUtil';
+
 const useGasValidation = () => {
   const { t } = useTranslation();
-  const { selectedNetwork } = walletPersistStore();
-  const network = getNetworkConfig(selectedNetwork);
-
   const { gas, setState } = gasStore();
-
-  const red = commonColors.red;
-
+  const { red, networkFeeType } = useGasUtil();
   const [gasCheck, setGasCheck] = useState<TGasHint | null>(null);
 
   const getGasCheck = useDebounce(() => {
-    switch (network.networkFeeType) {
+    switch (networkFeeType) {
       case NETWORK_FEE_TYPE.EIP1559:
         if (gas?.lt(new BigNumber(21000))) {
           setState({ gasValid: false });
