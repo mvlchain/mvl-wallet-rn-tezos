@@ -62,7 +62,14 @@ const useSetSendData = () => {
   const setData = async () => {
     if (!to || !value) return;
     if (tokenDto.contractAddress) {
-      const data = await transactionService.getTransferData(selectedNetwork, selectedWalletIndex[selectedNetwork], to, value);
+      const data = await transactionService.getTransferData({
+        selectedNetwork: selectedNetwork,
+        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+        to,
+        value,
+        contractAddress: tokenDto.contractAddress,
+        decimals: tokenDto.decimals,
+      });
       setBody({
         data,
       });

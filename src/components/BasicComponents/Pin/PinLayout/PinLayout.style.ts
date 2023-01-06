@@ -5,10 +5,10 @@ import { fontSize, height, width } from '@@utils/ui';
 
 import { IPinLayoutStyleProps, IPinPasswordMonitorStyleProps } from './PinLayout.type';
 
-export const PinLayoutWrapper = styled.SafeAreaView<IPinLayoutStyleProps>`
+export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
   flex: 1;
   justify-content: flex-end;
-  margin-top: ${({ isFull }) => (isFull ? `0px` : `${height * 14}px`)};
+  margin-top: ${({ isFull }) => (isFull ? `0px` : `${height * 60}px`)};
 `;
 
 export const BackDrop = styled.Pressable<IPinLayoutStyleProps>`

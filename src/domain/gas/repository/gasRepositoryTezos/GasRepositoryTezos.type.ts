@@ -6,9 +6,12 @@ export interface IGetTotalGasFeeParamsTEZ {
   baseFee: BigNumber;
 }
 
-export interface IEstimateGasParamsTEZ extends TransferParams {
+export interface IEstimateGasParamsTEZ {
   rpcUrl: string;
   walletPrivateKey: string;
+  to: string;
+  value?: BigNumber;
+  data?: string;
 }
 
 export interface IGasRepositoryTezos {

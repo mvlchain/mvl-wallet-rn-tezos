@@ -2,9 +2,8 @@ import { BigNumber } from 'bignumber.js';
 import { BigNumber as BigNumberEther } from 'ethers';
 import { injectable, inject } from 'tsyringe';
 
-import { NETWORK_FEE_TYPE, getNetworkConfig, Network, COIN_DTO } from '@@constants/network.constant';
+import { NETWORK_FEE_TYPE, getNetworkConfig, Network } from '@@constants/network.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IEstimateGasRequest, IGasService, IGetTotalGasFeeRequest } from './GasService.type';
 import { GasRepositoryImpl } from './repository/gasRepository/GasRepository';
@@ -85,21 +84,21 @@ export class GasService implements IGasService {
       const wallet = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
       switch (network.networkFeeType) {
         case NETWORK_FEE_TYPE.TEZOS:
-          if (!value) {
-            throw new Error('value is required');
-          }
           const estimationTezos = await this.gasRepositoryTezos.estimateGas({
             rpcUrl: network.rpcUrl,
             walletPrivateKey: wallet.privateKey,
             to,
-            amount: +formatBigNumber(value, COIN_DTO[network.coin].decimals).toString(10),
+            value,
+            data,
           });
           if (!estimationTezos) {
             throw new Error('fail to estimate');
           }
           return {
             baseFee: new BigNumber(estimationTezos.totalCost),
-            gasUsage: new BigNumber(estimationTezos.gasLimit),
+            storageFee: new BigNumber(estimationTezos.burnFeeMutez), //새로운 토큰 처음 보낼 때만 쓰임, 고정값
+            storageLimit: new BigNumber(estimationTezos.storageLimit),
+            gasUsage: new BigNumber(estimationTezos.gasLimit), //사실상 사용안함
           };
         case NETWORK_FEE_TYPE.EIP1559:
           const estimationEip1559 = await this.gasRepository.estimateGas(

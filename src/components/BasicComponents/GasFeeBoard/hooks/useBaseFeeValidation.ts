@@ -1,45 +1,28 @@
-import { useMemo, useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { COIN_DTO, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import { NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import useDebounce from '@@hooks/useDebounce';
-import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import gasStore from '@@store/gas/gasStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
-import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { commonColors } from '@@style/colors';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { TGasHint } from '../GasFeeInputs/GasFeeInputs.type';
+
+import useGasUtil from './useGasUtil';
+import useRemainBalance from './useRemainBalance';
 const useBaseFeeValidation = (tokenDto: TokenDto, blockBaseFee: BigNumber | null) => {
   const { t } = useTranslation();
-  const { selectedNetwork } = walletPersistStore();
-  const network = getNetworkConfig(selectedNetwork);
-  const { balance } = useOneTokenBalance(tokenDto);
-  const bnBalnce = new BigNumber(balance).shiftedBy(tokenDto.decimals);
 
+  const { remainBalanceStr, remainBalance } = useRemainBalance(!tokenDto.contractAddress);
   const { baseFee, tip, gas, setState } = gasStore();
-  const { value } = transactionRequestStore();
-  const grey = commonColors.grey500;
-  const red = commonColors.red;
-
   const [baseFeeCheck, setBaseFeeCheck] = useState<TGasHint | null>(null);
-
-  const remainBalance = useMemo(() => {
-    return value && tokenDto.contractAddress ? bnBalnce.minus(value) : bnBalnce;
-  }, [tokenDto, balance]);
-
-  const remainBalanceStr = formatBigNumber(remainBalance, tokenDto.decimals).toString(10);
-
-  const textForm = (text: string) => {
-    return `${t('maximum')} ${text} ${COIN_DTO[network.coin].symbol}`;
-  };
+  const { grey, red, textForm, networkFeeType } = useGasUtil();
 
   const getBaseFeeCheck = useDebounce(() => {
-    switch (network.networkFeeType) {
+    switch (networkFeeType) {
       case NETWORK_FEE_TYPE.EIP1559:
         if (!BigNumber.isBigNumber(gas) || !BigNumber.isBigNumber(tip) || !BigNumber.isBigNumber(baseFee) || !BigNumber.isBigNumber(blockBaseFee)) {
           setState({ baseFeeValid: false });
