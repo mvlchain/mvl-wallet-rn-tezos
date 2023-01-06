@@ -1,21 +1,19 @@
 import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { APP_STACK_ROUTE, TAppStackNavigationProps } from 'App.type';
 
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import { AuthProvider } from '@@domain/auth/IAuthService';
 import { useDi } from '@@hooks/useDi';
+import { TAuthStackNavigationProps, AUTH_STACK_ROUTE } from '@@navigation/AuthStack/AuthStack.type';
 import { authModalStore } from '@@store/auth/authModalStore';
-import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
 
 const useSignInScreen = () => {
-  const navigation = useNavigation<TAppStackNavigationProps<'AUTH'>>();
+  const navigation = useNavigation<TAuthStackNavigationProps<'SIGN_IN'>>();
   const keyClient = useDi('KeyClient');
-  const { pKey, setPKey, setAppScreen, setPKeyAppScreen } = authStore();
-  const { stage } = authPersistStore();
+  const { setPKey, setPKeyAppScreen } = authStore();
   const { close } = authModalStore();
 
   const auth = useDi('AuthService');
@@ -46,11 +44,6 @@ const useSignInScreen = () => {
     try {
       const { privateKey, isNewUser } = await auth.signIn(provider);
 
-      // setPKey(privateKey);
-      // if (!navigateToSeedPhrase(privateKey, isNewUser) && privateKey) {
-      //   setAppScreen(AppScreen.Root);
-      // }
-
       if (isSeedPhraseNavigatable(privateKey, isNewUser)) {
         setPKey(privateKey);
         navigateToSeedPhrase();
@@ -68,7 +61,7 @@ const useSignInScreen = () => {
   };
 
   const navigateToSeedPhrase = () => {
-    navigation.navigate(APP_STACK_ROUTE.SEED_PHRASE);
+    navigation.navigate(AUTH_STACK_ROUTE.SEED_PHRASE);
     close(AUTH_MODAL_NAME.PIN);
   };
 
