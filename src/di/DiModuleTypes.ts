@@ -15,7 +15,7 @@ import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepo
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
-import { ITradeRepository } from '@@domain/trade/repositories/tradeRepository';
+import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
 import { ITransactionService } from '@@domain/transaction/TransactionService.type';
 import { ITransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers.type';
 import { ITransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos.type';
@@ -55,7 +55,7 @@ export interface DiModuleTypes {
   GasRepository: GasRepositoryImpl;
   GasRepositoryEip1559: GasRepositoryEip1559Impl;
   GasRepositoryTezos: GasRepositoryTezosImpl;
-  TradeRepository: ITradeRepository;
+  TradeRepository: TradeRepository;
 
   // Client
   KeyClient: KeyClient;

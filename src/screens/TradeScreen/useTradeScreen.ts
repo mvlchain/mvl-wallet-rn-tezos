@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -6,22 +6,37 @@ import Toast from 'react-native-toast-message';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkByBase, NETWORK } from '@@constants/network.constant';
+import { NETWORK } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+
+const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const useTradeScreen = () => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
-  const { tokenList } = tokenPersistStore();
+  const { data: tokenList } = useTradeTokeneQuery(selectedNetwork, {
+    select: (data) => {
+      const tokens = Object.values(data.tokens).map((token) => {
+        // unknown으로 와서 any캐스팅 할 수 밖에 없었음...
+        const tokenData = token as any;
+        return {
+          ...tokenData,
+          contractAddress: tokenData?.address === BSC_DEFAULT_ADDRESS ? null : tokenData?.address,
+        };
+      });
+
+      return tokens as TokenDto[];
+    },
+  });
   const { selectedToken, selectToken } = tradeStore();
-  const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>(tokenList[getNetworkByBase(selectedNetwork)]);
+  const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>([]);
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const [toTradeMenu, setToTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const [showTip, setShowTip] = useState(false);
@@ -72,10 +87,13 @@ export const useTradeScreen = () => {
   }, [selectedToken.to]);
 
   useEffect(() => {
-    setSelectedTokenList(tokenList[getNetworkByBase(selectedNetwork)]);
-  }, [selectedNetwork]);
+    if (!tokenList) return;
+    setSelectedTokenList(tokenList);
+  }, [tokenList]);
 
   useEffect(() => {
+    console.log('selectedTokenList:  ', selectedTokenList);
+    if (selectedTokenList.length === 0) return;
     selectToken(selectedTokenList[0].symbol, 'from');
     if (selectedTokenList.length > 1) {
       selectToken(selectedTokenList[1].symbol, 'to');

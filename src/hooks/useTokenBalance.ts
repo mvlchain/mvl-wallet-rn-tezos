@@ -13,7 +13,6 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
-import useTokenQuery from './queries/useTokenQuery';
 import useWalletsQuery from './queries/useWalletsQuery';
 
 export const useTokenBalance = () => {
