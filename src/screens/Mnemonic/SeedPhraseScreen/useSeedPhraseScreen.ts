@@ -2,7 +2,6 @@ import { useState, useEffect, useLayoutEffect } from 'react';
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation, useIsFocused, RouteProp, useRoute } from '@react-navigation/native';
-import { APP_STACK_ROUTE, TAppStackNavigationProps, TAppStackParamList } from 'App.type';
 import { useTranslation } from 'react-i18next';
 import { BackHandler } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -11,18 +10,17 @@ import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { useDi } from '@@hooks/useDi';
 import useHeader from '@@hooks/useHeader';
+import { TAuthStackNavigationProps, TAuthStackParamList, AUTH_STACK_ROUTE } from '@@navigation/AuthStack/AuthStack.type';
 import { authModalStore } from '@@store/auth/authModalStore';
 import authStore from '@@store/auth/authStore';
 
 const useSeedPhraseScreen = () => {
-  const navigation = useNavigation<TAppStackNavigationProps<'SEED_PHRASE'>>();
-  const { params } = useRoute<RouteProp<TAppStackParamList, 'SEED_PHRASE'>>();
-  const isFocused = useIsFocused();
-
-  const { t } = useTranslation();
-
+  const navigation = useNavigation<TAuthStackNavigationProps<'SEED_PHRASE'>>();
+  const { params } = useRoute<RouteProp<TAuthStackParamList, 'SEED_PHRASE'>>();
   const auth = useDi('AuthService');
   const uiService = useDi('UIService');
+  const { t } = useTranslation();
+  const isFocused = useIsFocused();
   const { handleStackHeaderOption } = useHeader();
   const { mnemonic, setMnemonic } = authStore();
   const { close } = authModalStore();
@@ -93,7 +91,7 @@ const useSeedPhraseScreen = () => {
   };
 
   const onPressNext = () => {
-    navigation.navigate(APP_STACK_ROUTE.SEED_PHRASE_CONFIRM);
+    navigation.navigate(AUTH_STACK_ROUTE.SEED_PHRASE_CONFIRM);
   };
 
   return { type, onlyCopy: params?.onlyCopy, onPressViewSeedPhrase, onPressCopyMnemonic, onPressNext };

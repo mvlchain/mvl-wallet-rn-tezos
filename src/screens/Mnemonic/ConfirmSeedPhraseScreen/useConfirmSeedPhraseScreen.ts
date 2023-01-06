@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { TAppStackNavigationProps } from 'App.type';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkByBase, NETWORK } from '@@constants/network.constant';
+import { NETWORK } from '@@constants/network.constant';
 import useWalletMutation from '@@hooks/queries/useWalletMutation';
 import { useDi } from '@@hooks/useDi';
-import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { TAuthStackNavigationProps } from '@@navigation/AuthStack/AuthStack.type';
 import authPersistStore from '@@store/auth/authPersistStore';
 import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
@@ -16,7 +15,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useConfirmSeedPhraseScreen = () => {
-  const navigation = useNavigation<TAppStackNavigationProps<'SEED_PHRASE_CONFIRM'>>();
+  const navigation = useNavigation<TAuthStackNavigationProps<'SEED_PHRASE_CONFIRM'>>();
   const { t } = useTranslation();
   const { removeStageByPostboxKey } = authPersistStore();
   const { initWallet } = walletPersistStore();
