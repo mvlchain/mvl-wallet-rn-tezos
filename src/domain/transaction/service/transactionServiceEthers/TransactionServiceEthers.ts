@@ -2,6 +2,7 @@ import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { ethers } from 'ethers';
 import { inject, injectable } from 'tsyringe';
 
+import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, Network } from '@@constants/network.constant';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { loadingFunction } from '@@utils/loadingHelper';
@@ -42,4 +43,8 @@ export class TransactionServiceEthers implements ITransactionServiceEthers {
       console.log(err);
     }
   });
+
+  encodeData = async (method: string, params: any) => {
+    return new ethers.utils.Interface(abiERC20).encodeFunctionData(method, params);
+  };
 }
