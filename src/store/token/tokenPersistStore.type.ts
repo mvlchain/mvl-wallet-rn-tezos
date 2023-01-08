@@ -15,6 +15,7 @@ export interface TokenDto {
   symbol: string;
   name: string;
   decimals: number;
+  address: string;
   contractAddress: string | null;
   logoURI?: string;
   priceId?: string;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
@@ -9,11 +10,14 @@ import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import { IQuoteDto } from '@@domain/trade/repositories/tradeRepository.type';
+import useTradeQuoteQuery from '@@hooks/queries/useTradeQuoteQuery';
 import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -40,6 +44,22 @@ export const useTradeScreen = () => {
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const [toTradeMenu, setToTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
   const [showTip, setShowTip] = useState(false);
+
+  const [tradeFromValue, setTradeFromValue] = useState<BigNumber | null>(null);
+  const [tradeToValue, setTradeToValue] = useState<BigNumber | null>(new BigNumber(0));
+  const [tradeFromValidation, setTradeFromValidation] = useState(false);
+  const [quoteDto, setQuoteDto] = useState<IQuoteDto | null>(null);
+  const [priceImpact, setPriceImpact] = useState('-');
+  const { refetch } = useTradeQuoteQuery(selectedNetwork, quoteDto, {
+    enabled: false,
+    onSuccess: (data) => {
+      const { priceImpact, toTokenAmount } = data;
+      if (!priceImpact || !toTokenAmount) return;
+      setPriceImpact(priceImpact);
+      const amount = formatBigNumber(new BigNumber(toTokenAmount), data.toToken?.decimals ?? 18);
+      setTradeToValue(amount);
+    },
+  });
 
   const onPressToken = (type: string) => {
     const menuList = type === 'from' ? fromTradeMenu : toTradeMenu;
@@ -92,7 +112,6 @@ export const useTradeScreen = () => {
   }, [tokenList]);
 
   useEffect(() => {
-    console.log('selectedTokenList:  ', selectedTokenList);
     if (selectedTokenList.length === 0) return;
     selectToken(selectedTokenList[0].symbol, 'from');
     if (selectedTokenList.length > 1) {
@@ -114,19 +133,46 @@ export const useTradeScreen = () => {
   const onPressChange = () => {
     selectToken(selectedToken.to, 'from');
     selectToken(selectedToken.from, 'to');
+    setPriceImpact('-');
+    setTradeFromValue(null);
+    setTradeToValue(new BigNumber(0));
   };
 
   const onPressTrade = () => {
     openModal(MODAL_TYPES.GAS_FEE, { tokenDto: selectedTokenList[0], trade: async (gasfee: IGasFeeInfo) => {} });
   };
 
+  useEffect(() => {
+    if (!tradeFromValue || !tradeFromValidation) {
+      setPriceImpact('-');
+      setTradeToValue(new BigNumber(0));
+      return;
+    }
+
+    setQuoteDto({
+      fromTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.from)?.address ?? '',
+      toTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.to)?.address ?? '',
+      amount: tradeFromValue?.toString() ?? '',
+    });
+  }, [tradeFromValue, tradeFromValidation]);
+
+  useEffect(() => {
+    if (!quoteDto) return;
+    refetch();
+  }, [quoteDto]);
+
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
     toToken: selectedTokenList.find((token) => token.symbol === selectedToken.to),
     showTip,
+    tradeFromValue,
+    tradeToValue,
+    priceImpact,
     setShowTip,
     onPressToken,
     onPressChange,
     onPressTrade,
+    setTradeFromValue,
+    setTradeFromValidation,
   };
 };

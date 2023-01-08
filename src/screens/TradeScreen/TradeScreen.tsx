@@ -15,7 +15,20 @@ import { useTradeScreen } from './useTradeScreen';
 
 function TradeScreen() {
   const { t } = useTranslation();
-  const { fromToken, toToken, showTip, setShowTip, onPressToken, onPressChange, onPressTrade } = useTradeScreen();
+  const {
+    fromToken,
+    toToken,
+    showTip,
+    tradeFromValue,
+    tradeToValue,
+    priceImpact,
+    setShowTip,
+    onPressToken,
+    onPressChange,
+    onPressTrade,
+    setTradeFromValue,
+    setTradeFromValidation,
+  } = useTradeScreen();
   const { onPressWalletList } = useWalletSelector();
   const { address } = useAccount();
 
@@ -30,11 +43,13 @@ function TradeScreen() {
       <S.InputContainer>
         {fromToken && (
           <TradeVolume
-            onChange={() => console.log('')}
+            value={tradeFromValue}
+            onChange={setTradeFromValue}
             tokenDto={fromToken}
             useMax={true}
             label={t('from')}
             handleTokenSelect={() => onPressToken('from')}
+            setParentValid={setTradeFromValidation}
           />
         )}
         <S.SwapButtonContainer>
@@ -44,11 +59,15 @@ function TradeScreen() {
         </S.SwapButtonContainer>
         {toToken && (
           <TradeVolume
-            onChange={() => console.log('')}
+            value={tradeToValue}
+            onChange={() => {}}
             tokenDto={toToken}
             label={t('to')}
             disableHint={true}
             handleTokenSelect={() => onPressToken('to')}
+            editable={false}
+            outterChain={true}
+            disableDelete={true}
           />
         )}
         <PrimaryButton onPress={onPressTrade} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
@@ -69,7 +88,7 @@ function TradeScreen() {
               </S.PriceImpactHelpButton>
             </Tooltip>
           </S.HelpWrapper>
-          <S.PriceImpactText>-</S.PriceImpactText>
+          <S.PriceImpactText>{priceImpact}</S.PriceImpactText>
         </S.PriceImpactContainer>
       </S.InputContainer>
     </S.Container>
