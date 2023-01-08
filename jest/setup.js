@@ -264,5 +264,3 @@ jest.mock('react-native-vision-camera', () => {
 jest.mock('react-native-localize', () => mockRNLocalize);
 
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
-
-jest.mock('react-native-fs', () => {});
