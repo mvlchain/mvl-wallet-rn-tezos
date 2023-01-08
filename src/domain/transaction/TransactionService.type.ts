@@ -146,6 +146,7 @@ export interface IGetTransferData {
 }
 
 export interface ITransactionService {
+  getApproveData: (spender: string, value: BigNumber) => Promise<BytesLike>;
   getTransferData: (params: IGetTransferData) => Promise<BytesLike | undefined>;
   sendTransaction: ({
     selectedNetwork,

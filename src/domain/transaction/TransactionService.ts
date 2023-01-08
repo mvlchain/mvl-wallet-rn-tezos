@@ -31,6 +31,10 @@ export class TransactionService implements ITransactionService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
+  getApproveData = async (spender: string, value: BigNumber) => {
+    return this.etherService.encodeData('approve', [spender, value.toString(10)]);
+  };
+
   getTransferData = async ({ selectedNetwork, selectedWalletIndex, to, value, contractAddress, decimals }: IGetTransferData) => {
     try {
       const network = getNetworkConfig(selectedNetwork);
@@ -44,10 +48,9 @@ export class TransactionService implements ITransactionService {
           const amount = value.toNumber();
           return this.tezosService.getTransferData(selectedNetwork, wallet.privateKey, wallet.address, to, amount, contractAddress);
         case NETWORK_FEE_TYPE.EIP1559:
-          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value.toString(10)]);
-
+          return this.etherService.encodeData('transfer', [to, value.toString(10)]);
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
-          return new ethers.utils.Interface(abiERC20).encodeFunctionData('transfer', [to, value.toString(10)]);
+          return this.etherService.encodeData('transfer', [to, value.toString(10)]);
       }
     } catch (err) {
       console.log(err);
