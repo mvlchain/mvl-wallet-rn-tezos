@@ -173,7 +173,7 @@ export const useTradeScreen = () => {
   };
 
   const onPressTrade = () => {
-    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: selectedTokenList[0], trade: async (gasfee: IGasFeeInfo) => {} });
+    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: selectedTokenList[0], onConfirm: async (gasfee: IGasFeeInfo) => {} });
   };
 
   useEffect(() => {
