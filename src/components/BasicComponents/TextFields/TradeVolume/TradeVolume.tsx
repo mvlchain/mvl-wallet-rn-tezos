@@ -19,7 +19,21 @@ import * as S from '../TextField.style';
 import { ITradeVolumeComponentProps } from './TradeVolume.type';
 
 export function TradeVolume(props: ITradeVolumeComponentProps) {
-  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000, setParentValid, handleTokenSelect } = props;
+  const {
+    useMax,
+    value,
+    onSelect,
+    label,
+    tokenDto,
+    onChange,
+    disableHint,
+    debounceTime = 1000,
+    setParentValid,
+    handleTokenSelect,
+    editable = true,
+    outterChain,
+    disableDelete,
+  } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
 
@@ -55,10 +69,19 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       setUsingMax(false);
     }
     const value = data.nativeEvent.text;
+    handleValue(value);
+  };
+
+  const handleValue = (value: string) => {
     const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
     setDisplayValue(formattedValue);
     debounceCallback(formattedValue ? new BigNumber(formattedValue).shiftedBy(tokenDto.decimals) : null);
   };
+
+  useEffect(() => {
+    if (!value || !outterChain) return;
+    handleValue(value.toString());
+  }, [value, outterChain]);
 
   const onPressMax = () => {
     if (tokenDto.contractAddress) {
@@ -101,16 +124,23 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       )}
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
-          <S.TradeVolumeInput
-            value={displayValue ?? ''}
-            onChange={onSet}
-            keyboardType={'numeric'}
-            selectionColor={color.black}
-            placeholder={'0.00'}
-            placeholderTextColor={color.grey300Grey700}
-            onKeyPress={onKeyPress}
-          />
-          {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
+          {editable ? (
+            <S.TradeVolumeInput
+              value={displayValue ?? ''}
+              onChange={onSet}
+              keyboardType={'numeric'}
+              selectionColor={color.black}
+              placeholder={'0.00'}
+              placeholderTextColor={color.grey300Grey700}
+              onKeyPress={onKeyPress}
+              editable={editable}
+            />
+          ) : (
+            <S.TradeVolumeInputText numberOfLines={1} lineBreakMode='tail'>
+              {displayValue}
+            </S.TradeVolumeInputText>
+          )}
+          {!disableDelete && showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper
           onPress={() => {

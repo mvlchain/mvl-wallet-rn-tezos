@@ -31,7 +31,7 @@ export class TradeRepository implements ITradeRepository {
     return res.data;
   };
 
-  quote = async (network: Network, quoteDto: IQuoteDto): Promise<FetchPriceResponseDto> => {
+  quote = async (network: Network, quoteDto: IQuoteDto | null): Promise<FetchPriceResponseDto> => {
     const endpoint = `v1/native-swap/${network}/quote?${qs.stringify({
       ...quoteDto,
     })}`;

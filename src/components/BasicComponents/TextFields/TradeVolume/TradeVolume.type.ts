@@ -14,4 +14,7 @@ export interface ITradeVolumeComponentProps {
   debounceTime?: number;
   setParentValid?: (valid: boolean) => void;
   handleTokenSelect?: () => void;
+  editable?: boolean;
+  outterChain?: boolean;
+  disableDelete?: boolean;
 }
