@@ -12,7 +12,7 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-function GasFeeModal({ tokenDto, trade }: { tokenDto: TokenDto; trade: (gasFee: IGasFeeInfo) => Promise<void> }) {
+function GasFeeModal({ tokenDto, onConfirm }: { tokenDto: TokenDto; onConfirm: (gasFee: IGasFeeInfo) => Promise<void> }) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
 
@@ -28,7 +28,7 @@ function GasFeeModal({ tokenDto, trade }: { tokenDto: TokenDto; trade: (gasFee: 
     >
       <DismissKeyboardView>
         <ScrollView style={{ marginLeft: -24, marginRight: -24 }}>
-          <GasFeeBoard isRevision={false} onConfirm={trade} tokenDto={tokenDto} onConfirmTitle={t('trade')} hideDivider={true} />
+          <GasFeeBoard isRevision={false} onConfirm={onConfirm} tokenDto={tokenDto} onConfirmTitle={t('trade')} hideDivider={true} />
         </ScrollView>
       </DismissKeyboardView>
     </ModalLayout>
