@@ -27,7 +27,7 @@ const useTradeApprove = (fromToken: TokenDto) => {
 
   useSpenderQuery(getNetworkConfig(selectedNetwork).networkId, {
     onSuccess: (data) => {
-      setState({ to: data[0].address });
+      setState({ to: data[0].address, toValid: true });
     },
   });
 

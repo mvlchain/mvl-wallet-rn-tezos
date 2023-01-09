@@ -24,7 +24,7 @@ const useTrade = (fromToken: TokenDto, swapDto: ISwapDto) => {
     onSuccess: (res) => {
       const { from, to, value, data } = res.tx;
       const bnValue = new BigNumber(value);
-      setState({ from, to, value: bnValue, data }); //내가 보낸 value가 오는것 같은데 바꿔서 할당하는게 맞나? 비교 컨펌필요
+      setState({ from, to, value: bnValue, data, toValid: true, valueValid: true }); //내가 보낸 value가 오는것 같은데 바꿔서 할당하는게 맞나? 비교 컨펌필요
     },
   });
 
