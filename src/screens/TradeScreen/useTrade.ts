@@ -18,9 +18,9 @@ const useTrade = (fromToken: TokenDto, swapDto: ISwapDto) => {
   const { openModal, closeModal } = globalModalStore();
   const TransactionService = useDi('TransactionService');
 
-  const { to, value, data, setState } = transactionRequestStore();
+  const { to: spender, value, data: swapData, setState } = transactionRequestStore();
 
-  const { data: swapData } = useSwapDataQuery(getNetworkConfig(selectedNetwork).networkId, swapDto, {
+  const { data: serverSentSwapData } = useSwapDataQuery(getNetworkConfig(selectedNetwork).networkId, swapDto, {
     onSuccess: (res) => {
       const { from, to, value, data } = res.tx;
       const bnValue = new BigNumber(value);
@@ -29,11 +29,11 @@ const useTrade = (fromToken: TokenDto, swapDto: ISwapDto) => {
   });
 
   const sendTradeTransaction = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!to) return;
+    if (!spender) return;
     await TransactionService.sendTransaction({
-      to,
+      to: fromToken.contractAddress ? fromToken.contractAddress : spender,
       value: value ?? undefined,
-      data: data ?? undefined,
+      data: swapData ?? undefined,
       gasFeeInfo,
       selectedNetwork,
       selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -46,7 +46,7 @@ const useTrade = (fromToken: TokenDto, swapDto: ISwapDto) => {
   };
 
   return {
-    readyTrade: !!swapData,
+    readyTrade: !!serverSentSwapData,
     onPressTrade,
   };
 };
