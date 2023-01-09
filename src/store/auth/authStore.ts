@@ -2,11 +2,14 @@ import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
 
 import { TMnemonic } from '@@components/BasicComponents/Mnemonic/Mnemonic.type';
+import { isNotBlank, isBlank } from '@@utils/strings';
 
-import { IAuth, IAuthState } from './authStore.type';
+import { AppScreen, IAuth, IAuthState } from './authStore.type';
 
 const initState: IAuthState = {
   pKey: null,
+  isSignedIn: false,
+  appScreen: AppScreen.Auth,
   mnemonic: null,
   mnemonicList: [],
   focusedIndex: 0,
@@ -16,7 +19,28 @@ const authStore = create<IAuth>(
   zustandFlipper(
     (set) => ({
       ...initState,
-      setPKey: (pKey: string) => set(() => ({ pKey: pKey }), false, 'setPkey'),
+      setPKey: (pKey: string) =>
+        set(
+          (state) => ({
+            ...state,
+            pKey: pKey,
+            isSignedIn: isNotBlank(pKey),
+          }),
+          false,
+          'setPkey'
+        ),
+      setAppScreen: (appScreen: AppScreen) => set(() => ({ appScreen: appScreen }), false, 'setAppScreen'),
+      setPKeyAppScreen: (pKey: string, appScreen: AppScreen) =>
+        set(
+          (state) => ({
+            ...state,
+            pKey: pKey,
+            isSignedIn: isNotBlank(pKey),
+            appScreen: appScreen,
+          }),
+          false,
+          'setPKeyAppScreen'
+        ),
       setMnemonic: (mnemonic: string) => set(() => ({ mnemonic: mnemonic }), false, 'setMnemonic'),
       initMnemonic: (mnemonicArr: TMnemonic[]) => set(() => ({ mnemonicList: mnemonicArr }), false, 'initMnemonic'),
       setMnemonicList: (typedMnemonic: TMnemonic) =>
@@ -49,7 +73,7 @@ const authStore = create<IAuth>(
           'removeMnemonic'
         ),
       setFocusedIndex: (index: number) => set(() => ({ focusedIndex: index }), false, 'setFocusedIndex'),
-      resetAuthStore: () => set(() => ({ ...initState }), false, 'resetAuthStore'),
+      resetAuthStore: (appScreen: AppScreen) => set(() => ({ ...initState, appScreen: appScreen }), false, 'resetAuthStore'),
     }),
     'authStore'
   )

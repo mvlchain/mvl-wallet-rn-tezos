@@ -1,84 +1,79 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Appearance } from 'react-native';
-import ErrorBoundary from 'react-native-error-boundary';
-import SplashScreen from 'react-native-splash-screen';
-import { ThemeProvider } from 'styled-components';
 import 'reflect-metadata';
 /**
  * initializing DI modules, should be placed under reflect-metadata import statement
  */
 import './di/di';
 import '@@assets/locale/i18n';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ErrorBoundary from 'react-native-error-boundary';
+import { ThemeProvider } from 'styled-components';
 import useApp from 'useApp';
 
-import { THEME } from '@@constants/setting.constant';
-import { useDi } from '@@hooks/useDi';
+import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
+import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
+import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
+import { useSplashScreenTransition } from '@@hooks/useSplashScreenTransition';
+import AuthStack from '@@navigation/AuthStack';
+import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import RootStack from '@@navigation/RootStack';
+import { navigationRef } from '@@navigation/RootStack/RootNavigation';
 import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
+import authStore from '@@store/auth/authStore';
+import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
 import SecureKeychain from '@@utils/SecureKeychain';
 
 const queryClient = new QueryClient();
 
+const ROUTER_THEME = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#fff',
+  },
+};
+
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
 
-  const { appTheme, setAppTheme } = useApp();
+  const { appTheme } = useApp();
+  useSplashScreenTransition();
+  const { isSignedIn, appScreen } = authStore();
+
+  console.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
 
   /**
-   * Rn's splash screen policy for Android need to be handled in a separate solutin as of Android 12(api 31)
-   * if (android.version < 31) {
-   *   legacy splash screen
-   * } else {
-   *   android native splash screen
-   * }
-   *
-   * splash screenf for Android 12(api 31) will be updated in the coming version.
-   *
-   * Platform: Platform.OS> ios, android
-   * Detecting versions: Platform.Version
-   *
-   * NOTE!
-   * this useEffect is subject to refacotring task
+   * TODO: 추후 인증과 관련된 모듈들은 AuthStack에서 관리하도록 리팩터링하는게 좋을 듯하다.
+   *  - TermsOfService
+   *  - PinCodeGuide
+   *  - PinCodeSetup
+   *  - SeedPhrase
    */
-  const settingsRepository = useDi('RTNSettingsRepository');
-  useEffect(() => {
-    (async () => {
-      const themeType = await settingsRepository.getThemeType();
-      console.log(`Theme> fetching native theme settings: ${themeType}`);
-
-      if (themeType === THEME.DEFAULT) {
-        const theme = Appearance.getColorScheme() ?? 'light';
-        setAppTheme({
-          displayName: THEME.DEFAULT,
-          value: theme,
-        });
-      } else if (themeType === THEME.LIGHT) {
-        setAppTheme({
-          displayName: THEME.LIGHT,
-          value: THEME.LIGHT,
-        });
-      } else if (themeType === THEME.DARK) {
-        setAppTheme({
-          displayName: THEME.DARK,
-          value: THEME.DARK,
-        });
-      }
-
-      SplashScreen.hide();
-    })();
-  }, []);
-
   return (
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme[appTheme.value]}>
-          <RootStack />
+          <NavigationContainer
+            ref={navigationRef}
+            theme={ROUTER_THEME}
+            linking={DeepLinkOptions}
+            onStateChange={(state) => {
+              if (state) {
+                console.log(`Screen> current screen: ${state.routeNames[state.index]}, index; ${state.index}`);
+              }
+            }}
+          >
+            {!isSignedIn || appScreen === AppScreen.Auth ? <AuthStack /> : <RootStack />}
+
+            <PinModal />
+            <TermsOfServicesModal />
+            <PincodeGuideModal />
+          </NavigationContainer>
         </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
