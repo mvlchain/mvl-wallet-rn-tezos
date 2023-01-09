@@ -60,7 +60,7 @@ function TradeScreen() {
             value={tradeToValue}
             onChange={() => {}}
             tokenDto={toToken}
-            label={t('to')}
+            label={t('to_estimate')}
             disableHint={true}
             handleTokenSelect={() => onPressToken('to')}
             editable={false}

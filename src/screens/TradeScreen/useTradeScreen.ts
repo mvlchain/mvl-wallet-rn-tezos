@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
@@ -22,10 +22,12 @@ import { formatBigNumber } from '@@utils/formatBigNumber';
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const useTradeScreen = () => {
+  const isFocused = useIsFocused();
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
   const { data: tokenList } = useTradeTokeneQuery(selectedNetwork, {
+    enabled: isFocused,
     select: (data) => {
       const tokens = Object.values(data.tokens).map((token) => {
         // unknown으로 와서 any캐스팅 할 수 밖에 없었음...
@@ -143,7 +145,7 @@ export const useTradeScreen = () => {
   };
 
   useEffect(() => {
-    if (!tradeFromValue || !tradeFromValidation) {
+    if (!tradeFromValue) {
       setPriceImpact('-');
       setTradeToValue(new BigNumber(0));
       return;
@@ -154,7 +156,7 @@ export const useTradeScreen = () => {
       toTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.to)?.address ?? '',
       amount: tradeFromValue?.toString() ?? '',
     });
-  }, [tradeFromValue, tradeFromValidation]);
+  }, [tradeFromValue]);
 
   useEffect(() => {
     if (!quoteDto) return;
