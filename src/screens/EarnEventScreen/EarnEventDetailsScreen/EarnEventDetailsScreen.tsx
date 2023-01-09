@@ -187,7 +187,7 @@ export function EarnEventDetailsScreen() {
               onConnectPress={() => {
                 // decorated deeplink
                 const connectionDeepLink = thirdParty.connection!.connectionDeepLink;
-                console.log(`DeepLink> connectionDeepLink: ${connectionDeepLink}`);
+                console.log(`Details> connectionDeepLink: ${connectionDeepLink}`);
                 if (connectionDeepLink) {
                   onConnectThirdPartyPress(connectionDeepLink);
                 }

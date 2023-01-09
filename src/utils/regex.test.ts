@@ -2,12 +2,22 @@ import Url from 'url';
 
 import QueryString from 'qs';
 
-import { assembleUrl, evaluateUrlScheme } from '@@utils/regex';
+import { assembleUrl, evaluateUrlScheme, evaluateQueryString } from '@@utils/regex';
 
 test('url scheme', () => {
   const url = 'clutch://io.mvlchain.wallet';
   const scheme = evaluateUrlScheme(url);
   expect(scheme).toBe('clutch:');
+});
+
+test('evaluate query string', () => {
+  const qs = evaluateQueryString('clutch://io.mvlchain.wallet/mvlpath?i=id&a=alias');
+  expect(qs).toBe('i=id&a=alias');
+});
+
+test('evaluate empty query string', () => {
+  const qs = evaluateQueryString('clutch://io.mvlchain.wallet/mvlpath');
+  expect(qs).toBe(undefined);
 });
 
 test('url query string', () => {
