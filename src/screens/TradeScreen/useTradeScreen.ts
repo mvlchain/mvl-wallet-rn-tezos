@@ -16,9 +16,9 @@ import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
-
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const useTradeScreen = () => {
@@ -26,6 +26,7 @@ export const useTradeScreen = () => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
+  const { setState } = transactionRequestStore();
   const { data: tokenList } = useTradeTokeneQuery(selectedNetwork, {
     enabled: isFocused,
     select: (data) => {
@@ -60,6 +61,9 @@ export const useTradeScreen = () => {
       setPriceImpact(priceImpact);
       const amount = formatBigNumber(new BigNumber(toTokenAmount), data.toToken?.decimals ?? 18);
       setTradeToValue(amount);
+      setState({
+        value: tradeFromValue,
+      });
     },
   });
 
@@ -154,7 +158,7 @@ export const useTradeScreen = () => {
     setQuoteDto({
       fromTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.from)?.address ?? '',
       toTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.to)?.address ?? '',
-      amount: tradeFromValue?.toString() ?? '',
+      amount: tradeFromValue?.toString(10) ?? '',
     });
   }, [tradeFromValue]);
 
