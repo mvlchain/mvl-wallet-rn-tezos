@@ -31,8 +31,9 @@ export class TransactionService implements ITransactionService {
     @inject('WalletService') private walletService: WalletService
   ) {}
 
-  getApproveData = async (spender: string, value: BigNumber) => {
-    return this.etherService.encodeData('approve', [spender, value.toString(10)]);
+  getApproveData = async (spender: string, value?: BigNumber) => {
+    const valueStr = value ? value.toString(10) : ethers.constants.MaxUint256.toString();
+    return this.etherService.encodeData('approve', [spender, valueStr]);
   };
 
   getTransferData = async ({ selectedNetwork, selectedWalletIndex, to, value, contractAddress, decimals }: IGetTransferData) => {
