@@ -80,7 +80,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
 
   useEffect(() => {
     if (!value || !outterChain) return;
-    handleValue(value.toString());
+    handleValue(value.toString(10));
   }, [value, outterChain]);
 
   const onPressMax = () => {

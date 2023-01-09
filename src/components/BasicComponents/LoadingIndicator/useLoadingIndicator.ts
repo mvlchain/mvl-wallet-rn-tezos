@@ -39,9 +39,7 @@ const useLoadingIndicator = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    console.log('isLoadingCnt:  ', isLoadingCnt);
-    console.log('isFetching:  ', isFetching);
-    console.log('isMutating:  ', isMutating);
+    console.log(`blockChain: ${isLoadingCnt} | fetch: ${isFetching} | mutate: ${isMutating}`);
 
     if (isLoadingCnt > 0 || isFetching || isMutating) {
       setIsLoading(true);

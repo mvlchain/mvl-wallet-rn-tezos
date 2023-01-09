@@ -27,7 +27,6 @@ export class TradeRepository implements ITradeRepository {
   getTokens = async (network: Network): Promise<TokensResponseDto> => {
     const endpoint = `v1.1/native-swap/${network}/tokens`;
     const res = await request.get<TokensResponseDto>(endpoint);
-    console.log('res:  ', res.data);
     return res.data;
   };
 

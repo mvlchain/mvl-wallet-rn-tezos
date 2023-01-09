@@ -50,7 +50,7 @@ export const useTradeScreen = () => {
   const [tradeFromValidation, setTradeFromValidation] = useState(false);
   const [quoteDto, setQuoteDto] = useState<IQuoteDto | null>(null);
   const [priceImpact, setPriceImpact] = useState('-');
-  const { refetch } = useTradeQuoteQuery(selectedNetwork, quoteDto, {
+  const { data: quoteData, refetch } = useTradeQuoteQuery(selectedNetwork, quoteDto, {
     enabled: false,
     onSuccess: (data) => {
       const { priceImpact, toTokenAmount } = data;
