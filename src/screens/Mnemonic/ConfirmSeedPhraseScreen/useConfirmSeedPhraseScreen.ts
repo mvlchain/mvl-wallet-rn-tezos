@@ -58,10 +58,10 @@ const useConfirmSeedPhraseScreen = () => {
       }
 
       // TODO:  추후 지갑을 생성하는 아래의 코드는 별도로 리팩터링 할 것.
-      removeStageByPostboxKey(_postboxKey);
       initWallet();
       mutate({ index: 0, network: NETWORK.ETH });
       mutate({ index: 0, network: NETWORK.TEZOS });
+      removeStageByPostboxKey(_postboxKey);
 
       // reset AuthStack navigation
       navigation.popToTop();

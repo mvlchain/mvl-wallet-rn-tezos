@@ -16,7 +16,7 @@ const useApp = () => {
   }, [settedLanguage]);
 
   useEffect(() => {
-    console.log(`Theme> updating StatusBar style ${STATUSBAR_THEME[appTheme.displayName]}`);
+    // console.log(`Theme> updating StatusBar style ${STATUSBAR_THEME[appTheme.displayName]}`);
     const statusBarThemeStyle = getStatusBarThemeStyle(appTheme.displayName);
     StatusBar.setBarStyle(STATUSBAR_THEME[statusBarThemeStyle]);
   }, [appTheme]);

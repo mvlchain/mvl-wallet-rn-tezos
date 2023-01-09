@@ -17,6 +17,7 @@ import useApp from 'useApp';
 import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
+import { useInitialUrl } from '@@hooks/useInitialUrl';
 import { useSplashScreenTransition } from '@@hooks/useSplashScreenTransition';
 import AuthStack from '@@navigation/AuthStack';
 import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
@@ -44,6 +45,7 @@ function App(props: { foxCode?: string }) {
   const { appTheme } = useApp();
   useSplashScreenTransition();
   const { isSignedIn, appScreen } = authStore();
+  useInitialUrl();
 
   console.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
 
