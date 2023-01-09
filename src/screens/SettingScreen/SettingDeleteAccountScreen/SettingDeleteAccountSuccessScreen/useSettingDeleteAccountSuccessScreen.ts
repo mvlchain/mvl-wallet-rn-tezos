@@ -1,16 +1,26 @@
+import { useEffect } from 'react';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
+import authStore from '@@store/auth/authStore';
+import { AppScreen } from '@@store/auth/authStore.type';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useSettingDeleteAccountSuccessScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'SETTING_DELETE_ACCOUNT_SUCCESS'>;
-  const rootNavigation = useNavigation<rootStackProps>();
+  const navigation = useNavigation<rootStackProps>();
+
+  const { resetAuthStore } = authStore();
+  const { initWallet } = walletPersistStore();
+
+  const resetAuthState = (appScreen: AppScreen) => {
+    resetAuthStore(appScreen);
+    initWallet();
+  };
 
   const onPressConfirm = () => {
-    rootNavigation.reset({
-      index: 0,
-      routes: [{ name: ROOT_STACK_ROUTE.AUTH }],
-    });
+    resetAuthState(AppScreen.Auth);
   };
 
   return {

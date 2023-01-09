@@ -1,2 +1,1 @@
-export { DeepLinkConnectProxyScreen } from './DeepLinkConnectProxyScreen';
-[];
+export { DeepLinkConnectProxy } from './DeepLinkConnectProxy';

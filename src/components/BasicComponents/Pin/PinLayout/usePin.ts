@@ -75,12 +75,14 @@ function usePin() {
         if (!_postboxKey) {
           throw new Error('postboxkey is required');
         }
+
         if (stage[_postboxKey] === AUTH_STAGE.PIN_SETUP_STAGE) {
           setStage(_postboxKey, AUTH_STAGE.BACKUP_SEED_PHRASE_STAGE);
         }
         if (preSuccessCallbackRef.current) {
           await preSuccessCallbackRef.current(input);
         }
+
         success(input);
         setState({ step: PIN_STEP.FINISH });
       } else {
