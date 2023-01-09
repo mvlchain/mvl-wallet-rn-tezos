@@ -17,7 +17,7 @@ export function ImageModal(props: Type.IImageModalComponentProps) {
   const modalPosition = Type.Bottom;
   return (
     <Modal isVisible={isVisible} backdropOpacity={0.25} style={S.inlineStyles(modalPosition).modal}>
-      <S.ModalBackDrop modalPosition={modalPosition}>
+      <S.ModalBackDrop>
         <S.ImageWrapper>
           {image}
           <S.ImageModalTopWrapper>
