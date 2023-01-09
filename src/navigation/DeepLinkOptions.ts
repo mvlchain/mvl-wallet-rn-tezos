@@ -45,11 +45,6 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
     const onUrlScheme = (event: { url: string }): void => {
       console.log(`DeepLink> ${event.url}`);
 
-      // const link = parseDeepLink(event.url);
-      // if (link) {
-      //   const { routeName, params } = link;
-      //   R.navigate(routeName, params);
-      // }
       navigateByDeepLink(event.url);
 
       listener(event.url);
