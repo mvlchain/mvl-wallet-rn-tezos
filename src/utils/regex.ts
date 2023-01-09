@@ -16,6 +16,15 @@ export const evaluateUrlScheme = (url: string | unknown): string | undefined => 
   return schemes ? schemes[0] : undefined;
 };
 
+export const evaluateQueryString = (url: string | unknown): string | undefined => {
+  if (typeof url !== 'string') {
+    return;
+  }
+
+  const qs = url.split('?')[1];
+  return qs ? qs : undefined;
+};
+
 export const assembleUrl = (scheme: string | null, host: string | null, pathname: string | null, query: string | null) => {
   let url = '';
 

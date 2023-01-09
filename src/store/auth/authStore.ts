@@ -13,6 +13,7 @@ const initState: IAuthState = {
   mnemonic: null,
   mnemonicList: [],
   focusedIndex: 0,
+  initialUrl: null,
 };
 
 const authStore = create<IAuth>(
@@ -74,6 +75,7 @@ const authStore = create<IAuth>(
         ),
       setFocusedIndex: (index: number) => set(() => ({ focusedIndex: index }), false, 'setFocusedIndex'),
       resetAuthStore: (appScreen: AppScreen) => set(() => ({ ...initState, appScreen: appScreen }), false, 'resetAuthStore'),
+      setInitialUrl: (url: string | null) => set(() => ({ initialUrl: url }), false, 'setInitalUrl'),
     }),
     'authStore'
   )

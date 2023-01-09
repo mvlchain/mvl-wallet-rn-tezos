@@ -38,7 +38,6 @@ public class MainActivity extends ReactActivity {
     //androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
 
     super.onCreate(null);
-    Log.d("Theme", "onCreate started");
     Log.d("Theme", "isDarkMode: " + AndroidTheme.isDarkMode(this) + " after onCreate called");
   }
 
@@ -67,21 +66,17 @@ public class MainActivity extends ReactActivity {
       case THEME_TYPE_DEFAULT:
         boolean isDarkMode = AndroidTheme.isDarkMode(this);
         if (isDarkMode) {
-          Log.d("Theme", "Parsing dark theme");
           themeStyle = R.style.DarkTheme;
         } else {
-          Log.d("Theme", "Parsing light theme");
           themeStyle = R.style.LightTheme;
         }
         break;
 
       case THEME_TYPE_DARK:
-        Log.d("Theme", "Parsing dark theme");
         themeStyle = R.style.DarkTheme;
         break;
 
       case THEME_TYPE_LIGHT:
-        Log.d("Theme", "Parsing light theme");
       default:
         themeStyle = R.style.LightTheme;
         break;
@@ -99,7 +94,6 @@ public class MainActivity extends ReactActivity {
   private void applyThemeStyle(@ThemeType String themeType, int themeStyle) {
     AndroidTheme.editThemeType(themeType);
     setTheme(themeStyle);
-    Log.d("Theme", "platform themeType: " + themeType + " isDarkMode: " + AndroidTheme.isDarkMode(this));
   }
 
   public static class MainActivityDelegate extends ReactActivityDelegate {

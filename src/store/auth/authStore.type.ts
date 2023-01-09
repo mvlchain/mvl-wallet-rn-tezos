@@ -10,6 +10,7 @@ export interface IAuth extends IAuthState {
   removeMnemonic: (selectedChipIndex: number) => void;
   setFocusedIndex: (index: number) => void;
   resetAuthStore: (appScreen: AppScreen) => void;
+  setInitialUrl: (initialUrl: string | null) => void;
 }
 
 export const AppScreen = {
@@ -26,4 +27,5 @@ export interface IAuthState {
   mnemonic: string | null;
   mnemonicList: TMnemonic[];
   focusedIndex: number;
+  initialUrl: string | null;
 }

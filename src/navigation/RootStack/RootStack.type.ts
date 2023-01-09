@@ -50,12 +50,6 @@ export type TRootStackParamList = {
     data?: EarnEventDto;
     deepLink?: ThirdPartyDeepLink;
   };
-  DEEPLINK_CONNECT: {
-    f: string;
-    t: string;
-    e: string;
-    a?: string;
-  };
   EARN_EVENT_TRNASFERRING: {
     eventId: string;
     address: string;
@@ -88,7 +82,6 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   WALLET_TOKEN_RECEIVE_SELECT: 'WALLET_TOKEN_RECEIVE_SELECT',
   EVENT_DETAILS: 'EVENT_DETAILS',
   EARN_EVENT_TRNASFERRING: 'EARN_EVENT_TRNASFERRING',
-  DEEPLINK_CONNECT: 'DEEPLINK_CONNECT',
   EARN_EVENT_TRANSFER_SUCCESS: 'EARN_EVENT_TRANSFER_SUCCESS',
 } as const;
 

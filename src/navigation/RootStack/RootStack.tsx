@@ -1,18 +1,18 @@
 /* eslint-disable max-lines */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native';
+import { Linking, SafeAreaView } from 'react-native';
 
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ToastPopup } from '@@components/BasicComponents/Modals/BaseModal/ToastPopup';
 import { GlobalModal } from '@@components/BasicComponents/Modals/GlobalModal';
+import { useDeepLinkByInitialUrl } from '@@hooks/useDeepLinkByInitialUrl';
 import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
 import MainTab from '@@navigation/MainTab';
-import { DeepLinkConnectProxy } from '@@screens/DeepLink';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
 import EarnEventTransferSuccessScreen from '@@screens/EarnEventScreen/EarnEventTransferSuccessScreen';
 import EarnEventTransferringScreen from '@@screens/EarnEventScreen/EarnEventTransferringScreen';
@@ -48,6 +48,7 @@ function RootStack() {
   const { color } = useColor();
   const { resetState } = gasStore();
   const { resetBody } = transactionRequestStore();
+  useDeepLinkByInitialUrl();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -184,12 +185,6 @@ function RootStack() {
           name={ROOT_STACK_ROUTE.EVENT_DETAILS}
           component={EarnEventDetailsScreen}
           options={handleStackHeaderOption({ title: t('') })}
-        />
-        <Screen
-          key={ROOT_STACK_ROUTE.DEEPLINK_CONNECT}
-          name={ROOT_STACK_ROUTE.DEEPLINK_CONNECT}
-          component={DeepLinkConnectProxy}
-          options={{ headerShown: false }}
         />
         <Screen
           key={ROOT_STACK_ROUTE.EARN_EVENT_TRNASFERRING}
