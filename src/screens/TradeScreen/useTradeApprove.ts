@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig } from '@@constants/network.constant';
@@ -19,6 +20,7 @@ const useTradeApprove = (fromToken: TokenDto) => {
   const [allowance, setAllowance] = useState<BigNumber | null>(null);
 
   const { openModal, closeModal } = globalModalStore();
+  const { t } = useTranslation();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
   const { to: spender, value, data: approveData, setState } = transactionRequestStore();
@@ -41,7 +43,6 @@ const useTradeApprove = (fromToken: TokenDto) => {
 
   const sendApproveTransaction = async (gasFeeInfo: IGasFeeInfo) => {
     if (!spender || !approveData || !fromToken.contractAddress) return;
-
     await TransactionService.sendTransaction({
       selectedNetwork,
       selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -55,9 +56,16 @@ const useTradeApprove = (fromToken: TokenDto) => {
 
   const onPressApprove = async () => {
     if (!spender || !value) return;
-    const approveData = await TransactionService.getApproveData(spender, value);
-    setState({ data: approveData });
-    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendApproveTransaction });
+    openModal(MODAL_TYPES.TEXT_MODAL, {
+      label: t('approve_wallet_content'),
+      title: t('approve_wallet'),
+      onConfirm: async () => {
+        closeModal();
+        const approveData = await TransactionService.getApproveData(spender);
+        setState({ data: approveData });
+        openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendApproveTransaction });
+      },
+    });
   };
 
   const isEnoughAllowance = useMemo(() => {
