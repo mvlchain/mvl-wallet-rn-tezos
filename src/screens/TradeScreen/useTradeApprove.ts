@@ -16,17 +16,16 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 const useTradeApprove = (fromToken: TokenDto) => {
   const TokenRepository = useDi('TokenRepository');
   const TransactionService = useDi('TransactionService');
-  const [spender, setSpender] = useState<string>();
   const [allowance, setAllowance] = useState<BigNumber | null>(null);
 
   const { openModal, closeModal } = globalModalStore();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
-  const { to, value, data: approveData, setState } = transactionRequestStore();
+  const { to: spender, value, data: approveData, setState } = transactionRequestStore();
 
   useSpenderQuery(getNetworkConfig(selectedNetwork).networkId, {
     onSuccess: (data) => {
-      setSpender(data[0].address);
+      setState({ to: data[0].address });
     },
   });
 
@@ -41,7 +40,7 @@ const useTradeApprove = (fromToken: TokenDto) => {
   };
 
   const sendApproveTransaction = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!to || !approveData || !fromToken.contractAddress) return;
+    if (!spender || !approveData || !fromToken.contractAddress) return;
 
     await TransactionService.sendTransaction({
       selectedNetwork,
@@ -51,6 +50,7 @@ const useTradeApprove = (fromToken: TokenDto) => {
       gasFeeInfo,
     });
     closeModal();
+    setState({ data: null });
   };
 
   const onPressApprove = async () => {
