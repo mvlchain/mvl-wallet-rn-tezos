@@ -1,3 +1,21 @@
+import { Network } from '@@constants/network.constant';
+import {
+  BroadcastTransactionDto,
+  CreateNativeSwapTransactionResponseDto,
+  FetchPriceResponseDto,
+  SimpleResponseDto,
+  SpenderResponseDto,
+  TokensResponseDto,
+} from '@@generated/generated-scheme-clutch';
+
+export interface ITradeRepository {
+  getSpender: (network: Network) => Promise<SpenderResponseDto[]>;
+  getTokens: (network: Network) => Promise<TokensResponseDto>;
+  quote: (network: Network, quoteDto: IQuoteDto) => Promise<FetchPriceResponseDto>;
+  swap: (network: Network, swapDto: ISwapDto) => Promise<CreateNativeSwapTransactionResponseDto>;
+  broadcast: (network: Network, broadcastDto: BroadcastTransactionDto) => Promise<SimpleResponseDto>;
+}
+
 export interface IQuoteDto {
   fromTokenAddress: string;
   toTokenAddress: string;

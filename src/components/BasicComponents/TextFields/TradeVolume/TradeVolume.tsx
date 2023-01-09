@@ -3,24 +3,37 @@ import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 import { ChevronDownLightIcon, TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import SymbolImage from '@@components/BasicComponents/SymbolImage';
 import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
 import gasStore from '@@store/gas/gasStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
-import { height } from '@@utils/ui';
 
 import * as S from '../TextField.style';
 
 import { ITradeVolumeComponentProps } from './TradeVolume.type';
 
 export function TradeVolume(props: ITradeVolumeComponentProps) {
-  const { useMax, value, onSelect, label, tokenDto, onChange, disableHint, debounceTime = 1000, setParentValid, handleTokenSelect } = props;
+  const {
+    useMax,
+    value,
+    onSelect,
+    label,
+    tokenDto,
+    onChange,
+    disableHint,
+    debounceTime = 1000,
+    setParentValid,
+    handleTokenSelect,
+    editable = true,
+    outterChain,
+    disableDelete,
+  } = props;
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
 
@@ -56,10 +69,19 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       setUsingMax(false);
     }
     const value = data.nativeEvent.text;
+    handleValue(value);
+  };
+
+  const handleValue = (value: string) => {
     const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
     setDisplayValue(formattedValue);
     debounceCallback(formattedValue ? new BigNumber(formattedValue).shiftedBy(tokenDto.decimals) : null);
   };
+
+  useEffect(() => {
+    if (!value || !outterChain) return;
+    handleValue(value.toString(10));
+  }, [value, outterChain]);
 
   const onPressMax = () => {
     if (tokenDto.contractAddress) {
@@ -102,16 +124,23 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       )}
       <S.TradeVolumeMiddle>
         <S.TradeVolumeInputWrapper>
-          <S.TradeVolumeInput
-            value={displayValue ?? ''}
-            onChange={onSet}
-            keyboardType={'numeric'}
-            selectionColor={color.black}
-            placeholder={'0.00'}
-            placeholderTextColor={color.grey300Grey700}
-            onKeyPress={onKeyPress}
-          />
-          {showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
+          {editable ? (
+            <S.TradeVolumeInput
+              value={displayValue ?? ''}
+              onChange={onSet}
+              keyboardType={'numeric'}
+              selectionColor={color.black}
+              placeholder={'0.00'}
+              placeholderTextColor={color.grey300Grey700}
+              onKeyPress={onKeyPress}
+              editable={editable}
+            />
+          ) : (
+            <S.TradeVolumeInputText numberOfLines={1} lineBreakMode='tail'>
+              {displayValue}
+            </S.TradeVolumeInputText>
+          )}
+          {!disableDelete && showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
         </S.TradeVolumeInputWrapper>
         <S.SymbolWrapper
           onPress={() => {
@@ -119,7 +148,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
             handleTokenSelect();
           }}
         >
-          {tokenDto.logoURI && <SvgUri uri={tokenDto.logoURI} width={height * 32} height={height * 32} />}
+          {tokenDto?.logoURI && <SymbolImage symbolURI={tokenDto.logoURI} size={32} />}
           <S.Token>{tokenDto.symbol}</S.Token>
           {handleTokenSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} />}
         </S.SymbolWrapper>

@@ -38,3 +38,7 @@ export function extension(filename: string | undefined): string {
   }
   return !!filename ? filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase() : '';
 }
+
+export function isSvg(file: string): boolean {
+  return extension(file) === 'svg';
+}

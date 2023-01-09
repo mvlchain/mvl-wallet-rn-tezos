@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { formatFixed } from '@ethersproject/bignumber';
+import { useIsFocused } from '@react-navigation/native';
 
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import { WalletDto } from '@@domain/model/WalletDto';
@@ -13,11 +14,10 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import useBalanceQuery from './queries/useBalanceQuery';
 import usePriceQuery from './queries/usePriceQuery';
-import useTokenQuery from './queries/useTokenQuery';
 import useWalletsQuery from './queries/useWalletsQuery';
 
 export const useTokenBalance = () => {
-  // @TODO 데이터 연결
+  const isFocused = useIsFocused();
   const walletBlockChainService = useDi('WalletBlockChainService');
   const { settedCurrency } = settingPersistStore();
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
@@ -92,9 +92,9 @@ export const useTokenBalance = () => {
 
   useEffect(() => {
     // TODO: wallet data 못가져왔을 때 에러 로직 추가
-    if (walletData.length === 0) return;
+    if (walletData.length === 0 || !isFocused) return;
     getBalance();
-  }, [selectedNetwork, walletData, _selectedWalletIndex, selectedTokenList]);
+  }, [walletData, _selectedWalletIndex, isFocused]);
 
   //5. balanceData, price 변경 시 formalizedBalance 업데이트
   useEffect(() => {
