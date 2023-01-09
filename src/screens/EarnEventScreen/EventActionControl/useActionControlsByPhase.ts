@@ -14,7 +14,7 @@ import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { extension, format } from '@@utils/strings';
+import { format, isSvg } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 import { IActionControlAttrs } from './EventActionControl.type';
@@ -220,10 +220,6 @@ export const useActionControlsByPhase = (
     const isOnEvent = phase == EventPhase.OnEvent;
     const isAbleToClaim = phase == EventPhase.OnClaim && !!claimInfo?.isClaimable;
     return (!isThirdPartySupported || isThirdPartyConnected) && (isOnEvent || isAbleToClaim);
-  }
-
-  function isSvg(file: string): boolean {
-    return extension(file) === 'svg';
   }
 
   return actionControlAttrs;

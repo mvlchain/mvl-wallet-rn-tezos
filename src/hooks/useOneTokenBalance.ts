@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import { useIsFocused } from '@react-navigation/native';
+
 import { useDi } from '@@hooks/useDi';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useOneTokenBalance = (tokenDto: TokenDto) => {
+  const isFocused = useIsFocused();
   const ethService = useDi('WalletBlockChainService');
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const [balance, setBalance] = useState<string>('-');
@@ -19,8 +22,9 @@ const useOneTokenBalance = (tokenDto: TokenDto) => {
   };
 
   useEffect(() => {
+    if (!isFocused) return;
     getBalance();
-  }, [tokenDto, selectedNetwork, selectedWalletIndex]);
+  }, [tokenDto, selectedNetwork, selectedWalletIndex, isFocused]);
 
   return { balance };
 };

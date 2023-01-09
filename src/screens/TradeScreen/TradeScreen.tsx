@@ -15,7 +15,20 @@ import { useTradeScreen } from './useTradeScreen';
 
 function TradeScreen() {
   const { t } = useTranslation();
-  const { fromToken, toToken, showTip, setShowTip, onPressToken, onPressChange, onPressTrade } = useTradeScreen();
+  const {
+    fromToken,
+    toToken,
+    showTip,
+    tradeFromValue,
+    tradeToValue,
+    priceImpact,
+    setShowTip,
+    onPressToken,
+    onPressChange,
+    onPressTrade,
+    setTradeFromValue,
+    setTradeFromValidation,
+  } = useTradeScreen();
   const { onPressWalletList } = useWalletSelector();
   const { address } = useAccount();
 
@@ -27,51 +40,55 @@ function TradeScreen() {
           <Jdenticon value={address} />
         </S.WallerSelectButton>
       </S.Header>
-      <S.InputContainer>
-        {fromToken && (
+      {fromToken && toToken && (
+        <S.InputContainer>
           <TradeVolume
-            onChange={() => console.log('')}
+            value={tradeFromValue}
+            onChange={setTradeFromValue}
             tokenDto={fromToken}
             useMax={true}
             label={t('from')}
             handleTokenSelect={() => onPressToken('from')}
+            setParentValid={setTradeFromValidation}
           />
-        )}
-        <S.SwapButtonContainer>
-          <S.SwapButton onPress={onPressChange}>
-            <ChangeIconLight />
-          </S.SwapButton>
-        </S.SwapButtonContainer>
-        {toToken && (
+          <S.SwapButtonContainer>
+            <S.SwapButton onPress={onPressChange}>
+              <ChangeIconLight />
+            </S.SwapButton>
+          </S.SwapButtonContainer>
           <TradeVolume
-            onChange={() => console.log('')}
+            value={tradeToValue}
+            onChange={() => {}}
             tokenDto={toToken}
-            label={t('to')}
+            label={t('to_estimate')}
             disableHint={true}
             handleTokenSelect={() => onPressToken('to')}
+            editable={false}
+            outterChain={true}
+            disableDelete={true}
           />
-        )}
-        <PrimaryButton onPress={onPressTrade} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
-        <S.PriceImpactContainer>
-          <S.HelpWrapper>
-            <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
-            <Tooltip
-              isVisible={showTip}
-              content={<S.PriceImpactHelp>{t('price_impact_explanation')}</S.PriceImpactHelp>}
-              onClose={() => setShowTip(false)}
-              placement='top'
-              backgroundColor='transparent'
-              contentStyle={S.InlineStyle.tooltip}
-              arrowStyle={S.InlineStyle.tooltipArrow}
-            >
-              <S.PriceImpactHelpButton onPress={() => setShowTip(true)}>
-                <QuestionMarkIcon />
-              </S.PriceImpactHelpButton>
-            </Tooltip>
-          </S.HelpWrapper>
-          <S.PriceImpactText>-</S.PriceImpactText>
-        </S.PriceImpactContainer>
-      </S.InputContainer>
+          <PrimaryButton onPress={onPressTrade} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
+          <S.PriceImpactContainer>
+            <S.HelpWrapper>
+              <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
+              <Tooltip
+                isVisible={showTip}
+                content={<S.PriceImpactHelp>{t('price_impact_explanation')}</S.PriceImpactHelp>}
+                onClose={() => setShowTip(false)}
+                placement='top'
+                backgroundColor='transparent'
+                contentStyle={S.InlineStyle.tooltip}
+                arrowStyle={S.InlineStyle.tooltipArrow}
+              >
+                <S.PriceImpactHelpButton onPress={() => setShowTip(true)}>
+                  <QuestionMarkIcon />
+                </S.PriceImpactHelpButton>
+              </Tooltip>
+            </S.HelpWrapper>
+            <S.PriceImpactText>{priceImpact}</S.PriceImpactText>
+          </S.PriceImpactContainer>
+        </S.InputContainer>
+      )}
     </S.Container>
   );
 }
