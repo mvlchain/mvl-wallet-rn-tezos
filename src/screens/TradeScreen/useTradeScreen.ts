@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useState } from 'react';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -13,6 +14,7 @@ import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { IQuoteDto } from '@@domain/trade/repositories/tradeRepository.type';
 import useTradeQuoteQuery from '@@hooks/queries/useTradeQuoteQuery';
 import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
+import { useColor } from '@@hooks/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
@@ -29,6 +31,7 @@ export const useTradeScreen = () => {
   const { selectedNetwork, selectNetwork } = walletPersistStore();
   const { setState } = transactionRequestStore();
   const [tokenList, setTokenList] = useState<TokenDto[]>([]);
+  const { color } = useColor();
   useTradeTokeneQuery(selectedNetwork, {
     enabled: isFocused,
     onSuccess: (data) => {
@@ -55,12 +58,14 @@ export const useTradeScreen = () => {
   const [tradeFromValidation, setTradeFromValidation] = useState(false);
   const [quoteDto, setQuoteDto] = useState<IQuoteDto | null>(null);
   const [priceImpact, setPriceImpact] = useState('-');
+  const [priceImpactColor, setPriceImpactColor] = useState('color.whiteBlack');
   const { data: quoteData, refetch } = useTradeQuoteQuery(selectedNetwork, quoteDto, {
     enabled: false,
     onSuccess: (data) => {
       const { priceImpact, toTokenAmount } = data;
       if (!priceImpact || !toTokenAmount) return;
       setPriceImpact(priceImpact);
+      setPriceImpactColor(handlePriceImpactColor(priceImpact));
       const amount = formatBigNumber(new BigNumber(toTokenAmount), data.toToken?.decimals ?? 18);
       setTradeToValue(amount);
       setState({
@@ -68,6 +73,24 @@ export const useTradeScreen = () => {
       });
     },
   });
+
+  const handlePriceImpactColor = (priceImpact: string) => {
+    let textColor: string = color.whiteBlack;
+    if (priceImpact === '-') {
+      return textColor;
+    }
+    const numberImpact = parseFloat(priceImpact);
+    if (numberImpact < 0.99) {
+      textColor = color.green;
+    } else if (numberImpact >= 1 && numberImpact < 3) {
+      textColor = color.whiteBlack;
+    } else if (numberImpact >= 3 && numberImpact < 5) {
+      textColor = color.yellow;
+    } else if (numberImpact >= 5) {
+      textColor = color.red;
+    }
+    return textColor;
+  };
 
   const onPressToken = (type: string) => {
     const menuList = type === 'from' ? fromTradeMenu : toTradeMenu;
@@ -165,13 +188,6 @@ export const useTradeScreen = () => {
   }, [tradeFromValue]);
 
   useEffect(() => {
-    return () => {
-      setQuoteDto(null);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log('quoteDto:  ', quoteDto);
     if (!quoteDto) return;
     refetch();
   }, [quoteDto]);
@@ -183,6 +199,7 @@ export const useTradeScreen = () => {
     tradeFromValue,
     tradeToValue,
     priceImpact,
+    priceImpactColor,
     setShowTip,
     onPressToken,
     onPressChange,
