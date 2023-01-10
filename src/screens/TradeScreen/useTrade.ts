@@ -9,6 +9,7 @@ import { ISwapDto } from '@@domain/trade/repositories/tradeRepository.type';
 import { FetchPriceResponseDto } from '@@generated/generated-scheme-clutch';
 import useSwapDataQuery from '@@hooks/queries/useSwapDataQuery';
 import { useDi } from '@@hooks/useDi';
+import gasStore from '@@store/gas/gasStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -21,6 +22,7 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   const WalletService = useDi('WalletService');
 
   const { to: spender, value, data: swapData, setState } = transactionRequestStore();
+  const { setState: setGasStore, baseFee, gas, total } = gasStore();
   const [swapDto, setSwapDto] = useState<ISwapDto | null>(null);
 
   useEffect(() => {
@@ -42,24 +44,31 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   const { data: serverSentSwapData } = useSwapDataQuery(selectedNetwork, swapDto, {
     onSuccess: (res) => {
       if (!res) return;
-
       const { from, to, value, data } = res.tx;
+
       const bnValue = new BigNumber(value);
+
+      setGasStore({ isDataRequired: true });
       setState({ from, to, value: bnValue, data, toValid: true, valueValid: true }); //내가 보낸 value가 오는것 같은데 바꿔서 할당하는게 맞나? 비교 컨펌필요
     },
   });
 
   const sendTradeTransaction = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!spender) return;
+    if (!spender || !baseFee || !gas || !total) return;
     await TransactionService.sendTransaction({
       to: fromToken?.contractAddress ? fromToken.contractAddress : spender,
       value: value ?? undefined,
       data: swapData ?? undefined,
-      gasFeeInfo,
+      gasFeeInfo: {
+        baseFee,
+        gas,
+        total,
+      },
       selectedNetwork,
       selectedWalletIndex: selectedWalletIndex[selectedNetwork],
     });
     closeModal();
+    setGasStore({ isDataRequired: false });
   };
 
   const onPressTrade = async () => {
