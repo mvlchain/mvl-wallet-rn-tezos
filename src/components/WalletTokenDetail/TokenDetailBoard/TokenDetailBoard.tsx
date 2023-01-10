@@ -32,7 +32,7 @@ function TokenDetailBoard() {
   const gotoReceive = () => {
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_RECEIVE, params);
   };
-  console.log(price);
+
   return (
     <View>
       <S.TokenInfoContainer>
