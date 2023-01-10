@@ -6,15 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
-import { TokenDto } from '@@generated/generated-scheme-clutch';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
 import { useDi } from '@@hooks/useDi';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useTradeApprove = (fromToken: TokenDto) => {
+const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const TokenRepository = useDi('TokenRepository');
   const TransactionService = useDi('TransactionService');
   const [allowance, setAllowance] = useState<BigNumber | null>(null);
@@ -36,13 +36,13 @@ const useTradeApprove = (fromToken: TokenDto) => {
   }, [spender, selectedToken.from]);
 
   const getAllowance = async () => {
-    if (!spender || !selectedToken.from || !fromToken.contractAddress) return;
+    if (!spender || !selectedToken.from || !fromToken?.contractAddress) return;
     const allowance = await TokenRepository.getAllowance(selectedNetwork, selectedWalletIndex[selectedNetwork], spender, fromToken.contractAddress);
     setAllowance(allowance);
   };
 
   const sendApproveTransaction = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!spender || !approveData || !fromToken.contractAddress) return;
+    if (!spender || !approveData || !fromToken?.contractAddress) return;
     await TransactionService.sendTransaction({
       selectedNetwork,
       selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -55,7 +55,7 @@ const useTradeApprove = (fromToken: TokenDto) => {
   };
 
   const onPressApprove = async () => {
-    if (!spender || !value) return;
+    if (!spender || !value || !fromToken) return;
     openModal(MODAL_TYPES.TEXT_MODAL, {
       label: t('approve_wallet_content'),
       title: t('approve_wallet'),
@@ -69,13 +69,13 @@ const useTradeApprove = (fromToken: TokenDto) => {
   };
 
   const isEnoughAllowance = useMemo(() => {
-    if (!fromToken.contractAddress) return true;
+    if (!fromToken?.contractAddress) return true;
     if (allowance && value && allowance.gt(value)) {
       return true;
     } else {
       return false;
     }
-  }, [allowance, value, fromToken.contractAddress]);
+  }, [allowance, value, !!fromToken?.contractAddress]);
 
   return { isEnoughAllowance, onPressApprove };
 };

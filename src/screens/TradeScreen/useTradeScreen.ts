@@ -203,6 +203,7 @@ export const useTradeScreen = () => {
     tradeToValue,
     priceImpact,
     priceImpactColor,
+    quoteData,
     setShowTip,
     onPressToken,
     onPressChange,

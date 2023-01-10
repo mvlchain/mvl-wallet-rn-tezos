@@ -11,6 +11,9 @@ import useAccount from '@@components/Wallet/Account/useAccount';
 import useWalletSelector from '@@components/Wallet/WalletSelector/useWalletSelector';
 
 import * as S from './TradeScreen.style';
+import useTrade from './useTrade';
+import useTradeApprove from './useTradeApprove';
+import useTradeButtonValidation from './useTradeButtonValidation';
 import { useTradeScreen } from './useTradeScreen';
 
 function TradeScreen() {
@@ -23,13 +26,17 @@ function TradeScreen() {
     tradeToValue,
     priceImpact,
     priceImpactColor,
+    quoteData,
     setShowTip,
     onPressToken,
     onPressChange,
-    onPressTrade,
     setTradeFromValue,
     setTradeFromValidation,
   } = useTradeScreen();
+
+  const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData);
+  const { isEnoughAllowance, onPressApprove } = useTradeApprove(fromToken);
+  const validation = useTradeButtonValidation(isEnoughAllowance, isReadyTrade, onPressTrade, onPressApprove);
   const { onPressWalletList } = useWalletSelector();
   const { address } = useAccount();
 
@@ -68,7 +75,12 @@ function TradeScreen() {
             outterChain={true}
             disableDelete={true}
           />
-          <PrimaryButton onPress={onPressTrade} label={t('enter_amount')} wrapperStyle={S.InlineStyle.button} />
+          <PrimaryButton
+            onPress={validation[2] as Function}
+            label={validation[1] as string}
+            wrapperStyle={S.InlineStyle.button}
+            disabled={!validation[0]}
+          />
           <S.PriceImpactContainer>
             <S.HelpWrapper>
               <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
