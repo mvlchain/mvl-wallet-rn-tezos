@@ -28,6 +28,7 @@ const useEstimateGas = ({
   const selectedNetwork = getNetworkByBase(pickNetwork);
 
   const { to, value, data, toValid, valueValid } = transactionRequestStore();
+  const { isDataRequired } = gasStore();
 
   const estimateGas = useCallback(
     async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
@@ -37,7 +38,7 @@ const useEstimateGas = ({
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
         to: contractAddress ?? to,
         value: contractAddress ? undefined : value,
-        data: contractAddress ? data! : undefined,
+        data: isDataRequired || contractAddress ? data! : undefined,
         //data set after entering to and value in useTokenSend useEffect, so add non-null assertion
       });
       if (!estimation) {

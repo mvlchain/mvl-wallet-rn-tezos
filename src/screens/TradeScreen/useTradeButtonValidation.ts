@@ -36,7 +36,7 @@ const useTradeButtonValidation = (isEnoughAllowance: boolean, isReadyTrade: bool
     if (!value) {
       return [false, 'enter_amount', () => {}];
     } else if (!isEnoughAllowance) {
-      return [false, 'approve', onPressApprove];
+      return [true, 'approve', onPressApprove];
     } else if (!isReadyTrade) {
       return [false, 'trade', () => {}];
     } else {
