@@ -32,7 +32,7 @@ function TokenDetailBoard() {
   const gotoReceive = () => {
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_RECEIVE, params);
   };
-
+  console.log(price);
   return (
     <View>
       <S.TokenInfoContainer>
@@ -41,9 +41,10 @@ function TokenDetailBoard() {
           <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>
-          <S.TokenAmount>{commify(balance)}</S.TokenAmount>
+          <S.TokenAmount>{balance !== '-' ? commify(balance) : 0}</S.TokenAmount>
           <S.TokenBaseCurrency>
-            {commify(new BigNumber(price).toString(10))} {settedCurrency}
+            {price !== '-' ? commify(new BigNumber(price).toString(10)) : 0} {settedCurrency}
+            {/* {price} {settedCurrency} */}
           </S.TokenBaseCurrency>
         </S.TokenAmountWrapper>
       </S.TokenInfoContainer>
