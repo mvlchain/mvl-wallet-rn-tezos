@@ -19,6 +19,7 @@ import tradeStore from '@@store/trade/tradeStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
+
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const useTradeScreen = () => {
@@ -27,9 +28,10 @@ export const useTradeScreen = () => {
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
   const { setState } = transactionRequestStore();
-  const { data: tokenList } = useTradeTokeneQuery(selectedNetwork, {
+  const [tokenList, setTokenList] = useState<TokenDto[]>([]);
+  useTradeTokeneQuery(selectedNetwork, {
     enabled: isFocused,
-    select: (data) => {
+    onSuccess: (data) => {
       const tokens = Object.values(data.tokens).map((token) => {
         // unknown으로 와서 any캐스팅 할 수 밖에 없었음...
         const tokenData = token as any;
@@ -39,7 +41,7 @@ export const useTradeScreen = () => {
         };
       });
 
-      return tokens as TokenDto[];
+      setTokenList(tokens as TokenDto[]);
     },
   });
   const { selectedToken, selectToken } = tradeStore();
@@ -163,6 +165,13 @@ export const useTradeScreen = () => {
   }, [tradeFromValue]);
 
   useEffect(() => {
+    return () => {
+      setQuoteDto(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log('quoteDto:  ', quoteDto);
     if (!quoteDto) return;
     refetch();
   }, [quoteDto]);
