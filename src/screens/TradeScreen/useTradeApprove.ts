@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
 import { useDi } from '@@hooks/useDi';
@@ -37,7 +37,12 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
 
   const getAllowance = async () => {
     if (!spender || !selectedToken.from || !fromToken?.contractAddress) return;
-    const allowance = await TokenRepository.getAllowance(selectedNetwork, selectedWalletIndex[selectedNetwork], spender, fromToken.contractAddress);
+    const allowance = await TokenRepository.getAllowance(
+      getNetworkByBase(selectedNetwork),
+      selectedWalletIndex[getNetworkByBase(selectedNetwork)],
+      spender,
+      fromToken.contractAddress
+    );
     setAllowance(allowance);
   };
 
