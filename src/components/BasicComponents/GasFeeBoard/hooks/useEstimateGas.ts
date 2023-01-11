@@ -13,13 +13,19 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useEstimateGas = ({
+  to,
+  value,
+  data,
+  isValidInput,
   tokenDto,
-  advanced,
   setBlockBaseFee,
   setBlockGas,
 }: {
+  to?: string | null;
+  value?: BigNumber | null;
+  data?: BytesLike | null;
+  isValidInput: boolean;
   tokenDto: TokenDto;
-  advanced: boolean;
   setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
@@ -27,12 +33,12 @@ const useEstimateGas = ({
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
   const selectedNetwork = getNetworkByBase(pickNetwork);
 
-  const { to, value, data, toValid, valueValid } = transactionRequestStore();
+  // const { to, value, data, toValid, valueValid } = transactionRequestStore();
   const { isDataRequired } = gasStore();
 
   const estimateGas = useCallback(
     async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
-      if (!toValid || !valueValid) return;
+      if (!isValidInput) return;
       const estimation = await gasService.estimateGas({
         selectedNetwork,
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -51,7 +57,7 @@ const useEstimateGas = ({
         setBlockBaseFee(estimation.baseFee);
       }
     },
-    [toValid, valueValid]
+    [isValidInput]
   );
 
   const debounceEstimate = useDebounce(estimateGas, 100);

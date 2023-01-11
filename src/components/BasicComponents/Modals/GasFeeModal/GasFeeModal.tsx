@@ -10,12 +10,14 @@ import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/Modal
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
 function GasFeeModal({ tokenDto, onConfirm }: { tokenDto: TokenDto; onConfirm: (gasFee: IGasFeeInfo) => Promise<void> }) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
+  const { to, value, data, toValid, valueValid } = transactionRequestStore();
 
   return (
     <ModalLayout
@@ -30,7 +32,17 @@ function GasFeeModal({ tokenDto, onConfirm }: { tokenDto: TokenDto; onConfirm: (
       <LoadingIndicator />
       <DismissKeyboardView>
         <ScrollView style={{ marginLeft: -24, marginRight: -24 }}>
-          <GasFeeBoard isRevision={false} onConfirm={onConfirm} tokenDto={tokenDto} onConfirmTitle={t('trade')} hideDivider={true} />
+          <GasFeeBoard
+            isRevision={false}
+            onConfirm={onConfirm}
+            tokenDto={tokenDto}
+            onConfirmTitle={t('trade')}
+            hideDivider={true}
+            to={to}
+            value={value}
+            data={data}
+            isValidInput={toValid && valueValid}
+          />
         </ScrollView>
       </DismissKeyboardView>
     </ModalLayout>
