@@ -5,6 +5,7 @@ import { ScrollView, View } from 'react-native';
 
 import DismissKeyboardView from '@@components/BasicComponents/DismissKeyboardView';
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
+import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -26,6 +27,7 @@ function GasFeeModal({ tokenDto, onConfirm }: { tokenDto: TokenDto; onConfirm: (
         closeModal();
       }}
     >
+      <LoadingIndicator />
       <DismissKeyboardView>
         <ScrollView style={{ marginLeft: -24, marginRight: -24 }}>
           <GasFeeBoard isRevision={false} onConfirm={onConfirm} tokenDto={tokenDto} onConfirmTitle={t('trade')} hideDivider={true} />
