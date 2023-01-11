@@ -34,8 +34,9 @@ function TradeScreen() {
     setTradeFromValidation,
   } = useTradeScreen();
 
-  const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData);
   const { isEnoughAllowance, onPressApprove } = useTradeApprove(fromToken);
+  const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData, isEnoughAllowance);
+
   const validation = useTradeButtonValidation(isEnoughAllowance, isReadyTrade, onPressTrade, onPressApprove);
   const { onPressWalletList } = useWalletSelector();
   const { address } = useAccount();

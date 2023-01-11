@@ -14,7 +14,15 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-function GasFeeModal({ tokenDto, onConfirm }: { tokenDto: TokenDto; onConfirm: (gasFee: IGasFeeInfo) => Promise<void> }) {
+function GasFeeModal({
+  tokenDto,
+  onConfirm,
+  onConfirmTitle,
+}: {
+  tokenDto: TokenDto;
+  onConfirm: (gasFee: IGasFeeInfo) => Promise<void>;
+  onConfirmTitle: string;
+}) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
   const { to, value, data, toValid, valueValid } = transactionRequestStore();
@@ -36,7 +44,7 @@ function GasFeeModal({ tokenDto, onConfirm }: { tokenDto: TokenDto; onConfirm: (
             isRevision={false}
             onConfirm={onConfirm}
             tokenDto={tokenDto}
-            onConfirmTitle={t('trade')}
+            onConfirmTitle={onConfirmTitle}
             hideDivider={true}
             to={to}
             value={value}

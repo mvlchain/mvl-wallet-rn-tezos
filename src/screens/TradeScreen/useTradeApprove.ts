@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
 import { useDi } from '@@hooks/useDi';
@@ -24,6 +24,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
   const { to: spender, value, data: approveData, setState } = transactionRequestStore();
+  const [sentApprove, setSentApprove] = useState(false);
 
   useSpenderQuery(getNetworkConfig(selectedNetwork).networkId, {
     onSuccess: (data) => {
@@ -49,13 +50,14 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const sendApproveTransaction = async (gasFeeInfo: IGasFeeInfo) => {
     if (!spender || !approveData || !fromToken?.contractAddress) return;
     await TransactionService.sendTransaction({
-      selectedNetwork,
-      selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+      selectedNetwork: getNetworkByBase(selectedNetwork),
+      selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
       to: fromToken.contractAddress,
       data: approveData,
       gasFeeInfo,
     });
     closeModal();
+    setSentApprove(true);
     setState({ data: null });
   };
 
@@ -68,7 +70,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
         closeModal();
         const approveData = await TransactionService.getApproveData(spender);
         setState({ data: approveData });
-        openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendApproveTransaction });
+        openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendApproveTransaction, onConfirmTitle: t('approve') });
       },
     });
   };
@@ -76,12 +78,12 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const isEnoughAllowance = useMemo(() => {
     if (!fromToken?.contractAddress) return true;
 
-    if (allowance && value && allowance.gt(value)) {
+    if (sentApprove || (allowance && value && allowance.gt(value))) {
       return true;
     } else {
       return false;
     }
-  }, [allowance, value, !!fromToken?.contractAddress]);
+  }, [allowance, value, !!fromToken?.contractAddress, sentApprove]);
 
   return { isEnoughAllowance, onPressApprove };
 };
