@@ -1,3 +1,4 @@
+import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
 import { LinkingOptions, useNavigation } from '@react-navigation/native';
 import qs from 'qs';
 import { Linking } from 'react-native';
@@ -41,6 +42,14 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
   //   },
   // },
 
+  async getInitialURL(): Promise<string | null> {
+    const dynamicLink = await dynamicLinks().getInitialLink();
+    if (dynamicLink) {
+      return dynamicLink.url;
+    }
+    return await Linking.getInitialURL();
+  },
+
   subscribe: (listener) => {
     const onUrlScheme = (event: { url: string }): void => {
       console.log(`DeepLink> ${event.url}`);
@@ -49,10 +58,16 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
 
       listener(event.url);
     };
+    const urlLinkSubscription = Linking.addEventListener('url', onUrlScheme);
 
-    const subscription = Linking.addEventListener('url', onUrlScheme);
+    const onDynamicLink = (dynamicLink: FirebaseDynamicLinksTypes.DynamicLink) => {
+      listener(dynamicLink.url);
+    };
+    const unsubscribeToDynamicLink = dynamicLinks().onLink(onDynamicLink);
+
     return () => {
-      subscription.remove();
+      unsubscribeToDynamicLink();
+      urlLinkSubscription.remove();
     };
   },
 };

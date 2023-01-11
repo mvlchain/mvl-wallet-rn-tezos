@@ -7,6 +7,14 @@ export const ETHEREUM_TOKEN_LIST = [
     priceId: 'ethereum',
     symbol: 'ETH',
   },
+  {
+    contractAddress: '0xa849eaae994fb86afa73382e9bd88c2b6b18dc71',
+    decimals: 18,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg',
+    name: 'MVL',
+    priceId: 'mass-vehicle-ledger',
+    symbol: 'MVL',
+  },
 ];
 
 export const BSC_TOKEN_LIST = [
@@ -17,6 +25,22 @@ export const BSC_TOKEN_LIST = [
     name: 'BNB',
     priceId: 'binancecoin',
     symbol: 'BNB',
+  },
+  {
+    contractAddress: '0x5f588EfAf8eB57e3837486e834fC5a4E07768D98',
+    decimals: 18,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg',
+    name: 'Binance Wrapped MVL',
+    priceId: 'mass-vehicle-ledger',
+    symbol: 'bMVL',
+  },
+  {
+    contractAddress: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+    decimals: 18,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/btcb.svg',
+    name: 'Binance-Peg BTCB',
+    priceId: 'binance-bitcoin',
+    symbol: 'BTCB',
   },
 ];
 

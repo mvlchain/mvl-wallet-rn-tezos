@@ -1,10 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 
+import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID } from '@@constants/network.constant';
 import { ERC20_MULTICALL_METHOD } from '@@constants/token.constant';
 import { IBlockChainRepository, ICallBody, IConfigBody } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
+import { ITokenPersistState, TokenDto } from '@@store/token/tokenPersistStore.type';
+import { isBlank, isNotBlank } from '@@utils/strings';
 
 import { IBalance } from './WalletBlockChainService.type';
 import { WalletService } from './WalletService';
@@ -13,6 +15,7 @@ export interface IWalletBlockChainService {
   getBalanceFromNetwork: (index: number, network: Network, tokenList: TokenDto[]) => Promise<any>;
   setBlockChainRepository(network: Network): IBlockChainRepository;
   getOneBalanceFromNetwork: (index: number, network: Network, token: TokenDto) => Promise<string>;
+  getTokenByNetworkContractAddress: (tokenStore: ITokenPersistState, network: Network, contractAddress?: string) => TokenDto | undefined;
 }
 
 @injectable()
@@ -21,7 +24,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
     @inject('EthersRepository') private ethersRepository: IBlockChainRepository,
     @inject('TezosRepository') private tezosRepository: IBlockChainRepository,
     @inject('WalletService') private walletService: WalletService
-  ) {}
+  ) { }
 
   setBlockChainRepository = (network: Network): IBlockChainRepository => {
     const networkId = getNetworkConfig(network).networkId;
@@ -119,5 +122,54 @@ export class WalletBlockChainService implements IWalletBlockChainService {
       });
     }
     return balance;
+  };
+
+  /**
+   * find a token model from local token list.
+   * @param network fidn
+   * @param contractAddress
+   * @returns
+   */
+  getTokenByNetworkContractAddress = (tokenStore: ITokenPersistState, network: Network, contractAddress?: string): TokenDto | undefined => {
+    const { tokenList } = tokenStore;
+    const networkByType = this.getNetworkByNetworkType(network);
+    return tokenList[networkByType].find(
+      (item) => (isBlank(contractAddress) && !item.contractAddress) || (isNotBlank(contractAddress) && item.contractAddress)
+    );
+  };
+
+  isTestNet = () => appconfig().baseNetwork !== 'mainnet';
+
+  getNetworkByNetworkType = (network: Network): Network => {
+    const isTestNet = this.isTestNet();
+    if (isTestNet) {
+      switch (network) {
+        case 'ETHEREUM':
+        case 'GOERLI':
+          return 'GOERLI';
+
+        case 'BSC':
+        case 'BSC_TESTNET':
+          return 'BSC_TESTNET';
+
+        case 'TEZOS':
+        case 'TEZOS_GHOSTNET':
+          return 'TEZOS_GHOSTNET';
+      }
+    } else {
+      switch (network) {
+        case 'ETHEREUM':
+        case 'GOERLI':
+          return 'ETHEREUM';
+
+        case 'BSC':
+        case 'BSC_TESTNET':
+          return 'BSC';
+
+        case 'TEZOS':
+        case 'TEZOS_GHOSTNET':
+          return 'TEZOS';
+      }
+    }
   };
 }
