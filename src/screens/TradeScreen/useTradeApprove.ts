@@ -69,7 +69,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   };
 
   const isEnoughAllowance = useMemo(() => {
-    // if (!fromToken?.contractAddress) return true;
+    if (!fromToken?.contractAddress) return true;
 
     if (allowance && value && allowance.gt(value)) {
       return true;

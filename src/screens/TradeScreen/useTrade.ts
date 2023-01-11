@@ -54,17 +54,14 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   });
 
   const sendTradeTransaction = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!spender || !baseFee || !gas || !total) return;
+    if (!spender || !gasFeeInfo) return;
+
     await TransactionService.sendTransaction({
       to: fromToken?.contractAddress ? fromToken.contractAddress : spender,
       value: value ?? undefined,
       data: swapData ?? undefined,
-      gasFeeInfo: {
-        baseFee,
-        gas,
-        total,
-      },
-      selectedNetwork,
+      gasFeeInfo,
+      selectedNetwork: getNetworkByBase(selectedNetwork),
       selectedWalletIndex: selectedWalletIndex[selectedNetwork],
     });
     closeModal();
