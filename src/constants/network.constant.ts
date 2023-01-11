@@ -40,6 +40,7 @@ export type NetworkConfig = {
   networkFeeType: NetworkFeeType;
   networkId: NetworkId;
   coin: string;
+  multicallAddress?: string;
 };
 
 const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
@@ -52,6 +53,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
+    multicallAddress: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
   },
   [NETWORK.GOERLI]: {
     name: 'Ethereum Goerli Testnet',
@@ -62,6 +64,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
+    multicallAddress: '0x77dCa2C955b15e9dE4dbBCf1246B4B85b651e50e',
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',
@@ -72,6 +75,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
+    multicallAddress: '0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb',
   },
   [NETWORK.BSC_TESTNET]: {
     name: 'BNB Smart Chain - Testnet',
@@ -82,6 +86,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
+    multicallAddress: '0x6e5BB1a5Ad6F68A8D7D6A5e47750eC15773d6042',
   },
   [NETWORK.TEZOS]: {
     name: 'Tezos Mainnet',

@@ -1,11 +1,14 @@
 import { formatFixed } from '@ethersproject/bignumber';
+import { aggregate } from '@makerdao/multicall';
 import { ethers } from 'ethers';
 import { inject, injectable } from 'tsyringe';
 
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
+import { IBalance } from '@@domain/wallet/services/WalletBlockChainService.type';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
+import { IBalanceMultical } from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class EthersRepository implements Type.IBlockChainRepository {
@@ -33,6 +36,11 @@ export class EthersRepository implements Type.IBlockChainRepository {
     } catch (e) {
       throw new Error(`Error:  ${e}`);
     }
+  });
+
+  getBalanceByMulticall = loadingFunction<IBalance>(async ({ calls, config }: IBalanceMultical) => {
+    const result = await aggregate(calls, config);
+    return result.results.transformed;
   });
 
   getTokenMetadata = async (rpcUrl: string, contractAddress: string, abi?: string) => {

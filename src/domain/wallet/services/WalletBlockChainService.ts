@@ -2,7 +2,8 @@ import { inject, injectable } from 'tsyringe';
 
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID } from '@@constants/network.constant';
-import { IBlockChainRepository } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
+import { ERC20_MULTICALL_METHOD } from '@@constants/token.constant';
+import { IBlockChainRepository, ICallBody, IConfigBody } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import { IBalance } from './WalletBlockChainService.type';
@@ -34,29 +35,61 @@ export class WalletBlockChainService implements IWalletBlockChainService {
   };
 
   getBalanceFromNetwork = async (index: number, network: Network, tokenList: TokenDto[]) => {
-    const { rpcUrl } = getNetworkConfig(getNetworkByBase(network));
-    let balanceList: IBalance = {};
+    const { rpcUrl, multicallAddress } = getNetworkConfig(getNetworkByBase(network));
     const wallet = await this.walletService.getWalletInfo({ index, network });
     const blockchainRepository = this.setBlockChainRepository(network);
+    let balanceList: IBalance = {};
+
+    if (blockchainRepository.getBalanceByMulticall) {
+      if (!multicallAddress) return;
+      balanceList = await this._multiCall(blockchainRepository, rpcUrl, multicallAddress, tokenList, wallet.address);
+    } else {
+      balanceList = await this._singleCall(blockchainRepository, rpcUrl, tokenList, wallet.address);
+    }
+
+    return balanceList;
+  };
+
+  getOneBalanceFromNetwork = async (index: number, network: Network, token: TokenDto) => {
+    const { rpcUrl } = getNetworkConfig(getNetworkByBase(network));
+    const wallet = await this.walletService.getWalletInfo({ index, network });
+    const blockchainRepository = this.setBlockChainRepository(network);
+    const balance = await this._getBalance(blockchainRepository, wallet.address, token, rpcUrl);
+
+    return balance;
+  };
+
+  _multiCall = async (
+    blockchainRepository: IBlockChainRepository,
+    rpcUrl: string,
+    multicallAddress: string,
+    tokenList: TokenDto[],
+    walletAddress: string
+  ) => {
+    if (!blockchainRepository.getBalanceByMulticall) return {};
+    const config: IConfigBody = {
+      rpcUrl,
+      multicallAddress: multicallAddress ?? '',
+    };
+    let balanceList: IBalance = {};
+    const calls: ICallBody[] = [];
+    tokenList.map(async (token) => {
+      const target = token.contractAddress ?? undefined;
+      const type = token.contractAddress === null ? 'COIN' : 'TOKEN';
+      calls.push({
+        target,
+        call: [ERC20_MULTICALL_METHOD[type], walletAddress],
+        returns: [[token.symbol, (val: any) => val / 10 ** token.decimals]],
+      });
+    });
+    balanceList = await blockchainRepository.getBalanceByMulticall({ calls, config });
+    return balanceList;
+  };
+
+  _singleCall = async (blockchainRepository: IBlockChainRepository, rpcUrl: string, tokenList: TokenDto[], walletAddress: string) => {
+    let balanceList: IBalance = {};
     const getBalancePromise = tokenList.map(async (token) => {
-      let balance;
-      if (token.contractAddress === null) {
-        balance = await blockchainRepository.getBalance({
-          selectedWalletAddress: wallet.address,
-          rpcUrl: rpcUrl,
-          decimals: token.decimals,
-        });
-      } else {
-        // TODO: tezos token일 시 standardType 추가해야함
-        balance = await blockchainRepository.getContractBalance({
-          contractAddress: token.contractAddress,
-          rpcUrl: rpcUrl,
-          abi: abiERC20,
-          address: wallet.address,
-          decimals: token.decimals,
-          // standardType: token.standardType, // undefined or string?
-        });
-      }
+      const balance = await this._getBalance(blockchainRepository, walletAddress, token, rpcUrl);
       balanceList = {
         ...balanceList,
         [token.symbol]: balance,
@@ -66,14 +99,11 @@ export class WalletBlockChainService implements IWalletBlockChainService {
     return balanceList;
   };
 
-  getOneBalanceFromNetwork = async (index: number, network: Network, token: TokenDto) => {
-    const { rpcUrl } = getNetworkConfig(getNetworkByBase(network));
-    const wallet = await this.walletService.getWalletInfo({ index, network });
-    const blockchainRepository = this.setBlockChainRepository(network);
+  _getBalance = async (blockchainRepository: IBlockChainRepository, address: string, token: TokenDto, rpcUrl: string) => {
     let balance;
     if (token.contractAddress === null) {
       balance = await blockchainRepository.getBalance({
-        selectedWalletAddress: wallet.address,
+        selectedWalletAddress: address,
         rpcUrl: rpcUrl,
         decimals: token.decimals,
       });
@@ -83,7 +113,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
         contractAddress: token.contractAddress,
         rpcUrl: rpcUrl,
         abi: abiERC20,
-        address: wallet.address,
+        address: address,
         decimals: token.decimals,
         // standardType: token.standardType, // undefined or string?
       });
