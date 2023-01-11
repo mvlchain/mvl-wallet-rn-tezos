@@ -62,7 +62,7 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
       data: swapData ?? undefined,
       gasFeeInfo,
       selectedNetwork: getNetworkByBase(selectedNetwork),
-      selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+      selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
     });
     closeModal();
     setGasStore({ isDataRequired: false });
