@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
+import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import gasStore from '@@store/gas/gasStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 import useBaseFeeValidation from './hooks/useBaseFeeValidation';
@@ -12,7 +14,7 @@ import useSetInitial from './hooks/useSetInitial';
 import useSetTotal from './hooks/useSetTotal';
 import useTipValidation from './hooks/useTipValidation';
 
-const useGasFeeBoard = (tokenDto: TokenDto) => {
+const useGasFeeBoard = (tokenDto: TokenDto, onConfirm: (gas: IGasFeeInfo) => void) => {
   //The setted value
   const [advanced, setAdvanced] = useState(false);
   const [enableTip, setEnableTip] = useState<boolean>(false);
@@ -21,6 +23,7 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
   //The reference values from blockchain
   const [blockBaseFee, setBlockBaseFee] = useState<BigNumber | null>(null);
   const [blockGas, setBlockGas] = useState<BigNumber | null>(null);
+  const { baseFee, gas, total, tip } = gasStore();
 
   useSetTotal({ blockGas });
   useSetGasState({ blockBaseFee, blockGas, advanced });
@@ -35,6 +38,17 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
   const { baseFeeCheck } = useBaseFeeValidation(tokenDto, blockBaseFee);
   const { tipCheck } = useTipValidation(tokenDto);
   const { gasCheck } = useGasValidation();
+  const wrappedOnConfirm = () => {
+    if (!baseFee || !gas || !total || (enableTip && !tip)) return;
+    const gasFeeInfo = {
+      baseFee,
+      gas,
+      total,
+      tip: enableTip ? tip! : undefined,
+    };
+
+    onConfirm(gasFeeInfo);
+  };
 
   const toggleGasAdvanced = useCallback(() => {
     setAdvanced(!advanced);
@@ -48,6 +62,7 @@ const useGasFeeBoard = (tokenDto: TokenDto) => {
     tipCheck,
     gasCheck,
     toggleGasAdvanced,
+    wrappedOnConfirm,
   };
 };
 
