@@ -1,14 +1,16 @@
 import 'react-native';
 import React from 'react';
 
+import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
+
 import App from './App';
 import { cleanup, render } from './test/test-utils';
-
-import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
 import 'jest-styled-components';
 import { RTNSettingsRepository } from '@@domain/auth/repositories/RTNSettingsRepository';
 import { TTheme } from '@@store/setting/settingPersistStore.type';
+
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 /**
  * Mock class for RTNSettingsRepository
@@ -37,6 +39,16 @@ beforeEach(() => {
     return {
       hide: jest.fn(),
       show: jest.fn(),
+    };
+  });
+
+  jest.mock('@react-native-firebase/dynamic-links', () => {
+    return function () {
+      return {
+        getInitialLink: async () => ({
+          url: 'fake-link',
+        }),
+      };
     };
   });
 });
