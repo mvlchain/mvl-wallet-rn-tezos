@@ -23,3 +23,9 @@ export const WALLET_TOKEN = {
 export const TRADE_TOKEN = {
   ...BASIC_BSC_TOKEN,
 } as const;
+
+// eth와 bsc둘다 helper method이름이 getEthBalance임
+export const ERC20_MULTICALL_METHOD = {
+  COIN: 'getEthBalance(address)(uint256)',
+  TOKEN: 'balanceOf(address)(uint256)',
+};
