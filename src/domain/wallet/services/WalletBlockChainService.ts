@@ -2,19 +2,22 @@ import { inject, injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID } from '@@constants/network.constant';
 import { ERC20_MULTICALL_METHOD } from '@@constants/token.constant';
 import { IBlockChainRepository, ICallBody, IConfigBody } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
+import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID, NETWORK } from '@@constants/network.constant';
+import QrCodeParser from '@@domain/auth/QrCodeParser/QrCodeParser';
+import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { ITokenPersistState, TokenDto } from '@@store/token/tokenPersistStore.type';
 import { isBlank, isNotBlank } from '@@utils/strings';
 
-import { IBalance } from './WalletBlockChainService.type';
+import { IBalance, TQrCodeLink } from './WalletBlockChainService.type';
 import { WalletService } from './WalletService';
 
 export interface IWalletBlockChainService {
   getBalanceFromNetwork: (index: number, network: Network, tokenList: TokenDto[]) => Promise<any>;
   setBlockChainRepository(network: Network): IBlockChainRepository;
   getOneBalanceFromNetwork: (index: number, network: Network, token: TokenDto) => Promise<string>;
+  parseQrCodeLink: (qrCode: string) => Promise<TQrCodeLink | undefined>;
   getTokenByNetworkContractAddress: (tokenStore: ITokenPersistState, network: Network, contractAddress?: string) => TokenDto | undefined;
 }
 
@@ -122,6 +125,28 @@ export class WalletBlockChainService implements IWalletBlockChainService {
       });
     }
     return balance;
+  };
+
+  parseQrCodeLink = async (qrCode: string): Promise<TQrCodeLink | undefined> => {
+    const tokenStore: ITokenPersistState = tokenPersistStore.getState();
+    const qrCodeContents = await QrCodeParser.decodeQrCode(qrCode);
+    const network = Object.values(NETWORK).find((item) => item === qrCodeContents?.network);
+    let token: TokenDto | undefined;
+
+    if (qrCodeContents && network) {
+      token = this.getTokenByNetworkContractAddress(tokenStore, network, qrCodeContents.contractAddress);
+    }
+
+    console.log(`QrPay> token: ${token?.symbol}, amount: ${qrCodeContents?.amount}`);
+
+    if (!qrCodeContents || !token) {
+      return;
+    }
+
+    return {
+      qrCodeContents: qrCodeContents,
+      token,
+    };
   };
 
   /**

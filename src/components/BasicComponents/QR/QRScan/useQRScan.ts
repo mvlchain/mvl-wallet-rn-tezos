@@ -10,33 +10,24 @@ import { useFrameProcessor } from 'react-native-vision-camera';
 import { Barcode, BarcodeFormat, scanBarcodes } from 'vision-camera-code-scanner';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { NETWORK } from '@@constants/network.constant';
-import QrCodeParser from '@@domain/auth/QrCodeParser/QrCodeParser';
 import { QrCodeLinkTransfer } from '@@domain/auth/QrCodeParser/QrCodeParser.type';
+import { TQrCodeLink } from '@@domain/wallet/services/WalletBlockChainService.type';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import { TScanQRRouteProps } from '@@screens/WalletScreen/WalletScanQR/WalletScanQR.type';
 import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { requestPermission, getNotGrantedList, openSettingAlert } from '@@utils/permissions/permissions';
 import { TRequestPermissionResultType } from '@@utils/permissions/permissions.type';
 import { isNotBlank } from '@@utils/strings';
 
-type TQrCodeLink = {
-  qrCodeContents: QrCodeLinkTransfer;
-  token: TokenDto;
-};
-
 const useQRScan = (targetToken?: string) => {
-  const [scanResult, setScanResult] = useState<string | null>(null);
   const [isQrCodeDecoding, setIsQrCodeDecoding] = useState<boolean>(false);
   const { openModal } = globalModalStore();
   const { t } = useTranslation();
   const { params } = useRoute<TScanQRRouteProps>();
   const navigation = useNavigation<TTokenSendRootStackProps>();
-  const tokenStore = tokenPersistStore();
   const blockChainService = useDi('WalletBlockChainService');
 
   useEffect(() => {
@@ -89,6 +80,7 @@ const useQRScan = (targetToken?: string) => {
   }, []);
 
   const navigateToTokenSender = (token: TokenDto, qrCodeLink: QrCodeLinkTransfer) => {
+    navigation.pop();
     navigation.navigate(ROOT_STACK_ROUTE.WALLET_TOKEN_SEND, {
       tokenDto: token,
       scanData: {
@@ -104,26 +96,14 @@ const useQRScan = (targetToken?: string) => {
    * @returns object that has parsed from QrCode image.
    */
   const parseQrCodeLink = async (qrCode: string): Promise<TQrCodeLink | undefined> => {
-    const qrCodeContents = await QrCodeParser.decodeQrCode(qrCode);
-    const network = Object.values(NETWORK).find((item) => item === qrCodeContents?.network);
-    let token: TokenDto | undefined;
-
-    if (qrCodeContents && network) {
-      token = blockChainService.getTokenByNetworkContractAddress(tokenStore, network, qrCodeContents.contractAddress);
-    }
-
-    console.log(`QrPay> token: ${token?.symbol}, amount: ${qrCodeContents?.amount}`);
-
-    if (!qrCodeContents || !token) {
-      // TODO: Basically, right approach to this error handling is to throw an exception
-      openModal(MODAL_TYPES.TITLE_ONLY, { title: t('dialog_wrong_qr_code_title') });
+    const qrCodeLink = await blockChainService.parseQrCodeLink(qrCode);
+    if (!qrCodeLink) {
+      if (isNotBlank(qrCode)) {
+        openModal(MODAL_TYPES.TITLE_ONLY, { title: t('dialog_wrong_qr_code_title') });
+      }
       return;
     }
-
-    return {
-      qrCodeContents: qrCodeContents,
-      token,
-    };
+    return qrCodeLink;
   };
 
   /**
@@ -152,19 +132,16 @@ const useQRScan = (targetToken?: string) => {
         }
       }
     },
-    [isQrCodeDecoding, tokenStore]
+    [isQrCodeDecoding]
   );
 
-  const frameProcessor = useFrameProcessor(
-    (frame) => {
-      'worklet';
-      const barcodes: Barcode[] = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
-      if (barcodes.length > 0) {
-        runOnJS(onQrCodeDetected)(barcodes);
-      }
-    },
-    [onQrCodeDetected]
-  );
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet';
+    const barcodes: Barcode[] = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
+    if (barcodes.length > 0) {
+      runOnJS(onQrCodeDetected)(barcodes);
+    }
+  }, []);
 
   return {
     getQRFromGallery,
