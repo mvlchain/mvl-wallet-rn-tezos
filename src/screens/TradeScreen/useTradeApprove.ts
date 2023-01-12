@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
+import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
@@ -26,7 +27,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const { to: spender, value, data: approveData, setState } = transactionRequestStore();
   const [sentApprove, setSentApprove] = useState(false);
 
-  useSpenderQuery(getNetworkConfig(selectedNetwork).networkId, {
+  useSpenderQuery(getNetworkByBase(selectedNetwork), {
     onSuccess: (data) => {
       setState({ to: data[0].address, toValid: true });
     },
@@ -47,14 +48,12 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
     setAllowance(allowance);
   };
 
-  const sendApproveTransaction = async (gasFeeInfo: IGasFeeInfo) => {
+  const sendApproveTransaction = async (param: TGasConfirmButtonFunctionParam) => {
     if (!spender || !approveData || !fromToken?.contractAddress) return;
     await TransactionService.sendTransaction({
       selectedNetwork: getNetworkByBase(selectedNetwork),
       selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
-      to: fromToken.contractAddress,
-      data: approveData,
-      gasFeeInfo,
+      ...param,
     });
     closeModal();
     setSentApprove(true);

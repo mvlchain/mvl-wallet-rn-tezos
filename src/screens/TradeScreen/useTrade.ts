@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
+import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
@@ -58,19 +59,16 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   });
 
   useEffect(() => {
-    if (isEnoughAllowance) {
+    if (isEnoughAllowance && serverSentSwapData) {
       setState({ data: serverSentSwapData });
     }
-  }, [isEnoughAllowance]);
+  }, [isEnoughAllowance, serverSentSwapData]);
 
-  const sendTradeTransaction = async (gasFeeInfo: IGasFeeInfo) => {
-    if (!spender || !gasFeeInfo) return;
+  const sendTradeTransaction = async (param: TGasConfirmButtonFunctionParam) => {
+    if (!spender || !param) return;
     if (!value) return;
     await TransactionService.sendTransaction({
-      to: fromToken?.contractAddress ? fromToken.contractAddress : spender,
-      value: fromToken?.contractAddress ? value : undefined,
-      data: swapData ?? undefined,
-      gasFeeInfo,
+      ...param,
       selectedNetwork: getNetworkByBase(selectedNetwork),
       selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
     });

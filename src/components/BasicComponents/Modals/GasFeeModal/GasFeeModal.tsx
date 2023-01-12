@@ -5,6 +5,7 @@ import { ScrollView, View } from 'react-native';
 
 import DismissKeyboardView from '@@components/BasicComponents/DismissKeyboardView';
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
+import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
@@ -20,7 +21,7 @@ function GasFeeModal({
   onConfirmTitle,
 }: {
   tokenDto: TokenDto;
-  onConfirm: (gasFee: IGasFeeInfo) => Promise<void>;
+  onConfirm: (param: TGasConfirmButtonFunctionParam) => void;
   onConfirmTitle: string;
 }) {
   const { modalType, closeModal } = globalModalStore();
