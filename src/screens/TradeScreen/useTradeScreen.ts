@@ -58,14 +58,13 @@ export const useTradeScreen = () => {
   const [tradeFromValidation, setTradeFromValidation] = useState(false);
   const [quoteDto, setQuoteDto] = useState<IQuoteDto | null>(null);
   const [priceImpact, setPriceImpact] = useState('-');
-  const [priceImpactColor, setPriceImpactColor] = useState('color.whiteBlack');
+  const [priceImpactColor, setPriceImpactColor] = useState<string>(color.whiteBlack);
   const { data: quoteData, refetch } = useTradeQuoteQuery(selectedNetwork, quoteDto, {
     enabled: false,
     onSuccess: (data) => {
       const { priceImpact, toTokenAmount } = data;
       if (!priceImpact || !toTokenAmount) return;
       setPriceImpact(priceImpact);
-      setPriceImpactColor(handlePriceImpactColor(priceImpact));
       const amount = formatBigNumber(new BigNumber(toTokenAmount), data.toToken?.decimals ?? 18);
       setTradeToValue(amount);
       setState({
@@ -108,6 +107,10 @@ export const useTradeScreen = () => {
       selectToken(symbol, type);
     }
   };
+
+  useEffect(() => {
+    setPriceImpactColor(handlePriceImpactColor(priceImpact));
+  }, [priceImpact]);
 
   useEffect(() => {
     setFromTradeMenu(
