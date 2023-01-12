@@ -24,7 +24,7 @@ const useEstimateGas = ({
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
-  tokenDto: TokenDto;
+  tokenDto?: TokenDto;
   setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {

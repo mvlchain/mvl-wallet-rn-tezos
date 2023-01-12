@@ -17,6 +17,7 @@ import { hexToBN, fromWei } from '@@utils/number';
 import { isSwapTransaction } from '@@utils/transactions';
 
 import Approval from './Approval';
+import { BigNumber } from "bignumber.js";
 
 export const KEYSTONE_TX_CANCELED = 'KeystoneError#Tx_canceled';
 
@@ -139,7 +140,7 @@ const RootRPCMethodsUI = () => {
         setTransactionRequest({
           from: transactionMeta.transaction.from,
           to: transactionMeta.transaction.to,
-          value: transactionMeta.transaction.value,
+          value: new BigNumber(value),
           data: transactionMeta.transaction.data,
           toValid: true,
           valueValid: true,
