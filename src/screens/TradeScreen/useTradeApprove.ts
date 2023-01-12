@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
+import { getNetworkByBase } from '@@constants/network.constant';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
 import { useDi } from '@@hooks/useDi';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -24,12 +23,12 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const { t } = useTranslation();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
-  const { to: spender, value, data: approveData, setState } = transactionRequestStore();
+  const { to: spender, value, valueValid, data: approveData, setState } = transactionRequestStore();
   const [sentApprove, setSentApprove] = useState(false);
 
-  useSpenderQuery(getNetworkByBase(selectedNetwork), {
+  useSpenderQuery(selectedNetwork, {
     onSuccess: (data) => {
-      setState({ to: data[0].address, toValid: true });
+      setState({ to: data.address, toValid: true });
     },
   });
 
@@ -82,7 +81,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
     } else {
       return false;
     }
-  }, [allowance, value, !!fromToken?.contractAddress, sentApprove]);
+  }, [allowance, value, !!fromToken?.contractAddress, sentApprove, valueValid]);
 
   return { isEnoughAllowance, onPressApprove };
 };

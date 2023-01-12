@@ -9,7 +9,7 @@ import {
 } from '@@generated/generated-scheme-clutch';
 
 export interface ITradeRepository {
-  getSpender: (network: Network) => Promise<SpenderResponseDto[]>;
+  getSpender: (network: Network) => Promise<SpenderResponseDto>;
   getTokens: (network: Network) => Promise<TokensResponseDto>;
   quote: (network: Network, quoteDto: IQuoteDto) => Promise<FetchPriceResponseDto>;
   swap: (network: Network, swapDto: ISwapDto) => Promise<CreateNativeSwapTransactionResponseDto>;
