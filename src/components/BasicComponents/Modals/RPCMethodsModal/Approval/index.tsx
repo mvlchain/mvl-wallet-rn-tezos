@@ -64,11 +64,13 @@ const Approval = () => {
     setEnableLimitCustom,
     setBlockBaseFee,
     setBlockGas: setNoBlockGas,
+    isValidInput: true,
   });
+  const { to, value }: { to: string; value: BN } = transaction;
 
-  useSetTotal({ blockGas });
+  useSetTotal({ to: to, value: new BigNumber(value.toString(10)), blockGas });
   useSetGasState({ blockBaseFee, blockGas, advanced });
-  useEstimateGas({ tokenDto: undefined, advanced, setBlockBaseFee, setBlockGas });
+  useEstimateGas({ isValidInput: true, tokenDto: undefined, setBlockBaseFee, setBlockGas });
 
   const updateNavBar = () => {
     // const colors = this.context.colors || mockTheme.colors;

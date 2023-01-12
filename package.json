@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "cp:boostvision": "cp ./boost_1_76_0.tar.gz ./node_modules/react-native-vision-camera/android/build/downloads",
-    "cp:quickcrypto": "cp ./boost_1_76_0.tar.gz ./node_modules/react-native-quick-crypto/android/build/downloads",
+    "cp:from": "cp ./node_modules/react-native-vision-camera/android/build/downloads/boost_1_76_0.tar.gz ./ 2>/dev/null || :",
+    "cp:boostvision": "cp ./boost_1_76_0.tar.gz ./node_modules/react-native-vision-camera/android/build/downloads 2>/dev/null || :",
+    "cp:quickcrypto": "cp ./boost_1_76_0.tar.gz ./node_modules/react-native-quick-crypto/android/build/downloads 2>/dev/null || :",
     "android": "yarn cp:boostvision && yarn cp:quickcrypto && react-native run-android --appIdSuffix=dev --active-arch-only",
     "ios": "react-native run-ios",
     "start": "APP_ENV=dev react-native start",
