@@ -65,7 +65,7 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   }, [isEnoughAllowance, serverSentSwapData]);
 
   const broadCastToServer = (param: BroadcastTransactionDto) => {
-    TradeRepository.broadcast(getNetworkByBase(selectedNetwork), param);
+    TradeRepository.broadcast(selectedNetwork, param);
   };
 
   const sendTradeTransaction = async (param: TGasConfirmButtonFunctionParam) => {
