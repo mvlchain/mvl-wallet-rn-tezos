@@ -79,7 +79,7 @@ export const useTradeScreen = () => {
       return textColor;
     }
     const numberImpact = parseFloat(priceImpact);
-    if (numberImpact < 0.99) {
+    if (numberImpact < 1) {
       textColor = color.green;
     } else if (numberImpact >= 1 && numberImpact < 3) {
       textColor = color.whiteBlack;
