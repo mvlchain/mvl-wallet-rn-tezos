@@ -1,1 +1,1 @@
-export const IOS_APPSTORE_ID = 'id1598853856';
+export const IOS_APPSTORE_ID = '1598853856';

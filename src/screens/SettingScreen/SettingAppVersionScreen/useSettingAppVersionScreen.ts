@@ -20,7 +20,7 @@ export const useSettingAppVersionScreen = () => {
     const store =
       Platform.OS === 'android'
         ? await VersionCheck.getPlayStoreUrl({ packageName: VersionCheck.getPackageName() })
-        : await VersionCheck.getAppStoreUrl({ appID: IOS_APPSTORE_ID });
+        : await VersionCheck.getAppStoreUrl({ appID: `id${IOS_APPSTORE_ID}` });
     Linking.openURL(store);
   };
 
