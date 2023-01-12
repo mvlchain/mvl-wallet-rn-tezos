@@ -47,7 +47,7 @@ const useGasFeeBoard = ({ to, value, data, isValidInput, tokenDto, onConfirm }: 
     const isCoin = !tokenDto.contractAddress;
     if ((isDataRequired || !isCoin) && !data) return;
     const confirmParam = {
-      to: isCoin ? to : tokenDto.contractAddress!,
+      to: isDataRequired || isCoin ? to : tokenDto.contractAddress!,
       value: isCoin ? value : undefined,
       data: isDataRequired || !isCoin ? data! : undefined,
       gasFeeInfo: { baseFee, gas, total, tip: enableTip ? tip! : undefined },

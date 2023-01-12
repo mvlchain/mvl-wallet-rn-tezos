@@ -18,7 +18,7 @@ const INITIAL_GAS_STORE_STATE = {
   isDataRequired: false,
   //estimategas할때 tokenDto의 contractAddress유무에 따라 data를 보내서 가스를 계산할지 판단한다.
   //trade에서는 coin인 경우에도 데이터를 보내서 가스를 계산해야하므로 isDataRequired 를 셋해서 사용하도록 한다.
-  //다른 판단기준을 만들어야하는지 고민.
+  //다른 판단기준을 만들어야하는지 고민. isDataRequired일때는 token이어도 to에 contract address가 아닌 to를 보낸다.
 };
 const gasStore = create<IGasStore>(
   zustandFlipper(
