@@ -1,8 +1,10 @@
 import { useState } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import VersionCheck from 'react-native-version-check';
+
+import { IOS_APPSTORE_ID } from '@@constants/app.constant';
 
 export const useSettingAppVersionScreen = () => {
   const [needUpdate, setNeedUpdate] = useState<boolean>(false);
@@ -14,8 +16,12 @@ export const useSettingAppVersionScreen = () => {
     });
   });
 
-  const onPressUpdate = () => {
-    Linking.openURL(VersionCheck.getPackageName());
+  const onPressUpdate = async () => {
+    const store =
+      Platform.OS === 'android'
+        ? await VersionCheck.getPlayStoreUrl({ packageName: VersionCheck.getPackageName() })
+        : await VersionCheck.getAppStoreUrl({ appID: IOS_APPSTORE_ID });
+    Linking.openURL(store);
   };
 
   return {
