@@ -1,6 +1,8 @@
 import { parse } from 'url';
 
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import { validateAddress, ValidationResult } from '@taquito/utils';
+import { ethers } from 'ethers';
 import QueryString from 'qs';
 
 import { URL_DYNAMIC_LINK, URL_DEEPLINK } from '@@constants/url.constant';
@@ -102,4 +104,16 @@ export default class QrCodeParser {
     }
     return address;
   };
+
+  /**
+   * Clutch에서 지원하는 지갑 주소의 형식인지 확인한다.
+   * 현재는 아래의 지값 주소들을 확인한다.
+   *  - etherum
+   *  - binance (etherum과 동일)
+   *  - tezos
+   * @param address
+   */
+  static isWalletAddress(address: string): boolean {
+    return ethers.utils.isAddress(address) || validateAddress(address) == ValidationResult.VALID;
+  }
 }
