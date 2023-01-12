@@ -69,6 +69,9 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       setUsingMax(false);
     }
     const value = data.nativeEvent.text;
+    if (value === '') {
+      clearTextField();
+    }
     handleValue(value);
   };
 

@@ -22,6 +22,7 @@ function TradeScreen() {
     tradeFromValue,
     tradeToValue,
     priceImpact,
+    priceImpactColor,
     setShowTip,
     onPressToken,
     onPressChange,
@@ -85,7 +86,7 @@ function TradeScreen() {
                 </S.PriceImpactHelpButton>
               </Tooltip>
             </S.HelpWrapper>
-            <S.PriceImpactText>{priceImpact}</S.PriceImpactText>
+            <S.PriceImpactText priceImpactColor={priceImpactColor}>{priceImpact === '-' ? priceImpact : `${priceImpact}%`}</S.PriceImpactText>
           </S.PriceImpactContainer>
         </S.InputContainer>
       )}

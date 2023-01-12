@@ -43,9 +43,9 @@ export const PriceImpactContainer = styled.View`
   margin-top: ${width * 24}px;
 `;
 
-export const PriceImpactText = styled.Text`
+export const PriceImpactText = styled.Text<{ priceImpactColor?: string }>`
   ${({ theme }) => theme.font.Label.md};
-  color: ${({ theme }) => theme.color.whiteBlack};
+  color: ${({ theme, priceImpactColor }) => (priceImpactColor ? priceImpactColor : theme.color.whiteBlack)};
 `;
 
 export const PriceImpactHelp = styled.Text`

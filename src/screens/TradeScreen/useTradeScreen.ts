@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useState } from 'react';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -13,12 +14,14 @@ import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { IQuoteDto } from '@@domain/trade/repositories/tradeRepository.type';
 import useTradeQuoteQuery from '@@hooks/queries/useTradeQuoteQuery';
 import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
+import { useColor } from '@@hooks/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
+
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const useTradeScreen = () => {
@@ -27,9 +30,11 @@ export const useTradeScreen = () => {
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
   const { setState } = transactionRequestStore();
-  const { data: tokenList } = useTradeTokeneQuery(selectedNetwork, {
+  const [tokenList, setTokenList] = useState<TokenDto[]>([]);
+  const { color } = useColor();
+  useTradeTokeneQuery(selectedNetwork, {
     enabled: isFocused,
-    select: (data) => {
+    onSuccess: (data) => {
       const tokens = Object.values(data.tokens).map((token) => {
         // unknown으로 와서 any캐스팅 할 수 밖에 없었음...
         const tokenData = token as any;
@@ -39,7 +44,7 @@ export const useTradeScreen = () => {
         };
       });
 
-      return tokens as TokenDto[];
+      setTokenList(tokens as TokenDto[]);
     },
   });
   const { selectedToken, selectToken } = tradeStore();
@@ -53,6 +58,7 @@ export const useTradeScreen = () => {
   const [tradeFromValidation, setTradeFromValidation] = useState(false);
   const [quoteDto, setQuoteDto] = useState<IQuoteDto | null>(null);
   const [priceImpact, setPriceImpact] = useState('-');
+  const [priceImpactColor, setPriceImpactColor] = useState<string>(color.whiteBlack);
   const { data: quoteData, refetch } = useTradeQuoteQuery(selectedNetwork, quoteDto, {
     enabled: false,
     onSuccess: (data) => {
@@ -66,6 +72,24 @@ export const useTradeScreen = () => {
       });
     },
   });
+
+  const handlePriceImpactColor = (priceImpact: string) => {
+    let textColor: string = color.whiteBlack;
+    if (priceImpact === '-') {
+      return textColor;
+    }
+    const numberImpact = parseFloat(priceImpact);
+    if (numberImpact < 1) {
+      textColor = color.green;
+    } else if (numberImpact >= 1 && numberImpact < 3) {
+      textColor = color.whiteBlack;
+    } else if (numberImpact >= 3 && numberImpact < 5) {
+      textColor = color.yellow;
+    } else if (numberImpact >= 5) {
+      textColor = color.red;
+    }
+    return textColor;
+  };
 
   const onPressToken = (type: string) => {
     const menuList = type === 'from' ? fromTradeMenu : toTradeMenu;
@@ -83,6 +107,10 @@ export const useTradeScreen = () => {
       selectToken(symbol, type);
     }
   };
+
+  useEffect(() => {
+    setPriceImpactColor(handlePriceImpactColor(priceImpact));
+  }, [priceImpact]);
 
   useEffect(() => {
     setFromTradeMenu(
@@ -174,6 +202,7 @@ export const useTradeScreen = () => {
     tradeFromValue,
     tradeToValue,
     priceImpact,
+    priceImpactColor,
     setShowTip,
     onPressToken,
     onPressChange,
