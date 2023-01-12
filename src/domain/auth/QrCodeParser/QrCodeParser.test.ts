@@ -63,3 +63,17 @@ test('QrCodeParser valid tezos address', () => {
 test('QrCodeParser valid tezos address', () => {
   expect(QrCodeParser.isWalletAddress('1L9r8mWmRPndRhuvMCWESLGSVeFzQ9NAWx')).toBe(false);
 });
+
+test('QrCodeParser valid MetaMask address', () => {
+  expect(QrCodeParser.parseMetaMaskAddress('ethereum:0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d561@1')).toBe(
+    '0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d561'
+  );
+});
+
+test('QrCodeParser valid MetaMask address(without chainId)', () => {
+  expect(QrCodeParser.parseMetaMaskAddress('ethereum:0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d561')).toBe('0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d561');
+});
+
+test('QrCodeParser invalid MetaMask address', () => {
+  expect(QrCodeParser.parseMetaMaskAddress('ethereum:0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d56')).toBe(undefined);
+});
