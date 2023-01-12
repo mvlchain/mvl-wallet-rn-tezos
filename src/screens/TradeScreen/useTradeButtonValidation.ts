@@ -9,40 +9,19 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 
 const useTradeButtonValidation = (isEnoughAllowance: boolean, isReadyTrade: boolean, onPressTrade: Function, onPressApprove: Function) => {
   const { t } = useTranslation();
-  const { value } = transactionRequestStore();
-  // const bigNumberSchema = new BigNumberSchema();
-
-  // yup.setLocale({
-  //   boolean: {},
-  // });
-
-  // const valueValidation = bigNumberSchema.required(t('enter_amount')).min(0, t('enter_amount'));
-  // const allowanceValidation = yup.boolean();
-  // const
-
-  // const schema = yup.object({
-  //   value :bigNumberSchema.required(t('enter_amount')).min(0, t('enter_amount'));
-  //   isEnoughAllowance: yup.boolean().when(
-  //     'value',
-  //     {
-  //       is:true,
-  //       then:(schema)=>schema.boolean(),
-  //     }),
-  //   isReadyTrade: yup.boolean(),
-  // });
-  // return;
+  const { value, valueValid } = transactionRequestStore();
 
   const validation = useMemo(() => {
-    if (!value) {
-      return [false, 'enter_amount', () => {}];
+    if (!value || !valueValid) {
+      return [false, t('enter_amount'), () => {}];
     } else if (!isEnoughAllowance) {
-      return [true, 'approve', onPressApprove];
+      return [true, t('approve'), onPressApprove];
     } else if (!isReadyTrade) {
-      return [false, 'trade', () => {}];
+      return [false, t('trade'), () => {}];
     } else {
-      return [true, 'trade', onPressTrade];
+      return [true, t('trade'), onPressTrade];
     }
-  }, [value, isEnoughAllowance, isReadyTrade]);
+  }, [value, valueValid, isEnoughAllowance, isReadyTrade]);
 
   return validation;
 };
