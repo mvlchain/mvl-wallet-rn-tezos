@@ -191,6 +191,18 @@ export const useTradeScreen = () => {
     refetch();
   }, [quoteDto]);
 
+  const resetTradeScreen = () => {
+    setPriceImpact('-');
+    setTradeFromValue(null);
+    setTradeToValue(new BigNumber(0));
+    setState({ value: null, data: null });
+  };
+
+  const setTradeFromAndStoreStateValidation = (validation: boolean) => {
+    setTradeFromValidation(validation);
+    setState({ valueValid: validation });
+  };
+
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
     toToken: selectedTokenList.find((token) => token.symbol === selectedToken.to),
@@ -204,6 +216,7 @@ export const useTradeScreen = () => {
     onPressToken,
     onPressChange,
     setTradeFromValue,
-    setTradeFromValidation,
+    setTradeFromAndStoreStateValidation,
+    resetTradeScreen,
   };
 };

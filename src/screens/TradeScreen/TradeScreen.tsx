@@ -31,11 +31,12 @@ function TradeScreen() {
     onPressToken,
     onPressChange,
     setTradeFromValue,
-    setTradeFromValidation,
+    setTradeFromAndStoreStateValidation,
+    resetTradeScreen,
   } = useTradeScreen();
 
   const { isEnoughAllowance, onPressApprove } = useTradeApprove(fromToken);
-  const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData, isEnoughAllowance);
+  const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData, isEnoughAllowance, resetTradeScreen);
 
   const validation = useTradeButtonValidation(isEnoughAllowance, isReadyTrade, onPressTrade, onPressApprove);
   const { onPressWalletList } = useWalletSelector();
@@ -58,7 +59,7 @@ function TradeScreen() {
             useMax={true}
             label={t('from')}
             handleTokenSelect={() => onPressToken('from')}
-            setParentValid={setTradeFromValidation}
+            setParentValid={setTradeFromAndStoreStateValidation}
           />
           <S.SwapButtonContainer>
             <S.SwapButton onPress={onPressChange}>

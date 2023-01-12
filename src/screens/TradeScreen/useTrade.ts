@@ -17,7 +17,12 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponseDto | undefined, isEnoughAllowance: boolean) => {
+const useTrade = (
+  fromToken: TokenDto | undefined,
+  quoteData: FetchPriceResponseDto | undefined,
+  isEnoughAllowance: boolean,
+  resetTradeScreen: () => void
+) => {
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { openModal, closeModal } = globalModalStore();
   const TransactionService = useDi('TransactionService');
