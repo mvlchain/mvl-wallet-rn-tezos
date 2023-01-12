@@ -2,10 +2,12 @@ import { useState, useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-toast-message';
 
 import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkByBase } from '@@constants/network.constant';
+import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
 import { useDi } from '@@hooks/useDi';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -55,6 +57,11 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
       ...param,
     });
     closeModal();
+    Toast.show({
+      ...TOAST_DEFAULT_OPTION,
+      type: 'basic',
+      text1: t('approve_success'),
+    });
     setSentApprove(true);
     setState({ data: null });
   };
