@@ -6,9 +6,15 @@ import { BytesLike } from 'ethers';
 import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
+export type TGasConfirmButtonFunctionParam = {
+  to: string;
+  value?: BigNumber;
+  data?: BytesLike;
+  gasFeeInfo: IGasFeeInfo;
+};
 export interface IGasFeeBoardProps {
   isRevision: boolean;
-  onConfirm: (param: IGasFeeInfo) => Promise<void>;
+  onConfirm: (param: TGasConfirmButtonFunctionParam) => void;
   tokenDto: TokenDto;
   onConfirmTitle?: string;
   hideDivider?: boolean;
@@ -24,5 +30,5 @@ export interface IUseGasFeeBoard {
   data?: BytesLike | null;
   isValidInput: boolean;
   tokenDto: TokenDto;
-  onConfirm: (gas: IGasFeeInfo) => void;
+  onConfirm: (gas: TGasConfirmButtonFunctionParam) => void;
 }

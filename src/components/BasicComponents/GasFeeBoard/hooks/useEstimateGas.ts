@@ -38,7 +38,6 @@ const useEstimateGas = ({
 
   const estimateGas = useCallback(
     async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
-      if (!isValidInput) return;
       const estimation = await gasService.estimateGas({
         selectedNetwork,
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
@@ -65,12 +64,14 @@ const useEstimateGas = ({
   useEffect(() => {
     if (!to || !value) return;
     if (!!tokenDto.contractAddress && !data) return;
+    if (!isValidInput) return;
     debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
   }, [to, value, data]);
 
   useInterval(() => {
     if (!to || !value) return;
     if (!!tokenDto.contractAddress && !data) return;
+    if (!isValidInput) return;
     debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
   }, 20000);
 };

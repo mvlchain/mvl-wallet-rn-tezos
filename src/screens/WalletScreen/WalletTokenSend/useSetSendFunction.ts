@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
@@ -52,7 +53,7 @@ const useSetSendFunction = () => {
     }
   };
 
-  const sendToBlockChain = async () => {
+  const sendToBlockChain = async (param: TGasConfirmButtonFunctionParam) => {
     try {
       if (!to || !value || !baseFee || !gas || !total) {
         throw new Error('baseFee, gas, total ,to, value is required');
@@ -102,14 +103,14 @@ const useSetSendFunction = () => {
     }
   };
 
-  const send = async () => {
+  const send = async (param: TGasConfirmButtonFunctionParam) => {
     try {
       if (!toValid || !valueValid) return;
       //close confirm tx modal
       closeModal();
       await checkPin();
       closeModal();
-      const hash = await sendToBlockChain();
+      const hash = await sendToBlockChain(param);
       if (!hash) {
         throw new Error('fail send to blockChain');
       }

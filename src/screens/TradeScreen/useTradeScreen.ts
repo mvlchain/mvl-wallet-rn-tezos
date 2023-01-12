@@ -172,10 +172,6 @@ export const useTradeScreen = () => {
     setTradeToValue(new BigNumber(0));
   };
 
-  const onPressTrade = () => {
-    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: selectedTokenList[0], onConfirm: async (gasfee: IGasFeeInfo) => {} });
-  };
-
   useEffect(() => {
     if (!tradeFromValue) {
       setPriceImpact('-');
@@ -207,7 +203,6 @@ export const useTradeScreen = () => {
     setShowTip,
     onPressToken,
     onPressChange,
-    onPressTrade,
     setTradeFromValue,
     setTradeFromValidation,
   };
