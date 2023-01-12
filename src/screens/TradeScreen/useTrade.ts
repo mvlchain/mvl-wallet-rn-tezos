@@ -1,11 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-toast-message';
 
 import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkByBase } from '@@constants/network.constant';
+import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { ISwapDto } from '@@domain/trade/repositories/tradeRepository.type';
 import { BroadcastTransactionDto, CreateNativeSwapTransactionResponseDto, FetchPriceResponseDto } from '@@generated/generated-scheme-clutch';
 import useSwapDataQuery from '@@hooks/queries/useSwapDataQuery';
@@ -49,11 +50,8 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   useSwapDataQuery(selectedNetwork, swapDto, {
     onSuccess: (res) => {
       if (!res) return;
-      const { from, to, value } = res.tx;
-      const bnValue = new BigNumber(value);
       setGasStore({ isDataRequired: true });
       setServerSentSwapData(res.tx);
-      setState({ from, to, value: bnValue, toValid: true, valueValid: true });
     },
   });
 
@@ -76,13 +74,23 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
       selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
     });
     if (!hash) {
-      console.log('fail send trade transaction');
+      Toast.show({
+        ...TOAST_DEFAULT_OPTION,
+        type: 'basic',
+        text1: t('fail send trade transaction'),
+      });
       return;
     }
     const nonce = (await TransactionService.getNonce(getNetworkByBase(selectedNetwork), hash)) ?? 0;
     broadCastToServer({ ...serverSentSwapData, hash, nonce });
     closeModal();
-    setGasStore({ isDataRequired: false });
+    Toast.show({
+      ...TOAST_DEFAULT_OPTION,
+      type: 'basic',
+      text1: t('trade_success'),
+    });
+    setState({ value: null, valueValid: false });
+    resetTradeScreen();
   };
 
   const onPressTrade = async () => {
