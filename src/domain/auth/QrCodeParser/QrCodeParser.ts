@@ -6,7 +6,7 @@ import { ethers } from 'ethers';
 import QueryString from 'qs';
 
 import { URL_DYNAMIC_LINK, URL_DEEPLINK } from '@@constants/url.constant';
-import { evaluateQueryString } from '@@utils/regex';
+import { evaluateQueryString, REGEX_METAMASK_ADDRESS } from '@@utils/regex';
 import { isBlank, isNotBlank } from '@@utils/strings';
 
 import { QrCodeLinkTransfer } from './QrCodeParser.type';
@@ -20,9 +20,13 @@ export default class QrCodeParser {
    * @returns decoded QrCodeLinkTransfer object or undefined if failed to parse QrCode
    */
   static decodeQrCode = async (qrCode: string): Promise<QrCodeLinkTransfer | undefined> => {
-    let deepLink = '';
+    let deepLink: string | undefined;
     /*
-     * parse DynamicLink if it starts with URL_DYNAMIC_LINK
+     * DynamicLink if it starts with
+     *  - URL_DYNAMIC_LINK
+     *  - URL_DEEPLINK
+     *  - MetaMask
+     *
      * Dynamic Link format
      * https://link.mvlclutch.io/short
      *   ?link={URL ENCODED DeepLink}
@@ -37,7 +41,20 @@ export default class QrCodeParser {
       deepLink = qrCode;
     }
 
-    return this.parseLinkTransferQrCode(deepLink);
+    if (deepLink) {
+      return this.parseLinkTransferQrCode(deepLink);
+    }
+
+    // MetaMask
+    const metaMaskAddress = this.parseMetaMaskAddress(qrCode);
+    if (metaMaskAddress) {
+      console.log(`QrPay> MetaMask address: ${metaMaskAddress}`);
+      return {
+        network: 'ETHEREUM',
+        address: metaMaskAddress,
+      } as QrCodeLinkTransfer;
+    }
+    return;
   };
 
   /**
@@ -115,5 +132,14 @@ export default class QrCodeParser {
    */
   static isWalletAddress(address: string): boolean {
     return ethers.utils.isAddress(address) || validateAddress(address) == ValidationResult.VALID;
+  }
+
+  /**
+   * 메타마스크에서 지원하는 지갑이라면 주소를 가져온다
+   * @param address ex) ethereum:0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d561@1
+   */
+  static parseMetaMaskAddress(address: string): string | undefined {
+    const res = REGEX_METAMASK_ADDRESS.exec(address);
+    return res?.[2];
   }
 }

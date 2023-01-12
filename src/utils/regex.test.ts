@@ -2,7 +2,7 @@ import Url from 'url';
 
 import QueryString from 'qs';
 
-import { assembleUrl, evaluateUrlScheme, evaluateQueryString } from '@@utils/regex';
+import { assembleUrl, evaluateUrlScheme, evaluateQueryString, REGEX_METAMASK_ADDRESS } from '@@utils/regex';
 
 test('url scheme', () => {
   const url = 'clutch://io.mvlchain.wallet';
@@ -33,4 +33,9 @@ test('url query string', () => {
 
   const res = assembleUrl(url.protocol, url.host, url.pathname, QueryString.stringify(query));
   expect(res).toBe('clutch://io.mvlchain.wallet/mvlpath?i=new-id&a=alias');
+});
+
+test('metamask address', () => {
+  const res = REGEX_METAMASK_ADDRESS.exec('ethereum:0x83Fd6891c30238bCEaD0F5bb3dBB7C43Ff11d561@1');
+  expect(!!res).toBe(true);
 });
