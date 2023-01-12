@@ -91,7 +91,7 @@ export function createLoggerMiddleware(opts: any) {
       if (req.isMetamaskInternal) {
         return;
       }
-      console.log(`RPC (${opts.origin}):`, req, '->', res);
+      console.log(`WB MIDDLEWARE LOGGING> RPC (${opts.origin}):`, req, '->', res);
       cb();
     });
   };
@@ -404,7 +404,7 @@ export class BackgroundBridge extends EventEmitter {
     // setup json rpc engine stack
     const engine = new JsonRpcEngine();
     const provider = this._providerProxy;
-    console.log(`provider: ${this._providerProxy}, sendAsync: ${this._providerProxy && this._providerProxy.sendAsync}`);
+    console.log(`WB SETUP> setupProviderEngine provider: ${this._providerProxy}, sendAsync: ${this._providerProxy && this._providerProxy.sendAsync}`);
 
     const blockTracker = this._blockTrackerProxy;
 
@@ -437,7 +437,7 @@ export class BackgroundBridge extends EventEmitter {
     function providerAsMiddleware(provider: any) {
       return (req: any, res: any, next: any, end: any) => {
         // send request to provider
-        console.log(`provider.sendAsync middleware`);
+        console.log(`WB INCOMING> 7. provider.sendAsync middleware`);
         provider.sendAsync(req, (err: any, providerRes: any) => {
           // forward any error
           if (err) return end(err);

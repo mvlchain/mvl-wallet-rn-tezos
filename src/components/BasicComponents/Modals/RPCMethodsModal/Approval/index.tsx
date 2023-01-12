@@ -50,7 +50,7 @@ const Approval = () => {
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const { baseFee, tip, gas, total, resetState: resetGas } = gasStore();
 
-  const { transaction, resetTransaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
+  const { transaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
   const [enableTip, setEnableTip] = useState<boolean>(false);
   const [enableLimitCustom, setEnableLimitCustom] = useState<boolean>(true);
 
@@ -104,9 +104,13 @@ const Approval = () => {
   }, []);
 
   const onCancel = useCallback(() => {
-    console.log(`onCancel clicked`);
+    console.log(`onCancel clicked, ${JSON.stringify(transaction, null, 2)}`);
+    const { transactionController: TransactionController } = controllerManager;
+    // TransactionController.cancelTransaction(transaction.id);
+    // console.log(`TransactionController.cancelTransaction(transaction.id) called`);
+
     toggleDappTransactionModal();
-  }, []);
+  }, [transaction]);
 
   /**
    * Callback on confirm transaction
@@ -116,7 +120,6 @@ const Approval = () => {
       (async () => {
         // const { TransactionController, KeyringController } = Engine.context;
         const { transactionController: TransactionController } = controllerManager;
-        const { transactions } = TransactionController.state;
         const { assetType, selectedAsset } = transaction;
         console.log(`selectedAsset: ${JSON.stringify(selectedAsset, null, 2)}`);
         // const showCustomNonce = false;
@@ -126,7 +129,7 @@ const Approval = () => {
         // if (showCustomNonce && nonce) transaction.nonce = BNToHex(nonce);
         setState({ transactionConfirmed: true });
         try {
-          let preparedTransaction: any = transaction;
+          let preparedTransaction: any;
           if (assetType === 'ETH') {
             preparedTransaction = prepareTransaction({
               transaction,

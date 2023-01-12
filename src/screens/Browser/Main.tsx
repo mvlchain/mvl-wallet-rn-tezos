@@ -225,11 +225,11 @@ export const BrowserMain = () => {
     id: 0,
     activeTab: 0,
     navigation,
-    defaultProtocol: 'http://',
+    defaultProtocol: 'https://',
   });
 
   useEffect(() => {
-    setApprovedHosts({ 'http://192.168.1.56': true });
+    setApprovedHosts({ 'https://stage.mvlbridge.io': true });
   }, []);
   useEffect(() => {
     setProps({

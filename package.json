@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android --appIdSuffix=dev --active-arch-only",
+    "cp:boostvision": "cp ./boost_1_76_0.tar.gz ./node_modules/react-native-vision-camera/android/build/downloads",
+    "cp:quickcrypto": "cp ./boost_1_76_0.tar.gz ./node_modules/react-native-quick-crypto/android/build/downloads",
+    "android": "yarn cp:boostvision && yarn cp:quickcrypto && react-native run-android --appIdSuffix=dev --active-arch-only",
     "ios": "react-native run-ios",
     "start": "APP_ENV=dev react-native start",
     "clean": "yarn clean:ios && yarn clean:android && yarn clean:node",
@@ -65,6 +67,7 @@
     "bn.js": "^5.2.1",
     "buffer": "^6.0.3",
     "decimal.js": "^10.4.0",
+    "end-of-stream": "^1.4.4",
     "eth-json-rpc-errors": "^2.0.2",
     "eth-json-rpc-filters": "^5.0.0",
     "eth-json-rpc-infura": "^5.1.0",
