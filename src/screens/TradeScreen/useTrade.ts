@@ -94,6 +94,7 @@ const useTrade = (
       type: 'basic',
       text1: t('trade_success'),
     });
+    resetGasStore();
     setState({ value: null, valueValid: false });
     resetTradeScreen();
   };
