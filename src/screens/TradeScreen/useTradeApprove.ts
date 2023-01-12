@@ -50,7 +50,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   };
 
   const sendApproveTransaction = async (param: TGasConfirmButtonFunctionParam) => {
-    if (!spender || !approveData || !fromToken?.contractAddress) return;
+    if (!param || !fromToken?.contractAddress) return;
     await TransactionService.sendTransaction({
       selectedNetwork: getNetworkByBase(selectedNetwork),
       selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
