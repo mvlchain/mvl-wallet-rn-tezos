@@ -116,7 +116,7 @@ export const getRpcMethodMiddleware = ({
   tabId,
 }: RPCMethodsMiddleParameters) =>
   // all user facing RPC calls not implemented by the provider
-  createAsyncMiddleware(async (req: any, res: any, next: any) => {
+  createAsyncMiddleware<any, any>(async (req, res, next) => {
     const getAccounts = (): string[] => {
       // const {
       //   privacy: { privacyMode },
@@ -197,7 +197,12 @@ export const getRpcMethodMiddleware = ({
         // }
 
         const chainId = getNetworkConfig(NETWORK.GOERLI).chainId.toString(10);
-        if (chainId && !chainId.startsWith('0x')) {
+        if (!chainId) {
+          res.error = new Error('No chainId found');
+        }
+        if (chainId.startsWith('0x')) {
+          res.result = chainId;
+        } else {
           // Convert to hex
           res.result = `0x${parseInt(chainId, 10).toString(16)}`;
         }
@@ -251,7 +256,7 @@ export const getRpcMethodMiddleware = ({
         res.result = [selectedAddress];
       },
       eth_accounts: async () => {
-        console.log(`eth_accounts called`);
+        console.log(`WB INCOMING> 6. eth_accounts called`);
         res.result = await getAccounts();
       },
 
@@ -260,7 +265,7 @@ export const getRpcMethodMiddleware = ({
         res.result = accounts.length > 0 ? accounts[0] : null;
       },
       eth_sendTransaction: () => {
-        console.log(`eth_sendTransaction called: ${JSON.stringify(req.params, null, 2)}`);
+        console.log(`WB INCOMING> 6. eth_sendTransaction called: ${JSON.stringify(req.params, null, 2)}`);
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[0].from,
@@ -270,12 +275,13 @@ export const getRpcMethodMiddleware = ({
         next();
       },
       eth_signTransaction: async () => {
-        console.log(`eth_signTransaction`);
+        console.log(`WB INCOMING> 6. eth_signTransaction`);
         // This is implemented later in our middleware stack – specifically, in
         // eth-json-rpc-middleware – but our UI does not support it.
         throw ethErrors.rpc.methodNotSupported();
       },
       eth_sign: async () => {
+        console.log(`WB INCOMING> 6. eth_sign`);
         // const { MessageManager } = Engine.context;
         const pageMeta = {
           meta: {
@@ -307,6 +313,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       personal_sign: async () => {
+        console.log(`WB INCOMING> 6. personal_sign`);
         // const { PersonalMessageManager } = Engine.context;
         const firstParam = req.params[0];
         const secondParam = req.params[1];
@@ -344,6 +351,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       eth_signTypedData: async () => {
+        console.log(`WB INCOMING> 6. eth_signTypedData`);
         // const { TypedMessageManager } = Engine.context;
         const pageMeta = {
           meta: {
@@ -373,6 +381,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       eth_signTypedData_v3: async () => {
+        console.log(`WB INCOMING> 6. eth_signTypedData_v3`);
         // const { TypedMessageManager } = Engine.context;
 
         const data = JSON.parse(req.params[1]);
@@ -407,6 +416,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       eth_signTypedData_v4: async () => {
+        console.log(`WB INCOMING> 6. eth_signTypedData_v4`);
         // const { TypedMessageManager } = Engine.context;
 
         const data = JSON.parse(req.params[1]);
@@ -550,9 +560,9 @@ export const getRpcMethodMiddleware = ({
     //   }
     // }
 
-    console.log(`rpcMethods[req.method]: ${rpcMethods[req.method]}`);
+    console.log(`WB INCOMING> 5. rpcMethods[req.method]: ${rpcMethods[req.method]}`);
     if (!rpcMethods[req.method]) {
-      console.log('no rpc method so next()');
+      console.log('WB INCOMING> 6. no rpc method so next()');
       return next();
     }
     await rpcMethods[req.method]();

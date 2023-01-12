@@ -73,7 +73,7 @@ class ControllerManager {
       // @ts-ignore
       static: {
         eth_sendTransaction: async (payload: { params: any[]; origin: any }, next: any, end: (arg0: undefined, arg1: undefined) => void) => {
-          console.log(`networkController.providerConfig static eth_sendTransaction`);
+          console.log(`WB INCOMING> 7-1. networkController.providerConfig static eth_sendTransaction`);
           const { TransactionController } = this.context;
           try {
             const hash = await (await TransactionController.addTransaction(payload.params[0], payload.origin, WalletDevice.MM_MOBILE)).result;

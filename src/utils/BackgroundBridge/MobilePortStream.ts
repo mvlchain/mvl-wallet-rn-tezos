@@ -61,7 +61,7 @@ export default class PortDuplexStream extends Duplex {
    * @param {Function} cb Called when writing is complete or an error occurs
    */
   _write = (msg: any, encoding: any, cb: any) => {
-    console.log(`WB INCOMING> 4. MobilePortStream _write`);
+    console.log(`WB OUTGOING> 1. MobilePortStream _write`);
     try {
       if (Buffer.isBuffer(msg)) {
         const data = msg.toJSON();

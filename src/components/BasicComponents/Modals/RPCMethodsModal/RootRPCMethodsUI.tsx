@@ -42,17 +42,14 @@ const RootRPCMethodsUI = () => {
   const [hostToApprove, setHostToApprove] = useState<any>(null);
 
   const [watchAsset, setWatchAsset] = useState(false);
-  const [suggestedAssetMeta, setSuggestedAssetMeta] = useState(undefined);
   const { t: strings } = useTranslation();
   const {
-    transaction,
     setTransaction: setEtherTransaction,
     toggleDappTransactionModal,
     dappTransactionModalVisible,
     approveModalVisible,
     toggleApproveModal,
   } = rpcMethodsUiStore();
-  const navigation = useNavigation();
   const { setState: setTransactionRequest } = transactionRequestStore();
 
   const showPendingApprovalModal = ({ type, origin }: any) => {
@@ -100,6 +97,7 @@ const RootRPCMethodsUI = () => {
 
   const onUnapprovedTransaction = useCallback(
     async (transactionMeta: any) => {
+      console.log(`WB INCOMING> 8. onUnapprovedTransaction transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
       if (transactionMeta.origin === 'MetaMask Mobile') return;
 
       const to = transactionMeta.transaction.to?.toLowerCase();
@@ -126,7 +124,6 @@ const RootRPCMethodsUI = () => {
           asset = { symbol: 'ERC20', decimals: new BN('18'), address: to };
         }
 
-        console.log(`transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
         transactionMeta.transaction.gas = hexToBN(gas);
         transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
 
