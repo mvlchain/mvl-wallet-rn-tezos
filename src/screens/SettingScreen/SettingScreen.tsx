@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
+import VersionCheck from 'react-native-version-check';
 
 import useBottomSelectModal from '@@components/BasicComponents/Modals/BottomSelectModal/useBottomSelectModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -71,7 +72,7 @@ function SettingScreen() {
         />
         <SettingMenu
           title={t('app_version')}
-          subTitle='1.0'
+          subTitle={VersionCheck.getCurrentVersion()}
           isThickBorder={true}
           onPress={() => {
             onPressSettingMenu(ROOT_STACK_ROUTE.SETTING_APP_VERSION);
