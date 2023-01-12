@@ -55,7 +55,6 @@ const useTrade = (
   useSwapDataQuery(selectedNetwork, swapDto, {
     onSuccess: (res) => {
       if (!res) return;
-      setGasStore({ isDataRequired: true });
       setServerSentSwapData(res.tx);
     },
   });
@@ -73,6 +72,7 @@ const useTrade = (
 
   const sendTradeTransaction = async (param: TGasConfirmButtonFunctionParam) => {
     if (!spender || !param || !serverSentSwapData || !value) return;
+
     const hash = await TransactionService.sendTransaction({
       ...param,
       selectedNetwork: getNetworkByBase(selectedNetwork),
@@ -101,6 +101,7 @@ const useTrade = (
 
   const onPressTrade = async () => {
     if (!fromToken) return;
+    setGasStore({ isDataRequired: true });
     openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendTradeTransaction, onConfirmTitle: t('trade') });
   };
 
