@@ -595,7 +595,8 @@ export const BrowserMain = () => {
   /**
    * Sets loading bar progress
    */
-  const onLoadProgress = ({ nativeEvent: { progress } }: any) => {
+  const onLoadProgress = ({ nativeEvent }: any) => {
+    console.log(`WB SETUP> WebView onLoadProgress: ${JSON.stringify(nativeEvent, null, 2)}`);
     setProgress(progress);
   };
 
@@ -610,6 +611,7 @@ export const BrowserMain = () => {
    * When website finished loading
    */
   const onLoadEnd = ({ nativeEvent }: any) => {
+    console.log(`WB SETUP> onLoadEnd`);
     // Do not update URL unless website has successfully completed loading.
     if (nativeEvent.loading) {
       return;
@@ -816,6 +818,8 @@ export const BrowserMain = () => {
               javascriptEnabled
               allowsInlineMediaPlayback
               useWebkit
+              cacheEnabled={false}
+              cacheMode={'LOAD_NO_CACHE'}
               testID={'browser-webview'}
               applicationNameForUserAgent={'WebView MetaMaskMobile'}
               onFileDownload={handleOnFileDownload}

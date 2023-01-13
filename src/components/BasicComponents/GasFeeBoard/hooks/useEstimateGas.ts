@@ -51,7 +51,7 @@ const useEstimateGas = ({
         console.log('fail to estimate gas');
         return;
       }
-      console.log(`estimation.gasUsage: ${estimation.gasUsage}`);
+      console.log(`estimation res: ${JSON.stringify(estimation, null, 2)}`);
       setBlockGas(estimation.gasUsage);
       //tezos return basefee after estimategas
       if (estimation.baseFee) {
@@ -61,12 +61,13 @@ const useEstimateGas = ({
     [isValidInput]
   );
 
-  const debounceEstimate = useDebounce(estimateGas, 100);
+  const debounceEstimate = useDebounce(estimateGas, 1000);
 
   useEffect(() => {
     if (!to || !value) return;
     if (tokenDto && !!tokenDto.contractAddress && !data) return;
     if (!isValidInput) return;
+    console.log(`debounceEstimate called`);
     debounceEstimate({ to, value, data, contractAddress: tokenDto?.contractAddress ?? to });
   }, [to, value, data]);
 
