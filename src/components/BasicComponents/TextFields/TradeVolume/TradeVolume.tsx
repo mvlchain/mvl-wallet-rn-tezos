@@ -19,67 +19,69 @@ import * as S from '../TextField.style';
 
 import { ITradeVolumeComponentProps } from './TradeVolume.type';
 
+/**
+ * @param value type Bignumber 부모로부터 오는 우리가 실제 사용하려는 값, 내부에서는 displayValue라는 state를 만들어서 보이는 값을 핸들링함.
+ * @param setValue 부모로부터 오는 위의 value를 핸들링하는 함수.
+ * @parma setValueValid 부모로부터 위의 value가 valid한지 판단. balance기준으로 대소 비교.
+ * @screen WalletTokenSendScreen
+ * @screen TradeScreen
+ * @기능 value set
+ * @기능 max 누르면 gas를 제외한 가능한 양만큼 셋
+ * @기능 balance잔고 보여주기
+ * @기능 handletokenselect (해당 prop들어오면 화살표아이콘 표시됨)
+ */
 export function TradeVolume(props: ITradeVolumeComponentProps) {
   const {
-    useMax,
-    value,
-    onSelect,
     label,
     tokenDto,
-    onChange,
-    disableHint,
     debounceTime = 1000,
-    setParentValid,
-    handleTokenSelect,
     editable = true,
-    outterChain,
+    useMax,
+    hideBalance,
     disableDelete,
+    ref,
+    value,
+    setValue,
+    setValueValid,
+    handleTokenSelect,
   } = props;
-  const [showDelete, setShowDelete] = useState(false);
+
   const [displayValue, setDisplayValue] = useState<string | null>(null);
-
-  const { balance } = useOneTokenBalance(tokenDto);
-  const { color } = useColor();
-  const { t } = useTranslation();
-
-  const { total } = gasStore();
+  const [showDelete, setShowDelete] = useState(false);
   const [usingMax, setUsingMax] = useState(false);
-  const [hint, setHint] = useState<string | null>(null);
+  const [balanceWarning, setBalanceWarning] = useState<string | null>(null);
 
+  const { t } = useTranslation();
+  const { color } = useColor();
+  const { total } = gasStore();
+  const { balance } = useOneTokenBalance(tokenDto);
   const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
   const validStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toString(10) : balance;
 
-  const debounceCallback = useDebounce((value: BigNumber | null) => {
-    onChange(value);
-    setShowDelete(!!value);
+  const setValueDebounce = useDebounce((value: BigNumber | null) => {
+    setValue(value);
   }, debounceTime);
 
-  const clearTextField = () => {
-    setDisplayValue(null);
-    setHint(null);
-    onChange(null);
-    setShowDelete(false);
+  const handleValueAndDisplayValue = (value: string) => {
+    const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
+    setShowDelete(!!value);
+    setDisplayValue(formattedValue);
+    setValueDebounce(formattedValue ? new BigNumber(formattedValue).shiftedBy(tokenDto.decimals) : null);
   };
 
-  const onKeyPress = () => {
-    setShowDelete(true);
-  };
-
-  const onSet = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+  const onChange = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    //사용자가 직접 입력하기 시작하면 usingMax를 해제한다.
     if (usingMax) {
       setUsingMax(false);
     }
     const value = data.nativeEvent.text;
-    if (value === '') {
-      clearTextField();
-    }
-    handleValue(value);
+    handleValueAndDisplayValue(value);
   };
 
-  const handleValue = (value: string) => {
-    const formattedValue = inputNumberFormatter(value, tokenDto.decimals);
-    setDisplayValue(formattedValue);
-    debounceCallback(formattedValue ? new BigNumber(formattedValue).shiftedBy(tokenDto.decimals) : null);
+  const clearTextField = () => {
+    setBalanceWarning(null);
+    setUsingMax(false);
+    handleValueAndDisplayValue('');
   };
 
   // SetUp initial value
@@ -90,43 +92,36 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     }
   }, [value]);
 
-  useEffect(() => {
-    if (!value || !outterChain) return;
-    handleValue(value.toString(10));
-  }, [value, outterChain]);
-
   const onPressMax = () => {
     if (tokenDto.contractAddress) {
-      setDisplayValue(balance);
+      handleValueAndDisplayValue(balance);
     } else {
       setUsingMax(true);
-      setDisplayValue(validStrBalance);
     }
   };
 
-  //max사용할 경우
   useEffect(() => {
-    if (!usingMax || disableHint || !total || tokenDto.contractAddress) return;
-    setDisplayValue(validStrBalance);
-  }, [disableHint, usingMax, total, value, tokenDto]);
+    if (!usingMax || hideBalance || tokenDto.contractAddress) return;
+    handleValueAndDisplayValue(validStrBalance);
+  }, [hideBalance, usingMax, total, value, tokenDto]);
 
   useEffect(() => {
-    if (!value || disableHint) return;
-    if (value.gt(bnBalance)) {
-      setHint(t('msg_insufficient_amount'));
+    if (hideBalance) return;
+    if (value && value.gt(bnBalance)) {
+      setBalanceWarning(t('msg_insufficient_amount'));
     } else {
-      setHint(null);
+      setBalanceWarning(null);
     }
-  }, [value, disableHint, bnBalance]);
+  }, [value, hideBalance, bnBalance]);
 
   useEffect(() => {
-    if (!setParentValid) return;
-    if (!displayValue || hint) {
-      setParentValid(false);
+    if (!setValueValid) return;
+    if (!displayValue || balanceWarning) {
+      setValueValid(false);
     } else {
-      setParentValid(true);
+      setValueValid(true);
     }
-  }, [hint, !displayValue]);
+  }, [balanceWarning, !displayValue]);
 
   return (
     <S.TradeVolumeContainer>
@@ -140,13 +135,13 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
         <S.TradeVolumeInputWrapper>
           {editable ? (
             <S.TradeVolumeInput
+              ref={ref}
               value={displayValue ?? ''}
-              onChange={onSet}
+              onChange={onChange}
               keyboardType={'numeric'}
               selectionColor={color.black}
               placeholder={'0.00'}
               placeholderTextColor={color.grey300Grey700}
-              onKeyPress={onKeyPress}
               editable={editable}
             />
           ) : (
@@ -167,7 +162,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
           {handleTokenSelect && <ChevronDownLightIcon style={S.inlineStyles.marginProvider} />}
         </S.SymbolWrapper>
       </S.TradeVolumeMiddle>
-      {!disableHint && (hint ? <S.Hint>{hint}</S.Hint> : <S.Balance>{`${t('balance')}: ${balance}`}</S.Balance>)}
+      {!hideBalance && (balanceWarning ? <S.Hint>{balanceWarning}</S.Hint> : <S.Balance>{`${t('balance')}: ${balance}`}</S.Balance>)}
     </S.TradeVolumeContainer>
   );
 }

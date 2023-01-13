@@ -27,6 +27,8 @@ function TradeScreen() {
     priceImpact,
     priceImpactColor,
     quoteData,
+    fromTradeVolumeRef,
+    toTradeVolumeRef,
     setShowTip,
     onPressToken,
     onPressChange,
@@ -53,13 +55,14 @@ function TradeScreen() {
       {fromToken && toToken && (
         <S.InputContainer>
           <TradeVolume
+            ref={fromTradeVolumeRef}
             value={tradeFromValue}
-            onChange={setTradeFromValue}
+            setValue={setTradeFromValue}
             tokenDto={fromToken}
             useMax={true}
             label={t('from')}
             handleTokenSelect={() => onPressToken('from')}
-            setParentValid={setTradeFromAndStoreStateValidation}
+            setValueValid={setTradeFromAndStoreStateValidation}
           />
           <S.SwapButtonContainer>
             <S.SwapButton onPress={onPressChange}>
@@ -67,14 +70,14 @@ function TradeScreen() {
             </S.SwapButton>
           </S.SwapButtonContainer>
           <TradeVolume
+            ref={toTradeVolumeRef}
             value={tradeToValue}
-            onChange={() => {}}
+            setValue={() => {}}
             tokenDto={toToken}
             label={t('to_estimate')}
-            disableHint={true}
+            hideBalance={true}
             handleTokenSelect={() => onPressToken('to')}
             editable={false}
-            outterChain={true}
             disableDelete={true}
           />
           <PrimaryButton onPress={onPressTradeOrApprove} label={tradeLabel} wrapperStyle={S.InlineStyle.button} disabled={!tradeValid} />
