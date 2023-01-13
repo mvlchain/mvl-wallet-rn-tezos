@@ -11,6 +11,7 @@ import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
 import gasStore from '@@store/gas/gasStore';
+import { qrPayLogger } from '@@utils/Log';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
 
@@ -80,6 +81,14 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     setDisplayValue(formattedValue);
     debounceCallback(formattedValue ? new BigNumber(formattedValue).shiftedBy(tokenDto.decimals) : null);
   };
+
+  // SetUp initial value
+  useEffect(() => {
+    qrPayLogger.log(`Setting TradeVolume value to: ${value?.toString(10)}`);
+    if (value) {
+      setDisplayValue(value.toString(10));
+    }
+  }, [value]);
 
   useEffect(() => {
     if (!value || !outterChain) return;
