@@ -496,7 +496,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nGOOGLE_PLIST_FOLDER = \"${PROJECT_DIR}/Wallet/\"\n\ncase \"${CONFIGURATION}\" in\n    \"Debug\" | \"Staging\" )\n        cp - r \"$GOOGLE_PLIST_FOLDER/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    \"Release\" )\n        cp - r \"$GOOGLE_PLIST_FOLDER/GoogleService-Info-prod.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    \"*\" )\n        ;;\nesac\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nGOOGLE_PLIST_FOLDER=\"${PROJECT_DIR}/plists\"\n\ncase \"${CONFIGURATION}\" in\n    \"Debug\" | \"Staging\" )\n        cp -r \"$GOOGLE_PLIST_FOLDER/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    \"Release\" )\n        cp -r \"$GOOGLE_PLIST_FOLDER/GoogleService-Info-prod.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    \"*\" )\n        ;;\nesac\n";
 		};
 		A9E8FAE60903B46A4B853C9F /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
