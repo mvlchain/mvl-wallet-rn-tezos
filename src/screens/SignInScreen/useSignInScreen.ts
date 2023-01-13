@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-toast-message';
 
 import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
+import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { AuthProvider } from '@@domain/auth/IAuthService';
 import { useDi } from '@@hooks/useDi';
 import { TAuthStackNavigationProps, AUTH_STACK_ROUTE } from '@@navigation/AuthStack/AuthStack.type';
@@ -18,6 +21,7 @@ const useSignInScreen = () => {
   const { setPKey, setPKeyAppScreen } = authStore();
   const { close } = authModalStore();
   const { stage } = authPersistStore();
+  const { t } = useTranslation();
 
   const auth = useDi('AuthService');
   const legacyAuthMigrationService = useDi('LegacyAuthMigrationService');
@@ -49,8 +53,20 @@ const useSignInScreen = () => {
     try {
       const { privateKey, isNewUser } = await auth.signIn(provider);
       updateAuthState(privateKey, isNewUser);
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      let msg = e.message;
+      let toastType = 'error';
+      if (e.message === 'user_cancelled') {
+        msg = t('msg_error_user_cancelled');
+        toastType = 'basic';
+      } else {
+        console.error(e);
+      }
+      Toast.show({
+        ...TOAST_DEFAULT_OPTION,
+        type: toastType,
+        text1: msg,
+      });
     }
   };
 
