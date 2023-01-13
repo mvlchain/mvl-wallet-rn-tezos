@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { BigNumber } from 'bignumber.js';
 import BN from 'bn.js';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Alert, InteractionManager, Button } from 'react-native';
@@ -17,7 +17,6 @@ import { hexToBN, fromWei } from '@@utils/number';
 import { isSwapTransaction } from '@@utils/transactions';
 
 import Approval from './Approval';
-import { BigNumber } from "bignumber.js";
 
 export const KEYSTONE_TX_CANCELED = 'KeystoneError#Tx_canceled';
 
