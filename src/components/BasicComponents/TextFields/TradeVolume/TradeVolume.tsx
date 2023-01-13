@@ -54,10 +54,10 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   }, debounceTime);
 
   const clearTextField = () => {
-    onChange(null);
     setDisplayValue(null);
     setHint(null);
-    debounceCallback(null);
+    onChange(null);
+    setShowDelete(false);
   };
 
   const onKeyPress = () => {
@@ -105,6 +105,8 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     if (!value || disableHint) return;
     if (value.gt(bnBalance)) {
       setHint(t('msg_insufficient_amount'));
+    } else {
+      setHint(null);
     }
   }, [value, disableHint, bnBalance]);
 
