@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import { Linking, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ToastPopup } from '@@components/BasicComponents/Modals/BaseModal/ToastPopup';
