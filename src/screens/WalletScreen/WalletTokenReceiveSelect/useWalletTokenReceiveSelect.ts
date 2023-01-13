@@ -14,7 +14,7 @@ import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { tagLog } from '@@utils/Log';
+import { qrPayLogger } from '@@utils/Log';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IHistory, ITokenReceiveListItem } from './WalletTokenReceiveSelect.type';
@@ -46,7 +46,7 @@ export const useWalletTokenReceiveSelect = () => {
     const address = walletList[_selectedWalletIndex]?.address;
     const bnAmount = new BigNumber(amount);
     const qr = cacheQR ? cacheQR : await generateQR({ token, address, value: bnAmount });
-    tagLog('QrPay', `QrLink generated: ${qr}`);
+    qrPayLogger.log(`QrLink generated: ${qr}`);
 
     const formalize = formatBigNumber(bnAmount, token.decimals);
     addReceiveHistory(selectedNetwork, token, amount, qr);

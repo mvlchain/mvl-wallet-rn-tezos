@@ -15,53 +15,6 @@ const _logConfigs: LogConfigs = {
 };
 const _tags: Set<LogTag> = _logConfigs.tags;
 
-// class Log {
-//   constructor() { }
-
-//   // ASSERT
-//   // writes a message if `value` is false
-//   a(value: boolean, message?: any, params?: Array<any>) {
-//     if (__DEV__) {
-//       console.assert(value, message, params);
-//     }
-//   }
-
-//   // ERROR
-//   e(message?: any, params?: Array<any>) {
-//     if (__DEV__) {
-//       console.error(message, params);
-//     }
-//   }
-
-//   // DEBUG alias for LOG
-//   d(message: any) {
-//     if (__DEV__) {
-//       console.debug(message);
-//     }
-//   }
-
-//   // LOG
-//   l(message?: any, params?: Array<any>) {
-//     if (__DEV__) {
-//       console.log(message, params);
-//     }
-//   }
-
-//   // TRACE
-//   t(message?: any, params?: Array<any>) {
-//     if (__DEV__) {
-//       console.trace(message, params);
-//     }
-//   }
-
-//   // WARN
-//   w(message?: any, params?: Array<any>) {
-//     if (__DEV__) {
-//       console.warn(message, params);
-//     }
-//   }
-// }
-
 /**
  * ex) setLogConfigs(['Auth', 'QrPay']);
  */
@@ -71,27 +24,39 @@ const setLogConfigs = (tags: Array<LogTag>) => {
   });
 };
 
-const debug = (...message: any[]) => {
-  if (__DEV__) {
-    console.debug(message);
-  }
-};
-
-const tagDebug = (tag: LogTag, message: any) => {
+const _assert = (tag: LogTag, value: boolean, message: any, ...params: any[]) => {
   if (__DEV__ && _tags.has(tag)) {
-    console.debug(`${tag}> ${message}`);
+    params.length > 0 ? console.assert(value, `${tag}> ${message}`, params) : console.assert(value, `${tag}> ${message}`);
   }
 };
 
-const log = (...message: any[]) => {
-  if (__DEV__) {
-    console.log(message);
-  }
-};
-
-const tagLog = (tag: LogTag, message: any) => {
+const _debug = (tag: LogTag, message: any, ...params: any[]) => {
   if (__DEV__ && _tags.has(tag)) {
-    console.log(`${tag}> ${message}`);
+    params.length > 0 ? console.debug(`${tag}> ${message}`, params) : console.debug(`${tag}> ${message}`);
+  }
+};
+
+const _error = (tag: LogTag, message: any, ...params: any[]) => {
+  if (__DEV__ && _tags.has(tag)) {
+    params.length > 0 ? console.error(`${tag}> ${message}`, params) : console.error(`${tag}> ${message}`);
+  }
+};
+
+const _log = (tag: LogTag, message: any, ...params: any[]) => {
+  if (__DEV__ && _tags.has(tag)) {
+    params.length > 0 ? console.log(`${tag}> ${message}`, params) : console.log(`${tag}> ${message}`);
+  }
+};
+
+const _trace = (tag: LogTag, message: any, ...params: any[]) => {
+  if (__DEV__ && _tags.has(tag)) {
+    params.length > 0 ? console.trace(`${tag}> ${message}`, params) : console.trace(`${tag}> ${message}`);
+  }
+};
+
+const _warn = (tag: LogTag, message: any, ...params: any[]) => {
+  if (__DEV__ && _tags.has(tag)) {
+    params.length > 0 ? console.warn(`${tag}> ${message}`, params) : console.warn(`${tag}> ${message}`);
   }
 };
 
@@ -100,4 +65,30 @@ const tagLog = (tag: LogTag, message: any) => {
  */
 setLogConfigs(['Auth', 'QrPay']);
 
-export { log, tagLog };
+const tagLogger = (tag: LogTag) => {
+  return {
+    assert: (tag: LogTag, value: boolean, message: any, ...params: any[]) => {
+      _assert(tag, value, message, params);
+    },
+    debug: (message: any, ...params: any[]) => {
+      _debug(tag, message, params);
+    },
+    error: (message: any, ...params: any[]) => {
+      _error(tag, message, params);
+    },
+    log: (message: any, ...params: any[]) => {
+      _log(tag, message, params);
+    },
+    trace: (message: any, ...params: any[]) => {
+      _trace(tag, message, params);
+    },
+    wran: (message: any, ...params: any[]) => {
+      _warn(tag, message, params);
+    },
+  };
+};
+
+const authLogger = tagLogger('Auth');
+const qrPayLogger = tagLogger('QrPay');
+
+export { tagLogger, authLogger, qrPayLogger };
