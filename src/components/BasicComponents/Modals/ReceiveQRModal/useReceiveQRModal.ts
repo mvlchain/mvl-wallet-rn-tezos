@@ -2,12 +2,11 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import BigNumber from 'bignumber.js';
 import qs from 'qs';
 
+import { URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IDeepLinkParam } from './ReceiveQRModal.type';
-
-const domainUriPrefix = 'https://link.mvlclutch.io/short';
 
 export const useReceiveQRModal = () => {
   const { selectedNetwork } = walletPersistStore();
@@ -16,6 +15,7 @@ export const useReceiveQRModal = () => {
     const bigNumber = new BigNumber(value);
     const formalize = formatBigNumber(bigNumber, token.decimals);
     const qrLink = await buildReceiveShortLink({ token, address, value: formalize.toString() });
+    console.log(`QrPay> QrLink: ${qrLink}`);
     return decodeURIComponent(qrLink);
   };
 
@@ -31,7 +31,7 @@ export const useReceiveQRModal = () => {
     console.log('buildLink:  ', buildLink);
     const link = await dynamicLinks().buildLink({
       link: buildLink,
-      domainUriPrefix,
+      domainUriPrefix: URL_DYNAMIC_LINK,
     });
     return link;
   };
@@ -39,7 +39,7 @@ export const useReceiveQRModal = () => {
   const buildReceiveShortLink = async ({ token, address, value }: IDeepLinkParam) => {
     const link = await dynamicLinks().buildShortLink({
       link: buildDeepLink({ token, address, value }),
-      domainUriPrefix,
+      domainUriPrefix: URL_DYNAMIC_LINK,
     });
     return link;
   };

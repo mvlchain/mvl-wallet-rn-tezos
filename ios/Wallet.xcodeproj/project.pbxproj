@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* WalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* WalletTests.m */; };
-		08410C4E294714FE0076E11C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08410C4D294714FD0076E11C /* GoogleService-Info.plist */; };
+		08410C4E294714FE0076E11C /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08410C4D294714FD0076E11C /* GoogleService-Info-prod.plist */; };
 		0CED54EE6CA1CEB5DC1E13EC /* Pods_Wallet_WalletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DACA10B38FA5681CA4A927 /* Pods_Wallet_WalletTests.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -37,6 +37,7 @@
 		47C2EF15291DCE93009FC5F5 /* RTNSettingsModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 47C2EF14291DCE93009FC5F5 /* RTNSettingsModule.m */; };
 		47C2EF22291DF3CF009FC5F5 /* SettingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2EF21291DF3CF009FC5F5 /* SettingsStorage.swift */; };
 		47C2EF24291DF481009FC5F5 /* StorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2EF23291DF481009FC5F5 /* StorageKey.swift */; };
+		47D7C2CE296E7AC90088339A /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47D7C2CD296E7AC90088339A /* GoogleService-Info-dev.plist */; };
 		77CB09582897A6BA00C80D81 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 77CB09572897A6BA00C80D81 /* Fonts */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F9E058949071E2B1024FCA33 /* Pods_Wallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F1D6BB5F48CD3F1A52504F7 /* Pods_Wallet.framework */; };
@@ -56,7 +57,7 @@
 		00E356EE1AD99517003FC87E /* WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* WalletTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WalletTests.m; sourceTree = "<group>"; };
-		08410C4D294714FD0076E11C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		08410C4D294714FD0076E11C /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* CryptoVehicleWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoVehicleWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Wallet/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Wallet/AppDelegate.mm; sourceTree = "<group>"; };
@@ -98,6 +99,7 @@
 		47C2EF21291DF3CF009FC5F5 /* SettingsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStorage.swift; sourceTree = "<group>"; };
 		47C2EF23291DF481009FC5F5 /* StorageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKey.swift; sourceTree = "<group>"; };
 		47C2EF26291E1536009FC5F5 /* ThemeType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemeType.h; sourceTree = "<group>"; };
+		47D7C2CD296E7AC90088339A /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
 		77CB09572897A6BA00C80D81 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Wallet/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F1D6BB5F48CD3F1A52504F7 /* Pods_Wallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,6 +234,23 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		47D7C2CB296E7A2B0088339A /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				47D7C2CC296E7A7A0088339A /* plists */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		47D7C2CC296E7A7A0088339A /* plists */ = {
+			isa = PBXGroup;
+			children = (
+				08410C4D294714FD0076E11C /* GoogleService-Info-prod.plist */,
+				47D7C2CD296E7AC90088339A /* GoogleService-Info-dev.plist */,
+			);
+			path = plists;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,7 +261,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				08410C4D294714FD0076E11C /* GoogleService-Info.plist */,
+				47D7C2CB296E7A2B0088339A /* Assets */,
 				77CB09572897A6BA00C80D81 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* Wallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -315,6 +334,7 @@
 				474CB102AE2570B72C3CFA05 /* [CP] Embed Pods Frameworks */,
 				D2F652501030F74020BC9E66 /* [CP] Copy Pods Resources */,
 				A9E8FAE60903B46A4B853C9F /* [CP-User] [RNFB] Core Configuration */,
+				47D7C2CA296E79510088339A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -375,7 +395,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				33906B55293F2A05009CDA3D /* Wallet.common.xcconfig in Resources */,
-				08410C4E294714FE0076E11C /* GoogleService-Info.plist in Resources */,
+				47D7C2CE296E7AC90088339A /* GoogleService-Info-dev.plist in Resources */,
+				08410C4E294714FE0076E11C /* GoogleService-Info-prod.plist in Resources */,
 				33906B54293F2A05009CDA3D /* Wallet.staging.xcconfig in Resources */,
 				33906B53293F2A05009CDA3D /* Wallet.debug.xcconfig in Resources */,
 				77CB09582897A6BA00C80D81 /* Fonts in Resources */,
@@ -459,6 +480,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wallet/Pods-Wallet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		47D7C2CA296E79510088339A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nGOOGLE_PLIST_FOLDER = \"${PROJECT_DIR}/Wallet/\"\n\ncase \"${CONFIGURATION}\" in\n    \"Debug\" | \"Staging\" )\n        cp - r \"$GOOGLE_PLIST_FOLDER/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    \"Release\" )\n        cp - r \"$GOOGLE_PLIST_FOLDER/GoogleService-Info-prod.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    \"*\" )\n        ;;\nesac\n";
 		};
 		A9E8FAE60903B46A4B853C9F /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;

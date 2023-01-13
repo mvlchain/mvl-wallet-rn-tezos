@@ -1,14 +1,16 @@
 import 'react-native';
 import React from 'react';
 
+import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
+
 import App from './App';
 import { cleanup, render } from './test/test-utils';
-
-import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
 import 'jest-styled-components';
 import { RTNSettingsRepository } from '@@domain/auth/repositories/RTNSettingsRepository';
 import { TTheme } from '@@store/setting/settingPersistStore.type';
+
+import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
 
 /**
  * Mock class for RTNSettingsRepository
@@ -22,6 +24,12 @@ class MockRTNSettingsRepository implements RTNSettingsRepository {
   }
   putThemeType(themeType: TTheme): void {}
 }
+
+type PartialDynamicLink = {
+  getInitialLink(): Promise<FirebaseDynamicLinksTypes.DynamicLink | null>;
+};
+jest.mock('@react-native-firebase/dynamic-links');
+const mockDynamicLinks = dynamicLinks as unknown as jest.MockedFunction<() => PartialDynamicLink>;
 
 jest.useFakeTimers();
 
@@ -46,6 +54,9 @@ container.register('RTNSettingsRepository', {
 });
 //const settingsRepository: RTNSettingsRepository = container.resolve('RTNSettingsRepository');
 
-test('renders correctly', async () => {
+test('renders correctly', () => {
+  mockDynamicLinks.mockReturnValueOnce({
+    getInitialLink: jest.fn(),
+  });
   render(<App />);
 });
