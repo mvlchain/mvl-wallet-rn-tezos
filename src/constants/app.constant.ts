@@ -1,0 +1,1 @@
+export const IOS_APPSTORE_ID = '1598853856';
