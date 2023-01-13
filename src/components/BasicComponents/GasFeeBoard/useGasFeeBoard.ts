@@ -27,7 +27,7 @@ const useGasFeeBoard = ({ to, value, data, isValidInput, tokenDto, onConfirm }: 
   const [blockGas, setBlockGas] = useState<BigNumber | null>(null);
   const { baseFee, gas, total, tip, isDataRequired } = gasStore();
 
-  useSetTotal({ to, value, isValidInput, blockGas });
+  useSetTotal({ to, value, blockGas });
   useSetGasState({ blockBaseFee, blockGas, advanced });
   useEstimateGas({ to, value, data, isValidInput, tokenDto, setBlockBaseFee, setBlockGas });
   useSetInitial({

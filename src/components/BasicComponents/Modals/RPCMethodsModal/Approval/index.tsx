@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
@@ -16,9 +18,11 @@ import useSetTotal from '@@components/BasicComponents/GasFeeBoard/hooks/useSetTo
 import { KEYSTONE_TX_CANCELED } from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
+import { GAS_LEVEL } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
 import { addHexPrefix, BNToHex } from '@@utils/number';
@@ -48,29 +52,35 @@ const Approval = () => {
   });
   const transactionService = useDi('TransactionService');
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
-  const { baseFee, tip, gas, total, resetState: resetGas } = gasStore();
+  const { baseFee, tip, gas, total, setState: setGasStore } = gasStore();
 
   const { transaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
+  const { to, value, data } = transactionRequestStore();
+
   const [enableTip, setEnableTip] = useState<boolean>(false);
   const [enableLimitCustom, setEnableLimitCustom] = useState<boolean>(true);
 
   const [blockBaseFee, setBlockBaseFee] = useState<BigNumber | null>(null);
   const [blockGas, setBlockGas] = useState<BigNumber | null>(null);
-  const [noBlockGas, setNoBlockGas] = useState<BigNumber | null>(null);
+  // const [noBlockGas, setNoBlockGas] = useState<BigNumber | null>(null);
 
-  const [advanced, setAdvanced] = useState(false);
+  console.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
+
+  useSetTotal({ to: to, value, blockGas });
+  useSetGasState({ blockBaseFee, blockGas, advanced: false });
+  useEstimateGas({ isValidInput: true, tokenDto: undefined, to, value, data, setBlockBaseFee, setBlockGas });
   useSetInitial({
     setEnableTip,
     setEnableLimitCustom,
     setBlockBaseFee,
-    setBlockGas: setNoBlockGas,
+    setBlockGas,
     isValidInput: true,
   });
-  const { to, value }: { to: string; value: BN } = transaction;
 
-  useSetTotal({ to: to, value: new BigNumber(value.toString(10)), blockGas });
-  useSetGasState({ blockBaseFee, blockGas, advanced });
-  useEstimateGas({ isValidInput: true, tokenDto: undefined, setBlockBaseFee, setBlockGas });
+  useEffect(() => {
+    setGasStore({ level: GAS_LEVEL.MID });
+  }, []);
+  console.log(`baseFee: ${baseFee}`);
 
   const updateNavBar = () => {
     // const colors = this.context.colors || mockTheme.colors;
