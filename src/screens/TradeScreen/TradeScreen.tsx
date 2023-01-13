@@ -38,7 +38,7 @@ function TradeScreen() {
   const { isEnoughAllowance, onPressApprove } = useTradeApprove(fromToken);
   const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData, isEnoughAllowance, resetTradeScreen);
 
-  const validation = useTradeButtonValidation(isEnoughAllowance, isReadyTrade, onPressTrade, onPressApprove);
+  const [tradeValid, tradeLabel, onPressTradeOrApprove] = useTradeButtonValidation(isEnoughAllowance, isReadyTrade, onPressTrade, onPressApprove);
   const { onPressWalletList } = useWalletSelector();
   const { address } = useAccount();
 
@@ -77,12 +77,7 @@ function TradeScreen() {
             outterChain={true}
             disableDelete={true}
           />
-          <PrimaryButton
-            onPress={validation[2] as Function}
-            label={validation[1] as string}
-            wrapperStyle={S.InlineStyle.button}
-            disabled={!validation[0]}
-          />
+          <PrimaryButton onPress={onPressTradeOrApprove} label={tradeLabel} wrapperStyle={S.InlineStyle.button} disabled={!tradeValid} />
           <S.PriceImpactContainer>
             <S.HelpWrapper>
               <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
