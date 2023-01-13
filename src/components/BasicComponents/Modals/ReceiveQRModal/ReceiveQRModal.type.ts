@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export interface IReceiveQRModalProps {
@@ -15,5 +17,5 @@ export interface IReceiveQRModalProps {
 export interface IDeepLinkParam {
   token: TokenDto;
   address: string;
-  value: string;
+  value: BigNumber;
 }
