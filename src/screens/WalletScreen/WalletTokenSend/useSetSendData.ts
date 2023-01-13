@@ -38,15 +38,15 @@ const useSetSendData = () => {
   }, []);
 
   const setInitialFromRouteProps = () => {
-    qrPayLogger.log(
-      `initializing RouteProps: ${JSON.stringify(params?.scanData)}, in bg: ${new BigNumber(params?.scanData?.amount ?? '0').toString(10)}`
-    );
+    qrPayLogger.log(`initializing RouteProps: ${JSON.stringify(params?.scanData)} to TokenSender`);
 
     if (params?.scanData?.address) {
       setBody({ to: params.scanData.address });
     }
     if (params?.scanData?.amount) {
-      setBody({ value: new BigNumber(params.scanData.amount.toString()).shiftedBy(tokenDto.decimals) });
+      const amount = new BigNumber(params.scanData.amount);
+      qrPayLogger.log(`amount: ${amount.toString(10)}`);
+      setBody({ value: amount });
     }
   };
 
