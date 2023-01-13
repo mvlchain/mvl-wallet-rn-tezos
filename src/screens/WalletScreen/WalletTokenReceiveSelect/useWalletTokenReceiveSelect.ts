@@ -14,6 +14,7 @@ import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { qrPayLogger } from '@@utils/Log';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IHistory, ITokenReceiveListItem } from './WalletTokenReceiveSelect.type';
@@ -43,9 +44,11 @@ export const useWalletTokenReceiveSelect = () => {
   const onPressConfirm = async (amount: string, token: TokenDto, cacheQR?: string) => {
     if (!walletList) return;
     const address = walletList[_selectedWalletIndex]?.address;
-    const qr = cacheQR ? cacheQR : await generateQR({ token, address, value: amount });
-    const bigNumber = new BigNumber(amount);
-    const formalize = formatBigNumber(bigNumber, token.decimals);
+    const bnAmount = new BigNumber(amount);
+    const qr = cacheQR ? cacheQR : await generateQR({ token, address, value: bnAmount });
+    qrPayLogger.log(`QrLink generated: ${qr}`);
+
+    const formalize = formatBigNumber(bnAmount, token.decimals);
     addReceiveHistory(selectedNetwork, token, amount, qr);
     openModal(MODAL_TYPES.RECEIVE_QR, {
       title: t('qr_payment_send_link_title'),

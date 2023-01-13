@@ -9,6 +9,7 @@ import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { qrPayLogger } from '@@utils/Log';
 
 import { TTokenSendRouteProps } from './WalletTokenSend.type';
 const useSetSendData = () => {
@@ -37,6 +38,10 @@ const useSetSendData = () => {
   }, []);
 
   const setInitialFromRouteProps = () => {
+    qrPayLogger.log(
+      `initializing RouteProps: ${JSON.stringify(params?.scanData)}, in bg: ${new BigNumber(params?.scanData?.amount ?? '0').toString(10)}`
+    );
+
     if (params?.scanData?.address) {
       setBody({ to: params.scanData.address });
     }
