@@ -1,3 +1,4 @@
+import { QrCodeLinkTransfer } from '@@domain/auth/QrCodeParser/QrCodeParser.type';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 //
 export interface IBalance {
@@ -11,3 +12,8 @@ export interface IBalanceData {
   logoURI: string | undefined;
   tokenDto: TokenDto;
 }
+
+export type TQrCodeLink = {
+  qrCodeContents: QrCodeLinkTransfer;
+  token: TokenDto;
+};

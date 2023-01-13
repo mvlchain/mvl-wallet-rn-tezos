@@ -11,6 +11,8 @@ import Jdenticon from '@@components/BasicComponents/Jdenticon';
 import Address from '@@components/Wallet/Address';
 import WalletSelector from '@@components/Wallet/WalletSelector';
 import { useAssetFromTheme } from '@@hooks/useTheme';
+import * as R from '@@navigation/RootStack/RootNavigation';
+import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 
 import * as S from './Account.style';
 import useAccount from './useAccount';
@@ -44,7 +46,7 @@ function Account() {
         />
         <PrimaryButton
           onPress={() => {
-            console.log('send!');
+            R.navigate(ROOT_STACK_ROUTE.WALLET_SCAN_QR);
           }}
           label={t('send')}
           Icon={WhiteScanIcon}

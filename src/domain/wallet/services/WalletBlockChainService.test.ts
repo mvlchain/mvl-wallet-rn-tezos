@@ -148,3 +148,21 @@ it('get pkey', async () => {
 //   const xtzBalance = await blockChainService.getBalanceFromNetwork(0, 'TEZOS', TEZOS_TOKENLIST);
 //   expect(xtzBalance).toStrictEqual({ XTZ: '2101' });
 // });
+
+// it('BlockChainService find token by network', () => {
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const token = blockChainService.getTokenByNetworkContractAddress('GOERLI');
+//   expect(token?.symbol).toBe('ETH');
+// });
+
+// it('BlockChainService find token by network and contractAddress', () => {
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const token = blockChainService.getTokenByNetworkContractAddress('GOERLI', '0x1edfcCe833bac99C278E2886210DbD9213bd139a');
+//   expect(token?.symbol).toBe('MVL');
+// });
+
+// it('BlockChainService token not found', () => {
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const token = blockChainService.getTokenByNetworkContractAddress('GOERLI', '0xINVALID_ADDRESS');
+//   expect(token).toBe(null);
+// });

@@ -5,7 +5,9 @@
  * ex) wallet://io.mvlchain.wallet
  * -> wallet:
  */
-const REGEX_URL_SCHEME = /^([a-z0-9.+-]+:)/i;
+export const REGEX_URL_SCHEME = /^([a-z0-9.+-]+:)/i;
+
+export const REGEX_METAMASK_ADDRESS = /^(\w+):(0x[a-fA-F0-9]{40})(@(\d))?$/;
 
 export const evaluateUrlScheme = (url: string | unknown): string | undefined => {
   if (typeof url !== 'string') {
