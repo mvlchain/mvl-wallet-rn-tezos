@@ -12,11 +12,13 @@ const useSetInitial = ({
   setEnableLimitCustom,
   setBlockBaseFee,
   setBlockGas,
+  isValidInput,
 }: {
   setEnableTip: Dispatch<SetStateAction<boolean>>;
   setEnableLimitCustom: Dispatch<SetStateAction<boolean>>;
   setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
+  isValidInput: boolean;
 }) => {
   const gasService = useDi('GasService');
   const { selectedNetwork: pickNetwork } = walletPersistStore();
@@ -36,8 +38,12 @@ const useSetInitial = ({
       setEnableTip(gasFeeData.enableTip);
       setEnableLimitCustom(gasFeeData.enableLimitCustom);
       setBlockBaseFee(gasFeeData.baseFee ?? null);
-      setBlockGas(gasFeeData.gasLimit ?? null);
-      setState({ gas: gasFeeData.gasLimit });
+      //useEffect가 실행될때 valid하디는것은 data가 미리 입력되어 들어온다는것을 의미함
+      //이때에는 initialgas가 아니라 estimategas가 먼저 보여져야한다.
+      if (!isValidInput) {
+        setBlockGas(gasFeeData.gasLimit ?? null);
+        setState({ gas: gasFeeData.gasLimit });
+      }
     } catch (err) {
       console.log(err);
     }

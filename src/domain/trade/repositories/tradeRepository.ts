@@ -18,9 +18,9 @@ import { IQuoteDto, ISwapDto, ITradeRepository } from './tradeRepository.type';
 export class TradeRepository implements ITradeRepository {
   constructor() {}
 
-  getSpender = async (network: Network): Promise<SpenderResponseDto[]> => {
+  getSpender = async (network: Network): Promise<SpenderResponseDto> => {
     const endpoint = `v1/native-swap/${network}/approve/spender`;
-    const res = await request.get<SpenderResponseDto[]>(endpoint);
+    const res = await request.get<SpenderResponseDto>(endpoint);
     return res.data;
   };
 

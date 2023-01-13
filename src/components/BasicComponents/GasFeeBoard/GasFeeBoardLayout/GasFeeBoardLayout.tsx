@@ -31,6 +31,7 @@ function GasFeeBoardLayout({
   children,
   onConfirmTitle,
   hideDivider,
+  onConfirmValid,
 }: IGasFeeBoardLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
@@ -41,9 +42,9 @@ function GasFeeBoardLayout({
   const { coinDto } = useCoinDto();
   const totalStr = total ? formatBigNumber(total, coinDto.decimals).toString(10) : '-';
   const { price } = useOneTokenPrice(coinDto, totalStr);
-  const { toValid, valueValid } = transactionRequestStore();
+  // const { toValid, valueValid } = transactionRequestStore();
   const { baseFeeValid, tipValid, gasValid } = gasStore();
-  const isValid = toValid && valueValid && baseFeeValid && tipValid && gasValid;
+  const isValid = onConfirmValid && baseFeeValid && tipValid && gasValid;
 
   const opacityAnimation = useAnimatedStyle(() => {
     return {

@@ -172,10 +172,6 @@ export const useTradeScreen = () => {
     setTradeToValue(new BigNumber(0));
   };
 
-  const onPressTrade = () => {
-    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: selectedTokenList[0], trade: async (gasfee: IGasFeeInfo) => {} });
-  };
-
   useEffect(() => {
     if (!tradeFromValue) {
       setPriceImpact('-');
@@ -195,6 +191,18 @@ export const useTradeScreen = () => {
     refetch();
   }, [quoteDto]);
 
+  const resetTradeScreen = () => {
+    setPriceImpact('-');
+    setTradeFromValue(null);
+    setTradeToValue(new BigNumber(0));
+    setState({ value: null, data: null });
+  };
+
+  const setTradeFromAndStoreStateValidation = (validation: boolean) => {
+    setTradeFromValidation(validation);
+    setState({ valueValid: validation });
+  };
+
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
     toToken: selectedTokenList.find((token) => token.symbol === selectedToken.to),
@@ -203,11 +211,12 @@ export const useTradeScreen = () => {
     tradeToValue,
     priceImpact,
     priceImpactColor,
+    quoteData,
     setShowTip,
     onPressToken,
     onPressChange,
-    onPressTrade,
     setTradeFromValue,
-    setTradeFromValidation,
+    setTradeFromAndStoreStateValidation,
+    resetTradeScreen,
   };
 };

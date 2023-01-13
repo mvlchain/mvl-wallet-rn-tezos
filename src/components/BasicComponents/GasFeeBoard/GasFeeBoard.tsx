@@ -6,17 +6,25 @@ import GasFeeInputs from './GasFeeInputs';
 import GasLevelRadioButtons from './GasLevelRadioButtons';
 import useGasFeeBoard from './useGasFeeBoard';
 
-function GasFeeBoard({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivider }: IGasFeeBoardProps) {
-  const { advanced, enableTip, enableLimitCustom, baseFeeCheck, tipCheck, gasCheck, toggleGasAdvanced } = useGasFeeBoard(tokenDto);
+function GasFeeBoard({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivider, to, value, data, isValidInput }: IGasFeeBoardProps) {
+  const { advanced, enableTip, enableLimitCustom, baseFeeCheck, tipCheck, gasCheck, toggleGasAdvanced, wrappedOnConfirm } = useGasFeeBoard({
+    to,
+    value,
+    data,
+    isValidInput,
+    tokenDto,
+    onConfirm,
+  });
 
   return (
     <GasFeeBoardLayout
-      isRevision={isRevision}
-      onConfirm={onConfirm}
+      onConfirm={wrappedOnConfirm}
+      onConfirmTitle={onConfirmTitle}
+      onConfirmValid={isValidInput}
       advanced={advanced}
       toggleGasAdvanced={toggleGasAdvanced}
-      onConfirmTitle={onConfirmTitle}
       hideDivider={hideDivider}
+      isRevision={isRevision}
     >
       <GasLevelRadioButtons />
       <GasFeeInputs enableTip={enableTip} enableLimitCustom={enableLimitCustom} baseFeeCheck={baseFeeCheck} tipCheck={tipCheck} gasCheck={gasCheck} />
