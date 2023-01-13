@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 import styled from 'styled-components/native';
 
 import { Color } from '@@style/colors';
@@ -111,11 +111,13 @@ export const TradeVolumeInputWrapper = styled.View`
   align-items: center;
   margin-right: ${width * 16}px;
 `;
+
 export const TradeVolumeInput = styled.TextInput`
   flex: 1;
   ${({ theme }) => theme.font.Label.md};
   line-height: ${height * 20}px;
-`;
+` as unknown as typeof TextInput;
+
 export const TradeVolumeInputText = styled.Text`
   flex: 1;
   ${({ theme }) => theme.font.Label.md};

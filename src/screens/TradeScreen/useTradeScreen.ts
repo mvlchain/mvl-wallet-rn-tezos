@@ -1,9 +1,10 @@
 /* eslint-disable max-lines */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
+import { TextInput } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
@@ -47,6 +48,8 @@ export const useTradeScreen = () => {
       setTokenList(tokens as TokenDto[]);
     },
   });
+  const fromTradeVolumeRef = useRef<TextInput>(null);
+  const toTradeVolumeRef = useRef<TextInput>(null);
   const { selectedToken, selectToken } = tradeStore();
   const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>([]);
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
@@ -212,6 +215,8 @@ export const useTradeScreen = () => {
     priceImpact,
     priceImpactColor,
     quoteData,
+    fromTradeVolumeRef,
+    toTradeVolumeRef,
     setShowTip,
     onPressToken,
     onPressChange,
