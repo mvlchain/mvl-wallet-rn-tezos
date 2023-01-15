@@ -17,7 +17,7 @@ const useTokenSend = () => {
 
   const { openModal } = globalModalStore();
   const { to, value, resetBody } = transactionRequestStore();
-  const { total } = gasStore();
+  const { total, resetState: resetGasStore } = gasStore();
 
   const { setAmount, setAddress } = useSetSendData();
   const { send } = useSetSendFunction();
@@ -34,8 +34,9 @@ const useTokenSend = () => {
     useCallback(() => {
       return () => {
         resetBody();
+        resetGasStore();
       };
-    }, [to, value])
+    }, [])
   );
 
   return { amount: value, setAmount, address: to, setAddress, confirm };
