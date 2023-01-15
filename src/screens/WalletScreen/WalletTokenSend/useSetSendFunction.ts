@@ -109,7 +109,6 @@ const useSetSendFunction = () => {
       //close confirm tx modal
       closeModal();
       await checkPin();
-      closeModal();
       const hash = await sendToBlockChain(param);
       if (!hash) {
         throw new Error('fail send to blockChain');
@@ -120,6 +119,7 @@ const useSetSendFunction = () => {
       resetBody();
       resetGas();
       navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
+      closeModal();
     } catch (err) {
       console.log(err);
     }
