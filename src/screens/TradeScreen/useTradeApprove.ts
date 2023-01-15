@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
-import { get } from 'immer/dist/internal';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
