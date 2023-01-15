@@ -11,7 +11,6 @@ import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/Bott
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { IQuoteDto } from '@@domain/trade/repositories/tradeRepository.type';
 import useTradeQuoteQuery from '@@hooks/queries/useTradeQuoteQuery';
 import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
