@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 
 import { Modal, BackHandler } from 'react-native';
 
+import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import PinLayout from '@@components/BasicComponents/Pin/PinLayout/PinLayout';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
@@ -22,6 +23,7 @@ function ConfirmTxPinModal() {
 
   return (
     <Modal visible={modalType === MODAL_TYPES.CONFIRM_TX_PIN} onRequestClose={interruption}>
+      <LoadingIndicator />
       <PinLayout back={interruption} />
     </Modal>
   );
