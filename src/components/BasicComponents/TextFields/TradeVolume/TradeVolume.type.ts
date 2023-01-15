@@ -14,9 +14,9 @@ export interface ITradeVolumeComponentProps {
   iconUrl?: string;
   hideBalance?: boolean;
   disableDelete?: boolean;
-  ref?: RefObject<TextInput>;
+  textInputRef?: RefObject<TextInput>;
   value: BigNumber | null;
-  setValue: (value: BigNumber) => void;
+  setValue: (value: BigNumber | null) => void;
   setValueValid?: (valid: boolean) => void;
   handleTokenSelect?: () => void;
 }

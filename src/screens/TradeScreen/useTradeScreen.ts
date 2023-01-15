@@ -1,10 +1,10 @@
 /* eslint-disable max-lines */
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
-import { TextInput } from 'react-native';
+import { TextInput, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
@@ -30,7 +30,7 @@ export const useTradeScreen = () => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
-  const { setState } = transactionRequestStore();
+  const { setState, resetBody } = transactionRequestStore();
   const [tokenList, setTokenList] = useState<TokenDto[]>([]);
   const { color } = useColor();
   useTradeTokeneQuery(selectedNetwork, {
@@ -49,7 +49,6 @@ export const useTradeScreen = () => {
     },
   });
   const fromTradeVolumeRef = useRef<TextInput>(null);
-  const toTradeVolumeRef = useRef<TextInput>(null);
   const { selectedToken, selectToken } = tradeStore();
   const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>([]);
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
@@ -173,6 +172,7 @@ export const useTradeScreen = () => {
     setPriceImpact('-');
     setTradeFromValue(null);
     setTradeToValue(new BigNumber(0));
+    fromTradeVolumeRef.current?.clear();
   };
 
   useEffect(() => {
@@ -199,12 +199,24 @@ export const useTradeScreen = () => {
     setTradeFromValue(null);
     setTradeToValue(new BigNumber(0));
     setState({ value: null, data: null });
+    fromTradeVolumeRef.current?.clear();
+    fromTradeVolumeRef.current?.blur();
   };
 
   const setTradeFromAndStoreStateValidation = (validation: boolean) => {
     setTradeFromValidation(validation);
     setState({ valueValid: validation });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        resetBody();
+        setTradeFromValue(null);
+        fromTradeVolumeRef.current?.clear();
+      };
+    }, [])
+  );
 
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
@@ -216,7 +228,6 @@ export const useTradeScreen = () => {
     priceImpactColor,
     quoteData,
     fromTradeVolumeRef,
-    toTradeVolumeRef,
     setShowTip,
     onPressToken,
     onPressChange,

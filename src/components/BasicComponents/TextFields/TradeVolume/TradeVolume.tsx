@@ -39,7 +39,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     useMax,
     hideBalance,
     disableDelete,
-    ref,
+    textInputRef,
     value,
     setValue,
     setValueValid,
@@ -92,6 +92,14 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     }
   }, [value]);
 
+  useEffect(() => {
+    setShowDelete(!!value);
+  }, [value]);
+
+  //max버튼을 눌렀을 경우, 가능한 양만큼 set해준다.
+  //coin은 balance에서 total total gas fee를 제외한 값을 셋팅해준다.
+  //total gas fee는 주기적을 fetch해서 변하기때문에 주기적으로 바꾸어줘야한다.
+  //token은 balance를 셋팅해준다.
   const onPressMax = () => {
     if (tokenDto.contractAddress) {
       handleValueAndDisplayValue(balance);
@@ -135,7 +143,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
         <S.TradeVolumeInputWrapper>
           {editable ? (
             <S.TradeVolumeInput
-              ref={ref}
+              ref={textInputRef}
               value={displayValue ?? ''}
               onChange={onChange}
               keyboardType={'numeric'}
@@ -146,7 +154,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
             />
           ) : (
             <S.TradeVolumeInputText numberOfLines={1} lineBreakMode='tail'>
-              {displayValue}
+              {value?.toString(10)}
             </S.TradeVolumeInputText>
           )}
           {!disableDelete && showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
