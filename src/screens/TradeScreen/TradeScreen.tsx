@@ -28,7 +28,6 @@ function TradeScreen() {
     priceImpactColor,
     quoteData,
     fromTradeVolumeRef,
-    toTradeVolumeRef,
     setShowTip,
     onPressToken,
     onPressChange,
@@ -55,7 +54,7 @@ function TradeScreen() {
       {fromToken && toToken && (
         <S.InputContainer>
           <TradeVolume
-            ref={fromTradeVolumeRef}
+            textInputRef={fromTradeVolumeRef}
             value={tradeFromValue}
             setValue={setTradeFromValue}
             tokenDto={fromToken}
@@ -70,7 +69,6 @@ function TradeScreen() {
             </S.SwapButton>
           </S.SwapButtonContainer>
           <TradeVolume
-            ref={toTradeVolumeRef}
             value={tradeToValue}
             setValue={() => {}}
             tokenDto={toToken}
