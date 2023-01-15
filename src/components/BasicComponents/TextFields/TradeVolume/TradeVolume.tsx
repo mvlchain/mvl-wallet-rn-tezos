@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
+import { useFocusEffect } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
@@ -22,11 +23,11 @@ import { ITradeVolumeComponentProps } from './TradeVolume.type';
 /**
  * @param value type Bignumber 부모로부터 오는 우리가 실제 사용하려는 값, 내부에서는 displayValue라는 state를 만들어서 보이는 값을 핸들링함.
  * @param setValue 부모로부터 오는 위의 value를 핸들링하는 함수.
- * @parma setValueValid 부모로부터 위의 value가 valid한지 판단. balance기준으로 대소 비교.
+ * @param setValueValid 부모로부터 위의 value가 valid한지 판단. balance기준으로 대소 비교.
  * @screen WalletTokenSendScreen
  * @screen TradeScreen
  * @기능 value set
- * @기능 max 누르면 gas를 제외한 가능한 양만큼 셋
+ * @기능 max 누르면 가능한 양만큼 set
  * @기능 balance잔고 보여주기
  * @기능 handletokenselect (해당 prop들어오면 화살표아이콘 표시됨)
  */
@@ -70,7 +71,6 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   };
 
   const onChange = (data: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    //사용자가 직접 입력하기 시작하면 usingMax를 해제한다.
     if (usingMax) {
       setUsingMax(false);
     }
@@ -96,10 +96,6 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     setShowDelete(!!value);
   }, [value]);
 
-  //max버튼을 눌렀을 경우, 가능한 양만큼 set해준다.
-  //coin은 balance에서 total total gas fee를 제외한 값을 셋팅해준다.
-  //total gas fee는 주기적을 fetch해서 변하기때문에 주기적으로 바꾸어줘야한다.
-  //token은 balance를 셋팅해준다.
   const onPressMax = () => {
     if (tokenDto.contractAddress) {
       handleValueAndDisplayValue(balance);
@@ -130,6 +126,13 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
       setValueValid(true);
     }
   }, [balanceWarning, !displayValue]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!value) return;
+      setDisplayValue(formatBigNumber(value, tokenDto.decimals).toString(10));
+    }, [])
+  );
 
   return (
     <S.TradeVolumeContainer>
