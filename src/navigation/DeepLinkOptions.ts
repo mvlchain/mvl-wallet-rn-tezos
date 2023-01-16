@@ -1,15 +1,16 @@
 import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
 import { LinkingOptions } from '@react-navigation/native';
 import qs from 'qs';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import { container } from 'tsyringe';
 
 import { URL_DEEPLINK, URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import { WalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
-import { evaluateQueryString } from '@@utils/regex';
+import { evaluateQueryString, evaluateUrlScheme } from '@@utils/regex';
 
-import { RouteLink } from './DeepLink.type';
+import { ThirdPartyScheme, RouteLink } from './DeepLink.type';
+import { MAIN_TAB_ROUTE } from './MainTab/MainTab.type';
 import * as R from './RootStack/RootNavigation';
 
 export const CLUTCH_APP_SCHEME = 'clutchwallet';
@@ -19,32 +20,45 @@ const blockChainService = container.resolve<WalletBlockChainService>('WalletBloc
 /**
  * React Navigation By DeepLinks
  *
- * DeepLink
+ * DeepLinks
+ *
+ * ThirdParty app connection
  * • clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={eventAlias}
  *  - f: from, UUID style app id defined by Clutch
  *  - t: token, access token
  *  - e?(optional): event id
  *  - a?(optional): alias, event alias
  *
+ * EarnEventDetailsScreen
  * • clutchwallet://screen/earn?i={eventId}
  *  - i: event id
+ *
+ * TradeScreen
+ * • clutchwallet://screen/trade
  */
 export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
   prefixes: [`${CLUTCH_APP_SCHEME}://`],
   /**
    * DeepLinks that are not required pin authentication can be navigated by configs as follows.
    */
-  // config: {
-  //   initialRouteName: ROOT_STACK_ROUTE.MAIN,
-  //   screens: {
-  //     [ROOT_STACK_ROUTE.DEEPLINK_CONNECT]: {
-  //       path: 'connect',
-  //     },
-  //     [ROOT_STACK_ROUTE.EVENT_DETAILS]: {
-  //       path: 'screen/earn',
-  //     },
-  //   },
-  // },
+  config: {
+    // initialRouteName: ROOT_STACK_ROUTE.MAIN,
+    screens: {
+      // [ROOT_STACK_ROUTE.DEEPLINK_CONNECT]: {
+      //   path: 'connect',
+      // },
+      // [ROOT_STACK_ROUTE.EVENT_DETAILS]: {
+      //   path: 'screen/earn',
+      // },
+      [ROOT_STACK_ROUTE.MAIN]: {
+        screens: {
+          [MAIN_TAB_ROUTE.TRADE]: {
+            path: 'screen/trade',
+          },
+        },
+      },
+    },
+  },
 
   async getInitialURL(): Promise<string | null> {
     const dynamicLink = await dynamicLinks().getInitialLink();
@@ -126,5 +140,44 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
         }
       })
       .catch((e) => console.error(e));
+  }
+};
+
+const TADA_DRIVER: ThirdPartyScheme = {
+  scheme: '***REMOVED***',
+  packageName: 'io.mvlchain.tada.driver',
+};
+const TADA_RIDER: ThirdPartyScheme = {
+  scheme: '***REMOVED***',
+  packageName: 'io.mvlchain.tada',
+};
+
+const THIRD_PARTY_SCHEME = new Map<string, ThirdPartyScheme>();
+THIRD_PARTY_SCHEME.set(TADA_DRIVER.scheme, TADA_DRIVER);
+THIRD_PARTY_SCHEME.set(TADA_RIDER.scheme, TADA_RIDER);
+
+export const openUriForApp = async (uri: string) => {
+  if (await Linking.canOpenURL(uri)) {
+    await Linking.openURL(uri);
+  } else {
+    const scheme = evaluateUrlScheme(uri)?.replace(':', '').toLocaleLowerCase();
+    if (scheme) {
+      const thirdPartyScheme = THIRD_PARTY_SCHEME.get(scheme);
+      if (thirdPartyScheme) {
+        // a third party app not installed
+        switch (Platform.OS) {
+          case 'ios':
+            await Linking.openURL(`https://itunes.apple.com/lookup?bundleId=${thirdPartyScheme.packageName}`);
+            break;
+          case 'android':
+            try {
+              await Linking.openURL(`market://details?id=${thirdPartyScheme.packageName}`);
+            } catch (e) {
+              await Linking.openURL(`https://play.google.com/store/apps/details?id=${thirdPartyScheme.packageName}`);
+            }
+            break;
+        }
+      }
+    }
   }
 };

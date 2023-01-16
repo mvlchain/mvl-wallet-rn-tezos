@@ -20,7 +20,7 @@ export function getEventPhase(event: EarnEventDto, current: Date = new Date()): 
   // OnEvent phase
   const eventEndAtDuration = parseTimeDuration(new Date(event.eventEndAt), current);
   if (eventEndAtDuration != null) {
-    return EventPhase.OnClaim;
+    return EventPhase.OnEvent;
   }
 
   // BeforeClaim phase
