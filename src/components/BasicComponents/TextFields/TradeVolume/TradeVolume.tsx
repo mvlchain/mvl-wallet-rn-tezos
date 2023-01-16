@@ -12,7 +12,6 @@ import useDebounce from '@@hooks/useDebounce';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { useColor } from '@@hooks/useTheme';
 import gasStore from '@@store/gas/gasStore';
-import { qrPayLogger } from '@@utils/Log';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { inputNumberFormatter } from '@@utils/gas';
 
@@ -29,7 +28,7 @@ import { ITradeVolumeComponentProps } from './TradeVolume.type';
  * @기능 value set
  * @기능 max 누르면 가능한 양만큼 set
  * @기능 balance잔고 보여주기
- * @기능 handletokenselect (해당 prop들어오면 화살표아이콘 표시됨)
+ * @기능 handletokenselect (해당 prop들어오면 화살표 아래방향 아이콘 표시됨)
  */
 export function TradeVolume(props: ITradeVolumeComponentProps) {
   const {
@@ -84,14 +83,6 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     handleValueAndDisplayValue('');
   };
 
-  // SetUp initial value
-  useEffect(() => {
-    qrPayLogger.log(`Setting TradeVolume value to: ${value?.toString(10)}`);
-    if (value) {
-      setDisplayValue(value.toString(10));
-    }
-  }, [value]);
-
   useEffect(() => {
     setShowDelete(!!value);
   }, [value]);
@@ -127,6 +118,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     }
   }, [balanceWarning, !displayValue]);
 
+  // SetUp initial value
   useFocusEffect(
     useCallback(() => {
       if (!value) return;
