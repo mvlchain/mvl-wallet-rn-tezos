@@ -20,7 +20,6 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -66,7 +65,7 @@ export const useTradeScreen = () => {
       const { priceImpact, toTokenAmount } = data;
       if (!priceImpact || !toTokenAmount) return;
       setPriceImpact(priceImpact);
-      const amount = formatBigNumber(new BigNumber(toTokenAmount), data.toToken?.decimals ?? 18);
+      const amount = new BigNumber(toTokenAmount);
       setTradeToValue(amount);
       setState({
         value: tradeFromValue,

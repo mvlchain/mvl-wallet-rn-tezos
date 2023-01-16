@@ -46,6 +46,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     handleTokenSelect,
   } = props;
 
+  //displayvalue의 형식은 반드시 formatBigNumber(value, tokenDto.decimals).toString(10) 를 따른다.
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [usingMax, setUsingMax] = useState(false);
@@ -119,6 +120,8 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   }, [balanceWarning, !displayValue]);
 
   // SetUp initial value
+  // QR스캔을 통해 초기에 value에 따른 displayValue값을 할당해줘야할 필요가 있다.
+  // focus되었을때 value가 있으면 디스플레이 밸류를 셋해준다.
   useFocusEffect(
     useCallback(() => {
       if (!value) return;
@@ -148,8 +151,10 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
               editable={editable}
             />
           ) : (
+            //editabale false로 사용자 입력을 받지 않고 보여준다.
+            //value가 바뀔 때마다 들어온 그대로 displayValue 형식으로 변환해서 보여준다.
             <S.TradeVolumeInputText numberOfLines={1} lineBreakMode='tail'>
-              {value?.toString(10)}
+              {value ? formatBigNumber(value, tokenDto.decimals ?? 18).toString(10) : ''}
             </S.TradeVolumeInputText>
           )}
           {!disableDelete && showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
