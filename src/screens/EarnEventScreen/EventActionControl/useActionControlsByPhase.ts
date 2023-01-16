@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Linking } from 'react-native';
 
 import useClaimWalletListModal from '@@components/BasicComponents/Modals/ClaimWalletListModal/useClaimWalletListModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -11,10 +12,12 @@ import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
 import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
+import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { format, isSvg } from '@@utils/strings';
+import { eventLogger } from '@@utils/Log';
+import { format, isNotBlank, isSvg } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 import { IActionControlAttrs } from './EventActionControl.type';
@@ -50,6 +53,8 @@ export const useActionControlsByPhase = (
 
   useEffect(() => {
     const attrs = setUpActionControls(phase, event, thirdParty, claimStatusInfo, t);
+    eventLogger.log(`ActionControls attrs(${phase}): ${JSON.stringify(attrs)}`);
+
     setActionControlAttrs(attrs);
   }, [phase, event, thirdParty, claimStatusInfo]);
 
@@ -162,8 +167,13 @@ export const useActionControlsByPhase = (
               currency: point.currency,
             };
           }),
+          onActionButtonPress: async () => {
+            if (event.eventActionScheme) {
+              eventLogger.log(`eventActionScheme: ${event.eventActionScheme}`);
+              await openUriForApp(event.eventActionScheme);
+            }
+          },
         };
-        // onActionButtonPress -> redirect event.eventActionScheme
       }
       case EventPhase.BeforeClaim: {
         return claimControlAttrs();

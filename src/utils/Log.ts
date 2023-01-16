@@ -68,7 +68,7 @@ const _warn = (tag: LogTag, message: any, ...params: any[]) => {
 /**
  * Set up tags
  */
-setLogConfigs(['Auth', 'QrPay']);
+setLogConfigs(['Auth', 'QrPay', 'Event']);
 
 const tagLogger = (tag: LogTag) => {
   return {
@@ -107,5 +107,6 @@ const tagLogger = (tag: LogTag) => {
 
 const authLogger = tagLogger('Auth');
 const qrPayLogger = tagLogger('QrPay');
+const eventLogger = tagLogger('Event');
 
-export { tagLogger, authLogger, qrPayLogger };
+export { tagLogger, authLogger, qrPayLogger, eventLogger };
