@@ -60,7 +60,7 @@ const useSetSendData = () => {
     setBody({ to: address });
   };
 
-  const setAmount = (amount: BigNumber) => {
+  const setAmount = (amount: BigNumber | null) => {
     setBody({ value: amount });
   };
 

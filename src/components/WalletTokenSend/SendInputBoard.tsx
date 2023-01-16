@@ -43,11 +43,11 @@ function SendInputBoard({ amount, setAmount, address, setAddress }: ISendInputBo
       <S.Gap />
       <TradeVolume
         label={t('send_amount')}
-        onChange={setAmount}
+        setValue={setAmount}
         value={amount}
         useMax={true}
         tokenDto={params.tokenDto}
-        setParentValid={setTradeVolumeValid}
+        setValueValid={setTradeVolumeValid}
       />
     </S.Container>
   );

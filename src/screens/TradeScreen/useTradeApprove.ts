@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
+import { useFocusEffect } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
@@ -20,23 +21,34 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const TokenRepository = useDi('TokenRepository');
   const TransactionService = useDi('TransactionService');
   const [allowance, setAllowance] = useState<BigNumber | null>(null);
+  const [spender, setSpender] = useState('');
 
   const { openModal, closeModal } = globalModalStore();
   const { t } = useTranslation();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
-  const { to: spender, value, valueValid, data: approveData, setState } = transactionRequestStore();
+  const { to, value, valueValid, data, setState } = transactionRequestStore();
   const [sentApprove, setSentApprove] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setState({ to: spender, toValid: true });
+    }, [spender])
+  );
 
   useSpenderQuery(selectedNetwork, {
     onSuccess: (data) => {
-      setState({ to: data.address, toValid: true });
+      setSpender(data.address);
     },
   });
 
   useEffect(() => {
     getAllowance();
-  }, [spender, selectedToken.from]);
+  }, [to, fromToken]);
+
+  useEffect(() => {
+    setSentApprove(false);
+  }, [fromToken]);
 
   const getAllowance = async () => {
     if (!spender || !selectedToken.from || !fromToken?.contractAddress) return;

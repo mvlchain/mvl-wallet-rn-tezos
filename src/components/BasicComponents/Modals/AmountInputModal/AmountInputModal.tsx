@@ -16,7 +16,7 @@ function AmountInputModal({ title, tokenDto, cancelLabel, confirmLabel, onCancel
   const { modalType, closeModal } = globalModalStore();
   const [value, setValue] = useState<BigNumber | null>(null);
 
-  const onChangeInput = (amount: BigNumber) => {
+  const onChangeInput = (amount: BigNumber | null) => {
     setValue(amount);
   };
 
@@ -37,7 +37,15 @@ function AmountInputModal({ title, tokenDto, cancelLabel, confirmLabel, onCancel
       confirmLabel={confirmLabel}
       isConfirmDisabled={!value}
     >
-      <TradeVolume label={t('amount')} onChange={onChangeInput} useMax={false} tokenDto={tokenDto} disableHint={true} debounceTime={0} />
+      <TradeVolume
+        label={t('amount')}
+        value={value}
+        setValue={onChangeInput}
+        useMax={false}
+        tokenDto={tokenDto}
+        hideBalance={true}
+        debounceTime={0}
+      />
     </ModalLayout>
   );
 }

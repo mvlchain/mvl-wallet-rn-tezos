@@ -1,20 +1,22 @@
+import { RefObject, Ref } from 'react';
+
 import { BigNumber } from 'bignumber.js';
+import { TextInput } from 'react-native';
 
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export interface ITradeVolumeComponentProps {
-  useMax?: boolean;
-  onSelect?: () => void;
   label?: string;
   tokenDto: TokenDto;
-  value?: BigNumber | null;
-  onChange: (amount: any) => void;
-  iconUrl?: string;
-  disableHint?: boolean;
   debounceTime?: number;
-  setParentValid?: (valid: boolean) => void;
-  handleTokenSelect?: () => void;
   editable?: boolean;
-  outterChain?: boolean;
+  useMax?: boolean;
+  iconUrl?: string;
+  hideBalance?: boolean;
   disableDelete?: boolean;
+  textInputRef?: RefObject<TextInput>;
+  value: BigNumber | null;
+  setValue: (value: BigNumber | null) => void;
+  setValueValid?: (valid: boolean) => void;
+  handleTokenSelect?: () => void;
 }

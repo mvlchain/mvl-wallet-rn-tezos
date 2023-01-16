@@ -1,4 +1,6 @@
-import { useRoute } from '@react-navigation/native';
+import { useCallback } from 'react';
+
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import gasStore from '@@store/gas/gasStore';
@@ -14,8 +16,8 @@ const useTokenSend = () => {
   const tokenDto = params.tokenDto;
 
   const { openModal } = globalModalStore();
-  const { to, value } = transactionRequestStore();
-  const { total } = gasStore();
+  const { to, value, resetBody } = transactionRequestStore();
+  const { total, resetState: resetGasStore } = gasStore();
 
   const { setAmount, setAddress } = useSetSendData();
   const { send } = useSetSendFunction();
@@ -27,6 +29,15 @@ const useTokenSend = () => {
       onConfirm: send,
     });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        resetBody();
+        resetGasStore();
+      };
+    }, [])
+  );
 
   return { amount: value, setAmount, address: to, setAddress, confirm };
 };
