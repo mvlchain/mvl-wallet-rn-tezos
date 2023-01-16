@@ -26,6 +26,7 @@ import {
 } from '@@assets/image';
 import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
 import Browser from '@@screens/Browser';
+import BrowserMainScreen from '@@screens/Browser/BrowserMainScreen';
 import { EarnEventListScreen } from '@@screens/EarnEventScreen';
 import SettingScreen from '@@screens/SettingScreen';
 import TradeScreen from '@@screens/TradeScreen';
@@ -77,7 +78,7 @@ function MainTab() {
       <Screen
         key={MAIN_TAB_ROUTE.BROWSER}
         name={MAIN_TAB_ROUTE.BROWSER}
-        component={Browser}
+        component={BrowserMainScreen}
         options={{
           tabBarIcon: ({ size, focused }) =>
             focused ? <BrowserSelected width={size} height={size} /> : <BrowserNormal width={size} height={size} />,
