@@ -55,6 +55,7 @@ export type TRootStackParamList = {
     address: string;
   };
   EARN_EVENT_TRANSFER_SUCCESS: undefined;
+  BROWSER_SEARCH: undefined;
 };
 
 export type RootStackRouteType = Record<keyof TRootStackParamList, keyof TRootStackParamList>;
@@ -83,6 +84,7 @@ export const ROOT_STACK_ROUTE: RootStackRouteType = {
   EVENT_DETAILS: 'EVENT_DETAILS',
   EARN_EVENT_TRNASFERRING: 'EARN_EVENT_TRNASFERRING',
   EARN_EVENT_TRANSFER_SUCCESS: 'EARN_EVENT_TRANSFER_SUCCESS',
+  BROWSER_SEARCH: 'BROWSER_SEARCH',
 } as const;
 
 export type RouteName = valueOf<typeof ROOT_STACK_ROUTE>;
