@@ -82,6 +82,14 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+    bundleInStage: true,
+    devDisabledInStage: true,
+    hermesFlagsForVariant: {
+        def v -> v.name.toLowerCase().contains('release') || v.name.toLowerCase().contains('stage') ? ['-w'] : []
+    },
+    deleteDebugFilesForVariant: {
+        def v -> v.name.toLowerCase().contains('release') || v.name.toLowerCase().contains('stage')
+    },
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
