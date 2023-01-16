@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet, View, ViewStyle } from 'react-native';
 import Modal from 'react-native-modal';
@@ -11,7 +11,9 @@ import { FileDownloadEvent, WebViewMessageEvent } from 'react-native-webview/lib
 import URL from 'url-parse';
 
 import useAccount from '@@components/Wallet/Account/useAccount';
+import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import PhishingModal from '@@screens/PhishingModal/PhishingModal';
+import useBrowserHistoryPersistStore from '@@store/dapp/useBrowserHistoryPersistStore';
 import { mmLightColors, mmShadows } from '@@style/colors';
 import { fontStyles } from '@@style/fonts';
 import BackgroundBridge from '@@utils/BackgroundBridge/BackgroundBridge';
@@ -207,8 +209,10 @@ type PropTypes = {
   app_version: string;
 };
 export const BrowserMain = () => {
+  type TBrowserDappRouteProps = RouteProp<TRootStackParamList, 'BROWSER_DAPP'>;
+  const { params } = useRoute<TBrowserDappRouteProps>();
   const { address } = useAccount();
-
+  const { addBrowserHistory } = useBrowserHistoryPersistStore();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [approvedHosts, setApprovedHosts] = useState<ApprovedHosts>({});
@@ -616,6 +620,8 @@ export const BrowserMain = () => {
     if (nativeEvent.loading) {
       return;
     }
+    const { title } = nativeEvent;
+    addBrowserHistory({ link: params.link ?? title, title });
     // Use URL to produce real url. This should be the actual website that the user is viewing.
     const urlObj = new URL(nativeEvent.url);
     const { origin, pathname = '', query = '' } = urlObj;

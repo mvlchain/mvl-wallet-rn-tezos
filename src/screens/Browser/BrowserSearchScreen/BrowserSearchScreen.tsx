@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TextInput } from 'react-native';
 
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Device from '@@utils/device';
@@ -15,14 +14,14 @@ import useBrowserSearchScreen from './useBrowserSearchScreen';
 
 function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
   const { t } = useTranslation();
-  const { data, isInputFocused, setIsInputFocused } = useBrowserSearchScreen();
+  const { history, setIsInputFocused, onPressSearch, onPressCancel } = useBrowserSearchScreen();
   const renderDappItem = useCallback(({ item }: ListRenderItemInfo<IBrowserSearchHistoryItemProps>) => {
     return (
       <BrowserSearchHistoryItem
         title={item.title}
         link={item.link}
-        onPress={() => console.log('open modal')}
-        onPressDelete={() => console.log('deelte')}
+        onPress={item.onPress}
+        onPressDelete={item.onPressDelete}
         isFocused={item.isFocused}
       />
     );
@@ -31,6 +30,7 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
     <S.Container>
       <S.SearchContainer>
         <S.SearchInput
+          onSubmitEditing={onPressSearch}
           onFocus={() => {
             setIsInputFocused(true);
           }}
@@ -38,19 +38,20 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
             setIsInputFocused(false);
           }}
           placeholder={t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}
+          returnKeyType='search'
         />
-        <TextButton label={t('cancel')} disabled={false} onPress={() => console.log('cancel')} />
+        <TextButton label={t('cancel')} disabled={false} onPress={onPressCancel} />
       </S.SearchContainer>
       <S.ContentContainer>
         <S.History>{t('history')}</S.History>
       </S.ContentContainer>
       <FlashList
-        data={data}
-        extraData={data}
+        data={history}
+        extraData={history}
         keyExtractor={(item) => item.title}
         renderItem={renderDappItem}
         showsVerticalScrollIndicator={false}
-        estimatedItemSize={data.length ?? 0}
+        estimatedItemSize={history.length ?? 0}
       />
     </S.Container>
   );
