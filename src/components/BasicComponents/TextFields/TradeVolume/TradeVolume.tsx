@@ -46,7 +46,9 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     handleTokenSelect,
   } = props;
 
-  //displayvalue의 형식은 반드시 formatBigNumber(value, tokenDto.decimals).toString(10) 를 따른다.
+  //value와 displayValue의 상관관계
+  //어떠한 value에 대하여 displayValue는 formatBigNumber(value, tokenDto.decimals).toString(10)으로 표현된다.
+  //어떠한 displayValue에 대하여 value는 new BigNumber(displayValue는).shiftedBy(tokenDto.decimals)으로 표현된다.
   const [displayValue, setDisplayValue] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [usingMax, setUsingMax] = useState(false);
