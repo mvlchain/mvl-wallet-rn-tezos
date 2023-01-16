@@ -19,6 +19,7 @@ class ControllerManager {
   context: any;
   controllerMessenger: any;
   static instance: any;
+
   constructor() {
     if (ControllerManager.instance) {
       return ControllerManager.instance;
@@ -72,13 +73,17 @@ class ControllerManager {
     networkController.providerConfig = {
       // @ts-ignore
       static: {
-        eth_sendTransaction: async (payload: { params: any[]; origin: any }, next: any, end: (arg0: undefined, arg1: undefined) => void) => {
-          console.log(`WB INCOMING> 7-1. networkController.providerConfig static eth_sendTransaction`);
+        eth_sendTransaction: async (payload: { params: any[]; origin: any }, next: any, end: (err: any, res: any) => void) => {
+          console.log(`WB INCOMING> 7-1. networkController.providerConfig static eth_sendTransaction, ${JSON.stringify(payload.params, null, 2)}`);
           const { TransactionController } = this.context;
           try {
-            const hash = await (await TransactionController.addTransaction(payload.params[0], payload.origin, WalletDevice.MM_MOBILE)).result;
+            const addTransactionRes = await TransactionController.addTransaction(payload.params[0], payload.origin, WalletDevice.MM_MOBILE);
+            console.log(`WB OUTGOING> static eth_sendTransaction addTransactionRes, ${addTransactionRes.transactionMeta}`);
+            const hash = await addTransactionRes.result;
+            console.log(`WB OUTGOING> static eth_sendTransaction res, ${hash}`);
             end(undefined, hash);
           } catch (error: any) {
+            console.log(`WB OUTGOING> static eth_sendTransaction error, ${error}`);
             end(error, undefined);
           }
         },
