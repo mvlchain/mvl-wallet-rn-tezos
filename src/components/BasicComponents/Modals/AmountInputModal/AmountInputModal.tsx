@@ -16,7 +16,7 @@ function AmountInputModal({ title, tokenDto, cancelLabel, confirmLabel, onCancel
   const { modalType, closeModal } = globalModalStore();
   const [value, setValue] = useState<BigNumber | null>(null);
 
-  const onChangeInput = (amount: BigNumber) => {
+  const onChangeInput = (amount: BigNumber | null) => {
     setValue(amount);
   };
 
