@@ -1,16 +1,16 @@
 /* eslint-disable max-lines */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
+import { TextInput, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { NETWORK } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { IQuoteDto } from '@@domain/trade/repositories/tradeRepository.type';
 import useTradeQuoteQuery from '@@hooks/queries/useTradeQuoteQuery';
 import useTradeTokeneQuery from '@@hooks/queries/useTradeTokenQuery';
@@ -20,7 +20,6 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import tradeStore from '@@store/trade/tradeStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 
 const BSC_DEFAULT_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -29,7 +28,7 @@ export const useTradeScreen = () => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { selectedNetwork, selectNetwork } = walletPersistStore();
-  const { setState } = transactionRequestStore();
+  const { setState, resetBody } = transactionRequestStore();
   const [tokenList, setTokenList] = useState<TokenDto[]>([]);
   const { color } = useColor();
   useTradeTokeneQuery(selectedNetwork, {
@@ -47,6 +46,7 @@ export const useTradeScreen = () => {
       setTokenList(tokens as TokenDto[]);
     },
   });
+  const fromTradeVolumeRef = useRef<TextInput>(null);
   const { selectedToken, selectToken } = tradeStore();
   const [selectedTokenList, setSelectedTokenList] = useState<TokenDto[]>([]);
   const [fromTradeMenu, setFromTradeMenu] = useState<IBottomSelectMenuProps[]>([]);
@@ -65,7 +65,7 @@ export const useTradeScreen = () => {
       const { priceImpact, toTokenAmount } = data;
       if (!priceImpact || !toTokenAmount) return;
       setPriceImpact(priceImpact);
-      const amount = formatBigNumber(new BigNumber(toTokenAmount), data.toToken?.decimals ?? 18);
+      const amount = new BigNumber(toTokenAmount);
       setTradeToValue(amount);
       setState({
         value: tradeFromValue,
@@ -170,6 +170,7 @@ export const useTradeScreen = () => {
     setPriceImpact('-');
     setTradeFromValue(null);
     setTradeToValue(new BigNumber(0));
+    fromTradeVolumeRef.current?.clear();
   };
 
   useEffect(() => {
@@ -196,12 +197,24 @@ export const useTradeScreen = () => {
     setTradeFromValue(null);
     setTradeToValue(new BigNumber(0));
     setState({ value: null, data: null });
+    fromTradeVolumeRef.current?.clear();
+    fromTradeVolumeRef.current?.blur();
   };
 
   const setTradeFromAndStoreStateValidation = (validation: boolean) => {
     setTradeFromValidation(validation);
     setState({ valueValid: validation });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        resetBody();
+        setTradeFromValue(null);
+        fromTradeVolumeRef.current?.clear();
+      };
+    }, [])
+  );
 
   return {
     fromToken: selectedTokenList.find((token) => token.symbol === selectedToken.from),
@@ -212,6 +225,7 @@ export const useTradeScreen = () => {
     priceImpact,
     priceImpactColor,
     quoteData,
+    fromTradeVolumeRef,
     setShowTip,
     onPressToken,
     onPressChange,
