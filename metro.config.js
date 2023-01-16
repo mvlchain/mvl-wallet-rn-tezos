@@ -8,7 +8,7 @@ module.exports = (async () => {
   return {
     resolver: {
       extraNodeModules: {
-        stream: require.resolve('readable-stream'),
+        stream: require.resolve('stream-browserify'),
         crypto: require.resolve('react-native-quick-crypto'),
         http: require.resolve('stream-http'),
         https: require.resolve('https-browserify'),
@@ -21,6 +21,7 @@ module.exports = (async () => {
       sourceExts: [...sourceExts, 'svg'],
     },
     transformer: {
+      minifierPath: 'metro-minify-terser',
       getTransformOptions: async () => ({
         transform: {
           experimentalImportSupport: true,

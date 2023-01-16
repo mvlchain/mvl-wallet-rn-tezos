@@ -190,6 +190,7 @@
     "jest-styled-components": "^7.1.1",
     "lint-staged": "^13.0.3",
     "metro-babel-register": "^0.72.0",
+    "metro-minify-terser": "^0.74.0",
     "metro-react-native-babel-preset": "^0.71.3",
     "openapi-typescript": "^5.4.1",
     "pod-install": "^0.1.38",
