@@ -759,7 +759,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(WALLET_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = CryptoVehicleWallet;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.mvlchain.wallet";
+				PROVISIONING_PROFILE_SPECIFIER = "***REMOVED***";
 				SWIFT_OBJC_BRIDGING_HEADER = "Wallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -862,8 +862,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(WALLET_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = CryptoVehicleWallet;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.mvlchain.wallet";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore ***REMOVED***";
+				PROVISIONING_PROFILE_SPECIFIER = "***REMOVED***";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore ***REMOVED******REMOVED***";
 				SWIFT_OBJC_BRIDGING_HEADER = "Wallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
