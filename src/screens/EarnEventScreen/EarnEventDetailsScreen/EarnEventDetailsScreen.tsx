@@ -3,12 +3,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Linking, Alert } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import Webview from '@@components/BasicComponents/Webview';
+import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
+import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { format } from '@@utils/strings';
 
@@ -120,11 +123,14 @@ export function EarnEventDetailsScreen() {
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
-      const supported = await Linking.canOpenURL(uri);
-      if (supported) {
-        await Linking.openURL(uri);
-      } else {
-        Alert.alert('Inappropriate link to open!');
+      try {
+        await openUriForApp(uri);
+      } catch (e) {
+        Toast.show({
+          ...TOAST_DEFAULT_OPTION,
+          type: 'basic',
+          text1: t('msg_error_cannot_resolve_uri'),
+        });
       }
     },
     [event]
@@ -132,7 +138,7 @@ export function EarnEventDetailsScreen() {
 
   const onDisconnectThirdPartyPress = useCallback(async () => {
     const res = await disconnectThirdParty(event?.app?.id);
-    if (res && res.status == 'ok') {
+    if (res?.status === 'ok') {
       // TODO: disconnected successfully. do following tasks
       //  1. third-party disconnection modal
       console.log(`Details> disconnected and refreshing`);

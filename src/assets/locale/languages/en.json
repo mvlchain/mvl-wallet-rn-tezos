@@ -243,6 +243,7 @@
   "msg_error_wallet_name_duplicate": "Wallet name already exists.",
   "msg_error_wallet_name_empty": "Wallet name is empty",
   "msg_error_wallet_not_found": "Wallet not found.",
+  "msg_error_cannot_resolve_uri": "Cannot find the app.",
   "msg_eth_not_enough": "ETH is not enough.",
   "msg_file_and_media_denied_msg": "Files and media permission is denied",
   "msg_insufficient_amount": "Insufficient Amount",

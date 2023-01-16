@@ -9,6 +9,10 @@ export const REGEX_URL_SCHEME = /^([a-z0-9.+-]+:)/i;
 
 export const REGEX_METAMASK_ADDRESS = /^(\w+):(0x[a-fA-F0-9]{40})(@(\d))?$/;
 
+/**
+ * Parse URL scheme
+ * `clutch://io.mvlchain.wallet will` return `clutch:`
+ */
 export const evaluateUrlScheme = (url: string | unknown): string | undefined => {
   if (typeof url !== 'string') {
     return;
