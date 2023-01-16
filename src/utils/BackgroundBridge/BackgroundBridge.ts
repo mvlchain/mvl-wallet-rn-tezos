@@ -99,6 +99,7 @@ export function createLoggerMiddleware(opts: any) {
 
 export function createOriginMiddleware(opts: any) {
   return function originMiddleware(req: any, _: any, next: any) {
+    console.log(`called originMiddleware`);
     req.origin = opts.origin;
 
     if (!req.params) {
@@ -439,6 +440,7 @@ export class BackgroundBridge extends EventEmitter {
         // send request to provider
         console.log(`WB INCOMING> 7. provider.sendAsync middleware`);
         provider.sendAsync(req, (err: any, providerRes: any) => {
+          console.log(`WB OUTGOING> provider.sendAsync ${err}, ${providerRes}`);
           // forward any error
           if (err) return end(err);
           // copy provider response onto original response

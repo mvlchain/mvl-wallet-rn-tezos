@@ -117,9 +117,14 @@ const Approval = () => {
 
   const onCancel = useCallback(() => {
     console.log(`onCancel clicked, ${JSON.stringify(transaction, null, 2)}`);
-    const { transactionController: TransactionController } = controllerManager;
+    const { transactionController } = controllerManager;
     // TransactionController.cancelTransaction(transaction.id);
     // console.log(`TransactionController.cancelTransaction(transaction.id) called`);
+
+    transactionController.hub.emit(`${transaction.id}:finished`, {
+      status: 'rejected',
+    });
+    console.log(`hub.emit ${transaction.id}:finished status: rejected called`);
 
     toggleDappTransactionModal();
   }, [transaction]);
@@ -131,7 +136,7 @@ const Approval = () => {
     ({ gasEstimateType, EIP1559GasData, gasSelected }: any) => {
       (async () => {
         // const { TransactionController, KeyringController } = Engine.context;
-        const { transactionController: TransactionController } = controllerManager;
+        const { transactionController } = controllerManager;
         const { assetType, selectedAsset } = transaction;
         console.log(`selectedAsset: ${JSON.stringify(selectedAsset, null, 2)}`);
         // const showCustomNonce = false;
@@ -155,8 +160,8 @@ const Approval = () => {
               gasEstimateType,
               EIP1559GasData,
             });
-            console.log(`preparedTransaction: ${JSON.stringify(preparedTransaction, null, 2)}`);
           }
+          console.log(`preparedTransaction: ${JSON.stringify(preparedTransaction, null, 2)}`);
 
           //preparedTransaction: {
           //   "id": "ced225c0-90c1-11ed-91cb-af1b1e3db6d3",
@@ -197,8 +202,12 @@ const Approval = () => {
             data: data ?? undefined,
           });
 
-          console.log(`txHash: ${txHash}`);
-
+          console.log(`txHash: ${txHash}, ${transactionController.hub}`);
+          transactionController.hub.emit(`${preparedTransaction.id}:finished`, {
+            status: 'submitted',
+            transactionHash: txHash,
+          });
+          console.log(`hub.emit ${preparedTransaction.id}:finished called`);
           toggleDappTransactionModal();
 
           // TransactionController.hub.once(`${preparedTransaction.id}:finished`, (transactionMeta: any) => {
