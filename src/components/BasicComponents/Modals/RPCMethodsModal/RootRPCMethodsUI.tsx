@@ -14,7 +14,6 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 import { mmLightColors } from '@@style/colors';
 import { ApprovalTypes } from '@@utils/BackgroundBridge/RPCMethodMiddleware';
 import { hexToBN, fromWei } from '@@utils/number';
-import { isSwapTransaction } from '@@utils/transactions';
 
 import Approval from './Approval';
 
@@ -70,85 +69,55 @@ const RootRPCMethodsUI = () => {
     });
   };
 
-  const autoSign = useCallback(async (transactionMeta: any) => {
-    try {
-      const { transactionController: TransactionController } = controllerManager;
-      TransactionController.hub.once(`${transactionMeta.id}:finished`, (transactionMeta: any) => {
-        if (transactionMeta.status === 'submitted') {
-          // NotificationManager.watchSubmittedTransaction({
-          //   ...transactionMeta,
-          //   assetType: transactionMeta.transaction.assetType,
-          // });
-        } else {
-          throw transactionMeta.error;
-        }
-      });
-      TransactionController.hub.once(`${transactionMeta.id}:confirmed`, (transactionMeta: any) => {});
-      await TransactionController.approveTransaction(transactionMeta.id);
-    } catch (error: any) {
-      if (!error?.message.startsWith(KEYSTONE_TX_CANCELED)) {
-        Alert.alert(strings('transactions.transaction_error'), error && error.message, [{ text: strings('navigation.ok') }]);
-        console.log(error, 'error while trying to send transaction (Main)');
-      } else {
-        // AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.QR_HARDWARE_TRANSACTION_CANCELED);
-      }
-    }
-  }, []);
-
   const onUnapprovedTransaction = useCallback(
     async (transactionMeta: any) => {
       console.log(`WB INCOMING> 8. onUnapprovedTransaction transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
       if (transactionMeta.origin === 'MetaMask Mobile') return;
 
       const to = transactionMeta.transaction.to?.toLowerCase();
-      const { data } = transactionMeta.transaction;
 
-      if (isSwapTransaction(data, transactionMeta.origin, to, chainId)) {
-        autoSign(transactionMeta);
-      } else {
-        const {
-          transaction: { value, gas, gasPrice, data },
-        } = transactionMeta;
-        const { assetsContractController } = controllerManager;
+      const {
+        transaction: { value, gas, gasPrice, data },
+      } = transactionMeta;
+      const { assetsContractController } = controllerManager;
 
-        let asset: any = {};
-        try {
-          asset.decimals = await assetsContractController.getERC20TokenDecimals(to);
-          asset.symbol = await assetsContractController.getERC721AssetSymbol(to);
-          // adding `to` here as well
-          asset.address = to;
-        } catch (e) {
-          // This could fail when requesting a transfer in other network
-          // adding `to` here as well
-          console.log(`e in getAssetmetadata`, e);
-          asset = { symbol: 'ERC20', decimals: new BN('18'), address: to };
-        }
-
-        transactionMeta.transaction.gas = hexToBN(gas);
-        transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
-
-        transactionMeta.transaction.value = hexToBN(value || '0');
-        transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);
-
-        setEtherTransaction({
-          id: transactionMeta.id,
-          selectedAsset: asset,
-          origin: transactionMeta.origin,
-          ...transactionMeta.transaction,
-        });
-        setTransactionRequest({
-          from: transactionMeta.transaction.from,
-          to: transactionMeta.transaction.to,
-          value: new BigNumber(value),
-          data: transactionMeta.transaction.data,
-          toValid: true,
-          valueValid: true,
-        });
-
-        toggleDappTransactionModal();
+      let asset: any = {};
+      try {
+        asset.decimals = await assetsContractController.getERC20TokenDecimals(to);
+        asset.symbol = await assetsContractController.getERC721AssetSymbol(to);
+        // adding `to` here as well
+        asset.address = to;
+      } catch (e) {
+        // This could fail when requesting a transfer in other network
+        // adding `to` here as well
+        console.log(`e in getAssetmetadata`, e);
+        asset = { symbol: 'ERC20', decimals: new BN('18'), address: to };
       }
+
+      transactionMeta.transaction.gas = hexToBN(gas);
+      transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
+
+      transactionMeta.transaction.value = hexToBN(value || '0');
+      transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);
+
+      setEtherTransaction({
+        id: transactionMeta.id,
+        selectedAsset: asset,
+        origin: transactionMeta.origin,
+        ...transactionMeta.transaction,
+      });
+      setTransactionRequest({
+        from: transactionMeta.transaction.from,
+        to: transactionMeta.transaction.to,
+        value: new BigNumber(value),
+        data: transactionMeta.transaction.data,
+        toValid: true,
+        valueValid: true,
+      });
+
+      toggleDappTransactionModal();
     },
-    [setEtherTransaction, toggleDappTransactionModal, autoSign]
+    [setEtherTransaction, toggleDappTransactionModal]
   );
 
   const onSignAction = () => setShowPendingApproval(false);

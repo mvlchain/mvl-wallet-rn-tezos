@@ -1,13 +1,8 @@
-import {
-  AssetsContractController,
-  ControllerMessenger,
-  NetworkController,
-  PreferencesController,
-  TransactionController,
-  WalletDevice,
-} from '@metamask/controllers';
+import { AssetsContractController, ControllerMessenger, NetworkController, PreferencesController, WalletDevice } from '@metamask/controllers';
 
+import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { MessageManager, PersonalMessageManager, TypedMessageManager } from '@@domain/message-manager';
+import { TransactionController } from '@@domain/transaction/TransactionController';
 
 let instance: ControllerManager;
 
@@ -74,7 +69,7 @@ class ControllerManager {
       // @ts-ignore
       static: {
         eth_sendTransaction: async (payload: { params: any[]; origin: any }, next: any, end: (err: any, res: any) => void) => {
-          console.log(`WB INCOMING> 7-1. networkController.providerConfig static eth_sendTransaction, ${JSON.stringify(payload.params, null, 2)}`);
+          console.log(`WB INCOMING> 7-1. networkController.providerConfig static eth_sendTransaction, ${JSON.stringify(payload, null, 2)}`);
           const { TransactionController } = this.context;
           try {
             const addTransactionRes = await TransactionController.addTransaction(payload.params[0], payload.origin, WalletDevice.MM_MOBILE);
@@ -101,13 +96,21 @@ class ControllerManager {
       },
     };
 
-    const transactionController = new TransactionController({
-      getNetworkState: () => networkController.state,
-      // @ts-ignore
-      onNetworkStateChange: (listener: any) => this.controllerMessenger.subscribe('NetworkController:stateChange', listener),
-      getProvider: () => networkController.provider,
+    // const transactionController = new TransactionController({
+    //   getNetworkState: () => networkController.state,
+    //   // @ts-ignore
+    //   onNetworkStateChange: (listener: any) => this.controllerMessenger.subscribe('NetworkController:stateChange', listener),
+    //   getProvider: () => networkController.provider,
+    // });
+
+    const myTransactionController = new TransactionController({
+      getSelectedNetworkConfig: () => {
+        const selectedNetwork = NETWORK.GOERLI;
+        return getNetworkConfig(getNetworkByBase(selectedNetwork));
+      },
     });
-    const controllers = [preferencesController, assetsContractController, networkController, transactionController];
+
+    const controllers = [preferencesController, assetsContractController, networkController, myTransactionController];
     this.context = controllers.reduce((context: any, controller: any) => {
       context[controller.name] = controller;
       return context;
@@ -132,7 +135,7 @@ export const controllerManager = {
   get networkController() {
     return instance && instance.context.NetworkController;
   },
-  get transactionController() {
+  get transactionController(): TransactionController {
     return instance && instance.context.TransactionController;
   },
   get assetsContractController() {
