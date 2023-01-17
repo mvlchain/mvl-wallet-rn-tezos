@@ -1,4 +1,4 @@
-import { AssetsContractController, ControllerMessenger, NetworkController, PreferencesController, WalletDevice } from '@metamask/controllers';
+import { ControllerMessenger, NetworkController, PreferencesController, WalletDevice } from '@metamask/controllers';
 
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { MessageManager, PersonalMessageManager, TypedMessageManager } from '@@domain/message-manager';
@@ -39,17 +39,6 @@ class ControllerManager {
       ticker: 'goerliETH',
       nickname: 'Goerli',
     };
-
-    const assetsContractController = new AssetsContractController(
-      {
-        onPreferencesStateChange: (listener) => preferencesController.subscribe(listener),
-        onNetworkStateChange: (listener) => this.controllerMessenger.subscribe('NetworkController:stateChange', listener),
-      },
-      {
-        provider,
-        chainId: '5',
-      }
-    );
 
     const networkControllerOpts = {
       infuraProjectId: '***REMOVED***',
@@ -110,7 +99,7 @@ class ControllerManager {
       },
     });
 
-    const controllers = [preferencesController, assetsContractController, networkController, myTransactionController];
+    const controllers = [preferencesController, networkController, myTransactionController];
     this.context = controllers.reduce((context: any, controller: any) => {
       context[controller.name] = controller;
       return context;
@@ -137,9 +126,6 @@ export const controllerManager = {
   },
   get transactionController(): TransactionController {
     return instance && instance.context.TransactionController;
-  },
-  get assetsContractController() {
-    return instance && instance.context.AssetsContractController;
   },
   messageManager,
   personalMessageManager,

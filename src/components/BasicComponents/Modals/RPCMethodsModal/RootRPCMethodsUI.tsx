@@ -79,20 +79,8 @@ const RootRPCMethodsUI = () => {
       const {
         transaction: { value, gas, gasPrice, data },
       } = transactionMeta;
-      const { assetsContractController } = controllerManager;
 
-      let asset: any = {};
-      try {
-        asset.decimals = await assetsContractController.getERC20TokenDecimals(to);
-        asset.symbol = await assetsContractController.getERC721AssetSymbol(to);
-        // adding `to` here as well
-        asset.address = to;
-      } catch (e) {
-        // This could fail when requesting a transfer in other network
-        // adding `to` here as well
-        console.log(`e in getAssetmetadata`, e);
-        asset = { symbol: 'ERC20', decimals: new BN('18'), address: to };
-      }
+      const asset = { symbol: 'ERC20', decimals: new BN('18'), address: to };
 
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
