@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
@@ -8,7 +8,7 @@ import 'reflect-metadata';
  */
 import './di/di';
 import '@@assets/locale/i18n';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, NavigationState } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorBoundary from 'react-native-error-boundary';
 import { ThemeProvider } from 'styled-components';
@@ -18,7 +18,6 @@ import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
 import RootRPCMethodsUI from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
-import ControllerManager from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { useInitialUrl } from '@@hooks/useInitialUrl';
 import { useSplashScreenTransition } from '@@hooks/useSplashScreenTransition';
 import AuthStack from '@@navigation/AuthStack';
@@ -29,8 +28,7 @@ import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
-import EntryScriptWeb3 from '@@utils/BackgroundBridge/EntryScriptWeb3';
-import { setLogConfigs, tagLogger } from '@@utils/Logger';
+import { tagLogger } from '@@utils/Logger';
 import SecureKeychain from '@@utils/SecureKeychain';
 
 const queryClient = new QueryClient();
@@ -45,18 +43,20 @@ const ROUTER_THEME = {
 
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
-  ControllerManager.init();
-  EntryScriptWeb3.init();
   /**
    * Set up LogTag filters to display logs in console
    */
-  setLogConfigs(['Auth', 'QrPay', 'Event', 'DeepLink']);
   const authLogger = tagLogger('Auth');
 
   const { appTheme } = useApp();
   useSplashScreenTransition();
   const { isSignedIn, appScreen } = authStore();
   useInitialUrl();
+  const onNavigationStateChange = useCallback((state: NavigationState | undefined) => {
+    if (state) {
+      console.log(`Screen> current screen: ${state.routeNames[state.index]}, index; ${state.index}`);
+    }
+  }, []);
 
   authLogger.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
 
@@ -71,16 +71,7 @@ function App(props: { foxCode?: string }) {
     <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme[appTheme.value]}>
-          <NavigationContainer
-            ref={navigationRef}
-            theme={ROUTER_THEME}
-            linking={DeepLinkOptions}
-            onStateChange={(state) => {
-              if (state) {
-                console.log(`Screen> current screen: ${state.routeNames[state.index]}, index; ${state.index}`);
-              }
-            }}
-          >
+          <NavigationContainer ref={navigationRef} theme={ROUTER_THEME} linking={DeepLinkOptions} onStateChange={onNavigationStateChange}>
             {!isSignedIn || appScreen === AppScreen.Auth ? <AuthStack /> : <RootStack />}
 
             <PinModal />
