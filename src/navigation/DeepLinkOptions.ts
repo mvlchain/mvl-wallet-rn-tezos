@@ -170,11 +170,11 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
   }
 };
 
-const TADA_DRIVER: ThirdPartyScheme = {
+export const TADA_DRIVER: ThirdPartyScheme = {
   scheme: '***REMOVED***',
   packageName: 'io.mvlchain.tada.driver',
 };
-const TADA_RIDER: ThirdPartyScheme = {
+export const TADA_RIDER: ThirdPartyScheme = {
   scheme: '***REMOVED***',
   packageName: 'io.mvlchain.tada',
 };

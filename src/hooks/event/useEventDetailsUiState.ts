@@ -20,6 +20,7 @@ import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto, EarnEve
 import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useAppStateChange } from '@@hooks/useAppStateChange';
 import { useDi } from '@@hooks/useDi';
+import { TADA_DRIVER, TADA_RIDER } from '@@navigation/DeepLinkOptions';
 import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -30,13 +31,40 @@ import { isNotBlank, format, isBlank } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 /**
- * Combination of following usecases
+ * A hook that calculates EventDetails screen state.
  *
  * UseCases
  *  • useThirdPartyConnection & useUserPoints
  *  • useClaimStatusInformation
  *    - useClaimInfomation
  *    - useClaimStatus
+ *
+ * [details] dependency
+ * setDetails -> refreshThirdParty()
+ *
+ * refreshThirdParty() {
+ *   const connection = repository.useThirdPartyConnection(appId, token)
+ *   const points = repository.useUserPoints()
+ *   setThirdPary({ connection, points })
+ * }
+ *
+ * [thirdParty] dependency
+ * const claimStatus = await repository.getClaimStatus(event.id);
+ * const claimInfo = await repository.getClaimInformation(event.id);
+ * setClaimStatusInfo({
+ *   claimStatus, claimInfo
+ * })
+ *
+ * [claimStatusInfo]
+ *
+ * useEventDetailsUiState = () => ({
+ *   ...
+ *   return {
+ *     details,
+ *     thirdParty,
+ *     claimStatusInfo
+ *   }
+ * })
  *
  * isClaimable field is equal to the conditions as follows
  * ```
@@ -98,6 +126,7 @@ export const useEarnEventDetailsUiState = (
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
 
+  // ThirdParty connection callback. This will connect ThirdParty appif executed.
   const onThirdPartyConnectionConfirm = useCallback(
     async (appId: string, token: string | null) => {
       if (token) {
@@ -153,7 +182,7 @@ export const useEarnEventDetailsUiState = (
       ...thirdParty,
     };
 
-    // UseCase: useThirdPartyConnection & useUserPoints
+    // UseCase: useThirdPartyConnection
     const { appId, token, error } = parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);
     try {
       const connection = await repository.checkThirdPartyConnection(appId, token);
@@ -335,10 +364,9 @@ function getThirdPartyConnectionDeepLink(event: EarnEventDto, connectionDeepLink
   }
 
   const scheme = evaluateUrlScheme(connectionDeepLink);
-
   switch (scheme) {
-    case '***REMOVED***:':
-    case '***REMOVED***:':
+    case `${TADA_RIDER.scheme}:`:
+    case `${TADA_DRIVER.scheme}:`:
       const url = Url.parse(connectionDeepLink ?? '', true);
       url.query.e = event.id;
       return assembleUrl(url.protocol, url.host, url.pathname, qs.stringify(url.query));
