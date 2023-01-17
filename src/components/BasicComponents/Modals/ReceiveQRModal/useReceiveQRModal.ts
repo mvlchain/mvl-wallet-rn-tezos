@@ -24,7 +24,6 @@ export const useReceiveQRModal = () => {
     const amount = value.toString(10);
     const link = `https://l.mvlclutch.io/link-transfer/${selectedNetwork}?${qs.stringify({ tokenAddress, address, value: amount })}`;
     qrPayLogger.log(`built QrLink ${qs.stringify({ tokenAddress, address, value: amount })}`);
-    tagLogger;
     return decodeURIComponent(link);
   };
 
