@@ -1,20 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-
-import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { Linking, Alert, AppState, AppStateStatus } from 'react-native';
+import React, { useCallback } from 'react';
 import Toast from 'react-native-toast-message';
+import { useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
-import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import Webview from '@@components/BasicComponents/Webview';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
-import { useAppStateChange } from '@@hooks/useAppStateChange';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
-import globalModalStore from '@@store/globalModal/globalModalStore';
-import { tagLogger } from '@@utils/Logger';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -24,11 +17,12 @@ import * as S from './EarnEventDetailsScreen.style';
 import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
 
 /**
- * Event details screen that displays contents to the WebView.
- * WebView: display event contents (O)
- * EventActionControl (O)
- * RewardReceiptModal (O WebView based modal)
- * ThirdPartyApp (O)
+ * Screen displaying event details to the WebView
+ *
+ * WebView: display event contents
+ * EventActionControl
+ * RewardReceiptModal (WebView based modal)
+ * ThirdPartyApp
  * Alert modal
  *  • failed claim
  *  • transfer failed
@@ -43,9 +37,9 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * UseCases
  *  • useConnectThirdParty
  *  • useDisconnectThirdParty
- *  • useThirdPartyConnection (O)
- *  • useUserPoints (O)
- *  • useClaimStatusInformation (O)
+ *  • useThirdPartyConnection
+ *  • useUserPoints
+ *  • useClaimStatusInformation
  *    - useClaimInfomation
  *    - useClaimStatus
  *
@@ -107,8 +101,8 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *  - add RetryTransferModal to claim reward again in EarnEventTransferringScreen
  *
  * DeepLinks
- *  clutchwallet://connect (O)
- *  clutchwallet://screen/earn (O)
+ *  clutchwallet://connect
+ *  clutchwallet://screen/earn
  *  clutchwallet://screen/trade
  */
 export function EarnEventDetailsScreen() {
