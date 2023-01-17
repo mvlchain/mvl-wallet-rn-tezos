@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 
 import { TouchableOpacity } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import ErrorBoundary from 'react-native-error-boundary';
 
+import ErrorScreenInRootStack from '@@components/BasicComponents/ErrorBoundary/ErrorScreenInRootStack';
 import EditTokenListItem from '@@components/Wallet/EditTokenListItem';
 import { WALLET_TOKEN } from '@@constants/token.constant';
 
@@ -41,17 +43,19 @@ function WalletEditTokenListScreen() {
   ]);
 
   return (
-    <S.Container>
-      <DraggableFlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        bounces={false}
-        onDragEnd={({ data }) => {
-          setData(data);
-        }}
-      />
-    </S.Container>
+    <ErrorBoundary FallbackComponent={ErrorScreenInRootStack}>
+      <S.Container>
+        <DraggableFlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          bounces={false}
+          onDragEnd={({ data }) => {
+            setData(data);
+          }}
+        />
+      </S.Container>
+    </ErrorBoundary>
   );
 }
 

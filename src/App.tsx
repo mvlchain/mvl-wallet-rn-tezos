@@ -25,7 +25,6 @@ import AuthStack from '@@navigation/AuthStack';
 import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import RootStack from '@@navigation/RootStack';
 import { navigationRef } from '@@navigation/RootStack/RootNavigation';
-import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
@@ -69,12 +68,11 @@ function App(props: { foxCode?: string }) {
    *  - SeedPhrase
    */
   return (
-    <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
+    <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme[appTheme.value]}>
           <NavigationContainer ref={navigationRef} theme={ROUTER_THEME} linking={DeepLinkOptions} onStateChange={onNavigationStateChange}>
             {!isSignedIn || appScreen === AppScreen.Auth ? <AuthStack /> : <RootStack />}
-
             <PinModal />
             <TermsOfServicesModal />
             <PincodeGuideModal />

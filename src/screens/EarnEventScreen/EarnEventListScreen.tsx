@@ -4,7 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl } from 'react-native';
+import ErrorBoundary from 'react-native-error-boundary';
 
+import ErrorScreenInMainTab from '@@components/BasicComponents/ErrorBoundary/ErrorScreenInMainTab';
 import { EarnEvent } from '@@domain/model/EarnEvent';
 import { useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { useRefetchByRefreshControl } from '@@hooks/useRefetchByRefreshControl';
@@ -41,37 +43,39 @@ export const EarnEventListScreen = () => {
   }, []);
 
   return (
-    <S.Container>
-      <S.TopTitleBar>
-        <S.HeaderText>{t('event_screen_title')}</S.HeaderText>
-        <S.BetaTag>
-          <S.BetaTagText>{t('beta')}</S.BetaTagText>
-        </S.BetaTag>
-      </S.TopTitleBar>
+    <ErrorBoundary FallbackComponent={ErrorScreenInMainTab}>
+      <S.Container>
+        <S.TopTitleBar>
+          <S.HeaderText>{t('event_screen_title')}</S.HeaderText>
+          <S.BetaTag>
+            <S.BetaTagText>{t('beta')}</S.BetaTagText>
+          </S.BetaTag>
+        </S.TopTitleBar>
 
-      <S.BodyContainer>
-        {(data?.length ?? 0) === 0 && <EmptyEarnEventContent />}
-        <S.EventListLayout>
-          {data && (
-            <FlashList
-              data={data}
-              extraData={data}
-              keyExtractor={(item) => item.id}
-              renderItem={renderEarnEventContents}
-              estimatedItemSize={data?.length ?? 0}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={refresh}
-                  tintColor='transparent'
-                  colors={['transparent']}
-                  style={S.InlineStyle.flashlist}
-                />
-              }
-            />
-          )}
-        </S.EventListLayout>
-      </S.BodyContainer>
-    </S.Container>
+        <S.BodyContainer>
+          {(data?.length ?? 0) === 0 && <EmptyEarnEventContent />}
+          <S.EventListLayout>
+            {data && (
+              <FlashList
+                data={data}
+                extraData={data}
+                keyExtractor={(item) => item.id}
+                renderItem={renderEarnEventContents}
+                estimatedItemSize={data?.length ?? 0}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={refresh}
+                    tintColor='transparent'
+                    colors={['transparent']}
+                    style={S.InlineStyle.flashlist}
+                  />
+                }
+              />
+            )}
+          </S.EventListLayout>
+        </S.BodyContainer>
+      </S.Container>
+    </ErrorBoundary>
   );
 };
