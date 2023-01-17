@@ -7,7 +7,6 @@ import { getNetworkByBase } from '@@constants/network.constant';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
 import useInterval from '@@hooks/useInterval';
-import gasStore from '@@store/gas/gasStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
@@ -16,7 +15,6 @@ const useEstimateGas = ({
   value,
   data,
   isValidInput,
-  tokenDto,
   setBlockBaseFee,
   setBlockGas,
 }: {
