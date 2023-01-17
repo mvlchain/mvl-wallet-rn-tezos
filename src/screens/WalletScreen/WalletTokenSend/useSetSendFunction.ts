@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { BigNumber } from 'bignumber.js';
 
 import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -29,7 +30,7 @@ const useSetSendFunction = () => {
 
   const { openModal, closeModal } = globalModalStore();
   const { setState: pinSet } = pinStore();
-  const { to, data, value, resetBody, toValid, valueValid } = transactionRequestStore();
+  const { to, data, value, resetBody, toValid, valueValid, tokenValue } = transactionRequestStore();
   const { baseFee, tip, gas, total, resetState: resetGas } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
@@ -55,22 +56,21 @@ const useSetSendFunction = () => {
 
   const sendToBlockChain = async (param: TGasConfirmButtonFunctionParam) => {
     try {
-      if (!to || !value || !baseFee || !gas || !total) {
-        throw new Error('baseFee, gas, total ,to, value is required');
+      let txHash;
+      if (tokenDto.contractAddress) {
+        txHash = await transactionService.sendTransaction({
+          selectedNetwork,
+          selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+          ...param,
+          to: tokenDto.contractAddress,
+        });
+      } else {
+        txHash = await transactionService.sendTransaction({
+          selectedNetwork,
+          selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+          ...param,
+        });
       }
-      const txHash = await transactionService.sendTransaction({
-        selectedNetwork,
-        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-        gasFeeInfo: {
-          baseFee,
-          tip: tip ?? undefined,
-          gas,
-          total,
-        },
-        to: tokenDto.contractAddress ?? to,
-        value: tokenDto.contractAddress ? undefined : value,
-        data: data ?? undefined,
-      });
 
       return txHash;
     } catch (err) {
@@ -80,9 +80,6 @@ const useSetSendFunction = () => {
 
   const registerHistoryToServer = async (txHash: string, nonce: number) => {
     try {
-      if (!to || !value) {
-        throw new Error('to,value is required');
-      }
       const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
       const transactionType = getTransactionType(network.networkId, !!tokenDto.contractAddress, tokenDto.symbol === 'BTCB', false);
       const serverRes = await transactionService.registerHistory({
@@ -93,7 +90,7 @@ const useSetSendFunction = () => {
         hash: txHash,
         type: transactionType,
         nonce,
-        value: value.toString(10),
+        value: tokenDto.contractAddress ? tokenValue.toString(10) : value.toString(10),
       });
       if (!serverRes) {
         throw new Error('fail register history');

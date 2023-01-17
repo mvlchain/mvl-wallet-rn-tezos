@@ -6,6 +6,8 @@ export interface ITransactionRequestBody {
   from: string | null;
   data: BytesLike | null;
   value: BigNumber | null;
+  tokenTo: string | null;
+  tokenValue: BigNumber | null;
   toValid: boolean;
   valueValid: boolean;
 }
