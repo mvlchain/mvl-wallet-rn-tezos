@@ -19,7 +19,7 @@ const useSetSendData = () => {
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
 
-  const { to, value, setState: setBody, resetBody } = transactionRequestStore();
+  const { to, value, setState: setBody, resetBody, tokenTo, tokenValue } = transactionRequestStore();
   const { resetState: resetGas } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
@@ -30,8 +30,10 @@ const useSetSendData = () => {
   }, []);
 
   useEffect(() => {
-    setData();
-  }, [to, value]);
+    if (params.tokenDto.contractAddress) {
+      setData(tokenTo, tokenValue);
+    }
+  }, [tokenTo, tokenValue]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', clearSendInput);
@@ -58,15 +60,22 @@ const useSetSendData = () => {
   };
 
   const setAddress = (address: string) => {
-    setBody({ to: address });
+    if (params.tokenDto.contractAddress) {
+      setBody({ tokenTo: address, to: tokenDto.contractAddress });
+    } else {
+      setBody({ to: address });
+    }
   };
 
   const setAmount = (amount: BigNumber | null) => {
-    setBody({ value: amount });
+    if (params.tokenDto.contractAddress) {
+      setBody({ tokenValue: amount });
+    } else {
+      setBody({ value: amount });
+    }
   };
 
-  const setData = async () => {
-    if (!to || !value) return;
+  const setData = async (to: string, value: BigNumber) => {
     if (tokenDto.contractAddress) {
       const data = await transactionService.getTransferData({
         selectedNetwork: selectedNetwork,

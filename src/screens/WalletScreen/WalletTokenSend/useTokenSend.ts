@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 
+import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import gasStore from '@@store/gas/gasStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -16,20 +17,11 @@ const useTokenSend = () => {
   const tokenDto = params.tokenDto;
 
   const { openModal } = globalModalStore();
-  const { to, value, resetBody } = transactionRequestStore();
+  const { to, value, resetBody, tokenValue, tokenTo } = transactionRequestStore();
   const { total, resetState: resetGasStore } = gasStore();
 
   const { setAmount, setAddress } = useSetSendData();
   const { send } = useSetSendFunction();
-
-  const confirm = async () => {
-    if (!to || !value || !total) return;
-    openModal(MODAL_TYPES.CONFIRM_SEND, {
-      tokenDto,
-      onConfirm: send,
-    });
-  };
-
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -39,6 +31,21 @@ const useTokenSend = () => {
     }, [])
   );
 
-  return { amount: value, setAmount, address: to, setAddress, confirm };
+  const amount = params.tokenDto.contractAddress ? tokenValue : value;
+  const address = params.tokenDto.contractAddress ? tokenTo : to;
+
+  const confirm = async (param: TGasConfirmButtonFunctionParam) => {
+    if (!total) return;
+    openModal(MODAL_TYPES.CONFIRM_SEND, {
+      tokenDto,
+      onConfirm: () => {
+        send(param);
+      },
+      to: address,
+      value: amount,
+    });
+  };
+
+  return { amount, setAmount, address, setAddress, confirm };
 };
 export default useTokenSend;

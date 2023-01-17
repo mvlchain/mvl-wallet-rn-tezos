@@ -86,6 +86,7 @@ export class TransactionService implements ITransactionService {
             });
           }
         case NETWORK_FEE_TYPE.EIP1559:
+          console.log('>>sendTransaction service', gasFeeInfo, to, value, data);
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
             chainId: network.chainId,
             maxFeePerGas: gasFeeInfo.baseFee.plus(gasFeeInfo.tip!).toFixed(0),

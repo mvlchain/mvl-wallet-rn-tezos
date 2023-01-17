@@ -7,6 +7,8 @@ const INITIAL_TRANSACTION_REQUEST_BODY_STATE = {
   to: null,
   from: null,
   data: null,
+  tokenTo: null,
+  tokenValue: null,
   value: null,
   toValid: false,
   valueValid: false,

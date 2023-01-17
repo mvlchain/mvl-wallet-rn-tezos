@@ -22,7 +22,7 @@ import { MODAL_TYPES } from '../../GlobalModal';
 import * as S from './ConfirmSendModal.style';
 import { IConfirmSendModalProps } from './ConfirmSendModal.type';
 
-function ConfirmSendModal({ onConfirm, tokenDto }: IConfirmSendModalProps) {
+function ConfirmSendModal({ onConfirm, tokenDto, to, value }: IConfirmSendModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
@@ -31,7 +31,6 @@ function ConfirmSendModal({ onConfirm, tokenDto }: IConfirmSendModalProps) {
   const { settedCurrency } = settingPersistStore();
 
   const { total } = gasStore();
-  const { value, to } = transactionRequestStore();
   const { coinDto } = useCoinDto();
 
   const totalStr = formatBigNumber(total!, coinDto.decimals).toString(10);
