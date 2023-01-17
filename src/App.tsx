@@ -17,6 +17,8 @@ import useApp from 'useApp';
 import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
+import RootRPCMethodsUI from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
+import ControllerManager from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { useInitialUrl } from '@@hooks/useInitialUrl';
 import { useSplashScreenTransition } from '@@hooks/useSplashScreenTransition';
 import AuthStack from '@@navigation/AuthStack';
@@ -27,6 +29,7 @@ import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
+import EntryScriptWeb3 from '@@utils/BackgroundBridge/EntryScriptWeb3';
 import SecureKeychain from '@@utils/SecureKeychain';
 
 const queryClient = new QueryClient();
@@ -41,6 +44,8 @@ const ROUTER_THEME = {
 
 function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
+  ControllerManager.init();
+  EntryScriptWeb3.init();
 
   const { appTheme } = useApp();
   useSplashScreenTransition();
@@ -75,6 +80,7 @@ function App(props: { foxCode?: string }) {
             <PinModal />
             <TermsOfServicesModal />
             <PincodeGuideModal />
+            <RootRPCMethodsUI />
           </NavigationContainer>
         </ThemeProvider>
       </QueryClientProvider>

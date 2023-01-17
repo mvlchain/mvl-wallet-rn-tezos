@@ -54,6 +54,8 @@ export { default as SocialAppleDark } from './img-social-apple-dark.svg';
 export { default as SocialAppleLight } from './img-social-apple-light.svg';
 export { default as SocialGoogle } from './img-social-google.svg';
 export { default as NFTImage } from './img-nft.svg';
+export { default as BridgeImage } from './img-bridge.svg';
+export { default as DappImage } from './img-dapp.svg';
 
 export { default as QRScanOverlay } from './img-qr-scan-overlay.svg';
 export { default as SelectIcon } from './ic-select.svg';
@@ -71,3 +73,6 @@ export { default as ArrangeIcon } from './ic-arrange-black.svg';
 export { default as EmptyEvent } from './img-emptyevent.svg';
 export { default as ChangeIconLight } from './ic-change-light.svg';
 export { default as QuestionMarkIcon } from './ic-question-mark.svg';
+
+export { default as DeleteIconLight } from './ic-delete-light.svg';
+export { default as DeleteIconDark } from './ic-delete-dark.svg';

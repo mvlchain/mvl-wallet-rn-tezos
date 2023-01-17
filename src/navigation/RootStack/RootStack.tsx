@@ -13,6 +13,8 @@ import { useDeepLinkByInitialUrl } from '@@hooks/useDeepLinkByInitialUrl';
 import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
 import MainTab from '@@navigation/MainTab';
+import BrowserDappScreen from '@@screens/Browser/BrowserDappScreen';
+import BrowserSearchScreen from '@@screens/Browser/BrowserSearchScreen';
 import { EarnEventDetailsScreen } from '@@screens/EarnEventScreen';
 import EarnEventTransferSuccessScreen from '@@screens/EarnEventScreen/EarnEventTransferSuccessScreen';
 import EarnEventTransferringScreen from '@@screens/EarnEventScreen/EarnEventTransferringScreen';
@@ -196,6 +198,18 @@ function RootStack() {
           key={ROOT_STACK_ROUTE.EARN_EVENT_TRANSFER_SUCCESS}
           name={ROOT_STACK_ROUTE.EARN_EVENT_TRANSFER_SUCCESS}
           component={EarnEventTransferSuccessScreen}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Screen
+          key={ROOT_STACK_ROUTE.BROWSER_SEARCH}
+          name={ROOT_STACK_ROUTE.BROWSER_SEARCH}
+          component={BrowserSearchScreen}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Screen
+          key={ROOT_STACK_ROUTE.BROWSER_DAPP}
+          name={ROOT_STACK_ROUTE.BROWSER_DAPP}
+          component={BrowserDappScreen}
           options={{ headerShown: false, gestureEnabled: false }}
         />
       </Navigator>

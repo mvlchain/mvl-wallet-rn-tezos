@@ -16,7 +16,6 @@ const useSetTotal = ({
 }: {
   to?: string | null;
   value?: BigNumber | null;
-  isValidInput: boolean;
   blockGas: BigNumber | null;
 }) => {
   const gasService = useDi('GasService');

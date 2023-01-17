@@ -1,5 +1,6 @@
-import 'react-native';
 import React from 'react';
+
+import 'react-native';
 
 import { container, instancePerContainerCachingFactory, injectable } from 'tsyringe';
 
@@ -11,6 +12,7 @@ import { RTNSettingsRepository } from '@@domain/auth/repositories/RTNSettingsRep
 import { TTheme } from '@@store/setting/settingPersistStore.type';
 
 import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
+import { act, ReactTestRenderer } from 'react-test-renderer';
 
 /**
  * Mock class for RTNSettingsRepository
@@ -39,24 +41,18 @@ afterEach(() => {
   container.clearInstances();
 });
 
-beforeEach(() => {
-  // mock splash screen
-  jest.mock('react-native-splash-screen', () => {
-    return {
-      hide: jest.fn(),
-      show: jest.fn(),
-    };
-  });
-});
-
 container.register('RTNSettingsRepository', {
   useFactory: instancePerContainerCachingFactory<MockRTNSettingsRepository>((container) => container.resolve(MockRTNSettingsRepository)),
 });
 //const settingsRepository: RTNSettingsRepository = container.resolve('RTNSettingsRepository');
 
 test('renders correctly', () => {
+  jest.useFakeTimers();
   mockDynamicLinks.mockReturnValueOnce({
     getInitialLink: jest.fn(),
   });
   render(<App />);
+  act(() => {
+    jest.runAllTimers();
+  });
 });

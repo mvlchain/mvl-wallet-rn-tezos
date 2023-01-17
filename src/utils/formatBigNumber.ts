@@ -10,7 +10,7 @@ export const formatBigNumber = (amount: BigNumber, decimals: number) => {
 };
 
 export const BnToEtherBn = (value: BigNumber) => {
-  return BigNumberEther.from(value.toString(10));
+  return BigNumberEther.from(value.toFixed(0));
 };
 
 export const etherBNtoBN = (value: BigNumberEther | null) => {
