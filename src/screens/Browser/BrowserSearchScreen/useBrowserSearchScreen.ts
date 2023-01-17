@@ -7,6 +7,7 @@ import { NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-nat
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import useBrowserHistoryPersistStore from '@@store/dapp/useBrowserHistoryPersistStore';
+import useBrowserHistoryStore from '@@store/dapp/useBrowserHistoryStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { format } from '@@utils/strings';
 
@@ -18,11 +19,13 @@ const useBrowserSearchScreen = () => {
   const { t } = useTranslation();
   const { browserHistory, deleteBrowserHistory } = useBrowserHistoryPersistStore();
   const [history, setHistory] = useState<IBrowserSearchHistoryItemProps[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<IBrowserSearchHistoryItemProps[]>([]);
   const { openModal, closeModal } = globalModalStore();
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
+  const { searchValue, setSearchValue } = useBrowserHistoryStore();
 
   useEffect(() => {
-    setHistory(
+    const uniqueHistory = new Set(
       browserHistory.map((_history) => ({
         title: _history.title,
         link: _history.link,
@@ -31,7 +34,21 @@ const useBrowserSearchScreen = () => {
         isFocused: isInputFocused,
       }))
     );
-  }, [browserHistory]);
+    setHistory([...uniqueHistory]);
+  }, [browserHistory, isInputFocused]);
+
+  useEffect(() => {
+    setFilteredHistory(history);
+  }, [history]);
+
+  useEffect(() => {
+    if (searchValue.length > 0) {
+      const filteredHistory = history.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1);
+      setFilteredHistory(filteredHistory);
+    } else {
+      setFilteredHistory(history);
+    }
+  }, [searchValue]);
 
   const onPressOpenDapp = (link: string) => {
     rootNavigation.navigate('BROWSER_DAPP', { link });
@@ -56,7 +73,9 @@ const useBrowserSearchScreen = () => {
   };
 
   return {
-    history,
+    filteredHistory,
+    searchValue,
+    setSearchValue,
     setIsInputFocused,
     onPressSearch,
     onPressCancel,

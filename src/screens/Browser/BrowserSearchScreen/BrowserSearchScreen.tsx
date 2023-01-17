@@ -14,7 +14,7 @@ import useBrowserSearchScreen from './useBrowserSearchScreen';
 
 function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
   const { t } = useTranslation();
-  const { history, setIsInputFocused, onPressSearch, onPressCancel } = useBrowserSearchScreen();
+  const { filteredHistory, searchValue, setSearchValue, setIsInputFocused, onPressSearch, onPressCancel } = useBrowserSearchScreen();
   const renderDappItem = useCallback(({ item }: ListRenderItemInfo<IBrowserSearchHistoryItemProps>) => {
     return (
       <BrowserSearchHistoryItem
@@ -26,10 +26,13 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
       />
     );
   }, []);
+
   return (
     <S.Container>
       <S.SearchContainer>
         <S.SearchInput
+          value={searchValue}
+          onChangeText={setSearchValue}
           onSubmitEditing={onPressSearch}
           onFocus={() => {
             setIsInputFocused(true);
@@ -46,12 +49,12 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
         <S.History>{t('history')}</S.History>
       </S.ContentContainer>
       <FlashList
-        data={history}
-        extraData={history}
-        keyExtractor={(item) => item.title}
+        data={filteredHistory}
+        extraData={filteredHistory}
+        keyExtractor={(item) => item.link}
         renderItem={renderDappItem}
         showsVerticalScrollIndicator={false}
-        estimatedItemSize={history.length ?? 0}
+        estimatedItemSize={filteredHistory.length ?? 0}
       />
     </S.Container>
   );
