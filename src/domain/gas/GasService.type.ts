@@ -25,8 +25,8 @@ export interface IEstimateGasRequest {
   selectedNetwork: Network;
   selectedWalletIndex: number;
   to: string;
-  value?: BigNumber;
-  data?: BytesLike;
+  value?: BigNumber | string;
+  data?: BytesLike | null;
 }
 
 export interface IEstimateGasResponse {
