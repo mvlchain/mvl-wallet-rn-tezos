@@ -5,11 +5,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet, View, ViewStyle } from 'react-native';
+import ErrorBoundary from 'react-native-error-boundary';
 import Modal from 'react-native-modal';
 import { WebView } from 'react-native-webview';
 import { FileDownloadEvent, WebViewMessageEvent, WebViewNavigation } from 'react-native-webview/lib/WebViewTypes';
 import URL from 'url-parse';
 
+import ErrorScreenInMainTab from '@@components/BasicComponents/ErrorBoundary/ErrorScreenInMainTab';
 import useAccount from '@@components/Wallet/Account/useAccount';
 import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import PhishingModal from '@@screens/PhishingModal/PhishingModal';
@@ -781,40 +783,42 @@ export const BrowserMain = ({ webviewRef }: { webviewRef: any }) => {
   logger.log(`main render starts, ${!!entryScriptWeb3}, ${firstUrlLoaded}`);
 
   return (
-    <S.Container>
-      <View style={[styles.wrapper]} {...(Device.isAndroid() ? { collapsable: false } : {})}>
-        <View style={styles.webview}>
-          {!!entryScriptWeb3 && firstUrlLoaded && (
-            <WebView
-              originWhitelist={['https://*', 'http://*']}
-              decelerationRate={'normal'}
-              ref={webviewRef}
-              renderError={() => <View>{error}</View>}
-              source={{ uri: initialUrl }}
-              injectedJavaScriptBeforeContentLoaded={entryScriptWeb3}
-              style={styles.webview}
-              onLoadStart={onLoadStart}
-              onLoad={onLoad}
-              onLoadEnd={onLoadEnd}
-              onLoadProgress={onLoadProgress}
-              onMessage={onMessage}
-              onError={onError}
-              onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-              sendCookies
-              javascriptEnabled
-              allowsInlineMediaPlayback
-              useWebkit
-              cacheEnabled={false}
-              cacheMode={'LOAD_NO_CACHE'}
-              testID={'browser-webview'}
-              applicationNameForUserAgent={'WebView MetaMaskMobile'}
-              onFileDownload={handleOnFileDownload}
-              onNavigationStateChange={setNavState}
-            />
-          )}
+    <ErrorBoundary FallbackComponent={ErrorScreenInMainTab}>
+      <S.Container>
+        <View style={[styles.wrapper]} {...(Device.isAndroid() ? { collapsable: false } : {})}>
+          <View style={styles.webview}>
+            {!!entryScriptWeb3 && firstUrlLoaded && (
+              <WebView
+                originWhitelist={['https://*', 'http://*']}
+                decelerationRate={'normal'}
+                ref={webviewRef}
+                renderError={() => <View>{error}</View>}
+                source={{ uri: initialUrl }}
+                injectedJavaScriptBeforeContentLoaded={entryScriptWeb3}
+                style={styles.webview}
+                onLoadStart={onLoadStart}
+                onLoad={onLoad}
+                onLoadEnd={onLoadEnd}
+                onLoadProgress={onLoadProgress}
+                onMessage={onMessage}
+                onError={onError}
+                onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+                sendCookies
+                javascriptEnabled
+                allowsInlineMediaPlayback
+                useWebkit
+                cacheEnabled={false}
+                cacheMode={'LOAD_NO_CACHE'}
+                testID={'browser-webview'}
+                applicationNameForUserAgent={'WebView MetaMaskMobile'}
+                onFileDownload={handleOnFileDownload}
+                onNavigationStateChange={setNavState}
+              />
+            )}
+          </View>
         </View>
-      </View>
-    </S.Container>
+      </S.Container>
+    </ErrorBoundary>
   );
 };
 
