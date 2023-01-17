@@ -25,9 +25,9 @@ const useGasFeeBoard = ({ to, value, data, isValidInput, tokenDto, onConfirm }: 
   //The reference values from blockchain
   const [blockBaseFee, setBlockBaseFee] = useState<BigNumber | null>(null);
   const [blockGas, setBlockGas] = useState<BigNumber | null>(null);
-  const { baseFee, gas, total, tip, isDataRequired } = gasStore();
+  const { baseFee, gas, total, tip } = gasStore();
 
-  useSetTotal({ to, value, blockGas });
+  useSetTotal({ blockGas });
   useSetGasState({ blockBaseFee, blockGas, advanced });
   useEstimateGas({ to, value, data, isValidInput, tokenDto, setBlockBaseFee, setBlockGas });
   useSetInitial({
@@ -42,17 +42,13 @@ const useGasFeeBoard = ({ to, value, data, isValidInput, tokenDto, onConfirm }: 
   const { tipCheck } = useTipValidation(tokenDto);
   const { gasCheck } = useGasValidation();
   const wrappedOnConfirm = () => {
-    //TODO: nonnullassertion 정리좀
-    if (!to || !value || !baseFee || !gas || !total || (enableTip && !tip)) return;
-    const isCoin = !tokenDto.contractAddress;
-    if ((isDataRequired || !isCoin) && !data) return;
+    if (!to || !baseFee || !gas || !total || (enableTip && !tip)) return;
     const confirmParam = {
-      to: isDataRequired || isCoin ? to : tokenDto.contractAddress!,
-      value: isCoin ? value : undefined,
-      data: isDataRequired || !isCoin ? data! : undefined,
+      to,
+      value,
+      data,
       gasFeeInfo: { baseFee, gas, total, tip: enableTip ? tip! : undefined },
     };
-
     onConfirm(confirmParam);
   };
 

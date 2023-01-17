@@ -103,13 +103,13 @@ export class GasService implements IGasService {
         case NETWORK_FEE_TYPE.EIP1559:
           const estimationEip1559 = await this.gasRepository.estimateGas(
             { rpcUrl: network.rpcUrl, chainId: network.chainId },
-            { from: wallet.address, to, value: value ? value.toString() : undefined, data }
+            { from: wallet.address, to, value, data }
           );
           return { gasUsage: estimationEip1559 };
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           const estimationLegacy = await this.gasRepository.estimateGas(
             { rpcUrl: network.rpcUrl, chainId: network.chainId },
-            { from: wallet.address, to, value: value ? value.toString() : undefined, data }
+            { from: wallet.address, to, value, data }
           );
           return { gasUsage: estimationLegacy };
       }
