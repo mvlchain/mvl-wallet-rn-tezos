@@ -11,10 +11,10 @@ const useTradeButtonValidation = (
   onPressApprove: Function
 ): [boolean, string, Function] => {
   const { t } = useTranslation();
-  const { value, valueValid } = transactionRequestStore();
+  const { value, valueValid, tokenValue } = transactionRequestStore();
 
   const validation: [boolean, string, Function] = useMemo(() => {
-    if (!value || !valueValid) {
+    if (!(value || tokenValue) || !valueValid) {
       return [false, t('enter_amount'), () => {}];
     } else if (!isEnoughAllowance) {
       return [true, t('approve'), onPressApprove];
