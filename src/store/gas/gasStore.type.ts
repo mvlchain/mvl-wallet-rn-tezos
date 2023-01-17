@@ -11,7 +11,6 @@ export interface IGasStoreState {
   baseFeeValid: boolean;
   tipValid: boolean;
   gasValid: boolean;
-  isDataRequired: boolean;
 }
 
 export interface IGasStore extends IGasStoreState {
