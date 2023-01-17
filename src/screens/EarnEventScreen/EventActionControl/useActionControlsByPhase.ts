@@ -16,7 +16,7 @@ import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { eventLogger } from '@@utils/Log';
+import { tagLogger } from '@@utils/Logger';
 import { format, isNotBlank, isSvg } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
@@ -33,6 +33,7 @@ export const useActionControlsByPhase = (
 ): IActionControlAttrs => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const rootNavigation = useNavigation<rootStackProps>();
+  const eventLogger = tagLogger('Event');
   const { t } = useTranslation();
   const { openModal, closeModal } = globalModalStore();
   const [actionControlAttrs, setActionControlAttrs] = useState<IActionControlAttrs>(

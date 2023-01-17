@@ -7,7 +7,7 @@ import { container } from 'tsyringe';
 import { URL_DEEPLINK, URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import { WalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
-import { deepLinkLogger } from '@@utils/Log';
+import { tagLogger } from '@@utils/Logger';
 import { evaluateQueryString, evaluateUrlScheme } from '@@utils/regex';
 
 import { ThirdPartyScheme, RouteLink } from './DeepLink.type';
@@ -17,6 +17,7 @@ import * as R from './RootStack/RootNavigation';
 export const CLUTCH_APP_SCHEME = 'clutchwallet';
 
 const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+const deepLinkLogger = tagLogger('DeepLink');
 
 /**
  * React Navigation By DeepLinks
