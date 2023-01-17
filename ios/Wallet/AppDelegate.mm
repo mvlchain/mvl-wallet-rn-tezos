@@ -126,7 +126,7 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
   NSString *urlString = url.absoluteString;
-  NSLog(@"URL> %@ ", urlString);
+  NSLog(@"URL> DeepLink: %@", urlString);
   if ([urlString hasPrefix:@"clutchwallet"]) {
     if ([urlString hasPrefix:@"clutchwallet://***REMOVED***"] || [urlString hasPrefix:@"clutchwallet://***REMOVED***"]) {
       if (@available(iOS 13.0, *)) {
@@ -148,6 +148,7 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
     continueUserActivity:(NSUserActivity *)userActivity
     restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
+  NSLog(@"URL> UniversalLink: %@, %@", userActivity.webpageURL, userActivity.activityType);
   return [RCTLinkingManager application:application
                    continueUserActivity:userActivity
                      restorationHandler:restorationHandler];

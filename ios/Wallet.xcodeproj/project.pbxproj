@@ -717,7 +717,7 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTING_SEARCH_PATHS = YES;
 				INFOPLIST_FILE = Wallet/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -753,7 +753,7 @@
 				DEVELOPMENT_TEAM = F9A4LFAZ3F;
 				ENABLE_TESTING_SEARCH_PATHS = YES;
 				INFOPLIST_FILE = Wallet/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -851,13 +851,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Wallet/Wallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F9A4LFAZ3F;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F9A4LFAZ3F;
 				ENABLE_TESTING_SEARCH_PATHS = YES;
 				INFOPLIST_FILE = Wallet/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -870,7 +871,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(WALLET_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = CryptoVehicleWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "***REMOVED***";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore ***REMOVED******REMOVED***";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development ***REMOVED***";
 				SWIFT_OBJC_BRIDGING_HEADER = "Wallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

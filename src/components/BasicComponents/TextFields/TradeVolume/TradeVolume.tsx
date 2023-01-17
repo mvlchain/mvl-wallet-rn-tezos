@@ -128,7 +128,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     useCallback(() => {
       if (!value) return;
       setDisplayValue(formatBigNumber(value, tokenDto.decimals).toString(10));
-    }, [])
+    }, [!value])
   );
 
   return (
