@@ -1,10 +1,15 @@
 import 'react-native-gesture-handler/jestSetup';
 import 'reflect-metadata';
+import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
+import mockRNLocalize from 'react-native-localize/mock';
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
+
+import mockControllerManager from '../__mocks__/@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import mockLegacyAuthManager from '../__mocks__/@@store/LegacyAuthManager';
 import mockSecureKeychain from '../__mocks__/@@utils/SecureKeychain';
-
 jest.mock('@@utils/SecureKeychain', () => mockSecureKeychain);
 jest.mock('@@store/LegacyAuthManager', () => mockLegacyAuthManager);
+jest.mock('@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager', () => mockControllerManager);
 jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
 jest.mock('@toruslabs/customauth-react-native-sdk', () => () => jest.fn());
 jest.mock('@react-native-clipboard/clipboard', () => () => jest.fn());
@@ -258,9 +263,15 @@ jest.mock('react-native-vision-camera', () => {
   };
 });
 
-jest.mock('react-native-localize', () => {
-  const getTimeZone = jest.fn();
+jest.mock('react-native-localize', () => mockRNLocalize);
+
+jest.mock('react-native-device-info', () => mockRNDeviceInfo);
+
+jest.mock('react-native-splash-screen', () => {
   return {
-    getTimeZone,
+    hide: jest.fn(),
+    show: jest.fn(),
   };
 });
+
+jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);

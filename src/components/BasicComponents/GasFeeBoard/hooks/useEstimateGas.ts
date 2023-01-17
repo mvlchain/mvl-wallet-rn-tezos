@@ -24,7 +24,7 @@ const useEstimateGas = ({
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
-  tokenDto: TokenDto;
+  tokenDto?: TokenDto;
   setBlockBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setBlockGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
@@ -51,6 +51,7 @@ const useEstimateGas = ({
         console.log('fail to estimate gas');
         return;
       }
+      console.log(`estimation res: ${JSON.stringify(estimation, null, 2)}`);
       setBlockGas(estimation.gasUsage);
       //tezos return basefee after estimategas
       if (estimation.baseFee) {
@@ -60,20 +61,21 @@ const useEstimateGas = ({
     [isValidInput]
   );
 
-  const debounceEstimate = useDebounce(estimateGas, 100);
+  const debounceEstimate = useDebounce(estimateGas, 1000);
 
   useEffect(() => {
     if (!to || !value) return;
-    if (!!tokenDto.contractAddress && !data) return;
+    if (tokenDto && !!tokenDto.contractAddress && !data) return;
     if (!isValidInput) return;
-    debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
+    console.log(`debounceEstimate called`);
+    debounceEstimate({ to, value, data, contractAddress: tokenDto?.contractAddress ?? to });
   }, [to, value, data]);
 
   useInterval(() => {
     if (!to || !value) return;
-    if (!!tokenDto.contractAddress && !data) return;
+    if (tokenDto && !!tokenDto.contractAddress && !data) return;
     if (!isValidInput) return;
-    debounceEstimate({ to, value, data, contractAddress: tokenDto.contractAddress });
+    debounceEstimate({ to, value, data, contractAddress: tokenDto?.contractAddress ?? to });
   }, 20000);
 };
 export default useEstimateGas;

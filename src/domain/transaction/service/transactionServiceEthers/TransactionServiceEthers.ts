@@ -15,33 +15,25 @@ export class TransactionServiceEthers implements ITransactionServiceEthers {
 
   sendTransaction = loadingFunction<string | undefined>(
     async (selectedNetwork: Network, selectedWalletPrivateKey: string, params: TransactionRequest) => {
-      try {
-        const network = getNetworkConfig(selectedNetwork);
-        const provider = this.evmJsonRpcProviderHolder.getProvider(network.rpcUrl);
-        const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
+      const network = getNetworkConfig(selectedNetwork);
+      const provider = this.evmJsonRpcProviderHolder.getProvider(network.rpcUrl);
+      const wallet = new ethers.Wallet(selectedWalletPrivateKey, provider);
 
-        const res = await wallet.sendTransaction({
-          chainId: network.chainId,
-          ...params,
-        });
-        return res.hash;
-      } catch (err) {
-        console.log(err);
-      }
+      const res = await wallet.sendTransaction({
+        chainId: network.chainId,
+        ...params,
+      });
+      return res.hash;
     }
   );
 
   getTransaction = loadingFunction<number | undefined>(async (selectedNetwork: Network, hash: string) => {
-    try {
-      const network = getNetworkConfig(selectedNetwork);
-      const provider = this.evmJsonRpcProviderHolder.getProvider(network.rpcUrl);
+    const network = getNetworkConfig(selectedNetwork);
+    const provider = this.evmJsonRpcProviderHolder.getProvider(network.rpcUrl);
 
-      const transactionInfo = await provider.getTransaction(hash);
+    const transactionInfo = await provider.getTransaction(hash);
 
-      return transactionInfo.nonce;
-    } catch (err) {
-      console.log(err);
-    }
+    return transactionInfo.nonce;
   });
 
   encodeData = async (method: string, params: any) => {

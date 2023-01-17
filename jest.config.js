@@ -1,14 +1,14 @@
 module.exports = {
   preset: '@testing-library/react-native',
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.spec.json',
-      babelConfig: true,
-    },
-  },
   transform: {
     '^.+\\.jsx$': 'babel-jest',
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.spec.json',
+        babelConfig: true,
+      },
+    ],
   },
   transformIgnorePatterns: [
     // eslint-disable-next-line max-len

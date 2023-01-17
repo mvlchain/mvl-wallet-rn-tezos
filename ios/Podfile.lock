@@ -371,7 +371,7 @@ PODS:
     - React-Core
   - react-native-version-check (3.4.6):
     - React-Core
-  - react-native-webview (11.25.0):
+  - react-native-webview (11.13.0):
     - React-Core
   - React-perflogger (0.70.6)
   - React-RCTActionSheet (0.70.6):
@@ -450,6 +450,8 @@ PODS:
   - RNCustomAuthSdk (3.1.0):
     - CustomAuth (~> 4.1.0)
     - React
+  - RNDeviceInfo (10.3.0):
+    - React-Core
   - RNFBApp (16.4.6):
     - Firebase/CoreOnly (= 10.2.0)
     - React-Core
@@ -459,6 +461,8 @@ PODS:
     - React-Core
     - RNFBApp
   - RNFlashList (1.4.0):
+    - React-Core
+  - RNFS (2.20.0):
     - React-Core
   - RNGestureHandler (2.5.0):
     - React-Core
@@ -596,9 +600,11 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCustomAuthSdk (from `../node_modules/@toruslabs/customauth-react-native-sdk`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBDynamicLinks (from `../node_modules/@react-native-firebase/dynamic-links`)"
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
@@ -771,12 +777,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCustomAuthSdk:
     :path: "../node_modules/@toruslabs/customauth-react-native-sdk"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBDynamicLinks:
     :path: "../node_modules/@react-native-firebase/dynamic-links"
   RNFlashList:
     :path: "../node_modules/@shopify/flash-list"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNKeychain:
@@ -870,7 +880,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-version-check: dc483031cdf65d9e947aea2d6a41142d010c7e59
-  react-native-webview: a71da846ed2e9085440e1d6659c04e285528834b
+  react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
@@ -888,9 +898,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
   RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
   RNCustomAuthSdk: fbbc9f8aa33e1a6b4527e38277df362d214b15ee
+  RNDeviceInfo: 4701f0bf2a06b34654745053db0ce4cb0c53ada7
   RNFBApp: a61f530d08a0f5996b1fbdcbd1b8bb077d5d61a1
   RNFBDynamicLinks: db8903a4c376ba91c32725a6707b6ddb54f27938
   RNFlashList: 399bf6a0db68f594ad2c86aaff3ea39564f39f8a
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
