@@ -67,9 +67,15 @@ export const useTradeScreen = () => {
       setPriceImpact(priceImpact);
       const amount = new BigNumber(toTokenAmount);
       setTradeToValue(amount);
-      setState({
-        value: tradeFromValue,
-      });
+      if (selectedTokenList.find((token) => token.symbol === selectedToken.from)?.contractAddress) {
+        setState({
+          tokenValue: tradeFromValue,
+        });
+      } else {
+        setState({
+          value: tradeFromValue,
+        });
+      }
     },
   });
 
@@ -196,7 +202,7 @@ export const useTradeScreen = () => {
     setPriceImpact('-');
     setTradeFromValue(null);
     setTradeToValue(new BigNumber(0));
-    setState({ value: null, data: null });
+    setState({ value: null, data: null, tokenValue: null });
     fromTradeVolumeRef.current?.clear();
     fromTradeVolumeRef.current?.blur();
   };

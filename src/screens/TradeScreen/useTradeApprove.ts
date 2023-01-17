@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 
 import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import { getNetworkByBase } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
@@ -27,7 +28,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const { t } = useTranslation();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
-  const { to, value, valueValid, data, setState } = transactionRequestStore();
+  const { to, value, tokenValue, valueValid, data, setState } = transactionRequestStore();
   const [sentApprove, setSentApprove] = useState(false);
 
   useFocusEffect(
@@ -67,6 +68,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
       selectedNetwork: getNetworkByBase(selectedNetwork),
       selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
       ...param,
+      to: fromToken.contractAddress,
     });
     closeModal();
     Toast.show({
@@ -79,7 +81,9 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   };
 
   const onPressApprove = async () => {
-    if (!spender || !value || !fromToken) return;
+    if (!spender || !fromToken) return;
+    if (fromToken.contractAddress && !tokenValue) return;
+    if (!fromToken.contractAddress && !value) return;
     openModal(MODAL_TYPES.TEXT_MODAL, {
       label: t('approve_wallet_content'),
       title: t('approve_wallet'),
@@ -95,12 +99,12 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const isEnoughAllowance = useMemo(() => {
     if (!fromToken?.contractAddress) return true;
 
-    if (sentApprove || (allowance && value && allowance.gt(value))) {
+    if (sentApprove || (allowance && tokenValue && allowance.gt(tokenValue))) {
       return true;
     } else {
       return false;
     }
-  }, [allowance, value, !!fromToken?.contractAddress, sentApprove, valueValid]);
+  }, [allowance, tokenValue, !!fromToken?.contractAddress, sentApprove, valueValid]);
 
   return { isEnoughAllowance, onPressApprove };
 };

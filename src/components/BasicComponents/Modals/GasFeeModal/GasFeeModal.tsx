@@ -26,7 +26,7 @@ function GasFeeModal({
 }) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
-  const { to, value, data, toValid, valueValid } = transactionRequestStore();
+  const { to, value, tokenTo, tokenValue, data, toValid, valueValid } = transactionRequestStore();
 
   return (
     <ModalLayout
@@ -47,8 +47,8 @@ function GasFeeModal({
             tokenDto={tokenDto}
             onConfirmTitle={onConfirmTitle}
             hideDivider={true}
-            to={to}
-            value={value}
+            to={tokenDto.contractAddress ? tokenTo : to}
+            value={tokenDto.contractAddress ? tokenValue : value}
             data={data}
             isValidInput={toValid && valueValid}
           />
