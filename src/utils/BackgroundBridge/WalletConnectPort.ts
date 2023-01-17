@@ -1,4 +1,5 @@
 import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
 
@@ -17,7 +18,7 @@ class WalletConnectPort extends EventEmitter {
       if (msg?.data?.method === NOTIFICATION_NAMES.chainChanged) {
         // const { selectedAddress } = Engine.datamodel.flatState;
         // FIXME: get selectedAddress
-        const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+        const selectedAddress = getAddress();
         this._wcRequestActions?.updateSession?.({
           chainId: parseInt(msg.data.params.chainId, 16),
           accounts: [selectedAddress],

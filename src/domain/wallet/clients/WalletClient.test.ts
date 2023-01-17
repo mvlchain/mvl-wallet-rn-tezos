@@ -28,7 +28,7 @@ afterAll(() => {
 describe('Ether base methods', () => {
   it('create a Ethereum wallet with string type entropy, no hex prefix, no zero padding', async () => {
     const ethersClient = container.resolve(EthersWalletClient);
-    const wallet = await ethersClient.createWalletWithEntropy(PRIVATE_KEY, 0);
+    const wallet = ethersClient.createWalletWithEntropy(PRIVATE_KEY, 0);
 
     expect(wallet.address).toBe(ethAddress);
   });
@@ -36,7 +36,7 @@ describe('Ether base methods', () => {
   it('create a Ethereum wallet with string type entropy, hex prefix, no zero padding', async () => {
     const entropy = `0x${PRIVATE_KEY}`;
     const ethersClient = container.resolve(EthersWalletClient);
-    const wallet = await ethersClient.createWalletWithEntropy(entropy, 0);
+    const wallet = ethersClient.createWalletWithEntropy(entropy, 0);
 
     expect(wallet.address).toBe(ethAddress);
   });
@@ -51,7 +51,7 @@ describe('Ether base methods', () => {
 
   it('create a Ethereum wallet with mnemonic phrase and derivation path', async () => {
     const ethersClient = container.resolve(EthersWalletClient);
-    const wallet = await ethersClient.createWalletWithMnemonic(MNEMONIC, 0);
+    const wallet = ethersClient.createWalletWithMnemonic(MNEMONIC, 0);
 
     expect(wallet.address).toBe(ethAddress);
   });
@@ -62,7 +62,7 @@ describe('Tezos base methods', () => {
 
   it('create a Tezos wallet with string type entropy, no hex prefix, no zero padding', async () => {
     const tezosClient = container.resolve(TezosClient);
-    const wallet = await tezosClient.createWalletWithEntropy(PRIVATE_KEY, 0);
+    const wallet = tezosClient.createWalletWithEntropy(PRIVATE_KEY, 0);
 
     expect(wallet.address).toBe(tezosAddress);
   });
@@ -70,14 +70,14 @@ describe('Tezos base methods', () => {
   it('create a Tezos wallet with string type entropy, hex prefix, no zero padding', async () => {
     const entropy = `0x${PRIVATE_KEY}`;
     const tezosClient = container.resolve(TezosClient);
-    const wallet = await tezosClient.createWalletWithEntropy(entropy, 0);
+    const wallet = tezosClient.createWalletWithEntropy(entropy, 0);
 
     expect(wallet.address).toBe(tezosAddress);
   });
 
   it('create a Tezos wallet with mnemonic phrase and derivation path', async () => {
     const tezosClient = container.resolve(TezosClient);
-    const wallet = await tezosClient.createWalletWithMnemonic(MNEMONIC, 0);
+    const wallet = tezosClient.createWalletWithMnemonic(MNEMONIC, 0);
 
     expect(wallet.address).toBe(tezosAddress);
   });

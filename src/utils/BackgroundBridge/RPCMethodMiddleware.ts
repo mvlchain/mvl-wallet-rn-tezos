@@ -6,6 +6,7 @@ import { getVersion } from 'react-native-device-info';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
 
@@ -124,7 +125,9 @@ export const getRpcMethodMiddleware = ({
       // } = store.getState();
 
       // FIXME: get selectedAddress
-      const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+      const selectedAddress = getAddress();
+
+      console.log('address:         ', selectedAddress);
       return [selectedAddress];
 
       // const isEnabled = !!getApprovedHosts()[hostname];
@@ -253,7 +256,8 @@ export const getRpcMethodMiddleware = ({
         //   }
         // }
         // FIXME: get selectedAddress
-        const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+        const selectedAddress = getAddress();
+
         console.log(`eth_requestAccounts: ${selectedAddress}`);
         res.result = [selectedAddress];
       },

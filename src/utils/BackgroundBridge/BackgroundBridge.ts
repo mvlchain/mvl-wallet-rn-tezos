@@ -19,6 +19,7 @@ import URL from 'url-parse';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
 import MobilePortStream from './MobilePortStream';
@@ -376,8 +377,8 @@ export class BackgroundBridge extends EventEmitter {
     const { selectedNetwork } = walletPersistStore.getState();
     const networkConfig = getNetworkConfig(getNetworkByBase(selectedNetwork));
 
-    // FIXME: get selectedAddress
-    const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+    const selectedAddress = getAddress();
+
     return {
       isInitialized: true,
       isUnlocked: true,
