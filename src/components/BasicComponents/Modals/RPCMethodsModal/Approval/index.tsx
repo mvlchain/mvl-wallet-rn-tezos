@@ -3,12 +3,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
-import { useNavigation } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
 import BN from 'bn.js';
 import { toChecksumAddress } from 'ethereumjs-util';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Alert, InteractionManager, Button } from 'react-native';
+import { StyleSheet, Alert, Button } from 'react-native';
 import Modal from 'react-native-modal';
 
 import useEstimateGas from '@@components/BasicComponents/GasFeeBoard/hooks/useEstimateGas';
@@ -118,13 +117,7 @@ const Approval = () => {
   const onCancel = useCallback(() => {
     console.log(`onCancel clicked, ${JSON.stringify(transaction, null, 2)}`);
     const { transactionController } = controllerManager;
-    // TransactionController.cancelTransaction(transaction.id);
-    // console.log(`TransactionController.cancelTransaction(transaction.id) called`);
-
-    transactionController.hub.emit(`${transaction.id}:finished`, {
-      status: 'rejected',
-    });
-    console.log(`hub.emit ${transaction.id}:finished status: rejected called`);
+    transactionController.cancelTransaction(transaction.id);
 
     toggleDappTransactionModal();
   }, [transaction]);
@@ -188,50 +181,22 @@ const Approval = () => {
           }
           console.log(`selectedNetwork: ${selectedNetwork}, ${selectedWalletIndex[selectedNetwork]}`);
           const networkByBase = getNetworkByBase(selectedNetwork);
-          const txHash = await transactionService.sendTransaction({
-            selectedNetwork: networkByBase,
-            selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-            gasFeeInfo: {
-              baseFee,
-              tip: tip ?? undefined,
-              gas: blockGas,
-              total,
-            },
-            to: to,
-            value: value,
-            data: data ?? undefined,
+          await transactionController.approveTransaction(preparedTransaction.id, () => {
+            return transactionService.sendTransaction({
+              selectedNetwork: networkByBase,
+              selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+              gasFeeInfo: {
+                baseFee,
+                tip: tip ?? undefined,
+                gas: blockGas,
+                total,
+              },
+              to: to,
+              value: value,
+              data: data ?? undefined,
+            });
           });
-
-          console.log(`txHash: ${txHash}, ${transactionController.hub}`);
-          transactionController.hub.emit(`${preparedTransaction.id}:finished`, {
-            status: 'submitted',
-            transactionHash: txHash,
-          });
-          console.log(`hub.emit ${preparedTransaction.id}:finished called`);
           toggleDappTransactionModal();
-
-          // TransactionController.hub.once(`${preparedTransaction.id}:finished`, (transactionMeta: any) => {
-          //   if (transactionMeta.status === 'submitted') {
-          //     setState({ transactionHandled: true });
-          //     toggleDappTransactionModal();
-          //     // NotificationManager.watchSubmittedTransaction({
-          //     //   ...transactionMeta,
-          //     //   assetType: transaction.assetType,
-          //     // });
-          //   } else {
-          //     console.log(`transactionMeta on hub finished evt handler: ${transactionMeta}, ${JSON.stringify(transactionMeta, null, 2)}`);
-          //     // throw transactionMeta.error;
-          //   }
-          // });
-          //
-          // const fullTx = transactions.find(({ id }: any) => id === preparedTransaction.id);
-          // console.log(`fullTx: ${fullTx}, ${JSON.stringify(fullTx, null, 2)}`);
-          // const updatedTx = { ...fullTx, transaction: preparedTransaction };
-          // console.log(`updatedTx: ${updatedTx}, ${JSON.stringify(updatedTx, null, 2)}`);
-          // // await TransactionController.updateTransaction(updatedTx);
-          // console.log(`call TransactionController.approveTransaction(transaction.id), ${transaction.id}`);
-          // await TransactionController.approveTransaction(transaction.id);
-          // this.showWalletConnectNotification(true);
         } catch (error: any) {
           console.log(`error: ${error.message}`);
           if (!error?.message.startsWith(KEYSTONE_TX_CANCELED)) {

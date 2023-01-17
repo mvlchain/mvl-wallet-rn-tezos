@@ -23,7 +23,7 @@ import AppConstants from './AppConstants';
 import MobilePortStream from './MobilePortStream';
 import Port from './Port';
 
-const USER_REJECTED_ERRORS = ['user rejected', 'user denied', 'user cancelled'];
+const USER_REJECTED_ERRORS = ['user_rejected_transaction'];
 const USER_REJECTED_ERROR_CODE = 4001;
 
 function containsUserRejectedError(errorMessage: any, errorCode: any) {
