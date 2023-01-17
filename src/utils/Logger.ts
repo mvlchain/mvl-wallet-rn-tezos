@@ -1,4 +1,4 @@
-import { LogTag, LogConfigs } from './Log.type';
+import { LogTag, LogConfigs } from './Logger.type';
 
 /**
  * Logger
@@ -100,14 +100,4 @@ const tagLogger = (tag: LogTag) => {
   };
 };
 
-/**
- * Set up tag filters
- */
-setLogConfigs(['Auth', 'QrPay', 'Event', 'DeepLink']);
-
-const authLogger = tagLogger('Auth');
-const qrPayLogger = tagLogger('QrPay');
-const eventLogger = tagLogger('Event');
-const deepLinkLogger = tagLogger('DeepLink');
-
-export { tagLogger, authLogger, qrPayLogger, eventLogger, deepLinkLogger };
+export { setLogConfigs, tagLogger };

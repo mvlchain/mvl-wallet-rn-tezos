@@ -4,12 +4,13 @@ import qs from 'qs';
 
 import { URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { qrPayLogger } from '@@utils/Log';
+import { tagLogger } from '@@utils/Logger';
 
 import { IDeepLinkParam } from './ReceiveQRModal.type';
 
 export const useReceiveQRModal = () => {
   const { selectedNetwork } = walletPersistStore();
+  const qrPayLogger = tagLogger('QrPay');
 
   const generateQR = async ({ token, address, value }: IDeepLinkParam) => {
     const qrLink = await buildReceiveShortLink({ token, address, value });
@@ -23,6 +24,7 @@ export const useReceiveQRModal = () => {
     const amount = value.toString(10);
     const link = `https://l.mvlclutch.io/link-transfer/${selectedNetwork}?${qs.stringify({ tokenAddress, address, value: amount })}`;
     qrPayLogger.log(`built QrLink ${qs.stringify({ tokenAddress, address, value: amount })}`);
+    tagLogger;
     return decodeURIComponent(link);
   };
 

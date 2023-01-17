@@ -9,11 +9,12 @@ import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { qrPayLogger } from '@@utils/Log';
+import { tagLogger } from '@@utils/Logger';
 
 import { TTokenSendRouteProps } from './WalletTokenSend.type';
 const useSetSendData = () => {
   const transactionService = useDi('TransactionService');
+  const qrPayLogger = tagLogger('QrPay');
 
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;

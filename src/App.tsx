@@ -30,6 +30,7 @@ import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
 import EntryScriptWeb3 from '@@utils/BackgroundBridge/EntryScriptWeb3';
+import { setLogConfigs, tagLogger } from '@@utils/Logger';
 import SecureKeychain from '@@utils/SecureKeychain';
 
 const queryClient = new QueryClient();
@@ -46,13 +47,18 @@ function App(props: { foxCode?: string }) {
   SecureKeychain.init(props.foxCode || 'debug');
   ControllerManager.init();
   EntryScriptWeb3.init();
+  /**
+   * Set up LogTag filters to display logs in console
+   */
+  setLogConfigs(['Auth', 'QrPay', 'Event', 'DeepLink']);
+  const authLogger = tagLogger('Auth');
 
   const { appTheme } = useApp();
   useSplashScreenTransition();
   const { isSignedIn, appScreen } = authStore();
   useInitialUrl();
 
-  console.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
+  authLogger.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
 
   /**
    * TODO: 추후 인증과 관련된 모듈들은 AuthStack에서 관리하도록 리팩터링하는게 좋을 듯하다.
