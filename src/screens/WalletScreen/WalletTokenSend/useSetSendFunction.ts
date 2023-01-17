@@ -80,17 +80,20 @@ const useSetSendFunction = () => {
 
   const registerHistoryToServer = async (txHash: string, nonce: number) => {
     try {
+      if (!tokenDto.contractAddress && !to) return;
+      if (tokenDto.contractAddress && !tokenValue) return;
+      if (!tokenDto.contractAddress && !value) return;
       const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
       const transactionType = getTransactionType(network.networkId, !!tokenDto.contractAddress, tokenDto.symbol === 'BTCB', false);
       const serverRes = await transactionService.registerHistory({
         network: network.networkId,
         from: wallet.address,
-        to: tokenDto.contractAddress ?? to,
+        to: tokenDto.contractAddress ?? to!,
         data,
         hash: txHash,
         type: transactionType,
         nonce,
-        value: tokenDto.contractAddress ? tokenValue.toString(10) : value.toString(10),
+        value: tokenDto.contractAddress ? tokenValue!.toString(10) : value!.toString(10),
       });
       if (!serverRes) {
         throw new Error('fail register history');

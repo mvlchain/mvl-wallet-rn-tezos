@@ -94,7 +94,7 @@ export class TransactionService implements ITransactionService {
             gasLimit: gasFeeInfo.gas.toString(10),
             to,
             value: value ? value.toString(10) : undefined,
-            data,
+            data: data ?? undefined,
           });
         case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
           return await this.etherService.sendTransaction(selectedNetwork, wallet.privateKey, {
@@ -103,7 +103,7 @@ export class TransactionService implements ITransactionService {
             gasLimit: BnToEtherBn(gasFeeInfo.gas),
             to,
             value: value ? BnToEtherBn(value) : undefined,
-            data,
+            data: data ?? undefined,
           });
       }
     } catch (err) {

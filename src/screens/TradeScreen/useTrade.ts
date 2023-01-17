@@ -101,7 +101,6 @@ const useTrade = (
 
   const onPressTrade = async () => {
     if (!fromToken) return;
-    setGasStore({ isDataRequired: true });
     openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendTradeTransaction, onConfirmTitle: t('trade') });
   };
 

@@ -106,8 +106,8 @@ export interface ISendTransactionRequest {
   gasFeeInfo: IGasFeeInfo;
   to: string;
   from?: BigNumber;
-  value?: BigNumber;
-  data?: BytesLike;
+  value?: BigNumber | null;
+  data?: BytesLike | null;
 }
 
 export interface IRegisterTransactionRequest {
