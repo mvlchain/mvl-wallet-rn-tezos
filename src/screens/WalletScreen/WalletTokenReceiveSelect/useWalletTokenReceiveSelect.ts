@@ -14,13 +14,14 @@ import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { qrPayLogger } from '@@utils/Log';
+import { tagLogger } from '@@utils/Logger';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { IHistory, ITokenReceiveListItem } from './WalletTokenReceiveSelect.type';
 
 export const useWalletTokenReceiveSelect = () => {
   type walletTokenReceiveSelectRouteProps = RouteProp<TRootStackParamList, 'WALLET_TOKEN_RECEIVE_SELECT'>;
+  const qrPayLogger = tagLogger('QrPay');
   const { t } = useTranslation();
   const { params } = useRoute<walletTokenReceiveSelectRouteProps>();
   const { openModal, closeModal } = globalModalStore();

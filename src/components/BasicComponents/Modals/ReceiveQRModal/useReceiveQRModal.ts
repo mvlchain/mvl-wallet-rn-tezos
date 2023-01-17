@@ -4,12 +4,13 @@ import qs from 'qs';
 
 import { URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { qrPayLogger } from '@@utils/Log';
+import { tagLogger } from '@@utils/Logger';
 
 import { IDeepLinkParam } from './ReceiveQRModal.type';
 
 export const useReceiveQRModal = () => {
   const { selectedNetwork } = walletPersistStore();
+  const qrPayLogger = tagLogger('QrPay');
 
   const generateQR = async ({ token, address, value }: IDeepLinkParam) => {
     const qrLink = await buildReceiveShortLink({ token, address, value });
