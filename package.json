@@ -21,7 +21,7 @@
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,http,https,url,assert,process --hack --yarn && patch-package",
     "openapi:generate": "node ./scripts/openapi-typescript-generator.mjs",
     "download:i18n": "node translation/download.js",
-    "build:ios": "APP_ENV=staging react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'"
+    "build:ios": "APP_ENV=staging react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='ios'"
   },
   "dependencies": {
     "@ethersproject/abstract-provider": "^5.7.0",
