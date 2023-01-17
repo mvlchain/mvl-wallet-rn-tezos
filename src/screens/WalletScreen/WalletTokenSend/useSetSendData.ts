@@ -31,6 +31,7 @@ const useSetSendData = () => {
 
   useEffect(() => {
     if (params.tokenDto.contractAddress) {
+      if (!tokenTo || !tokenValue) return;
       setData(tokenTo, tokenValue);
     }
   }, [tokenTo, tokenValue]);

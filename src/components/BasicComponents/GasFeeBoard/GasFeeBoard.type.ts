@@ -8,8 +8,8 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 
 export type TGasConfirmButtonFunctionParam = {
   to: string;
-  value?: BigNumber;
-  data?: BytesLike;
+  value?: BigNumber | null;
+  data?: BytesLike | null;
   gasFeeInfo: IGasFeeInfo;
 };
 export interface IGasFeeBoardProps {

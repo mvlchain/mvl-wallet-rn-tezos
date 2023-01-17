@@ -41,8 +41,8 @@ const useTokenSend = () => {
       onConfirm: () => {
         send(param);
       },
-      to: address,
-      value: amount,
+      to: address!,
+      value: amount!,
     });
   };
 
