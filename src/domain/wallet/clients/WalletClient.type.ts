@@ -1,6 +1,6 @@
 export interface IWalletClient {
-  createWalletWithEntropy(entropy: string | Uint8Array, index?: number): Promise<IWallet>;
-  createWalletWithMnemonic(mnemonic: string, index?: number): Promise<IWallet>;
+  createWalletWithEntropy(entropy: string | Uint8Array, index?: number): IWallet;
+  createWalletWithMnemonic(mnemonic: string, index?: number): IWallet;
   getDerivationPath(index: number): string;
 }
 
