@@ -32,19 +32,17 @@ const useEstimateGas = ({
   const { selectedNetwork: pickNetwork, selectedWalletIndex } = walletPersistStore();
   const selectedNetwork = getNetworkByBase(pickNetwork);
 
-  const { isDataRequired } = gasStore();
-
   //TODO: estimategas 실패했을시 명시적으로 적을 수 있도록 작업 필요
   //advanced로 바꿔주고 입력받음
   const estimateGas = useCallback(
-    async ({ to, value, data, contractAddress }: { to: string; value: BigNumber; data?: BytesLike | null; contractAddress?: string | null }) => {
-      const isCoin = !contractAddress;
+    async ({ to, value, data }: { to: string; value: BigNumber; data?: BytesLike | null }) => {
+      console.log('to,value,data', to, value, data);
       const estimation = await gasService.estimateGas({
         selectedNetwork,
         selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-        to: isDataRequired || isCoin ? to : contractAddress,
-        value: contractAddress ? undefined : value,
-        data: isDataRequired || !isCoin ? data! : undefined,
+        to,
+        value: value?.toString(10),
+        data,
         //data set after entering to and value in useTokenSend useEffect, so add non-null assertion
       });
       if (!estimation) {
@@ -64,18 +62,13 @@ const useEstimateGas = ({
   const debounceEstimate = useDebounce(estimateGas, 1000);
 
   useEffect(() => {
-    if (!to || !value) return;
-    if (tokenDto && !!tokenDto.contractAddress && !data) return;
     if (!isValidInput) return;
-    console.log(`debounceEstimate called`);
-    debounceEstimate({ to, value, data, contractAddress: tokenDto?.contractAddress ?? to });
+    debounceEstimate({ to, value, data });
   }, [to, value, data]);
 
   useInterval(() => {
-    if (!to || !value) return;
-    if (tokenDto && !!tokenDto.contractAddress && !data) return;
     if (!isValidInput) return;
-    debounceEstimate({ to, value, data, contractAddress: tokenDto?.contractAddress ?? to });
+    debounceEstimate({ to, value, data });
   }, 20000);
 };
 export default useEstimateGas;

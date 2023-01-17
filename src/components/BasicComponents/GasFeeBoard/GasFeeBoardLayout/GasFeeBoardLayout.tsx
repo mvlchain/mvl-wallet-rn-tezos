@@ -14,7 +14,6 @@ import useCoinDto from '@@hooks/useCoinDto';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import gasStore from '@@store/gas/gasStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { width } from '@@utils/ui';
