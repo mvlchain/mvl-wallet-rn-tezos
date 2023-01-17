@@ -65,11 +65,6 @@ const _warn = (tag: LogTag, message: any, ...params: any[]) => {
   }
 };
 
-/**
- * Set up tags
- */
-setLogConfigs(['Auth', 'QrPay', 'Event']);
-
 const tagLogger = (tag: LogTag) => {
   return {
     assert: (tag: LogTag, value: boolean, message: any, ...params: any[]) => {
@@ -105,8 +100,14 @@ const tagLogger = (tag: LogTag) => {
   };
 };
 
+/**
+ * Set up tag filters
+ */
+setLogConfigs(['Auth', 'QrPay', 'Event', 'DeepLink']);
+
 const authLogger = tagLogger('Auth');
 const qrPayLogger = tagLogger('QrPay');
 const eventLogger = tagLogger('Event');
+const deepLinkLogger = tagLogger('DeepLink');
 
-export { tagLogger, authLogger, qrPayLogger, eventLogger };
+export { tagLogger, authLogger, qrPayLogger, eventLogger, deepLinkLogger };
