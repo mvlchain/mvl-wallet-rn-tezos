@@ -5,7 +5,9 @@ import TouchID from 'react-native-touch-id';
 
 import { AUTH_STAGE } from '@@constants/authStage.constant';
 import { PIN_MODE, PIN_STEP, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
+import { TOAST_TYPE } from '@@constants/toastConfig.constant';
 import { useDi } from '@@hooks/useDi';
+import useToast from '@@hooks/useToast';
 import authPersistStore from '@@store/auth/authPersistStore';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
@@ -20,6 +22,7 @@ function usePin() {
   const preSuccessCallbackRef = useRef<(input: string) => Promise<void> | undefined>();
   const { pinMode, error, step, setState, success, resetStore } = pinStore();
   const { t } = useTranslation();
+  const { showToast } = useToast();
 
   useEffect(() => {
     return () => resetStore();
@@ -60,7 +63,9 @@ function usePin() {
       setState({ step: PIN_STEP.FINISH });
     } else {
       setState({ error: { message: t('password_wrong_pin') } });
-      setInput('');
+      setTimeout(() => {
+        setInput('');
+      }, 1000);
     }
   };
 
@@ -81,6 +86,7 @@ function usePin() {
         }
         if (preSuccessCallbackRef.current) {
           await preSuccessCallbackRef.current(input);
+          showToast(TOAST_TYPE.BASIC, t('password_pin_changed'), { visibilityTime: 5500 });
         }
 
         success(input);
