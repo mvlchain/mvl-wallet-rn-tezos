@@ -7,6 +7,7 @@ import { container } from 'tsyringe';
 import { URL_DEEPLINK, URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import { WalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
+import { deepLinkLogger } from '@@utils/Log';
 import { evaluateQueryString, evaluateUrlScheme } from '@@utils/regex';
 
 import { ThirdPartyScheme, RouteLink } from './DeepLink.type';
@@ -63,22 +64,25 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
   async getInitialURL(): Promise<string | null> {
     const dynamicLink = await dynamicLinks().getInitialLink();
     if (dynamicLink) {
+      deepLinkLogger.log(`initial DynamicLink: ${dynamicLink.url}`);
       return dynamicLink.url;
     }
-    return await Linking.getInitialURL();
+    const initialUrl = await Linking.getInitialURL();
+    deepLinkLogger.log(`initial URL: ${initialUrl}`);
+    return initialUrl;
   },
 
   subscribe: (listener) => {
     const onUrlScheme = (event: { url: string }): void => {
-      console.log(`DeepLink> ${event.url}`);
-
+      deepLinkLogger.log(`${event.url}`);
       navigateByDeepLink(event.url);
-
       listener(event.url);
     };
     const urlLinkSubscription = Linking.addEventListener('url', onUrlScheme);
 
     const onDynamicLink = (dynamicLink: FirebaseDynamicLinksTypes.DynamicLink) => {
+      deepLinkLogger.log(`DynamicLink: ${dynamicLink.url}`);
+      navigateByDeepLink(dynamicLink.url);
       listener(dynamicLink.url);
     };
     const unsubscribeToDynamicLink = dynamicLinks().onLink(onDynamicLink);
@@ -109,7 +113,7 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
     // clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={eventAlias}
 
     const params = qs.parse(queryString);
-    console.log(`DeepLink> parsing params: ${JSON.stringify(params, null, 2)}`);
+    deepLinkLogger.log(`parsing params: ${JSON.stringify(params, null, 2)}`);
 
     return {
       routeName: ROOT_STACK_ROUTE.EVENT_DETAILS,
