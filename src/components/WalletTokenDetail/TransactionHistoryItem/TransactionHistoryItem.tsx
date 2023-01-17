@@ -74,7 +74,6 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   // const goToCancel = () => {
   //   navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL);
   // };
-
   return (
     <Pressable
       onPress={() => {
@@ -89,7 +88,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
         <S.HistoryItemTopContent>
           <S.TransactionHistoryContentInnerWrapper>
             <S.TransactionStatusWrapper>
-              <S.TransactionStatus>{displayStatus}</S.TransactionStatus>
+              <S.TransactionStatus>{displayStatus ?? status}</S.TransactionStatus>
               <S.TransactionDate>{dateFormatter(updatedAt)}</S.TransactionDate>
             </S.TransactionStatusWrapper>
             <S.TransactionAmountWrapper>
