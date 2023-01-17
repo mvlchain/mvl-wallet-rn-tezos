@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import { height, width } from '@@utils/ui';
+import { width } from '@@utils/ui';
 
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.color.whiteBlack};
@@ -15,8 +15,9 @@ export const ContentContainer = styled.View`
   justify-content: space-between;
 `;
 
-export const Title = styled.Text`
+export const Title = styled.Text<{ isHighlight?: boolean }>`
   ${({ theme }) => theme.font.Label.md};
+  color: ${({ theme, isHighlight }) => (isHighlight ? theme.color.primary : theme.color.blackWhite)};
   margin-bottom: ${width * 5}px;
 `;
 

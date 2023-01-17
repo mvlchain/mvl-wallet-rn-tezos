@@ -233,8 +233,9 @@ export const BrowserMain = () => {
   });
 
   useEffect(() => {
-    setApprovedHosts({ 'https://stage.mvlbridge.io': true });
+    setApprovedHosts({ [params.link]: true });
   }, []);
+
   useEffect(() => {
     setProps({
       ...props,
@@ -424,7 +425,9 @@ export const BrowserMain = () => {
    * Set initial url, dapp scripts and engine. Similar to componentDidMount
    */
   useEffect(() => {
-    const initialUrl = props.initialUrl || HOMEPAGE_URL;
+    // const initialUrl = props.initialUrl || HOMEPAGE_URL;
+    const initialUrl = params.link || HOMEPAGE_URL;
+
     go(initialUrl, true);
 
     const getEntryScriptWeb3 = async () => {

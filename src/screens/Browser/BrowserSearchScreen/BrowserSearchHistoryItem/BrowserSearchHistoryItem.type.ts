@@ -5,3 +5,7 @@ export interface IBrowserSearchHistoryItemProps {
   onPress: () => void;
   onPressDelete: () => void;
 }
+
+export interface IUseBrowserSearchHistoryItemParam {
+  title: string;
+}
