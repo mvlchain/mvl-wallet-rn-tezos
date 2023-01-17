@@ -63,7 +63,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
 
   console.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
 
-  useSetTotal({ to: to, value, blockGas });
+  useSetTotal({ blockGas });
   useSetGasState({ blockBaseFee, blockGas, advanced: false });
   useEstimateGas({ isValidInput: true, tokenDto: undefined, to, value, data, setBlockBaseFee, setBlockGas });
   useSetInitial({
