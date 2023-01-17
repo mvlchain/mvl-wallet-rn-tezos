@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +42,7 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 import { fontSize, height } from '@@utils/ui';
 
 import { ROOT_STACK_ROUTE, TRootStackParamList } from './RootStack.type';
+
 const { Navigator, Screen } = createStackNavigator<TRootStackParamList>();
 
 function RootStack() {
