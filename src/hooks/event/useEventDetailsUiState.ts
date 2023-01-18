@@ -16,13 +16,12 @@ import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
-import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
+import { ThirdPartyConnectCheckResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useAppStateChange } from '@@hooks/useAppStateChange';
 import { useDi } from '@@hooks/useDi';
 import { TADA_DRIVER, TADA_RIDER } from '@@navigation/DeepLinkOptions';
 import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
-import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import utilStore from '@@store/util/utilStore';
 import { tagLogger } from '@@utils/Logger';
@@ -41,22 +40,20 @@ import { valueOf } from '@@utils/types';
  *
  * [details] dependency
  * setDetails -> refreshThirdParty()
- *
  * refreshThirdParty() {
- *   const connection = repository.useThirdPartyConnection(appId, token)
- *   const points = repository.useUserPoints()
+ *   const connection = useThirdPartyConnection(appId, token)
+ *   const points = useUserPoints(...)
  *   setThirdPary({ connection, points })
  * }
  *
  * [thirdParty] dependency
- * const claimStatus = await repository.getClaimStatus(event.id);
- * const claimInfo = await repository.getClaimInformation(event.id);
+ * const claimStatus = await useClaimStatus(event.id);
+ * const claimInfo = await useClaimInformation(event.id);
  * setClaimStatusInfo({
  *   claimStatus, claimInfo
  * })
  *
- * [claimStatusInfo]
- *
+ * [claimStatusInfo] dependency
  * useEventDetailsUiState = () => ({
  *   ...
  *   return {
@@ -65,6 +62,10 @@ import { valueOf } from '@@utils/types';
  *     claimStatusInfo
  *   }
  * })
+ *
+ * 포인트 혹은 클레임 리워드 (이벤트의 상태에 따라 다른 API를 조회한다)
+ * when EventPhase is (BeforeEvent, OnEvent, BeforeClaim) -> useUserPoints(...)[participation/current]
+ * when it's OnClaim -> useClaimInformation(...)[claim/information]
  *
  * isClaimable field is equal to the conditions as follows
  * ```
@@ -78,11 +79,17 @@ import { valueOf } from '@@utils/types';
  *   currentPoint >= lowerLimitPoint
  * ```
  */
-export const useEarnEventDetailsUiState = (
-  id: string,
-  data?: EarnEventDto,
-  deepLink?: ThirdPartyDeepLink
-): {
+export type useEarnEventDetailsUiStateProps = {
+  id: string;
+  data?: EarnEventDto;
+  deepLink?: ThirdPartyDeepLink;
+};
+
+export const useEarnEventDetailsUiState = ({
+  id,
+  data,
+  deepLink,
+}: useEarnEventDetailsUiStateProps): {
   details: IEventDetails;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;

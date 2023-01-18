@@ -17,7 +17,6 @@ import * as R from './RootStack/RootNavigation';
 
 export const CLUTCH_APP_SCHEME = 'clutchwallet';
 
-const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
 const deepLinkLogger = tagLogger('DeepLink');
 const eventLogger = tagLogger('Event');
 
