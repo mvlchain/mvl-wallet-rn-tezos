@@ -69,6 +69,8 @@ const useBrowserSearchScreen = () => {
         confirmLabel: t('btn_got_it'),
         onConfirm: () => onPressOpenDapp(link),
       });
+    } else {
+      onPressOpenDapp(link);
     }
   };
 
