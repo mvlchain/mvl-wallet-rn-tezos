@@ -3,21 +3,17 @@ import styled from 'styled-components/native';
 import { height, width } from '@@utils/ui';
 
 export const Container = styled.View`
-  flex: 1;
   overflow: hidden;
   border-radius: ${width * 16}px;
   margin-bottom: ${height * 24}px;
 `;
 
-export const Pressable = styled.Pressable`
-  flex: 1;
-`;
+export const Pressable = styled.Pressable``;
 
-export const ImageContainer = styled.View`
-  flex: 1;
+export const ImageContainer = styled.View<{ imageHeight: number }>`
   align-items: center;
   justify-content: center;
-  max-height: ${height * 60}%;
+  height: ${({ imageHeight }) => height * imageHeight * 0.6}px;
   overflow: hidden;
 `;
 
