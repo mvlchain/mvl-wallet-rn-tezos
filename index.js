@@ -1,5 +1,4 @@
 import './shim';
-
 import Decimal from 'decimal.js';
 import { AppRegistry } from 'react-native';
 
@@ -34,7 +33,7 @@ setAxiosConfig({
     Authorization: `Basic ${encoded}`,
   },
 });
-setLogConfigs(['Auth', 'QrPay', 'Event', 'DeepLink']);
+setLogConfigs(['App', 'Auth', 'QrPay', 'Event', 'DeepLink', 'ServerShareRepository']);
 
 ControllerManager.init();
 EntryScriptWeb3.init();

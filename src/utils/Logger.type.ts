@@ -1,4 +1,4 @@
-export type LogTag = 'Auth' | 'QrPay' | 'Event' | 'DeepLink';
+export type LogTag = 'App' | 'Auth' | 'QrPay' | 'Event' | 'DeepLink' | 'ServerShareRepository';
 
 export type LogConfigs = {
   tags: Set<LogTag>;
