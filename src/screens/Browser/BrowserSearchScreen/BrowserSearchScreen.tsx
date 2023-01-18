@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 
+import { TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Device from '@@utils/device';
 
@@ -14,7 +15,8 @@ import useBrowserSearchScreen from './useBrowserSearchScreen';
 
 function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
   const { t } = useTranslation();
-  const { filteredHistory, searchValue, setSearchValue, setIsInputFocused, onPressSearch, onPressCancel } = useBrowserSearchScreen();
+  const { filteredHistory, searchValue, setSearchValue, setIsInputFocused, onPressSearch, onPressCancel, resetSearchValue } =
+    useBrowserSearchScreen();
   const renderDappItem = useCallback(({ item }: ListRenderItemInfo<IBrowserSearchHistoryItemProps>) => {
     return (
       <BrowserSearchHistoryItem
@@ -30,19 +32,22 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
   return (
     <S.Container>
       <S.SearchContainer>
-        <S.SearchInput
-          value={searchValue}
-          onChangeText={setSearchValue}
-          onSubmitEditing={onPressSearch}
-          onFocus={() => {
-            setIsInputFocused(true);
-          }}
-          onBlur={() => {
-            setIsInputFocused(false);
-          }}
-          placeholder={t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}
-          returnKeyType='search'
-        />
+        <S.SearchWrapper>
+          <S.SearchInput
+            value={searchValue}
+            onChangeText={setSearchValue}
+            onSubmitEditing={onPressSearch}
+            onFocus={() => {
+              setIsInputFocused(true);
+            }}
+            onBlur={() => {
+              setIsInputFocused(false);
+            }}
+            placeholder={t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}
+            returnKeyType='search'
+          />
+          {searchValue.length > 0 && <TextFieldDelete onPress={resetSearchValue} style={S.inlineStyles.marginProvider} />}
+        </S.SearchWrapper>
         <TextButton label={t('cancel')} disabled={false} onPress={onPressCancel} />
       </S.SearchContainer>
       <S.ContentContainer>
