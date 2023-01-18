@@ -9,6 +9,7 @@ import 'reflect-metadata';
 import './di/di';
 import '@@assets/locale/i18n';
 import { DefaultTheme, NavigationContainer, NavigationState } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorBoundary from 'react-native-error-boundary';
 import { ThemeProvider } from 'styled-components';
@@ -30,6 +31,13 @@ import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
 import { tagLogger } from '@@utils/Logger';
 import SecureKeychain from '@@utils/SecureKeychain';
+
+Sentry.init({
+  dsn: '***REMOVED***',
+  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  // We recommend adjusting this value in production.
+  tracesSampleRate: 1.0,
+});
 
 const queryClient = new QueryClient();
 
@@ -85,4 +93,4 @@ function App(props: { foxCode?: string }) {
   );
 }
 
-export default App;
+export default Sentry.wrap(App);

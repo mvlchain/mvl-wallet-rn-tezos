@@ -65,7 +65,7 @@ const useApp = () => {
     }
 
     // TODO: Error 처리 추가 (ex: sentry, crashlytics)
-    Alert.alert('Service Error', 'An unknown problem has occurred.');
+    Alert.alert('Unexpected Error', error.message);
   };
 
   setJSExceptionHandler(errorHandler, true);

@@ -502,6 +502,9 @@ PODS:
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
+  - RNSentry (4.13.0):
+    - React-Core
+    - Sentry/HybridSDK (= 7.31.5)
   - RNSVG (13.6.0):
     - React-Core
   - RxBlocking (6.5.0):
@@ -515,6 +518,7 @@ PODS:
   - RxTest (6.5.0):
     - RxSwift (= 6.5.0)
   - secp256k1.swift (0.1.4)
+  - Sentry/HybridSDK (7.31.5)
   - Torus-fetchNodeDetails (3.0.0):
     - PromiseKit/Foundation (~> 6.0)
     - web3.swift (~> 0.9.3)
@@ -611,6 +615,7 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - RxBlocking (= 6.5.0)
   - RxCocoa (= 6.5.0)
@@ -658,6 +663,7 @@ SPEC REPOS:
     - RxSwift
     - RxTest
     - secp256k1.swift
+    - Sentry
     - Torus-fetchNodeDetails
     - Torus-utils
     - TweetNacl
@@ -799,6 +805,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   TouchID:
@@ -909,6 +917,7 @@ SPEC CHECKSUMS:
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
+  RNSentry: acebe4104a6f5915ae871eb59dc73f13dcc92ef7
   RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
   RxBlocking: 04b5fd28bb5ea49f7d64b80db8bbfe50d9cc1c7d
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
@@ -916,6 +925,7 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   RxTest: eb2d23adefc5a5ebf5779c7792fa3edfe6ebcc17
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
+  Sentry: 4c9babff9034785067c896fd580b1f7de44da020
   Torus-fetchNodeDetails: 186d6bc852bfd943f8d25154f25b5cc5fd6a03b1
   Torus-utils: e3bbb4f884fce6290b43a86ee88544fbd5addb91
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
@@ -925,6 +935,6 @@ SPEC CHECKSUMS:
   web3.swift: c6c3bf1f853743f8a7a58d263e5f7e46545e22c7
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
 
-PODFILE CHECKSUM: 2cb08f5eeab50387b4b7995ee9861defc9323ea7
+PODFILE CHECKSUM: 8b242e125c9ae3d75dc819b921c84646ae71b0d1
 
 COCOAPODS: 1.11.3
