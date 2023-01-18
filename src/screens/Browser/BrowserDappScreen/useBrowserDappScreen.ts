@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+
+import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 
 const useBrowserDappScreen = () => {
-  const [sample, setSample] = useState('');
+  type rootStackProps = TRootStackNavigationProps<'MAIN'>;
+  const rootNavigation = useNavigation<rootStackProps>();
+  const onPressClose = () => {
+    rootNavigation.goBack();
+  };
+
   return {
-    sample,
+    onPressClose,
   };
 };
 

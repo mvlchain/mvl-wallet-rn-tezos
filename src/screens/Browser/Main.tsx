@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet, View, ViewStyle } from 'react-native';
 import Modal from 'react-native-modal';
 import { WebView } from 'react-native-webview';
-import { FileDownloadEvent, WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
+import { FileDownloadEvent, WebViewMessageEvent, WebViewNavigation } from 'react-native-webview/lib/WebViewTypes';
 import URL from 'url-parse';
 
 import useAccount from '@@components/Wallet/Account/useAccount';
@@ -253,6 +253,7 @@ export const BrowserMain = () => {
   const [entryScriptWeb3, setEntryScriptWeb3] = useState<string | null>(null);
   const [showPhishingModal, setShowPhishingModal] = useState(false);
   const [blockedUrl, setBlockedUrl] = useState<string | undefined>(undefined);
+  const [navState, setNavState] = useState<WebViewNavigation>();
   const webviewRef = useRef<null | WebView<any>>(null);
   const blockListType = useRef('');
 
@@ -448,9 +449,15 @@ export const BrowserMain = () => {
    */
   useEffect(() => {
     const handleAndroidBackPress = () => {
-      if (!isTabActive()) return false;
-      goBack();
-      return true;
+      if (!navState || !webviewRef.current) return;
+
+      if (navState.canGoBack) {
+        toggleOptionsIfNeeded();
+        webviewRef.current.goBack();
+        return true;
+      } else {
+        return false;
+      }
     };
 
     BackHandler.addEventListener('hardwareBackPress', handleAndroidBackPress);
@@ -466,7 +473,7 @@ export const BrowserMain = () => {
     return function cleanup() {
       BackHandler.removeEventListener('hardwareBackPress', handleAndroidBackPress);
     };
-  }, [goBack, isTabActive, props.navigation]);
+  }, [goBack, isTabActive, props.navigation, navState?.canGoBack, webviewRef.current]);
 
   /**
    * Handles state changes for when the url changes
@@ -834,6 +841,7 @@ export const BrowserMain = () => {
               testID={'browser-webview'}
               applicationNameForUserAgent={'WebView MetaMaskMobile'}
               onFileDownload={handleOnFileDownload}
+              onNavigationStateChange={setNavState}
             />
           )}
         </View>
