@@ -1,0 +1,206 @@
+import { useState, useCallback, useMemo, useEffect } from 'react';
+
+import BigNumber from 'bignumber.js';
+import { useTranslation } from 'react-i18next';
+
+import { GAS_LEVEL, GAS_UNIT } from '@@constants/gas.constant';
+import { TGasLevel } from '@@domain/gas/GasService.type';
+import { tagLogger } from '@@utils/Logger';
+
+import { IUseGasProps } from '../GasFeeBoard.type';
+import { IGasInputs } from '../common/GasInputs/GasInputs.type';
+import useEVMGasLimitValidation from '../common/hooks/useEVMGasLimitValidation';
+
+import useEIP1559Estimate from './hooks/useEIP1559Estimate';
+import useEIP1559GasPriceValidation from './hooks/useEIP1559GasPriceValidation';
+import useEIP1559GasTipValidation from './hooks/useEIP1559GasTipValidation';
+import useEIP1559Total from './hooks/useEIP1559Total';
+
+const EIP1559_LEVEL_WEIGHT = {
+  [GAS_LEVEL.LOW]: '1.1',
+  [GAS_LEVEL.MID]: '1.3',
+  [GAS_LEVEL.HIGH]: '1.7',
+};
+
+const useEIP1559Gas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseGasProps) => {
+  const gasLogger = tagLogger('Gas');
+  const { t } = useTranslation();
+  const [advanced, setAdvanced] = useState<boolean>(false);
+  const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
+
+  const [maxFeePerGas, setMaxFeePerGas] = useState<BigNumber | null>(null);
+  const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
+  const [userInputMaxFeePerGas, setUserInputMaxFeePerGas] = useState<BigNumber | null>(null);
+  const [userInputMaxPriorityFeePerGas, setUserInputMaxPriorityFeePerGas] = useState<BigNumber | null>(null);
+  const [userInputGasLimit, setUserInputGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
+
+  const leveledMaxFeePerGas = useMemo(() => {
+    return maxFeePerGas ? maxFeePerGas.multipliedBy(EIP1559_LEVEL_WEIGHT[level]) : new BigNumber(0);
+  }, [level]);
+
+  const leveledMaxFeePriorityFeePerGas = useMemo(() => {
+    switch (level) {
+      case GAS_LEVEL.LOW:
+        return new BigNumber('1').shiftedBy(9);
+      case GAS_LEVEL.MID:
+        return new BigNumber('1.5').shiftedBy(9);
+      case GAS_LEVEL.HIGH:
+        return new BigNumber('2').shiftedBy(9);
+    }
+  }, [level]);
+
+  //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
+  const total = useEIP1559Total({
+    advanced,
+    leveledMaxFeePerGas,
+    leveledMaxFeePriorityFeePerGas,
+    gasLimit,
+    userInputMaxFeePerGas,
+    userInputMaxPriorityFeePerGas,
+    userInputGasLimit,
+  });
+  //가스프라이스 조회와 가스사용량을 예측합니다.
+  useEIP1559Estimate({ advanced, to, value, data, isValidInput, tokenDto, setGasLimit, setMaxFeePerGas });
+
+  const setBaseValueForUserInputs = () => {
+    if (!advanced) return;
+    setUserInputMaxFeePerGas(leveledMaxFeePerGas);
+    setUserInputMaxPriorityFeePerGas(leveledMaxFeePriorityFeePerGas);
+    setUserInputGasLimit(gasLimit);
+  };
+  useEffect(() => {
+    setBaseValueForUserInputs();
+  }, [advanced, leveledMaxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit]);
+
+  //유저가 입력하는 값이 타당한 값인지 검증합니다.
+  const EIP1559GasPriceInputValidation = useEIP1559GasPriceValidation({
+    tokenDto,
+    advanced,
+    value,
+    leveledMaxFeePerGas,
+    leveledMaxFeePriorityFeePerGas,
+    maxFeePerGas,
+    gasLimit,
+    userInputMaxFeePerGas,
+    userInputMaxPriorityFeePerGas,
+    userInputGasLimit,
+  });
+  const EIP1559GasTipInputValidation = useEIP1559GasTipValidation({
+    tokenDto,
+    advanced,
+    value,
+    leveledMaxFeePerGas,
+    leveledMaxFeePriorityFeePerGas,
+    gasLimit,
+    userInputMaxFeePerGas,
+    userInputMaxPriorityFeePerGas,
+    userInputGasLimit,
+  });
+  const EIP1559GasLimitInputValidation = useEVMGasLimitValidation({ advanced, gasLimit, userInputGasLimit });
+
+  const toggleGasAdvanced = useCallback(() => {
+    setAdvanced(!advanced);
+  }, [advanced]);
+
+  //advanced가 true일때 사용자가 직접 입력한 값을 사용합니다.
+  //사용할 input array입니다.
+  const userInputs: Array<IGasInputs> = useMemo(() => {
+    return [
+      {
+        label: t('max_fee_per_gas'),
+        hint: { text: EIP1559GasPriceInputValidation.text, color: EIP1559GasPriceInputValidation.textColor },
+        unit: GAS_UNIT.GWEI,
+        value: userInputMaxFeePerGas,
+        setValue: setUserInputMaxFeePerGas,
+      },
+      {
+        label: t('max_priority_fee_per_gas'),
+        hint: { text: EIP1559GasTipInputValidation.text, color: EIP1559GasTipInputValidation.textColor },
+        unit: GAS_UNIT.GWEI,
+        value: userInputMaxPriorityFeePerGas,
+        setValue: setUserInputMaxPriorityFeePerGas,
+      },
+      {
+        label: t('gas_limit'),
+        hint: { text: EIP1559GasLimitInputValidation.text, color: EIP1559GasLimitInputValidation.textColor },
+        unit: GAS_UNIT.GWEI,
+        value: userInputGasLimit,
+        setValue: setUserInputGasLimit,
+      },
+    ];
+  }, [
+    EIP1559GasPriceInputValidation,
+    EIP1559GasTipInputValidation,
+    EIP1559GasLimitInputValidation,
+    userInputMaxFeePerGas,
+    userInputMaxPriorityFeePerGas,
+    userInputGasLimit,
+  ]);
+
+  //버튼활성화여부를 판단합니다.
+  const onConfirmValid = useMemo(() => {
+    switch (advanced) {
+      case true:
+        return isValidInput && !!leveledMaxFeePerGas && !!leveledMaxFeePriorityFeePerGas && !!gasLimit;
+      case false:
+        return isValidInput && EIP1559GasPriceInputValidation.status && EIP1559GasTipInputValidation.status && EIP1559GasLimitInputValidation.status;
+    }
+  }, [
+    maxFeePerGas,
+    leveledMaxFeePriorityFeePerGas,
+    gasLimit,
+    EIP1559GasPriceInputValidation.status,
+    EIP1559GasTipInputValidation.status,
+    EIP1559GasLimitInputValidation.status,
+  ]);
+
+  //버튼을 눌렀을때 실행하는 함수입니다.
+  //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
+  const wrappedOnConfirm = () => {
+    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'data:', data);
+    if (!onConfirmValid || !to) {
+      gasLogger.error('gas is not ready or to doesn`t exist! ');
+      return;
+    }
+    let gasFeeInfo;
+    switch (advanced) {
+      case true:
+        gasFeeInfo = {
+          maxFeePerGas: leveledMaxFeePerGas!,
+          maxPriorityFeePerGas: leveledMaxFeePriorityFeePerGas!,
+          gasLimit: gasLimit,
+        };
+        break;
+      case false:
+        gasFeeInfo = {
+          maxFeePerGas: userInputMaxFeePerGas!,
+          maxPriorityFeePerGas: userInputMaxPriorityFeePerGas!,
+          gasLimit: userInputGasLimit,
+        };
+        break;
+    }
+    gasLogger.log(
+      'final gas is: ',
+      'maxFeePerGas:',
+      gasFeeInfo.maxFeePerGas?.toString(10),
+      'maxPriorityFeePerGas:',
+      gasFeeInfo.maxPriorityFeePerGas.toString(10),
+      'gasLimit',
+      gasFeeInfo.gasLimit?.toString(10)
+    );
+    onConfirm({ to, value, data, gasFeeInfo });
+  };
+
+  return {
+    advanced,
+    level,
+    setLevel,
+    total,
+    toggleGasAdvanced,
+    wrappedOnConfirm,
+    onConfirmValid,
+    userInputs,
+  };
+};
+
+export default useEIP1559Gas;
