@@ -44,8 +44,6 @@ export type NetworkState = {
   properties: NetworkProperties;
 };
 
-const LOCALHOST_RPC_URL = 'http://localhost:8545';
-
 const name = 'NetworkController';
 
 export type EthQuery = any;
@@ -147,9 +145,6 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
       case 'goerli':
         this.setupInfuraProvider(type);
         break;
-      case 'localhost':
-        this.setupStandardProvider(LOCALHOST_RPC_URL);
-        break;
       case RPC:
         rpcTarget && this.setupStandardProvider(rpcTarget, chainId, ticker, nickname);
         break;
@@ -240,8 +235,10 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
    * @param providerConfig - The web3-provider-engine configuration.
    */
   set providerConfig(providerConfig: ProviderConfig) {
+    console.log(`setter providerConfig: ${JSON.stringify(providerConfig, null, 2)}`);
     this.internalProviderConfig = providerConfig;
     const { type, rpcTarget, chainId, ticker, nickname } = this.state.providerConfig;
+    console.log(`providerConfig: ${JSON.stringify(this.state.providerConfig, null, 2)}`);
     this.initializeProvider(type, rpcTarget, chainId, ticker, nickname);
     this.registerProvider();
     this.lookupNetwork();
@@ -251,12 +248,14 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
     throw new Error('Property only used for setting');
   }
 
-  async #getNetworkId(): Promise<string> {
+  private async getNetworkId(): Promise<string> {
+    const self = this;
     return await new Promise((resolve, reject) => {
-      this.ethQuery.sendAsync({ method: 'net_version' }, (error: Error, result: string) => {
+      self.ethQuery.sendAsync({ method: 'net_version' }, (error: Error, result: string) => {
         if (error) {
           reject(error);
         } else {
+          console.log(`getNetworkId net_version res: ${result}`);
           resolve(result);
         }
       });
@@ -275,7 +274,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
 
     try {
       try {
-        const networkId = await this.#getNetworkId();
+        const networkId = await this.getNetworkId();
         if (this.state.network === networkId) {
           return;
         }

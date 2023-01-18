@@ -1,8 +1,9 @@
-import { ControllerMessenger, NetworkController, PreferencesController, WalletDevice } from '@metamask/controllers';
+import { ControllerMessenger, PreferencesController, WalletDevice } from '@metamask/controllers';
 
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { MessageManager, PersonalMessageManager, TypedMessageManager } from '@@domain/message-manager';
 import { TransactionController } from '@@domain/transaction/TransactionController';
+import NetworkController from '@@domain/wallet/services/NetworkController';
 
 let instance: ControllerManager;
 
@@ -32,7 +33,7 @@ class ControllerManager {
         openSeaEnabled: false,
       }
     );
-    const provider = {
+    const providerConfig = {
       rpcTarget: 'https://goerli.infura.io/v3/***REMOVED***',
       type: 'goerli',
       chainId: '5',
@@ -43,7 +44,7 @@ class ControllerManager {
     const networkControllerOpts = {
       infuraProjectId: '***REMOVED***',
       state: {
-        provider: provider,
+        providerConfig,
       },
       messenger: this.controllerMessenger.getRestricted({
         name: 'NetworkController',
