@@ -46,7 +46,7 @@ function App(props: { foxCode?: string }) {
   /**
    * Set up LogTag filters to display logs in console
    */
-  const authLogger = tagLogger('Auth');
+  const appLogger = tagLogger('App');
 
   const { appTheme } = useApp();
   useSplashScreenTransition();
@@ -58,7 +58,7 @@ function App(props: { foxCode?: string }) {
     }
   }, []);
 
-  authLogger.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
+  appLogger.log(`isSignedIn: ${isSignedIn} appScreen: ${appScreen}`);
 
   /**
    * TODO: 추후 인증과 관련된 모듈들은 AuthStack에서 관리하도록 리팩터링하는게 좋을 듯하다.
