@@ -10,7 +10,6 @@ import {
   EarnEventGetClaimResponseDto,
   SimpleResponseDto,
 } from '@@generated/generated-scheme';
-import { mockApi } from '@@utils/mockApi';
 
 /**
  * Abstract class for testing EarnEventRepository
@@ -20,8 +19,7 @@ export class AbsTestEarnEventRepository implements EarnEventRepository {
   private events = mockApi<EarnEventDto[]>('v1/earn-event/list.json');
 
   getEventList(): Promise<EarnEventDto[]> {
-    const res = mockApi<EarnEventDto[]>('v1/earn-event/list.json');
-    return Promise.resolve(res ?? []);
+    throw new UnsupportOperationError();
   }
   getEvent(eventId: string): Promise<EarnEventDto> {
     throw new UnsupportOperationError();
