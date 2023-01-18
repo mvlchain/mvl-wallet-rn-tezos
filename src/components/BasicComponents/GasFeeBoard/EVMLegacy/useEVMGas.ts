@@ -9,9 +9,9 @@ import { tagLogger } from '@@utils/Logger';
 
 import { IUseGasProps } from '../GasFeeBoard.type';
 import { IGasInputs } from '../common/GasInputs/GasInputs.type';
+import useEVMGasLimitValidation from '../common/hooks/useEVMGasLimitValidation';
 
 import useEVMEstimate from './hooks/useEVMEstimate';
-import useEVMGasLimitValidation from './hooks/useEVMGasLimitValidation';
 import useEVMGasPriceValidation from './hooks/useEVMGasPriceValidation';
 import useEVMTotal from './hooks/useEVMTotal';
 
@@ -35,13 +35,13 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
   //가스프라이스 조회와 가스사용량을 예측합니다.
   useEVMEstimate({ advanced, to, value, data, isValidInput, tokenDto, setGasLimit, setGasPrice });
 
-  const setInitialInputs = () => {
+  const setBaseValueForUserInputs = () => {
     if (!advanced) return;
     setUserInputGasPrice(leveledGasPrice);
     setUserInputGasLimit(gasLimit);
   };
   useEffect(() => {
-    setInitialInputs();
+    setBaseValueForUserInputs();
   }, [advanced, leveledGasPrice, gasLimit]);
 
   //유저가 입력하는 값이 타당한 값인지 검증합니다.
@@ -95,21 +95,9 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
+    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'data:', data);
     if (!onConfirmValid || !to) {
-      gasLogger.error(
-        'can`t press confirm button, gas is not ready or to doesn`t exist! ',
-        'press gas confirm button!',
-        'to:',
-        to,
-        'value:',
-        value?.toString(10),
-        'data:',
-        data,
-        'gasPrice:',
-        gasPrice?.toString(10),
-        'gasLimit',
-        gasLimit?.toString(10)
-      );
+      gasLogger.error('gas is not ready or to doesn`t exist! ', 'gasPrice:');
       return;
     }
     let gasFeeInfo;
@@ -127,19 +115,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
         };
         break;
     }
-    gasLogger.log(
-      'press gas confirm button!',
-      'to:',
-      to,
-      'value:',
-      value?.toString(10),
-      'data:',
-      data,
-      'gasPrice:',
-      gasPrice?.toString(10),
-      'gasLimit',
-      gasLimit?.toString(10)
-    );
+    gasLogger.log('final gas is: ', 'gasPrice:', gasFeeInfo.gasPrice?.toString(10), 'gasLimit', gasFeeInfo.gasLimit?.toString(10));
     onConfirm({ to, value, data, gasFeeInfo });
   };
 
@@ -148,8 +124,6 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
     level,
     setLevel,
     total,
-    EVMGasPriceInputValidation,
-    EVMGasLimitInputValidation,
     toggleGasAdvanced,
     wrappedOnConfirm,
     onConfirmValid,

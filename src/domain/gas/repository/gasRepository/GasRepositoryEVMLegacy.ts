@@ -1,4 +1,4 @@
-import { TransactionRequest } from '@ethersproject/abstract-provider';
+import { FeeData, TransactionRequest } from '@ethersproject/abstract-provider';
 import { BigNumber } from 'ethers';
 import { inject, injectable } from 'tsyringe';
 
@@ -20,6 +20,11 @@ export class GasRepositoryEVMLegacy implements IGasRepositoryEVMLegacy {
     // TODO: get gasPrice from v1/fee/:networkName | v2/fee/:networkName
     const provider = this.evmJsonRpcProviderHolder.getProvider(networkInfo.rpcUrl);
     return await provider.getGasPrice();
+  });
+
+  getFeeData = loadingFunction<FeeData>(async (networkInfo: INetworkInfo) => {
+    const provider = this.evmJsonRpcProviderHolder.getProvider(networkInfo.rpcUrl);
+    return await provider.getFeeData();
   });
 
   estimateGas = loadingFunction<BigNumber>(async (networkInfo: INetworkInfo, args: TransactionRequest) => {
