@@ -126,8 +126,6 @@ export const getRpcMethodMiddleware = ({
 
       // FIXME: get selectedAddress
       const selectedAddress = getAddress();
-
-      console.log('address:         ', selectedAddress);
       return [selectedAddress];
 
       // const isEnabled = !!getApprovedHosts()[hostname];
@@ -270,13 +268,13 @@ export const getRpcMethodMiddleware = ({
         const accounts = await getAccounts();
         res.result = accounts.length > 0 ? accounts[0] : null;
       },
-      eth_sendTransaction: () => {
+      eth_sendTransaction: async () => {
         console.log(`WB INCOMING> 6. eth_sendTransaction called: ${JSON.stringify(req.params, null, 2)}`);
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[0].from,
           chainId: req.params[0].chainId,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
         next();
       },
@@ -300,7 +298,7 @@ export const getRpcMethodMiddleware = ({
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[0].from,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         if (req.params[1].length === 66 || req.params[1].length === 67) {
@@ -344,7 +342,7 @@ export const getRpcMethodMiddleware = ({
         checkTabActive();
         checkActiveAccountAndChainId({
           address: params.from,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await personalMessageManager.addUnapprovedMessageAsync({
@@ -370,7 +368,7 @@ export const getRpcMethodMiddleware = ({
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[1],
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await typedMessageManager.addUnapprovedMessageAsync(
@@ -405,7 +403,7 @@ export const getRpcMethodMiddleware = ({
         checkActiveAccountAndChainId({
           address: req.params[0],
           chainId,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await typedMessageManager.addUnapprovedMessageAsync(
@@ -440,7 +438,7 @@ export const getRpcMethodMiddleware = ({
         checkActiveAccountAndChainId({
           address: req.params[0],
           chainId,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await typedMessageManager.addUnapprovedMessageAsync(
