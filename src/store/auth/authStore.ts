@@ -2,7 +2,7 @@ import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
 
 import { TMnemonic } from '@@components/BasicComponents/Mnemonic/Mnemonic.type';
-import { isNotBlank, isBlank } from '@@utils/strings';
+import { isNotBlank } from '@@utils/strings';
 
 import { AppScreen, IAuth, IAuthState } from './authStore.type';
 

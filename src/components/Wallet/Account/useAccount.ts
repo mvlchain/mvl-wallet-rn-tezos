@@ -97,9 +97,9 @@ const useAccount = () => {
   };
 
   return {
-    walletName: walletList[selectedNetwork][_selectedWalletIndex]?.name ?? 'default wallet',
+    walletName: walletList[selectedNetwork][_selectedWalletIndex]?.name ?? 'Loading',
     networkName: getNetworkConfig(getNetworkByBase(selectedNetwork)).name,
-    address: (data && data[_selectedWalletIndex]?.address) ?? 'default address',
+    address: (data && data[_selectedWalletIndex]?.address) ?? 'Loading',
     onPressSwitchNetwork,
     onPressMore,
     onPressReceive,

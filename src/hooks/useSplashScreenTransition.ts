@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 import { Appearance } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import useApp from 'useApp';
 
 import { THEME } from '@@constants/setting.constant';
 import { useDi } from '@@hooks/useDi';
+import settingPersistStore from '@@store/setting/settingPersistStore';
 
 /**
  * Rn's splash screen policy for Android need to be handled in a separate solutin as of Android 12(api 31)
@@ -22,7 +22,7 @@ import { useDi } from '@@hooks/useDi';
  */
 export const useSplashScreenTransition = () => {
   const settingsRepository = useDi('RTNSettingsRepository');
-  const { setAppTheme } = useApp();
+  const { setAppTheme } = settingPersistStore();
 
   useEffect(() => {
     (async () => {

@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native';
 
+import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ToastPopup } from '@@components/BasicComponents/Modals/BaseModal/ToastPopup';
 import useHeader from '@@hooks/useHeader';
 import { useColor } from '@@hooks/useTheme';
@@ -48,6 +49,8 @@ function AuthStack() {
           options={handleStackHeaderOption({ title: t('confirm_seed_phrase_lbl_title') })}
         />
       </Navigator>
+
+      <LoadingIndicator />
       <ToastPopup />
     </SafeAreaView>
   );
