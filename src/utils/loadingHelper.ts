@@ -9,7 +9,7 @@ export const loadingFunction = <T>(originFunc: Function) => {
       return result;
     } catch (e) {
       utilStore.getState().endLoading();
-      throw new Error(`error:  ${e}`);
+      throw e;
     }
   };
 };

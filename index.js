@@ -1,9 +1,11 @@
 import './shim';
-
 import Decimal from 'decimal.js';
 import { AppRegistry } from 'react-native';
 
+import ControllerManager from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import appconfig from '@@config/appconfig';
+import EntryScriptWeb3 from '@@utils/BackgroundBridge/EntryScriptWeb3';
+import { setLogConfigs } from '@@utils/Logger';
 import { setAxiosConfig } from '@@utils/request';
 
 import { name as appName } from './app.json';
@@ -15,17 +17,25 @@ if (__DEV__) {
 
 Decimal.set({ precision: 1e9, toExpPos: 9e15 });
 
-(() => {
-  const { username, password } = appconfig().auth.basic;
-  const basicCredential = `${username}:${password}`;
-  const encoded = new Buffer(basicCredential, 'utf8').toString('base64');
+const {
+  baseUrl,
+  auth: {
+    basic: { username, password },
+  },
+} = appconfig();
 
-  setAxiosConfig({
-    baseURL: '***REMOVED***',
-    headers: {
-      Authorization: `Basic ${encoded}`,
-    },
-  });
-})();
+const basicCredential = `${username}:${password}`;
+const encoded = new Buffer(basicCredential, 'utf8').toString('base64');
+
+setAxiosConfig({
+  baseURL: baseUrl,
+  headers: {
+    Authorization: `Basic ${encoded}`,
+  },
+});
+setLogConfigs(['App', 'Auth', 'QrPay', 'Event', 'DeepLink', 'ServerShareRepository']);
+
+ControllerManager.init();
+EntryScriptWeb3.init();
 
 AppRegistry.registerComponent(appName, () => App);
