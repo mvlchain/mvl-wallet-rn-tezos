@@ -49,9 +49,9 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
       // [ROOT_STACK_ROUTE.DEEPLINK_CONNECT]: {
       //   path: 'connect',
       // },
-      // [ROOT_STACK_ROUTE.EVENT_DETAILS]: {
-      //   path: 'screen/earn',
-      // },
+      [ROOT_STACK_ROUTE.EVENT_DETAILS]: {
+        path: 'screen/earn',
+      },
       [ROOT_STACK_ROUTE.MAIN]: {
         screens: {
           [MAIN_TAB_ROUTE.TRADE]: {
