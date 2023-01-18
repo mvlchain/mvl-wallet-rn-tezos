@@ -114,8 +114,13 @@ export function EarnEventDetailsScreen() {
 
   const { disconnectThirdParty } = useDisconnectThirdParty();
 
-  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data, params.deepLink);
+  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState({
+    id: params.i,
+    data: params.data,
+    deepLink: params.deepLink,
+  });
   const { event, phase } = details;
+  console.log(`Details> i: ${params.i}`);
   console.log(`Details> i: ${params.i}, data: ${event?.detailPageUrl}, deepLink: ${JSON.stringify(details.deepLink)}`);
 
   const onConnectThirdPartyPress = useCallback(

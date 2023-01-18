@@ -126,5 +126,33 @@
     },
     "alias": "tada-mvp",
     "isAllowParticipationInClaim": true
+  },
+  {
+    "id": "8aa3a8c8-0f97-43f1-949e-2c19db342ddb",
+    "eventStartAt": "2023-01-02T08:45:00.000Z",
+    "eventEndAt": "2023-02-13T12:25:00.000Z",
+    "claimStartAt": "2023-02-13T14:45:00.000Z",
+    "claimEndAt": "2023-02-19T15:10:00.000Z",
+    "iconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/6wuq9iau5lkogbc",
+    "title": "트레이드하고",
+    "subTitle": "bMVL 받기",
+    "detailPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/8aa3a8c8-0f97-43f1-949e-2c19db342ddb/detail",
+    "pointInfoArr": [
+      {
+        "key": "k0",
+        "currency": "P",
+        "title": "나의 Trading Point"
+      }
+    ],
+    "pointIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/clutch/earn-event/uploaded/7616hxy42nfmb5",
+    "eventActionButtonTitle": "Trade 바로가기",
+    "eventActionScheme": "clutchwallet://screen/trade",
+    "currency": "bMVL",
+    "currencyIconUrl": "https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/mvl.svg",
+    "calcInfoPageUrl": "https://backend.stage-1pei.mvlnft.io/v1/earn-event/web/8aa3a8c8-0f97-43f1-949e-2c19db342ddb/claim/calc",
+    "claimType": "RATIO_DIVISION",
+    "app": null,
+    "alias": "trade-event-es",
+    "isAllowParticipationInClaim": false
   }
 ]
