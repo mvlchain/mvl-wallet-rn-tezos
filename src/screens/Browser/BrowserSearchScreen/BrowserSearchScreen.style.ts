@@ -18,6 +18,7 @@ export const SearchContainer = styled.View`
 export const SearchInput = styled.TextInput`
   flex: 1;
   padding: ${width * 14}px ${width * 16}px;
+  margin-right: ${width * 24}px;
   border-radius: ${width * 8}px;
   border-width: ${width * 1}px;
   border-color: ${({ theme }) => theme.color.highlight};
