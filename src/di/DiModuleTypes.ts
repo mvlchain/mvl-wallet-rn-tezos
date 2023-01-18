@@ -11,7 +11,7 @@ import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepos
 import { UIService } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { IGasService } from '@@domain/gas/GasService.type';
-import { GasRepositoryImpl } from '@@domain/gas/repository/gasRepository/GasRepository';
+import { GasRepositoryEVMLegacy } from '@@domain/gas/repository/gasRepository/GasRepositoryEVMLegacy';
 import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
@@ -52,7 +52,7 @@ export interface DiModuleTypes {
   RTNSettingsRepository: RTNSettingsRepository;
   EarnEventRepository: EarnEventRepository;
   TokenRepository: ITokenRepository;
-  GasRepository: GasRepositoryImpl;
+  GasRepositoryEVMLegacy: GasRepositoryEVMLegacy;
   GasRepositoryEip1559: GasRepositoryEip1559Impl;
   GasRepositoryTezos: GasRepositoryTezosImpl;
   TradeRepository: TradeRepository;
