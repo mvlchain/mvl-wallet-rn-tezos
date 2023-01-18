@@ -74,6 +74,10 @@ const useBrowserSearchScreen = () => {
     }
   };
 
+  const resetSearchValue = () => {
+    setSearchValue('');
+  };
+
   return {
     filteredHistory,
     searchValue,
@@ -81,6 +85,7 @@ const useBrowserSearchScreen = () => {
     setIsInputFocused,
     onPressSearch,
     onPressCancel,
+    resetSearchValue,
   };
 };
 
