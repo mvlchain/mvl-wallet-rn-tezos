@@ -116,10 +116,9 @@ export function EarnEventDetailsScreen() {
   const { disconnectThirdParty } = useDisconnectThirdParty();
   const { openModal } = globalModalStore();
 
-  console.log(`Details> i: ${params.i}`);
-
   const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data, params.deepLink);
   const { event, phase } = details;
+  console.log(`Details> i: ${params.i}, deepLink: ${JSON.stringify(details.deepLink)}`);
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
