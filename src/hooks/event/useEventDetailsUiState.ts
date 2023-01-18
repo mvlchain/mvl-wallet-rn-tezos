@@ -22,6 +22,7 @@ import { useDi } from '@@hooks/useDi';
 import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { tagLogger } from '@@utils/Logger';
 import { assembleUrl, evaluateUrlScheme } from '@@utils/regex';
 import { isNotBlank, format, isBlank } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
@@ -58,6 +59,9 @@ export const useEarnEventDetailsUiState = (
   refresh: (clearDeepLink: boolean) => Promise<void>;
 } => {
   const repository: EarnEventRepository = useDi('EarnEventRepository');
+  const eventLogger = tagLogger('Event');
+
+  eventLogger.log(`start useEarnEventDetailsUiState() with deepLink: ${JSON.stringify(deepLink)}`);
 
   const { t } = useTranslation();
   const { openModal, closeModal } = globalModalStore();
@@ -98,14 +102,6 @@ export const useEarnEventDetailsUiState = (
     },
     [details]
   );
-  // const onThirdPartyConnectionConfirm = async (appId: string, token: string | null) => {
-  //   if (token) {
-  //     const res = await connectThirdParty(appId, token);
-  //     if (res && res.status === 'ok') {
-  //       refreshThirdParty();
-  //     }
-  //   }
-  // };
 
   // refresh State<Details>
   const refresh = async (clearDeepLink: boolean = false) => {
@@ -114,7 +110,7 @@ export const useEarnEventDetailsUiState = (
       setDetails({
         event: res,
         phase: getEventPhase(res),
-        deepLink: clearDeepLink ? undefined : details.deepLink,
+        deepLink: clearDeepLink ? undefined : deepLink,
       });
     } catch (e) {
       console.error(e);
@@ -134,6 +130,8 @@ export const useEarnEventDetailsUiState = (
   const refreshThirdParty = async () => {
     const { event, phase, deepLink } = details;
     if (!event) return;
+
+    eventLogger.log(`refreshing ThirdParty with following: details.deepLink: ${JSON.stringify(details.deepLink)}`);
 
     const thirdPartyApp = event.app;
     if (!thirdPartyApp) {
