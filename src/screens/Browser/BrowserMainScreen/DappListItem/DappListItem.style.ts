@@ -22,15 +22,16 @@ export const ContentContainer = styled.View`
   border-bottom-left-radius: ${width * 16}px;
   border-bottom-right-radius: ${width * 16}px;
   border-width: ${width * 1}px;
-  border-color: ${({ theme }) => theme.color.grey100};
+  border-top-width: 0;
+  border-color: ${({ theme }) => theme.color.grey100Grey900};
 `;
 
 export const Title = styled.Text`
   ${({ theme }) => theme.font.Title.xs};
-  ${({ theme }) => theme.color.blackWhite};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
 export const Description = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md};
-  ${({ theme }) => theme.color.grey500};
+  color: ${({ theme }) => theme.color.grey500};
 `;
