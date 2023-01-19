@@ -10,9 +10,8 @@ import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRep
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
-import { IGasService } from '@@domain/gas/GasService.type';
+import { IGasService } from '@@domain/gas/Gas.type';
 import { GasRepositoryEVMLegacy } from '@@domain/gas/repository/gasRepository/GasRepositoryEVMLegacy';
-import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
@@ -53,7 +52,6 @@ export interface DiModuleTypes {
   EarnEventRepository: EarnEventRepository;
   TokenRepository: ITokenRepository;
   GasRepositoryEVMLegacy: GasRepositoryEVMLegacy;
-  GasRepositoryEip1559: GasRepositoryEip1559Impl;
   GasRepositoryTezos: GasRepositoryTezosImpl;
   TradeRepository: TradeRepository;
 

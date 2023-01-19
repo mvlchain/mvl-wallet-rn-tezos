@@ -3,8 +3,8 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { GAS_LEVEL, GAS_LEVEL_SETTING, GAS_UNIT } from '@@constants/gas.constant';
-import { TGasLevel } from '@@domain/gas/GasService.type';
+import { GAS_LEVEL, GAS_UNIT } from '@@constants/gas.constant';
+import { TGasLevel } from '@@domain/gas/Gas.type';
 import { tagLogger } from '@@utils/Logger';
 
 import { IUseGasProps } from '../GasFeeBoard.type';
@@ -15,6 +15,11 @@ import useEVMEstimate from './hooks/useEVMEstimate';
 import useEVMGasPriceValidation from './hooks/useEVMGasPriceValidation';
 import useEVMTotal from './hooks/useEVMTotal';
 
+const EVM_LEVEL_WEIGHT = {
+  [GAS_LEVEL.LOW]: '1.1',
+  [GAS_LEVEL.MID]: '1.3',
+  [GAS_LEVEL.HIGH]: '1.7',
+};
 const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { t } = useTranslation();
@@ -27,7 +32,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
   const [userInputGasLimit, setUserInputGasLimit] = useState<BigNumber | null>(null);
 
   const leveledGasPrice = useMemo(() => {
-    return gasPrice ? gasPrice.multipliedBy(GAS_LEVEL_SETTING[level].weight) : new BigNumber(0);
+    return gasPrice ? gasPrice.multipliedBy(EVM_LEVEL_WEIGHT[level]) : new BigNumber(0);
   }, [level, gasPrice]);
 
   //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.

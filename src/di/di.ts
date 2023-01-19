@@ -18,7 +18,6 @@ import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasService } from '@@domain/gas/GasService';
 import { GasRepositoryEVMLegacy } from '@@domain/gas/repository/gasRepository/GasRepositoryEVMLegacy';
-import { GasRepositoryEip1559Impl } from '@@domain/gas/repository/gasRepositoryEip1559/GasRepositoryEIP1559';
 import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
@@ -123,10 +122,6 @@ container.register('GasService', {
 
 container.register('GasRepositoryEVMLegacy', {
   useFactory: instancePerContainerCachingFactory<GasRepositoryEVMLegacy>((container) => container.resolve(GasRepositoryEVMLegacy)),
-});
-
-container.register('GasRepositoryEip1559', {
-  useFactory: instancePerContainerCachingFactory<GasRepositoryEip1559Impl>((container) => container.resolve(GasRepositoryEip1559Impl)),
 });
 
 container.register('GasRepositoryTezos', {

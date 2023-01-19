@@ -4,34 +4,33 @@ import { useTranslation } from 'react-i18next';
 
 import CustomRadio from '@@components/BasicComponents/Form/CustomRadio';
 import { GAS_LEVEL } from '@@constants/gas.constant';
-import gasStore from '@@store/gas/gasStore';
+import { TGasLevel } from '@@domain/gas/Gas.type';
 
 import * as S from './GasLevelRadioButtons.style';
 
-function GasLevelRadioButtons() {
+function GasLevelRadioButtons({ level, setLevel }: { level: TGasLevel; setLevel: (level: TGasLevel) => void }) {
   const { t } = useTranslation();
-  const { level, setState } = gasStore();
 
   const options = [
     {
       label: t('speed_low'),
       level: GAS_LEVEL.LOW,
       onPress: () => {
-        setState({ level: GAS_LEVEL.LOW });
+        setLevel(GAS_LEVEL.LOW);
       },
     },
     {
       label: t('speed_mid'),
       level: GAS_LEVEL.MID,
       onPress: () => {
-        setState({ level: GAS_LEVEL.MID });
+        setLevel(GAS_LEVEL.MID);
       },
     },
     {
       label: t('speed_high'),
       level: GAS_LEVEL.HIGH,
       onPress: () => {
-        setState({ level: GAS_LEVEL.HIGH });
+        setLevel(GAS_LEVEL.HIGH);
       },
     },
   ];
