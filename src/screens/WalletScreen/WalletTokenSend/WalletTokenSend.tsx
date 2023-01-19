@@ -17,7 +17,7 @@ import useTokenSend from './useTokenSend';
 function WalletTokenSend() {
   const { params } = useRoute<TTokenSendRouteProps>();
   const { amount, setAmount, address, setAddress, confirm } = useTokenSend();
-  const { value, data, toValid, valueValid, transferParam } = transactionRequestStore();
+  const { value, data, toValid, valueValid, transferParam, to } = transactionRequestStore();
   return (
     <DismissKeyboardView>
       <S.Container>
@@ -28,7 +28,7 @@ function WalletTokenSend() {
           hideDivider={false}
           onConfirm={confirm}
           tokenDto={params.tokenDto}
-          to={address}
+          to={to}
           value={value}
           data={data}
           isValidInput={toValid && valueValid}

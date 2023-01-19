@@ -5,5 +5,5 @@ import { BigNumber } from 'ethers';
 export interface IGasRepositoryEthers {
   getGasPrice: (selectedNetwork: Network) => Promise<BigNumber>;
   getFeeData: (selectedNetwork: Network) => Promise<FeeData>;
-  estimateGas: (selectedNetwork: Network, args: TransactionRequest) => Promise<BigNumber>;
+  estimateGas: (selectedNetwork: Network, selectedWalletIndex: number, args: TransactionRequest) => Promise<BigNumber>;
 }
