@@ -16,7 +16,7 @@ import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShar
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
-import { GasRepositoryEVMLegacy } from '@@domain/gas/gasRepository/GasRepositoryEVMLegacy';
+import { GasRepositoryEthers } from '@@domain/gas/gasRepositoryEthers/GasRepositoryEthers';
 import { GasRepositoryTezosImpl } from '@@domain/gas/gasRepositoryTezos/GasRepositoryTezos';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
@@ -110,8 +110,8 @@ container.register('TransactionServiceTezos', {
   useFactory: instancePerContainerCachingFactory<TransactionServiceTezos>((container) => container.resolve(TransactionServiceTezos)),
 });
 
-container.register('GasRepositoryEVMLegacy', {
-  useFactory: instancePerContainerCachingFactory<GasRepositoryEVMLegacy>((container) => container.resolve(GasRepositoryEVMLegacy)),
+container.register('GasRepositoryEthers', {
+  useFactory: instancePerContainerCachingFactory<GasRepositoryEthers>((container) => container.resolve(GasRepositoryEthers)),
 });
 
 container.register('GasRepositoryTezos', {

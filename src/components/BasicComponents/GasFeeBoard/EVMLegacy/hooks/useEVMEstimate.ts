@@ -30,7 +30,7 @@ const useEVMEstimate = ({
   setGasPrice: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
   const gasLogger = tagLogger('Gas');
-  const gasRepository = useDi('GasRepositoryEVMLegacy');
+  const gasRepository = useDi('GasRepositoryEthers');
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
 
