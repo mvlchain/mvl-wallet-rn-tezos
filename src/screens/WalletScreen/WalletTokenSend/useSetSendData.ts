@@ -21,7 +21,7 @@ const useSetSendData = () => {
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
 
-  const { setState: setBody, resetBody, tokenTo, tokenValue } = transactionRequestStore();
+  const { setState: setBody, resetBody, tokenTo, tokenValue, to, value } = transactionRequestStore();
   const { resetTotal } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
@@ -31,14 +31,6 @@ const useSetSendData = () => {
   useEffect(() => {
     setInitialFromRouteProps();
   }, []);
-
-  useEffect(() => {
-    if (!params.tokenDto.contractAddress) return;
-    if (!tokenTo || !tokenValue) return;
-
-    setData(tokenTo, tokenValue);
-  }, [tokenTo, tokenValue]);
-
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', clearSendInput);
     return () => backHandler.remove();
@@ -48,12 +40,20 @@ const useSetSendData = () => {
     qrPayLogger.log(`initializing RouteProps: ${JSON.stringify(params?.scanData)} to TokenSender`);
 
     if (params?.scanData?.address) {
-      setBody({ to: params.scanData.address });
+      if (tokenDto.contractAddress) {
+        setBody({ tokenTo: params.scanData.address, to: tokenDto.contractAddress });
+      } else {
+        setBody({ to: params.scanData.address });
+      }
     }
     if (params?.scanData?.amount) {
       const amount = new BigNumber(params.scanData.amount);
       qrPayLogger.log(`amount: ${amount.toString(10)}`);
-      setBody({ value: amount });
+      if (tokenDto.contractAddress) {
+        setBody({ tokenValue: amount });
+      } else {
+        setBody({ value: amount });
+      }
     }
   };
 
@@ -98,6 +98,13 @@ const useSetSendData = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (!params.tokenDto.contractAddress) return;
+    if (!tokenTo || !tokenValue) return;
+    console.log('wallet token send Set data: ', 'tokenTo', tokenTo, 'tokenValue', tokenValue, 'to', to, 'value', value);
+    setData(tokenTo, tokenValue);
+  }, [tokenTo, tokenValue, params.tokenDto.contractAddress]);
 
   return {
     setAddress,
