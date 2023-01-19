@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { View } from 'react-native';
+
 import { GasTextField } from '@@components/BasicComponents/TextFields/GasTextField/GasTextField';
 import { height } from '@@utils/ui';
 
@@ -11,12 +13,12 @@ function GasInputs({ inputs }: { inputs: Array<IGasInputs> }) {
     <S.Container>
       {inputs.map((v, i) => {
         return (
-          <>
+          <View key={i + v.label}>
             <S.Label style={{ marginTop: i === 0 ? 0 : height * 24 }}>{v.label}</S.Label>
             <S.InputWrapper>
               <GasTextField value={v.value} setValue={v.setValue} unit={v.unit} hint={v.hint} />
             </S.InputWrapper>
-          </>
+          </View>
         );
       })}
     </S.Container>

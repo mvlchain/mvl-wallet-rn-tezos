@@ -13,6 +13,10 @@ export interface ITezosTotalProps {
 }
 
 const useTezosTotal = ({ advanced, baseFee, leveledTip, storageLimit, storageFee, userInputBaseFee, userInputTip }: ITezosTotalProps) => {
+  const getTotal = (baseFee: BigNumber | null, tip: BigNumber | null) => {
+    if (!baseFee || !tip) return null;
+    return baseFee.plus(tip);
+  };
   const total = useMemo(() => {
     switch (advanced) {
       case true:
@@ -21,11 +25,6 @@ const useTezosTotal = ({ advanced, baseFee, leveledTip, storageLimit, storageFee
         return getTotal(baseFee, leveledTip);
     }
   }, [advanced, baseFee, leveledTip, userInputBaseFee, userInputTip]);
-
-  const getTotal = (baseFee: BigNumber | null, tip: BigNumber | null) => {
-    if (!baseFee || !tip) return null;
-    return baseFee.plus(tip);
-  };
 
   return total;
 };

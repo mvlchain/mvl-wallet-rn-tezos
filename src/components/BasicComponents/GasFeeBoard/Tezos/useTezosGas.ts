@@ -12,6 +12,7 @@ import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { ITezosUseGasProps, IUseGasProps } from '../GasFeeBoard.type';
 import { IGasInputs } from '../common/GasInputs/GasInputs.type';
+import useSetGasTotalGlobal from '../common/hooks/useSetGasTotalGlobal';
 
 import useTezosBaseFeeValidation from './hooks/useTezosBaseFeeValidation';
 import useTezosEstimate from './hooks/useTezosEstimate';
@@ -26,7 +27,6 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
   const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
 
   const [baseFee, setBaseFee] = useState<BigNumber | null>(null);
-  const [tip, setTip] = useState<BigNumber | null>(null);
   const [storageLimit, setStorageLimit] = useState<BigNumber | null>(null);
   //테조스의 가스와 스토리지비용은 유저가 수정할 수 없다.
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(null);
@@ -59,18 +59,15 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
   //가스프라이스 조회와 가스사용량을 예측합니다.
   useTezosEstimate({ advanced, to, value, transferParam, isValidInput, tokenDto, setGasLimit, setStorageFee, setStorageLimit, setBaseFee });
 
-  const setBaseValueForUserInputs = () => {
-    if (!advanced) return;
-    setUserInputBaseFee(baseFee);
-    // setUserInputStorageLimit(storageLimit);
-    setUserInputTip(tip);
-  };
   useEffect(() => {
-    setBaseValueForUserInputs();
-  }, [advanced, baseFee, storageLimit, tip]);
+    setUserInputBaseFee(baseFee);
+  }, [advanced, baseFee]);
+  useEffect(() => {
+    setUserInputTip(leveledTip);
+  }, [advanced, leveledTip]);
 
   //유저가 입력하는 값이 타당한 값인지 검증합니다.
-  const baseFeeInputValidation = useTezosBaseFeeValidation({
+  const userInputBaseFeeValidation = useTezosBaseFeeValidation({
     tokenDto,
     advanced,
     value,
@@ -81,7 +78,7 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
     userInputBaseFee,
     userInputTip,
   });
-  const tipInputValidation = useTezosTipValidation({
+  const userInputTipValidation = useTezosTipValidation({
     tokenDto,
     advanced,
     value,
@@ -103,35 +100,36 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
     return [
       {
         label: t('base_fee'),
-        hint: { text: baseFeeInputValidation.text, color: baseFeeInputValidation.textColor },
+        hint: { text: userInputBaseFeeValidation.text, color: userInputBaseFeeValidation.textColor },
         unit: GAS_UNIT.MUTEZ,
         value: userInputBaseFee,
         setValue: setUserInputBaseFee,
       },
       {
         label: t('tip'),
-        hint: { text: tipInputValidation.text, color: tipInputValidation.textColor },
+        hint: { text: userInputTipValidation.text, color: userInputTipValidation.textColor },
         unit: GAS_UNIT.MUTEZ,
         value: userInputTip,
         setValue: setUserInputTip,
       },
-      {
-        label: t('storage_fee'),
-        hint: null,
-        unit: GAS_UNIT.MUTEZ,
-        value: storageFee,
-        setValue: () => {},
-      },
-      {
-        //storageLimit은 어떻게 쓰이는지 받아서 밸리데이션 처리 나중에해주고 지금은 보여주기만
-        label: t('storage_limit'),
-        hint: null,
-        unit: GAS_UNIT.MUTEZ,
-        value: storageLimit,
-        setValue: () => {},
-      },
+      // 아래 항목 사용하기 전 까지 숨김처리
+      // {
+      //   label: t('storage_fee'),
+      //   hint: null,
+      //   unit: GAS_UNIT.MUTEZ,
+      //   value: storageFee,
+      //   setValue: () => {},
+      // },
+      // {
+      //   //storageLimit은 어떻게 쓰이는지 받아서 밸리데이션 처리 나중에해주고 지금은 보여주기만
+      //   label: t('storage_limit'),
+      //   hint: null,
+      //   unit: undefined,
+      //   value: storageLimit,
+      //   setValue: () => {},
+      // },
     ];
-  }, [baseFeeInputValidation, tipInputValidation, userInputBaseFee, userInputTip, storageFee]);
+  }, [userInputBaseFeeValidation, userInputTipValidation, userInputBaseFee, userInputTip, storageFee]);
 
   //버튼활성화여부를 판단합니다.
   const onConfirmValid = useMemo(() => {
@@ -139,33 +137,35 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
       case true:
         return isValidInput && !!baseFee && !!leveledTip;
       case false:
-        return isValidInput && baseFeeInputValidation.status && tipInputValidation.status;
+        return isValidInput && userInputBaseFeeValidation.status && userInputTipValidation.status;
     }
-  }, [baseFee, leveledTip, baseFeeInputValidation.status, tipInputValidation.status]);
+  }, [baseFee, leveledTip, userInputBaseFeeValidation.status, userInputTipValidation.status]);
 
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
     gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'transferParam:', transferParam);
-    if (!onConfirmValid || !to || !value || !total) {
+    if (!onConfirmValid || !to || !total) {
       gasLogger.error('gas is not ready.');
       return;
     }
     gasLogger.log('final gas is: ', 'fee:', total?.toString(10));
-    const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10);
+
     const fee = total.toNumber();
 
     if (tokenDto.contractAddress) {
       onConfirm({ ...transferParam, fee });
     } else {
+      if (!value) {
+        gasLogger.error('gas is not ready.');
+        return;
+      }
+      const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10);
       onConfirm({ to, amount, fee });
     }
   };
 
-  useEffect(() => {
-    //글로벌스토어 total임 useState아님 주의
-    setTotal(total);
-  }, [total]);
+  useSetGasTotalGlobal(total, gasLimit);
 
   return {
     advanced,

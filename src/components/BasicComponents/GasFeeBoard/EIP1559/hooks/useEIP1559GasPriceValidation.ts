@@ -12,9 +12,9 @@ import useRemainBalance from '../../common/hooks/useRemainBalance';
 interface IUseEIP1559GasPriceValidationProps {
   tokenDto: TokenDto;
   advanced: boolean;
-  leveledMaxFeePerGas: BigNumber | null;
-  leveledMaxFeePriorityFeePerGas: BigNumber | null;
   maxFeePerGas: BigNumber | null;
+  leveledMaxFeePriorityFeePerGas: BigNumber | null;
+  lastBaseFeePerGas: BigNumber | null;
   gasLimit: BigNumber | null;
   userInputMaxFeePerGas: BigNumber | null;
   userInputMaxPriorityFeePerGas: BigNumber | null;
@@ -26,9 +26,9 @@ const useEIP1559GasPriceValidation = ({
   tokenDto,
   advanced,
   value,
-  leveledMaxFeePerGas,
-  leveledMaxFeePriorityFeePerGas,
   maxFeePerGas,
+  leveledMaxFeePriorityFeePerGas,
+  lastBaseFeePerGas,
   gasLimit,
   userInputMaxFeePerGas,
   userInputMaxPriorityFeePerGas,
@@ -43,7 +43,7 @@ const useEIP1559GasPriceValidation = ({
 
   const check = (
     maxFeePerGas: BigNumber | null,
-    defaultMaxFeePerGas: BigNumber | null, //level에 따라 가중치를 주지 않은 블록체인으로부터 처음 받아 저장했던 값
+    lastBaseFeePerGas: BigNumber | null, //level에 따라 가중치를 주지 않은 블록체인으로부터 처음 받아 저장했던 값
     maxPriorityFeePerGas: BigNumber | null,
     gasLimit: BigNumber | null
   ) => {
@@ -51,7 +51,7 @@ const useEIP1559GasPriceValidation = ({
       !BigNumber.isBigNumber(gasLimit) ||
       !BigNumber.isBigNumber(maxPriorityFeePerGas) ||
       !BigNumber.isBigNumber(maxFeePerGas) ||
-      !BigNumber.isBigNumber(defaultMaxFeePerGas)
+      !BigNumber.isBigNumber(lastBaseFeePerGas)
     ) {
       setStatus(false);
       setText(maximumIS(remainBalanceStr));
@@ -70,7 +70,7 @@ const useEIP1559GasPriceValidation = ({
       setTextColor(red);
 
       return;
-    } else if (maxFeePerGas.lt(defaultMaxFeePerGas)) {
+    } else if (maxFeePerGas.lt(lastBaseFeePerGas)) {
       setStatus(true);
       setText(t('warning _lower_than_network'));
       setTextColor(red);
@@ -94,10 +94,10 @@ const useEIP1559GasPriceValidation = ({
   const runCheck = () => {
     switch (advanced) {
       case true:
-        check(leveledMaxFeePerGas, maxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
+        check(maxFeePerGas, lastBaseFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
         return;
       case false:
-        check(userInputMaxFeePerGas, maxFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
+        check(userInputMaxFeePerGas, lastBaseFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
         return;
     }
   };
@@ -107,9 +107,9 @@ const useEIP1559GasPriceValidation = ({
   }, [
     advanced,
     value,
-    leveledMaxFeePerGas,
-    leveledMaxFeePriorityFeePerGas,
     maxFeePerGas,
+    leveledMaxFeePriorityFeePerGas,
+    lastBaseFeePerGas,
     gasLimit,
     userInputMaxFeePerGas,
     userInputMaxPriorityFeePerGas,

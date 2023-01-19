@@ -13,37 +13,39 @@ import { IGetTransferParam, ITransactionServiceTezos } from './TransactionServic
 export class TransactionServiceTezos implements ITransactionServiceTezos {
   constructor(@inject('WalletService') private walletService: WalletService) {}
 
-  getTransferParam = async ({ selectedNetwork, selectedWalletIndex, to, amount, contractAddress }: IGetTransferParam) => {
-    const network = getNetworkConfig(selectedNetwork);
-    const Tezos = new TezosToolkit(network.rpcUrl);
-    const walletInfo = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
-    Tezos.setProvider({
-      signer: new InMemorySigner(walletInfo.privateKey),
-    });
-    const contract = await Tezos.wallet.at(contractAddress, tzip12);
-    Tezos.addExtension(new Tzip12Module());
-    let params;
-    const from = walletInfo.address;
-    if (faType(contractAddress) === 'fa12') {
-      params = contract.methods.transfer(from, to, amount).toTransferParams();
-    } else {
-      params = contract.methods
-        .transfer([
-          {
-            from_: from,
-            txs: [
-              {
-                to_: to,
-                token_id: 0,
-                amount: amount,
-              },
-            ],
-          },
-        ])
-        .toTransferParams();
+  getTransferParam = loadingFunction<TransferParams>(
+    async ({ selectedNetwork, selectedWalletIndex, to, amount, contractAddress }: IGetTransferParam) => {
+      const network = getNetworkConfig(selectedNetwork);
+      const Tezos = new TezosToolkit(network.rpcUrl);
+      const walletInfo = await this.walletService.getWalletInfo({ index: selectedWalletIndex, network: selectedNetwork });
+      Tezos.setProvider({
+        signer: new InMemorySigner(walletInfo.privateKey),
+      });
+      const contract = await Tezos.wallet.at(contractAddress, tzip12);
+      Tezos.addExtension(new Tzip12Module());
+      let params;
+      const from = walletInfo.address;
+      if (faType(contractAddress) === 'fa12') {
+        params = contract.methods.transfer(from, to, amount).toTransferParams();
+      } else {
+        params = contract.methods
+          .transfer([
+            {
+              from_: from,
+              txs: [
+                {
+                  to_: to,
+                  token_id: 0,
+                  amount: amount,
+                },
+              ],
+            },
+          ])
+          .toTransferParams();
+      }
+      return params;
     }
-    return params;
-  };
+  );
   // Tezos는 general한 sendTransaction을 raw string data를 활용하는 방식으로 구현하기 어려워서 transfer 기준으로 일단 구현
   sendTransaction = loadingFunction<WalletOperation>(async (selectedNetwork: Network, selectedWalletIndex: number, params: TransferParams) => {
     const network = getNetworkConfig(selectedNetwork);

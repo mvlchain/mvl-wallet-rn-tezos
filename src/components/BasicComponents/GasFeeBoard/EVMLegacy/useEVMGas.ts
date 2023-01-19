@@ -11,13 +11,14 @@ import { BnToEtherBn } from '@@utils/formatBigNumber';
 import { IUseGasProps } from '../GasFeeBoard.type';
 import { IGasInputs } from '../common/GasInputs/GasInputs.type';
 import useEVMGasLimitValidation from '../common/hooks/useEVMGasLimitValidation';
+import useSetGasTotalGlobal from '../common/hooks/useSetGasTotalGlobal';
 
 import useEVMEstimate from './hooks/useEVMEstimate';
 import useEVMGasPriceValidation from './hooks/useEVMGasPriceValidation';
 import useEVMTotal from './hooks/useEVMTotal';
 
 const EVM_LEVEL_WEIGHT = {
-  [GAS_LEVEL.LOW]: '1.1',
+  [GAS_LEVEL.LOW]: '1.0',
   [GAS_LEVEL.MID]: '1.3',
   [GAS_LEVEL.HIGH]: '1.7',
 };
@@ -42,14 +43,12 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
   //가스프라이스 조회와 가스사용량을 예측합니다.
   useEVMEstimate({ advanced, to, value, data, isValidInput, setGasLimit, setGasPrice });
 
-  const setBaseValueForUserInputs = () => {
-    if (!advanced) return;
-    setUserInputGasPrice(leveledGasPrice);
-    setUserInputGasLimit(gasLimit);
-  };
   useEffect(() => {
-    setBaseValueForUserInputs();
-  }, [advanced, leveledGasPrice, gasLimit]);
+    setUserInputGasPrice(leveledGasPrice);
+  }, [advanced, leveledGasPrice]);
+  useEffect(() => {
+    setUserInputGasLimit(gasLimit);
+  }, [advanced, gasLimit]);
 
   //유저가 입력하는 값이 타당한 값인지 검증합니다.
   const EVMGasPriceInputValidation = useEVMGasPriceValidation({
@@ -82,7 +81,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
       {
         label: t('gas_limit'),
         hint: { text: EVMGasLimitInputValidation.text, color: EVMGasLimitInputValidation.textColor },
-        unit: GAS_UNIT.GWEI,
+        unit: undefined,
         value: userInputGasLimit,
         setValue: setUserInputGasLimit,
       },
@@ -126,10 +125,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
     onConfirm({ to, value: BnToEtherBn(value) ?? undefined, data: data ?? undefined, ...gasFeeInfo });
   };
 
-  useEffect(() => {
-    //글로벌스토어 total임 useState아님 주의
-    setTotal(total);
-  }, [total]);
+  useSetGasTotalGlobal(total, gasLimit);
 
   return {
     advanced,
