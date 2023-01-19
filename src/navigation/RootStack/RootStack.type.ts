@@ -3,7 +3,7 @@ import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 import { Network } from '@@constants/network.constant';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
-import { IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import { IGetTransactionHistoryResponse } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
 

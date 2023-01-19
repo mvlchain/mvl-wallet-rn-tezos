@@ -57,7 +57,7 @@ const useSetSendFunction = () => {
     try {
       switch (network.networkId) {
         case NETWORK_ID.XTZ:
-          return await transactionServiceTezos.sendTransaction(selectedNetwork, selectedWalletIndex[selectedNetwork], params);
+          return await transactionServiceTezos.sendTransaction(selectedNetwork, selectedWalletIndex[selectedNetwork], params as TransferParams);
 
         default:
           if (tokenDto.contractAddress) {

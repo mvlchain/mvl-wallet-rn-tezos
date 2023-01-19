@@ -1,3 +1,7 @@
+import React from 'react';
+
+import { SafeAreaView } from 'react-native';
+
 import { getNetworkByBase, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
@@ -69,6 +73,6 @@ const GasFeeBoard = ({
     }
   };
 
-  return <>{renderAlongWithNetwork()}</>;
+  return <SafeAreaView>{renderAlongWithNetwork()}</SafeAreaView>;
 };
 export default GasFeeBoard;
