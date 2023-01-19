@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { BytesLike, BigNumber as BigNumberEther } from 'ethers';
 
 import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
-import { getNetworkByBase } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
@@ -33,10 +33,11 @@ const useEIP1559Estimate = ({
 }) => {
   const gasLogger = tagLogger('Gas');
   //EVMLegacy와 동일한 Repository사용하지만 리턴되어 오는 값에 차이 존재함
-  const gasRepository = useDi('GasRepositoryEVMLegacy');
+  const gasRepository = useDi('GasRepositoryEthers');
 
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
+
   const fetchMaxFeePerGas = async () => {
     const feeData = await gasRepository.getFeeData(testIncludeSelectedNetwork);
     console.log(
