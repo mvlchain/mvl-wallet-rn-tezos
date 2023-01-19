@@ -21,7 +21,7 @@ export const BSC_TOKEN_LIST = [
   {
     contractAddress: null,
     decimals: 18,
-    logoURI: 'https://exchange.biswap.org/images/coins/bnb.svg',
+    logoURI: 'https://tokens.1inch.io/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c_1.png',
     name: 'BNB',
     priceId: 'binancecoin',
     symbol: 'BNB',
@@ -67,7 +67,7 @@ export const BSC_TESTNET_TOKEN_LIST = [
   {
     contractAddress: null,
     decimals: 18,
-    logoURI: 'https://exchange.biswap.org/images/coins/bnb.svg',
+    logoURI: 'https://tokens.1inch.io/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c_1.png',
     name: 'BNB',
     priceId: 'binancecoin',
     symbol: 'BNB',

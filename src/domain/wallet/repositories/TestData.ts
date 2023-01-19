@@ -29,7 +29,7 @@ export const BSC_TOKENLIST = [
   {
     contractAddress: null,
     decimals: 18,
-    logoURI: 'https://exchange.biswap.org/images/coins/bnb.svg',
+    logoURI: 'https://static.biswap.org/bs/coins/bnb.svg',
     name: 'BNB',
     priceId: 'binancecoin',
     symbol: 'BNB',

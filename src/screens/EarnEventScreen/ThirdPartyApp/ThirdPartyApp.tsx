@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import DropShadow from 'react-native-drop-shadow';
 
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import Picture from '@@components/BasicComponents/Picture';
+import { getWidth } from '@@utils/ui';
 
 import * as S from './ThirdPartyApp.style';
 import { IThirdPartyAppProps } from './ThirdPartyApp.type';
@@ -21,7 +23,7 @@ export function ThirdPartyApp({
   return (
     <DropShadow style={S.style.shadow}>
       <S.Container>
-        <S.ThirdPartyAvatar source={{ uri: avatarUrl }} />
+        <Picture url={avatarUrl} width={getWidth(40)} height={getWidth(40)} />
         <S.ThirdPartyConnectionLayout>
           <S.ThirdPartyConnectionState>{connectionState}</S.ThirdPartyConnectionState>
           {displayName && <S.ThirdPartyDisplayName>{displayName}</S.ThirdPartyDisplayName>}
