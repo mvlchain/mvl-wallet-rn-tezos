@@ -101,7 +101,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
-    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'data:', data);
+    console.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'data:', data);
     if (!onConfirmValid || !to) {
       gasLogger.error('gas is not ready or to doesn`t exist! ', 'gasPrice:');
       return;
@@ -121,7 +121,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
         };
         break;
     }
-    gasLogger.log('final gas is: ', 'gasPrice:', gasFeeInfo.gasPrice?.toString(), 'gasLimit', gasFeeInfo.gasLimit?.toString());
+    console.log('final gas is: ', 'gasPrice:', gasFeeInfo.gasPrice?.toString(), 'gasLimit', gasFeeInfo.gasLimit?.toString());
     onConfirm({ to, value: BnToEtherBn(value) ?? undefined, data: data ?? undefined, ...gasFeeInfo });
   };
 
