@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 
-import { DappImage, NFTImage, BridgeImage } from '@@assets/image';
+import { DappImage } from '@@assets/image';
 import Device from '@@utils/device';
 
 import * as S from './BrowserMainScreen.style';
@@ -14,31 +14,12 @@ import useBrowserMainScreen from './useBrowserMainScreen';
 
 function BrowserMainScreen(props: IBrowserMainScreenProps) {
   const { t } = useTranslation();
-  const { onPressSearchBtn } = useBrowserMainScreen();
-
-  const data = [
-    {
-      Image: BridgeImage,
-      title: 'MVL NFT',
-      description: 'MVL NFTs are minted on Binance Smart Chain, which are connected to vehicles...',
-      onPress: () => {},
-    },
-    { Image: NFTImage, title: 'MVL Bridge', description: 'MVL Bridge helps users to exchange between MVL ERC-20 and MVL BEP-20.', onPress: () => {} },
-  ];
+  const { dappList, onPressSearchBtn } = useBrowserMainScreen();
 
   const renderDappItem = useCallback(({ item }: ListRenderItemInfo<IDappListItemProps>) => {
-    return (
-      <DappListItem
-        Image={item.Image}
-        title={item.title}
-        description={item.description}
-        onPress={() => {
-          // onItemClick event
-          // navigation.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, { i: item.id, data: item });
-        }}
-      />
-    );
+    return <DappListItem Image={item.Image} title={item.title} description={item.description} onPress={item.onPress} />;
   }, []);
+
   return (
     <S.Container>
       <S.Header>
@@ -52,12 +33,12 @@ function BrowserMainScreen(props: IBrowserMainScreenProps) {
       <S.ContentContainer isIOS={Device.isIos()}>
         {Device.isAndroid() ? (
           <FlashList
-            data={data}
-            extraData={data}
+            data={dappList}
+            extraData={dappList}
             keyExtractor={(item) => item.title}
             renderItem={renderDappItem}
             showsVerticalScrollIndicator={false}
-            estimatedItemSize={data.length ?? 0}
+            estimatedItemSize={dappList?.length ?? 0}
           />
         ) : (
           <DappImage />
