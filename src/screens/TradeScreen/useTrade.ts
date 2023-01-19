@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
-import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkByBase } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { ISwapDto } from '@@domain/trade/repositories/tradeRepository.type';
+import { TransactionServiceEthers } from '@@domain/transaction/transactionServiceEthers/TransactionServiceEthers';
 import { BroadcastTransactionDto, CreateNativeSwapTransactionResponseDto, FetchPriceResponseDto } from '@@generated/generated-scheme-clutch';
 import useSwapDataQuery from '@@hooks/queries/useSwapDataQuery';
 import { useDi } from '@@hooks/useDi';
@@ -25,13 +26,14 @@ const useTrade = (
 ) => {
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { openModal, closeModal } = globalModalStore();
-  const TransactionService = useDi('TransactionService');
+
+  const transactionServiceEthers = useDi('TransactionServiceEthers');
   const WalletService = useDi('WalletService');
   const TradeRepository = useDi('TradeRepository');
 
   const { t } = useTranslation();
   const { to: spender, value, setState } = transactionRequestStore();
-  const { setState: setGasStore, resetState: resetGasStore } = gasStore();
+  const { resetTotal } = gasStore();
   const [swapDto, setSwapDto] = useState<ISwapDto | null>(null);
   const [serverSentSwapData, setServerSentSwapData] = useState<CreateNativeSwapTransactionResponseDto['tx'] | null>(null);
 
@@ -70,15 +72,15 @@ const useTrade = (
     TradeRepository.broadcast(selectedNetwork, param);
   };
 
-  const sendTradeTransaction = async (param: TGasConfirmButtonFunctionParam) => {
-    if (!spender || !param || !serverSentSwapData || !value) return;
+  const sendTradeTransaction = async (params: TransactionRequest) => {
+    if (!spender || !params || !serverSentSwapData || !value) return;
 
-    const hash = await TransactionService.sendTransaction({
-      ...param,
-      selectedNetwork: getNetworkByBase(selectedNetwork),
-      selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
-    });
-    if (!hash) {
+    const transaction = await transactionServiceEthers.sendTransaction(
+      getNetworkByBase(selectedNetwork),
+      selectedWalletIndex[getNetworkByBase(selectedNetwork)],
+      params
+    );
+    if (!transaction) {
       Toast.show({
         ...TOAST_DEFAULT_OPTION,
         type: 'basic',
@@ -86,15 +88,14 @@ const useTrade = (
       });
       return;
     }
-    const nonce = (await TransactionService.getNonce(getNetworkByBase(selectedNetwork), hash)) ?? 0;
-    broadCastToServer({ ...serverSentSwapData, hash, nonce });
+    broadCastToServer({ ...serverSentSwapData, hash: transaction.hash, nonce: transaction.nonce });
     closeModal();
     Toast.show({
       ...TOAST_DEFAULT_OPTION,
       type: 'basic',
       text1: t('trade_success'),
     });
-    resetGasStore();
+    resetTotal();
     setState({ value: null, valueValid: false, tokenValue: null });
     resetTradeScreen();
   };

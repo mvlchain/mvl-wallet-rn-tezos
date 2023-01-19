@@ -1,7 +1,3 @@
-import { BigNumber } from 'bignumber.js';
-
-import { NetworkFeeType, NETWORK_FEE_TYPE } from '@@constants/network.constant';
-
 export const alphaNumericDecimalRegex = (decimal: number) => {
   // tokenDTO에 있는 decimals를 기준으로 입력 가능하게 자름
   return new RegExp(`^(\\d{0,60})([.]\\d{0,${decimal}})*?$`);

@@ -3,7 +3,7 @@ import { TextInputProps } from 'react-native';
 
 import { TGasUnit } from '@@constants/gas.constant';
 
-import { TGasHint } from '../../GasFeeBoard/GasFeeInputs/GasFeeInputs.type';
+import { TGasHint } from '../../GasFeeBoard/EIP1559/GasFeeInputs/GasFeeInputs.type';
 
 export interface IGasTextFieldProps {
   defaultValue?: any;

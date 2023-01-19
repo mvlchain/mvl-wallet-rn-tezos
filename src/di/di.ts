@@ -16,14 +16,13 @@ import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShar
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
-import { GasService } from '@@domain/gas/GasService';
-import { GasRepositoryEVMLegacy } from '@@domain/gas/repository/gasRepository/GasRepositoryEVMLegacy';
-import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
+import { GasRepositoryEVMLegacy } from '@@domain/gas/gasRepository/GasRepositoryEVMLegacy';
+import { GasRepositoryTezosImpl } from '@@domain/gas/gasRepositoryTezos/GasRepositoryTezos';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
-import { TransactionService } from '@@domain/transaction/TransactionService';
-import { TransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers';
-import { TransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos';
+import { TransactionHistoryRepository } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository';
+import { TransactionServiceEthers } from '@@domain/transaction/transactionServiceEthers/TransactionServiceEthers';
+import { TransactionServiceTezos } from '@@domain/transaction/transactionServiceTezos/TransactionServiceTezos';
 import { EthersWalletClient } from '@@domain/wallet/clients/EthersWalletClient';
 import { TezosClient } from '@@domain/wallet/clients/TezosClient';
 import { WalletRepositoryImpl } from '@@domain/wallet/repositories/WalletRepository';
@@ -103,21 +102,12 @@ container.register('EthersWalletClient', {
 container.register('TezosClient', {
   useFactory: instancePerContainerCachingFactory<TezosClient>((container) => container.resolve(TezosClient)),
 });
-
-container.register('TransactionService', {
-  useFactory: instancePerContainerCachingFactory<TransactionService>((container) => container.resolve(TransactionService)),
-});
-
 container.register('TransactionServiceEthers', {
   useFactory: instancePerContainerCachingFactory<TransactionServiceEthers>((container) => container.resolve(TransactionServiceEthers)),
 });
 
 container.register('TransactionServiceTezos', {
   useFactory: instancePerContainerCachingFactory<TransactionServiceTezos>((container) => container.resolve(TransactionServiceTezos)),
-});
-
-container.register('GasService', {
-  useFactory: instancePerContainerCachingFactory<GasService>((container) => container.resolve(GasService)),
 });
 
 container.register('GasRepositoryEVMLegacy', {
@@ -138,4 +128,8 @@ container.register('EvmJsonRpcProviderHolder', {
 
 container.register('TradeRepository', {
   useFactory: instancePerContainerCachingFactory<TradeRepository>((container) => container.resolve(TradeRepository)),
+});
+
+container.register('TransactionHistoryRepository', {
+  useFactory: instancePerContainerCachingFactory<TransactionHistoryRepository>((container) => container.resolve(TransactionHistoryRepository)),
 });

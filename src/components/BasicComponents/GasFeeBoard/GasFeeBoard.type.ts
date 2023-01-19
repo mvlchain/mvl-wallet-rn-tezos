@@ -1,3 +1,4 @@
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import { BytesLike } from 'ethers';
@@ -10,7 +11,7 @@ export interface IUseGasProps {
   data?: BytesLike | null;
   isValidInput: boolean;
   tokenDto: TokenDto;
-  onConfirm: Function;
+  onConfirm: (params: TransactionRequest | TransferParams) => void;
 }
 export interface IEVMGasComponentProps extends IUseGasProps {
   isRevision: boolean;
@@ -24,3 +25,9 @@ export interface ITezosUseGasProps extends Omit<IUseGasProps, 'data'> {
 
 export interface ITezosGasComponentProps extends ITezosUseGasProps, Omit<IEVMGasComponentProps, 'data'> {}
 export interface IGasComponentProps extends ITezosGasComponentProps, IEVMGasComponentProps {}
+
+export interface IGasInjectParamToOnConfirm {
+  to: string;
+  value?: BigNumber | null;
+  sendParam: TransactionRequest | TransferParams;
+}

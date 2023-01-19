@@ -2,7 +2,6 @@ import { BigNumber } from 'bignumber.js';
 import { BigNumberish, BytesLike } from 'ethers';
 
 import { NETWORK, Network, NetworkId, NETWORK_FEE_TYPE, NETWORK_ID } from '@@constants/network.constant';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import { RefreshTransactionResponseDto, TokenDto } from '@@generated/generated-scheme-clutch';
 export enum TTransactionStatus {
   PENDING = 'PENDING',
@@ -100,16 +99,6 @@ export interface ITransaction {
   estimateGasError?: string;
 }
 
-export interface ISendTransactionRequest {
-  selectedNetwork: Network;
-  selectedWalletIndex: number;
-  gasFeeInfo: IGasFeeInfo;
-  to: string;
-  from?: BigNumber;
-  value?: BigNumber | null;
-  data?: BytesLike | null;
-}
-
 export interface IRegisterTransactionRequest {
   network: NetworkId;
   type: TTransactionType;
@@ -136,30 +125,9 @@ export interface IRegisterTransactionResponse {
   ticker: string;
 }
 
-export interface IGetTransferData {
-  selectedNetwork: Network;
-  selectedWalletIndex: number;
-  to: string;
-  value: BigNumber;
-  contractAddress?: string;
-  decimals?: number;
-}
-
-export interface ITransactionService {
-  getApproveData: (spender: string, value?: BigNumber) => Promise<BytesLike>;
-  getTransferData: (params: IGetTransferData) => Promise<BytesLike | undefined>;
-  sendTransaction: ({
-    selectedNetwork,
-    selectedWalletIndex,
-    gasFeeInfo,
-    to,
-    from,
-    value,
-    data,
-  }: ISendTransactionRequest) => Promise<string | undefined>;
+export interface ITransactionHistoryRepository {
   getHistory: (params: IGetHistoryParams) => Promise<IGetTransactionHistoryResponse[] | []>;
   getSingleHistory: (params: IHistoryParams) => Promise<RefreshTransactionResponseDto>;
   refreshHistory: (params: IHistoryParams) => Promise<RefreshTransactionResponseDto>;
   registerHistory: (params: IRegisterTransactionRequest) => Promise<IRegisterTransactionResponse>;
-  getNonce: (selectedNetwork: Network, hash: string) => Promise<number | undefined>;
 }

@@ -3,8 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CustomRadio from '@@components/BasicComponents/Form/CustomRadio';
-import { GAS_LEVEL } from '@@constants/gas.constant';
-import { TGasLevel } from '@@domain/gas/Gas.type';
+import { GAS_LEVEL, TGasLevel } from '@@constants/gas.constant';
 
 import * as S from './GasLevelRadioButtons.style';
 

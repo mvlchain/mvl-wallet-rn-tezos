@@ -37,7 +37,7 @@ const useEIP1559Estimate = ({
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
 
   const fetchMaxFeePerGas = async () => {
-    const feeData = await gasRepository.getFeeData();
+    const feeData = await gasRepository.getFeeData(testIncludeSelectedNetwork);
     gasLogger.log(
       'get EIP1559 gas price: ',
       'maxFeePerGas',
@@ -53,9 +53,7 @@ const useEIP1559Estimate = ({
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
     gasLogger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
-    const gasUsage = await gasRepository.estimateGas({
-      selectedNetwork: testIncludeSelectedNetwork,
-      selectedWalletIndex: selectedWalletIndex[testIncludeSelectedNetwork],
+    const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
       to,
       value: BnToEtherBn(value),
       data,

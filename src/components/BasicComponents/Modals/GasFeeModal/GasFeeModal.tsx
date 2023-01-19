@@ -1,14 +1,14 @@
 import React from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
+import { TransferParams } from '@taquito/taquito';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 
 import DismissKeyboardView from '@@components/BasicComponents/DismissKeyboardView';
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
-import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -21,12 +21,12 @@ function GasFeeModal({
   onConfirmTitle,
 }: {
   tokenDto: TokenDto;
-  onConfirm: (param: TGasConfirmButtonFunctionParam) => void;
+  onConfirm: (params: TransactionRequest | TransferParams) => void;
   onConfirmTitle: string;
 }) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
-  const { to, value, tokenTo, tokenValue, data, toValid, valueValid } = transactionRequestStore();
+  const { to, value, tokenTo, tokenValue, data, toValid, valueValid, transferParam } = transactionRequestStore();
 
   return (
     <ModalLayout
@@ -50,6 +50,7 @@ function GasFeeModal({
             to={tokenDto.contractAddress ? tokenTo : to}
             value={tokenDto.contractAddress ? tokenValue : value}
             data={data}
+            transferParam={transferParam}
             isValidInput={toValid && valueValid}
           />
         </ScrollView>

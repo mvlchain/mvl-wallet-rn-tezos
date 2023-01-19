@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { useFocusEffect } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
-import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import { getNetworkByBase } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import useSpenderQuery from '@@hooks/queries/useSpenderQuery';
@@ -20,7 +20,7 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const TokenRepository = useDi('TokenRepository');
-  const TransactionService = useDi('TransactionService');
+  const transactionServiceEthers = useDi('TransactionServiceEthers');
   const [allowance, setAllowance] = useState<BigNumber | null>(null);
   const [spender, setSpender] = useState('');
 
@@ -62,12 +62,10 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
     setAllowance(allowance);
   };
 
-  const sendApproveTransaction = async (param: TGasConfirmButtonFunctionParam) => {
-    if (!param || !fromToken?.contractAddress) return;
-    await TransactionService.sendTransaction({
-      selectedNetwork: getNetworkByBase(selectedNetwork),
-      selectedWalletIndex: selectedWalletIndex[getNetworkByBase(selectedNetwork)],
-      ...param,
+  const sendApproveTransaction = async (params: TransactionRequest) => {
+    if (!params || !fromToken?.contractAddress) return;
+    await transactionServiceEthers.sendTransaction(getNetworkByBase(selectedNetwork), selectedWalletIndex[getNetworkByBase(selectedNetwork)], {
+      ...params,
       to: fromToken.contractAddress,
     });
     closeModal();
@@ -89,7 +87,8 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
       title: t('approve_wallet'),
       onConfirm: async () => {
         closeModal();
-        const approveData = await TransactionService.getApproveData(spender);
+        const maxValue = value ? value.toString(10) : ethers.constants.MaxUint256.toString();
+        const approveData = await transactionServiceEthers.encodeFunctionData('approve', [spender, maxValue]);
         setState({ data: approveData });
         openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendApproveTransaction, onConfirmTitle: t('approve') });
       },
