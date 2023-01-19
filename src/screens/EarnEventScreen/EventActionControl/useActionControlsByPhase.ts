@@ -7,7 +7,7 @@ import { Linking } from 'react-native';
 
 import useClaimWalletListModal from '@@components/BasicComponents/Modals/ClaimWalletListModal/useClaimWalletListModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { NetworkId, networkIdToNetworkByBase } from '@@constants/network.constant';
+import { NetworkId, networkIdToNetwork } from '@@constants/network.constant';
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
@@ -46,8 +46,8 @@ export const useActionControlsByPhase = (
 
   const networkId = event.network as NetworkId;
 
-  const network = networkIdToNetworkByBase(networkId);
-  const { wallet } = useClaimWalletListModal({ network: network, onPressClaim });
+  const network = networkIdToNetwork(networkId);
+  const { wallet } = useClaimWalletListModal({ network, onPressClaim });
   const openClaimWalletListModal = () => {
     openModal(MODAL_TYPES.CLAIM_WALLET_LIST, { menuList: wallet });
   };
