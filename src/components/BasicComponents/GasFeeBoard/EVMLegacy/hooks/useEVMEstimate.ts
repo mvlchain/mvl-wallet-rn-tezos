@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import BigNumber from 'bignumber.js';
 import { BytesLike } from 'ethers';
 
@@ -42,10 +43,11 @@ const useEVMEstimate = ({
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
     console.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
-    const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
+
+    const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, {
       to,
-      value: BnToEtherBn(value),
-      data,
+      value: BnToEtherBn(value) ?? undefined,
+      data: data ?? undefined,
     });
     if (!gasUsage) {
       console.error('fail to estimate EVM Legacy gas');
