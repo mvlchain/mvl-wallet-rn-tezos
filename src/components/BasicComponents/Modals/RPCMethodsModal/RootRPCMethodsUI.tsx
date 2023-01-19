@@ -164,7 +164,7 @@ const RootRPCMethodsUI = () => {
     </Modal>
   );
 
-  const renderDappTransactionModal = () => dappTransactionModalVisible && <Approval />;
+  const renderDappTransactionModal = () => dappTransactionModalVisible && <Approval isVisible={dappTransactionModalVisible} />;
 
   const renderApproveModal = () =>
     approveModalVisible && (

@@ -5,6 +5,7 @@ import { MessageManager, PersonalMessageManager, TypedMessageManager } from '@@d
 import { TransactionController } from '@@domain/transaction/TransactionController';
 import NetworkController from '@@domain/wallet/services/NetworkController';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { getAddress } from '@@utils/walletHelper';
 
 let instance: ControllerManager;
 
@@ -74,7 +75,9 @@ class ControllerManager {
         // const selectedAddress = this.context.PreferencesController.state.selectedAddress;
         // end(null, isUnlocked && isEnabled && selectedAddress ? [selectedAddress] : []);
         // FIXME: get selectedAddress
-        const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+        // const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+        const selectedAddress = getAddress();
+        console.log('account:   ', selectedAddress);
         end(null, [selectedAddress]);
       },
     };

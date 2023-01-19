@@ -11,11 +11,13 @@ import { WalletResponseDto } from '@@generated/generated-scheme';
 import { IWallet, IWalletClient } from '../clients/WalletClient.type';
 
 import * as Type from './WalletService.type';
+import authStore from "@@store/auth/authStore";
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
   signMessageByExtendedKey(data: any): Promise<string>;
   getWalletInfo(param: Type.IGetWalletInfoParam): Promise<IWallet>;
+  getWalletInfoFromStore(param: Type.IGetWalletInfoParam): IWallet;
   getWalletList(networkId: NetworkId): Promise<WalletDto[]>;
   createWallet(body: Type.ICreateWalletBody): Promise<WalletResponseDto>;
   getWalletPKey(param: Type.IGetWalletPKeyParam): Promise<string>;
@@ -79,7 +81,17 @@ export class WalletServiceImpl implements WalletService {
   getWalletInfo = async ({ index, network }: Type.IGetWalletInfoParam) => {
     const client = this.setWalletClient(network);
     const pKey = await this.keyClient.getPrivateKey();
-    const wallet = await client.createWalletWithEntropy(pKey, index);
+    const wallet = client.createWalletWithEntropy(pKey, index);
+    return wallet;
+  };
+
+  getWalletInfoFromStore = ({ index, network }: Type.IGetWalletInfoParam) => {
+    const client = this.setWalletClient(network);
+    const { pKey } = authStore.getState();
+    if (pKey === null) {
+      throw new Error('authStore pKey is null');
+    }
+    const wallet = client.createWalletWithEntropy(pKey, index);
     return wallet;
   };
 

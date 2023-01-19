@@ -6,6 +6,7 @@ import { getVersion } from 'react-native-device-info';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
 
@@ -124,7 +125,7 @@ export const getRpcMethodMiddleware = ({
       // } = store.getState();
 
       // FIXME: get selectedAddress
-      const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+      const selectedAddress = getAddress();
       return [selectedAddress];
 
       // const isEnabled = !!getApprovedHosts()[hostname];
@@ -253,7 +254,8 @@ export const getRpcMethodMiddleware = ({
         //   }
         // }
         // FIXME: get selectedAddress
-        const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
+        const selectedAddress = getAddress();
+
         console.log(`eth_requestAccounts: ${selectedAddress}`);
         res.result = [selectedAddress];
       },
@@ -266,13 +268,13 @@ export const getRpcMethodMiddleware = ({
         const accounts = await getAccounts();
         res.result = accounts.length > 0 ? accounts[0] : null;
       },
-      eth_sendTransaction: () => {
+      eth_sendTransaction: async () => {
         console.log(`WB INCOMING> 6. eth_sendTransaction called: ${JSON.stringify(req.params, null, 2)}`);
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[0].from,
           chainId: req.params[0].chainId,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
         next();
       },
@@ -296,7 +298,7 @@ export const getRpcMethodMiddleware = ({
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[0].from,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         if (req.params[1].length === 66 || req.params[1].length === 67) {
@@ -340,7 +342,7 @@ export const getRpcMethodMiddleware = ({
         checkTabActive();
         checkActiveAccountAndChainId({
           address: params.from,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await personalMessageManager.addUnapprovedMessageAsync({
@@ -366,7 +368,7 @@ export const getRpcMethodMiddleware = ({
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[1],
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await typedMessageManager.addUnapprovedMessageAsync(
@@ -401,7 +403,7 @@ export const getRpcMethodMiddleware = ({
         checkActiveAccountAndChainId({
           address: req.params[0],
           chainId,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await typedMessageManager.addUnapprovedMessageAsync(
@@ -436,7 +438,7 @@ export const getRpcMethodMiddleware = ({
         checkActiveAccountAndChainId({
           address: req.params[0],
           chainId,
-          activeAccounts: getAccounts(),
+          activeAccounts: await getAccounts(),
         });
 
         const rawSig = await typedMessageManager.addUnapprovedMessageAsync(

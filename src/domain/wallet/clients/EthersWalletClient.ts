@@ -10,7 +10,7 @@ import { IWallet, IWalletClient } from './WalletClient.type';
 export class EthersWalletClient implements IWalletClient {
   constructor() {}
 
-  createWalletWithEntropy = async (entropy: string | Uint8Array, index?: number): Promise<IWallet> => {
+  createWalletWithEntropy = (entropy: string | Uint8Array, index?: number): IWallet => {
     const root = createNodeWithEntropy(entropy);
     let wallet: Wallet;
     if (index !== undefined) {
@@ -25,7 +25,7 @@ export class EthersWalletClient implements IWalletClient {
     return { address, publicKey, privateKey };
   };
 
-  createWalletWithMnemonic = async (mnemonic: string, index?: number): Promise<IWallet> => {
+  createWalletWithMnemonic = (mnemonic: string, index?: number): IWallet => {
     let derivationPath;
     if (index !== undefined) {
       derivationPath = this.getDerivationPath(index);

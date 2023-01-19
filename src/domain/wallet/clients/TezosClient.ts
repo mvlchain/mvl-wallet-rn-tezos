@@ -9,13 +9,13 @@ import { IWalletClient, IWallet } from './WalletClient.type';
 @injectable()
 export class TezosClient implements IWalletClient {
   constructor() {}
-  createWalletWithEntropy = async (entropy: string | Uint8Array, index?: number): Promise<IWallet> => {
+  createWalletWithEntropy = (entropy: string | Uint8Array, index?: number): IWallet => {
     const bufEntropy = tezosCrypto.common.hexToBuf(entropy);
     const mnemonic = tezosCrypto.utils.entropyToMnemonic(bufEntropy);
     return this.createWalletWithMnemonic(mnemonic, index);
   };
 
-  createWalletWithMnemonic = async (mnemonic: string, index?: number): Promise<IWallet> => {
+  createWalletWithMnemonic = (mnemonic: string, index?: number): IWallet => {
     const mnemonicToSeed = tezosCrypto.utils.mnemonicToSeed(mnemonic, '', true);
     const keyPair = tezosCrypto.hd.keyPairFromAccountIndex(mnemonicToSeed, index ?? 0);
     const { sk: privateKey, pk: publicKey, pkh: address } = keyPair;
