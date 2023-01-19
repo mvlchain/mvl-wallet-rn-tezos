@@ -1,9 +1,10 @@
-import { ControllerMessenger, PreferencesController, WalletDevice } from '@metamask/controllers';
+import { ControllerMessenger, WalletDevice } from '@metamask/controllers';
 
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import { MessageManager, PersonalMessageManager, TypedMessageManager } from '@@domain/message-manager';
 import { TransactionController } from '@@domain/transaction/TransactionController';
 import NetworkController from '@@domain/wallet/services/NetworkController';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 let instance: ControllerManager;
 
@@ -23,22 +24,14 @@ class ControllerManager {
     console.log(`controllerManager constructor`);
 
     this.controllerMessenger = new ControllerMessenger();
+    const { selectedNetwork: pickNetwork } = walletPersistStore.getState();
+    const selectedNetwork = getNetworkByBase(pickNetwork);
 
-    const preferencesController = new PreferencesController(
-      {},
-      {
-        ipfsGateway: 'https://cloudflare-ipfs.com/ipfs/',
-        useTokenDetection: false,
-        useNftDetection: false,
-        openSeaEnabled: false,
-      }
-    );
+    const networkConfig = getNetworkConfig(selectedNetwork);
+
     const providerConfig = {
-      rpcTarget: 'https://goerli.infura.io/v3/***REMOVED***',
-      type: 'goerli',
-      chainId: '5',
-      ticker: 'goerliETH',
-      nickname: 'Goerli',
+      type: selectedNetwork,
+      chainId: networkConfig.chainId.toString(10),
     };
 
     const networkControllerOpts = {
@@ -95,12 +88,12 @@ class ControllerManager {
 
     const myTransactionController = new TransactionController({
       getSelectedNetworkConfig: () => {
-        const selectedNetwork = NETWORK.GOERLI;
+        const { selectedNetwork } = walletPersistStore.getState();
         return getNetworkConfig(getNetworkByBase(selectedNetwork));
       },
     });
 
-    const controllers = [preferencesController, networkController, myTransactionController];
+    const controllers = [networkController, myTransactionController];
     this.context = controllers.reduce((context: any, controller: any) => {
       context[controller.name] = controller;
       return context;

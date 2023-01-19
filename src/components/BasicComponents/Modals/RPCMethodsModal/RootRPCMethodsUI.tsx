@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
 const RootRPCMethodsUI = () => {
   const colors = mmLightColors;
   // FIXME: chainId
-  const chainId = '5';
   const [showPendingApproval, setShowPendingApproval] = useState<any>(false);
   const [signMessageParams, setSignMessageParams] = useState({ data: '' });
   const [signType, setSignType] = useState<any>(false);
@@ -405,7 +404,6 @@ const RootRPCMethodsUI = () => {
       // personalMessageManager.hub.removeAllListeners();
       // typedMessageManager.hub.removeAllListeners();
       // tokensController.hub.removeAllListeners();
-      // controllerMessenger.unsubscribe('ApprovalController:stateChange', handlePendingApprovals);
     };
   }, []);
 

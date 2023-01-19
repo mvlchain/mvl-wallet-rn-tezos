@@ -17,7 +17,8 @@ import { createEventEmitterProxy, createSwappableProxy } from 'swappable-obj-pro
 import URL from 'url-parse';
 
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
-import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import AppConstants from './AppConstants';
 import MobilePortStream from './MobilePortStream';
@@ -111,75 +112,6 @@ export function createOriginMiddleware(opts: any) {
 }
 
 const { NOTIFICATION_NAMES } = AppConstants;
-
-export const MAINNET = 'mainnet';
-export const HOMESTEAD = 'homestead';
-export const ROPSTEN = 'ropsten';
-export const KOVAN = 'kovan';
-export const RINKEBY = 'rinkeby';
-export const GOERLI = 'goerli';
-export const RPC = 'rpc';
-export const NO_RPC_BLOCK_EXPLORER = 'NO_BLOCK_EXPLORER';
-export const PRIVATENETWORK = 'PRIVATENETWORK';
-export const DEFAULT_MAINNET_CUSTOM_NAME = 'Ethereum Main Custom';
-
-const NetworkList = {
-  [MAINNET]: {
-    name: 'Ethereum Main Network',
-    shortName: 'Ethereum',
-    networkId: 1,
-    chainId: 1,
-    hexChainId: '0x1',
-    color: '#3cc29e',
-    networkType: 'mainnet',
-  },
-  [ROPSTEN]: {
-    name: 'Ropsten Test Network',
-    shortName: 'Ropsten',
-    networkId: 3,
-    chainId: 3,
-    hexChainId: '0x3',
-    color: '#ff4a8d',
-    networkType: 'ropsten',
-  },
-  [KOVAN]: {
-    name: 'Kovan Test Network',
-    shortName: 'Kovan',
-    networkId: 42,
-    chainId: 42,
-    hexChainId: '0x2a',
-    color: '#7057ff',
-    networkType: 'kovan',
-  },
-  [RINKEBY]: {
-    name: 'Rinkeby Test Network',
-    shortName: 'Rinkeby',
-    networkId: 4,
-    chainId: 4,
-    hexChainId: '0x4',
-    color: '#f6c343',
-    networkType: 'rinkeby',
-  },
-  [GOERLI]: {
-    name: 'Goerli Test Network',
-    shortName: 'Goerli',
-    networkId: 5,
-    chainId: 5,
-    hexChainId: '0x5',
-    color: '#3099f2',
-    networkType: 'goerli',
-  },
-  [RPC]: {
-    name: 'Private Network',
-    shortName: 'Private',
-    color: '#f2f3f4',
-    networkType: 'rpc',
-  },
-};
-
-const NetworkListKeys = Object.keys(NetworkList);
-
-export const getAllNetworks = () => NetworkListKeys.filter((name) => name !== RPC);
 
 function setupMultiplex(connectionStream: any) {
   const mux = new ObjectMultiplex();
@@ -275,29 +207,7 @@ export class BackgroundBridge extends EventEmitter {
     this.blockTracker = blockTracker;
   }
 
-  onUnlock() {
-    // TODO UNSUBSCRIBE EVENT INSTEAD
-    if (this.disconnected) return;
-
-    this.sendNotification({
-      method: NOTIFICATION_NAMES.unlockStateChanged,
-      params: true,
-    });
-  }
-
-  onLock() {
-    // TODO UNSUBSCRIBE EVENT INSTEAD
-    if (this.disconnected) return;
-
-    this.sendNotification({
-      method: NOTIFICATION_NAMES.unlockStateChanged,
-      params: false,
-    });
-  }
-
-  getProviderNetworkState({ network }: any) {
-    const networkConfig = getNetworkConfig(NETWORK.GOERLI);
-    const chainId = `${networkConfig.chainId}`;
+  getProviderNetworkState({ network: chainId }: { network: string }) {
     let hexChainId: string;
     if (chainId && !chainId.startsWith('0x')) {
       // Convert to hex
@@ -306,11 +216,10 @@ export class BackgroundBridge extends EventEmitter {
       hexChainId = chainId;
     }
 
-    const result = {
+    return {
       networkVersion: chainId,
       chainId: hexChainId,
     };
-    return result;
   }
 
   notifyChainChanged(params: any) {
@@ -327,7 +236,7 @@ export class BackgroundBridge extends EventEmitter {
     });
   }
 
-  onStateUpdate(memState: any) {
+  onStateUpdate() {
     // const networkConfig = getNetworkConfig(NETWORK.GOERLI);
     // const provider = EvmJsonRpcProviderHolder.getMetamaskProvider(networkConfig.rpcUrl);
     const { networkController } = controllerManager;
@@ -335,9 +244,7 @@ export class BackgroundBridge extends EventEmitter {
     // @ts-ignore
     const blockTracker = provider._blockTracker;
     this.setProviderAndBlockTracker({ provider, blockTracker });
-    if (!memState) {
-      memState = this.getState();
-    }
+    const memState = this.getState();
     const publicState = this.getProviderNetworkState(memState);
 
     // Check if update already sent
@@ -466,15 +373,15 @@ export class BackgroundBridge extends EventEmitter {
    * @returns {Object} status
    */
   getState() {
-    // const vault = Engine.context.KeyringController.state.vault;
-    // const { network, selectedAddress } = Engine.datamodel.flatState;
-    const network = getNetworkConfig(NETWORK.GOERLI);
+    const { selectedNetwork } = walletPersistStore.getState();
+    const networkConfig = getNetworkConfig(getNetworkByBase(selectedNetwork));
+
     // FIXME: get selectedAddress
     const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
     return {
       isInitialized: true,
       isUnlocked: true,
-      network: network.chainId.toString(10),
+      network: networkConfig.chainId.toString(10),
       selectedAddress,
     };
   }
