@@ -6,7 +6,10 @@ import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
-import { TTransactionStatus, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import {
+  IGetTransactionHistoryResponse,
+  TTransactionStatus,
+} from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import useRefreshTransactionQuery from '@@hooks/queries/useRefreshTransactionQuery';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';

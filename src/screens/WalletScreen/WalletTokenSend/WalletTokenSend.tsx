@@ -25,6 +25,7 @@ function WalletTokenSend() {
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
         <GasFeeBoard
           isRevision={false}
+          hideDivider={false}
           onConfirm={confirm}
           tokenDto={params.tokenDto}
           to={address}

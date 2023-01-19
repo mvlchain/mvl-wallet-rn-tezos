@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
-import { TTransactionStatus } from '@@domain/transaction/TransactionService.type';
+import { TTransactionStatus } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import useRefreshTransactionQuery from '@@hooks/queries/useRefreshTransactionQuery';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
