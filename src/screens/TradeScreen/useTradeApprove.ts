@@ -28,7 +28,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
   const { t } = useTranslation();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { selectedToken } = tradeStore();
-  const { to, value, tokenValue, valueValid, data, setState } = transactionRequestStore();
+  const { to, tokenTo, tokenValue, value, toValid, valueValid, data, setState } = transactionRequestStore();
   const [sentApprove, setSentApprove] = useState(false);
 
   useFocusEffect(
@@ -89,8 +89,15 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
         closeModal();
         const maxValue = value ? value.toString(10) : ethers.constants.MaxUint256.toString();
         const approveData = await transactionServiceEthers.encodeFunctionData('approve', [spender, maxValue]);
-        setState({ data: approveData });
-        openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendApproveTransaction, onConfirmTitle: t('approve') });
+        openModal(MODAL_TYPES.GAS_FEE, {
+          tokenDto: fromToken,
+          onConfirm: sendApproveTransaction,
+          onConfirmTitle: t('approve'),
+          to: fromToken.contractAddress,
+          value,
+          data: approveData,
+          isValidInput: toValid && valueValid,
+        });
       },
     });
   };

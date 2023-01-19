@@ -2,6 +2,8 @@ import React from 'react';
 
 import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { TransferParams } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
+import { BytesLike } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 
@@ -15,18 +17,20 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-function GasFeeModal({
-  tokenDto,
-  onConfirm,
-  onConfirmTitle,
-}: {
+export interface IGasFeeModalProps {
   tokenDto: TokenDto;
   onConfirm: (params: TransactionRequest | TransferParams) => void;
   onConfirmTitle: string;
-}) {
+  to: string | null;
+  value?: BigNumber | null;
+  data?: BytesLike | null;
+  transferParam?: TransferParams;
+  isValidInput: boolean;
+}
+
+function GasFeeModal({ tokenDto, onConfirm, onConfirmTitle, to, value, data, transferParam, isValidInput }: IGasFeeModalProps) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
-  const { to, value, tokenTo, tokenValue, data, toValid, valueValid, transferParam } = transactionRequestStore();
 
   return (
     <ModalLayout
@@ -47,11 +51,11 @@ function GasFeeModal({
             tokenDto={tokenDto}
             onConfirmTitle={onConfirmTitle}
             hideDivider={true}
-            to={tokenDto.contractAddress ? tokenTo : to}
-            value={tokenDto.contractAddress ? tokenValue : value}
+            to={to}
+            value={value}
             data={data}
             transferParam={transferParam}
-            isValidInput={toValid && valueValid}
+            isValidInput={isValidInput}
           />
         </ScrollView>
       </DismissKeyboardView>

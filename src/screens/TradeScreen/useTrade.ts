@@ -32,7 +32,7 @@ const useTrade = (
   const TradeRepository = useDi('TradeRepository');
 
   const { t } = useTranslation();
-  const { to: spender, value, setState } = transactionRequestStore();
+  const { to: spender, value, toValid, valueValid, data, setState } = transactionRequestStore();
   const { resetTotal } = gasStore();
   const [swapDto, setSwapDto] = useState<ISwapDto | null>(null);
   const [serverSentSwapData, setServerSentSwapData] = useState<CreateNativeSwapTransactionResponseDto['tx'] | null>(null);
@@ -61,19 +61,12 @@ const useTrade = (
     },
   });
 
-  useEffect(() => {
-    if (isEnoughAllowance && serverSentSwapData) {
-      setState({ data: serverSentSwapData.data });
-      //useTradeApprove에서 approveData를 사용하고나서야 data를 할당해야함
-    }
-  }, [isEnoughAllowance, serverSentSwapData]);
-
   const broadCastToServer = (param: BroadcastTransactionDto) => {
     TradeRepository.broadcast(selectedNetwork, param);
   };
 
   const sendTradeTransaction = async (params: TransactionRequest) => {
-    if (!spender || !params || !serverSentSwapData || !value) return;
+    if (!spender || !params || !serverSentSwapData) return;
 
     const transaction = await transactionServiceEthers.sendTransaction(
       getNetworkByBase(selectedNetwork),
@@ -101,8 +94,16 @@ const useTrade = (
   };
 
   const onPressTrade = async () => {
-    if (!fromToken) return;
-    openModal(MODAL_TYPES.GAS_FEE, { tokenDto: fromToken, onConfirm: sendTradeTransaction, onConfirmTitle: t('trade') });
+    if (!fromToken || !spender) return;
+    openModal(MODAL_TYPES.GAS_FEE, {
+      tokenDto: fromToken,
+      onConfirm: sendTradeTransaction,
+      onConfirmTitle: t('trade'),
+      to: fromToken.contractAddress ?? spender,
+      value,
+      data: serverSentSwapData?.data,
+      isValidInput: toValid && valueValid,
+    });
   };
 
   const isReadyTrade = useMemo(() => {
