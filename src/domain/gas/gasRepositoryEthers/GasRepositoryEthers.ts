@@ -6,10 +6,10 @@ import { getNetworkConfig, Network } from '@@constants/network.constant';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { loadingFunction } from '@@utils/loadingHelper';
 
-import { IGasRepositoryEVMLegacy } from './GasRepositoryEVMLegacy.type';
+import { IGasRepositoryEthers } from './GasRepositoryEthers.type';
 
 @injectable()
-export class GasRepositoryEVMLegacy implements IGasRepositoryEVMLegacy {
+export class GasRepositoryEthers implements IGasRepositoryEthers {
   constructor(@inject('EvmJsonRpcProviderHolder') private evmJsonRpcProviderHolder: EvmJsonRpcProviderHolder) {}
 
   getGasPrice = loadingFunction<BigNumber>(async (selectedNetwork: Network) => {
