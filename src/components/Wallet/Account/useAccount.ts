@@ -34,7 +34,7 @@ const useAccount = () => {
 
   // TODO: 추후 네트워크 추가 시 walletList에 해당 네트워크 name object추가하기
   const checkNetworkDefault = () => {
-    return walletList[selectedNetwork][0].index === -1;
+    return walletList[selectedNetwork][0] === undefined || walletList[selectedNetwork][0].index === -1;
   };
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const useAccount = () => {
   }, [selectedWalletIndex, selectedNetwork]);
 
   useEffect(() => {
-    if (checkNetworkDefault() && data && pKey) {
+    if (checkNetworkDefault() && data && data.length > 0 && pKey) {
       // TODO: 추후 네트워크 추가 시 네트워크에 따라 알맞게 set해주기.
       // 지금은 ETH와 BSC가 생성시 함께 사용하기 때문에 함께 넣어주고 있음.
       setWallets(
