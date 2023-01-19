@@ -7,33 +7,31 @@ import { BigNumber } from 'bignumber.js';
 import BN from 'bn.js';
 import { toChecksumAddress } from 'ethereumjs-util';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Alert, Button } from 'react-native';
-import Modal from 'react-native-modal';
+import { Alert, Pressable } from 'react-native';
 
+import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import useEstimateGas from '@@components/BasicComponents/GasFeeBoard/hooks/useEstimateGas';
 import useSetGasState from '@@components/BasicComponents/GasFeeBoard/hooks/useSetGasState';
 import useSetInitial from '@@components/BasicComponents/GasFeeBoard/hooks/useSetInitial';
 import useSetTotal from '@@components/BasicComponents/GasFeeBoard/hooks/useSetTotal';
+import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import { KEYSTONE_TX_CANCELED } from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { GAS_LEVEL } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
+import { useAssetFromTheme } from '@@hooks/useTheme';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
 import { addHexPrefix, BNToHex } from '@@utils/number';
 
+import * as S from './ApprovalModal.style';
+
 const REVIEW = 'review';
 
-const styles = StyleSheet.create({
-  bottomModal: {
-    justifyContent: 'flex-end',
-    margin: 0,
-  },
-});
 export function safeToChecksumAddress(address: string) {
   if (!address) return undefined;
   return toChecksumAddress(address);
@@ -268,13 +266,39 @@ const Approval = () => {
     return transactionToSend;
   };
 
-  const colors = mmLightColors;
-
+  const ArrowIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   return (
-    <Modal isVisible={dappTransactionModalVisible} style={styles.bottomModal} backdropColor={colors.overlay.default} backdropOpacity={1}>
-      <Button title={'Close'} onPress={onCancel} />
-      <Button title={'Confirm'} onPress={onConfirm} />
-    </Modal>
+    <ModalLayout
+      title={t('transaction_details')}
+      modalPosition='bottom'
+      isVisible={true}
+      onConfirm={onConfirm}
+      confirmLabel={t('btn_confirm_payment')}
+      onClose={onCancel}
+    >
+      {/* <S.Label>{label}</S.Label> */}
+      <S.AmountText>100 MVL</S.AmountText>
+      <S.ContentContainer>
+        <S.GreyText>{t('payer')}</S.GreyText>
+        <S.BlackText>0xE4de5635351F5fa0e1e8b856422423oi1</S.BlackText>
+      </S.ContentContainer>
+      <S.ContentContainer>
+        <S.GreyText>{t('to')}</S.GreyText>
+        <S.BlackText>0xE4de5635351F5fa0e1e8b856422423oi1</S.BlackText>
+      </S.ContentContainer>
+      <Pressable>
+        <S.GasContainer>
+          <S.BlackText>{t('gas')}</S.BlackText>
+          <S.GasWrapper>
+            <S.GasBalanceWrapper>
+              <S.BlackText>0.03 ETH</S.BlackText>
+              <S.GreyText>10.90 USD</S.GreyText>
+            </S.GasBalanceWrapper>
+            <ArrowIcon />
+          </S.GasWrapper>
+        </S.GasContainer>
+      </Pressable>
+    </ModalLayout>
   );
 };
 

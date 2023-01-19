@@ -4,6 +4,7 @@ import { width } from '@@utils/ui';
 
 export const Container = styled.View`
   flex: 1;
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 
 export const Header = styled.View`
