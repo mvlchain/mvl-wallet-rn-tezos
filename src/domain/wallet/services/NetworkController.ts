@@ -1,5 +1,4 @@
-import { BaseControllerV2, NetworksChainId, NetworkType, RestrictedControllerMessenger } from '@metamask/controllers';
-import { TESTNET_NETWORK_TYPE_TO_TICKER_SYMBOL } from '@metamask/controllers/dist/constants';
+import { BaseControllerV2, RestrictedControllerMessenger } from '@metamask/controllers';
 import { Mutex } from 'async-mutex';
 // @ts-ignore
 import createInfuraProvider from 'eth-json-rpc-infura/src/createProvider';
@@ -10,12 +9,12 @@ import Subprovider from 'web3-provider-engine/subproviders/provider';
 // @ts-ignore
 import createMetamaskProvider from 'web3-provider-engine/zero';
 
-import { MAINNET, RPC } from '@@utils/BackgroundBridge/BackgroundBridge';
+import { getNetworkConfig, NETWORK, Network } from '@@constants/network.constant';
 import type { Patch } from 'immer';
 
 export type ProviderConfig = {
   rpcTarget?: string;
-  type: NetworkType;
+  type: Network;
   chainId: string;
   ticker?: string;
   nickname?: string;
@@ -85,7 +84,7 @@ export type NetworkControllerOptions = {
 export const defaultState: NetworkState = {
   network: 'loading',
   isCustomNetwork: false,
-  providerConfig: { type: MAINNET, chainId: NetworksChainId.mainnet },
+  providerConfig: { type: NETWORK.ETH, chainId: '1' },
   properties: { isEIP1559Compatible: false },
 };
 
@@ -97,7 +96,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
 
   private internalProviderConfig: ProviderConfig = {} as ProviderConfig;
 
-  private infuraProjectId: string | undefined;
+  private readonly infuraProjectId: string | undefined;
 
   private mutex = new Mutex();
 
@@ -135,18 +134,24 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
     });
   }
 
-  private initializeProvider(type: NetworkType, rpcTarget?: string, chainId?: string, ticker?: string, nickname?: string) {
+  private initializeProvider(type: Network, chainId?: string) {
     this.update((state) => {
       state.isCustomNetwork = this.getIsCustomNetwork(chainId);
     });
+    const networkConfig = getNetworkConfig(type);
 
     switch (type) {
-      case MAINNET:
-      case 'goerli':
-        this.setupInfuraProvider(type);
+      case NETWORK.ETH:
+      case NETWORK.GOERLI:
+        const infuraNetwork = networkConfig.infuraNetwork;
+        if (!infuraNetwork) {
+          throw new Error(`Undefined infura network: ${type}, ${infuraNetwork}`);
+        }
+        this.setupInfuraProvider(infuraNetwork);
         break;
-      case RPC:
-        rpcTarget && this.setupStandardProvider(rpcTarget, chainId, ticker, nickname);
+      case NETWORK.BSC:
+      case NETWORK.BSC_TESTNET:
+        this.setupStandardProvider(networkConfig.rpcUrl, networkConfig.chainId.toString(10), networkConfig.coin, networkConfig.shortName);
         break;
       default:
         throw new Error(`Unrecognized network type: '${type}'`);
@@ -159,8 +164,8 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
       state.network = 'loading';
       state.properties = {};
     });
-    const { rpcTarget, type, chainId, ticker } = this.state.providerConfig;
-    this.initializeProvider(type, rpcTarget, chainId, ticker);
+    const { type, chainId } = this.state.providerConfig;
+    this.initializeProvider(type, chainId);
     this.lookupNetwork();
   }
 
@@ -169,7 +174,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
     this.ethQuery = new EthQuery(this.provider);
   }
 
-  private setupInfuraProvider(type: NetworkType) {
+  private setupInfuraProvider(type: 'mainnet' | 'goerli') {
     const infuraProvider = createInfuraProvider({
       network: type,
       projectId: this.infuraProjectId,
@@ -189,7 +194,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
   }
 
   private getIsCustomNetwork(chainId?: string) {
-    return chainId !== NetworksChainId.mainnet && chainId !== NetworksChainId.goerli && chainId !== NetworksChainId.localhost;
+    return false;
   }
 
   private setupStandardProvider(rpcTarget: string, chainId?: string, ticker?: string, nickname?: string) {
@@ -237,9 +242,9 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
   set providerConfig(providerConfig: ProviderConfig) {
     console.log(`setter providerConfig: ${JSON.stringify(providerConfig, null, 2)}`);
     this.internalProviderConfig = providerConfig;
-    const { type, rpcTarget, chainId, ticker, nickname } = this.state.providerConfig;
+    const { type, chainId } = this.state.providerConfig;
     console.log(`providerConfig: ${JSON.stringify(this.state.providerConfig, null, 2)}`);
-    this.initializeProvider(type, rpcTarget, chainId, ticker, nickname);
+    this.initializeProvider(type, chainId);
     this.registerProvider();
     this.lookupNetwork();
   }
@@ -249,9 +254,8 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
   }
 
   private async getNetworkId(): Promise<string> {
-    const self = this;
     return await new Promise((resolve, reject) => {
-      self.ethQuery.sendAsync({ method: 'net_version' }, (error: Error, result: string) => {
+      this.ethQuery.sendAsync({ method: 'net_version' }, (error: Error, result: string) => {
         if (error) {
           reject(error);
         } else {
@@ -299,38 +303,17 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
    *
    * @param type - Human readable network name.
    */
-  setProviderType(type: NetworkType) {
-    // If testnet the ticker symbol should use a testnet prefix
-    const ticker =
-      type in TESTNET_NETWORK_TYPE_TO_TICKER_SYMBOL && TESTNET_NETWORK_TYPE_TO_TICKER_SYMBOL[type].length > 0
-        ? TESTNET_NETWORK_TYPE_TO_TICKER_SYMBOL[type]
-        : 'ETH';
+  setProviderType(type: Network) {
+    const networkConfig = getNetworkConfig(type);
+    const ticker = networkConfig.coin;
+    const chainId = networkConfig.chainId.toString(10);
 
     this.update((state) => {
       state.providerConfig.type = type;
       state.providerConfig.ticker = ticker;
-      state.providerConfig.chainId = NetworksChainId[type];
-      state.providerConfig.rpcTarget = undefined;
-      state.providerConfig.nickname = undefined;
-    });
-    this.refreshNetwork();
-  }
-
-  /**
-   * Convenience method to update provider RPC settings.
-   *
-   * @param rpcTarget - The RPC endpoint URL.
-   * @param chainId - The chain ID as per EIP-155.
-   * @param ticker - The currency ticker.
-   * @param nickname - Personalized network name.
-   */
-  setRpcTarget(rpcTarget: string, chainId: string, ticker?: string, nickname?: string) {
-    this.update((state) => {
-      state.providerConfig.type = RPC;
-      state.providerConfig.rpcTarget = rpcTarget;
       state.providerConfig.chainId = chainId;
-      state.providerConfig.ticker = ticker;
-      state.providerConfig.nickname = nickname;
+      state.providerConfig.rpcTarget = networkConfig.rpcUrl;
+      state.providerConfig.nickname = networkConfig.shortName;
     });
     this.refreshNetwork();
   }

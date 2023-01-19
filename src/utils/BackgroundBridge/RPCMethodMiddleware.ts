@@ -4,7 +4,8 @@ import { createAsyncMiddleware } from 'json-rpc-engine';
 import { getVersion } from 'react-native-device-info';
 
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
-import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import AppConstants from './AppConstants';
 
@@ -195,8 +196,9 @@ export const getRpcMethodMiddleware = ({
         // } else if (networkType === RPC) {
         //   chainId = networkProvider.chainId;
         // }
+        const { selectedNetwork } = walletPersistStore.getState();
 
-        const chainId = getNetworkConfig(NETWORK.GOERLI).chainId.toString(10);
+        const chainId = getNetworkConfig(getNetworkByBase(selectedNetwork)).chainId.toString(10);
         if (!chainId) {
           res.error = new Error('No chainId found');
         }
