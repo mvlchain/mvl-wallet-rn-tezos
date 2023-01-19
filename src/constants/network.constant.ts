@@ -1,7 +1,4 @@
 import appconfig from '@@config/appconfig';
-import { BSC_TOKENLIST } from '@@domain/wallet/repositories/TestData';
-import { ETHEREUM_TOKEN_LIST, TEZOS_TOKEN_LIST } from '@@store/token/tokenPersistStore.constant';
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
 
 export const NETWORK = {
@@ -41,6 +38,7 @@ export type NetworkConfig = {
   networkId: NetworkId;
   coin: string;
   multicallAddress?: string;
+  infuraNetwork?: 'mainnet' | 'goerli';
 };
 
 const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
@@ -54,6 +52,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
     multicallAddress: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
+    infuraNetwork: 'mainnet',
   },
   [NETWORK.GOERLI]: {
     name: 'Ethereum Goerli Testnet',
@@ -65,6 +64,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
     multicallAddress: '0x77dCa2C955b15e9dE4dbBCf1246B4B85b651e50e',
+    infuraNetwork: 'goerli',
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',
