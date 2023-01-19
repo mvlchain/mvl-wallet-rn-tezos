@@ -40,7 +40,7 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
   //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
   const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice, userInputGasLimit });
   //가스프라이스 조회와 가스사용량을 예측합니다.
-  useEVMEstimate({ advanced, to, value, data, isValidInput, tokenDto, setGasLimit, setGasPrice });
+  useEVMEstimate({ advanced, to, value, data, isValidInput, setGasLimit, setGasPrice });
 
   const setBaseValueForUserInputs = () => {
     if (!advanced) return;
