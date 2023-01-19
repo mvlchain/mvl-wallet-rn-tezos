@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 export interface IEIP1559TotalProps {
   advanced: boolean;
-  leveledMaxFeePerGas: BigNumber | null;
+  maxFeePerGas: BigNumber | null;
   leveledMaxFeePriorityFeePerGas: BigNumber | null;
   gasLimit: BigNumber | null;
   userInputMaxFeePerGas: BigNumber | null;
@@ -15,33 +15,25 @@ export interface IEIP1559TotalProps {
 const useEIP1559Total = ({
   advanced,
   leveledMaxFeePriorityFeePerGas,
-  leveledMaxFeePerGas,
+  maxFeePerGas,
   gasLimit,
   userInputMaxFeePerGas,
   userInputMaxPriorityFeePerGas,
   userInputGasLimit,
 }: IEIP1559TotalProps) => {
+  const getTotal = (maxFeePerGas: BigNumber | null, maxPriorityFeePerGas: BigNumber | null, gasLimit: BigNumber | null) => {
+    if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) return null;
+    return maxFeePerGas.multipliedBy(gasLimit);
+  };
+
   const total = useMemo(() => {
     switch (advanced) {
       case true:
         return getTotal(userInputMaxFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
       case false:
-        return getTotal(leveledMaxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
+        return getTotal(maxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
     }
-  }, [
-    advanced,
-    leveledMaxFeePriorityFeePerGas,
-    leveledMaxFeePerGas,
-    gasLimit,
-    userInputMaxFeePerGas,
-    userInputMaxPriorityFeePerGas,
-    userInputGasLimit,
-  ]);
-
-  const getTotal = (maxFeePerGas: BigNumber | null, maxPriorityFeePerGas: BigNumber | null, gasLimit: BigNumber | null) => {
-    if (!maxFeePerGas || !maxPriorityFeePerGas || !gasLimit) return null;
-    return maxFeePerGas.plus(maxPriorityFeePerGas).multipliedBy(gasLimit);
-  };
+  }, [advanced, leveledMaxFeePriorityFeePerGas, maxFeePerGas, gasLimit, userInputMaxFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit]);
 
   return total;
 };

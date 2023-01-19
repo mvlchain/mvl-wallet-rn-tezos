@@ -11,6 +11,11 @@ export interface IEVMTotalProps {
 }
 
 const useEVMTotal = ({ advanced, leveledGasPrice, gasLimit, userInputGasPrice, userInputGasLimit }: IEVMTotalProps) => {
+  const getTotal = (gasPrice: BigNumber | null, gasLimit: BigNumber | null) => {
+    if (!gasPrice || !gasLimit) return null;
+    return gasPrice.multipliedBy(gasLimit);
+  };
+
   const total = useMemo(() => {
     switch (advanced) {
       case true:
@@ -19,11 +24,6 @@ const useEVMTotal = ({ advanced, leveledGasPrice, gasLimit, userInputGasPrice, u
         return getTotal(leveledGasPrice, gasLimit);
     }
   }, [advanced, leveledGasPrice, gasLimit, userInputGasPrice, userInputGasLimit]);
-
-  const getTotal = (gasPrice: BigNumber | null, gasLimit: BigNumber | null) => {
-    if (!gasPrice || !gasLimit) return null;
-    return gasPrice.multipliedBy(gasLimit);
-  };
 
   return total;
 };

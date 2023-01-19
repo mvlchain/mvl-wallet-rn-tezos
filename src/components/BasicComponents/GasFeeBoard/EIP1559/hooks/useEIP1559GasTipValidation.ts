@@ -12,7 +12,7 @@ import useRemainBalance from '../../common/hooks/useRemainBalance';
 interface IUseEIP1559GasTipValidationProps {
   tokenDto: TokenDto;
   advanced: boolean;
-  leveledMaxFeePerGas: BigNumber | null;
+  maxFeePerGas: BigNumber | null;
   leveledMaxFeePriorityFeePerGas: BigNumber | null;
   gasLimit: BigNumber | null;
   userInputMaxFeePerGas: BigNumber | null;
@@ -24,7 +24,7 @@ const useEIP1559GasTipValidation = ({
   tokenDto,
   advanced,
   value,
-  leveledMaxFeePerGas,
+  maxFeePerGas,
   leveledMaxFeePriorityFeePerGas,
   gasLimit,
   userInputMaxFeePerGas,
@@ -75,7 +75,7 @@ const useEIP1559GasTipValidation = ({
   const runCheck = () => {
     switch (advanced) {
       case true:
-        check(leveledMaxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
+        check(maxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
         return;
       case false:
         check(userInputMaxFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
@@ -88,7 +88,7 @@ const useEIP1559GasTipValidation = ({
   }, [
     advanced,
     value,
-    leveledMaxFeePerGas,
+    maxFeePerGas,
     leveledMaxFeePriorityFeePerGas,
     gasLimit,
     userInputMaxFeePerGas,
