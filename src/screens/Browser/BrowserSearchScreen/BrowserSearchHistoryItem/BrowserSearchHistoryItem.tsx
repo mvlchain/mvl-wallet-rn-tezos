@@ -7,15 +7,16 @@ import { useAssetFromTheme } from '@@hooks/useTheme';
 
 import * as S from './BrowserSearchHistoryItem.style';
 import { IBrowserSearchHistoryItemProps } from './BrowserSearchHistoryItem.type';
+import useBrowserSearchHistoryItem from './useBrowserSearchHistoryItem';
 
 function BrowserSearchHistoryItem({ title, link, isFocused, onPress, onPressDelete }: IBrowserSearchHistoryItemProps) {
   const CloseIcon = useAssetFromTheme(DeleteIconLight, DeleteIconDark);
-
+  const { renderTitle } = useBrowserSearchHistoryItem({ title });
   return (
     <S.Container>
       <S.ContentContainer>
         <Pressable onPress={onPress}>
-          <S.Title>{title}</S.Title>
+          {renderTitle()}
           <S.Link>{link}</S.Link>
         </Pressable>
         {!isFocused && (

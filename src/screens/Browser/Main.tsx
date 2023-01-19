@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet, View, ViewStyle } from 'react-native';
 import Modal from 'react-native-modal';
 import { WebView } from 'react-native-webview';
-import { FileDownloadEvent, WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
+import { FileDownloadEvent, WebViewMessageEvent, WebViewNavigation } from 'react-native-webview/lib/WebViewTypes';
 import URL from 'url-parse';
 
 import useAccount from '@@components/Wallet/Account/useAccount';
@@ -233,8 +233,9 @@ export const BrowserMain = () => {
   });
 
   useEffect(() => {
-    setApprovedHosts({ 'https://stage.mvlbridge.io': true });
+    setApprovedHosts({ [params.link]: true });
   }, []);
+
   useEffect(() => {
     setProps({
       ...props,
@@ -252,13 +253,14 @@ export const BrowserMain = () => {
   const [entryScriptWeb3, setEntryScriptWeb3] = useState<string | null>(null);
   const [showPhishingModal, setShowPhishingModal] = useState(false);
   const [blockedUrl, setBlockedUrl] = useState<string | undefined>(undefined);
+  const [navState, setNavState] = useState<WebViewNavigation>();
   const webviewRef = useRef<null | WebView<any>>(null);
   const blockListType = useRef('');
 
   const url = useRef('');
   const title = useRef('');
   const icon = useRef(null);
-  const backgroundBridges = useRef<any[]>([]);
+  const backgroundBridge = useRef<any>();
   const fromHomepage = useRef(false);
   const wizardScrollAdjusted = useRef(false);
 
@@ -288,13 +290,12 @@ export const BrowserMain = () => {
     const fullHostname = new URL(url.current).hostname;
 
     // TODO:permissions move permissioning logic elsewhere
-    backgroundBridges.current.forEach((bridge: any) => {
-      if (bridge.hostname === fullHostname && !restricted) {
-        // || approvedHosts[bridge.hostname]
-        console.log(`bridge.sendNotification called`);
-        bridge.sendNotification(payload);
-      }
-    });
+    if (!backgroundBridge.current) return;
+    if (backgroundBridge.current.hostname === fullHostname && !restricted) {
+      // || approvedHosts[bridge.hostname]
+      console.log(`bridge.sendNotification called`);
+      backgroundBridge.current.sendNotification(payload);
+    }
   }, []);
 
   useEffect(() => {
@@ -424,7 +425,9 @@ export const BrowserMain = () => {
    * Set initial url, dapp scripts and engine. Similar to componentDidMount
    */
   useEffect(() => {
-    const initialUrl = props.initialUrl || HOMEPAGE_URL;
+    // const initialUrl = props.initialUrl || HOMEPAGE_URL;
+    const initialUrl = params.link || HOMEPAGE_URL;
+
     go(initialUrl, true);
 
     const getEntryScriptWeb3 = async () => {
@@ -436,7 +439,8 @@ export const BrowserMain = () => {
 
     // Specify how to clean up after this effect:
     return function cleanup() {
-      backgroundBridges.current.forEach((bridge) => bridge.onDisconnect());
+      if (!backgroundBridge.current) return;
+      backgroundBridge.current.onDisconnect();
     };
   }, []);
 
@@ -445,9 +449,15 @@ export const BrowserMain = () => {
    */
   useEffect(() => {
     const handleAndroidBackPress = () => {
-      if (!isTabActive()) return false;
-      goBack();
-      return true;
+      if (!navState || !webviewRef.current) return;
+
+      if (navState.canGoBack) {
+        toggleOptionsIfNeeded();
+        webviewRef.current.goBack();
+        return true;
+      } else {
+        return false;
+      }
     };
 
     BackHandler.addEventListener('hardwareBackPress', handleAndroidBackPress);
@@ -463,7 +473,7 @@ export const BrowserMain = () => {
     return function cleanup() {
       BackHandler.removeEventListener('hardwareBackPress', handleAndroidBackPress);
     };
-  }, [goBack, isTabActive, props.navigation]);
+  }, [goBack, isTabActive, props.navigation, navState?.canGoBack, webviewRef.current]);
 
   /**
    * Handles state changes for when the url changes
@@ -645,16 +655,15 @@ export const BrowserMain = () => {
         console.log(`WB INCOMING> 2. data or data.name doesn't exist`);
         return;
       }
-      console.log(`WB INCOMING> 2. backgroundBridges.current.forEach .onMessage: ${backgroundBridges.current}`);
+      console.log(`WB INCOMING> 2. backgroundBridges.current.forEach .onMessage: ${backgroundBridge.current}`);
 
-      backgroundBridges.current.forEach((bridge) => {
-        const { origin } = data && data.origin && new URL(data.origin);
-        if (bridge.url !== origin) {
-          console.warn(`bridge.url !== origin, onMessage not executed: ${bridge.url}, ${origin}`);
-          return;
-        }
-        bridge.onMessage(data);
-      });
+      if (!backgroundBridge.current) return;
+      const { origin } = data && data.origin && new URL(data.origin);
+      if (backgroundBridge.current.url !== origin) {
+        console.warn(`bridge.url !== origin, onMessage not executed: ${backgroundBridge.current.url}, ${origin}`);
+        return;
+      }
+      backgroundBridge.current.onMessage(data);
       return;
     } catch (e: any) {
       console.log(`WB INCOMING> error: ${e.message}`);
@@ -730,7 +739,8 @@ export const BrowserMain = () => {
         });
       },
     });
-    backgroundBridges.current.push(newBridge);
+    // backgroundBridges.current.push(newBridge);
+    backgroundBridge.current = newBridge;
   };
 
   /**
@@ -755,8 +765,10 @@ export const BrowserMain = () => {
     icon.current = null;
 
     // Reset the previous bridges
-    backgroundBridges.current.length && backgroundBridges.current.forEach((bridge) => bridge.onDisconnect());
-    backgroundBridges.current = [];
+    // backgroundBridges.current.length && backgroundBridges.current.forEach((bridge) => bridge.onDisconnect());
+    // backgroundBridges.current = [];
+    backgroundBridge.current && backgroundBridge.current.onDisconnect();
+    backgroundBridge.current = undefined;
     const origin = new URL(nativeEvent.url).origin;
     initializeBackgroundBridge(origin);
   };
@@ -829,6 +841,7 @@ export const BrowserMain = () => {
               testID={'browser-webview'}
               applicationNameForUserAgent={'WebView MetaMaskMobile'}
               onFileDownload={handleOnFileDownload}
+              onNavigationStateChange={setNavState}
             />
           )}
         </View>

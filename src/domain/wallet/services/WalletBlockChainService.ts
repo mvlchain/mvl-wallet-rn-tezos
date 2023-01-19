@@ -2,10 +2,10 @@ import { inject, injectable } from 'tsyringe';
 
 import appconfig from '@@config/appconfig';
 import { abiERC20 } from '@@constants/contract/abi/abiERC20';
-import { ERC20_MULTICALL_METHOD } from '@@constants/token.constant';
-import { IBlockChainRepository, ICallBody, IConfigBody } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
 import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID, NETWORK } from '@@constants/network.constant';
+import { ERC20_MULTICALL_METHOD } from '@@constants/token.constant';
 import QrCodeParser from '@@domain/auth/QrCodeParser/QrCodeParser';
+import { IBlockChainRepository, ICallBody, IConfigBody } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
 import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { ITokenPersistState, TokenDto } from '@@store/token/tokenPersistStore.type';
 import { isBlank, isNotBlank } from '@@utils/strings';
@@ -27,7 +27,7 @@ export class WalletBlockChainService implements IWalletBlockChainService {
     @inject('EthersRepository') private ethersRepository: IBlockChainRepository,
     @inject('TezosRepository') private tezosRepository: IBlockChainRepository,
     @inject('WalletService') private walletService: WalletService
-  ) { }
+  ) {}
 
   setBlockChainRepository = (network: Network): IBlockChainRepository => {
     const networkId = getNetworkConfig(network).networkId;
