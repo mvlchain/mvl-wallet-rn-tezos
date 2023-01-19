@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TextFieldDelete } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
+import { useColor } from '@@hooks/useTheme';
 import Device from '@@utils/device';
 
 import BrowserSearchHistoryItem from './BrowserSearchHistoryItem';
@@ -17,6 +18,7 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
   const { t } = useTranslation();
   const { filteredHistory, searchValue, setSearchValue, setIsInputFocused, onPressSearch, onPressCancel, resetSearchValue } =
     useBrowserSearchScreen();
+  const { color } = useColor();
   const renderDappItem = useCallback(({ item }: ListRenderItemInfo<IBrowserSearchHistoryItemProps>) => {
     return (
       <BrowserSearchHistoryItem
@@ -44,6 +46,7 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
               setIsInputFocused(false);
             }}
             placeholder={t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}
+            placeholderTextColor={color.grey300Grey700}
             returnKeyType='search'
           />
           {searchValue.length > 0 && <TextFieldDelete onPress={resetSearchValue} style={S.inlineStyles.marginProvider} />}
