@@ -26,7 +26,6 @@ const useEVMEstimate = ({
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
-  tokenDto?: TokenDto;
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setGasPrice: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
