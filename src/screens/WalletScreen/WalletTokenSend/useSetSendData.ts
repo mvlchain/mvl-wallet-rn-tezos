@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { BigNumber } from 'bignumber.js';
 import { BackHandler } from 'react-native';
 
-import { getNetworkByBase } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig, NETWORK_ID } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -12,28 +12,31 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 
 import { TTokenSendRouteProps } from './WalletTokenSend.type';
+
 const useSetSendData = () => {
-  const transactionService = useDi('TransactionService');
+  const transactionServiceEthers = useDi('TransactionServiceEthers');
+  const transactionServiceTezos = useDi('TransactionServiceTezos');
   const qrPayLogger = tagLogger('QrPay');
 
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
 
-  const { to, value, setState: setBody, resetBody, tokenTo, tokenValue } = transactionRequestStore();
-  const { resetState: resetGas } = gasStore();
+  const { setState: setBody, resetBody, tokenTo, tokenValue } = transactionRequestStore();
+  const { resetTotal } = gasStore();
 
-  const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
-  const selectedNetwork = getNetworkByBase(pickNetwork);
+  const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
+  const network = getNetworkConfig(selectedNetwork);
+  const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
 
   useEffect(() => {
     setInitialFromRouteProps();
   }, []);
 
   useEffect(() => {
-    if (params.tokenDto.contractAddress) {
-      if (!tokenTo || !tokenValue) return;
-      setData(tokenTo, tokenValue);
-    }
+    if (!params.tokenDto.contractAddress) return;
+    if (!tokenTo || !tokenValue) return;
+
+    setData(tokenTo, tokenValue);
   }, [tokenTo, tokenValue]);
 
   useEffect(() => {
@@ -56,7 +59,7 @@ const useSetSendData = () => {
 
   const clearSendInput = () => {
     resetBody();
-    resetGas();
+    resetTotal();
     return true;
   };
 
@@ -77,15 +80,19 @@ const useSetSendData = () => {
   };
 
   const setData = async (to: string, value: BigNumber) => {
-    if (tokenDto.contractAddress) {
-      const data = await transactionService.getTransferData({
-        selectedNetwork: selectedNetwork,
-        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
+    if (network.networkId === NETWORK_ID.XTZ) {
+      const transferParam = await transactionServiceTezos.getTransferParam({
+        selectedNetwork: testIncludeSelectedNetwork,
+        selectedWalletIndex: selectedWalletIndex[testIncludeSelectedNetwork],
         to,
-        value,
-        contractAddress: tokenDto.contractAddress,
-        decimals: tokenDto.decimals,
+        amount: value.toNumber(),
+        contractAddress: tokenDto.contractAddress!,
       });
+      setBody({
+        transferParam,
+      });
+    } else {
+      const data = await transactionServiceEthers.encodeFunctionData('transfer', [to, value.toString(10)]);
       setBody({
         data,
       });

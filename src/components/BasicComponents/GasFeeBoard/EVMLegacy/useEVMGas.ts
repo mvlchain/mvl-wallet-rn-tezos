@@ -3,9 +3,10 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { GAS_LEVEL, GAS_UNIT } from '@@constants/gas.constant';
-import { TGasLevel } from '@@domain/gas/Gas.type';
+import { GAS_LEVEL, GAS_UNIT, TGasLevel } from '@@constants/gas.constant';
+import gasStore from '@@store/gas/gasStore';
 import { tagLogger } from '@@utils/Logger';
+import { BnToEtherBn } from '@@utils/formatBigNumber';
 
 import { IUseGasProps } from '../GasFeeBoard.type';
 import { IGasInputs } from '../common/GasInputs/GasInputs.type';
@@ -23,6 +24,7 @@ const EVM_LEVEL_WEIGHT = {
 const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { t } = useTranslation();
+  const { setTotal } = gasStore();
   const [advanced, setAdvanced] = useState<boolean>(false);
   const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
 
@@ -109,20 +111,25 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
     switch (advanced) {
       case true:
         gasFeeInfo = {
-          gasPrice: leveledGasPrice!,
-          gasLimit: gasLimit!,
+          gasPrice: BnToEtherBn(leveledGasPrice) ?? undefined,
+          gasLimit: BnToEtherBn(gasLimit) ?? undefined,
         };
         break;
       case false:
         gasFeeInfo = {
-          gasPrice: userInputGasPrice!,
-          gasLimit: userInputGasLimit!,
+          gasPrice: BnToEtherBn(userInputGasPrice) ?? undefined,
+          gasLimit: BnToEtherBn(userInputGasLimit) ?? undefined,
         };
         break;
     }
-    gasLogger.log('final gas is: ', 'gasPrice:', gasFeeInfo.gasPrice?.toString(10), 'gasLimit', gasFeeInfo.gasLimit?.toString(10));
-    onConfirm({ to, value, data, gasFeeInfo });
+    gasLogger.log('final gas is: ', 'gasPrice:', gasFeeInfo.gasPrice?.toString(), 'gasLimit', gasFeeInfo.gasLimit?.toString());
+    onConfirm({ to, value: BnToEtherBn(value) ?? undefined, data: data ?? undefined, ...gasFeeInfo });
   };
+
+  useEffect(() => {
+    //글로벌스토어 total임 useState아님 주의
+    setTotal(total);
+  }, [total]);
 
   return {
     advanced,

@@ -40,26 +40,6 @@ const useTezosEstimate = ({
   const gasLogger = tagLogger('Gas');
   const gasRepository = useDi('GasRepositoryTezos');
 
-  //   const getTokenEstimateParam = async () => {
-  //     if (!to || !value) {
-  //       gasLogger.log('To get token transfer Estimate Param, to and value is required: ', 'to', to, 'value', value);
-  //     }
-  //     const wallet = await walletService.getWalletInfo({
-  //       index: selectedWalletIndex[testIncludeSelectedNetwork],
-  //       network: testIncludeSelectedNetwork,
-  //     });
-  //     const param = await TransactionService.getTransferData({
-  //       selectedNetwork: testIncludeSelectedNetwork,
-  //       selectedWalletIndex: selectedWalletIndex[testIncludeSelectedNetwork],
-  //       from: wallet.address,
-  //       to,
-  //       amount: value?.toNumber(),
-  //       contractAddress: tokenDto.contractAddress,
-  //     });
-
-  //     setTokenEstimateParam(param);
-  //   };
-
   const estimateGas = useDebounce(
     async ({
       to,

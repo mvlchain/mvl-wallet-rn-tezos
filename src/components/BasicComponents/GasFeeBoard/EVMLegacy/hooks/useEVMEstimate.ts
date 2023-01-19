@@ -36,16 +36,14 @@ const useEVMEstimate = ({
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
 
   const fetchGasPrice = async () => {
-    const gasPrice = await gasRepository.getGasPrice();
+    const gasPrice = await gasRepository.getGasPrice(testIncludeSelectedNetwork);
     gasLogger.log('get EVM gas price', gasPrice);
     setGasPrice(etherBNtoBN(gasPrice));
   };
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
     gasLogger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
-    const gasUsage = await gasRepository.estimateGas({
-      selectedNetwork: testIncludeSelectedNetwork,
-      selectedWalletIndex: selectedWalletIndex[testIncludeSelectedNetwork],
+    const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
       to,
       value: BnToEtherBn(value),
       data,

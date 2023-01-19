@@ -10,14 +10,13 @@ import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRep
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
 import { UIService } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
-import { IGasService } from '@@domain/gas/Gas.type';
-import { GasRepositoryEVMLegacy } from '@@domain/gas/repository/gasRepository/GasRepositoryEVMLegacy';
-import { GasRepositoryTezosImpl } from '@@domain/gas/repository/gasRepositoryTezos/GasRepositoryTezos';
+import { GasRepositoryEVMLegacy } from '@@domain/gas/gasRepository/GasRepositoryEVMLegacy';
+import { GasRepositoryTezosImpl } from '@@domain/gas/gasRepositoryTezos/GasRepositoryTezos';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
-import { ITransactionService } from '@@domain/transaction/TransactionService.type';
-import { ITransactionServiceEthers } from '@@domain/transaction/service/transactionServiceEthers/TransactionServiceEthers.type';
-import { ITransactionServiceTezos } from '@@domain/transaction/service/transactionServiceTezos/TransactionServiceTezos.type';
+import { ITransactionHistoryRepository } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
+import { ITransactionServiceEthers } from '@@domain/transaction/transactionServiceEthers/TransactionServiceEthers.type';
+import { ITransactionServiceTezos } from '@@domain/transaction/transactionServiceTezos/TransactionServiceTezos.type';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { IBlockChainRepository } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
@@ -33,10 +32,10 @@ export interface DiModuleTypes {
   WalletBlockChainService: IWalletBlockChainService;
   AuthService: AuthService;
   UIService: UIService;
-  TransactionService: ITransactionService;
+
+  TransactionHistoryRepository: ITransactionHistoryRepository;
   TransactionServiceEthers: ITransactionServiceEthers;
   TransactionServiceTezos: ITransactionServiceTezos;
-  GasService: IGasService;
   LegacyAuthMigrationService: ILegacyAuthMigrationService;
   EvmJsonRpcProviderHolder: EvmJsonRpcProviderHolder;
 

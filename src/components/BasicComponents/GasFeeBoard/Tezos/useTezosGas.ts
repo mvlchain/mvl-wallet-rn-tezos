@@ -1,10 +1,11 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 
+import { TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { GAS_LEVEL, GAS_UNIT } from '@@constants/gas.constant';
-import { TGasLevel } from '@@domain/gas/Gas.type';
+import { GAS_LEVEL, GAS_UNIT, TGasLevel } from '@@constants/gas.constant';
+import gasStore from '@@store/gas/gasStore';
 import { TEZOS_TOKEN_LIST } from '@@store/token/tokenPersistStore.constant';
 import { tagLogger } from '@@utils/Logger';
 import { formatBigNumber } from '@@utils/formatBigNumber';
@@ -19,6 +20,7 @@ import useTezosTotal from './hooks/useTezosTotal';
 
 const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfirm }: ITezosUseGasProps) => {
   const gasLogger = tagLogger('Gas');
+  const { setTotal } = gasStore();
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState<boolean>(false);
   const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
@@ -145,13 +147,13 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
     gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'transferParam:', transferParam);
-    if (!onConfirmValid || !to) {
-      gasLogger.error('gas is not ready or to doesn`t exist! ');
+    if (!onConfirmValid || !to || !value || !total) {
+      gasLogger.error('gas is not ready.');
       return;
     }
     gasLogger.log('final gas is: ', 'fee:', total?.toString(10));
-    const amount = value ? +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10) : null;
-    const fee = total ? total.toNumber() : null;
+    const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10);
+    const fee = total.toNumber();
 
     if (tokenDto.contractAddress) {
       onConfirm({ ...transferParam, fee });
@@ -159,6 +161,11 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
       onConfirm({ to, amount, fee });
     }
   };
+
+  useEffect(() => {
+    //글로벌스토어 total임 useState아님 주의
+    setTotal(total);
+  }, [total]);
 
   return {
     advanced,

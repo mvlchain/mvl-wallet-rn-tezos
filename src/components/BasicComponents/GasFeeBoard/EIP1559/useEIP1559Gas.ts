@@ -1,11 +1,13 @@
+/* eslint-disable max-lines */
 import { useState, useCallback, useMemo, useEffect } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { GAS_LEVEL, GAS_UNIT } from '@@constants/gas.constant';
-import { TGasLevel } from '@@domain/gas/Gas.type';
+import { GAS_LEVEL, GAS_UNIT, TGasLevel } from '@@constants/gas.constant';
+import gasStore from '@@store/gas/gasStore';
 import { tagLogger } from '@@utils/Logger';
+import { BnToEtherBn } from '@@utils/formatBigNumber';
 
 import { IUseGasProps } from '../GasFeeBoard.type';
 import { IGasInputs } from '../common/GasInputs/GasInputs.type';
@@ -18,12 +20,13 @@ import useEIP1559Total from './hooks/useEIP1559Total';
 
 const EIP1559_LEVEL_WEIGHT = {
   [GAS_LEVEL.LOW]: '1.1',
-  [GAS_LEVEL.MID]: '1.3',
-  [GAS_LEVEL.HIGH]: '1.7',
+  [GAS_LEVEL.MID]: '1.2',
+  [GAS_LEVEL.HIGH]: '1.6',
 };
 
 const useEIP1559Gas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
+  const { setTotal } = gasStore();
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState<boolean>(false);
   const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
@@ -166,30 +169,34 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: I
     switch (advanced) {
       case true:
         gasFeeInfo = {
-          maxFeePerGas: leveledMaxFeePerGas!,
-          maxPriorityFeePerGas: leveledMaxFeePriorityFeePerGas!,
-          gasLimit: gasLimit,
+          maxFeePerGas: BnToEtherBn(leveledMaxFeePerGas) ?? undefined,
+          maxPriorityFeePerGas: BnToEtherBn(leveledMaxFeePriorityFeePerGas) ?? undefined,
+          gasLimit: BnToEtherBn(gasLimit) ?? undefined,
         };
         break;
       case false:
         gasFeeInfo = {
-          maxFeePerGas: userInputMaxFeePerGas!,
-          maxPriorityFeePerGas: userInputMaxPriorityFeePerGas!,
-          gasLimit: userInputGasLimit,
+          maxFeePerGas: BnToEtherBn(userInputMaxFeePerGas) ?? undefined,
+          maxPriorityFeePerGas: BnToEtherBn(userInputMaxPriorityFeePerGas) ?? undefined,
+          gasLimit: BnToEtherBn(userInputGasLimit) ?? undefined,
         };
         break;
     }
     gasLogger.log(
       'final gas is: ',
       'maxFeePerGas:',
-      gasFeeInfo.maxFeePerGas?.toString(10),
+      gasFeeInfo.maxFeePerGas?.toString(),
       'maxPriorityFeePerGas:',
-      gasFeeInfo.maxPriorityFeePerGas.toString(10),
+      gasFeeInfo.maxPriorityFeePerGas?.toString(),
       'gasLimit',
-      gasFeeInfo.gasLimit?.toString(10)
+      gasFeeInfo.gasLimit?.toString()
     );
-    onConfirm({ to, value, data, gasFeeInfo });
+    onConfirm({ to, value: BnToEtherBn(value) ?? undefined, data: data ?? undefined, ...gasFeeInfo });
   };
+
+  useEffect(() => {
+    setTotal(total);
+  }, [total]);
 
   return {
     advanced,

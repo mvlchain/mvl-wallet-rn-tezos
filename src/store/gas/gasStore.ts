@@ -1,43 +1,34 @@
+import BigNumber from 'bignumber.js';
 import zustandFlipper from 'react-native-flipper-zustand';
 import create from 'zustand';
 
-import { GAS_LEVEL } from '@@constants/gas.constant';
-import { formatBigNumber } from '@@utils/formatBigNumber';
-
-import { IGasStore, IGasStoreState } from './gasStore.type';
+import { IGasStore } from './gasStore.type';
 
 const INITIAL_GAS_STORE_STATE = {
-  baseFee: null,
-  tip: null,
-  gas: null,
   total: null,
-  level: GAS_LEVEL.LOW,
-  baseFeeValid: false,
-  tipValid: false,
-  gasValid: false,
 };
 const gasStore = create<IGasStore>(
   zustandFlipper(
     (set, get) => ({
       ...INITIAL_GAS_STORE_STATE,
-      setState: (newState) => {
+      setTotal: (total: BigNumber | null) => {
         set(
           (prevState) => ({
             ...prevState,
-            ...newState,
+            total,
           }),
           false,
-          `setGas`
+          `setGasTotal`
         );
       },
-      resetState: () => {
+      resetTotal: () => {
         set(
           (prevState) => ({
             ...prevState,
             ...INITIAL_GAS_STORE_STATE,
           }),
           false,
-          'resetGas'
+          'resetGasTotal'
         );
       },
     }),
