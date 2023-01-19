@@ -39,7 +39,7 @@ export function safeToChecksumAddress(address: string) {
 /**
  * PureComponent that manages transaction approval from the dapp browser
  */
-const Approval = () => {
+const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const { t } = useTranslation();
   const strings = t;
   const [state, setState] = useState<any>({
@@ -271,8 +271,10 @@ const Approval = () => {
     <ModalLayout
       title={t('transaction_details')}
       modalPosition='bottom'
-      isVisible={true}
-      onConfirm={onConfirm}
+      isVisible={isVisible}
+      onConfirm={() => {
+        onConfirm({});
+      }}
       confirmLabel={t('btn_confirm_payment')}
       onClose={onCancel}
     >
