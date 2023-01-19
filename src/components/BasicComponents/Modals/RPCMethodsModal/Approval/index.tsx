@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 
 import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
@@ -174,6 +175,9 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
               value: value,
               data: data ?? undefined,
             });
+            if (!tx) {
+              throw new Error('error: tx result is null');
+            }
             return tx.hash;
           });
         } catch (error: any) {
