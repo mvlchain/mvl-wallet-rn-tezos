@@ -114,7 +114,7 @@ export const SUPPORTED_NETWORKS = [NETWORK.ETH, NETWORK.BSC, NETWORK.TEZOS];
 
 const baseNetwork = appconfig().baseNetwork;
 
-export const networkIdToNetworkByBase = (networkId: NetworkId): Network => {
+export const networkIdToNetwork = (networkId: NetworkId): Network => {
   let network: Network;
   switch (networkId) {
     case NETWORK_ID.ETHEREUM:
@@ -127,7 +127,7 @@ export const networkIdToNetworkByBase = (networkId: NetworkId): Network => {
       network = NETWORK.TEZOS;
       break;
   }
-  return getNetworkByBase(network);
+  return network;
 };
 
 export const getNetworkByBase = (network: Network): Network => {
