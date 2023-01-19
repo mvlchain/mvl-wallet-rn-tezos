@@ -1,34 +1,74 @@
-import React from 'react';
+import { getNetworkByBase, getNetworkConfig, NETWORK_FEE_TYPE } from '@@constants/network.constant';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-import { IGasFeeBoardProps } from './GasFeeBoard.type';
-import GasFeeBoardLayout from './GasFeeBoardLayout/GasFeeBoardLayout';
-import GasFeeInputs from './GasFeeInputs';
-import GasLevelRadioButtons from './GasLevelRadioButtons';
-import useGasFeeBoard from './useGasFeeBoard';
+import EIP1559Gas from './EIP1559/EIP1559Gas';
+import EVMLegacyGas from './EVMLegacy/EVMLegacyGas';
+import { IGasComponentProps } from './GasFeeBoard.type';
+import TezosGas from './Tezos/TezosGas';
 
-function GasFeeBoard({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivider, to, value, data, isValidInput }: IGasFeeBoardProps) {
-  const { advanced, enableTip, enableLimitCustom, baseFeeCheck, tipCheck, gasCheck, toggleGasAdvanced, wrappedOnConfirm } = useGasFeeBoard({
-    to,
-    value,
-    data,
-    isValidInput,
-    tokenDto,
-    onConfirm,
-  });
+const GasFeeBoard = ({
+  isRevision,
+  onConfirm,
+  tokenDto,
+  onConfirmTitle,
+  hideDivider,
+  to,
+  value,
+  data,
+  isValidInput,
+  transferParam,
+}: IGasComponentProps) => {
+  const { selectedNetwork } = walletPersistStore();
+  const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
+  const networkConfig = getNetworkConfig(testIncludeSelectedNetwork);
 
-  return (
-    <GasFeeBoardLayout
-      onConfirm={wrappedOnConfirm}
-      onConfirmTitle={onConfirmTitle}
-      onConfirmValid={isValidInput}
-      advanced={advanced}
-      toggleGasAdvanced={toggleGasAdvanced}
-      hideDivider={hideDivider}
-      isRevision={isRevision}
-    >
-      <GasLevelRadioButtons />
-      <GasFeeInputs enableTip={enableTip} enableLimitCustom={enableLimitCustom} baseFeeCheck={baseFeeCheck} tipCheck={tipCheck} gasCheck={gasCheck} />
-    </GasFeeBoardLayout>
-  );
-}
+  const renderAlongWithNetwork = () => {
+    switch (networkConfig.networkFeeType) {
+      case NETWORK_FEE_TYPE.EIP1559:
+        return (
+          <EIP1559Gas
+            isRevision={isRevision}
+            onConfirm={onConfirm}
+            tokenDto={tokenDto}
+            onConfirmTitle={onConfirmTitle}
+            hideDivider={hideDivider}
+            to={to}
+            value={value}
+            data={data}
+            isValidInput={isValidInput}
+          />
+        );
+      case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
+        return (
+          <EVMLegacyGas
+            isRevision={isRevision}
+            onConfirm={onConfirm}
+            tokenDto={tokenDto}
+            onConfirmTitle={onConfirmTitle}
+            hideDivider={hideDivider}
+            to={to}
+            value={value}
+            data={data}
+            isValidInput={isValidInput}
+          />
+        );
+      case NETWORK_FEE_TYPE.TEZOS:
+        return (
+          <TezosGas
+            isRevision={isRevision}
+            onConfirm={onConfirm}
+            tokenDto={tokenDto}
+            onConfirmTitle={onConfirmTitle}
+            hideDivider={hideDivider}
+            to={to}
+            value={value}
+            transferParam={transferParam}
+            isValidInput={isValidInput}
+          />
+        );
+    }
+  };
+
+  return <>{renderAlongWithNetwork()}</>;
+};
 export default GasFeeBoard;

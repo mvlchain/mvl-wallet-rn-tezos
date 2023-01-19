@@ -15,14 +15,14 @@ const useGasUtil = () => {
   const grey = commonColors.grey500;
   const red = commonColors.red;
 
-  const textForm = (text: string) => {
+  const maximumIS = (text: string) => {
     return `${t('maximum')} ${text} ${coinDto.symbol}`;
   };
 
   return {
     grey,
     red,
-    textForm,
+    maximumIS,
     networkFeeType: network.networkFeeType,
   };
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -12,44 +12,44 @@ import Toggle from '@@components/BasicComponents/Form/Toggle';
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import useCoinDto from '@@hooks/useCoinDto';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
-import gasStore from '@@store/gas/gasStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 import { width } from '@@utils/ui';
 
-import * as S from './GasFeeBoardLayout.style';
-import { IGasFeeBoardLayoutProps } from './GasFeeBoardLayout.type';
+import * as S from './GasLayout.style';
+import { IGasLayoutProps } from './GasLayout.type';
 
-function GasFeeBoardLayout({
+function GasLayout({
   isRevision,
+  hideDivider,
+  total,
   estimatedTime,
-  advanced,
   onConfirm,
+  onConfirmTitle,
+  onConfirmValid,
+  advanced,
   toggleGasAdvanced,
   children,
-  onConfirmTitle,
-  hideDivider,
-  onConfirmValid,
-}: IGasFeeBoardLayoutProps) {
+}: IGasLayoutProps) {
   const { t } = useTranslation();
   const { settedCurrency } = settingPersistStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkByBase(pickNetwork);
   const coin = getNetworkConfig(selectedNetwork).coin;
-  const { total } = gasStore();
+
   const { coinDto } = useCoinDto();
   const totalStr = total ? formatBigNumber(total, coinDto.decimals).toString(10) : '-';
   const { price } = useOneTokenPrice(coinDto, totalStr);
-  // const { toValid, valueValid } = transactionRequestStore();
-  const { baseFeeValid, tipValid, gasValid } = gasStore();
-  const isValid = onConfirmValid && baseFeeValid && tipValid && gasValid;
 
   const opacityAnimation = useAnimatedStyle(() => {
     return {
       opacity: withSequence(withTiming(0, { duration: 500 }), withSpring(1)),
     };
   }, [total]);
+
+  const DirectGasInputs = children[1];
+  const GasLevelButton = children[0];
 
   return (
     <S.Container>
@@ -62,7 +62,7 @@ function GasFeeBoardLayout({
               <Toggle checked={advanced} onPress={toggleGasAdvanced} style={{ marginLeft: width * 16 }} />
             </S.ToggleWrapper>
           </S.Row>
-          {advanced ? children[1] : children[0]}
+          {advanced ? DirectGasInputs : GasLevelButton}
         </S.InnerContainer>
         {!hideDivider && <Divider thickness={DIVIDER_THICKNESS.THIN} />}
         <S.InnerContainer>
@@ -94,16 +94,10 @@ function GasFeeBoardLayout({
         </S.InnerContainer>
       </View>
       <S.ConfirmWrapper>
-        <PrimaryButton
-          label={onConfirmTitle ? onConfirmTitle : t('next')}
-          onPress={() => {
-            onConfirm();
-          }}
-          disabled={!isValid}
-        />
+        <PrimaryButton label={onConfirmTitle ? onConfirmTitle : t('next')} onPress={onConfirm} disabled={!onConfirmValid} />
       </S.ConfirmWrapper>
     </S.Container>
   );
 }
 
-export default GasFeeBoardLayout;
+export default GasLayout;

@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { IEVMGasComponentProps } from '../GasFeeBoard.type';
+import { ITezosGasComponentProps } from '../GasFeeBoard.type';
 import GasInputs from '../common/GasInputs';
 import GasFeeBoardLayout from '../common/GasLayout/GasLayout';
 import GasLevelRadioButtons from '../common/GasLevelRadioButtons';
 
-import useEIP1559Gas from './useEIP1559Gas';
+import useTezosGas from './useTezosGas';
 
-function EIP1559Gas({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivider, to, value, data, isValidInput }: IEVMGasComponentProps) {
-  const { advanced, level, setLevel, total, toggleGasAdvanced, wrappedOnConfirm, onConfirmValid, userInputs } = useEIP1559Gas({
+function TezosGas({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivider, to, value, transferParam, isValidInput }: ITezosGasComponentProps) {
+  const { advanced, level, setLevel, total, toggleGasAdvanced, wrappedOnConfirm, onConfirmValid, userInputs } = useTezosGas({
     to,
     value,
-    data,
+    transferParam,
     isValidInput,
     tokenDto,
     onConfirm,
@@ -27,11 +27,10 @@ function EIP1559Gas({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivid
       hideDivider={hideDivider}
       isRevision={isRevision}
       total={total}
-      // estimatedTime={estimatedTime}
     >
       <GasLevelRadioButtons level={level} setLevel={setLevel} />
       <GasInputs inputs={userInputs} />
     </GasFeeBoardLayout>
   );
 }
-export default EIP1559Gas;
+export default TezosGas;

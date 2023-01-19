@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import { GAS_LEVEL, GAS_UNIT } from '@@constants/gas.constant';
-import { TGasLevel } from '@@domain/gas/GasService.type';
+import { TGasLevel } from '@@domain/gas/Gas.type';
 import { tagLogger } from '@@utils/Logger';
 
 import { IUseGasProps } from '../GasFeeBoard.type';
