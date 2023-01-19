@@ -63,13 +63,21 @@ class WalletServiceImpl implements WalletService {
   signMessageByExtendedKey(data: any): Promise<string> {
     throw new Error('Method not implemented.');
   }
-  getWalletInfo = async (param: IGetWalletInfoParam) => {
+  getWalletInfo = async (param: IGetWalletInfoParam): Promise<IWallet> => {
     return {
       address: 'tz1XmNmcHRP7J7ZHurpUy4ZbjE3dpNT9chtS',
       privateKey: 'edskS252S8sZYXuai5qRuqxx1BsNaRdNdgZt3VmJdmPEZAE3kuBdG3KNVjWctV2Zf5mXz4nnoEDQRx9bXYjGqHUsLCkbkJYeVh',
       publicKey: '',
     };
   };
+  getWalletInfoFromStore(param: IGetWalletInfoParam): IWallet {
+    return {
+      address: 'tz1XmNmcHRP7J7ZHurpUy4ZbjE3dpNT9chtS',
+      privateKey: 'edskS252S8sZYXuai5qRuqxx1BsNaRdNdgZt3VmJdmPEZAE3kuBdG3KNVjWctV2Zf5mXz4nnoEDQRx9bXYjGqHUsLCkbkJYeVh',
+      publicKey: '',
+    };
+  }
+
   getWalletList(networkId: NetworkId): Promise<WalletDto[]> {
     throw new Error('Method not implemented.');
   }
