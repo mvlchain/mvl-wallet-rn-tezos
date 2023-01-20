@@ -72,7 +72,7 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
       Toast.show({
         ...TOAST_DEFAULT_OPTION,
         type: 'basic',
-        text1: t('fail send trade transaction'),
+        text1: t('msg_fail_send_trade_transaction'),
       });
       return;
     }
@@ -81,7 +81,7 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
     Toast.show({
       ...TOAST_DEFAULT_OPTION,
       type: 'basic',
-      text1: t('trade_success'),
+      text1: t('msg_trade_success'),
     });
     resetTotal();
     setState({ value: null, valueValid: false, tokenValue: null });
