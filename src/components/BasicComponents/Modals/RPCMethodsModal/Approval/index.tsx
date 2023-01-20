@@ -17,13 +17,18 @@ import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsMod
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { GAS_LEVEL, TGasLevel } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
+import usePriceQuery from '@@hooks/queries/usePriceQuery';
+import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
+import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import gasStore from '@@store/gas/gasStore';
+import settingPersistStore from '@@store/setting/settingPersistStore';
+import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
-import { BnToEtherBn } from '@@utils/formatBigNumber';
+import { formatBigNumber, BnToEtherBn } from '@@utils/formatBigNumber';
 import { addHexPrefix, BNToHex } from '@@utils/number';
 
 import * as S from './ApprovalModal.style';
@@ -47,7 +52,21 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   });
   const transactionService = useDi('TransactionServiceEthers');
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
+  const { settedCurrency } = settingPersistStore();
+  const [symbol, setSymbol] = useState<string>();
+  const [gasCurrencyPrice, setGasCurrencyPrice] = useState<string>();
+  const { tokenList } = tokenPersistStore();
 
+  // const { data: price } = usePriceQuery(
+  //   { ids: priceId, vsCurrencies: settedCurrency },
+  //   {
+  //     onError: () => {
+  //       // TODO: 일괄로 처리할것인가..?
+  //       console.log('TODO: SERVER ERROR');
+  //     },
+  //     keepPreviousData: true,
+  //   }
+  // );
   const { transaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
   const { to, value, data } = transactionRequestStore();
 
@@ -55,8 +74,12 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
 
   const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
-
+  const [isPaymentDisable, setIsPaymentDisable] = useState(true);
   console.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
+  const { coinDto } = useCoinDto();
+  const amountStr = useMemo(() => formatBigNumber(gasPrice!, transaction?.selectedAsset?.decimals ?? 18)?.toString(10), [gasPrice, transaction]);
+
+  const { price: coinPrice } = useOneTokenPrice(coinDto, amountStr ?? '-');
 
   const leveledGasPrice = useMemo(() => {
     return gasPrice ? gasPrice.multipliedBy('1.3') : new BigNumber(0);
@@ -66,6 +89,12 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice: gasPrice, userInputGasLimit: gasLimit });
   //가스프라이스 조회와 가스사용량을 예측합니다.
   useEVMEstimate({ advanced, to, value, data, isValidInput: true, setGasLimit, setGasPrice });
+
+  useEffect(() => {
+    const coin = tokenList[selectedNetwork].find((token) => token.contractAddress === null);
+    if (!coin) return;
+    setSymbol(coin.symbol);
+  }, []);
 
   const updateNavBar = () => {
     // const colors = this.context.colors || mockTheme.colors;
@@ -114,6 +143,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const onConfirm = useCallback(
     ({ gasEstimateType, EIP1559GasData, gasSelected }: any) => {
       (async () => {
+        setIsPaymentDisable(true);
         // const { TransactionController, KeyringController } = Engine.context;
         const { transactionController } = controllerManager;
         const { assetType, selectedAsset } = transaction;
@@ -224,6 +254,12 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     return transactionToSend;
   };
 
+  useEffect(() => {
+    if (gasPrice) {
+      setIsPaymentDisable(false);
+    }
+  }, [gasPrice]);
+
   /**
    * Returns transaction object with gas and gasPrice in hex format, value set to 0 in hex format
    * and to set to selectedAsset address
@@ -263,24 +299,29 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       }}
       confirmLabel={t('btn_confirm_payment')}
       onClose={onCancel}
+      isConfirmDisabled={isPaymentDisable}
     >
       {/* <S.Label>{label}</S.Label> */}
-      <S.AmountText>100 MVL</S.AmountText>
+      <S.AmountText>{value?.toString(10)} MVL</S.AmountText>
       <S.ContentContainer>
         <S.GreyText>{t('payer')}</S.GreyText>
-        <S.BlackText>0xE4de5635351F5fa0e1e8b856422423oi1</S.BlackText>
+        <S.BlackText>{transaction?.from}</S.BlackText>
       </S.ContentContainer>
       <S.ContentContainer>
         <S.GreyText>{t('to')}</S.GreyText>
-        <S.BlackText>0xE4de5635351F5fa0e1e8b856422423oi1</S.BlackText>
+        <S.BlackText>{transaction?.to}</S.BlackText>
       </S.ContentContainer>
       <Pressable>
         <S.GasContainer>
           <S.BlackText>{t('gas')}</S.BlackText>
           <S.GasWrapper>
             <S.GasBalanceWrapper>
-              <S.BlackText>0.03 ETH</S.BlackText>
-              <S.GreyText>10.90 USD</S.GreyText>
+              <S.BlackText>
+                {gasPrice && formatBigNumber(gasPrice, transaction?.selectedAsset?.decimals ?? 18).toString(10)} {symbol}
+              </S.BlackText>
+              <S.GreyText>
+                {coinPrice} {settedCurrency}
+              </S.GreyText>
             </S.GasBalanceWrapper>
             <ArrowIcon />
           </S.GasWrapper>
