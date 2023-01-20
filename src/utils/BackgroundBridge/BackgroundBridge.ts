@@ -7,17 +7,19 @@ import createFilterMiddleware from 'eth-json-rpc-filters';
 // @ts-ignore
 import createSubscriptionManager from 'eth-json-rpc-filters/subscriptionManager';
 import { JsonRpcEngine } from 'json-rpc-engine';
+import { JsonRpcMiddleware } from 'json-rpc-engine/dist/JsonRpcEngine';
 import { createEngineStream } from 'json-rpc-middleware-stream';
 // @ts-ignore
 import ObjectMultiplex from 'obj-multiplex';
 import pump from 'pump';
 import { WebView } from 'react-native-webview';
+import { Duplex } from 'readable-stream';
 // @ts-ignore
 import { createEventEmitterProxy, createSwappableProxy } from 'swappable-obj-proxy';
 import URL from 'url-parse';
 
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
-import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { getAddress } from '@@utils/walletHelper';
 
@@ -114,8 +116,8 @@ export function createOriginMiddleware(opts: any) {
 
 const { NOTIFICATION_NAMES } = AppConstants;
 
-function setupMultiplex(connectionStream: any) {
-  const mux = new ObjectMultiplex();
+function setupMultiplex(connectionStream: Duplex) {
+  const mux: ObjectMultiplex = new ObjectMultiplex();
   pump(connectionStream, mux, connectionStream, (err: any) => {
     if (err) {
       console.warn(err);
@@ -133,7 +135,7 @@ export class BackgroundBridge extends EventEmitter {
   private _providerProxy: any;
   private _blockTrackerProxy: any;
   private port: any;
-  private engine: any;
+  private engine: JsonRpcEngine | null;
   private chainIdSent: any;
   private provider: any;
   private blockTracker: any;
@@ -177,6 +179,7 @@ export class BackgroundBridge extends EventEmitter {
     const portStream = new MobilePortStream(this.port, url);
     // setup multiplexing
     const mux = setupMultiplex(portStream);
+
     // connect features
     this.setupProviderConnection(mux.createStream('metamask-provider'));
 
@@ -288,7 +291,7 @@ export class BackgroundBridge extends EventEmitter {
    * A method for serving our ethereum provider over a given stream.
    * @param {*} outStream - The stream to provide over.
    */
-  setupProviderConnection(outStream: any) {
+  setupProviderConnection(outStream: Duplex) {
     this.engine = this.setupProviderEngine();
 
     // setup connection
@@ -296,7 +299,8 @@ export class BackgroundBridge extends EventEmitter {
 
     pump(outStream, providerStream, outStream, (err: any) => {
       // handle any middleware cleanup
-      this.engine._middleware.forEach((mid: any) => {
+      // @ts-ignore
+      this.engine?._middleware.forEach((mid: any) => {
         if (mid.destroy && typeof mid.destroy === 'function') {
           mid.destroy();
         }

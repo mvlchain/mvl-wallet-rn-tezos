@@ -2,12 +2,15 @@ import { Buffer } from 'buffer';
 
 import { Duplex } from 'readable-stream';
 
+import Port from '@@utils/BackgroundBridge/Port';
+
 const noop = () => {};
 
 export default class PortDuplexStream extends Duplex {
-  private _port: any;
-  private _url: any;
-  constructor(port: any, url: any) {
+  private _port: Port;
+  private readonly _url: string;
+
+  constructor(port: Port, url: string) {
     super({
       objectMode: true,
     });
