@@ -6,6 +6,7 @@ import { getVersion } from 'react-native-device-info';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { polyfillGasPrice } from '@@utils/BackgroundBridge/utils';
 import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
@@ -168,35 +169,15 @@ export const getRpcMethodMiddleware = ({
 
     const rpcMethods: any = {
       eth_getTransactionByHash: async () => {
-        // res.result = await polyfillGasPrice('getTransactionByHash', req.params);
-        res.result = {
-          tx: true,
-        };
+        res.result = await polyfillGasPrice('getTransactionByHash', req.params);
       },
       eth_getTransactionByBlockHashAndIndex: async () => {
-        // res.result = await polyfillGasPrice('getTransactionByBlockHashAndIndex', req.params);
-        res.result = {
-          tx: true,
-        };
+        res.result = await polyfillGasPrice('getTransactionByBlockHashAndIndex', req.params);
       },
       eth_getTransactionByBlockNumberAndIndex: async () => {
-        // res.result = await polyfillGasPrice('getTransactionByBlockNumberAndIndex', req.params);
-        res.result = {
-          tx: true,
-        };
+        res.result = await polyfillGasPrice('getTransactionByBlockNumberAndIndex', req.params);
       },
       eth_chainId: async () => {
-        // const { provider } = Engine.context.NetworkController.state;
-        // const networkProvider = provider;
-        // const networkType = provider.type as NetworkType;
-        // const isInitialNetwork = networkType && getAllNetworks().includes(networkType);
-        // let chainId;
-        //
-        // if (isInitialNetwork) {
-        //   chainId = NetworksChainId[networkType];
-        // } else if (networkType === RPC) {
-        //   chainId = networkProvider.chainId;
-        // }
         const { selectedNetwork } = walletPersistStore.getState();
 
         const chainId = getNetworkConfig(getNetworkByBase(selectedNetwork)).chainId.toString(10);
@@ -211,49 +192,13 @@ export const getRpcMethodMiddleware = ({
         }
       },
       net_version: async () => {
-        // const {
-        //   provider: { type: networkType },
-        // } = Engine.context.NetworkController.state;
+        const { selectedNetwork } = walletPersistStore.getState();
 
-        // const isInitialNetwork = networkType && getAllNetworks().includes(networkType);
-        // if (isInitialNetwork) {
-        //   res.result = (Networks as any)[networkType].networkId;
-        // } else {
-        //   return next();
-        // }
-        res.result = getNetworkConfig(NETWORK.GOERLI).chainId.toString(10);
+        const chainId = getNetworkConfig(getNetworkByBase(selectedNetwork)).chainId.toString(10);
+        res.result = chainId;
       },
       eth_requestAccounts: async () => {
         const { params } = req;
-        // const {
-        //   privacy: { privacyMode },
-        // } = store.getState();
-        //
-        // let { selectedAddress } = Engine.context.PreferencesController.state;
-        //
-        // selectedAddress = selectedAddress?.toLowerCase();
-        //
-        // if (isWalletConnect || !privacyMode || ((!params || !params.force) && getApprovedHosts()[hostname])) {
-        //   res.result = [selectedAddress];
-        // } else {
-        //   try {
-        //     await requestUserApproval({
-        //       type: ApprovalTypes.CONNECT_ACCOUNTS,
-        //       requestData: { hostname },
-        //     });
-        //     const fullHostname = hostname;
-        //     approveHost?.(fullHostname);
-        //     setApprovedHosts?.({
-        //       ...getApprovedHosts?.(),
-        //       [fullHostname]: true,
-        //     });
-        //
-        //     res.result = selectedAddress ? [selectedAddress] : [];
-        //   } catch (e) {
-        //     throw ethErrors.provider.userRejectedRequest('User denied account authorization.');
-        //   }
-        // }
-        // FIXME: get selectedAddress
         const selectedAddress = getAddress();
 
         console.log(`eth_requestAccounts: ${selectedAddress}`);
@@ -261,11 +206,11 @@ export const getRpcMethodMiddleware = ({
       },
       eth_accounts: async () => {
         console.log(`WB INCOMING> 6. eth_accounts called`);
-        res.result = await getAccounts();
+        res.result = getAccounts();
       },
 
       eth_coinbase: async () => {
-        const accounts = await getAccounts();
+        const accounts = getAccounts();
         res.result = accounts.length > 0 ? accounts[0] : null;
       },
       eth_sendTransaction: async () => {
@@ -274,7 +219,7 @@ export const getRpcMethodMiddleware = ({
         checkActiveAccountAndChainId({
           address: req.params[0].from,
           chainId: req.params[0].chainId,
-          activeAccounts: await getAccounts(),
+          activeAccounts: getAccounts(),
         });
         next();
       },

@@ -14,11 +14,11 @@ class Port extends EventEmitter {
   }
 
   postMessage = (msg: any, origin = '*') => {
-    console.log(`WB OUTGOING> 2. Port postMessage: ${JSON.stringify(msg, null, 2)}`);
+    // console.log(`WB OUTGOING> 2. Port postMessage: ${JSON.stringify(msg, null, 2)}`);
     const js = JS_POST_MESSAGE_TO_PROVIDER(msg, origin);
 
     if (this._window.webViewRef?.current) {
-      console.log(`WB OUTGOING> 3. this._window?.injectJavaScript(js)`);
+      // console.log(`WB OUTGOING> 3. this._window?.injectJavaScript(js)`);
       this._window?.injectJavaScript(js);
     }
   };
