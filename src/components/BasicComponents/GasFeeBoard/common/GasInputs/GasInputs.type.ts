@@ -1,7 +1,8 @@
-import { TGasUnit } from '@@constants/gas.constant';
+import { TGasUnit, TGasHint } from '@@constants/gas.constant';
+
 export interface IGasInputs {
   label: string;
-  hint?: null | { text: string; color: string };
+  hint?: TGasHint;
   unit?: TGasUnit;
   value: any;
   setValue: (value: any) => void;
