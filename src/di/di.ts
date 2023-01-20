@@ -18,6 +18,7 @@ import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasRepositoryEthers } from '@@domain/gas/gasRepositoryEthers/GasRepositoryEthers';
 import { GasRepositoryTezosImpl } from '@@domain/gas/gasRepositoryTezos/GasRepositoryTezos';
+import { SignMessageService } from '@@domain/message-manager/SignMessageService';
 import { TokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
 import { TransactionHistoryRepository } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository';
@@ -132,4 +133,8 @@ container.register('TradeRepository', {
 
 container.register('TransactionHistoryRepository', {
   useFactory: instancePerContainerCachingFactory<TransactionHistoryRepository>((container) => container.resolve(TransactionHistoryRepository)),
+});
+
+container.register('SignMessageService', {
+  useFactory: instancePerContainerCachingFactory<SignMessageService>((container) => container.resolve(SignMessageService)),
 });

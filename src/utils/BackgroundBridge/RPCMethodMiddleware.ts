@@ -7,6 +7,7 @@ import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethod
 import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { polyfillGasPrice } from '@@utils/BackgroundBridge/utils';
+import { tagLogger } from '@@utils/Logger';
 import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
@@ -94,6 +95,7 @@ export const checkActiveAccountAndChainId = ({ address, chainId, activeAccounts 
 
 const { messageManager, personalMessageManager, typedMessageManager } = controllerManager;
 
+const logger = tagLogger('RPCMethodMiddleware');
 /**
  * Handle RPC methods called by dapps
  */
@@ -130,7 +132,7 @@ export const getRpcMethodMiddleware = ({
       return [selectedAddress];
 
       // const isEnabled = !!getApprovedHosts()[hostname];
-      // console.log(`isEnabled: ${isEnabled}, ${selectedAddress}`);
+      // logger.log(`isEnabled: ${isEnabled}, ${selectedAddress}`);
       // return isEnabled && selectedAddress ? [selectedAddress] : [];
     };
 
@@ -146,7 +148,7 @@ export const getRpcMethodMiddleware = ({
     };
 
     const requestUserApproval = async ({ type = '', requestData = {} }) => {
-      console.log(`requestUserApproval called`);
+      logger.log(`requestUserApproval called`);
       checkTabActive();
       // await Engine.context.ApprovalController.clear(ethErrors.provider.userRejectedRequest());
 
@@ -201,11 +203,11 @@ export const getRpcMethodMiddleware = ({
         const { params } = req;
         const selectedAddress = getAddress();
 
-        console.log(`eth_requestAccounts: ${selectedAddress}`);
+        logger.log(`eth_requestAccounts: ${selectedAddress}`);
         res.result = [selectedAddress];
       },
       eth_accounts: async () => {
-        console.log(`WB INCOMING> 6. eth_accounts called`);
+        logger.log(`WB INCOMING> 6. eth_accounts called`);
         res.result = getAccounts();
       },
 
@@ -214,7 +216,7 @@ export const getRpcMethodMiddleware = ({
         res.result = accounts.length > 0 ? accounts[0] : null;
       },
       eth_sendTransaction: async () => {
-        console.log(`WB INCOMING> 6. eth_sendTransaction called: ${JSON.stringify(req.params, null, 2)}`);
+        logger.log(`WB INCOMING> 6. eth_sendTransaction called: ${JSON.stringify(req.params, null, 2)}`);
         checkTabActive();
         checkActiveAccountAndChainId({
           address: req.params[0].from,
@@ -224,13 +226,13 @@ export const getRpcMethodMiddleware = ({
         next();
       },
       eth_signTransaction: async () => {
-        console.log(`WB INCOMING> 6. eth_signTransaction`);
+        logger.log(`WB INCOMING> 6. eth_signTransaction`);
         // This is implemented later in our middleware stack – specifically, in
         // eth-json-rpc-middleware – but our UI does not support it.
         throw ethErrors.rpc.methodNotSupported();
       },
       eth_sign: async () => {
-        console.log(`WB INCOMING> 6. eth_sign`);
+        logger.log(`WB INCOMING> 6. eth_sign`);
         // const { MessageManager } = Engine.context;
         const pageMeta = {
           meta: {
@@ -262,7 +264,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       personal_sign: async () => {
-        console.log(`WB INCOMING> 6. personal_sign`);
+        logger.log(`WB INCOMING> 6. personal_sign`);
         // const { PersonalMessageManager } = Engine.context;
         const firstParam = req.params[0];
         const secondParam = req.params[1];
@@ -300,7 +302,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       eth_signTypedData: async () => {
-        console.log(`WB INCOMING> 6. eth_signTypedData`);
+        logger.log(`WB INCOMING> 6. eth_signTypedData, ${JSON.stringify(req.params, null, 2)}`);
         // const { TypedMessageManager } = Engine.context;
         const pageMeta = {
           meta: {
@@ -330,7 +332,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       eth_signTypedData_v3: async () => {
-        console.log(`WB INCOMING> 6. eth_signTypedData_v3`);
+        logger.log(`WB INCOMING> 6. eth_signTypedData_v3`);
         // const { TypedMessageManager } = Engine.context;
 
         const data = JSON.parse(req.params[1]);
@@ -365,7 +367,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       eth_signTypedData_v4: async () => {
-        console.log(`WB INCOMING> 6. eth_signTypedData_v4`);
+        logger.log(`WB INCOMING> 6. eth_signTypedData_v4`);
         // const { TypedMessageManager } = Engine.context;
 
         const data = JSON.parse(req.params[1]);
@@ -436,7 +438,7 @@ export const getRpcMethodMiddleware = ({
         }),
 
       wallet_watchAsset: async () => {
-        console.log(`wallet_watchAsset called`);
+        logger.log(`wallet_watchAsset called`);
         res.result = true;
         // const {
         //   params: {
@@ -480,7 +482,7 @@ export const getRpcMethodMiddleware = ({
        */
       metamask_logWeb3ShimUsage: () => (res.result = null),
       wallet_addEthereumChain: () => {
-        console.log('called wallet_addEthereumChain');
+        logger.log('called wallet_addEthereumChain');
         checkTabActive();
         // return RPCMethods.wallet_addEthereumChain({
         //   req,
@@ -490,7 +492,7 @@ export const getRpcMethodMiddleware = ({
       },
 
       wallet_switchEthereumChain: () => {
-        console.log('called wallet_switchEthereumChain');
+        logger.log('called wallet_switchEthereumChain');
         checkTabActive();
         // return RPCMethods.wallet_switchEthereumChain({
         //   req,
@@ -509,9 +511,9 @@ export const getRpcMethodMiddleware = ({
     //   }
     // }
 
-    console.log(`WB INCOMING> 5. rpcMethods[req.method]: ${rpcMethods[req.method]}`);
+    logger.log(`WB INCOMING> 5. rpcMethods[req.method]: ${rpcMethods[req.method]}`);
     if (!rpcMethods[req.method]) {
-      console.log('WB INCOMING> 6. no rpc method so next()');
+      logger.log('WB INCOMING> 6. no rpc method so next()');
       return next();
     }
     await rpcMethods[req.method]();
