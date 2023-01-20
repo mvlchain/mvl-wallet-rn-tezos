@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
-import { TransactionRequest } from '@ethersproject/abstract-provider';
 import BigNumber from 'bignumber.js';
 import { BytesLike } from 'ethers';
 
@@ -11,6 +10,8 @@ import useInterval from '@@hooks/useInterval';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 import { etherBNtoBN, BnToEtherBn } from '@@utils/formatBigNumber';
+
+const logger = tagLogger('useEVMEstimate');
 
 const useEVMEstimate = ({
   advanced,
@@ -29,19 +30,18 @@ const useEVMEstimate = ({
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setGasPrice: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
-  const gasLogger = tagLogger('Gas');
   const gasRepository = useDi('GasRepositoryEthers');
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
 
   const fetchGasPrice = async () => {
     const gasPrice = await gasRepository.getGasPrice(testIncludeSelectedNetwork);
-    console.log('get EVM gas price', gasPrice);
+    logger.log('get EVM gas price', gasPrice);
     setGasPrice(etherBNtoBN(gasPrice));
   };
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
-    console.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
+    logger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
 
     const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
       to,
@@ -49,10 +49,10 @@ const useEVMEstimate = ({
       data: data ?? undefined,
     });
     if (!gasUsage) {
-      console.error('fail to estimate EVM Legacy gas');
+      logger.error('fail to estimate EVM Legacy gas');
       return;
     }
-    console.log('estimate gas result', etherBNtoBN(gasUsage)?.toString(10));
+    logger.log('estimate gas result', etherBNtoBN(gasUsage)?.toString(10));
     setGasLimit(etherBNtoBN(gasUsage));
   }, 1000);
 
