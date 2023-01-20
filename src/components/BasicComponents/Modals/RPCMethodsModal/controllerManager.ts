@@ -1,10 +1,11 @@
 import { ControllerMessenger, WalletDevice } from '@metamask/controllers';
 
-import { getNetworkByBase, getNetworkConfig, NETWORK } from '@@constants/network.constant';
+import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import { MessageManager, PersonalMessageManager, TypedMessageManager } from '@@domain/message-manager';
 import { TransactionController } from '@@domain/transaction/TransactionController';
 import NetworkController from '@@domain/wallet/services/NetworkController';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { IWalletPersist } from '@@store/wallet/walletPersistStore.type';
 import { getAddress } from '@@utils/walletHelper';
 
 let instance: ControllerManager;
@@ -22,9 +23,9 @@ class ControllerManager {
     if (ControllerManager.instance) {
       return ControllerManager.instance;
     }
-    console.log(`controllerManager constructor`);
 
     this.controllerMessenger = new ControllerMessenger();
+
     const { selectedNetwork: pickNetwork } = walletPersistStore.getState();
     const selectedNetwork = getNetworkByBase(pickNetwork);
 
@@ -68,26 +69,17 @@ class ControllerManager {
         },
       },
       getAccounts: (end: (arg0: null, arg1: any[]) => void, payload: { hostname: string | number }) => {
-        // const { approvedHosts, privacyMode } = store.getState();
-        // const isEnabled = !privacyMode || approvedHosts[payload.hostname];
-        // const { KeyringController } = this.context;
-        // const isUnlocked = KeyringController.isUnlocked();
-        // const selectedAddress = this.context.PreferencesController.state.selectedAddress;
-        // end(null, isUnlocked && isEnabled && selectedAddress ? [selectedAddress] : []);
-        // FIXME: get selectedAddress
-        // const selectedAddress = '0xf2B8288Ea9FC59447BfB88EA853849733d90D632';
         const selectedAddress = getAddress();
-        console.log('account:   ', selectedAddress);
         end(null, [selectedAddress]);
       },
     };
 
-    // const transactionController = new TransactionController({
-    //   getNetworkState: () => networkController.state,
-    //   // @ts-ignore
-    //   onNetworkStateChange: (listener: any) => this.controllerMessenger.subscribe('NetworkController:stateChange', listener),
-    //   getProvider: () => networkController.provider,
-    // });
+    walletPersistStore.subscribe((state: IWalletPersist, prevState: IWalletPersist) => {
+      if (prevState.selectedNetwork !== state.selectedNetwork) {
+        console.log(`WB SETUP> prev selectedNetwork: ${prevState.selectNetwork} -> ${state.selectNetwork}`);
+        networkController.setProviderType(getNetworkByBase(state.selectedNetwork));
+      }
+    });
 
     const myTransactionController = new TransactionController({
       getSelectedNetworkConfig: () => {
