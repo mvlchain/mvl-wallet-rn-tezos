@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
+import useCoinDto from '@@hooks/useCoinDto';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import useGasUtil from '../../common/hooks/useGasUtil';
 import useRemainBalance from '../../common/hooks/useRemainBalance';
 
 interface IUseEIP1559GasTipValidationProps {
-  tokenDto: TokenDto;
   advanced: boolean;
   maxFeePerGas: BigNumber | null;
   leveledMaxFeePriorityFeePerGas: BigNumber | null;
@@ -21,7 +20,6 @@ interface IUseEIP1559GasTipValidationProps {
   value: BigNumber | null | undefined;
 }
 const useEIP1559GasTipValidation = ({
-  tokenDto,
   advanced,
   value,
   maxFeePerGas,
@@ -35,8 +33,9 @@ const useEIP1559GasTipValidation = ({
   const [status, setStatus] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
-  const { remainBalanceStr, remainBalance } = useRemainBalance(!tokenDto.contractAddress, value);
+  const { remainBalanceStr, remainBalance } = useRemainBalance(value);
   const { red, grey, maximumIS } = useGasUtil();
+  const { coinDto } = useCoinDto();
 
   const check = (maxFeePerGas: BigNumber | null, maxPriorityFeePerGas: BigNumber | null, gasLimit: BigNumber | null) => {
     if (!BigNumber.isBigNumber(gasLimit) || !BigNumber.isBigNumber(maxPriorityFeePerGas) || !BigNumber.isBigNumber(maxFeePerGas)) {
@@ -65,7 +64,7 @@ const useEIP1559GasTipValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit).minus(maxFeePerGas), tokenDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit).minus(maxFeePerGas), coinDto.decimals).toString(10)));
       setTextColor(grey);
 
       return;

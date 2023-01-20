@@ -9,7 +9,6 @@ import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
 import useInterval from '@@hooks/useInterval';
 import { TEZOS_TOKEN_LIST } from '@@store/token/tokenPersistStore.constant';
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 import { etherBNtoBN, BnToEtherBn, formatBigNumber } from '@@utils/formatBigNumber';
@@ -20,7 +19,6 @@ const useTezosEstimate = ({
   value,
   transferParam,
   isValidInput,
-  tokenDto,
   setGasLimit,
   setBaseFee,
   setStorageFee,
@@ -31,7 +29,6 @@ const useTezosEstimate = ({
   value?: BigNumber | null;
   transferParam?: TransferParams | null;
   isValidInput: boolean;
-  tokenDto: TokenDto;
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setStorageLimit: Dispatch<SetStateAction<BigNumber | null>>;
@@ -43,21 +40,10 @@ const useTezosEstimate = ({
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
 
   const estimateGas = useDebounce(
-    async ({
-      to,
-      value,
-      transferParam,
-      tokenDto,
-    }: {
-      to: string;
-      value?: BigNumber | null;
-      transferParam?: TransferParams | null;
-      tokenDto: TokenDto;
-    }) => {
+    async ({ to, value, transferParam }: { to: string; value?: BigNumber | null; transferParam?: TransferParams | null }) => {
       console.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' transferParam: ', transferParam);
       let estimation: Estimate | undefined;
-      if (tokenDto.contractAddress) {
-        if (!transferParam) return;
+      if (transferParam) {
         estimation = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], transferParam);
       } else {
         if (!value) return;
@@ -90,14 +76,14 @@ const useTezosEstimate = ({
 
   useEffect(() => {
     if (!isValidInput) return;
-    estimateGas({ to, value, transferParam, tokenDto });
-  }, [to, value, transferParam, tokenDto]);
+    estimateGas({ to, value, transferParam });
+  }, [to, value, transferParam]);
 
   useInterval(() => {
     if (!isValidInput) return;
     //유저가 직접 입력하는 동안에는 주기적으로 가스를 조회하지 않는다.
     if (advanced) return;
-    estimateGas({ to, value, transferParam, tokenDto });
+    estimateGas({ to, value, transferParam });
   }, 20000);
 };
 export default useTezosEstimate;

@@ -7,13 +7,12 @@ import GasLevelRadioButtons from '../common/GasLevelRadioButtons';
 
 import useTezosGas from './useTezosGas';
 
-function TezosGas({ isRevision, onConfirm, tokenDto, onConfirmTitle, hideDivider, to, value, transferParam, isValidInput }: ITezosGasComponentProps) {
+function TezosGas({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, value, transferParam, isValidInput }: ITezosGasComponentProps) {
   const { advanced, level, setLevel, total, toggleGasAdvanced, wrappedOnConfirm, onConfirmValid, userInputs } = useTezosGas({
     to,
     value,
     transferParam,
     isValidInput,
-    tokenDto,
     onConfirm,
   });
 

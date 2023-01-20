@@ -10,18 +10,7 @@ import EVMLegacyGas from './EVMLegacy/EVMLegacyGas';
 import { IGasComponentProps } from './GasFeeBoard.type';
 import TezosGas from './Tezos/TezosGas';
 
-const GasFeeBoard = ({
-  isRevision,
-  onConfirm,
-  tokenDto,
-  onConfirmTitle,
-  hideDivider,
-  to,
-  value,
-  data,
-  isValidInput,
-  transferParam,
-}: IGasComponentProps) => {
+const GasFeeBoard = ({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, value, data, isValidInput, transferParam }: IGasComponentProps) => {
   const { selectedNetwork } = walletPersistStore();
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
   const networkConfig = getNetworkConfig(testIncludeSelectedNetwork);
@@ -33,7 +22,6 @@ const GasFeeBoard = ({
           <EIP1559Gas
             isRevision={isRevision}
             onConfirm={onConfirm}
-            tokenDto={tokenDto}
             onConfirmTitle={onConfirmTitle}
             hideDivider={hideDivider}
             to={to}
@@ -47,7 +35,6 @@ const GasFeeBoard = ({
           <EVMLegacyGas
             isRevision={isRevision}
             onConfirm={onConfirm}
-            tokenDto={tokenDto}
             onConfirmTitle={onConfirmTitle}
             hideDivider={hideDivider}
             to={to}
@@ -61,7 +48,6 @@ const GasFeeBoard = ({
           <TezosGas
             isRevision={isRevision}
             onConfirm={onConfirm}
-            tokenDto={tokenDto}
             onConfirmTitle={onConfirmTitle}
             hideDivider={hideDivider}
             to={to}
