@@ -17,7 +17,7 @@ import useTokenSend from './useTokenSend';
 function WalletTokenSend() {
   const { params } = useRoute<TTokenSendRouteProps>();
   const { amount, setAmount, address, setAddress, confirm } = useTokenSend();
-  const { to, value, data, toValid, valueValid } = transactionRequestStore();
+  const { value, data, toValid, valueValid, transferParam, to } = transactionRequestStore();
   return (
     <DismissKeyboardView>
       <S.Container>
@@ -25,12 +25,13 @@ function WalletTokenSend() {
         <Divider thickness={DIVIDER_THICKNESS.THICK} />
         <GasFeeBoard
           isRevision={false}
+          hideDivider={false}
           onConfirm={confirm}
-          tokenDto={params.tokenDto}
           to={to}
           value={value}
           data={data}
           isValidInput={toValid && valueValid}
+          transferParam={transferParam}
         />
       </S.Container>
     </DismissKeyboardView>

@@ -1,24 +1,3 @@
-import { BigNumber } from 'bignumber.js';
-
-import { GAS_LEVEL_SETTING } from '@@constants/gas.constant';
-import { NetworkFeeType, NETWORK_FEE_TYPE } from '@@constants/network.constant';
-import { TGasLevel } from '@@domain/gas/GasService.type';
-
-export const getLeveledBaseFee = (networkFeeType: NetworkFeeType, gasLevel: TGasLevel, baseFee: BigNumber | null) => {
-  if (!baseFee) return null;
-  switch (networkFeeType) {
-    case NETWORK_FEE_TYPE.TEZOS:
-      return baseFee;
-    default:
-      const gasWeight = GAS_LEVEL_SETTING[gasLevel].weight;
-      return baseFee.multipliedBy(gasWeight);
-  }
-};
-
-export const getEstimateTime = (gasLevel: TGasLevel) => {
-  return GAS_LEVEL_SETTING[gasLevel].waitTime;
-};
-
 export const alphaNumericDecimalRegex = (decimal: number) => {
   // tokenDTO에 있는 decimals를 기준으로 입력 가능하게 자름
   return new RegExp(`^(\\d{0,60})([.]\\d{0,${decimal}})*?$`);

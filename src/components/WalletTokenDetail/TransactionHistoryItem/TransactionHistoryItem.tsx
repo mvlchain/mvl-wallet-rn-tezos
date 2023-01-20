@@ -6,7 +6,10 @@ import { Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
-import { TTransactionStatus, IGetTransactionHistoryResponse } from '@@domain/transaction/TransactionService.type';
+import {
+  IGetTransactionHistoryResponse,
+  TTransactionStatus,
+} from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import useRefreshTransactionQuery from '@@hooks/queries/useRefreshTransactionQuery';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
@@ -53,7 +56,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
 
   const setSign = async () => {
     const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
-    const valueSign = from === wallet.address ? '-' : '';
+    const valueSign = `${from.toLocaleLowerCase()}` === wallet.address.toLocaleLowerCase() ? '-' : '';
     setValueSign(valueSign);
   };
 
@@ -74,7 +77,6 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   // const goToCancel = () => {
   //   navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_CANCEL);
   // };
-
   return (
     <Pressable
       onPress={() => {
@@ -89,7 +91,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
         <S.HistoryItemTopContent>
           <S.TransactionHistoryContentInnerWrapper>
             <S.TransactionStatusWrapper>
-              <S.TransactionStatus>{displayStatus}</S.TransactionStatus>
+              <S.TransactionStatus>{displayStatus ?? status}</S.TransactionStatus>
               <S.TransactionDate>{dateFormatter(updatedAt)}</S.TransactionDate>
             </S.TransactionStatusWrapper>
             <S.TransactionAmountWrapper>

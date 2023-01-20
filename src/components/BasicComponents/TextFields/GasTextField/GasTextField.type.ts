@@ -1,9 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { TextInputProps } from 'react-native';
 
-import { TGasUnit } from '@@constants/gas.constant';
-
-import { TGasHint } from '../../GasFeeBoard/GasFeeInputs/GasFeeInputs.type';
+import { TGasUnit, TGasHint } from '@@constants/gas.constant';
 
 export interface IGasTextFieldProps {
   defaultValue?: any;
