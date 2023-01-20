@@ -64,8 +64,8 @@ import { valueOf } from '@@utils/types';
  * })
  *
  * 포인트 혹은 클레임 리워드 (이벤트의 상태에 따라 다른 API를 조회한다)
- * when EventPhase is (BeforeEvent, OnEvent, BeforeClaim) -> useUserPoints(...)[participation/current]
- * when it's OnClaim -> useClaimInformation(...)[claim/information]
+ * when EventPhase is in (BeforeEvent, OnEvent, BeforeClaim) -> useUserPoints(...)[participation/current]
+ * when EventPhase in OnClaim -> useClaimInformation(...)[claim/information]
  *
  * isClaimable field is equal to the conditions as follows
  * ```
@@ -98,7 +98,7 @@ export const useEarnEventDetailsUiState = ({
   const repository: EarnEventRepository = useDi('EarnEventRepository');
   const eventLogger = tagLogger('Event');
 
-  eventLogger.log(`start useEarnEventDetailsUiState() with deepLink: ${JSON.stringify(deepLink)}`);
+  eventLogger.log(`useEarnEventDetailsUiState() starts with deepLink: ${JSON.stringify(deepLink)}`);
 
   const { t } = useTranslation();
   const { openModal, closeModal } = globalModalStore();
@@ -116,15 +116,6 @@ export const useEarnEventDetailsUiState = ({
     phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
     deepLink: deepLink,
   });
-
-  useEffect(() => {
-    setDetails({
-      event: data,
-      phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
-      deepLink: deepLink,
-    });
-  }, [data, deepLink]);
-
   const [thirdParty, setThirdParty] = useState<IEventThirdParty>({
     isThirdPartySupported: false,
     connection: undefined,
@@ -133,7 +124,7 @@ export const useEarnEventDetailsUiState = ({
   });
   const [claimStatusInfo, setClaimStatusInfo] = useState<ClaimStatusInformation | undefined>();
 
-  // ThirdParty connection callback. This will connect ThirdParty appif executed.
+  // ThirdParty connection callback. This will connect ThirdPartyApp if executed.
   const onThirdPartyConnectionConfirm = useCallback(
     async (appId: string, token: string | null) => {
       if (token) {
@@ -147,6 +138,15 @@ export const useEarnEventDetailsUiState = ({
     },
     [details]
   );
+
+  useEffect(() => {
+    eventLogger.log(`init details. will trigger refreshThirdParty(), after updating EarnEventDetailsScreen`);
+    setDetails({
+      event: data,
+      phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
+      deepLink: deepLink,
+    });
+  }, [data, deepLink]);
 
   // refresh State<Details>
   const refresh = async (clearDeepLink: boolean = false) => {
@@ -176,7 +176,7 @@ export const useEarnEventDetailsUiState = ({
     const { event, phase, deepLink } = details;
     if (!event) return;
 
-    eventLogger.log(`refreshing ThirdParty with following: details.deepLink: ${JSON.stringify(details.deepLink)}`);
+    eventLogger.log(`refreshThirdParty, details.deepLink: ${JSON.stringify(details.deepLink)}`);
 
     const thirdPartyApp = event.app;
     if (!thirdPartyApp) {
@@ -245,7 +245,7 @@ export const useEarnEventDetailsUiState = ({
     });
   };
 
-  // State<ThirdParty>
+  // UseCase: useThirdPartyConnection & useUserPoints, State<ThirdParty>
   useEffect(() => {
     (async () => {
       try {
