@@ -84,7 +84,8 @@ const RootRPCMethodsUI = () => {
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
 
-      transactionMeta.transaction.value = hexToBN(value || '0');
+      const valueWithDefaultZero = value || '0';
+      transactionMeta.transaction.value = hexToBN(valueWithDefaultZero);
       transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);
 
       setEtherTransaction({
@@ -96,7 +97,7 @@ const RootRPCMethodsUI = () => {
       setTransactionRequest({
         from: transactionMeta.transaction.from,
         to: transactionMeta.transaction.to,
-        value: new BigNumber(value),
+        value: new BigNumber(valueWithDefaultZero),
         data: transactionMeta.transaction.data,
         toValid: true,
         valueValid: true,
