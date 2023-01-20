@@ -25,7 +25,7 @@ const EIP1559_LEVEL_WEIGHT = {
   [GAS_LEVEL.HIGH]: '1.6',
 };
 
-const useEIP1559Gas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseGasProps) => {
+const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
@@ -79,7 +79,6 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: I
 
   //유저가 입력하는 값이 타당한 값인지 검증합니다.
   const EIP1559GasPriceInputValidation = useEIP1559GasPriceValidation({
-    tokenDto,
     advanced,
     value,
     maxFeePerGas,
@@ -91,7 +90,6 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: I
     userInputGasLimit,
   });
   const EIP1559GasTipInputValidation = useEIP1559GasTipValidation({
-    tokenDto,
     advanced,
     value,
     maxFeePerGas,

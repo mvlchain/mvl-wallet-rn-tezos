@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
+import useCoinDto from '@@hooks/useCoinDto';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import useGasUtil from '../../common/hooks/useGasUtil';
 import useRemainBalance from '../../common/hooks/useRemainBalance';
 
 interface IUseTezosBaseFeeValidationProps {
-  tokenDto: TokenDto;
   advanced: boolean;
   value: BigNumber | null | undefined;
   baseFee: BigNumber | null;
@@ -22,7 +21,6 @@ interface IUseTezosBaseFeeValidationProps {
 }
 
 const useTezosTipValidation = ({
-  tokenDto,
   advanced,
   value,
   baseFee,
@@ -36,8 +34,9 @@ const useTezosTipValidation = ({
   const [status, setStatus] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
-  const { remainBalanceStr, remainBalance } = useRemainBalance(!tokenDto.contractAddress, value);
+  const { remainBalanceStr, remainBalance } = useRemainBalance(value);
   const { red, grey, maximumIS } = useGasUtil();
+  const { coinDto } = useCoinDto();
 
   const check = (baseFee: BigNumber | null, tip: BigNumber | null) => {
     if (!BigNumber.isBigNumber(baseFee) || !BigNumber.isBigNumber(tip)) {
@@ -62,7 +61,7 @@ const useTezosTipValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.minus(baseFee), tokenDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.minus(baseFee), coinDto.decimals).toString(10)));
       setTextColor(grey);
       return;
     }
@@ -81,7 +80,7 @@ const useTezosTipValidation = ({
 
   useEffect(() => {
     runCheck();
-  }, [advanced, baseFee, leveledTip, userInputBaseFee, userInputTip, tokenDto]);
+  }, [advanced, baseFee, leveledTip, userInputBaseFee, userInputTip]);
 
   return {
     status,

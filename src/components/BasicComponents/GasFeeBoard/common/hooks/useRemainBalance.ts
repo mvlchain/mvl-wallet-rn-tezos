@@ -6,13 +6,13 @@ import useCoinDto from '@@hooks/useCoinDto';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
-const useRemainBalance = (isCoin: boolean, value: BigNumber | null | undefined) => {
+const useRemainBalance = (value: BigNumber | null | undefined) => {
   const { coinDto } = useCoinDto();
   const { balance } = useOneTokenBalance(coinDto);
   const bnBalnce = new BigNumber(balance).shiftedBy(coinDto.decimals);
 
   const remainBalance = useMemo(() => {
-    return value && isCoin ? bnBalnce.minus(value) : bnBalnce;
+    return value ? bnBalnce.minus(value) : bnBalnce;
   }, [balance, value]);
 
   const remainBalanceStr = formatBigNumber(remainBalance, coinDto.decimals).toString(10);

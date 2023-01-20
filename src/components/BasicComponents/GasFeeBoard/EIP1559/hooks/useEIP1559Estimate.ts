@@ -3,13 +3,10 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { BytesLike, BigNumber as BigNumberEther } from 'ethers';
 
-import TokenDetailBoard from '@@components/WalletTokenDetail/TokenDetailBoard';
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
-import { WalletServiceImpl } from '@@domain/wallet/services/WalletService';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
 import useInterval from '@@hooks/useInterval';
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 import { etherBNtoBN, BnToEtherBn } from '@@utils/formatBigNumber';
@@ -49,7 +46,6 @@ const useEIP1559Estimate = ({
       'lastBaseFeePerGas',
       etherBNtoBN(feeData.lastBaseFeePerGas)?.toString(10)
     );
-    //고민 뭘 골라 쓸지
     setLastBaseFeePerGas(etherBNtoBN(feeData.lastBaseFeePerGas));
   };
 

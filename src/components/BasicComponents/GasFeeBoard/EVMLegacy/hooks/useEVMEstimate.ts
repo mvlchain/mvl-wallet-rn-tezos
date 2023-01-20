@@ -8,7 +8,6 @@ import { getNetworkByBase } from '@@constants/network.constant';
 import useDebounce from '@@hooks/useDebounce';
 import { useDi } from '@@hooks/useDi';
 import useInterval from '@@hooks/useInterval';
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 import { etherBNtoBN, BnToEtherBn } from '@@utils/formatBigNumber';

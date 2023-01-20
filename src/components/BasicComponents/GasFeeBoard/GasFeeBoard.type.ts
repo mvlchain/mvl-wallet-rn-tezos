@@ -3,14 +3,11 @@ import { TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import { BytesLike } from 'ethers';
 
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
-
 export interface IUseGasProps {
   to: string | null;
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
-  tokenDto: TokenDto;
   onConfirm: (params: TransactionRequest | TransferParams) => void;
 }
 export interface IEVMGasComponentProps extends IUseGasProps {

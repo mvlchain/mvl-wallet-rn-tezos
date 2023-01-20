@@ -22,7 +22,7 @@ const EVM_LEVEL_WEIGHT = {
   [GAS_LEVEL.MID]: '1.3',
   [GAS_LEVEL.HIGH]: '1.7',
 };
-const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseGasProps) => {
+const useEVMGas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { t } = useTranslation();
   const { setTotal } = gasStore();
@@ -52,7 +52,6 @@ const useEVMGas = ({ to, value, data, isValidInput, tokenDto, onConfirm }: IUseG
 
   //유저가 입력하는 값이 타당한 값인지 검증합니다.
   const EVMGasPriceInputValidation = useEVMGasPriceValidation({
-    tokenDto,
     advanced,
     value,
     leveledGasPrice,

@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
+import useCoinDto from '@@hooks/useCoinDto';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import useGasUtil from '../../common/hooks/useGasUtil';
 import useRemainBalance from '../../common/hooks/useRemainBalance';
 
 interface IUseEVMGasPriceValidationProps {
-  tokenDto: TokenDto;
   advanced: boolean;
   leveledGasPrice: BigNumber | null;
   userInputGasPrice: BigNumber | null;
@@ -21,7 +20,6 @@ interface IUseEVMGasPriceValidationProps {
 }
 
 const useEVMGasPriceValidation = ({
-  tokenDto,
   advanced,
   leveledGasPrice,
   userInputGasPrice,
@@ -34,8 +32,9 @@ const useEVMGasPriceValidation = ({
   const [status, setStatus] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
-  const { remainBalanceStr, remainBalance } = useRemainBalance(!tokenDto.contractAddress, value);
+  const { remainBalanceStr, remainBalance } = useRemainBalance(value);
   const { red, grey, maximumIS } = useGasUtil();
+  const { coinDto } = useCoinDto();
 
   const check = (gasPrice: BigNumber | null, gasLimit: BigNumber | null) => {
     if (!BigNumber.isBigNumber(gasLimit) || !BigNumber.isBigNumber(gasPrice)) {
@@ -55,7 +54,7 @@ const useEVMGasPriceValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit), tokenDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit), coinDto.decimals).toString(10)));
       setTextColor(grey);
       return;
     }
@@ -74,7 +73,7 @@ const useEVMGasPriceValidation = ({
 
   useEffect(() => {
     runCheck();
-  }, [advanced, leveledGasPrice, userInputGasPrice, gasLimit, userInputGasLimit, total, tokenDto]);
+  }, [advanced, leveledGasPrice, userInputGasPrice, gasLimit, userInputGasLimit, total]);
 
   return {
     status,

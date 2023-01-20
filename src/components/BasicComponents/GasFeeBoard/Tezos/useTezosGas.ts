@@ -19,7 +19,7 @@ import useTezosEstimate from './hooks/useTezosEstimate';
 import useTezosTipValidation from './hooks/useTezosTipValidation';
 import useTezosTotal from './hooks/useTezosTotal';
 
-const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfirm }: ITezosUseGasProps) => {
+const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITezosUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
@@ -57,7 +57,7 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
     userInputTip,
   });
   //가스프라이스 조회와 가스사용량을 예측합니다.
-  useTezosEstimate({ advanced, to, value, transferParam, isValidInput, tokenDto, setGasLimit, setStorageFee, setStorageLimit, setBaseFee });
+  useTezosEstimate({ advanced, to, value, transferParam, isValidInput, setGasLimit, setStorageFee, setStorageLimit, setBaseFee });
 
   useEffect(() => {
     setUserInputBaseFee(baseFee);
@@ -68,7 +68,6 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
 
   //유저가 입력하는 값이 타당한 값인지 검증합니다.
   const userInputBaseFeeValidation = useTezosBaseFeeValidation({
-    tokenDto,
     advanced,
     value,
     baseFee,
@@ -79,7 +78,6 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
     userInputTip,
   });
   const userInputTipValidation = useTezosTipValidation({
-    tokenDto,
     advanced,
     value,
     baseFee,
@@ -153,7 +151,7 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, tokenDto, onConfi
 
     const fee = total.toNumber();
 
-    if (tokenDto.contractAddress) {
+    if (transferParam) {
       onConfirm({ ...transferParam, fee });
     } else {
       if (!value) {
