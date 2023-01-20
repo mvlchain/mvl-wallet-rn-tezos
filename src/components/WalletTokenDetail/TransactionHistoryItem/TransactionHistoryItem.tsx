@@ -56,7 +56,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
 
   const setSign = async () => {
     const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
-    const valueSign = from === wallet.address ? '-' : '';
+    const valueSign = `${from.toLocaleLowerCase()}` === wallet.address.toLocaleLowerCase() ? '-' : '';
     setValueSign(valueSign);
   };
 
