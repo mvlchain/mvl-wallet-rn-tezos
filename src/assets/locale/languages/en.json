@@ -410,6 +410,13 @@
   "base_fee": "Base Fee",
   "tip": "Tip",
   "warning_zero_input": "must be greater than 0",
-  "warning _lower_than_network": "low for current network conditions",
-  "maximum": "Maximum :"
+  "warning_lower_than_network": "low for current network conditions",
+  "maximum": "Maximum :",
+  "fee_setting": "Fee Setting",
+  "max_fee_per_gas": "Max Fee per Gas",
+  "max_priority_fee_per_gas": "Max Priority Fee per Gas",
+  "warning_must_bigger_than_max_priority_fee_per_gas": "Must bigger than max priority fee per gas",
+  "msg_approve_success": "approve transaction successfully send",
+  "msg_fail_send_trade_transaction": "Trade transaction fail",
+  "msg_trade_success": "Trade transaction successfully send"
 }

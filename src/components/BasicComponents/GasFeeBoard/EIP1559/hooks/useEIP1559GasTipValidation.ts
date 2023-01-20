@@ -53,7 +53,7 @@ const useEIP1559GasTipValidation = ({
       return;
     } else if (maxPriorityFeePerGas.lt(new BigNumber('1').shiftedBy(9))) {
       setStatus(true);
-      setText(t('warning _lower_than_network'));
+      setText(t('warning_lower_than_network'));
       setTextColor(red);
 
       return;

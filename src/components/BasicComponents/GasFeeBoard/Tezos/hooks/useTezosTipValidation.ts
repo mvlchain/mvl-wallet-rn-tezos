@@ -52,7 +52,7 @@ const useTezosTipValidation = ({
       return;
     } else if (tip.lt(new BigNumber(100))) {
       setStatus(true);
-      setText(t('warning _lower_than_network'));
+      setText(t('warning_lower_than_network'));
       setTextColor(red);
       return;
     } else if (remainBalance.minus(baseFee).lt(tip)) {
