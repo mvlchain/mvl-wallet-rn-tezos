@@ -17,3 +17,8 @@ export const GAS_UNIT_DECIMAL = {
 export type TGasUnit = keyof typeof GAS_UNIT;
 export type TGasUnitDecimal = typeof GAS_UNIT_DECIMAL[keyof typeof GAS_UNIT];
 export type TGasLevel = typeof GAS_LEVEL[keyof typeof GAS_LEVEL];
+
+export type TGasHint = {
+  text: string;
+  color: string;
+};

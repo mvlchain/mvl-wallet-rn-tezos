@@ -1,4 +1,4 @@
-import { TTransactionStatus, TTransactionType } from '@@domain/transaction/TransactionService.type';
+import { TTransactionStatus, TTransactionType } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import { TCurrency } from '@@store/setting/settingPersistStore.type';
 
 export interface ITransactionDetailBoardProps {
