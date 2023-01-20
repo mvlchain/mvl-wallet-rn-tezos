@@ -3,10 +3,10 @@ import React from 'react';
 import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 import Divider from '@@components/BasicComponents/Divider';
 import { DIVIDER_THICKNESS } from '@@components/BasicComponents/Divider/Divider.type';
+import Picture from '@@components/BasicComponents/Picture';
 import QRcode from '@@components/BasicComponents/QR/QRcode';
 import useAccount from '@@components/Wallet/Account/useAccount';
 import Address from '@@components/Wallet/Address';
@@ -14,7 +14,7 @@ import TokenListItem from '@@components/Wallet/TokenList/TokenListItem';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { height, width } from '@@utils/ui';
+import { getWidth, height, width } from '@@utils/ui';
 
 import * as S from './WalletTokenReceive.style';
 import { TTTokenReceiveRouteProps } from './WalletTokenRecieve.type';
@@ -30,7 +30,7 @@ function WalletTokenReceive() {
     <S.Container>
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
-          {params.tokenDto.logoURI && <SvgUri uri={params.tokenDto.logoURI} width={`${width * 38}`} height={`${width * 38}`} />}
+          {params.tokenDto.logoURI && <Picture url={params.tokenDto.logoURI} width={getWidth(38)} height={getWidth(38)} />}
           <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>

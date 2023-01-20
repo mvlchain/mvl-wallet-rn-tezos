@@ -5,9 +5,9 @@ import BigNumber from 'bignumber.js';
 import { commify } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { View, Platform } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import Picture from '@@components/BasicComponents/Picture';
 import useOneTokenBalance from '@@hooks/useOneTokenBalance';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
@@ -15,7 +15,7 @@ import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail
 import { TTokenReceiveRootStackProps } from '@@screens/WalletScreen/WalletTokenReceive/WalletTokenRecieve.type';
 import { TTokenSendRootStackProps } from '@@screens/WalletScreen/WalletTokenSend/WalletTokenSend.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { fontSize, width } from '@@utils/ui';
+import { fontSize, getWidth, width } from '@@utils/ui';
 
 import * as S from './TokenDetailBoard.style';
 
@@ -37,7 +37,7 @@ function TokenDetailBoard() {
     <View>
       <S.TokenInfoContainer>
         <S.TokenSymbolWrapper>
-          {params.tokenDto.logoURI && <SvgUri uri={params.tokenDto.logoURI} width={`${width * 32}`} height={`${width * 32}`} />}
+          {params.tokenDto.logoURI && <Picture url={params.tokenDto.logoURI} width={getWidth(32)} height={getWidth(32)} />}
           <S.TokenName>{params.tokenDto.symbol}</S.TokenName>
         </S.TokenSymbolWrapper>
         <S.TokenAmountWrapper>

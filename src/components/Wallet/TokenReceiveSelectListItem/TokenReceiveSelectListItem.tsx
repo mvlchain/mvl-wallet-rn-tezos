@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
-import { SvgUri } from 'react-native-svg';
 
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { BUTTON_SIZE } from '@@components/BasicComponents/Buttons/Button.type';
+import Picture from '@@components/BasicComponents/Picture';
 import { formatBigNumber } from '@@utils/formatBigNumber';
-import { width } from '@@utils/ui';
+import { getWidth, width } from '@@utils/ui';
 
 import * as S from './TokenReceiveSelectListItem.style';
 import { ITokenReceiveSelectListItemProps } from './TokenReceiveSelectListItem.type';
@@ -28,7 +28,7 @@ function TokenReceiveSelectListItem({ tokenItem, amount, onPress }: ITokenReceiv
       <S.DataContainer>
         {tokenItem.logoURI && (
           <S.IconWrapper>
-            <SvgUri uri={tokenItem.logoURI} width={`${width * 36}`} height={`${width * 36}`} />
+            <Picture url={tokenItem.logoURI} width={getWidth(36)} height={getWidth(36)} />
           </S.IconWrapper>
         )}
         <S.Text>

@@ -4,11 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import { commify } from 'ethers/lib/utils';
 import { Pressable } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 
+import Picture from '@@components/BasicComponents/Picture';
 import { ROOT_STACK_ROUTE, TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import settingPersistStore from '@@store/setting/settingPersistStore';
-import { width } from '@@utils/ui';
+import { getWidth } from '@@utils/ui';
 
 import * as S from './TokenListItem.style';
 import { ITokenListItemProps } from './TokenListItem.type';
@@ -28,7 +28,7 @@ function TokenListItem({ ticker, balance, valuatedPrice, logoURI, tokenDto }: IT
         <S.LabelContainer>
           {logoURI && (
             <S.IconWrapper>
-              <SvgUri uri={logoURI} width={`${width * 36}`} height={`${width * 36}`} />
+              <Picture url={logoURI} width={getWidth(36)} height={getWidth(36)} />
             </S.IconWrapper>
           )}
           <S.Name>{ticker}</S.Name>
