@@ -154,8 +154,8 @@ export class BackgroundBridge extends EventEmitter {
     this.disconnected = false;
 
     this.createMiddleware = getRpcMethodMiddleware;
-
-    const networkConfig = getNetworkConfig(NETWORK.GOERLI);
+    const { selectedNetwork } = walletPersistStore.getState();
+    const networkConfig = getNetworkConfig(getNetworkByBase(selectedNetwork));
 
     const { networkController } = controllerManager;
     const provider = networkController.provider;
