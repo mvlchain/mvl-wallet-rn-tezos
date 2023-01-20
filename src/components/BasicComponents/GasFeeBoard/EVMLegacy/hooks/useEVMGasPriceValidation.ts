@@ -54,7 +54,7 @@ const useEVMGasPriceValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit), coinDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit), coinDto.decimals).toFixed()));
       setTextColor(grey);
       return;
     }

@@ -61,7 +61,7 @@ const useTezosTipValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.minus(baseFee), coinDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.minus(baseFee), coinDto.decimals).toFixed()));
       setTextColor(grey);
       return;
     }

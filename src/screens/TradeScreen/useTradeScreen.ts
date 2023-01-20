@@ -189,7 +189,7 @@ export const useTradeScreen = () => {
     setQuoteDto({
       fromTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.from)?.address ?? '',
       toTokenAddress: selectedTokenList.find((token) => token.symbol === selectedToken.to)?.address ?? '',
-      amount: tradeFromValue?.toString(10) ?? '',
+      amount: tradeFromValue?.toFixed() ?? '',
     });
   }, [tradeFromValue]);
 

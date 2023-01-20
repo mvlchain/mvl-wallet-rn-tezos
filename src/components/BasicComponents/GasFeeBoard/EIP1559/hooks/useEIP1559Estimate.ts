@@ -11,6 +11,8 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 import { etherBNtoBN, BnToEtherBn } from '@@utils/formatBigNumber';
 
+const logger = tagLogger('useEIP1559Estimate');
+
 const useEIP1559Estimate = ({
   advanced,
   to,
@@ -28,7 +30,6 @@ const useEIP1559Estimate = ({
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setLastBaseFeePerGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
-  const gasLogger = tagLogger('Gas');
   //EVMLegacy와 동일한 Repository사용하지만 리턴되어 오는 값에 차이 존재함
   const gasRepository = useDi('GasRepositoryEthers');
 
@@ -37,20 +38,20 @@ const useEIP1559Estimate = ({
 
   const fetchMaxFeePerGas = async () => {
     const feeData = await gasRepository.getFeeData(testIncludeSelectedNetwork);
-    console.log(
+    logger.log(
       'get EIP1559 gas price: ',
       'maxFeePerGas',
-      etherBNtoBN(feeData.maxFeePerGas)?.toString(10),
+      etherBNtoBN(feeData.maxFeePerGas)?.toFixed(),
       'maxPriorityFeePerGas',
-      etherBNtoBN(feeData.maxPriorityFeePerGas)?.toString(10),
+      etherBNtoBN(feeData.maxPriorityFeePerGas)?.toFixed(),
       'lastBaseFeePerGas',
-      etherBNtoBN(feeData.lastBaseFeePerGas)?.toString(10)
+      etherBNtoBN(feeData.lastBaseFeePerGas)?.toFixed()
     );
     setLastBaseFeePerGas(etherBNtoBN(feeData.lastBaseFeePerGas));
   };
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
-    console.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
+    logger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toFixed(), ' data: ', data);
 
     const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
       to,
@@ -59,10 +60,10 @@ const useEIP1559Estimate = ({
     });
 
     if (!gasUsage) {
-      console.error('fail to estimate EIP1559 gas');
+      logger.error('fail to estimate EIP1559 gas');
       return;
     }
-    console.log('estimate gas result', etherBNtoBN(gasUsage)?.toString(10));
+    logger.log('EIP1559 estimate gas result', etherBNtoBN(gasUsage)?.toFixed());
     setGasLimit(etherBNtoBN(gasUsage));
   }, 1000);
 

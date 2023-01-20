@@ -20,7 +20,7 @@ function TokenReceiveSelectListItem({ tokenItem, amount, onPress }: ITokenReceiv
     if (!amount) return;
     const bigNumber = new BigNumber(amount);
     const formalize = formatBigNumber(bigNumber, tokenItem.decimals);
-    setDisplayAmount(formalize.toString(10));
+    setDisplayAmount(formalize.toFixed);
   }, [amount]);
 
   return (
