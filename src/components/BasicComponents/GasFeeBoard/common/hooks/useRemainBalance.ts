@@ -15,7 +15,7 @@ const useRemainBalance = (value: BigNumber | null | undefined) => {
     return value ? bnBalnce.minus(value) : bnBalnce;
   }, [balance, value]);
 
-  const remainBalanceStr = formatBigNumber(remainBalance, coinDto.decimals).toString(10);
+  const remainBalanceStr = formatBigNumber(remainBalance, coinDto.decimals).toFixed();
   return { remainBalanceStr, remainBalance };
 };
 

@@ -142,12 +142,12 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITez
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
-    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'transferParam:', transferParam);
+    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toFixed(), 'transferParam:', transferParam);
     if (!onConfirmValid || !to || !total) {
       gasLogger.error('gas is not ready.');
       return;
     }
-    gasLogger.log('final gas is: ', 'fee:', total?.toString(10));
+    gasLogger.log('final gas is: ', 'fee:', total?.toFixed());
 
     const fee = total.toNumber();
 
@@ -158,7 +158,7 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITez
         gasLogger.error('gas is not ready.');
         return;
       }
-      const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10);
+      const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toFixed();
       onConfirm({ to, amount, fee });
     }
   };

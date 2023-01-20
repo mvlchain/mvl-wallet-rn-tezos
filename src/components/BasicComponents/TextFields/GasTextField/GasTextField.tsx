@@ -20,7 +20,7 @@ export function GasTextField(props: IGasTextFieldProps) {
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const decimal = unit ? GAS_UNIT_DECIMAL[unit] : 0;
-  const initialDisplayValue = value ? formatBigNumber(value, decimal).toString(10) : '';
+  const initialDisplayValue = value ? formatBigNumber(value, decimal).toFixed() : '';
 
   const [displayValue, setDisplayValue] = useState<string>(initialDisplayValue);
   const debounceCallback = useDebounce(setValue, 1000);

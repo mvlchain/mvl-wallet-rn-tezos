@@ -69,7 +69,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
 
   //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
   const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice: gasPrice, userInputGasLimit: gasLimit });
-  const amountStr = useMemo(() => formatBigNumber(total || BigNumber(0), coinDto.decimals)?.toString(10), [total]);
+  const amountStr = useMemo(() => (total && formatBigNumber(total, coinDto.decimals)?.toFixed()) || '-', [total]);
 
   const { price: coinPrice } = useOneTokenPrice(coinDto, amountStr ?? '-');
   //가스프라이스 조회와 가스사용량을 예측합니다.
@@ -246,7 +246,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       isConfirmDisabled={isPaymentDisable}
     >
       {/* <S.Label>{label}</S.Label> */}
-      <S.AmountText>{value?.toString(10)} MVL</S.AmountText>
+      <S.AmountText>{value?.toFixed()} MVL</S.AmountText>
       <S.ContentContainer>
         <S.GreyText>{t('payer')}</S.GreyText>
         <S.BlackText>{transaction?.from}</S.BlackText>

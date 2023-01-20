@@ -41,7 +41,7 @@ const useEVMEstimate = ({
   };
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
-    logger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
+    logger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toFixed(), ' data: ', data);
 
     const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
       to,
@@ -52,7 +52,7 @@ const useEVMEstimate = ({
       logger.error('fail to estimate EVM Legacy gas');
       return;
     }
-    logger.log('estimate gas result', etherBNtoBN(gasUsage)?.toString(10));
+    logger.log('estimate gas result', etherBNtoBN(gasUsage)?.toFixed());
     setGasLimit(etherBNtoBN(gasUsage));
   }, 1000);
 

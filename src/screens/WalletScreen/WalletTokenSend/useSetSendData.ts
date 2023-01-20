@@ -48,7 +48,7 @@ const useSetSendData = () => {
     }
     if (params?.scanData?.amount) {
       const amount = new BigNumber(params.scanData.amount);
-      qrPayLogger.log(`amount: ${amount.toString(10)}`);
+      qrPayLogger.log(`amount: ${amount.toFixed()}`);
       if (tokenDto.contractAddress) {
         setBody({ tokenValue: amount });
       } else {
@@ -92,7 +92,7 @@ const useSetSendData = () => {
         transferParam,
       });
     } else {
-      const data = await transactionServiceEthers.encodeFunctionData('transfer', [to, value.toString(10)]);
+      const data = await transactionServiceEthers.encodeFunctionData('transfer', [to, value.toFixed()]);
       setBody({
         data,
       });
