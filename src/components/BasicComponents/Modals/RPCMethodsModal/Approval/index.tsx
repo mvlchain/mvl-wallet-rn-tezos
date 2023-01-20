@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
-
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 
 import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
 import { BigNumber } from 'bignumber.js';
@@ -10,15 +9,13 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
-import useEstimateGas from '@@components/BasicComponents/GasFeeBoard/hooks/useEstimateGas';
-import useSetGasState from '@@components/BasicComponents/GasFeeBoard/hooks/useSetGasState';
-import useSetInitial from '@@components/BasicComponents/GasFeeBoard/hooks/useSetInitial';
-import useSetTotal from '@@components/BasicComponents/GasFeeBoard/hooks/useSetTotal';
+import useEVMEstimate from '@@components/BasicComponents/GasFeeBoard/EVMLegacy/hooks/useEVMEstimate';
+import useEVMTotal from '@@components/BasicComponents/GasFeeBoard/EVMLegacy/hooks/useEVMTotal';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import { KEYSTONE_TX_CANCELED } from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
-import { GAS_LEVEL } from '@@constants/gas.constant';
+import { GAS_LEVEL, TGasLevel } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
 import { useDi } from '@@hooks/useDi';
 import { useAssetFromTheme } from '@@hooks/useTheme';
@@ -26,6 +23,7 @@ import gasStore from '@@store/gas/gasStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
+import { BnToEtherBn } from '@@utils/formatBigNumber';
 import { addHexPrefix, BNToHex } from '@@utils/number';
 
 import * as S from './ApprovalModal.style';
@@ -47,37 +45,27 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     transactionHandled: false,
     transactionConfirmed: false,
   });
-  const transactionService = useDi('TransactionService');
+  const transactionService = useDi('TransactionServiceEthers');
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
-  const { baseFee, tip, gas, total, setState: setGasStore } = gasStore();
 
   const { transaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
   const { to, value, data } = transactionRequestStore();
 
-  const [enableTip, setEnableTip] = useState<boolean>(false);
-  const [enableLimitCustom, setEnableLimitCustom] = useState<boolean>(true);
+  const advanced = false;
 
-  const [blockBaseFee, setBlockBaseFee] = useState<BigNumber | null>(null);
-  const [blockGas, setBlockGas] = useState<BigNumber | null>(null);
-  // const [noBlockGas, setNoBlockGas] = useState<BigNumber | null>(null);
+  const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
+  const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
 
   console.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
 
-  useSetTotal({ to: to, value, blockGas });
-  useSetGasState({ blockBaseFee, blockGas, advanced: false });
-  useEstimateGas({ isValidInput: true, tokenDto: undefined, to, value, data, setBlockBaseFee, setBlockGas });
-  useSetInitial({
-    setEnableTip,
-    setEnableLimitCustom,
-    setBlockBaseFee,
-    setBlockGas,
-    isValidInput: true,
-  });
+  const leveledGasPrice = useMemo(() => {
+    return gasPrice ? gasPrice.multipliedBy('1.3') : new BigNumber(0);
+  }, [gasPrice]);
 
-  useEffect(() => {
-    setGasStore({ level: GAS_LEVEL.MID });
-  }, []);
-  console.log(`baseFee: ${baseFee}`);
+  //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
+  const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice: gasPrice, userInputGasLimit: gasLimit });
+  //가스프라이스 조회와 가스사용량을 예측합니다.
+  useEVMEstimate({ advanced, to, value, data, isValidInput: true, setGasLimit, setGasPrice });
 
   const updateNavBar = () => {
     // const colors = this.context.colors || mockTheme.colors;
@@ -173,28 +161,25 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
           // }
 
           const { to, value, data } = preparedTransaction;
-          console.log(`baseFee: ${baseFee}, blockGas: ${blockGas}, total: ${total}`);
-          if (!to || !value || !baseFee || !blockGas || !total) {
+          console.log(`gasPrice: ${gasPrice}, gasLimit: ${gasLimit}, total: ${total}`);
+          if (!to || !value || !gasPrice || !gasLimit || !total) {
             throw new Error('baseFee, gas, total ,to, value is required');
           }
           console.log(`selectedNetwork: ${selectedNetwork}, ${selectedWalletIndex[selectedNetwork]}`);
           const networkByBase = getNetworkByBase(selectedNetwork);
-          await transactionController.approveTransaction(preparedTransaction.id, () => {
-            return transactionService.sendTransaction({
-              selectedNetwork: networkByBase,
-              selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-              gasFeeInfo: {
-                baseFee,
-                tip: tip ?? undefined,
-                gas: blockGas,
-                total,
-              },
+          await transactionController.approveTransaction(preparedTransaction.id, async () => {
+            const tx = await transactionService.sendTransaction(networkByBase, selectedWalletIndex[selectedNetwork], {
+              gasPrice: BnToEtherBn(gasPrice) ?? undefined,
+              gasLimit: BnToEtherBn(gasLimit) ?? undefined,
               to: to,
               value: value,
               data: data ?? undefined,
             });
+            if (!tx) {
+              throw new Error('error: tx result is null');
+            }
+            return tx.hash;
           });
-          toggleDappTransactionModal();
         } catch (error: any) {
           console.log(`error: ${error.message}`);
           if (!error?.message.startsWith(KEYSTONE_TX_CANCELED)) {
@@ -209,7 +194,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
         // setState({ transactionConfirmed: false });
       })();
     },
-    [state, transaction, baseFee, blockGas, total]
+    [state, transaction, gasPrice, gasLimit, total]
   );
 
   /**

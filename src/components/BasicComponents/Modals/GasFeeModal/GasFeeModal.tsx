@@ -1,32 +1,33 @@
 import React from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
+import { TransferParams } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
+import { BytesLike } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import DismissKeyboardView from '@@components/BasicComponents/DismissKeyboardView';
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
-import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
-import { IGasFeeInfo } from '@@domain/gas/GasService.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import { TokenDto } from '@@store/token/tokenPersistStore.type';
-import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-function GasFeeModal({
-  tokenDto,
-  onConfirm,
-  onConfirmTitle,
-}: {
-  tokenDto: TokenDto;
-  onConfirm: (param: TGasConfirmButtonFunctionParam) => void;
+export interface IGasFeeModalProps {
+  onConfirm: (params: TransactionRequest | TransferParams) => void;
   onConfirmTitle: string;
-}) {
+  to: string | null;
+  value?: BigNumber | null;
+  data?: BytesLike | null;
+  transferParam?: TransferParams;
+  isValidInput: boolean;
+}
+
+function GasFeeModal({ onConfirm, onConfirmTitle, to, value, data, transferParam, isValidInput }: IGasFeeModalProps) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
-  const { to, value, data, toValid, valueValid } = transactionRequestStore();
 
   return (
     <ModalLayout
@@ -44,13 +45,13 @@ function GasFeeModal({
           <GasFeeBoard
             isRevision={false}
             onConfirm={onConfirm}
-            tokenDto={tokenDto}
             onConfirmTitle={onConfirmTitle}
             hideDivider={true}
             to={to}
             value={value}
             data={data}
-            isValidInput={toValid && valueValid}
+            transferParam={transferParam}
+            isValidInput={isValidInput}
           />
         </ScrollView>
       </DismissKeyboardView>

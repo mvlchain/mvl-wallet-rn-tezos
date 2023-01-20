@@ -49,7 +49,7 @@ function RootStack() {
   const { t } = useTranslation();
   const { handleStackHeaderOption } = useHeader();
   const { color } = useColor();
-  const { resetState } = gasStore();
+  const { resetTotal } = gasStore();
   const { resetBody } = transactionRequestStore();
   useDeepLinkByInitialUrl();
 
@@ -136,7 +136,7 @@ function RootStack() {
           options={handleStackHeaderOption({
             title: t('send'),
             onPressBack: () => {
-              resetState();
+              resetTotal();
               resetBody();
             },
           })}

@@ -4,7 +4,10 @@ import { useRoute } from '@react-navigation/native';
 
 import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
 import { TRANSACTION_HISTORY_FILTER_CRITERIA } from '@@constants/transaction.constant';
-import { IGetTransactionHistoryResponse, TTransactionStatus } from '@@domain/transaction/TransactionService.type';
+import {
+  IGetTransactionHistoryResponse,
+  TTransactionStatus,
+} from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import useTransactionHistoryQuery from '@@hooks/queries/useTransactionHistoryQuery';
 import { useDi } from '@@hooks/useDi';
 import { TTokenDetailRouteProps } from '@@screens/WalletScreen/WalletTokenDetail/WalletTokenDetail.type';

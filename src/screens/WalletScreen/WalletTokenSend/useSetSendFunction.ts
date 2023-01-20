@@ -1,12 +1,11 @@
-import { useState } from 'react';
-
+import { TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { TransferParams, WalletOperation } from '@taquito/taquito';
 
-import { TGasConfirmButtonFunctionParam } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { getNetworkConfig, getNetworkByBase } from '@@constants/network.constant';
+import { getNetworkConfig, getNetworkByBase, NETWORK_ID } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
-import { getTransactionType } from '@@domain/transaction/TransactionService.type';
+import { getTransactionType } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import { useDi } from '@@hooks/useDi';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import gasStore from '@@store/gas/gasStore';
@@ -14,14 +13,15 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 import { pinStore } from '@@store/pin/pinStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import { TTransactionResultRootStackProps } from '../WalletTransactionResult/WalletTransactionResult.type';
 
 import { TTokenSendRouteProps } from './WalletTokenSend.type';
 
 const useSetSendFunction = () => {
-  const transactionService = useDi('TransactionService');
+  const transactionServiceTezos = useDi('TransactionServiceTezos');
+  const transactionServiceEthers = useDi('TransactionServiceEthers');
+  const transactionHistoryRepository = useDi('TransactionHistoryRepository');
   const walletService = useDi('WalletService');
 
   const { params } = useRoute<TTokenSendRouteProps>();
@@ -29,8 +29,8 @@ const useSetSendFunction = () => {
 
   const { openModal, closeModal } = globalModalStore();
   const { setState: pinSet } = pinStore();
-  const { to, data, value, resetBody, toValid, valueValid } = transactionRequestStore();
-  const { baseFee, tip, gas, total, resetState: resetGas } = gasStore();
+  const { to, data, value, resetBody, toValid, valueValid, tokenValue } = transactionRequestStore();
+  const { resetTotal } = gasStore();
 
   const { selectedWalletIndex, selectedNetwork: pickNetwork } = walletPersistStore();
   const selectedNetwork = getNetworkByBase(pickNetwork);
@@ -53,26 +53,22 @@ const useSetSendFunction = () => {
     }
   };
 
-  const sendToBlockChain = async (param: TGasConfirmButtonFunctionParam) => {
+  const sendToBlockChain = async (params: TransactionRequest | TransferParams) => {
     try {
-      if (!to || !value || !baseFee || !gas || !total) {
-        throw new Error('baseFee, gas, total ,to, value is required');
-      }
-      const txHash = await transactionService.sendTransaction({
-        selectedNetwork,
-        selectedWalletIndex: selectedWalletIndex[selectedNetwork],
-        gasFeeInfo: {
-          baseFee,
-          tip: tip ?? undefined,
-          gas,
-          total,
-        },
-        to: tokenDto.contractAddress ?? to,
-        value: tokenDto.contractAddress ? undefined : value,
-        data: data ?? undefined,
-      });
+      switch (network.networkId) {
+        case NETWORK_ID.XTZ:
+          return await transactionServiceTezos.sendTransaction(selectedNetwork, selectedWalletIndex[selectedNetwork], params as TransferParams);
 
-      return txHash;
+        default:
+          if (tokenDto.contractAddress) {
+            return await transactionServiceEthers.sendTransaction(selectedNetwork, selectedWalletIndex[selectedNetwork], {
+              ...params,
+              to: tokenDto.contractAddress,
+            });
+          } else {
+            return await transactionServiceEthers.sendTransaction(selectedNetwork, selectedWalletIndex[selectedNetwork], params);
+          }
+      }
     } catch (err) {
       console.log(err);
     }
@@ -80,20 +76,21 @@ const useSetSendFunction = () => {
 
   const registerHistoryToServer = async (txHash: string, nonce: number) => {
     try {
-      if (!to || !value) {
-        throw new Error('to,value is required');
-      }
+      if (!tokenDto.contractAddress && !to) return;
+      if (tokenDto.contractAddress && !tokenValue) return;
+      if (!tokenDto.contractAddress && !value) return;
       const wallet = await walletService.getWalletInfo({ index: selectedWalletIndex[selectedNetwork], network: selectedNetwork });
       const transactionType = getTransactionType(network.networkId, !!tokenDto.contractAddress, tokenDto.symbol === 'BTCB', false);
-      const serverRes = await transactionService.registerHistory({
+      const serverRes = await transactionHistoryRepository.registerHistory({
         network: network.networkId,
         from: wallet.address,
-        to: tokenDto.contractAddress ?? to,
+        to: tokenDto.contractAddress ?? to!,
+        //TODO: 테조스데이터는 뭘 넣어야하지?
         data,
         hash: txHash,
         type: transactionType,
         nonce,
-        value: value.toString(10),
+        value: tokenDto.contractAddress ? tokenValue!.toString(10) : value!.toString(10),
       });
       if (!serverRes) {
         throw new Error('fail register history');
@@ -103,22 +100,33 @@ const useSetSendFunction = () => {
     }
   };
 
-  const send = async (param: TGasConfirmButtonFunctionParam) => {
+  const send = async (param: TransactionRequest | TransferParams) => {
     try {
       if (!toValid || !valueValid) return;
       //close confirm tx modal
       closeModal();
       await checkPin();
-      const hash = await sendToBlockChain(param);
-      if (!hash) {
+      const transaction = await sendToBlockChain(param);
+      if (!transaction) {
         throw new Error('fail send to blockChain');
       }
-      //TODO: nonce조회를 일시적으로 하지 못하는 경우 어떤 값으로 처리해줄 것인가?
-      const nonce = (await transactionService.getNonce(selectedNetwork, hash)) ?? 0;
+      //TODO: nonce조회를 일시적으로 하지 못하는 경우 0으로 해줌
+      let hash;
+      let nonce;
+      switch (network.networkId) {
+        case NETWORK_ID.XTZ:
+          hash = (transaction as WalletOperation).opHash;
+          nonce = 0;
+          break;
+        default:
+          hash = (transaction as TransactionResponse).hash;
+          nonce = (transaction as TransactionResponse).nonce;
+          break;
+      }
       await registerHistoryToServer(hash, nonce);
       resetBody();
-      resetGas();
       navigation.navigate(ROOT_STACK_ROUTE.WALLET_TRANSACTION_RESULT);
+      resetTotal();
       closeModal();
     } catch (err) {
       console.log(err);

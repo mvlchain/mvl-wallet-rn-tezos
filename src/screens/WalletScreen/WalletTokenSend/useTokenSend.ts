@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { TransferParams } from '@taquito/taquito';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import gasStore from '@@store/gas/gasStore';
@@ -16,29 +18,35 @@ const useTokenSend = () => {
   const tokenDto = params.tokenDto;
 
   const { openModal } = globalModalStore();
-  const { to, value, resetBody } = transactionRequestStore();
-  const { total, resetState: resetGasStore } = gasStore();
+  const { to, value, resetBody, tokenValue, tokenTo } = transactionRequestStore();
+  const { total, resetTotal } = gasStore();
 
   const { setAmount, setAddress } = useSetSendData();
   const { send } = useSetSendFunction();
-
-  const confirm = async () => {
-    if (!to || !value || !total) return;
-    openModal(MODAL_TYPES.CONFIRM_SEND, {
-      tokenDto,
-      onConfirm: send,
-    });
-  };
-
   useFocusEffect(
     useCallback(() => {
       return () => {
         resetBody();
-        resetGasStore();
+        resetTotal();
       };
     }, [])
   );
 
-  return { amount: value, setAmount, address: to, setAddress, confirm };
+  const amount = params.tokenDto.contractAddress ? tokenValue : value;
+  const address = params.tokenDto.contractAddress ? tokenTo : to;
+
+  const confirm = async (sendParam: TransactionRequest | TransferParams) => {
+    if (!total) return;
+    openModal(MODAL_TYPES.CONFIRM_SEND, {
+      tokenDto,
+      onConfirm: () => {
+        send(sendParam);
+      },
+      to: address!,
+      value: amount!,
+    });
+  };
+
+  return { amount, setAmount, address, setAddress, confirm };
 };
 export default useTokenSend;
