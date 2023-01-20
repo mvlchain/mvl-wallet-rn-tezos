@@ -91,7 +91,6 @@ const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponse
   const onPressTrade = async () => {
     if (!fromToken || !spender) return;
     openModal(MODAL_TYPES.GAS_FEE, {
-      tokenDto: fromToken,
       onConfirm: sendTradeTransaction,
       onConfirmTitle: t('trade'),
       to: spender,
