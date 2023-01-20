@@ -39,7 +39,7 @@ function GasLayout({
   const coin = getNetworkConfig(selectedNetwork).coin;
 
   const { coinDto } = useCoinDto();
-  const totalStr = total ? formatBigNumber(total, coinDto.decimals).toString(10) : '-';
+  const totalStr = total ? formatBigNumber(total, coinDto.decimals).toFixed() : '-';
   const { price } = useOneTokenPrice(coinDto, totalStr);
 
   const opacityAnimation = useAnimatedStyle(() => {
