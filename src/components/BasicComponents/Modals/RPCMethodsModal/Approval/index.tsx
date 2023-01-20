@@ -65,9 +65,6 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const [isPaymentDisable, setIsPaymentDisable] = useState(true);
   console.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
   const { coinDto } = useCoinDto();
-  const amountStr = useMemo(() => formatBigNumber(gasPrice!, transaction?.selectedAsset?.decimals ?? 18)?.toString(10), [gasPrice, transaction]);
-
-  const { price: coinPrice } = useOneTokenPrice(coinDto, amountStr ?? '-');
 
   const leveledGasPrice = useMemo(() => {
     return gasPrice ? gasPrice.multipliedBy('1.3') : new BigNumber(0);
@@ -75,6 +72,9 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
 
   //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
   const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice: gasPrice, userInputGasLimit: gasLimit });
+  const amountStr = useMemo(() => formatBigNumber(total || BigNumber(0), coinDto.decimals)?.toString(10), [total]);
+
+  const { price: coinPrice } = useOneTokenPrice(coinDto, amountStr ?? '-');
   //가스프라이스 조회와 가스사용량을 예측합니다.
   useEVMEstimate({ advanced, to, value, data, isValidInput: true, setGasLimit, setGasPrice });
 
@@ -277,6 +277,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   };
 
   const ArrowIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
+  const totalStr = (total && formatBigNumber(total, coinDto.decimals).toFixed()) || '-';
   return (
     <ModalLayout
       title={t('transaction_details')}
@@ -305,7 +306,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
           <S.GasWrapper>
             <S.GasBalanceWrapper>
               <S.BlackText>
-                {gasPrice && formatBigNumber(gasPrice, transaction?.selectedAsset?.decimals ?? 18).toString(10)} {symbol}
+                {totalStr} {symbol}
               </S.BlackText>
               <S.GreyText>
                 {coinPrice} {settedCurrency}
