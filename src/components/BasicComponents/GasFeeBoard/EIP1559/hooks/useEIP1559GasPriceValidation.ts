@@ -83,7 +83,7 @@ const useEIP1559GasPriceValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit).minus(maxPriorityFeePerGas), coinDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit).minus(maxPriorityFeePerGas), coinDto.decimals).toFixed()));
       setTextColor(grey);
 
       return;

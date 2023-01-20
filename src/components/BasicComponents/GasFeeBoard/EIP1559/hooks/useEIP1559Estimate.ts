@@ -41,17 +41,17 @@ const useEIP1559Estimate = ({
     logger.log(
       'get EIP1559 gas price: ',
       'maxFeePerGas',
-      etherBNtoBN(feeData.maxFeePerGas)?.toString(10),
+      etherBNtoBN(feeData.maxFeePerGas)?.toFixed(),
       'maxPriorityFeePerGas',
-      etherBNtoBN(feeData.maxPriorityFeePerGas)?.toString(10),
+      etherBNtoBN(feeData.maxPriorityFeePerGas)?.toFixed(),
       'lastBaseFeePerGas',
-      etherBNtoBN(feeData.lastBaseFeePerGas)?.toString(10)
+      etherBNtoBN(feeData.lastBaseFeePerGas)?.toFixed()
     );
     setLastBaseFeePerGas(etherBNtoBN(feeData.lastBaseFeePerGas));
   };
 
   const estimateGas = useDebounce(async ({ to, value, data }: { to: string; value?: BigNumber | null; data?: BytesLike | null }) => {
-    logger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' data: ', data);
+    logger.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toFixed(), ' data: ', data);
 
     const gasUsage = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], {
       to,
@@ -63,7 +63,7 @@ const useEIP1559Estimate = ({
       logger.error('fail to estimate EIP1559 gas');
       return;
     }
-    logger.log('EIP1559 estimate gas result', etherBNtoBN(gasUsage)?.toString(10));
+    logger.log('EIP1559 estimate gas result', etherBNtoBN(gasUsage)?.toFixed());
     setGasLimit(etherBNtoBN(gasUsage));
   }, 1000);
 

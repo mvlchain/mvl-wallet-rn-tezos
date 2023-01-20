@@ -87,7 +87,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
       title: t('approve_wallet'),
       onConfirm: async () => {
         closeModal();
-        const maxValue = value ? value.toString(10) : ethers.constants.MaxUint256.toString();
+        const maxValue = value ? value.toFixed() : ethers.constants.MaxUint256.toString();
         const approveData = await transactionServiceEthers.encodeFunctionData('approve', [spender, maxValue]);
         openModal(MODAL_TYPES.GAS_FEE, {
           onConfirm: sendApproveTransaction,

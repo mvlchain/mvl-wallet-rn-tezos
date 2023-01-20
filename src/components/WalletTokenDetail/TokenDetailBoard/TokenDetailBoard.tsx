@@ -43,7 +43,7 @@ function TokenDetailBoard() {
         <S.TokenAmountWrapper>
           <S.TokenAmount>{balance !== '-' ? commify(balance) : 0}</S.TokenAmount>
           <S.TokenBaseCurrency>
-            {price !== '-' ? commify(new BigNumber(price).toString(10)) : 0} {settedCurrency}
+            {price !== '-' ? commify(new BigNumber(price).toFixed(3)) : 0} {settedCurrency}
             {/* {price} {settedCurrency} */}
           </S.TokenBaseCurrency>
         </S.TokenAmountWrapper>

@@ -64,7 +64,7 @@ const useEIP1559GasTipValidation = ({
       return;
     } else {
       setStatus(true);
-      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit).minus(maxFeePerGas), coinDto.decimals).toString(10)));
+      setText(maximumIS(formatBigNumber(remainBalance.dividedBy(gasLimit).minus(maxFeePerGas), coinDto.decimals).toFixed()));
       setTextColor(grey);
 
       return;

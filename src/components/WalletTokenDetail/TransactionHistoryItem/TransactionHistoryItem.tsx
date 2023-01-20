@@ -32,7 +32,7 @@ function TransactionHistoryListItem(props: IGetTransactionHistoryResponse) {
   const [refreshHash, setRefreshHash] = useState<string>('');
   const [displayStatus, setDisplayStatus] = useState<TTransactionStatus>(props.status);
   const { status, updatedAt, value: bnValue, from } = props;
-  const value = formatBigNumber(new BigNumber(bnValue), params.tokenDto.decimals).toString(10);
+  const value = formatBigNumber(new BigNumber(bnValue), params.tokenDto.decimals).toFixed();
   const RightIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const isCanceled = status === TTransactionStatus.FAIL;
 

@@ -21,7 +21,7 @@ export const useReceiveQRModal = () => {
   const buildDeepLink = ({ token, address, value }: IDeepLinkParam) => {
     const { contractAddress } = token;
     const tokenAddress = contractAddress ? contractAddress : undefined;
-    const amount = value.toString(10);
+    const amount = value.toFixed();
     const link = `https://l.mvlclutch.io/link-transfer/${selectedNetwork}?${qs.stringify({ tokenAddress, address, value: amount })}`;
     qrPayLogger.log(`built QrLink ${qs.stringify({ tokenAddress, address, value: amount })}`);
     return decodeURIComponent(link);

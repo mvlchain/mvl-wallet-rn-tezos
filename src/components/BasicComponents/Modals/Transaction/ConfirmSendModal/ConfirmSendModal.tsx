@@ -33,8 +33,8 @@ function ConfirmSendModal({ onConfirm, tokenDto, to, value }: IConfirmSendModalP
   const { total } = gasStore();
   const { coinDto } = useCoinDto();
 
-  const totalStr = formatBigNumber(total!, coinDto.decimals).toString(10);
-  const amountStr = formatBigNumber(value!, tokenDto.decimals).toString(10);
+  const totalStr = formatBigNumber(total!, coinDto.decimals).toFixed();
+  const amountStr = formatBigNumber(value!, tokenDto.decimals).toFixed();
   const { price: tokenPrice } = useOneTokenPrice(tokenDto, amountStr);
   const { price: coinPrice } = useOneTokenPrice(coinDto, totalStr);
   const tokenPriceInDeciaml = new Decimal(tokenPrice);

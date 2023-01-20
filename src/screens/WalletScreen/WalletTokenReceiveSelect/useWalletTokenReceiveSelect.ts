@@ -53,7 +53,7 @@ export const useWalletTokenReceiveSelect = () => {
     addReceiveHistory(selectedNetwork, token, amount, qr);
     openModal(MODAL_TYPES.RECEIVE_QR, {
       title: t('qr_payment_send_link_title'),
-      amount: formalize.toString(10),
+      amount: formalize.toFixed(),
       token,
       address: address,
       qr: qr,
