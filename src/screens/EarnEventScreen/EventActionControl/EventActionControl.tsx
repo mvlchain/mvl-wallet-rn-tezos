@@ -4,15 +4,15 @@ import Decimal from 'decimal.js';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
-import { SvgUri } from 'react-native-svg';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon, CircleAlertIcon } from '@@assets/image';
 import { PrimaryButton, SecondaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
+import Picture from '@@components/BasicComponents/Picture';
 import { useAssetFromTheme } from '@@hooks/useTheme';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { format } from '@@utils/strings';
-import { width, height } from '@@utils/ui';
+import { getWidth } from '@@utils/ui';
 
 import * as S from './EventActionControl.style';
 import { EarnEventActionModalProps } from './EventActionControl.type';
@@ -51,11 +51,7 @@ export const EventActionControl = ({ phase, event, thirdParty, claimStatusInfo }
             });
           }}
         >
-          {actionControlAttrs.isSvgAvatar ? (
-            <SvgUri uri={actionControlAttrs.avatarUrl} width={`${width * 40}`} height={`${height * 40}`} />
-          ) : (
-            <S.RewardAvatar source={{ uri: actionControlAttrs.avatarUrl }} />
-          )}
+          <Picture url={actionControlAttrs.avatarUrl} width={getWidth(40)} height={getWidth(40)} />
 
           <S.PointGroupLayout>
             {actionControlAttrs.eventPointInfoList.map((point, index) => {
