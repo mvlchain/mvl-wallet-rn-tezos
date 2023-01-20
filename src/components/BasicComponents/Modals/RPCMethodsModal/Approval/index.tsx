@@ -17,7 +17,6 @@ import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsMod
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { GAS_LEVEL, TGasLevel } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
-import usePriceQuery from '@@hooks/queries/usePriceQuery';
 import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
@@ -54,19 +53,8 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const { selectedWalletIndex, selectedNetwork } = walletPersistStore();
   const { settedCurrency } = settingPersistStore();
   const [symbol, setSymbol] = useState<string>();
-  const [gasCurrencyPrice, setGasCurrencyPrice] = useState<string>();
   const { tokenList } = tokenPersistStore();
 
-  // const { data: price } = usePriceQuery(
-  //   { ids: priceId, vsCurrencies: settedCurrency },
-  //   {
-  //     onError: () => {
-  //       // TODO: 일괄로 처리할것인가..?
-  //       console.log('TODO: SERVER ERROR');
-  //     },
-  //     keepPreviousData: true,
-  //   }
-  // );
   const { transaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
   const { to, value, data } = transactionRequestStore();
 
