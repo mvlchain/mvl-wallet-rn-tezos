@@ -66,13 +66,13 @@ const useEIP1559GasPriceValidation = ({
       return;
     } else if (maxFeePerGas.lt(maxPriorityFeePerGas)) {
       setStatus(false);
-      setText(t('must_bigger_than_max_priority_fee_per_gas'));
+      setText(t('warning_must_bigger_than_max_priority_fee_per_gas'));
       setTextColor(red);
 
       return;
     } else if (maxFeePerGas.lt(lastBaseFeePerGas)) {
       setStatus(true);
-      setText(t('warning _lower_than_network'));
+      setText(t('warning_lower_than_network'));
       setTextColor(red);
 
       return;

@@ -72,7 +72,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
     Toast.show({
       ...TOAST_DEFAULT_OPTION,
       type: 'basic',
-      text1: t('approve_success'),
+      text1: t('msg_approve_success'),
     });
     setSentApprove(true);
     setState({ data: null });

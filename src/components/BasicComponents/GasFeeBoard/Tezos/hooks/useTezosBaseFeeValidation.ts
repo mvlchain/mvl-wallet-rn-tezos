@@ -52,7 +52,7 @@ const useTezosBaseFeeValidation = ({
       return;
     } else if (baseFee.lt(basicBaseFee)) {
       setStatus(true);
-      setText(t('warning _lower_than_network'));
+      setText(t('warning_lower_than_network'));
       setTextColor(red);
       return;
     } else {
