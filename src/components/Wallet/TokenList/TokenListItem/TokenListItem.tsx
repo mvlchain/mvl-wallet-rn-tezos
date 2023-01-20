@@ -38,7 +38,7 @@ function TokenListItem({ ticker, balance, valuatedPrice, logoURI, tokenDto }: IT
             {commify(balance)} {ticker}
           </S.Text>
           <S.AmountUSD>
-            {commify(new BigNumber(valuatedPrice).toString(10))} {settedCurrency}
+            {commify(new BigNumber(valuatedPrice).toFixed())} {settedCurrency}
           </S.AmountUSD>
         </S.ValueContainer>
       </S.Container>

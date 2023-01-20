@@ -160,7 +160,7 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProp
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
-    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toString(10), 'data:', data);
+    gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toFixed(), 'data:', data);
     if (!onConfirmValid || !to) {
       gasLogger.error('gas is not ready or to doesn`t exist! ');
       return;

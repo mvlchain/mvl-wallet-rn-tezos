@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 
-import { BigNumber } from 'bignumber.js';
 import Decimal from 'decimal.js';
-import { formatEther } from 'ethers/lib/utils';
 
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
@@ -28,8 +26,7 @@ const useOneTokenPrice = (tokenDto: TokenDto, amount: string) => {
     const amountInDecimal = new Decimal(amount);
     const unitInDecimal = new Decimal(unitPrice as number);
     const priceInDecimal = amountInDecimal.mul(unitInDecimal);
-
-    return priceInDecimal.toString();
+    return priceInDecimal.toFixed();
   }, [data, amount]);
 
   return { price };

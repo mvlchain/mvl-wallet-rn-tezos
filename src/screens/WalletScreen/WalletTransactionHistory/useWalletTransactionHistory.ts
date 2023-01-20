@@ -49,8 +49,8 @@ export const useWalletTransactionHistory = () => {
     setSign();
   }, []);
 
-  const formattedValue = new BigNumber(value).shiftedBy(-params.tokenDto.decimals).toString(10);
-  const formattedDisplayFee = new BigNumber(displayFee).shiftedBy(-params.tokenDto.decimals).toString(10);
+  const formattedValue = new BigNumber(value).shiftedBy(-params.tokenDto.decimals).toFixed();
+  const formattedDisplayFee = new BigNumber(displayFee).shiftedBy(-params.tokenDto.decimals).toFixed();
 
   return {
     price,

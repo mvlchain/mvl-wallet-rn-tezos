@@ -90,7 +90,7 @@ const useSetSendFunction = () => {
         hash: txHash,
         type: transactionType,
         nonce,
-        value: tokenDto.contractAddress ? tokenValue!.toString(10) : value!.toString(10),
+        value: tokenDto.contractAddress ? tokenValue!.toFixed() : value!.toFixed(),
       });
       if (!serverRes) {
         throw new Error('fail register history');

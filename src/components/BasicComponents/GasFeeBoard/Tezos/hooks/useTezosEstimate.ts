@@ -41,13 +41,13 @@ const useTezosEstimate = ({
 
   const estimateGas = useDebounce(
     async ({ to, value, transferParam }: { to: string; value?: BigNumber | null; transferParam?: TransferParams | null }) => {
-      console.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toString(10), ' transferParam: ', transferParam);
+      console.log('estimate gas parameter', 'to: ', to, ' value: ', value?.toFixed(), ' transferParam: ', transferParam);
       let estimation: Estimate | undefined;
       if (transferParam) {
         estimation = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], transferParam);
       } else {
         if (!value) return;
-        const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toString(10);
+        const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toFixed();
         estimation = await gasRepository.estimateGas(testIncludeSelectedNetwork, selectedWalletIndex[testIncludeSelectedNetwork], { to, amount });
       }
 

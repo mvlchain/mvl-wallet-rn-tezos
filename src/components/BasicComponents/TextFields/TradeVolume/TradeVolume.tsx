@@ -59,7 +59,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   const { total } = gasStore();
   const { balance } = useOneTokenBalance(tokenDto);
   const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
-  const validStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toString(10) : balance;
+  const validStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toFixed() : balance;
 
   const setValueDebounce = useDebounce((value: BigNumber | null) => {
     setValue(value);
@@ -127,7 +127,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   useFocusEffect(
     useCallback(() => {
       if (!value) return;
-      setDisplayValue(formatBigNumber(value, tokenDto.decimals).toString(10));
+      setDisplayValue(formatBigNumber(value, tokenDto.decimals).toFixed());
     }, [!value])
   );
 
@@ -156,7 +156,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
             //editabale false로 사용자 입력을 받지 않고 보여준다.
             //value가 바뀔 때마다 들어온 그대로 displayValue 형식으로 변환해서 보여준다.
             <S.TradeVolumeInputText numberOfLines={1} lineBreakMode='tail'>
-              {value ? formatBigNumber(value, tokenDto.decimals ?? 18).toString(10) : ''}
+              {value ? formatBigNumber(value, tokenDto.decimals ?? 18).toFixed() : ''}
             </S.TradeVolumeInputText>
           )}
           {!disableDelete && showDelete && <TextFieldDelete onPress={clearTextField} style={S.inlineStyles.marginProvider} />}
