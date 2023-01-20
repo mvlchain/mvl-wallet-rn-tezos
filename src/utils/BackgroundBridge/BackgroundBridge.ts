@@ -7,7 +7,6 @@ import createFilterMiddleware from 'eth-json-rpc-filters';
 // @ts-ignore
 import createSubscriptionManager from 'eth-json-rpc-filters/subscriptionManager';
 import { JsonRpcEngine } from 'json-rpc-engine';
-import { JsonRpcMiddleware } from 'json-rpc-engine/dist/JsonRpcEngine';
 import { createEngineStream } from 'json-rpc-middleware-stream';
 // @ts-ignore
 import ObjectMultiplex from 'obj-multiplex';
@@ -28,7 +27,7 @@ import AppConstants from './AppConstants';
 import MobilePortStream from './MobilePortStream';
 import Port from './Port';
 
-const USER_REJECTED_ERRORS = ['user_rejected_transaction'];
+const USER_REJECTED_ERRORS = ['user_rejected_transaction', 'User denied'];
 const USER_REJECTED_ERROR_CODE = 4001;
 
 const logger = tagLogger('BackgroundBridge');
@@ -122,10 +121,8 @@ const { NOTIFICATION_NAMES } = AppConstants;
 function setupMultiplex(connectionStream: Duplex) {
   const mux: ObjectMultiplex = new ObjectMultiplex();
   pump(connectionStream, mux, connectionStream, (err: any) => {
-    if (err) {
-      if (err.message !== 'premature close') {
-        logger.warn(err);
-      }
+    if (err && err.message !== 'premature close') {
+      logger.warn(err);
     }
   });
   return mux;
