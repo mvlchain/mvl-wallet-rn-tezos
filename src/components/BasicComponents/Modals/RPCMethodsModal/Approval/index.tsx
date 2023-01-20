@@ -15,18 +15,16 @@ import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/Modal
 import { KEYSTONE_TX_CANCELED } from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
-import { GAS_LEVEL, TGasLevel } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
 import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
 import { useAssetFromTheme } from '@@hooks/useTheme';
-import gasStore from '@@store/gas/gasStore';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
-import { mmLightColors } from '@@style/colors';
+import { tagLogger } from '@@utils/Logger';
 import { formatBigNumber, BnToEtherBn } from '@@utils/formatBigNumber';
 import { addHexPrefix, BNToHex } from '@@utils/number';
 
@@ -38,9 +36,8 @@ export function safeToChecksumAddress(address: string) {
   if (!address) return undefined;
   return toChecksumAddress(address);
 }
-/**
- * PureComponent that manages transaction approval from the dapp browser
- */
+
+const logger = tagLogger('ApprovalModal');
 const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const { t } = useTranslation();
   const strings = t;
@@ -63,7 +60,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
   const [isPaymentDisable, setIsPaymentDisable] = useState(true);
-  console.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
+  logger.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
   const { coinDto } = useCoinDto();
 
   const leveledGasPrice = useMemo(() => {
@@ -92,33 +89,12 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     // );
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     try {
-  //       const { transactionHandled } = state;
-  //       if (!transactionHandled) {
-  //         const { transactionController: TransactionController } = controllerManager;
-  //         TransactionController.cancelTransaction(transaction.id);
-  //         TransactionController.hub.removeAllListeners(`${transaction.id}:finished`);
-  //         clear();
-  //       }
-  //     } catch (e) {
-  //       if (e) {
-  //         throw e;
-  //       }
-  //     }
-  //   };
-  // }, [transaction]);
-
   useEffect(() => {
     updateNavBar();
-    // navigation && navigation.setParams({ mode: REVIEW, dispatch: this.onModeChange });
-
-    // AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.DAPP_TRANSACTION_STARTED, this.getAnalyticsParams());
   }, []);
 
   const onCancel = useCallback(() => {
-    console.log(`onCancel clicked, ${JSON.stringify(transaction, null, 2)}`);
+    logger.log(`onCancel clicked, ${JSON.stringify(transaction, null, 2)}`);
     const { transactionController } = controllerManager;
     transactionController.cancelTransaction(transaction.id);
 
@@ -135,12 +111,9 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
         // const { TransactionController, KeyringController } = Engine.context;
         const { transactionController } = controllerManager;
         const { assetType, selectedAsset } = transaction;
-        console.log(`selectedAsset: ${JSON.stringify(selectedAsset, null, 2)}`);
-        // const showCustomNonce = false;
-        // const { nonce } = transaction;
+        logger.log(`selectedAsset: ${JSON.stringify(selectedAsset, null, 2)}`);
         const { transactionConfirmed } = state;
         if (transactionConfirmed) return;
-        // if (showCustomNonce && nonce) transaction.nonce = BNToHex(nonce);
         setState({ transactionConfirmed: true });
         try {
           let preparedTransaction: any;
@@ -158,32 +131,14 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
               EIP1559GasData,
             });
           }
-          console.log(`preparedTransaction: ${JSON.stringify(preparedTransaction, null, 2)}`);
-
-          //preparedTransaction: {
-          //   "id": "ced225c0-90c1-11ed-91cb-af1b1e3db6d3",
-          //   "selectedAsset": {
-          //     "symbol": "ERC20",
-          //     "decimals": "12",
-          //     "address": "0x1edfcce833bac99c278e2886210dbd9213bd139a"
-          //   },
-          //   "origin": "192.168.1.56",
-          //   "from": "0xf2b8288ea9fc59447bfb88ea853849733d90d632",
-          //   "data": "0xa9059cbb000000000000000000000000e3587f0a8da40fa3e
-          //   33c4141dd4b08241222460f00000000000000000000000000000000000000000000043c33c1937564800000",
-          //   "gas": "0xaf65",
-          //   "to": "0x1edfcce833bac99c278e2886210dbd9213bd139a",
-          //   "gasPrice": "0x14",
-          //   "value": "0x0",
-          //   "readableValue": "0"
-          // }
+          logger.log(`preparedTransaction: ${JSON.stringify(preparedTransaction, null, 2)}`);
 
           const { to, value, data } = preparedTransaction;
-          console.log(`gasPrice: ${gasPrice}, gasLimit: ${gasLimit}, total: ${total}`);
+          logger.log(`gasPrice: ${gasPrice}, gasLimit: ${gasLimit}, total: ${total}`);
           if (!to || !value || !gasPrice || !gasLimit || !total) {
             throw new Error('baseFee, gas, total ,to, value is required');
           }
-          console.log(`selectedNetwork: ${selectedNetwork}, ${selectedWalletIndex[selectedNetwork]}`);
+          logger.log(`selectedNetwork: ${selectedNetwork}, ${selectedWalletIndex[selectedNetwork]}`);
           const networkByBase = getNetworkByBase(selectedNetwork);
           await transactionController.approveTransaction(preparedTransaction.id, async () => {
             const tx = await transactionService.sendTransaction(networkByBase, selectedWalletIndex[selectedNetwork], {
@@ -200,10 +155,10 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
           });
           toggleDappTransactionModal();
         } catch (error: any) {
-          console.log(`error: ${error.message}`);
+          logger.log(`error: ${error.message}`);
           if (!error?.message.startsWith(KEYSTONE_TX_CANCELED)) {
             Alert.alert(strings('transactions.transaction_error'), error && error.message, [{ text: strings('navigation.ok') }]);
-            console.log(error, 'error while trying to send transaction (Approval)');
+            logger.log(error, 'error while trying to send transaction (Approval)');
           } else {
             // AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.QR_HARDWARE_TRANSACTION_CANCELED);
           }

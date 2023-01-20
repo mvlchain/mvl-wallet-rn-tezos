@@ -33,7 +33,7 @@ setAxiosConfig({
     Authorization: `Basic ${encoded}`,
   },
 });
-setLogConfigs(['App', 'Auth', 'QrPay', 'Event', 'DeepLink', 'ServerShareRepository']);
+setLogConfigs([]);
 
 ControllerManager.init();
 EntryScriptWeb3.init();

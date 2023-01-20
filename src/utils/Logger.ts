@@ -25,49 +25,49 @@ const setLogConfigs = (tags: Array<LogTag>) => {
 };
 
 const _assert = (tag: LogTag, value: boolean, message: any, ...params: any[]) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.assert(value, `${tag}> ${message}`, params);
   }
 };
 
 const _debug = (tag: LogTag, message: any, ...params: any[]) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.debug(`${tag}> ${message}`, params);
   }
 };
 
 const _error = (tag: LogTag, message: any, ...params: any[]) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.error(`${tag}> ${message}`, params);
   }
 };
 
 const _log = (tag: LogTag, message: any) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.log(`${tag}> ${message}`);
   }
 };
 const _logWithParams = (tag: LogTag, message: any, ...params: any[]) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.log(`${tag}> ${message}`, params);
   }
 };
 
 const _trace = (tag: LogTag, message: any, ...params: any[]) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.trace(`${tag}> ${message}`, params);
   }
 };
 
 const _warn = (tag: LogTag, message: any, ...params: any[]) => {
-  if (_tags.has(tag)) {
+  if (_tags.size === 0 || _tags.has(tag)) {
     console.warn(`${tag}> ${message}`, params);
   }
 };
 
 const tagLogger = (tag: LogTag) => {
   return {
-    assert: (tag: LogTag, value: boolean, message: any, ...params: any[]) => {
+    assert: (value: boolean, message: any, ...params: any[]) => {
       if (__DEV__) {
         params.length > 0 ? _assert(tag, value, message, params) : _assert(tag, value, message);
       }
