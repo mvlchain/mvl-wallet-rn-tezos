@@ -27,7 +27,6 @@ function WalletTokenSend() {
           isRevision={false}
           hideDivider={false}
           onConfirm={confirm}
-          tokenDto={params.tokenDto}
           to={to}
           value={value}
           data={data}
