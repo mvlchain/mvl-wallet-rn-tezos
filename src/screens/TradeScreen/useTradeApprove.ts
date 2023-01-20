@@ -110,7 +110,7 @@ const useTradeApprove = (fromToken: TokenDto | undefined) => {
     } else {
       return false;
     }
-  }, [allowance, tokenValue, !!fromToken?.contractAddress, sentApprove, valueValid]);
+  }, [allowance, tokenValue, value, fromToken, sentApprove, valueValid]);
 
   return { isEnoughAllowance, onPressApprove };
 };

@@ -18,12 +18,7 @@ import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 
-const useTrade = (
-  fromToken: TokenDto | undefined,
-  quoteData: FetchPriceResponseDto | undefined,
-  isEnoughAllowance: boolean,
-  resetTradeScreen: () => void
-) => {
+const useTrade = (fromToken: TokenDto | undefined, quoteData: FetchPriceResponseDto | undefined, resetTradeScreen: () => void) => {
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const { openModal, closeModal } = globalModalStore();
 
@@ -32,7 +27,7 @@ const useTrade = (
   const TradeRepository = useDi('TradeRepository');
 
   const { t } = useTranslation();
-  const { to: spender, value, toValid, valueValid, data, setState } = transactionRequestStore();
+  const { to: spender, value, toValid, valueValid, setState } = transactionRequestStore();
   const { resetTotal } = gasStore();
   const [swapDto, setSwapDto] = useState<ISwapDto | null>(null);
   const [serverSentSwapData, setServerSentSwapData] = useState<CreateNativeSwapTransactionResponseDto['tx'] | null>(null);
@@ -99,7 +94,7 @@ const useTrade = (
       tokenDto: fromToken,
       onConfirm: sendTradeTransaction,
       onConfirmTitle: t('trade'),
-      to: fromToken.contractAddress ?? spender,
+      to: spender,
       value,
       data: serverSentSwapData?.data,
       isValidInput: toValid && valueValid,

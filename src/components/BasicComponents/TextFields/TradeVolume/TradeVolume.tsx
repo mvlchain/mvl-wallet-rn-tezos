@@ -119,7 +119,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     } else {
       setValueValid(true);
     }
-  }, [balanceWarning, !displayValue]);
+  }, [balanceWarning, !displayValue, value]);
 
   // SetUp initial value
   // QR스캔을 통해 초기에 value에 따른 displayValue값을 할당해줘야할 필요가 있다.
