@@ -180,6 +180,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
             }
             return tx.hash;
           });
+          toggleDappTransactionModal();
         } catch (error: any) {
           console.log(`error: ${error.message}`);
           if (!error?.message.startsWith(KEYSTONE_TX_CANCELED)) {
