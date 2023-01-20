@@ -28,8 +28,8 @@ const useOneTokenPrice = (tokenDto: TokenDto, amount: string) => {
     const amountInDecimal = new Decimal(amount);
     const unitInDecimal = new Decimal(unitPrice as number);
     const priceInDecimal = amountInDecimal.mul(unitInDecimal);
-
-    return priceInDecimal.toString();
+    const bnPrice = new BigNumber(priceInDecimal.toString());
+    return bnPrice.toString(10);
   }, [data, amount]);
 
   return { price };
