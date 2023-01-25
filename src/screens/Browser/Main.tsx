@@ -19,6 +19,7 @@ import { fontStyles } from '@@style/fonts';
 import BackgroundBridge from '@@utils/BackgroundBridge/BackgroundBridge';
 import { getRpcMethodMiddleware } from '@@utils/BackgroundBridge/RPCMethodMiddleware';
 import { JS_DESELECT_TEXT, SPA_urlChangeListener } from '@@utils/BackgroundBridge/browserScripts';
+import { tagLogger } from '@@utils/Logger';
 import Device from '@@utils/device';
 
 import AppConstants from '../../utils/BackgroundBridge/AppConstants';
@@ -182,32 +183,7 @@ const createStyles = (colors: any, shadows: any) =>
 
 type ApprovedHosts = { [key: string]: boolean | undefined };
 
-type PropTypes = {
-  id: number;
-  activeTab: number;
-  initialUrl: string;
-  approveHost: Function;
-  defaultProtocol: string;
-  ipfsGateway: string;
-  transaction: any;
-  navigation: any;
-  network: string;
-  selectedAddress: string;
-  whitelist: any[];
-  url: string;
-  toggleNetworkModal: Function;
-  newTab: Function;
-  addBookmark: Function;
-  bookmarks: any[];
-  searchEngine: string;
-  addToBrowserHistory: Function;
-  addToWhitelist: Function;
-  updateTabInfo: Function;
-  showTabs: Function;
-  setOnboardingWizardStep: Function;
-  wizardStep: number;
-  app_version: string;
-};
+const logger = tagLogger('BrowserMain');
 export const BrowserMain = () => {
   type TBrowserDappRouteProps = RouteProp<TRootStackParamList, 'BROWSER_DAPP'>;
   const { params } = useRoute<TBrowserDappRouteProps>();
@@ -286,14 +262,14 @@ export const BrowserMain = () => {
   }, []);
 
   const notifyAllConnections = useCallback((payload: any, restricted = true) => {
-    console.log(`notifyAllConnections callback called, ${payload}, ${restricted}`);
+    logger.log(`notifyAllConnections callback called, ${payload}, ${restricted}`);
     const fullHostname = new URL(url.current).hostname;
 
     // TODO:permissions move permissioning logic elsewhere
     if (!backgroundBridge.current) return;
     if (backgroundBridge.current.hostname === fullHostname && !restricted) {
       // || approvedHosts[bridge.hostname]
-      console.log(`bridge.sendNotification called`);
+      logger.log(`bridge.sendNotification called`);
       backgroundBridge.current.sendNotification(payload);
     }
   }, []);
@@ -302,7 +278,7 @@ export const BrowserMain = () => {
     const { selectedAddress } = props;
 
     const numApprovedHosts = Object.keys(approvedHosts).length;
-    console.log(`selectedAddress: ${selectedAddress}, numApprovedHosts: ${numApprovedHosts}`);
+    logger.log(`selectedAddress: ${selectedAddress}, numApprovedHosts: ${numApprovedHosts}`);
 
     // this will happen if the approved hosts were cleared
     if (numApprovedHosts === 0) {
@@ -394,7 +370,7 @@ export const BrowserMain = () => {
       let urlToGo = sanitizedURL;
       urlToGo = sanitizeUrlInput(urlToGo);
       const { current } = webviewRef;
-      console.log(`hostname: ${hostname}, ${isAllowedUrl(hostname)}, ${initialCall}`);
+      logger.log(`hostname: ${hostname}, ${isAllowedUrl(hostname)}, ${initialCall}`);
 
       if (isAllowedUrl(hostname)) {
         if (initialCall || !firstUrlLoaded) {
@@ -497,13 +473,6 @@ export const BrowserMain = () => {
         icon: siteInfo.icon,
         silent: true,
       });
-
-    props.updateTabInfo(getMaskedUrl(siteInfo.url), props.id);
-
-    props.addToBrowserHistory({
-      name: siteInfo.title,
-      url: getMaskedUrl(siteInfo.url),
-    });
   };
 
   /**
@@ -610,7 +579,7 @@ export const BrowserMain = () => {
    * Sets loading bar progress
    */
   const onLoadProgress = ({ nativeEvent }: any) => {
-    console.log(`WB SETUP> WebView onLoadProgress: ${JSON.stringify(nativeEvent, null, 2)}`);
+    logger.log(`WB SETUP> WebView onLoadProgress: ${JSON.stringify(nativeEvent, null, 2)}`);
     setProgress(progress);
   };
 
@@ -625,7 +594,7 @@ export const BrowserMain = () => {
    * When website finished loading
    */
   const onLoadEnd = ({ nativeEvent }: any) => {
-    console.log(`WB SETUP> onLoadEnd`);
+    logger.log(`WB SETUP> onLoadEnd`);
     // Do not update URL unless website has successfully completed loading.
     if (nativeEvent.loading) {
       return;
@@ -647,26 +616,26 @@ export const BrowserMain = () => {
    * Handle message from website
    */
   const onMessage = ({ nativeEvent }: WebViewMessageEvent) => {
-    console.log(`WB INCOMING> 1. onMessage data: ${nativeEvent.data}`);
+    logger.debug(`WB INCOMING> 1. onMessage data: ${nativeEvent.data}`);
     const dataRaw = nativeEvent.data;
     try {
       const data = typeof dataRaw === 'string' ? JSON.parse(dataRaw) : dataRaw;
       if (!data || !data.name) {
-        console.log(`WB INCOMING> 2. data or data.name doesn't exist`);
+        logger.debug(`WB INCOMING> 2. data or data.name doesn't exist`);
         return;
       }
-      console.log(`WB INCOMING> 2. backgroundBridges.current.forEach .onMessage: ${backgroundBridge.current}`);
+      logger.debug(`WB INCOMING> 2. backgroundBridges.current.forEach .onMessage: ${backgroundBridge.current}`);
 
       if (!backgroundBridge.current) return;
       const { origin } = data && data.origin && new URL(data.origin);
       if (backgroundBridge.current.url !== origin) {
-        console.warn(`bridge.url !== origin, onMessage not executed: ${backgroundBridge.current.url}, ${origin}`);
+        logger.warn(`bridge.url !== origin, onMessage not executed: ${backgroundBridge.current.url}, ${origin}`);
         return;
       }
       backgroundBridge.current.onMessage(data);
       return;
     } catch (e: any) {
-      console.log(`WB INCOMING> error: ${e.message}`);
+      logger.debug(`WB INCOMING> error: ${e.message}`);
     }
   };
 
@@ -712,7 +681,7 @@ export const BrowserMain = () => {
   );
 
   const initializeBackgroundBridge = (urlBridge: string) => {
-    console.log(`WB SETUP> initializeBackgroundBridge starts, ${urlBridge}`);
+    logger.log(`WB SETUP> initializeBackgroundBridge starts, ${urlBridge}`);
     const newBridge = new BackgroundBridge({
       webview: webviewRef,
       url: urlBridge,
@@ -747,7 +716,7 @@ export const BrowserMain = () => {
    * Website started to load
    */
   const onLoadStart = async ({ nativeEvent }: any) => {
-    console.log(`WB SETUP> WebView onLoadStart: ${JSON.stringify(nativeEvent, null, 2)}`);
+    logger.log(`WB SETUP> WebView onLoadStart: ${JSON.stringify(nativeEvent, null, 2)}`);
     const { hostname } = new URL(nativeEvent.url);
 
     if (nativeEvent.url !== url.current && nativeEvent.loading && nativeEvent.navigationType === 'backforward') {
@@ -794,7 +763,7 @@ export const BrowserMain = () => {
    * Handle error, for example, ssl certificate error
    */
   const onError = ({ nativeEvent: errorInfo }: any) => {
-    console.log(errorInfo);
+    logger.log(errorInfo);
     props.navigation.setParams({
       error: true,
     });
@@ -803,14 +772,14 @@ export const BrowserMain = () => {
 
   const handleOnFileDownload = useCallback(
     async ({ nativeEvent: { downloadUrl } }: FileDownloadEvent) => {
-      console.log(`fileDownload tried: ${downloadUrl}`);
+      logger.log(`fileDownload tried: ${downloadUrl}`);
       Alert.alert(t('download_file.unsupported'));
       reload();
     },
     [reload]
   );
 
-  console.log(`main render starts, ${!!entryScriptWeb3}, ${firstUrlLoaded}`);
+  logger.log(`main render starts, ${!!entryScriptWeb3}, ${firstUrlLoaded}`);
 
   return (
     <S.Container>

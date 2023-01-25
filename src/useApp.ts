@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Alert, StatusBar, Appearance } from 'react-native';
-import { setJSExceptionHandler } from 'react-native-exception-handler';
+import { Appearance, StatusBar } from 'react-native';
 
-import { THEME, STATUSBAR_THEME } from '@@constants/setting.constant';
+import { STATUSBAR_THEME, THEME } from '@@constants/setting.constant';
 import settingPersistStore from '@@store/setting/settingPersistStore';
 
 const useApp = () => {
@@ -57,18 +56,6 @@ const useApp = () => {
       return THEME.DEFAULT;
     }
   };
-
-  const errorHandler = (error: Error) => {
-    if (__DEV__) {
-      // Alert.alert('Service Error', 'An unknown problem has occurred.');
-      return;
-    }
-
-    // TODO: Error 처리 추가 (ex: sentry, crashlytics)
-    Alert.alert('Unexpected Error', error.message);
-  };
-
-  setJSExceptionHandler(errorHandler, true);
 
   return {
     appTheme,
