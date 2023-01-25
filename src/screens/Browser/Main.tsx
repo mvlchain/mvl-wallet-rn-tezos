@@ -230,7 +230,6 @@ export const BrowserMain = ({ webviewRef }: { webviewRef: any }) => {
   const [showPhishingModal, setShowPhishingModal] = useState(false);
   const [blockedUrl, setBlockedUrl] = useState<string | undefined>(undefined);
   const [navState, setNavState] = useState<WebViewNavigation>();
-  // const webviewRef = useRef<null | WebView<any>>(null);
   const blockListType = useRef('');
 
   const url = useRef('');
