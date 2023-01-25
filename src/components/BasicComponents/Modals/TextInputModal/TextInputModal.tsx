@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
@@ -39,7 +39,7 @@ function TextInputModal({ title, defaultValue, cancelLabel, confirmLabel, onCanc
       confirmLabel={confirmLabel}
       isConfirmDisabled={value.length === 0}
     >
-      <BaseTextField value={value} onChange={onChangeInput} />
+      <BaseTextField value={value} onChange={onChangeInput} debounceTime={0} />
     </ModalLayout>
   );
 }
