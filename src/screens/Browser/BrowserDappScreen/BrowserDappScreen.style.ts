@@ -8,10 +8,14 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
   padding: ${width * 24}px;
 `;
 
 export const Pressable = styled.Pressable`
   flex: 1;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;

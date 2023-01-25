@@ -184,7 +184,7 @@ const createStyles = (colors: any, shadows: any) =>
 type ApprovedHosts = { [key: string]: boolean | undefined };
 
 const logger = tagLogger('BrowserMain');
-export const BrowserMain = () => {
+export const BrowserMain = ({ webviewRef }: { webviewRef: any }) => {
   type TBrowserDappRouteProps = RouteProp<TRootStackParamList, 'BROWSER_DAPP'>;
   const { params } = useRoute<TBrowserDappRouteProps>();
   const { address } = useAccount();
@@ -230,7 +230,7 @@ export const BrowserMain = () => {
   const [showPhishingModal, setShowPhishingModal] = useState(false);
   const [blockedUrl, setBlockedUrl] = useState<string | undefined>(undefined);
   const [navState, setNavState] = useState<WebViewNavigation>();
-  const webviewRef = useRef<null | WebView<any>>(null);
+  // const webviewRef = useRef<null | WebView<any>>(null);
   const blockListType = useRef('');
 
   const url = useRef('');
