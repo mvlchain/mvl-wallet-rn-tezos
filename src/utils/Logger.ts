@@ -92,7 +92,7 @@ const tagLogger = (tag: LogTag) => {
         params.length > 0 ? _trace(tag, message, params) : _trace(tag, message);
       }
     },
-    wran: (message: any, ...params: any[]) => {
+    warn: (message: any, ...params: any[]) => {
       if (__DEV__) {
         params.length > 0 ? _warn(tag, message, params) : _warn(tag, message);
       }

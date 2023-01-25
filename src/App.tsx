@@ -32,13 +32,6 @@ import { theme } from '@@style/theme';
 import { tagLogger } from '@@utils/Logger';
 import SecureKeychain from '@@utils/SecureKeychain';
 
-Sentry.init({
-  dsn: '***REMOVED***',
-  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-  // We recommend adjusting this value in production.
-  tracesSampleRate: 1.0,
-});
-
 const queryClient = new QueryClient();
 
 const ROUTER_THEME = {
