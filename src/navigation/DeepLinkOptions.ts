@@ -5,6 +5,7 @@ import { Linking, Platform } from 'react-native';
 import { container } from 'tsyringe';
 
 import { URL_DEEPLINK, URL_DYNAMIC_LINK } from '@@constants/url.constant';
+import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { WalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import { tagLogger } from '@@utils/Logger';
@@ -18,6 +19,7 @@ export const CLUTCH_APP_SCHEME = 'clutchwallet';
 
 const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
 const deepLinkLogger = tagLogger('DeepLink');
+const eventLogger = tagLogger('Event');
 
 /**
  * React Navigation By DeepLinks
@@ -116,17 +118,27 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
     const params = qs.parse(queryString);
     deepLinkLogger.log(`parsing params: ${JSON.stringify(params, null, 2)}`);
 
-    return {
-      routeName: ROOT_STACK_ROUTE.EVENT_DETAILS,
-      params: {
-        i: params.e,
-        deepLink: {
-          appId: params.f,
-          token: params.t,
-          alias: params.a,
-        },
-      },
-    };
+    const repository = container.resolve<EarnEventRepository>('EarnEventRepository');
+    const eventId = params.e;
+
+    if (eventId) {
+      repository
+        .getEvent(eventId?.toString())
+        .then((event) => {
+          R.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, {
+            i: params.e,
+            data: event,
+            deepLink: {
+              appId: params.f,
+              token: params.t,
+              alias: params.a,
+            },
+          });
+        })
+        .catch((e) => {
+          eventLogger.error(`failed to get event: ${e}`);
+        });
+    }
   } else if (url.startsWith(`https://${URL_DYNAMIC_LINK}`) || url.startsWith(`https://${URL_DEEPLINK}`)) {
     // Link 2.
     // https://link.mvlclutch.io/short
