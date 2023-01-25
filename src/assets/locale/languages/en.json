@@ -418,5 +418,7 @@
   "warning_must_bigger_than_max_priority_fee_per_gas": "Must bigger than max priority fee per gas",
   "msg_approve_success": "approve transaction successfully send",
   "msg_fail_send_trade_transaction": "Trade transaction fail",
-  "msg_trade_success": "Trade transaction successfully send"
+  "msg_trade_success": "Trade transaction successfully send",
+  "incorrect_seed_phrase": "Incorrect Seed Phrase",
+  "plz_try_again": "Please try again."
 }
