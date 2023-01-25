@@ -24,8 +24,7 @@ function TermsOfServicesModal() {
         <DropShadow style={S.inlineStyles.boxShadow}>
           <S.ConfirmContainer>
             <Check checked={isAgree} onPress={toggle} style={S.inlineStyles.marginProvider}>
-              {/* TODO: 다국어 키값 추가 */}
-              <S.ConfirmLabel>{t('I read the contents and I agree.')}</S.ConfirmLabel>
+              <S.ConfirmLabel>{t('terms_of_service_agreement')}</S.ConfirmLabel>
             </Check>
             <PrimaryButton onPress={onPressAgree} disabled={!isAgree} label={t('btn_confirm')} wrapperStyle={S.inlineStyles.marginProvider} />
           </S.ConfirmContainer>

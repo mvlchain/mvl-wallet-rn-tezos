@@ -67,10 +67,9 @@ const useConfirmSeedPhraseScreen = () => {
       navigation.popToTop();
       setAppScreen(AppScreen.Root);
     } else {
-      // TODO: 다국어 요청
       openModal(MODAL_TYPES.TEXT_MODAL, {
-        title: t('Incorrect Seed Phrase'),
-        label: t('Please try again.'),
+        title: t('incorrect_seed_phrase'),
+        label: t('plz_try_again'),
       });
     }
   };
