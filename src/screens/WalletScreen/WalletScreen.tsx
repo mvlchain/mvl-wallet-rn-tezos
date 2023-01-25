@@ -2,7 +2,7 @@ import React from 'react';
 
 import ErrorBoundary from 'react-native-error-boundary';
 
-import ErrorScreenEmpty from '@@components/BasicComponents/ErrorBoundary/ErrorScreenEmpty';
+import ErrorScreenAtWalletMain from '@@components/BasicComponents/ErrorBoundary/ErrorScreenAtWalletMain';
 import Account from '@@components/Wallet/Account';
 import TokenList from '@@components/Wallet/TokenList';
 
@@ -12,7 +12,7 @@ import useWalletScreen from './useWalletScreen';
 function WalletScreen() {
   useWalletScreen();
   return (
-    <ErrorBoundary FallbackComponent={ErrorScreenEmpty}>
+    <ErrorBoundary FallbackComponent={ErrorScreenAtWalletMain}>
       <S.Container>
         <Account />
         <S.Seperator />
