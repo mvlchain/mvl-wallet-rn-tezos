@@ -10,7 +10,10 @@ import Modal from 'react-native-modal';
 
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
+import { getNetworkByBase } from '@@constants/network.constant';
+import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
+import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
 import { ApprovalTypes } from '@@utils/BackgroundBridge/RPCMethodMiddleware';
 import { hexToBN, fromWei } from '@@utils/number';
@@ -27,6 +30,8 @@ const styles = StyleSheet.create({
 });
 const RootRPCMethodsUI = () => {
   const colors = mmLightColors;
+  const blockChainService = useDi('WalletBlockChainService');
+  const { selectedNetwork } = walletPersistStore();
   // FIXME: chainId
   const [showPendingApproval, setShowPendingApproval] = useState<any>(false);
   const [signMessageParams, setSignMessageParams] = useState({ data: '' });
@@ -79,8 +84,9 @@ const RootRPCMethodsUI = () => {
         transaction: { value, gas, gasPrice, data },
       } = transactionMeta;
 
-      const asset = { symbol: 'ERC20', decimals: new BN('18'), address: to };
-
+      const { symbol, decimals } = await blockChainService.getMetadata(getNetworkByBase(selectedNetwork), to);
+      const asset = { symbol, decimals, address: to };
+      console.log('asset:  ', asset);
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
 

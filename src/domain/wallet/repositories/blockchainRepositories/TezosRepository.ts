@@ -9,6 +9,7 @@ import { formatBigNumber } from '@@utils/formatBigNumber';
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
+import { IMetadata } from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class TezosRepository implements Type.IBlockChainRepository {
@@ -44,9 +45,9 @@ export class TezosRepository implements Type.IBlockChainRepository {
     const contract = await Tezos.wallet.at(contractAddress, tzip12);
     // TODO: tzip12는 fa2.0의 metadata만 가져올 수 있음.
     const { name, decimals, symbol } = await contract.tzip12().getTokenMetadata(0);
-    const metadata = {
+    const metadata: IMetadata = {
       name,
-      decimals,
+      decimals: decimals.toString(),
       symbol,
     };
     return metadata;

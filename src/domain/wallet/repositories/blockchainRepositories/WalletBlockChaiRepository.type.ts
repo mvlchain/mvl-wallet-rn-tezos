@@ -4,7 +4,7 @@ export interface IBlockChainRepository {
   getBalance: ({ selectedWalletAddress, rpcUrl }: IGetCoinBalance) => Promise<string>;
   getContractBalance: ({ contractAddress, abi, address }: IGetTokenBalance) => Promise<string>;
   getBalanceByMulticall?: ({ calls, config }: IBalanceMultical) => Promise<IBalance>;
-  getTokenMetadata: (rpcUrl: string, contractAddress: string, abi?: string) => Promise<any>;
+  getTokenMetadata: (rpcUrl: string, contractAddress: string, abi?: string) => Promise<IMetadata>;
 }
 
 export interface IBalanceMultical {
@@ -36,4 +36,10 @@ export interface IGetTokenBalance {
   address: string;
   rpcUrl: string;
   decimals?: number;
+}
+
+export interface IMetadata {
+  name?: string;
+  symbol?: string;
+  decimals?: string;
 }
