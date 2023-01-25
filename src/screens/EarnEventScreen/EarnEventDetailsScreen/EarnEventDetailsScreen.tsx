@@ -101,6 +101,9 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *
  * • `transaction fee` will only be visible when claimInfo.fee > 0
  *
+ * TODO:
+ *  - add RetryTransferModal to claim reward again in EarnEventTransferringScreen
+ *
  * DeepLinks
  *  clutchwallet://connect (O)
  *  clutchwallet://screen/earn (O)
