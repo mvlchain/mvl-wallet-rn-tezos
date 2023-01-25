@@ -69,9 +69,9 @@ function App(props: { foxCode?: string }) {
    *  - SeedPhrase
    */
   return (
-    <ThemeProvider theme={theme[appTheme.value]}>
-      <ErrorBoundary FallbackComponent={ErrorScreenEmpty}>
-        <QueryClientProvider client={queryClient}>
+    <ErrorBoundary FallbackComponent={ErrorScreenEmpty}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme[appTheme.value]}>
           <NavigationContainer ref={navigationRef} theme={ROUTER_THEME} linking={DeepLinkOptions} onStateChange={onNavigationStateChange}>
             {!isSignedIn || appScreen === AppScreen.Auth ? <AuthStack /> : <RootStack />}
             <PinModal />
@@ -79,9 +79,9 @@ function App(props: { foxCode?: string }) {
             <PincodeGuideModal />
             <RootRPCMethodsUI />
           </NavigationContainer>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </ThemeProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
