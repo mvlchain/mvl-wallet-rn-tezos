@@ -12,8 +12,8 @@ export const PinLayoutWrapper = styled.View<IPinLayoutStyleProps>`
 `;
 
 export const BackDrop = styled.Pressable<IPinLayoutStyleProps>`
-  background-color: ${({ theme, isFull }) => (isFull ? theme.color.whiteBlack : theme.color.blackWhite)};
-  opacity: ${({ isFull }) => (isFull ? 1 : 0.25)};
+  background-color: ${({ theme, isFull }) => (isFull ? 'transaparent' : theme.color.blackWhite)};
+  opacity: 0.25;
   position: absolute;
   width: 100%;
   height: 100%;
