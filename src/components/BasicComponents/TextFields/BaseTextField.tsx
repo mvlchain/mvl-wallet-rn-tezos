@@ -11,13 +11,13 @@ import * as S from './TextField.style';
 import * as Type from './TextField.type';
 
 export function BaseTextField(props: Type.IBaseTextFieldComponentProps) {
-  const { placeholder, isValid, value, onChange, scanable, gotoScan, style, unit, label, hint } = props;
+  const { placeholder, isValid, value, onChange, scanable, gotoScan, style, unit, label, hint, debounceTime = 800 } = props;
   const ScanIcon = useAssetFromTheme(BlackScanIcon, WhiteScanIcon);
   const { color } = useColor();
   const [lcColor, setLcColor] = useState<string | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [displayValue, setDisplayValue] = useState<string | null>(null);
-  const debounceCallback = useDebounce(onChange, 800);
+  const debounceCallback = useDebounce(onChange, debounceTime);
   const clearTextField = () => {
     setDisplayValue('');
     debounceCallback(null);
