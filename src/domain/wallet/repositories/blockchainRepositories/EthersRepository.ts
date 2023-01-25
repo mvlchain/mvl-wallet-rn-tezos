@@ -8,7 +8,7 @@ import { IBalance } from '@@domain/wallet/services/WalletBlockChainService.type'
 import { loadingFunction } from '@@utils/loadingHelper';
 
 import * as Type from './WalletBlockChaiRepository.type';
-import { IBalanceMultical } from './WalletBlockChaiRepository.type';
+import { IBalanceMultical, IMetadata } from './WalletBlockChaiRepository.type';
 
 @injectable()
 export class EthersRepository implements Type.IBlockChainRepository {
@@ -44,13 +44,13 @@ export class EthersRepository implements Type.IBlockChainRepository {
   });
 
   getTokenMetadata = async (rpcUrl: string, contractAddress: string, abi?: string) => {
-    if (!abi) return;
+    if (!abi) throw new Error('erc20 token metadata required abi');
     const provider = this.evmJsonRpcProviderHolder.getProvider(rpcUrl);
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const name = await contract.name();
     const symbol = await contract.symbol();
     const decimals = await contract.decimals();
-    const metaData = {
+    const metaData: IMetadata = {
       name,
       symbol,
       decimals: decimals.toString(),
