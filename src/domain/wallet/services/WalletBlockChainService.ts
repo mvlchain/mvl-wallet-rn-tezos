@@ -5,7 +5,12 @@ import { abiERC20 } from '@@constants/contract/abi/abiERC20';
 import { getNetworkConfig, getNetworkByBase, Network, NETWORK_ID, NETWORK } from '@@constants/network.constant';
 import { ERC20_MULTICALL_METHOD } from '@@constants/token.constant';
 import QrCodeParser from '@@domain/auth/QrCodeParser/QrCodeParser';
-import { IBlockChainRepository, ICallBody, IConfigBody } from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
+import {
+  IBlockChainRepository,
+  ICallBody,
+  IConfigBody,
+  IMetadata,
+} from '@@domain/wallet/repositories/blockchainRepositories/WalletBlockChaiRepository.type';
 import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { ITokenPersistState, TokenDto } from '@@store/token/tokenPersistStore.type';
 import { isBlank, isNotBlank } from '@@utils/strings';
@@ -19,6 +24,7 @@ export interface IWalletBlockChainService {
   getOneBalanceFromNetwork: (index: number, network: Network, token: TokenDto) => Promise<string>;
   parseQrCodeLink: (qrCode: string) => Promise<TQrCodeLink | undefined>;
   getTokenByNetworkContractAddress: (tokenStore: ITokenPersistState, network: Network, contractAddress?: string) => TokenDto | undefined;
+  getMetadata: (network: Network, contractAddress: string) => Promise<IMetadata>;
 }
 
 @injectable()
@@ -196,5 +202,12 @@ export class WalletBlockChainService implements IWalletBlockChainService {
           return 'TEZOS';
       }
     }
+  };
+
+  getMetadata = async (network: Network, contractAddress: string) => {
+    const blockchainRepository = this.setBlockChainRepository(network);
+    const { rpcUrl } = getNetworkConfig(network);
+    const metadata = await blockchainRepository.getTokenMetadata(rpcUrl, contractAddress, abiERC20);
+    return metadata;
   };
 }

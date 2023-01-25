@@ -76,3 +76,6 @@ export { default as QuestionMarkIcon } from './ic-question-mark.svg';
 
 export { default as DeleteIconLight } from './ic-delete-light.svg';
 export { default as DeleteIconDark } from './ic-delete-dark.svg';
+
+export { default as RefreshIconLight } from './ic-refresh-light.svg';
+export { default as RefreshIconDark } from './ic-refresh-dark.svg';
