@@ -15,6 +15,7 @@ import ErrorBoundary from 'react-native-error-boundary';
 import { ThemeProvider } from 'styled-components';
 import useApp from 'useApp';
 
+import ErrorScreenEmpty from '@@components/BasicComponents/ErrorBoundary/ErrorScreenEmpty';
 import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
@@ -68,9 +69,9 @@ function App(props: { foxCode?: string }) {
    *  - SeedPhrase
    */
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme[appTheme.value]}>
+    <ThemeProvider theme={theme[appTheme.value]}>
+      <ErrorBoundary FallbackComponent={ErrorScreenEmpty}>
+        <QueryClientProvider client={queryClient}>
           <NavigationContainer ref={navigationRef} theme={ROUTER_THEME} linking={DeepLinkOptions} onStateChange={onNavigationStateChange}>
             {!isSignedIn || appScreen === AppScreen.Auth ? <AuthStack /> : <RootStack />}
             <PinModal />
@@ -78,9 +79,9 @@ function App(props: { foxCode?: string }) {
             <PincodeGuideModal />
             <RootRPCMethodsUI />
           </NavigationContainer>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 }
 

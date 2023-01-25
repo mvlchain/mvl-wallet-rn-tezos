@@ -20,7 +20,7 @@ const ErrorScreenInRootStack = ({ error, resetError }: { error: Error; resetErro
       if (isFocused) {
         rootNavigation.navigate(ROOT_STACK_ROUTE.MAIN);
         setTimeout(() => {
-          showToast(TOAST_TYPE.ERROR, t('msg_error_after_redirection_home'));
+          showToast(TOAST_TYPE.ERROR, t('msg_error_occurred_can_not_display'));
         }, 1500);
       }
     }, [isFocused])

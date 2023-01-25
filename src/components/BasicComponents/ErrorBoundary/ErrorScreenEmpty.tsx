@@ -15,7 +15,7 @@ const ErrorScreenEmpty = ({ error, resetError }: { error: Error; resetError: () 
   useFocusEffect(
     useCallback(() => {
       if (isFocused) {
-        showToast(TOAST_TYPE.ERROR, t('error'));
+        showToast(TOAST_TYPE.ERROR, t('msg_error_occurred_can_not_display'));
       }
     }, [isFocused])
   );
