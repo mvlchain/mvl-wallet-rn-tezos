@@ -222,8 +222,7 @@ const RootRPCMethodsUI = () => {
       backdropOpacity={1}
       animationInTiming={600}
       animationOutTiming={600}
-      onBackdropPress={onSignRejectAction}
-      onBackButtonPress={showExpandedMessage ? toggleExpandedMessage : onSignRejectAction}
+      onBackButtonPress={() => onSignRejectAction(signType)}
       swipeDirection={'down'}
       propagateSwipe
     >
