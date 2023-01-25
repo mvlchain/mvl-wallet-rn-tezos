@@ -16,6 +16,7 @@ export interface IBaseTextFieldProps {
   isValid?: boolean;
   scanable?: boolean;
   gotoScan?: Function;
+  debounceTime?: number;
 }
 export interface ITextFieldContainerProps {
   lcColor: string | null;

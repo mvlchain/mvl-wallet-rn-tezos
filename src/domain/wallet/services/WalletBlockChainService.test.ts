@@ -5,6 +5,7 @@ import { AuthProvider } from '@@constants/auth.constant';
 import { NetworkId, Network } from '@@constants/network.constant';
 import { KeyClient, PostboxKeyHolder } from '@@domain/auth/clients/KeyClient';
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
+import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { WalletDto } from '@@domain/model/WalletDto';
 
 import { EthersWalletClient } from '../clients/EthersWalletClient';
@@ -127,6 +128,10 @@ beforeAll(() => {
   container.register('WalletBlockChainService', {
     useFactory: instanceCachingFactory<WalletBlockChainService>((container) => container.resolve(WalletBlockChainService)),
   });
+
+  container.register('EvmJsonRpcProviderHolder', {
+    useFactory: instanceCachingFactory<EvmJsonRpcProviderHolder>((container) => container.resolve(EvmJsonRpcProviderHolder)),
+  });
 });
 
 afterAll(() => {
@@ -174,3 +179,15 @@ it('get pkey', async () => {
 //   const token = blockChainService.getTokenByNetworkContractAddress('GOERLI', '0xINVALID_ADDRESS');
 //   expect(token).toBe(null);
 // });
+
+// it('ERC20 BlockChainService get metadata', async () => {
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const metadata = await blockChainService.getMetadata('GOERLI', '0x1edfcCe833bac99C278E2886210DbD9213bd139a');
+//   expect(metadata?.symbol).toBe('MVL');
+// });
+
+it('tezos BlockChainService get metadata', async () => {
+  const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+  const metadata = await blockChainService.getMetadata('TEZOS_GHOSTNET', 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c');
+  expect(metadata?.symbol).toBe('QUIPU');
+});

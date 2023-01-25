@@ -5,6 +5,7 @@ import { fontSize, height } from '@@utils/ui';
 export const Container = styled.View`
   flex: 1;
   justify-content: flex-end;
+  background-color: ${({ theme }) => theme.color.whiteBlack};
 `;
 export const Contents = styled.View`
   flex: 1;

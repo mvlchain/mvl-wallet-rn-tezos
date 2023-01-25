@@ -230,7 +230,6 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
 
     return transactionToSend;
   };
-
   const ArrowIcon = useAssetFromTheme(ChevronRightLightIcon, ChevronRightBlackIcon);
   const totalStr = (total && formatBigNumber(total, coinDto.decimals).toFixed()) || '-';
   return (
@@ -246,7 +245,9 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       isConfirmDisabled={isPaymentDisable}
     >
       {/* <S.Label>{label}</S.Label> */}
-      <S.AmountText>{value?.toFixed()} MVL</S.AmountText>
+      <S.AmountText>
+        {value?.toFixed()} {transaction?.selectedAsset?.symbol}
+      </S.AmountText>
       <S.ContentContainer>
         <S.GreyText>{t('payer')}</S.GreyText>
         <S.BlackText>{transaction?.from}</S.BlackText>

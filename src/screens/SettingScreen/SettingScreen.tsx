@@ -52,12 +52,12 @@ function SettingScreen() {
             onPressSettingMenu(ROOT_STACK_ROUTE.SETTING_SECURITY);
           }}
         />
-        <SettingMenu
+        {/* <SettingMenu
           title={t('faq')}
           onPress={() => {
             onPressSettingMenu(ROOT_STACK_ROUTE.SETTING_FAQ);
           }}
-        />
+        /> */}
         <SettingMenu
           title={t('privacy_policy')}
           onPress={() => {
