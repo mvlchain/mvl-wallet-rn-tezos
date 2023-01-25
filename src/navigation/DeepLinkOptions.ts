@@ -1,5 +1,5 @@
 import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
-import { LinkingOptions } from '@react-navigation/native';
+import { CommonActions, LinkingOptions, StackActions } from '@react-navigation/native';
 import qs from 'qs';
 import { Linking, Platform } from 'react-native';
 import { container } from 'tsyringe';
@@ -51,9 +51,6 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
       // [ROOT_STACK_ROUTE.DEEPLINK_CONNECT]: {
       //   path: 'connect',
       // },
-      [ROOT_STACK_ROUTE.EVENT_DETAILS]: {
-        path: 'screen/earn',
-      },
       [ROOT_STACK_ROUTE.MAIN]: {
         screens: {
           [MAIN_TAB_ROUTE.TRADE]: {
@@ -116,7 +113,7 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
     // clutchwallet://connect?f={appId}&t={accessToken}&e={eventId}&a={eventAlias}
 
     const params = qs.parse(queryString);
-    deepLinkLogger.log(`parsing params: ${JSON.stringify(params, null, 2)}`);
+    deepLinkLogger.log(`navigating EventDetails to connect ThirdParty, params: ${JSON.stringify(params, null, 2)}`);
 
     const repository = container.resolve<EarnEventRepository>('EarnEventRepository');
     const eventId = params.e;
@@ -139,8 +136,21 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
           eventLogger.error(`failed to get event: ${e}`);
         });
     }
-  } else if (url.startsWith(`https://${URL_DYNAMIC_LINK}`) || url.startsWith(`https://${URL_DEEPLINK}`)) {
+  } else if (url.startsWith(`${CLUTCH_APP_SCHEME}://screen/earn`) && queryString) {
     // Link 2.
+    // clutchwallet://screen/earn?i={eventId}
+
+    const params = qs.parse(queryString);
+    deepLinkLogger.log(`navigating EventDetails with id, params: ${JSON.stringify(params, null, 2)}`);
+
+    R.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{ name: ROOT_STACK_ROUTE.MAIN }, { name: ROOT_STACK_ROUTE.EVENT_DETAILS, params: { i: params.i } }],
+      })
+    );
+  } else if (url.startsWith(`https://${URL_DYNAMIC_LINK}`) || url.startsWith(`https://${URL_DEEPLINK}`)) {
+    // Link 3.
     // https://link.mvlclutch.io/short
     blockChainService
       .parseQrCodeLink(url)
