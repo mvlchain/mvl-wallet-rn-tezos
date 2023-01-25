@@ -21,6 +21,7 @@ import URL from 'url-parse';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import { tagLogger } from '@@utils/Logger';
 import { getAddress } from '@@utils/walletHelper';
 
 import AppConstants from './AppConstants';
@@ -29,6 +30,8 @@ import Port from './Port';
 
 const USER_REJECTED_ERRORS = ['user_rejected_transaction'];
 const USER_REJECTED_ERROR_CODE = 4001;
+
+const logger = tagLogger('BackgroundBridge');
 
 function containsUserRejectedError(errorMessage: any, errorCode: any) {
   try {
@@ -88,14 +91,14 @@ export function createLoggerMiddleware(opts: any) {
               }
             }
 
-            console.error(errorToLog, errorParams);
+            logger.error(errorToLog, errorParams);
           }
         }
       }
       if (req.isMetamaskInternal) {
         return;
       }
-      console.log(`WB MIDDLEWARE LOGGING> RPC (${opts.origin}):`, req, '->', res);
+      logger.log(`WB MIDDLEWARE LOGGING> RPC (${opts.origin}):`, req, '->', res);
       cb();
     });
   };
@@ -103,7 +106,7 @@ export function createLoggerMiddleware(opts: any) {
 
 export function createOriginMiddleware(opts: any) {
   return function originMiddleware(req: any, _: any, next: any) {
-    console.log(`called originMiddleware`);
+    logger.log(`called originMiddleware`);
     req.origin = opts.origin;
 
     if (!req.params) {
@@ -120,7 +123,9 @@ function setupMultiplex(connectionStream: Duplex) {
   const mux: ObjectMultiplex = new ObjectMultiplex();
   pump(connectionStream, mux, connectionStream, (err: any) => {
     if (err) {
-      console.warn(err);
+      if (err.message !== 'premature close') {
+        logger.warn(err);
+      }
     }
   });
   return mux;
@@ -259,7 +264,7 @@ export class BackgroundBridge extends EventEmitter {
   }
 
   isUnlocked() {
-    console.log(`isUnlocked: true`);
+    logger.log(`isUnlocked: true`);
     return true;
   }
 
@@ -276,7 +281,7 @@ export class BackgroundBridge extends EventEmitter {
   };
 
   onMessage = (msg: any) => {
-    console.log(`WB INCOMING> 3. onMessage in bridge this.port.emit message`);
+    logger.log(`WB INCOMING> 3. onMessage in bridge this.port.emit message`);
     this.port.emit('message', { name: msg.name, data: msg.data });
   };
 
@@ -305,7 +310,7 @@ export class BackgroundBridge extends EventEmitter {
           mid.destroy();
         }
       });
-      if (err) console.log('Error with provider stream conn', err);
+      if (err) logger.log('Error with provider stream conn', err);
     });
   }
 
@@ -317,7 +322,7 @@ export class BackgroundBridge extends EventEmitter {
     // setup json rpc engine stack
     const engine = new JsonRpcEngine();
     const provider = this._providerProxy;
-    console.log(`WB SETUP> setupProviderEngine provider: ${this._providerProxy}, sendAsync: ${this._providerProxy && this._providerProxy.sendAsync}`);
+    logger.log(`WB SETUP> setupProviderEngine provider: ${this._providerProxy}, sendAsync: ${this._providerProxy && this._providerProxy.sendAsync}`);
 
     const blockTracker = this._blockTrackerProxy;
 
@@ -350,9 +355,9 @@ export class BackgroundBridge extends EventEmitter {
     function providerAsMiddleware(provider: any) {
       return (req: any, res: any, next: any, end: any) => {
         // send request to provider
-        console.log(`WB INCOMING> 7. provider.sendAsync middleware`);
+        logger.log(`WB INCOMING> 7. provider.sendAsync middleware`);
         provider.sendAsync(req, (err: any, providerRes: any) => {
-          console.log(`WB OUTGOING> provider.sendAsync ${err}, ${providerRes}`);
+          logger.log(`WB OUTGOING> provider.sendAsync ${err}, ${providerRes}`);
           // forward any error
           if (err) return end(err);
           // copy provider response onto original response
