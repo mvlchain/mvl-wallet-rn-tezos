@@ -47,7 +47,7 @@ export type TRootStackParamList = {
   };
   EVENT_DETAILS: {
     i: string;
-    data?: EarnEventDto;
+    data: EarnEventDto;
     deepLink?: ThirdPartyDeepLink;
   };
   EARN_EVENT_TRNASFERRING: {
