@@ -118,29 +118,59 @@ const RootRPCMethodsUI = () => {
     [setEtherTransaction, toggleDappTransactionModal]
   );
 
-  const onSignConfirmAction = async () => {
+  const onSignConfirmAction = async (signType: string) => {
     const messageParams = signMessageParams;
-    const { typedMessageManager } = controllerManager;
     const messageId = messageParams.metamaskId;
-    const version = messageParams.version;
-    let rawSig;
-    let cleanMessageParams;
-    try {
-      cleanMessageParams = await typedMessageManager.approveMessage(messageParams);
-      console.log(`cleanMessageParams: ${JSON.stringify(cleanMessageParams, null, 2)}, version: ${version}`);
-      const index = selectedWalletIndex[selectedNetwork] || 0;
-      rawSig = await signMessageService.signTypedMessage(getNetworkByBase(selectedNetwork), index, cleanMessageParams, version);
-      typedMessageManager.setMessageStatusSigned(messageId, rawSig);
-    } catch (error: any) {
-      typedMessageManager.setMessageStatusSigned(messageId, error.message);
+    const networkByBase = getNetworkByBase(selectedNetwork);
+    const index = selectedWalletIndex[selectedNetwork] || 0;
+    switch (signType) {
+      case 'typed':
+        const { typedMessageManager } = controllerManager;
+        const version = messageParams.version;
+        try {
+          const cleanMessageParams = await typedMessageManager.approveMessage(messageParams);
+          const rawSig = await signMessageService.signTypedMessage(networkByBase, index, cleanMessageParams, version);
+          typedMessageManager.setMessageStatusSigned(messageId, rawSig);
+        } catch (error: any) {
+          typedMessageManager.setMessageStatusErrored(messageId, error.message);
+        }
+        break;
+      case 'personal':
+        const { personalMessageManager } = controllerManager;
+        try {
+          const cleanMessageParams = await personalMessageManager.approveMessage(messageParams);
+          const rawSig = await signMessageService.signPersonalMessage(networkByBase, index, cleanMessageParams);
+          personalMessageManager.setMessageStatusSigned(messageId, rawSig);
+        } catch (error: any) {
+          console.error(error);
+        }
+        break;
+      case 'eth':
+        break;
+      default:
+        throw new Error(`Unknown sign type: ${signType}`);
     }
+
     setShowPendingApproval(false);
   };
-  const onSignRejectAction = () => {
+  const onSignRejectAction = (signType: string) => {
     const messageParams = signMessageParams;
-    const { typedMessageManager } = controllerManager;
     const messageId = messageParams.metamaskId;
-    typedMessageManager.rejectMessage(messageId);
+    switch (signType) {
+      case 'typed':
+        const { typedMessageManager } = controllerManager;
+        typedMessageManager.rejectMessage(messageId);
+        break;
+      case 'personal':
+        const { personalMessageManager } = controllerManager;
+        personalMessageManager.rejectMessage(messageId);
+        break;
+      case 'eth':
+        break;
+      default:
+        throw new Error(`Unknown sign type: ${signType}`);
+    }
+
     setShowPendingApproval(false);
   };
 
@@ -198,8 +228,8 @@ const RootRPCMethodsUI = () => {
       propagateSwipe
     >
       {signType === 'typed' && renderTypedMessage(signMessageParams)}
-      <Button title={'Sign'} onPress={onSignConfirmAction} />
-      <Button title={'Cancel'} onPress={onSignRejectAction} />
+      <Button title={'Sign'} onPress={() => onSignConfirmAction(signType)} />
+      <Button title={'Cancel'} onPress={() => onSignRejectAction(signType)} />
       {/*{signType === 'personal' && (*/}
       {/*  <PersonalSign*/}
       {/*    navigation={navigation}*/}

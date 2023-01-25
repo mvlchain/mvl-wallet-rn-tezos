@@ -1,5 +1,5 @@
-import { SignTypedDataVersion, TypedMessageParams } from '@metamask/controllers';
-import { signTypedData } from '@metamask/eth-sig-util';
+import { PersonalMessageParams, SignTypedDataVersion, TypedMessageParams } from '@metamask/controllers';
+import { personalSign, signTypedData } from '@metamask/eth-sig-util';
 import { addHexPrefix, toBuffer } from 'ethereumjs-util';
 import { inject, injectable } from 'tsyringe';
 
@@ -9,6 +9,7 @@ import { WalletService } from '@@domain/wallet/services/WalletService';
 @injectable()
 export class SignMessageService {
   constructor(@inject('WalletService') private walletService: WalletService) {}
+
   async signTypedMessage(selectedNetwork: Network, index: number, messageParams: TypedMessageParams, version: SignTypedDataVersion) {
     try {
       const walletInfo = await this.walletService.getWalletInfo({ index, network: selectedNetwork });
@@ -36,6 +37,17 @@ export class SignMessageService {
         default:
           throw new Error(`Unexpected signTypedMessage version: '${version}'`);
       }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async signPersonalMessage(selectedNetwork: Network, index: number, messageParams: PersonalMessageParams) {
+    try {
+      const walletInfo = await this.walletService.getWalletInfo({ index, network: selectedNetwork });
+      const privateKeyBuffer = toBuffer(addHexPrefix(walletInfo.privateKey));
+      return personalSign({ privateKey: privateKeyBuffer, data: messageParams.data });
     } catch (error) {
       console.error(error);
       throw error;
