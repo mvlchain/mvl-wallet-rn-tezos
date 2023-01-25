@@ -110,7 +110,6 @@ const useSetSendFunction = () => {
       if (!transaction) {
         throw new Error('fail send to blockChain');
       }
-      //TODO: nonce조회를 일시적으로 하지 못하는 경우 0으로 해줌
       let hash;
       let nonce;
       switch (network.networkId) {
