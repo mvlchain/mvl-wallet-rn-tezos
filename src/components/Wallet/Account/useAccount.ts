@@ -70,12 +70,12 @@ const useAccount = () => {
             onConfirm: onChangeWalletInput,
           }),
       },
-      {
-        id: 'EDIT_TOKEN_LIST',
-        title: t('edit_token_list'),
-        isSelected: false,
-        onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
-      },
+      // {
+      //   id: 'EDIT_TOKEN_LIST',
+      //   title: t('edit_token_list'),
+      //   isSelected: false,
+      //   onPress: () => rootNavigation.navigate(ROOT_STACK_ROUTE.WALLET_EDIT_TOKEN_LIST),
+      // },
     ],
     [data, _selectedWalletIndex, selectedNetwork, walletList]
   );
