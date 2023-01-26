@@ -420,5 +420,7 @@
   "msg_fail_send_trade_transaction": "Trade transaction fail",
   "msg_trade_success": "Trade transaction successfully send",
   "incorrect_seed_phrase": "Incorrect Seed Phrase",
-  "plz_try_again": "Please try again."
+  "plz_try_again": "Please try again.",
+  "msg_error_after_redirection_home": "Error has occurred, redirected to home screen",
+  "msg_error_occurred_can_not_display": "Error has occurred, screen cannot be displayed"
 }

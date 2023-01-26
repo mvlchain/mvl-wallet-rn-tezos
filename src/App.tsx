@@ -15,6 +15,7 @@ import ErrorBoundary from 'react-native-error-boundary';
 import { ThemeProvider } from 'styled-components';
 import useApp from 'useApp';
 
+import ErrorScreenEmpty from '@@components/BasicComponents/ErrorBoundary/ErrorScreenEmpty';
 import PinModal from '@@components/BasicComponents/Modals/Auth/PinModal';
 import PincodeGuideModal from '@@components/BasicComponents/Modals/Auth/PincodeGuideModal';
 import TermsOfServicesModal from '@@components/BasicComponents/Modals/Auth/TermsOfServicesModal';
@@ -25,7 +26,6 @@ import AuthStack from '@@navigation/AuthStack';
 import { DeepLinkOptions } from '@@navigation/DeepLinkOptions';
 import RootStack from '@@navigation/RootStack';
 import { navigationRef } from '@@navigation/RootStack/RootNavigation';
-import ErrorBoundaryScreen from '@@screens/ErrorBoundaryScreen';
 import authStore from '@@store/auth/authStore';
 import { AppScreen } from '@@store/auth/authStore.type';
 import { theme } from '@@style/theme';
@@ -69,12 +69,11 @@ function App(props: { foxCode?: string }) {
    *  - SeedPhrase
    */
   return (
-    <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
+    <ErrorBoundary FallbackComponent={ErrorScreenEmpty}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme[appTheme.value]}>
           <NavigationContainer ref={navigationRef} theme={ROUTER_THEME} linking={DeepLinkOptions} onStateChange={onNavigationStateChange}>
             {!isSignedIn || appScreen === AppScreen.Auth ? <AuthStack /> : <RootStack />}
-
             <PinModal />
             <TermsOfServicesModal />
             <PincodeGuideModal />

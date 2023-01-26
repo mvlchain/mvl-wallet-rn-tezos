@@ -114,3 +114,8 @@ export const ToastText = styled.Text`
   ${({ theme }) => theme.font.Paragraph.md}
   color: ${({ theme }) => theme.color.whiteBlack};
 `;
+
+export const ToastErrorText = styled.Text`
+  ${({ theme }) => theme.font.Paragraph.md}
+  color: ${({ theme }) => theme.color.red};
+`;
