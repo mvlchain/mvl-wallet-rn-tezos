@@ -104,6 +104,7 @@ export const useActionControlsByPhase = (
       avatarUrl: avatarUrl,
       actionButtonTitle: event.eventActionButtonTitle ?? '',
       isActionButtonEnabled: isButtonEnabled,
+      isActionButtonVisible: true,
       eventPointInfoList: thirdParty.points.map((point) => {
         return {
           title: point.title,
@@ -128,6 +129,7 @@ export const useActionControlsByPhase = (
       avatarUrl: event.pointIconUrl,
       actionButtonTitle: event.eventActionButtonTitle ?? '',
       isActionButtonEnabled: isButtonEnabled,
+      isActionButtonVisible: true,
       eventPointInfoList: thirdParty.points.map((point) => {
         return {
           title: point.title,
@@ -142,6 +144,7 @@ export const useActionControlsByPhase = (
       avatarUrl: event.pointIconUrl,
       actionButtonTitle: t('claim'),
       isActionButtonEnabled: isButtonEnabled,
+      isActionButtonVisible: true,
       eventPointInfoList: thirdParty.points.map((point) => {
         return {
           title: point.title,
@@ -161,6 +164,7 @@ export const useActionControlsByPhase = (
           avatarUrl: event.pointIconUrl,
           actionButtonTitle: event.eventActionButtonTitle ?? '',
           isActionButtonEnabled: isButtonEnabled,
+          isActionButtonVisible: true,
           eventPointInfoList: thirdParty.points.map((point) => {
             return {
               title: point.title,
@@ -182,7 +186,10 @@ export const useActionControlsByPhase = (
 
       case EventPhase.OnClaim: {
         if (!claimStatusInfo) {
-          return claimControlAttrs();
+          return {
+            ...claimControlAttrs(),
+            isActionButtonVisible: false,
+          };
         }
 
         const avatarUrl = claimStatusInfo.subCurrencyIconUrl ? claimStatusInfo.subCurrencyIconUrl : claimStatusInfo.currencyIconUrl;
@@ -193,12 +200,13 @@ export const useActionControlsByPhase = (
          * isAllowParticipationInClaim: a flat that the users are allowed to claim multiple times
          */
         const isClaimCompleted =
-          !event.isAllowParticipationInClaim || claimStatusInfo.status === 'COMPLETED' || claimStatusInfo.status === 'COMPLETED_TRANSFER';
+          !event.isAllowParticipationInClaim && (claimStatusInfo.status === 'COMPLETED' || claimStatusInfo.status === 'COMPLETED_TRANSFER');
         return {
           isSvgAvatar: isSvg(avatarUrl),
           avatarUrl,
           actionButtonTitle: isClaimCompleted ? t('claimed') : t('claim'),
           isActionButtonEnabled: isButtonEnabled,
+          isActionButtonVisible: !isClaimCompleted,
           eventPointInfoList: [
             {
               title: t('event_action_claimable_value_title'),
@@ -208,7 +216,6 @@ export const useActionControlsByPhase = (
               subCurrency: claimStatusInfo.subCurrency ?? undefined,
             },
           ],
-          isClaimCompleted,
           onActionButtonPress: openConfirmClaimModal,
         };
       }

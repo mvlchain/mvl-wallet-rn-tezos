@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Linking, Alert } from 'react-native';
+import { Linking, Alert, AppState, AppStateStatus } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
@@ -11,8 +11,10 @@ import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
+import { useAppStateChange } from '@@hooks/useAppStateChange';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import { tagLogger } from '@@utils/Logger';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -117,7 +119,6 @@ export function EarnEventDetailsScreen() {
   }
 
   const { disconnectThirdParty } = useDisconnectThirdParty();
-  const { openModal } = globalModalStore();
 
   const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data, params.deepLink);
   const { event, phase } = details;
