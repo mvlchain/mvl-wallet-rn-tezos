@@ -25,12 +25,12 @@ const EIP1559_LEVEL_WEIGHT = {
   [GAS_LEVEL.HIGH]: '1.6',
 };
 
-const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProps) => {
+const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm, initialLevel }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
+  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.LOW);
 
   const [lastBaseFeePerGas, setLastBaseFeePerGas] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));

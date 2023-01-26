@@ -21,7 +21,18 @@ export interface IGasFeeModalProps extends IGasComponentProps {
   onClose?: () => void;
 }
 
-function GasFeeModal({ onConfirm, onConfirmTitle, to, value, data, transferParam, isValidInput, isVisible, onClose }: IGasFeeModalProps) {
+function GasFeeModal({
+  onConfirm,
+  onConfirmTitle,
+  to,
+  value,
+  data,
+  transferParam,
+  isValidInput,
+  isVisible,
+  onClose,
+  initialLevel,
+}: IGasFeeModalProps) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
 
@@ -52,6 +63,7 @@ function GasFeeModal({ onConfirm, onConfirmTitle, to, value, data, transferParam
             data={data}
             transferParam={transferParam}
             isValidInput={isValidInput}
+            initialLevel={initialLevel}
           />
         </ScrollView>
       </DismissKeyboardView>
