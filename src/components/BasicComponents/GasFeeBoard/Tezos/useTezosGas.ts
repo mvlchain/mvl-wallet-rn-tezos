@@ -142,6 +142,7 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITez
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
+    if (!onConfirm) return;
     gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toFixed(), 'transferParam:', transferParam);
     if (!onConfirmValid || !to || !total) {
       gasLogger.error('gas is not ready.');
