@@ -31,13 +31,15 @@ export const SearchText = styled.Text`
   color: ${({ theme }) => theme.color.grey300};
 `;
 
-export const ContentContainer = styled.View<{ isIOS: boolean }>`
+export const ContentContainer = styled.View<{ isIOS?: boolean }>`
   flex: 1;
-  ${({ isIOS }) =>
+  /* ${({ isIOS }) =>
     isIOS &&
     css`
       align-items: center;
       justify-content: center;
-    `};
+    `}; */
+  align-items: center;
+  justify-content: center;
   padding: 0 ${width * 24}px;
 `;

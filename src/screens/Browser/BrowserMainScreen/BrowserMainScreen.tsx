@@ -30,7 +30,10 @@ function BrowserMainScreen(props: IBrowserMainScreenProps) {
           <S.SearchText>{t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}</S.SearchText>
         </S.SearchBtn>
       </S.SearchContainer>
-      <S.ContentContainer isIOS={Device.isIos()}>
+      <S.ContentContainer>
+        <DappImage />
+      </S.ContentContainer>
+      {/* <S.ContentContainer isIOS={Device.isIos()}>
         {Device.isAndroid() ? (
           <FlashList
             data={dappList}
@@ -43,7 +46,7 @@ function BrowserMainScreen(props: IBrowserMainScreenProps) {
         ) : (
           <DappImage />
         )}
-      </S.ContentContainer>
+      </S.ContentContainer> */}
     </S.Container>
   );
 }
