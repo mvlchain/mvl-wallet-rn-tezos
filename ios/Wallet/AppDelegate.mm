@@ -59,11 +59,13 @@ static NSString *const kRNOptionFoxCode = @"foxCode";
   NSDictionary *initProps = [self prepareInitialProps];
   UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"Wallet", initProps);
 
-  if (@available(iOS 13.0, *)) {
-    rootView.backgroundColor = [UIColor systemBackgroundColor];
-  } else {
-    rootView.backgroundColor = [UIColor whiteColor];
-  }
+  // TODO: LightTheme 고정
+  rootView.backgroundColor = [UIColor whiteColor];
+//  if (@available(iOS 13.0, *)) {
+//    rootView.backgroundColor = [UIColor systemBackgroundColor];
+//  } else {
+//    rootView.backgroundColor = [UIColor whiteColor];
+//  }
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

@@ -16,7 +16,10 @@ class SharedPreferenceStorage constructor(
     @ThemeType
     override var themeType: String
         get() {
-            return preferences.getString(PREFS_THEME, THEME_TYPE_DEFAULT)
+            // TODO: LightTheme 고정
+            //  original: preferences.getString(PREFS_THEME, THEME_TYPE_DEFAULT)
+            //  changed: preferences.getString(PREFS_THEME, THEME_TYPE_LIGHT)
+            return preferences.getString(PREFS_THEME, THEME_TYPE_LIGHT)
                 ?: throw NoSuchElementException()
         }
         set(value) {
