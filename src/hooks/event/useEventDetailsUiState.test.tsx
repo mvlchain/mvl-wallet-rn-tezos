@@ -36,7 +36,7 @@ describe('useEventDetailsUiState', () => {
     jest.useFakeTimers();
 
     const eventId = events[4].id;
-    const data: EarnEventDto | undefined = undefined;
+    const data: EarnEventDto = events[4];
     const deepLink: ThirdPartyDeepLink | undefined = undefined;
 
     // NOTE: events[4].app field is null,
@@ -51,7 +51,7 @@ describe('useEventDetailsUiState', () => {
     const spyGetClaimInformation = jest.spyOn(repository, 'getClaimInformation');
 
     // run hook
-    const { result } = renderHook(useEarnEventDetailsUiState, {
+    const { result, rerender } = renderHook(useEarnEventDetailsUiState, {
       initialProps: {
         id: eventId,
         data: undefined,
@@ -70,6 +70,7 @@ describe('useEventDetailsUiState', () => {
       isThirdPartySupported: false,
       connection: undefined,
       points: details.event?.pointInfoArr.map((data) => ({ ...data, amount: '0' })) ?? [],
+      isThirdPartyConnectionRequired: false,
       error: null,
     };
     const claimStatusInfo: ClaimStatusInformation | undefined = undefined;
@@ -80,7 +81,7 @@ describe('useEventDetailsUiState', () => {
       claimStatusInfo,
     };
 
-    jest.runAllTimers();
+    //jest.runAllTimers();
     const res = result.current;
     expect(spyGetEvent.mock.calls.length).toBe(1);
     expect(spyCheckThirdPartyConnection.mock.calls.length).toBe(0);
@@ -88,9 +89,10 @@ describe('useEventDetailsUiState', () => {
     expect(spyGetClaimStatus.mock.calls.length).toBe(0);
     expect(spyGetClaimInformation.mock.calls.length).toBe(0);
 
-    expect(JSON.stringify(res.details)).toBe(JSON.stringify(uiState.details));
-    expect(JSON.stringify(res.thirdParty)).toBe(JSON.stringify(uiState.thirdParty));
-    expect(JSON.stringify(res.claimStatusInfo)).toBe(JSON.stringify(uiState.claimStatusInfo));
+    expect(res).not.toBeUndefined();
+    expect(JSON.stringify(res!.details)).toBe(JSON.stringify(uiState.details));
+    expect(JSON.stringify(res!.thirdParty)).toBe(JSON.stringify(uiState.thirdParty));
+    expect(JSON.stringify(res!.claimStatusInfo)).toBe(JSON.stringify(uiState.claimStatusInfo));
   });
 });
 

@@ -114,12 +114,12 @@ export function EarnEventDetailsScreen() {
 
   const { disconnectThirdParty } = useDisconnectThirdParty();
 
-  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState({
+  const uiState = useEarnEventDetailsUiState({
     id: params.i,
     data: params.data,
     deepLink: params.deepLink,
   });
-  const { event, phase } = details;
+
   console.log(`Details> i: ${params.i}`);
   console.log(`Details> i: ${params.i}, data: ${event?.detailPageUrl}, deepLink: ${JSON.stringify(details.deepLink)}`);
 
@@ -135,7 +135,7 @@ export function EarnEventDetailsScreen() {
         });
       }
     },
-    [event]
+    [uiState]
   );
 
   const onDisconnectThirdPartyPress = useCallback(async () => {
@@ -144,15 +144,17 @@ export function EarnEventDetailsScreen() {
       // TODO: disconnected successfully. do following tasks
       //  1. third-party disconnection modal
       console.log(`Details> disconnected and refreshing`);
-      refresh(true);
+      uiState?.refresh(true);
     }
-  }, [event]);
+  }, [uiState]);
 
-  if (!event) {
-    console.log(`Details> event is null`);
+  if (!uiState) {
+    console.log(`Details> initial rendering with no data`);
     return null;
   }
 
+  const { details, thirdParty, claimStatusInfo, refresh } = uiState;
+  const { event, phase } = details;
   const isThirdPartyConnected = thirdParty.connection?.exists ?? false;
 
   function decorateThirdPartyApp(
