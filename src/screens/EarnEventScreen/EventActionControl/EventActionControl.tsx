@@ -79,7 +79,7 @@ export const EventActionControl = ({ phase, event, thirdParty, claimStatusInfo }
           </S.TxFeeLayout>
         ) : null}
 
-        {!actionControlAttrs.isClaimCompleted ? (
+        {actionControlAttrs.isActionButtonVisible ? (
           <PrimaryButton
             label={actionControlAttrs.actionButtonTitle}
             disabled={!actionControlAttrs.isActionButtonEnabled}
