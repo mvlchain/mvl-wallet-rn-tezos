@@ -14,7 +14,7 @@ import { EventActionControl } from '../EventActionControl';
 import { ThirdPartyApp } from '../ThirdPartyApp';
 
 import * as S from './EarnEventDetailsScreen.style';
-import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
+import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreen.type';
 
 /**
  * Screen displaying event details to the WebView
@@ -121,7 +121,6 @@ export function EarnEventDetailsScreen() {
   });
 
   console.log(`Details> i: ${params.i}`);
-  console.log(`Details> i: ${params.i}, data: ${event?.detailPageUrl}, deepLink: ${JSON.stringify(details.deepLink)}`);
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
