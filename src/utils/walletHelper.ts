@@ -10,5 +10,5 @@ export const getAddress = () => {
   const selectedNetwork = _walletPersistStore.selectedNetwork;
   const selectedWalletIndex = _walletPersistStore.selectedWalletIndex[selectedNetwork];
   const { address } = walletService.getWalletInfoFromStore({ index: selectedWalletIndex, network: selectedNetwork });
-  return address;
+  return address.toLowerCase();
 };
