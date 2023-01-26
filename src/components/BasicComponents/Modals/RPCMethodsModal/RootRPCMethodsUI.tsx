@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { hexToText } from '@metamask/controller-utils';
 import { BigNumber } from 'bignumber.js';
+import BN from 'bn.js';
 import { useTranslation } from 'react-i18next';
 import { Button, InteractionManager, StyleSheet, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
@@ -11,12 +12,15 @@ import Modal from 'react-native-modal';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase } from '@@constants/network.constant';
+import { TRANSACTION_METHOD, TRANSFER_FUNCTION_SIGNATURE } from '@@constants/transaction.constant';
+import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
 import { ApprovalTypes } from '@@utils/BackgroundBridge/RPCMethodMiddleware';
 import { tagLogger } from '@@utils/Logger';
+import { formatBigNumber } from '@@utils/formatBigNumber';
 import { fromWei, hexToBN } from '@@utils/number';
 
 import Approval from './Approval';
@@ -35,6 +39,9 @@ const RootRPCMethodsUI = () => {
   const colors = mmLightColors;
   const blockChainService = useDi('WalletBlockChainService');
   const signMessageService = useDi('SignMessageService');
+  const transactionServiceEthers = useDi('TransactionServiceEthers');
+
+  const { coinDto } = useCoinDto();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const [showPendingApproval, setShowPendingApproval] = useState<any>(false);
   const [signMessageParams, setSignMessageParams] = useState<any>({ data: '' });
@@ -77,6 +84,14 @@ const RootRPCMethodsUI = () => {
     });
   };
 
+  const checkTransfer = (data: string) => {
+    const fourByteSignature = data.substr(0, 10);
+    if (fourByteSignature === TRANSFER_FUNCTION_SIGNATURE) {
+      return true;
+    }
+    return false;
+  };
+
   const onUnapprovedTransaction = useCallback(
     async (transactionMeta: any) => {
       logger.log(`WB INCOMING> 8. onUnapprovedTransaction transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
@@ -87,14 +102,30 @@ const RootRPCMethodsUI = () => {
       const {
         transaction: { value, gas, gasPrice, data },
       } = transactionMeta;
-
-      const { symbol, decimals } = await blockChainService.getMetadata(getNetworkByBase(selectedNetwork), to);
-      const asset = { symbol, decimals, address: to };
+      const asset = { symbol: 'ERC20', decimals: '18', address: to };
+      if (!value) {
+        try {
+          const { symbol, decimals } = await blockChainService.getMetadata(getNetworkByBase(selectedNetwork), to);
+          asset.symbol = symbol ?? 'ERC20';
+          asset.decimals = decimals ?? '18';
+        } catch (e) {
+          logger.error('fail get metadata');
+        }
+      } else {
+        asset.symbol = coinDto.symbol;
+        asset.decimals = coinDto.decimals.toString();
+      }
       logger.log('asset:  ', asset);
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
-
-      const valueWithDefaultZero = value || '0';
+      let valueWithDefaultZero = value || '0';
+      if (!value && checkTransfer(data)) {
+        const weiValue = transactionServiceEthers.decodeFunctionData(TRANSACTION_METHOD.TRANSFER, data);
+        const bnValue = new BigNumber(weiValue);
+        const value = formatBigNumber(bnValue, coinDto.decimals);
+        valueWithDefaultZero = value.toFixed();
+      }
+      // const valueWithDefaultZero = value || '0';
       transactionMeta.transaction.value = hexToBN(valueWithDefaultZero);
       transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);
 
