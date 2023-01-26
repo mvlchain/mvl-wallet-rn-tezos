@@ -10,7 +10,18 @@ import EVMLegacyGas from './EVMLegacy/EVMLegacyGas';
 import { IGasComponentProps } from './GasFeeBoard.type';
 import TezosGas from './Tezos/TezosGas';
 
-const GasFeeBoard = ({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, value, data, isValidInput, transferParam }: IGasComponentProps) => {
+const GasFeeBoard = ({
+  isRevision,
+  onConfirm,
+  onConfirmTitle,
+  hideDivider,
+  to,
+  value,
+  data,
+  isValidInput,
+  transferParam,
+  initialLevel,
+}: IGasComponentProps) => {
   const { selectedNetwork } = walletPersistStore();
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
   const networkConfig = getNetworkConfig(testIncludeSelectedNetwork);
@@ -28,6 +39,7 @@ const GasFeeBoard = ({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, v
             value={value}
             data={data}
             isValidInput={isValidInput}
+            initialLevel={initialLevel}
           />
         );
       case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
@@ -41,6 +53,7 @@ const GasFeeBoard = ({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, v
             value={value}
             data={data}
             isValidInput={isValidInput}
+            initialLevel={initialLevel}
           />
         );
       case NETWORK_FEE_TYPE.TEZOS:
@@ -54,6 +67,7 @@ const GasFeeBoard = ({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, v
             value={value}
             transferParam={transferParam}
             isValidInput={isValidInput}
+            initialLevel={initialLevel}
           />
         );
     }

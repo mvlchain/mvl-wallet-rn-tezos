@@ -10,6 +10,7 @@ export interface IUseGasProps {
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
+  initialLevel?: TGasLevel;
   onConfirm?: (params: TransactionRequest | TransferParams, gasSettingInfo?: IGasSettingInfo) => void;
 }
 export interface IEVMGasComponentProps extends IUseGasProps {

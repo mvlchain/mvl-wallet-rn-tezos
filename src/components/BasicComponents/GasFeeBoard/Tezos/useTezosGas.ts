@@ -19,12 +19,12 @@ import useTezosEstimate from './hooks/useTezosEstimate';
 import useTezosTipValidation from './hooks/useTezosTipValidation';
 import useTezosTotal from './hooks/useTezosTotal';
 
-const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITezosUseGasProps) => {
+const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, onConfirm }: ITezosUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
+  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.LOW);
 
   const [baseFee, setBaseFee] = useState<BigNumber | null>(null);
   const [storageLimit, setStorageLimit] = useState<BigNumber | null>(null);

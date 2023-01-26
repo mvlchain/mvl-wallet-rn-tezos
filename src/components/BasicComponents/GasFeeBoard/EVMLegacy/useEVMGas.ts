@@ -22,12 +22,12 @@ export const EVM_LEVEL_WEIGHT = {
   [GAS_LEVEL.MID]: '1.3',
   [GAS_LEVEL.HIGH]: '1.7',
 };
-const useEVMGas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProps) => {
+const useEVMGas = ({ to, value, data, isValidInput, initialLevel, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { t } = useTranslation();
   const { setTotal } = gasStore();
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
+  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.LOW);
 
   const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));

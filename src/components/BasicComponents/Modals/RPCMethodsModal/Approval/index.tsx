@@ -71,6 +71,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   //가스피모달내부의 상태와 별개의 가스 값들,
   //가스피모달을 오픈할때는 advanced 를 true로 해두어서 주기적인 estimategas를 방지한다.
   const {
+    level,
     advanced,
     total,
     leveledGasPrice: gasPrice,
@@ -86,6 +87,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     value,
     data,
     isValidInput: true,
+    initialLevel: GAS_LEVEL.MID,
   });
 
   const onPressConfirmInGasFeeModal = (param: TransactionRequest, gasSettingInfo?: IGasSettingInfo) => {
@@ -106,9 +108,6 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const amountStr = useMemo(() => (total && formatBigNumber(total, coinDto.decimals)?.toFixed()) || '-', [total]);
   const { price: coinPrice } = useOneTokenPrice(coinDto, amountStr ?? '-');
 
-  useEffect(() => {
-    setLevel(GAS_LEVEL.MID);
-  }, []);
   useEffect(() => {
     const coin = tokenList[selectedNetwork].find((token) => token.contractAddress === null);
     if (!coin) return;
@@ -319,6 +318,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
         onClose={onPressCloseGasFeeModal}
         isRevision={false}
         hideDivider={true}
+        initialLevel={level}
       />
     </ModalLayout>
   );
