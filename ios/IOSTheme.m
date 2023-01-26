@@ -39,10 +39,13 @@
 {
   NSString *themeType = [[[DiContainer shared] getSettingsStorage] getStringValueFor:StorageKey.themeType];
   if (themeType == nil) {
+    // TODO: LightTheme 고정
+    //  - original: kThemeTypeDefault
+    //  - changed: kThemeTypeLight
     [[[DiContainer shared] getSettingsStorage]
      setStringValueFor:StorageKey.themeType
-     value:kThemeTypeDefault];
-    themeType = kThemeTypeDefault;
+     value:kThemeTypeLight];
+    themeType = kThemeTypeLight;
     RCTLogInfo(@"Theme> IOSTheme setting a default theme value: %@", themeType);
   }
 
