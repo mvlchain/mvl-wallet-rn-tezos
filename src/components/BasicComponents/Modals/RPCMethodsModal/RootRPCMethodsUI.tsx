@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { hexToText } from '@metamask/controller-utils';
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 import { Button, InteractionManager, StyleSheet, Text, View } from 'react-native';
@@ -176,6 +177,13 @@ const RootRPCMethodsUI = () => {
 
   const toggleExpandedMessage = () => setShowExpandedMessage(!showExpandedMessage);
 
+  const renderPersonalMessage = (messageParams: any) => {
+    return (
+      <View>
+        <Text>{hexToText(messageParams.data)}</Text>
+      </View>
+    );
+  };
   const renderTypedMessageV3 = (obj: any) => {
     return Object.keys(obj).map((key) => (
       <View key={key}>
@@ -227,6 +235,7 @@ const RootRPCMethodsUI = () => {
       propagateSwipe
     >
       {signType === 'typed' && renderTypedMessage(signMessageParams)}
+      {signType === 'personal' && renderPersonalMessage(signMessageParams)}
       <Button title={'Sign'} onPress={() => onSignConfirmAction(signType)} />
       <Button title={'Cancel'} onPress={() => onSignRejectAction(signType)} />
       {/*{signType === 'personal' && (*/}
