@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
+import ErrorBoundary from 'react-native-error-boundary';
 import Tooltip from 'react-native-walkthrough-tooltip';
 
 import { ChangeIconLight, QuestionMarkIcon } from '@@assets/image';
 import { PrimaryButton } from '@@components/BasicComponents/Buttons/BaseButton';
+import ErrorScreenInMainTab from '@@components/BasicComponents/ErrorBoundary/ErrorScreenInMainTab';
 import Jdenticon from '@@components/BasicComponents/Jdenticon';
 import { TradeVolume } from '@@components/BasicComponents/TextFields/TradeVolume/TradeVolume';
 import useAccount from '@@components/Wallet/Account/useAccount';
@@ -44,63 +46,65 @@ function TradeScreen() {
   const { address } = useAccount();
 
   return (
-    <S.Container>
-      <S.Header>
-        <S.HeaderTitle>{t('trade')}</S.HeaderTitle>
-        <S.WallerSelectButton onPress={onPressWalletList}>
-          <Jdenticon value={address} />
-        </S.WallerSelectButton>
-      </S.Header>
-      {fromToken && toToken && (
-        <S.InputContainer>
-          <TradeVolume
-            textInputRef={fromTradeVolumeRef}
-            value={tradeFromValue}
-            setValue={setTradeFromValue}
-            tokenDto={fromToken}
-            useMax={true}
-            label={t('from')}
-            handleTokenSelect={() => onPressToken('from')}
-            setValueValid={setTradeFromAndStoreStateValidation}
-          />
-          <S.SwapButtonContainer>
-            <S.SwapButton onPress={onPressChange}>
-              <ChangeIconLight />
-            </S.SwapButton>
-          </S.SwapButtonContainer>
-          <TradeVolume
-            value={tradeToValue}
-            setValue={() => {}}
-            tokenDto={toToken}
-            label={t('to_estimate')}
-            hideBalance={true}
-            handleTokenSelect={() => onPressToken('to')}
-            editable={false}
-            disableDelete={true}
-          />
-          <PrimaryButton onPress={onPressTradeOrApprove} label={tradeLabel} wrapperStyle={S.InlineStyle.button} disabled={!tradeValid} />
-          <S.PriceImpactContainer>
-            <S.HelpWrapper>
-              <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
-              <Tooltip
-                isVisible={showTip}
-                content={<S.PriceImpactHelp>{t('price_impact_explanation')}</S.PriceImpactHelp>}
-                onClose={() => setShowTip(false)}
-                placement='top'
-                backgroundColor='transparent'
-                contentStyle={S.InlineStyle.tooltip}
-                arrowStyle={S.InlineStyle.tooltipArrow}
-              >
-                <S.PriceImpactHelpButton onPress={() => setShowTip(true)}>
-                  <QuestionMarkIcon />
-                </S.PriceImpactHelpButton>
-              </Tooltip>
-            </S.HelpWrapper>
-            <S.PriceImpactText priceImpactColor={priceImpactColor}>{priceImpact === '-' ? priceImpact : `${priceImpact}%`}</S.PriceImpactText>
-          </S.PriceImpactContainer>
-        </S.InputContainer>
-      )}
-    </S.Container>
+    <ErrorBoundary FallbackComponent={ErrorScreenInMainTab}>
+      <S.Container>
+        <S.Header>
+          <S.HeaderTitle>{t('trade')}</S.HeaderTitle>
+          <S.WallerSelectButton onPress={onPressWalletList}>
+            <Jdenticon value={address} />
+          </S.WallerSelectButton>
+        </S.Header>
+        {fromToken && toToken && (
+          <S.InputContainer>
+            <TradeVolume
+              textInputRef={fromTradeVolumeRef}
+              value={tradeFromValue}
+              setValue={setTradeFromValue}
+              tokenDto={fromToken}
+              useMax={true}
+              label={t('from')}
+              handleTokenSelect={() => onPressToken('from')}
+              setValueValid={setTradeFromAndStoreStateValidation}
+            />
+            <S.SwapButtonContainer>
+              <S.SwapButton onPress={onPressChange}>
+                <ChangeIconLight />
+              </S.SwapButton>
+            </S.SwapButtonContainer>
+            <TradeVolume
+              value={tradeToValue}
+              setValue={() => {}}
+              tokenDto={toToken}
+              label={t('to_estimate')}
+              hideBalance={true}
+              handleTokenSelect={() => onPressToken('to')}
+              editable={false}
+              disableDelete={true}
+            />
+            <PrimaryButton onPress={onPressTradeOrApprove} label={tradeLabel} wrapperStyle={S.InlineStyle.button} disabled={!tradeValid} />
+            <S.PriceImpactContainer>
+              <S.HelpWrapper>
+                <S.PriceImpactText>{t('price_impact')}</S.PriceImpactText>
+                <Tooltip
+                  isVisible={showTip}
+                  content={<S.PriceImpactHelp>{t('price_impact_explanation')}</S.PriceImpactHelp>}
+                  onClose={() => setShowTip(false)}
+                  placement='top'
+                  backgroundColor='transparent'
+                  contentStyle={S.InlineStyle.tooltip}
+                  arrowStyle={S.InlineStyle.tooltipArrow}
+                >
+                  <S.PriceImpactHelpButton onPress={() => setShowTip(true)}>
+                    <QuestionMarkIcon />
+                  </S.PriceImpactHelpButton>
+                </Tooltip>
+              </S.HelpWrapper>
+              <S.PriceImpactText priceImpactColor={priceImpactColor}>{priceImpact === '-' ? priceImpact : `${priceImpact}%`}</S.PriceImpactText>
+            </S.PriceImpactContainer>
+          </S.InputContainer>
+        )}
+      </S.Container>
+    </ErrorBoundary>
   );
 }
 
