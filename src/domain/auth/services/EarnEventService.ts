@@ -15,6 +15,7 @@ import { ThirdPartyConnectCheckResponseDto, EarnEventGetClaimResponseDto } from 
 import { TADA_DRIVER, TADA_RIDER } from '@@navigation/DeepLinkOptions';
 import {
   IEventDetails,
+  IValidEventDetails,
   IEventThirdParty,
   IThirdPartyConnection,
   IEventDetailsGroup,
@@ -28,6 +29,7 @@ import { EarnEventRepository } from '../repositories/EarnEventRepository';
 
 export interface EarnEventService {
   getEarnEventDetailsUiState(id: string, data?: EarnEventDto, deepLink?: ThirdPartyDeepLink): Promise<IEventDetailsGroup>;
+  refreshThirdParty(details: IEventDetails): Promise<IEventThirdParty>;
 }
 
 @injectable()
@@ -44,7 +46,7 @@ export class EarnEventServiceImpl {
     }
 
     // [details]
-    const details: IEventDetails = {
+    const details: IValidEventDetails = {
       event,
       phase: event ? getEventPhase(event) : EventPhase.NotAvailable,
       deepLink: deepLink,
