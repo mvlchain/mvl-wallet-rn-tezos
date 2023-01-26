@@ -118,7 +118,7 @@ export function EarnEventDetailsScreen() {
 
   const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data, params.deepLink);
   const { event, phase } = details;
-  console.log(`Details> i: ${params.i}, deepLink: ${JSON.stringify(details.deepLink)}`);
+  console.log(`Details> i: ${params.i}, data: ${event?.detailPageUrl}, deepLink: ${JSON.stringify(details.deepLink)}`);
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
