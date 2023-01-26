@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
 import { BigNumber } from 'bignumber.js';
 import BN from 'bn.js';
@@ -27,6 +28,8 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
 import { formatBigNumber, BnToEtherBn } from '@@utils/formatBigNumber';
 import { addHexPrefix, BNToHex } from '@@utils/number';
+
+import GasFeeModal from '../../GasFeeModal';
 
 import * as S from './ApprovalModal.style';
 
@@ -80,6 +83,16 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     if (!coin) return;
     setSymbol(coin.symbol);
   }, []);
+
+  const [showGasFeeModal, setShowGasFeeModal] = useState<boolean>(false);
+
+  const onPressOpenGasFeeModal = () => {
+    setShowGasFeeModal(true);
+  };
+  const onPressCloseGasFeeModal = () => {
+    setShowGasFeeModal(false);
+  };
+  const onPressConfirmInGasFeeModal = (param: TransactionRequest) => {};
 
   const updateNavBar = () => {
     // const colors = this.context.colors || mockTheme.colors;
@@ -268,10 +281,22 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
                 {coinPrice} {settedCurrency}
               </S.GreyText>
             </S.GasBalanceWrapper>
-            <ArrowIcon />
+            <ArrowIcon onPress={onPressOpenGasFeeModal} />
           </S.GasWrapper>
         </S.GasContainer>
       </Pressable>
+      <GasFeeModal
+        onConfirm={onPressConfirmInGasFeeModal}
+        onConfirmTitle={t('confirm')}
+        to={to}
+        value={value}
+        data={data}
+        isValidInput={true}
+        isVisible={showGasFeeModal}
+        onClose={onPressCloseGasFeeModal}
+        isRevision={false}
+        hideDivider={true}
+      />
     </ModalLayout>
   );
 };
