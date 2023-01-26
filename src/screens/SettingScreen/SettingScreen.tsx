@@ -42,13 +42,14 @@ function SettingScreen() {
               openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('language'), menuList: languageMenu });
             }}
           />
-          <SettingMenu
+          {/* TODO: LightTheme 고정
+           <SettingMenu
             title={t('theme')}
             subTitle={t(THEME_NAME[appTheme.displayName])}
             onPress={() => {
               openModal(MODAL_TYPES.BOTTOM_SELECT, { modalTitle: t('theme'), menuList: themeMenu });
             }}
-          />
+          /> */}
           <SettingMenu
             title={t('security')}
             onPress={() => {

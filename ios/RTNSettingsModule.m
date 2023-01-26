@@ -34,8 +34,11 @@ RCT_EXPORT_METHOD(getThemeType:(RCTPromiseResolveBlock)resolve
 {
   NSString *themeType = [[[DiContainer shared] getSettingsStorage] getStringValueFor:StorageKey.themeType];
   if (themeType == nil) {
-    [settings setStringValueFor:StorageKey.themeType value:kThemeTypeDefault];
-    themeType = kThemeTypeDefault;
+    // TODO: LightTheme 고정
+    //  - original: [settings setStringValueFor:StorageKey.themeType value:kThemeTypeDefault];
+    //  - changed: [settings setStringValueFor:StorageKey.themeType value:kThemeTypeLight];
+    [settings setStringValueFor:StorageKey.themeType value:kThemeTypeLight];
+    themeType = kThemeTypeLight;
     RCTLogInfo(@"Theme> RTNSettingsModule.setting a default value: %@", themeType);
   }
   
