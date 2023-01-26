@@ -17,7 +17,7 @@ import useEVMEstimate from './hooks/useEVMEstimate';
 import useEVMGasPriceValidation from './hooks/useEVMGasPriceValidation';
 import useEVMTotal from './hooks/useEVMTotal';
 
-const EVM_LEVEL_WEIGHT = {
+export const EVM_LEVEL_WEIGHT = {
   [GAS_LEVEL.LOW]: '1.0',
   [GAS_LEVEL.MID]: '1.3',
   [GAS_LEVEL.HIGH]: '1.7',
@@ -136,6 +136,16 @@ const useEVMGas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProps) =
     wrappedOnConfirm,
     onConfirmValid,
     userInputs,
+
+    //아래는 gasfeeboard component 내부가 아니라
+    //다른 곳(예를들어 dapp RPC approval)에서 로직만 실행할 때 기존 리턴값외에 필요한 값들임.
+    leveledGasPrice,
+    gasLimit,
+    userInputGasPrice,
+    userInputGasLimit,
+    setUserInputGasPrice,
+    setUserInputGasLimit,
+    setAdvanced,
   };
 };
 
