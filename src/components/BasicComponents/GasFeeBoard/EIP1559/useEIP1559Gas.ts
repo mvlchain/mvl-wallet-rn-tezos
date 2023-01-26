@@ -168,14 +168,14 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProp
     }
     let gasFeeInfo;
     switch (advanced) {
-      case true:
+      case false:
         gasFeeInfo = {
           maxFeePerGas: BnToEtherBn(maxFeePerGas) ?? undefined,
           maxPriorityFeePerGas: BnToEtherBn(leveledMaxFeePriorityFeePerGas) ?? undefined,
           gasLimit: BnToEtherBn(gasLimit) ?? undefined,
         };
         break;
-      case false:
+      case true:
         gasFeeInfo = {
           maxFeePerGas: BnToEtherBn(userInputMaxFeePerGas) ?? undefined,
           maxPriorityFeePerGas: BnToEtherBn(userInputMaxPriorityFeePerGas) ?? undefined,

@@ -103,18 +103,18 @@ const useEVMGas = ({ to, value, data, isValidInput, onConfirm }: IUseGasProps) =
     if (!onConfirm) return;
     console.log('press gas confirm: ', 'to:', to, 'value:', value?.toFixed(), 'data:', data);
     if (!onConfirmValid || !to) {
-      gasLogger.error('gas is not ready or to doesn`t exist! ', 'gasPrice:');
+      gasLogger.error('gas is not ready or to doesn`t exist! ');
       return;
     }
     let gasFeeInfo;
     switch (advanced) {
-      case true:
+      case false:
         gasFeeInfo = {
           gasPrice: BnToEtherBn(leveledGasPrice) ?? undefined,
           gasLimit: BnToEtherBn(gasLimit) ?? undefined,
         };
         break;
-      case false:
+      case true:
         gasFeeInfo = {
           gasPrice: BnToEtherBn(userInputGasPrice) ?? undefined,
           gasLimit: BnToEtherBn(userInputGasLimit) ?? undefined,
