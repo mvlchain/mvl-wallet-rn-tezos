@@ -18,6 +18,7 @@ import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { ThirdPartyConnectCheckResponseDto, EarnEventCurrentResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
+import { useAppStateChange } from '@@hooks/useAppStateChange';
 import { useDi } from '@@hooks/useDi';
 import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
@@ -66,6 +67,12 @@ export const useEarnEventDetailsUiState = (
   const { t } = useTranslation();
   const { openModal, closeModal } = globalModalStore();
   const { connectThirdParty } = useConnectThirdParty();
+
+  useAppStateChange((isAppStateVisible: boolean) => {
+    if (isAppStateVisible) {
+      refresh();
+    }
+  });
 
   const [details, setDetails] = useState<IEventDetails>({
     event: data,
