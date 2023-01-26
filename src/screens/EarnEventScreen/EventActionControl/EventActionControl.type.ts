@@ -19,8 +19,8 @@ export interface IActionControlAttrs {
   actionButtonTitle: string;
   // true if action button state is enabled
   isActionButtonEnabled: boolean;
+  isActionButtonVisible: boolean;
   eventPointInfoList: IEventPointInfo[];
-  isClaimCompleted?: boolean;
   onActionButtonPress?: Function;
 }
 
