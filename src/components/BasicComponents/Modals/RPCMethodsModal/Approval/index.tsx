@@ -275,7 +275,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       onConfirm={() => {
         onConfirm({});
       }}
-      confirmLabel={t('btn_confirm_payment')}
+      confirmLabel={t('confirm_transaction')}
       onClose={onCancel}
       isConfirmDisabled={isPaymentDisable}
     >
@@ -284,7 +284,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
         {value?.toFixed()} {transaction?.selectedAsset?.symbol}
       </S.AmountText>
       <S.ContentContainer>
-        <S.GreyText>{t('payer')}</S.GreyText>
+        <S.GreyText>{t('from')}</S.GreyText>
         <S.BlackText>{transaction?.from}</S.BlackText>
       </S.ContentContainer>
       <S.ContentContainer>
