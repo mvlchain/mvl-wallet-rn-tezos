@@ -86,6 +86,10 @@ export interface paths {
     /** Delete Clutch Account. */
     post: operations["ClutchUserController_deleteAccounts"];
   };
+  "/v1/accounts/deferred": {
+    /** 연기된 인증을 위한 DeferredAuthToken 생성 */
+    post: operations["ClutchUserController_createDeferredAuth"];
+  };
   "/v2/accounts/token/hmac": {
     /** Get JWT Access Token with HMAC. */
     post: operations["ClutchUserControllerV2_authHmacVerification"];
@@ -115,6 +119,16 @@ export interface paths {
   "/v2/accounts/delete": {
     /** Delete Clutch Account. */
     post: operations["ClutchUserControllerV2_deleteAccounts"];
+  };
+  "/internal/UserReferrerInternal/require": {
+    /** Get inviterId by userId */
+    post: operations["UserReferrerInternal_require"];
+  };
+  "/internal/UserInternal/require": {
+    post: operations["UserInternal_require"];
+  };
+  "/internal/UserInternal/getBulkAbstract": {
+    post: operations["UserInternal_getBulkAbstract"];
   };
   "/v1/third-party/{appId}/connection/status": {
     /** Get Third Party connection Status */
@@ -203,6 +217,9 @@ export interface paths {
   };
   "/balance/withdrawals": {
     post: operations["BalanceWithdrawalRequestsController_createWithdrawalRequest"];
+  };
+  "/internal/GetCurrencyInternal/execute": {
+    post: operations["GetCurrencyInternal_execute"];
   };
   "/v1/earn-event/list": {
     /** Event Lists. */
@@ -320,6 +337,21 @@ export interface paths {
   };
   "/missions/{id}/claim": {
     post: operations["MissionsController_claimMission"];
+  };
+  "/sbt-missions/workspace/missions": {
+    get: operations["MissionsSbtController_getAllMissions"];
+  };
+  "/sbt-missions/workspace/missionAccomplishments": {
+    get: operations["MissionsSbtController_getAllMissionAccomplishment"];
+  };
+  "/sbt-missions/workspace/userActivities": {
+    get: operations["MissionsSbtController_getAllUserActivities"];
+  };
+  "/sbt-missions/{id}/claim": {
+    post: operations["MissionsSbtController_claimSbt"];
+  };
+  "/sbt-missions/{id}": {
+    get: operations["MissionsSbtController_missionMetadata"];
   };
   "/admin/discord-bot/commands": {
     post: operations["DiscordBotController_register"];
@@ -452,6 +484,52 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    AuthClientEntity: {
+      id: string;
+      name: string;
+      tokenRefreshable: boolean;
+      tokenRefreshableDurationMs: string | null;
+      minimumVersion: number | null;
+    };
+    AuthSessionEntity: {
+      id: string;
+      authNonce: string;
+      deferredAuthNonce: string | null;
+      userIdentifierId: string;
+      userIdentifier?: components["schemas"]["UserIdentifierEntity"];
+      userId: string;
+      user?: components["schemas"]["UserEntity"];
+      workspaceId: string | null;
+      workspace?: components["schemas"]["WorkspaceEntity"] | null;
+      country: string | null;
+      tokenRefreshable: boolean;
+      issuedIpAddress: string | null;
+      /** Format: date-time */
+      issuedAt: string;
+      /** Format: date-time */
+      validUntil: string;
+      /** Format: date-time */
+      lastRefreshedAt: string | null;
+      /** Format: date-time */
+      deletedAt: string | null;
+      authClientId: string;
+      authClient?: components["schemas"]["AuthClientEntity"];
+    };
+    WorkspaceEntity: {
+      id: string;
+      slug: string;
+      name: string;
+      iconImageSrc: string | null;
+      users?: components["schemas"]["UserWorkspaceEntity"][];
+      sessions?: components["schemas"]["AuthSessionEntity"][];
+    };
+    UserWorkspaceEntity: {
+      id: string;
+      userId: string;
+      user?: components["schemas"]["UserEntity"];
+      workspaceId: string;
+      workspace?: components["schemas"]["WorkspaceEntity"];
+    };
     UserEntity: {
       id: string;
       email: string | null;
@@ -468,6 +546,7 @@ export interface components {
       deletedAt: string | null;
       identifiers?: components["schemas"]["UserIdentifierEntity"][];
       wallet?: components["schemas"]["WalletEntity"] | null;
+      workspaces?: components["schemas"]["UserWorkspaceEntity"][];
     };
     UserIdentifierEntity: {
       type: components["schemas"]["UserIdentifierType"];
@@ -499,6 +578,7 @@ export interface components {
       deletedAt: string | null;
       identifiers?: components["schemas"]["UserIdentifierEntity"][];
       wallet: components["schemas"]["WalletEntity"] | null;
+      workspaces?: components["schemas"]["UserWorkspaceEntity"][];
     };
     OmittedAuthClient: {
       id: string;
@@ -521,6 +601,8 @@ export interface components {
       deferredAuthNonce: string | null;
       userIdentifierId: string;
       userId: string;
+      workspaceId: string | null;
+      workspace?: components["schemas"]["WorkspaceEntity"] | null;
       country: string | null;
       tokenRefreshable: boolean;
       issuedIpAddress: string | null;
@@ -542,35 +624,6 @@ export interface components {
       /** @description Token for Access APIs. */
       accessToken: string;
       authSession?: components["schemas"]["AuthSessionDtoWithRefreshToken"];
-    };
-    AuthClientEntity: {
-      id: string;
-      name: string;
-      tokenRefreshable: boolean;
-      tokenRefreshableDurationMs: string | null;
-      minimumVersion: number | null;
-    };
-    AuthSessionEntity: {
-      id: string;
-      authNonce: string;
-      deferredAuthNonce: string | null;
-      userIdentifierId: string;
-      userIdentifier?: components["schemas"]["UserIdentifierEntity"];
-      userId: string;
-      user?: components["schemas"]["UserEntity"];
-      country: string | null;
-      tokenRefreshable: boolean;
-      issuedIpAddress: string | null;
-      /** Format: date-time */
-      issuedAt: string;
-      /** Format: date-time */
-      validUntil: string;
-      /** Format: date-time */
-      lastRefreshedAt: string | null;
-      /** Format: date-time */
-      deletedAt: string | null;
-      authClientId: string;
-      authClient?: components["schemas"]["AuthClientEntity"];
     };
     JwtAccessToken: {
       /** @description Token for Access APIs. */
@@ -765,6 +818,19 @@ export interface components {
       /** @description Wallet 0 address for setting */
       walletAddress0: string;
       token: string;
+    };
+    QueryAbstractUsersDto: {
+      ids: string[];
+    };
+    AbstractUserIdentifierDto: {
+      type: components["schemas"]["UserIdentifierType"];
+      id: string;
+      identifier: string;
+      name: string | null;
+      avatar: string | null;
+      user: {
+        country?: string | null;
+      };
     };
     ThirdPartyConnectionCheckResponseDto: {
       /** @description Flag for connection information for third party app is exists. */
@@ -1101,6 +1167,8 @@ export interface components {
       eventActionButtonTitle: { [key: string]: unknown } | null;
       allowTimeRange: { [key: string]: unknown } | null;
       eventActionScheme: string | null;
+      eventActionAuthRequired: boolean;
+      connectionDeepLink: string | null;
       currencyId: string;
       subCurrencyId: string | null;
       subCurrencyReward: components["schemas"]["Decimal"] | null;
@@ -1347,7 +1415,7 @@ export interface components {
     /** @enum {string} */
     MissionType: "MY_ACTIVITIES_COUNT" | "REFEREE_ACTIVITIES_COUNT";
     /** @enum {string} */
-    MissionRewardType: "BALANCE" | "ITEM";
+    MissionRewardType: "BALANCE" | "ITEM" | "SBT";
     UserActivityEntity: {
       id: string;
       userId: string;
@@ -1414,6 +1482,7 @@ export interface components {
       rewardCurrency?: components["schemas"]["CurrencyEntity"] | null;
       rewardBalanceTxCode: string | null;
       rewardDescription: string | null;
+      rewardTokenId: number | null;
       gameId: string | null;
       game?: components["schemas"]["GameEntity"] | null;
       /** Format: date-time */
@@ -1603,6 +1672,11 @@ export interface components {
        */
       eventActionScheme: string | null;
       /**
+       * @description Deferred auth generated when earn button clicked
+       * @default false
+       */
+      eventActionAuthRequired: boolean;
+      /**
        * @description Unit text for claim
        * ex) bMVL
        */
@@ -1625,6 +1699,8 @@ export interface components {
       alias: string;
       /** @description Flag That determines whether to allow or not earn point within a claim period. */
       isAllowParticipationInClaim: boolean;
+      /** @description BlockChain Network supported by this earn event. */
+      network: string;
     };
     PaymentOptions: {
       /**
@@ -1775,15 +1851,6 @@ export interface components {
       diligence: number;
       image_url: string;
     };
-    AbstractUserIdentifierDto: {
-      type: components["schemas"]["UserIdentifierType"];
-      identifier: string;
-      name: string | null;
-      avatar: string | null;
-      user: {
-        country?: string | null;
-      };
-    };
     PastGameResultDto: {
       id: string;
       winner: boolean | null;
@@ -1889,6 +1956,27 @@ export interface components {
       userClaimableAccomplishmentsCount: number;
       rewardDescription: string | null;
       accomplishProgress: string | null;
+    };
+    MissionAdminQueryResultDto: {
+      data: components["schemas"]["MissionEntity"][];
+      page: number;
+      pageSize: number;
+    };
+    MissionAccomplishmentQueryResultDto: {
+      data: components["schemas"]["MissionAccomplishmentEntity"][];
+      page: number;
+      pageSize: number;
+    };
+    UserActivityQueryResultDto: {
+      data: components["schemas"]["UserActivityEntity"][];
+      page: number;
+      pageSize: number;
+    };
+    SbtClaimDto: {
+      signature: string;
+      ids: number[];
+      amounts: number[];
+      holdings: number[];
     };
     CreateWaitinglistSignatureDto: {
       wallet: string;
@@ -2476,6 +2564,22 @@ export interface operations {
       };
     };
   };
+  /** 연기된 인증을 위한 DeferredAuthToken 생성 */
+  ClutchUserController_createDeferredAuth: {
+    parameters: {};
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["DeferredAuthValidateDto"];
+        };
+      };
+      401: {
+        content: {
+          "application/json": components["schemas"]["HmacErrorDTO"];
+        };
+      };
+    };
+  };
   /** Get JWT Access Token with HMAC. */
   ClutchUserControllerV2_authHmacVerification: {
     parameters: {};
@@ -2766,6 +2870,52 @@ export interface operations {
             message?: string;
           };
         };
+      };
+    };
+  };
+  /** Get inviterId by userId */
+  UserReferrerInternal_require: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserReferrerEntity"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": string;
+      };
+    };
+  };
+  UserInternal_require: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SignedUserIdentifierDto"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": string;
+      };
+    };
+  };
+  UserInternal_getBulkAbstract: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AbstractUserIdentifierDto"][];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["QueryAbstractUsersDto"];
       };
     };
   };
@@ -3586,6 +3736,21 @@ export interface operations {
       };
     };
   };
+  GetCurrencyInternal_execute: {
+    parameters: {};
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CurrencyEntity"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": string;
+      };
+    };
+  };
   /** Event Lists. */
   EarnEventController_listPost: {
     parameters: {};
@@ -4298,6 +4463,75 @@ export interface operations {
       201: unknown;
     };
   };
+  MissionsSbtController_getAllMissions: {
+    parameters: {
+      query: {
+        page?: number;
+        pageSize?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["MissionAdminQueryResultDto"];
+        };
+      };
+    };
+  };
+  MissionsSbtController_getAllMissionAccomplishment: {
+    parameters: {
+      query: {
+        page?: number;
+        pageSize?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["MissionAccomplishmentQueryResultDto"];
+        };
+      };
+    };
+  };
+  MissionsSbtController_getAllUserActivities: {
+    parameters: {
+      query: {
+        page?: number;
+        pageSize?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserActivityQueryResultDto"];
+        };
+      };
+    };
+  };
+  MissionsSbtController_claimSbt: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SbtClaimDto"];
+        };
+      };
+    };
+  };
+  MissionsSbtController_missionMetadata: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: unknown;
+    };
+  };
   DiscordBotController_register: {
     parameters: {};
     responses: {
@@ -4911,14 +5145,16 @@ export interface external {}
 export type UserIdentifierType = components['schemas']['UserIdentifierType'];
 export type DeferredAuthValidateDto = components['schemas']['DeferredAuthValidateDto'];
 export type WalletEntity = components['schemas']['WalletEntity'];
+export type AuthClientEntity = components['schemas']['AuthClientEntity'];
+export type AuthSessionEntity = components['schemas']['AuthSessionEntity'];
+export type WorkspaceEntity = components['schemas']['WorkspaceEntity'];
+export type UserWorkspaceEntity = components['schemas']['UserWorkspaceEntity'];
 export type UserEntity = components['schemas']['UserEntity'];
 export type UserIdentifierEntity = components['schemas']['UserIdentifierEntity'];
 export type UserWithWalletDto = components['schemas']['UserWithWalletDto'];
 export type OmittedAuthClient = components['schemas']['OmittedAuthClient'];
 export type AuthSessionDtoWithRefreshToken = components['schemas']['AuthSessionDtoWithRefreshToken'];
 export type SignedUserIdentifierWithAccessTokenDto = components['schemas']['SignedUserIdentifierWithAccessTokenDto'];
-export type AuthClientEntity = components['schemas']['AuthClientEntity'];
-export type AuthSessionEntity = components['schemas']['AuthSessionEntity'];
 export type JwtAccessToken = components['schemas']['JwtAccessToken'];
 export type WalletAddressDto = components['schemas']['WalletAddressDto'];
 export type WalletAndNonceDto = components['schemas']['WalletAndNonceDto'];
@@ -4946,6 +5182,8 @@ export type AuthJWTResponseDto = components['schemas']['AuthJWTResponseDto'];
 export type SignupV2Dto = components['schemas']['SignupV2Dto'];
 export type SnsAuthDto = components['schemas']['SnsAuthDto'];
 export type RestoreAccountV2Dto = components['schemas']['RestoreAccountV2Dto'];
+export type QueryAbstractUsersDto = components['schemas']['QueryAbstractUsersDto'];
+export type AbstractUserIdentifierDto = components['schemas']['AbstractUserIdentifierDto'];
 export type ThirdPartyConnectionCheckResponseDto = components['schemas']['ThirdPartyConnectionCheckResponseDto'];
 export type ThirdPartyEarnDto = components['schemas']['ThirdPartyEarnDto'];
 export type ThirdPartyBalanceResponseDto = components['schemas']['ThirdPartyBalanceResponseDto'];
@@ -5013,7 +5251,6 @@ export type GameResultDto = components['schemas']['GameResultDto'];
 export type GameResultAbstractDto = components['schemas']['GameResultAbstractDto'];
 export type GameResultResponseDto = components['schemas']['GameResultResponseDto'];
 export type TadaArcadeDriverInfo = components['schemas']['TadaArcadeDriverInfo'];
-export type AbstractUserIdentifierDto = components['schemas']['AbstractUserIdentifierDto'];
 export type PastGameResultDto = components['schemas']['PastGameResultDto'];
 export type LotteryGameResultDto = components['schemas']['LotteryGameResultDto'];
 export type LotteryPossibleResultDto = components['schemas']['LotteryPossibleResultDto'];
@@ -5023,6 +5260,10 @@ export type ArchivedTweetResultDto = components['schemas']['ArchivedTweetResultD
 export type MissionData = components['schemas']['MissionData'];
 export type AbstractCurrencyDto = components['schemas']['AbstractCurrencyDto'];
 export type MissionDto = components['schemas']['MissionDto'];
+export type MissionAdminQueryResultDto = components['schemas']['MissionAdminQueryResultDto'];
+export type MissionAccomplishmentQueryResultDto = components['schemas']['MissionAccomplishmentQueryResultDto'];
+export type UserActivityQueryResultDto = components['schemas']['UserActivityQueryResultDto'];
+export type SbtClaimDto = components['schemas']['SbtClaimDto'];
 export type CreateWaitinglistSignatureDto = components['schemas']['CreateWaitinglistSignatureDto'];
 export type WaitingListSignatureResponseDto = components['schemas']['WaitingListSignatureResponseDto'];
 export type CreateWaitinglistSignatureErrorDto = components['schemas']['CreateWaitinglistSignatureErrorDto'];

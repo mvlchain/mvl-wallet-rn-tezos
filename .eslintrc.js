@@ -10,7 +10,7 @@ module.exports = {
     'plugin:react/recommended',
     '@mvlchain/eslint-config/react',
   ],
-  ignorePatterns: ['generated-scheme.ts', '__mocks__', 'InpageBridgeWeb3.js'],
+  ignorePatterns: ['generated-scheme*.ts', '__mocks__', 'InpageBridgeWeb3.js'],
   plugins: ['@typescript-eslint'],
   overrides: [
     {

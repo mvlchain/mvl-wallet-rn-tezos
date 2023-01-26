@@ -2,22 +2,24 @@
 import { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import qs from 'qs';
 import { useTranslation } from 'react-i18next';
-import { Linking } from 'react-native';
 
 import useClaimWalletListModal from '@@components/BasicComponents/Modals/ClaimWalletListModal/useClaimWalletListModal';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { NetworkId, networkIdToNetwork } from '@@constants/network.constant';
+import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
 import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase } from '@@domain/model/EventPhase';
 import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
+import { useDi } from '@@hooks/useDi';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { tagLogger } from '@@utils/Logger';
-import { format, isNotBlank, isSvg } from '@@utils/strings';
+import { format, isSvg } from '@@utils/strings';
 import { valueOf } from '@@utils/types';
 
 import { IActionControlAttrs } from './EventActionControl.type';
@@ -39,6 +41,7 @@ export const useActionControlsByPhase = (
   const [actionControlAttrs, setActionControlAttrs] = useState<IActionControlAttrs>(
     getInitialActionControls(phase, event, thirdParty, claimStatusInfo)
   );
+  const repository: EarnEventRepository = useDi('EarnEventRepository');
 
   const onPressClaim = (address: string) => {
     rootNavigation.navigate('EARN_EVENT_TRNASFERRING', { address, eventId: event.id });
@@ -174,8 +177,15 @@ export const useActionControlsByPhase = (
           }),
           onActionButtonPress: async () => {
             if (event.eventActionScheme) {
-              eventLogger.log(`eventActionScheme: ${event.eventActionScheme}`);
-              await openUriForApp(event.eventActionScheme);
+              const [url, queryString] = event.eventActionScheme.split('?');
+              let query = qs.parse(queryString);
+              eventLogger.log(`eventActionScheme: ${event.eventActionScheme}, eventActionAuthRequired: ${event.eventActionAuthRequired}`);
+              if (event.eventActionAuthRequired) {
+                const deferredAuth = await repository.deferAuthForInject();
+                query = { ...query, ...deferredAuth };
+              }
+              const urlSuffix = qs.stringify(query, { addQueryPrefix: true });
+              await openUriForApp(`${url}${urlSuffix}`);
             }
           },
         };

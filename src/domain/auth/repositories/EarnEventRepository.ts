@@ -1,5 +1,4 @@
 //import qs from 'qs';
-import { AxiosResponse } from 'axios';
 import { injectable } from 'tsyringe';
 
 import { ApiError } from '@@domain/error';
@@ -13,8 +12,9 @@ import {
   EarnEventGetClaimResponseDto,
   SimpleResponseDto,
   EarnEventClaimRequestDto,
+  DeferredAuthValidateDto,
 } from '@@generated/generated-scheme';
-import { authRequest, Response } from '@@utils/request';
+import { authRequest } from '@@utils/request';
 
 import { IEarnEventMutation } from './EarnEventRepository.type';
 
@@ -33,6 +33,7 @@ export interface EarnEventRepository {
   checkThirdPartyConnection(appId: string, token: string | null): Promise<ThirdPartyConnectCheckResponseDto>;
   connectThirdParty(appId: string, token: string | null): Promise<SimpleResponseDto>;
   disconnectThirdParty(appId: string): Promise<SimpleResponseDto>;
+  deferAuthForInject(): Promise<DeferredAuthValidateDto>;
 }
 
 @injectable()
@@ -219,6 +220,17 @@ export class EarnEventRepositoryImpl implements EarnEventRepository {
       // TODO: define a general type of error.
       console.error(res);
       throw new ApiError(`Api error: ${endpoint}`, res.status);
+    }
+  };
+
+  deferAuthForInject = async (): Promise<DeferredAuthValidateDto> => {
+    const endpoint = '/v1/accounts/deferred';
+    const res = await authRequest.post<DeferredAuthValidateDto>(endpoint);
+    if ([200, 201].includes(res.status)) {
+      return res.data;
+    } else {
+      console.error(res);
+      throw new ApiError(`Auth error: ${endpoint}`, res.status);
     }
   };
 }
