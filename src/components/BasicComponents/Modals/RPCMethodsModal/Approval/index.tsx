@@ -316,8 +316,6 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
         isValidInput={true}
         isVisible={showGasFeeModal}
         onClose={onPressCloseGasFeeModal}
-        isRevision={false}
-        hideDivider={true}
         initialLevel={level}
       />
     </ModalLayout>
