@@ -16,7 +16,7 @@ import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-export interface IGasFeeModalProps extends IGasComponentProps {
+export interface IGasFeeModalProps extends Omit<IGasComponentProps, 'isRevision' | 'hideDivider'> {
   isVisible?: boolean;
   onClose?: () => void;
 }
