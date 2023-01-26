@@ -10,7 +10,7 @@ const useBrowserMainScreen = () => {
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const rootNavigation = useNavigation<rootStackProps>();
   const { t } = useTranslation();
-  const { openModal } = globalModalStore();
+  const { openModal, closeModal } = globalModalStore();
   const onPressSearchBtn = () => {
     // TODO: move to search screen
     rootNavigation.navigate(ROOT_STACK_ROUTE.BROWSER_SEARCH);
@@ -21,13 +21,14 @@ const useBrowserMainScreen = () => {
       title: t('mvl_nft'),
       description: t('mvl_nft_description'),
       onPress: () => {
-        console.log('??');
         openModal(MODAL_TYPES.IMAGE_BACKGROUND, {
           title: t('mvl_nft'),
           description: t('mvl_nft_description'),
           Image: BridgeImage,
+          modalPosition: 'bottom',
           confirmLabel: t('go'),
           onConfirm: () => {},
+          onClose: closeModal,
         });
       },
     },
@@ -40,6 +41,7 @@ const useBrowserMainScreen = () => {
           title: t('mvl_bridge'),
           description: t('mvl_bridge_description'),
           Image: NFTImage,
+          modalPosition: 'bottom',
           confirmLabel: t('go'),
           onConfirm: () => {},
         });

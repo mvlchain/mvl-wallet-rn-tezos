@@ -1,104 +1,38 @@
-import { StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 import { width } from '@@utils/ui';
 
-export const ModalTitle = styled.Text`
-  ${({ theme }) => theme.font.Title.sm};
-  color: ${({ theme }) => theme.color.blackWhite};
-  font-family: ${({ theme }) => theme.fmBold};
-  line-height: ${width * 32}px;
-`;
+import { Center, IModalTypeProps } from '../BaseModal/Modal.type';
 
-export const ModalTopWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-top: ${width * 8}px;
-`;
-
-export const ButtonWrapper = styled.View<{ isReverseBtn?: boolean }>`
-  flex-direction: ${({ isReverseBtn }) => (isReverseBtn ? 'row-reverse' : 'row')};
-  justify-content: space-between;
-  margin: ${width * 24}px 0;
-`;
-
-export const ContentWrapper = styled.View`
-  color: ${({ theme }) => theme.color.blackWhite};
-  padding: ${width * 24}px 0;
-`;
-
-export const Gap = styled.View`
-  width: ${width * 16}px;
-`;
-
-export const ModalContainer = styled.View`
+export const Container = styled.View<IModalTypeProps>`
   background-color: ${({ theme }) => theme.color.whiteBlack};
-  border-radius: ${width * 24}px;
+  ${({ modalPosition }) =>
+    modalPosition === Center
+      ? css`
+          border-radius: ${width * 24}px;
+        `
+      : css`
+          border-top-left-radius: ${width * 24}px;
+          border-top-right-radius: ${width * 24}px;
+        `};
+  padding-bottom: ${({ modalPosition }) => (modalPosition === Center ? '0' : `${width * 34}px`)};
+`;
+
+export const ContentContainer = styled.View`
+  background-color: ${({ theme }) => theme.color.whiteBlack};
+`;
+
+export const Description = styled.Text`
   padding: ${width * 24}px;
-  padding-bottom: 0px;
+  ${({ theme }) => theme.font.Label.lg};
+  color: ${({ theme }) => theme.color.blackWhite};
 `;
 
-export const ModalContentWrapper = styled.View`
-  flex: 1;
-  justify-content: 'center';
-  margin: 0;
-`;
-
-export const ModalBackDrop = styled.Pressable`
-  position: absolute;
+export const ImageContainer = styled.View`
   width: 100%;
-  height: 100%;
-`;
-
-export const inlineStyles = StyleSheet.create({
-  modal: {
-    justifyContent: 'flex-end',
-    margin: 16,
-  },
-  halfbutton: { flex: 1 },
-});
-
-export const BackdropColor = {
-  light: undefined,
-  dark: 'rgba(255,255,255,0.25)',
-};
-
-//image
-export const ImageModalContainer = styled(ModalContainer)`
-  border-radius: 0;
-  padding-top: 0;
-`;
-export const ImageModalTopWrapper = styled(ModalTopWrapper)`
-  position: absolute;
-  width: 100%;
-  top: ${width * 24}px;
-  padding-left: ${width * 24}px;
-  padding-right: ${width * 24}px;
-`;
-export const ImageModalTitle = styled(ModalTitle)`
-  color: ${({ theme }) => theme.color.white};
-`;
-export const ImageWrapper = styled.View`
+  background-color: red;
+  align-items: center;
   border-top-left-radius: ${width * 24}px;
   border-top-right-radius: ${width * 24}px;
   overflow: hidden;
-`;
-
-//toast
-export const ToastPopupContainer = styled.View`
-  width: 100%;
-  padding: 0 ${width * 16}px;
-`;
-
-export const ToastTextWrapper = styled.View`
-  background-color: ${({ theme }) => theme.color.grey800Grey200};
-  border-radius: ${width * 24}px;
-  padding: ${width * 24}px;
-  width: 100%;
-`;
-
-export const ToastText = styled.Text`
-  ${({ theme }) => theme.font.Paragraph.md}
-  color: ${({ theme }) => theme.color.whiteBlack};
 `;
