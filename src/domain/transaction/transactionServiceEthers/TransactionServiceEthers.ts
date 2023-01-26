@@ -41,4 +41,12 @@ export class TransactionServiceEthers implements ITransactionServiceEthers {
   encodeFunctionData = async (method: string, params: any) => {
     return new ethers.utils.Interface(abiERC20).encodeFunctionData(method, params);
   };
+
+  decodeFunctionData = (method: string, params: any) => {
+    const contractInterface = ethers.ContractFactory.getInterface(abiERC20);
+    const func = contractInterface.getFunction(params.slice(0, 10));
+    const parsed = contractInterface.decodeFunctionData(func, params);
+    // parsed로 나온 배열 중 어떤게 value인지 확정 지을 수 있는 방법은..?
+    return parsed[1].toString();
+  };
 }

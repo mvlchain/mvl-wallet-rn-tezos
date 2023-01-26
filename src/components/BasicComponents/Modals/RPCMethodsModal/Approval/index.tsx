@@ -275,7 +275,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       onConfirm={() => {
         onConfirm({});
       }}
-      confirmLabel={t('confirm_transaction')}
+      confirmLabel={t('btn_confirm_transaction')}
       onClose={onCancel}
       isConfirmDisabled={isPaymentDisable}
     >
