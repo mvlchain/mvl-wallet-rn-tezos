@@ -36,13 +36,19 @@ export interface IEventPointAmount {
 }
 
 export interface IEventDetails {
+  event: EarnEventDto | undefined;
+  phase: valueOf<typeof EventPhase>;
+  deepLink?: ThirdPartyDeepLink;
+}
+
+export interface IValidEventDetails {
   event: EarnEventDto;
   phase: valueOf<typeof EventPhase>;
   deepLink?: ThirdPartyDeepLink;
 }
 
 export interface IEventDetailsGroup {
-  details: IEventDetails;
+  details: IValidEventDetails;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
 }

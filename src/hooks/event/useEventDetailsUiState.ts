@@ -90,9 +90,11 @@ export type useEarnEventDetailsUiStateProps = {
 };
 
 export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventDetailsUiStateProps): IEventDetailsUiState | undefined => {
-  const repository: EarnEventRepository = useDi('EarnEventRepository');
-  const eventLogger = tagLogger('Event');
+  const { t } = useTranslation();
   const service = useDi('EarnEventService');
+  const { openModal, closeModal } = globalModalStore();
+  const { connectThirdParty } = useConnectThirdParty();
+  const eventLogger = tagLogger('Event');
 
   eventLogger.log(`useEarnEventDetailsUiState() starts with deepLink: ${JSON.stringify(deepLink)}`);
 
@@ -112,19 +114,61 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
     data,
     deepLink,
   });
-  const [uiState, setUiState] = useState<IEventDetailsUiState>();
+  const [uiState, setUiState] = useState<IEventDetailsUiState>({
+    details: {
+      event: data,
+      phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
+      deepLink,
+    },
+    thirdParty: {
+      isThirdPartySupported: false,
+      points: [],
+      isThirdPartyConnectionRequired: false,
+      error: null,
+    },
+    claimStatusInfo: undefined,
+    refresh: async (clearDeepLink: boolean) => {},
+  });
 
-  useEffect(() => {
-    setArgs({ id, data, deepLink });
+  // ThirdParty connection callback. This will connect ThirdPartyApp if executed.
+  const onThirdPartyConnectionConfirm = useCallback(async (appId: string, token: string | null, details: IEventDetails) => {
+    if (token) {
+      const res = await connectThirdParty(appId, token);
+      if (res && res.status === 'ok') {
+        const thirdParty = await service.refreshThirdParty(details);
+        setUiState({
+          ...uiState,
+          thirdParty,
+        });
+      }
+    }
   }, []);
 
   useEffect(() => {
     (async () => {
       const { id, data, deepLink } = args;
-      const res = await service.getEarnEventDetailsUiState(id, data, deepLink);
 
-      // TODO: res.thirdParty.isThirdPartyConnectionRequired == true 일 경우
-      // ThirdParty연결 다이얼로그를 보여줄것
+      eventLogger.log(`calling getEarnEventDetailsUiState(), with id: ${id}, data: ${JSON.stringify(data, null, 2)}, deepLink: ${deepLink}`);
+
+      const res = await service.getEarnEventDetailsUiState(id, data, deepLink);
+      const { details, thirdParty } = res;
+      const { event } = details;
+
+      const thirdPartyApp = event.app;
+      if (thirdPartyApp && thirdParty.connection && thirdParty.isThirdPartyConnectionRequired) {
+        const { appId, token } = thirdParty.connection;
+
+        openModal(MODAL_TYPES.TEXT_MODAL, {
+          title: format(t('connect_thirdparty_dialog_title'), thirdPartyApp.name),
+          label: format(t('connect_thirdparty_dialog_description'), thirdPartyApp.name),
+          confirmLabel: t('connect'),
+          onConfirm: async () => await onThirdPartyConnectionConfirm(appId, token, details),
+          cancelLabel: t('btn_cancel'),
+          onCancel: () => {
+            closeModal();
+          },
+        });
+      }
 
       setUiState({
         ...res,
