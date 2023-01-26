@@ -151,6 +151,7 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
   } else if (url.startsWith(`https://${URL_DYNAMIC_LINK}`) || url.startsWith(`https://${URL_DEEPLINK}`)) {
     // Link 3.
     // https://link.mvlclutch.io/short
+    const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
     blockChainService
       .parseQrCodeLink(url)
       .then((qrCodeLink) => {

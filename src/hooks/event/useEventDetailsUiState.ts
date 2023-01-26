@@ -25,7 +25,7 @@ import {
   IEventDetails,
   IEventThirdParty,
   IThirdPartyConnection,
-} from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
+} from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreen.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import utilStore from '@@store/util/utilStore';
 import { tagLogger } from '@@utils/Logger';
