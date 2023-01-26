@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { hexToText } from '@metamask/controller-utils';
 import { BigNumber } from 'bignumber.js';
-import BN from 'bn.js';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Alert, InteractionManager, Button } from 'react-native';
+import { Button, InteractionManager, StyleSheet, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
 
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
@@ -16,11 +16,14 @@ import { transactionRequestStore } from '@@store/transaction/transactionRequestS
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
 import { ApprovalTypes } from '@@utils/BackgroundBridge/RPCMethodMiddleware';
-import { hexToBN, fromWei } from '@@utils/number';
+import { tagLogger } from '@@utils/Logger';
+import { fromWei, hexToBN } from '@@utils/number';
 
 import Approval from './Approval';
 
 export const KEYSTONE_TX_CANCELED = 'KeystoneError#Tx_canceled';
+
+const logger = tagLogger('RootRPCMethodsUI');
 
 const styles = StyleSheet.create({
   bottomModal: {
@@ -31,10 +34,10 @@ const styles = StyleSheet.create({
 const RootRPCMethodsUI = () => {
   const colors = mmLightColors;
   const blockChainService = useDi('WalletBlockChainService');
-  const { selectedNetwork } = walletPersistStore();
-  // FIXME: chainId
+  const signMessageService = useDi('SignMessageService');
+  const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const [showPendingApproval, setShowPendingApproval] = useState<any>(false);
-  const [signMessageParams, setSignMessageParams] = useState({ data: '' });
+  const [signMessageParams, setSignMessageParams] = useState<any>({ data: '' });
   const [signType, setSignType] = useState<any>(false);
   const [showExpandedMessage, setShowExpandedMessage] = useState(false);
   const [currentPageMeta, setCurrentPageMeta] = useState({});
@@ -62,6 +65,7 @@ const RootRPCMethodsUI = () => {
   };
 
   const onUnapprovedMessage = (messageParams: any, type: any) => {
+    logger.log(`onUnapprovedMessage: ${type} ${JSON.stringify(messageParams, null, 2)}`);
     setCurrentPageMeta(messageParams.meta);
     const signMessageParams = { ...messageParams };
     delete signMessageParams.meta;
@@ -75,7 +79,7 @@ const RootRPCMethodsUI = () => {
 
   const onUnapprovedTransaction = useCallback(
     async (transactionMeta: any) => {
-      console.log(`WB INCOMING> 8. onUnapprovedTransaction transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
+      logger.log(`WB INCOMING> 8. onUnapprovedTransaction transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
       if (transactionMeta.origin === 'MetaMask Mobile') return;
 
       const to = transactionMeta.transaction.to?.toLowerCase();
@@ -86,7 +90,7 @@ const RootRPCMethodsUI = () => {
 
       const { symbol, decimals } = await blockChainService.getMetadata(getNetworkByBase(selectedNetwork), to);
       const asset = { symbol, decimals, address: to };
-      console.log('asset:  ', asset);
+      logger.log('asset:  ', asset);
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
 
@@ -94,6 +98,7 @@ const RootRPCMethodsUI = () => {
       transactionMeta.transaction.value = hexToBN(valueWithDefaultZero);
       transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);
 
+      // TODO: tx 정보 통합
       setEtherTransaction({
         id: transactionMeta.id,
         selectedAsset: asset,
@@ -114,9 +119,106 @@ const RootRPCMethodsUI = () => {
     [setEtherTransaction, toggleDappTransactionModal]
   );
 
-  const onSignAction = () => setShowPendingApproval(false);
+  const onSignConfirmAction = async (signType: string) => {
+    const messageParams = signMessageParams;
+    const messageId = messageParams.metamaskId;
+    const networkByBase = getNetworkByBase(selectedNetwork);
+    const index = selectedWalletIndex[selectedNetwork] || 0;
+    switch (signType) {
+      case 'typed':
+        const { typedMessageManager } = controllerManager;
+        const version = messageParams.version;
+        try {
+          const cleanMessageParams = await typedMessageManager.approveMessage(messageParams);
+          const rawSig = await signMessageService.signTypedMessage(networkByBase, index, cleanMessageParams, version);
+          typedMessageManager.setMessageStatusSigned(messageId, rawSig);
+        } catch (error: any) {
+          typedMessageManager.setMessageStatusErrored(messageId, error.message);
+        }
+        break;
+      case 'personal':
+        const { personalMessageManager } = controllerManager;
+        try {
+          const cleanMessageParams = await personalMessageManager.approveMessage(messageParams);
+          const rawSig = await signMessageService.signPersonalMessage(networkByBase, index, cleanMessageParams);
+          personalMessageManager.setMessageStatusSigned(messageId, rawSig);
+        } catch (error: any) {
+          console.error(error);
+        }
+        break;
+      case 'eth':
+        break;
+      default:
+        throw new Error(`Unknown sign type: ${signType}`);
+    }
+
+    setShowPendingApproval(false);
+  };
+  const onSignRejectAction = (signType: string) => {
+    const messageParams = signMessageParams;
+    const messageId = messageParams.metamaskId;
+    switch (signType) {
+      case 'typed':
+        const { typedMessageManager } = controllerManager;
+        typedMessageManager.rejectMessage(messageId);
+        break;
+      case 'personal':
+        const { personalMessageManager } = controllerManager;
+        personalMessageManager.rejectMessage(messageId);
+        break;
+      case 'eth':
+        break;
+      default:
+        throw new Error(`Unknown sign type: ${signType}`);
+    }
+
+    setShowPendingApproval(false);
+  };
 
   const toggleExpandedMessage = () => setShowExpandedMessage(!showExpandedMessage);
+
+  const renderPersonalMessage = (messageParams: any) => {
+    return (
+      <View>
+        <Text>{hexToText(messageParams.data)}</Text>
+      </View>
+    );
+  };
+  const renderTypedMessageV3 = (obj: any) => {
+    return Object.keys(obj).map((key) => (
+      <View key={key}>
+        {obj[key] && typeof obj[key] === 'object' ? (
+          <View>
+            <Text>{key}:</Text>
+            <View>{renderTypedMessageV3(obj[key])}</View>
+          </View>
+        ) : (
+          <Text>
+            <Text>{key}:</Text> {`${obj[key]}`}
+          </Text>
+        )}
+      </View>
+    ));
+  };
+
+  const renderTypedMessage = (messageParams: any) => {
+    if (messageParams.version === 'V1') {
+      return (
+        <View>
+          {messageParams.data.map((obj: any, i: number) => (
+            <View key={`${obj.name}_${i}`}>
+              <Text>{obj.name}:</Text>
+              <Text key={obj.name}>{` ${obj.value}`}</Text>
+            </View>
+          ))}
+        </View>
+      );
+    }
+    if (messageParams.version === 'V3' || messageParams.version === 'V4') {
+      const { message } = JSON.parse(messageParams.data);
+      return renderTypedMessageV3(message);
+    }
+  };
 
   const renderSigningModal = () => (
     <Modal
@@ -128,13 +230,14 @@ const RootRPCMethodsUI = () => {
       backdropOpacity={1}
       animationInTiming={600}
       animationOutTiming={600}
-      onBackdropPress={onSignAction}
-      onBackButtonPress={showExpandedMessage ? toggleExpandedMessage : onSignAction}
-      onSwipeComplete={onSignAction}
+      onBackButtonPress={() => onSignRejectAction(signType)}
       swipeDirection={'down'}
       propagateSwipe
     >
-      <Button title={'Sign'} onPress={onSignAction} />
+      {signType === 'typed' && renderTypedMessage(signMessageParams)}
+      {signType === 'personal' && renderPersonalMessage(signMessageParams)}
+      <Button title={'Sign'} onPress={() => onSignConfirmAction(signType)} />
+      <Button title={'Cancel'} onPress={() => onSignRejectAction(signType)} />
       {/*{signType === 'personal' && (*/}
       {/*  <PersonalSign*/}
       {/*    navigation={navigation}*/}
@@ -184,7 +287,7 @@ const RootRPCMethodsUI = () => {
     try {
       // ApprovalController.reject(id, error);
     } catch (error) {
-      console.log(error, 'Reject while rejecting pending connection request');
+      logger.log(error, 'Reject while rejecting pending connection request');
     }
   };
 
@@ -308,41 +411,6 @@ const RootRPCMethodsUI = () => {
     </Modal>
   );
 
-  /**
-   * On rejection addinga an asset
-   */
-  const onCancelWatchAsset = () => {
-    setWatchAsset(false);
-  };
-
-  /**
-   * Render the add asset modal
-   */
-  const renderWatchAssetModal = () => (
-    <Modal
-      isVisible={watchAsset}
-      animationIn='slideInUp'
-      animationOut='slideOutDown'
-      style={styles.bottomModal}
-      backdropColor={colors.overlay.default}
-      backdropOpacity={1}
-      animationInTiming={600}
-      animationOutTiming={600}
-      onBackdropPress={onCancelWatchAsset}
-      onSwipeComplete={onCancelWatchAsset}
-      swipeDirection={'down'}
-      propagateSwipe
-    >
-      <Button title={'WatchAsset'} onPress={onCancelWatchAsset} />
-      {/*<WatchAssetRequest*/}
-      {/*  onCancel={onCancelWatchAsset}*/}
-      {/*  onConfirm={onCancelWatchAsset}*/}
-      {/*  suggestedAssetMeta={suggestedAssetMeta}*/}
-      {/*  currentPageInformation={currentPageMeta}*/}
-      {/*/>*/}
-    </Modal>
-  );
-
   // unapprovedTransaction effect
   useEffect(() => {
     const { transactionController: TransactionController } = controllerManager;
@@ -393,7 +461,7 @@ const RootRPCMethodsUI = () => {
   };
 
   useEffect(() => {
-    const { messageManager, personalMessageManager, typedMessageManager, controllerMessenger } = controllerManager;
+    const { messageManager, personalMessageManager, typedMessageManager } = controllerManager;
     messageManager.hub.on('unapprovedMessage', (messageParams) => onUnapprovedMessage(messageParams, 'eth'));
 
     personalMessageManager.hub.on('unapprovedMessage', (messageParams) => onUnapprovedMessage(messageParams, 'personal'));
@@ -402,15 +470,9 @@ const RootRPCMethodsUI = () => {
 
     // controllerMessenger.subscribe('ApprovalController:stateChange', handlePendingApprovals);
 
-    // Engine.context.TokensController.hub.on('pendingSuggestedAsset', (suggestedAssetMeta) => {
-    //   setSuggestedAssetMeta(suggestedAssetMeta);
-    //   setWatchAsset(true);
-    // });
-
     return function cleanup() {
-      // personalMessageManager.hub.removeAllListeners();
-      // typedMessageManager.hub.removeAllListeners();
-      // tokensController.hub.removeAllListeners();
+      personalMessageManager.hub.removeAllListeners();
+      typedMessageManager.hub.removeAllListeners();
     };
   }, []);
 
@@ -422,7 +484,6 @@ const RootRPCMethodsUI = () => {
       {renderAddCustomNetworkModal()}
       {renderSwitchCustomNetworkModal()}
       {renderAccountsApprovalModal()}
-      {renderWatchAssetModal()}
     </React.Fragment>
   );
 };

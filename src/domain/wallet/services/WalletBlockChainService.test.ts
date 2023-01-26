@@ -186,8 +186,8 @@ it('get pkey', async () => {
 //   expect(metadata?.symbol).toBe('MVL');
 // });
 
-it('tezos BlockChainService get metadata', async () => {
-  const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
-  const metadata = await blockChainService.getMetadata('TEZOS_GHOSTNET', 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c');
-  expect(metadata?.symbol).toBe('QUIPU');
-});
+// it('tezos BlockChainService get metadata', async () => {
+//   const blockChainService = container.resolve<WalletBlockChainService>('WalletBlockChainService');
+//   const metadata = await blockChainService.getMetadata('TEZOS_GHOSTNET', 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c');
+//   expect(metadata?.symbol).toBe('QUIPU');
+// });

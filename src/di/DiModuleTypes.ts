@@ -12,6 +12,7 @@ import { UIService } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasRepositoryEthers } from '@@domain/gas/gasRepositoryEthers/GasRepositoryEthers';
 import { GasRepositoryTezosImpl } from '@@domain/gas/gasRepositoryTezos/GasRepositoryTezos';
+import { SignMessageService } from '@@domain/message-manager/SignMessageService';
 import { ITokenRepository } from '@@domain/token/repositories/TokenRepository';
 import { TradeRepository } from '@@domain/trade/repositories/tradeRepository';
 import { ITransactionHistoryRepository } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
@@ -32,7 +33,7 @@ export interface DiModuleTypes {
   WalletBlockChainService: IWalletBlockChainService;
   AuthService: AuthService;
   UIService: UIService;
-
+  SignMessageService: SignMessageService;
   TransactionHistoryRepository: ITransactionHistoryRepository;
   TransactionServiceEthers: ITransactionServiceEthers;
   TransactionServiceTezos: ITransactionServiceTezos;
