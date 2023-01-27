@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import useCoinDto from '@@hooks/useCoinDto';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import useGasUtil from '../../common/hooks/useGasUtil';
@@ -73,10 +74,10 @@ const useEIP1559GasTipValidation = ({
 
   const runCheck = () => {
     switch (advanced) {
-      case true:
+      case false:
         check(maxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
         return;
-      case false:
+      case true:
         check(userInputMaxFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
         return;
     }

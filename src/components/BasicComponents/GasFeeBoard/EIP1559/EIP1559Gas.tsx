@@ -7,13 +7,14 @@ import GasLevelRadioButtons from '../common/GasLevelRadioButtons';
 
 import useEIP1559Gas from './useEIP1559Gas';
 
-function EIP1559Gas({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, value, data, isValidInput }: IEVMGasComponentProps) {
+function EIP1559Gas({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, value, data, isValidInput, initialLevel }: IEVMGasComponentProps) {
   const { advanced, level, setLevel, total, toggleGasAdvanced, wrappedOnConfirm, onConfirmValid, userInputs } = useEIP1559Gas({
     to,
     value,
     data,
     isValidInput,
     onConfirm,
+    initialLevel,
   });
 
   return (
