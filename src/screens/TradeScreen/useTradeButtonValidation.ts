@@ -8,14 +8,14 @@ const useTradeButtonValidation = (
   isEnoughAllowance: boolean,
   isReadyTrade: boolean,
   onPressTrade: Function,
-  onPressApprove: Function
+  onPressApprove: Function,
+  connectable: boolean
 ): [boolean, string, Function] => {
   const { t } = useTranslation();
   const { value, valueValid, tokenValue } = transactionRequestStore();
-  console.log('trade screen', 'value: ', value, 'valueValid: ', valueValid, 'tokenValue: ', tokenValue);
 
   const validation: [boolean, string, Function] = useMemo(() => {
-    if (!(value || tokenValue) || !valueValid) {
+    if (!(value || tokenValue) || !valueValid || !connectable) {
       return [false, t('enter_amount'), () => {}];
     } else if (!isEnoughAllowance) {
       return [true, t('approve'), onPressApprove];

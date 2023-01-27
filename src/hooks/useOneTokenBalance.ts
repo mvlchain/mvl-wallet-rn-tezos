@@ -26,6 +26,6 @@ const useOneTokenBalance = (tokenDto: TokenDto) => {
     getBalance();
   }, [tokenDto, selectedNetwork, selectedWalletIndex, isFocused]);
 
-  return { balance };
+  return { balance, getBalance };
 };
 export default useOneTokenBalance;

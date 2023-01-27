@@ -9,7 +9,7 @@ import Toast from 'react-native-toast-message';
 
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { NETWORK } from '@@constants/network.constant';
+import { getNetworkByBase, NETWORK } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import { IQuoteDto } from '@@domain/trade/repositories/tradeRepository.type';
 import useTradeQuoteQuery from '@@hooks/queries/useTradeQuoteQuery';
