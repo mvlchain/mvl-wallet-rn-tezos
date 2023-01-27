@@ -422,5 +422,6 @@
   "incorrect_seed_phrase": "Incorrect Seed Phrase",
   "plz_try_again": "Please try again.",
   "msg_error_after_redirection_home": "Error has occurred, redirected to home screen",
-  "msg_error_occurred_can_not_display": "Error has occurred, screen cannot be displayed"
+  "msg_error_occurred_can_not_display": "Error has occurred, screen cannot be displayed",
+  "btn_confirm_transaction": "Confirm Transaction"
 }
