@@ -22,7 +22,7 @@ const useTokenSend = () => {
   const { total, resetTotal } = gasStore();
 
   const { setAmount, setAddress } = useSetSendData();
-  const { send } = useSetSendFunction();
+  const { send, isHoldingGasEstimatePolling, setIsHoldingGasEstimatePolling } = useSetSendFunction();
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -37,16 +37,20 @@ const useTokenSend = () => {
 
   const confirm = async (sendParam: TransactionRequest | TransferParams) => {
     if (!total) return;
+    setIsHoldingGasEstimatePolling(true);
     openModal(MODAL_TYPES.CONFIRM_SEND, {
       tokenDto,
       onConfirm: () => {
         send(sendParam);
+      },
+      onClose: () => {
+        setIsHoldingGasEstimatePolling(false);
       },
       to: address!,
       value: amount!,
     });
   };
 
-  return { amount, setAmount, address, setAddress, confirm };
+  return { amount, setAmount, address, setAddress, confirm, isHoldingGasEstimatePolling };
 };
 export default useTokenSend;

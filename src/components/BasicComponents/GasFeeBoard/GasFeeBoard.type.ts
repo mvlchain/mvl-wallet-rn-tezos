@@ -11,6 +11,7 @@ export interface IUseGasProps {
   data?: BytesLike | null;
   isValidInput: boolean;
   initialLevel?: TGasLevel;
+  isHoldingGasEstimatePolling?: boolean; //true일때 주기적 가스 계산을 중단합니다. 가스피를 확정지었는지 여부는 가스피 내부 판단이 아닌 상위에 존재하므로 prop으로 설정하였습니다.
   onConfirm?: (params: TransactionRequest | TransferParams, gasSettingInfo: IGasSettingInfo) => void;
 }
 export interface IEVMGasComponentProps extends IUseGasProps {

@@ -22,7 +22,7 @@ export const EVM_LEVEL_WEIGHT = {
   [GAS_LEVEL.MID]: '1.3',
   [GAS_LEVEL.HIGH]: '1.7',
 };
-const useEVMGas = ({ to, value, data, isValidInput, initialLevel, onConfirm }: IUseGasProps) => {
+const useEVMGas = ({ to, value, data, isValidInput, initialLevel, isHoldingGasEstimatePolling, onConfirm }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { t } = useTranslation();
   const { setTotal } = gasStore();
@@ -41,7 +41,7 @@ const useEVMGas = ({ to, value, data, isValidInput, initialLevel, onConfirm }: I
   //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
   const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice, userInputGasLimit });
   //가스프라이스 조회와 가스사용량을 예측합니다.
-  useEVMEstimate({ advanced, to, value, data, isValidInput, setGasLimit, setGasPrice });
+  useEVMEstimate({ advanced, to, value, data, isValidInput, isHoldingGasEstimatePolling, setGasLimit, setGasPrice });
 
   useEffect(() => {
     setUserInputGasPrice(leveledGasPrice);

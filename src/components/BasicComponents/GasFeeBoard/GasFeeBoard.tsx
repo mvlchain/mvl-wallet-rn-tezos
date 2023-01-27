@@ -21,6 +21,7 @@ const GasFeeBoard = ({
   isValidInput,
   transferParam,
   initialLevel,
+  isHoldingGasEstimatePolling,
 }: IGasComponentProps) => {
   const { selectedNetwork } = walletPersistStore();
   const testIncludeSelectedNetwork = getNetworkByBase(selectedNetwork);
@@ -40,6 +41,7 @@ const GasFeeBoard = ({
             data={data}
             isValidInput={isValidInput}
             initialLevel={initialLevel}
+            isHoldingGasEstimatePolling={isHoldingGasEstimatePolling}
           />
         );
       case NETWORK_FEE_TYPE.EVM_LEGACY_GAS:
@@ -54,6 +56,7 @@ const GasFeeBoard = ({
             data={data}
             isValidInput={isValidInput}
             initialLevel={initialLevel}
+            isHoldingGasEstimatePolling={isHoldingGasEstimatePolling}
           />
         );
       case NETWORK_FEE_TYPE.TEZOS:
@@ -68,6 +71,7 @@ const GasFeeBoard = ({
             transferParam={transferParam}
             isValidInput={isValidInput}
             initialLevel={initialLevel}
+            isHoldingGasEstimatePolling={isHoldingGasEstimatePolling}
           />
         );
     }

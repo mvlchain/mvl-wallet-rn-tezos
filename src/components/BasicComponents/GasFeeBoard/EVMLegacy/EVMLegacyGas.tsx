@@ -7,7 +7,18 @@ import GasLevelRadioButtons from '../common/GasLevelRadioButtons';
 
 import useEVMGas from './useEVMGas';
 
-function EVMLegacyGas({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, value, data, isValidInput, initialLevel }: IEVMGasComponentProps) {
+function EVMLegacyGas({
+  isRevision,
+  onConfirm,
+  onConfirmTitle,
+  hideDivider,
+  to,
+  value,
+  data,
+  isValidInput,
+  initialLevel,
+  isHoldingGasEstimatePolling,
+}: IEVMGasComponentProps) {
   const { advanced, level, setLevel, total, toggleGasAdvanced, wrappedOnConfirm, onConfirmValid, userInputs } = useEVMGas({
     to,
     value,
@@ -15,6 +26,7 @@ function EVMLegacyGas({ isRevision, onConfirm, onConfirmTitle, hideDivider, to, 
     isValidInput,
     onConfirm,
     initialLevel,
+    isHoldingGasEstimatePolling,
   });
 
   return (

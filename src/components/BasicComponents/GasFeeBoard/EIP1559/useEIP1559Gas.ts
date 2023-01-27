@@ -25,7 +25,7 @@ const EIP1559_LEVEL_WEIGHT = {
   [GAS_LEVEL.HIGH]: '1.6',
 };
 
-const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm, initialLevel }: IUseGasProps) => {
+const useEIP1559Gas = ({ to, value, data, isValidInput, isHoldingGasEstimatePolling, onConfirm, initialLevel }: IUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
@@ -65,7 +65,7 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm, initialLevel 
     userInputGasLimit,
   });
   //가스프라이스 조회와 가스사용량을 예측합니다.
-  useEIP1559Estimate({ advanced, to, value, data, isValidInput, setGasLimit, setLastBaseFeePerGas });
+  useEIP1559Estimate({ advanced, to, value, data, isValidInput, isHoldingGasEstimatePolling, setGasLimit, setLastBaseFeePerGas });
 
   useEffect(() => {
     setUserInputMaxFeePerGas(maxFeePerGas);
