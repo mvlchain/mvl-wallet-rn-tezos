@@ -425,5 +425,8 @@
   "msg_error_occurred_can_not_display": "Error has occurred, screen cannot be displayed",
   "btn_confirm_transaction": "Confirm Transaction",
   "msg_error_claim_failure": "Failed to claim reward. Please try again later.",
-  "msg_error_transaction_failure": "Transation failed"
+  "msg_error_transaction_failure": "Transation failed",
+  "btn_sign": "Sign",
+  "sign_message": "Message",
+  "signature_request": "Signature request",
 }
