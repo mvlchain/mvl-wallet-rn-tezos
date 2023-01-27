@@ -75,7 +75,6 @@
     "end-of-stream": "^1.4.4",
     "eth-json-rpc-filters": "^5.0.0",
     "eth-json-rpc-infura": "^5.1.0",
-    "eth-json-rpc-middleware": "4.3.0",
     "eth-query": "^2.1.2",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.1.5",
