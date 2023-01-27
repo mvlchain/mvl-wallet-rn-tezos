@@ -12,6 +12,7 @@
 
 # Bundle artifact
 *.jsbundle
+*.jsbundle.map
 
 # Ruby / CocoaPods
 /ios/Pods/
