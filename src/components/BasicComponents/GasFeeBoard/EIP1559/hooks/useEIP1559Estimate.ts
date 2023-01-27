@@ -19,6 +19,7 @@ const useEIP1559Estimate = ({
   value,
   data,
   isValidInput,
+  isHoldingGasEstimatePolling,
   setGasLimit,
   setLastBaseFeePerGas,
 }: {
@@ -27,6 +28,7 @@ const useEIP1559Estimate = ({
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
+  isHoldingGasEstimatePolling?: boolean;
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setLastBaseFeePerGas: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
@@ -80,6 +82,7 @@ const useEIP1559Estimate = ({
     if (!isValidInput) return;
     //유저가 직접 입력하는 동안에는 주기적으로 가스를 조회하지 않는다.
     if (advanced) return;
+    if (isHoldingGasEstimatePolling) return;
     estimateGas({ to, value, data });
   }, 20000);
 };

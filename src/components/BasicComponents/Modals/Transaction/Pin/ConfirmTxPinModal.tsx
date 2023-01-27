@@ -8,11 +8,12 @@ import PinLayout from '@@components/BasicComponents/Pin/PinLayout/PinLayout';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import { MODAL_TYPES } from '../../GlobalModal';
-function ConfirmTxPinModal() {
+function ConfirmTxPinModal(onClose: Function) {
   const { modalType, closeModal } = globalModalStore();
 
   const interruption = () => {
     closeModal();
+    onClose();
     return true;
   };
 
