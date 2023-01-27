@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'react-i18next';
 
 import useCoinDto from '@@hooks/useCoinDto';
+import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import { formatBigNumber } from '@@utils/formatBigNumber';
 
 import useGasUtil from '../../common/hooks/useGasUtil';

@@ -90,16 +90,16 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     initialLevel: GAS_LEVEL.MID,
   });
 
-  const onPressConfirmInGasFeeModal = (param: TransactionRequest, gasSettingInfo?: IGasSettingInfo) => {
-    console.log('press confirm button at gas fee modal!', param.gasPrice?.toString(), param.gasLimit?.toString(), gasSettingInfo);
-    switch (gasSettingInfo!.advanced) {
+  const onPressConfirmInGasFeeModal = (param: TransactionRequest, gasSettingInfo: IGasSettingInfo) => {
+    logger.log('press confirm button at gas fee modal!', param.gasPrice?.toString(), param.gasLimit?.toString(), gasSettingInfo);
+    switch (gasSettingInfo.advanced) {
       case true:
         setUserInputGasPrice(etherBNtoBN(param.gasPrice as BigNumberEther));
         setUserInputGasLimit(etherBNtoBN(param.gasLimit as BigNumberEther));
         break;
       case false:
         setAdvanced(advanced);
-        setLevel(gasSettingInfo!.level);
+        setLevel(gasSettingInfo.level);
         break;
     }
     setShowGasFeeModal(false);
