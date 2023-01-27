@@ -17,7 +17,7 @@ import {
   EarnEventGetClaimResponseDto,
   SimpleResponseDto,
 } from '@@generated/generated-scheme';
-import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
+import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreen.type';
 import { AbsTestEarnEventRepository } from '@@test/repository/AbsEarnEventRepository';
 import { renderHook, Providers } from '@@test/test-utils';
 import { mockApi } from '@@utils/mockApi';
