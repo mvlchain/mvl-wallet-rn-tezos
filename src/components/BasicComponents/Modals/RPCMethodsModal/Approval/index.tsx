@@ -255,8 +255,6 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   useEffect(() => {
     if (checkTransfer(transaction.data)) {
       const decodeFunctionData = transactionService.decodeFunctionData(TRANSACTION_METHOD.TRANSFER, transaction.data);
-      // 질문: decodeFunctionData에서 항상 0번째가 to, 1번째가 value인가요?
-      // 아니라면 값중 hex 값을 value로 잡고 나머지 값을 to로 잡는 로직이 추가되야 할까요
       const weiValue = decodeFunctionData[1].toString();
       const _to = decodeFunctionData[0];
       const bnValue = new BigNumber(weiValue);
