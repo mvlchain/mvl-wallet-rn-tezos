@@ -28,6 +28,7 @@ export const useTokenBalance = () => {
   const [walletData, setWalletData] = useState<WalletDto[]>([]);
   const [balanceData, setBalanceData] = useState<IBalance>();
   const [priceIds, setPriceIds] = useState<string>();
+  const [latestBalanceNetwork, setLatestBalanceNetwork] = useState<string>('');
 
   // 1. network변경 시 token list 조회
   const selectedTokenList = useMemo(() => tokenList[getNetworkByBase(selectedNetwork)], [selectedNetwork]);
@@ -58,6 +59,7 @@ export const useTokenBalance = () => {
     },
     onSuccess: (data) => {
       setBalanceData(data);
+      setLatestBalanceNetwork(selectedNetwork);
     },
   });
 
@@ -83,6 +85,7 @@ export const useTokenBalance = () => {
         refetch();
       }
       setBalanceData(balance);
+      setLatestBalanceNetwork(selectedNetwork);
     } catch (e) {
       console.log('ERROR:  ', e);
       console.log('Data fetch from blockchain is fail -> Fetch from Server');
@@ -92,7 +95,7 @@ export const useTokenBalance = () => {
 
   useEffect(() => {
     // TODO: wallet data 못가져왔을 때 에러 로직 추가
-    if (walletData.length === 0 || !isFocused) return;
+    if (walletData.length === 0 || !isFocused || latestBalanceNetwork === selectedNetwork) return;
     getBalance();
   }, [walletData, _selectedWalletIndex, isFocused]);
 
