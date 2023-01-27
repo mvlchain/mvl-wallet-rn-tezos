@@ -30,6 +30,8 @@ const useQRScan = (targetToken?: string) => {
   const navigation = useNavigation<TTokenSendRootStackProps>();
   const blockChainService = useDi('WalletBlockChainService');
 
+  const [barcodes, setBarcodes] = useState<string>('');
+
   useEffect(() => {
     requestPermission({ ios: [PERMISSIONS.IOS.CAMERA], android: [PERMISSIONS.ANDROID.CAMERA] }).then(async (res) => {
       const { DENIED, BLOCKED } = getNotGrantedList(res as TRequestPermissionResultType);
@@ -110,17 +112,15 @@ const useQRScan = (targetToken?: string) => {
    * Callback that will be called when the QrCode detected from camera
    */
   const onQrCodeDetected = useCallback(
-    async (barcodes: Barcode[]) => {
+    async (barcode: string) => {
       if (isQrCodeDecoding) {
         return;
       }
       setIsQrCodeDecoding(true);
 
-      const qrCodes: string[] = barcodes.filter((item) => isNotBlank(item.displayValue)).map((item) => item.displayValue!);
-
-      if (qrCodes.length > 0) {
+      if (barcode.length > 0) {
         try {
-          const qrCodeLink = await parseQrCodeLink(qrCodes[0]);
+          const qrCodeLink = await parseQrCodeLink(barcode);
           if (qrCodeLink) {
             const { qrCodeContents, token } = qrCodeLink;
             navigateToTokenSender(params?.tokenDto ?? token, qrCodeContents!);
@@ -135,11 +135,20 @@ const useQRScan = (targetToken?: string) => {
     [isQrCodeDecoding]
   );
 
+  //runOnJS가 무한 여러번 반복해서 겹호출되므로 스트링으로 값을 저장한 후에 그 값에대해서 useEffect로 트리깅 하도록
+  useEffect(() => {
+    if (barcodes.length > 0) {
+      const parsedBarcodes = JSON.parse(barcodes);
+      onQrCodeDetected(parsedBarcodes);
+    }
+  }, [barcodes]);
+
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
     const barcodes: Barcode[] = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
-    if (barcodes.length > 0) {
-      runOnJS(onQrCodeDetected)(barcodes);
+    if (barcodes.length > 0 && barcodes[0].displayValue) {
+      const stringBarcodes = JSON.stringify(barcodes[0].displayValue);
+      runOnJS(setBarcodes)(stringBarcodes);
     }
   }, []);
 
