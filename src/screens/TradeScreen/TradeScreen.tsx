@@ -12,9 +12,7 @@ import Jdenticon from '@@components/BasicComponents/Jdenticon';
 import { TradeVolume } from '@@components/BasicComponents/TextFields/TradeVolume/TradeVolume';
 import useAccount from '@@components/Wallet/Account/useAccount';
 import useWalletSelector from '@@components/Wallet/WalletSelector/useWalletSelector';
-import { getNetworkByBase } from '@@constants/network.constant';
 import useNetworkCheck from '@@hooks/useNetworkCheck';
-import walletPersistStore from '@@store/wallet/walletPersistStore';
 
 import * as S from './TradeScreen.style';
 import useTrade from './useTrade';
@@ -44,8 +42,7 @@ function TradeScreen() {
 
   const { isEnoughAllowance, onPressApprove } = useTradeApprove(fromToken);
   const { isReadyTrade, onPressTrade } = useTrade(fromToken, quoteData, resetTradeScreen);
-  const { selectedNetwork } = walletPersistStore();
-  const { connectable, checkNetwork } = useNetworkCheck(getNetworkByBase(selectedNetwork));
+  const { connectable, checkNetwork } = useNetworkCheck();
   const [tradeValid, tradeLabel, onPressTradeOrApprove] = useTradeButtonValidation(
     isEnoughAllowance,
     isReadyTrade,
