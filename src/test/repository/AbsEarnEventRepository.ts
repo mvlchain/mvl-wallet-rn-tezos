@@ -15,8 +15,7 @@ import {
  * Abstract class for testing EarnEventRepository
  */
 export class AbsTestEarnEventRepository implements EarnEventRepository {
-  constructor() { }
-  private events = mockApi<EarnEventDto[]>('v1/earn-event/list.json');
+  constructor() {}
 
   getEventList(): Promise<EarnEventDto[]> {
     throw new UnsupportOperationError();
@@ -45,7 +44,10 @@ export class AbsTestEarnEventRepository implements EarnEventRepository {
   disconnectThirdParty(appId: string): Promise<SimpleResponseDto> {
     throw new UnsupportOperationError();
   }
-  deferAuthForInject(): Promise<{ type: 'PASSWORD' | 'FACEBOOK' | 'GOOGLE' | 'TWITTER' | 'DISCORD' | 'APPLE' | 'WEB3' | 'HMAC' | 'IN_MIGRATION'; code: string; }> {
+  deferAuthForInject(): Promise<{
+    type: 'PASSWORD' | 'FACEBOOK' | 'GOOGLE' | 'TWITTER' | 'DISCORD' | 'APPLE' | 'WEB3' | 'HMAC' | 'IN_MIGRATION';
+    code: string;
+  }> {
     throw new UnsupportOperationError();
   }
 }
