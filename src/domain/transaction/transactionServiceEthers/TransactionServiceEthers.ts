@@ -41,4 +41,11 @@ export class TransactionServiceEthers implements ITransactionServiceEthers {
   encodeFunctionData = async (method: string, params: any) => {
     return new ethers.utils.Interface(abiERC20).encodeFunctionData(method, params);
   };
+
+  decodeFunctionData = (method: string, params: any) => {
+    const contractInterface = ethers.ContractFactory.getInterface(abiERC20);
+    const func = contractInterface.getFunction(params.slice(0, 10));
+    const parsed = contractInterface.decodeFunctionData(func, params);
+    return parsed;
+  };
 }

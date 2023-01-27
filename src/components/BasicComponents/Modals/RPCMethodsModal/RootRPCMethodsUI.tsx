@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { hexToText } from '@metamask/controller-utils';
 import { BigNumber } from 'bignumber.js';
+import BN from 'bn.js';
 import { useTranslation } from 'react-i18next';
 import { Button, InteractionManager, StyleSheet, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
@@ -11,6 +12,7 @@ import Modal from 'react-native-modal';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase } from '@@constants/network.constant';
+import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -35,6 +37,8 @@ const RootRPCMethodsUI = () => {
   const colors = mmLightColors;
   const blockChainService = useDi('WalletBlockChainService');
   const signMessageService = useDi('SignMessageService');
+
+  const { coinDto } = useCoinDto();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
   const [showPendingApproval, setShowPendingApproval] = useState<any>(false);
   const [signMessageParams, setSignMessageParams] = useState<any>({ data: '' });
@@ -87,14 +91,25 @@ const RootRPCMethodsUI = () => {
       const {
         transaction: { value, gas, gasPrice, data },
       } = transactionMeta;
-
-      const { symbol, decimals } = await blockChainService.getMetadata(getNetworkByBase(selectedNetwork), to);
-      const asset = { symbol, decimals, address: to };
+      const asset = { symbol: 'ERC20', decimals: '18', address: to };
+      if (!value) {
+        try {
+          const { symbol, decimals } = await blockChainService.getMetadata(getNetworkByBase(selectedNetwork), to);
+          asset.symbol = symbol ?? 'ERC20';
+          asset.decimals = decimals ?? '18';
+        } catch (e) {
+          logger.error('fail get metadata');
+        }
+      } else {
+        asset.symbol = coinDto.symbol;
+        asset.decimals = coinDto.decimals.toString();
+      }
       logger.log('asset:  ', asset);
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
-
       const valueWithDefaultZero = value || '0';
+
+      // const valueWithDefaultZero = value || '0';
       transactionMeta.transaction.value = hexToBN(valueWithDefaultZero);
       transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);
 
