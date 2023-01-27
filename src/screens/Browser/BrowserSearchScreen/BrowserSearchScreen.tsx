@@ -31,6 +31,8 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
     );
   }, []);
 
+  // const browserHintKey = Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios';
+  const browserHintKey = 'd_app_hint';
   return (
     <S.Container>
       <S.SearchContainer>
@@ -45,7 +47,7 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
             onBlur={() => {
               setIsInputFocused(false);
             }}
-            placeholder={t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}
+            placeholder={t(browserHintKey)}
             placeholderTextColor={color.grey300Grey700}
             returnKeyType='search'
           />

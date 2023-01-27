@@ -31,16 +31,17 @@ class ControllerManager {
 
     const networkConfig = getNetworkConfig(selectedNetwork);
 
-    const providerConfig = {
-      type: selectedNetwork,
-      chainId: networkConfig.chainId.toString(10),
-    };
-
+    const initialState = networkConfig.supportBrowser
+      ? {
+          providerConfig: {
+            type: selectedNetwork,
+            chainId: networkConfig.chainId.toString(10),
+          },
+        }
+      : undefined;
     const networkControllerOpts = {
       infuraProjectId: '***REMOVED***',
-      state: {
-        providerConfig,
-      },
+      state: initialState,
       messenger: this.controllerMessenger.getRestricted({
         name: 'NetworkController',
         allowedEvents: [],
@@ -75,10 +76,14 @@ class ControllerManager {
     };
 
     walletPersistStore.subscribe((state: IWalletPersist, prevState: IWalletPersist) => {
-      if (prevState.selectedNetwork !== state.selectedNetwork) {
-        console.log(`WB SETUP> prev selectedNetwork: ${prevState.selectNetwork} -> ${state.selectNetwork}`);
-        networkController.setProviderType(getNetworkByBase(state.selectedNetwork));
+      if (prevState.selectedNetwork === state.selectedNetwork) {
+        return;
       }
+      const networkByBase = getNetworkByBase(state.selectedNetwork);
+      if (!getNetworkConfig(networkByBase).supportBrowser) {
+        return;
+      }
+      networkController.setProviderType(networkByBase);
     });
 
     const myTransactionController = new TransactionController({
@@ -93,7 +98,6 @@ class ControllerManager {
       context[controller.name] = controller;
       return context;
     }, {});
-    console.log(Object.keys(this.context));
     ControllerManager.instance = this;
     return ControllerManager.instance;
   }

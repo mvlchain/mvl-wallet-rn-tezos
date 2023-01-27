@@ -20,6 +20,8 @@ function BrowserMainScreen(props: IBrowserMainScreenProps) {
     return <DappListItem Image={item.Image} title={item.title} description={item.description} onPress={item.onPress} />;
   }, []);
 
+  // const browserHintKey = Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios';
+  const browserHintKey = 'd_app_hint';
   return (
     <S.Container>
       <S.Header>
@@ -27,7 +29,7 @@ function BrowserMainScreen(props: IBrowserMainScreenProps) {
       </S.Header>
       <S.SearchContainer>
         <S.SearchBtn onPress={onPressSearchBtn}>
-          <S.SearchText>{t(Device.isAndroid() ? 'd_app_search_hint' : 'd_app_search_hint_ios')}</S.SearchText>
+          <S.SearchText>{t(browserHintKey)}</S.SearchText>
         </S.SearchBtn>
       </S.SearchContainer>
       <S.ContentContainer>
