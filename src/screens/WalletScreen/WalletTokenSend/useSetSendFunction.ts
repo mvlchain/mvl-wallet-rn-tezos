@@ -1,12 +1,15 @@
 import { TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { TransferParams, WalletOperation } from '@taquito/taquito';
+import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { getNetworkConfig, getNetworkByBase, NETWORK_ID } from '@@constants/network.constant';
 import { PIN_LAYOUT, PIN_MODE } from '@@constants/pin.constant';
+import { TOAST_TYPE } from '@@constants/toastConfig.constant';
 import { getTransactionType } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import { useDi } from '@@hooks/useDi';
+import useToast from '@@hooks/useToast';
 import { ROOT_STACK_ROUTE } from '@@navigation/RootStack/RootStack.type';
 import gasStore from '@@store/gas/gasStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
@@ -23,6 +26,8 @@ const useSetSendFunction = () => {
   const transactionServiceEthers = useDi('TransactionServiceEthers');
   const transactionHistoryRepository = useDi('TransactionHistoryRepository');
   const walletService = useDi('WalletService');
+  const { t } = useTranslation();
+  const { showToast } = useToast();
 
   const { params } = useRoute<TTokenSendRouteProps>();
   const tokenDto = params.tokenDto;
@@ -70,7 +75,8 @@ const useSetSendFunction = () => {
           }
       }
     } catch (err) {
-      console.log(err);
+      // propagate sendTransaction error
+      throw err;
     }
   };
 
@@ -96,6 +102,7 @@ const useSetSendFunction = () => {
         throw new Error('fail register history');
       }
     } catch (err) {
+      // TODO: tx 히스토리를 남길때 에러에 대한 대응이 필요하다, tx전송은 성공했으나 히스토리 전송에 실패할 경우에 대비하여 sentry warning로그를 남겨볼까?
       console.log(err);
     }
   };
@@ -107,9 +114,7 @@ const useSetSendFunction = () => {
       closeModal();
       await checkPin();
       const transaction = await sendToBlockChain(param);
-      if (!transaction) {
-        throw new Error('fail send to blockChain');
-      }
+
       let hash;
       let nonce;
       switch (network.networkId) {
@@ -128,7 +133,8 @@ const useSetSendFunction = () => {
       resetTotal();
       closeModal();
     } catch (err) {
-      console.log(err);
+      closeModal();
+      showToast(TOAST_TYPE.ERROR, t('msg_error_transaction_failure'));
     }
   };
 
