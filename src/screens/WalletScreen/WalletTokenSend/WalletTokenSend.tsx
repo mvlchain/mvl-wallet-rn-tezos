@@ -18,7 +18,7 @@ import useTokenSend from './useTokenSend';
 
 function WalletTokenSend() {
   const { params } = useRoute<TTokenSendRouteProps>();
-  const { amount, setAmount, address, setAddress, confirm } = useTokenSend();
+  const { amount, setAmount, address, setAddress, confirm, isHoldingGasEstimatePolling } = useTokenSend();
   const { value, data, toValid, valueValid, transferParam, to } = transactionRequestStore();
   return (
     <ErrorBoundary FallbackComponent={ErrorScreenInRootStack}>
@@ -35,6 +35,7 @@ function WalletTokenSend() {
             data={data}
             isValidInput={toValid && valueValid}
             transferParam={transferParam}
+            isHoldingGasEstimatePolling={isHoldingGasEstimatePolling}
           />
         </S.Container>
       </DismissKeyboardView>
