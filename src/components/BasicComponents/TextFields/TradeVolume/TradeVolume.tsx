@@ -41,6 +41,7 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
     disableDelete,
     textInputRef,
     value,
+    forceBalanceUpdate,
     setValue,
     setValueValid,
     handleTokenSelect,
@@ -57,9 +58,13 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   const { t } = useTranslation();
   const { color } = useColor();
   const { total } = gasStore();
-  const { balance } = useOneTokenBalance(tokenDto);
+  const { balance, getBalance } = useOneTokenBalance(tokenDto);
   const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
   const validStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toFixed() : balance;
+
+  useEffect(() => {
+    getBalance();
+  }, [forceBalanceUpdate]);
 
   const setValueDebounce = useDebounce((value: BigNumber | null) => {
     setValue(value);
