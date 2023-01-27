@@ -6,7 +6,7 @@ import { pinStore } from '@@store/pin/pinStore';
 import { TPinMode } from '@@store/pin/pinStore.type';
 
 export interface UIService {
-  triggerGetPincode: () => Promise<string>;
+  triggerGetPincode: (pinMode?: TPinMode) => Promise<string>;
   triggerSetPincode: (stage?: keyof typeof AUTH_STAGE) => Promise<string>;
   triggerResetPincode: () => Promise<string>;
   currentPinUpdateToReset: () => void;
@@ -15,8 +15,8 @@ export interface UIService {
 export class UIServiceImpl implements UIService {
   constructor() {} //inject modalStore
 
-  triggerGetPincode = async () => {
-    return await this._triggerPincode(PIN_MODE.CONFIRM);
+  triggerGetPincode = async (pinMode: TPinMode = PIN_MODE.CONFIRM) => {
+    return await this._triggerPincode(pinMode);
   };
 
   triggerSetPincode = async (stage?: keyof typeof AUTH_STAGE) => {

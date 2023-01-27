@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 
@@ -28,8 +29,12 @@ const useSignInScreen = () => {
 
   useEffect(() => {
     const checkNeedsMigrationAndExec = async () => {
-      if (await legacyAuthMigrationService.needsMigration()) {
-        await legacyAuthMigrationService.migrate();
+      try {
+        if (await legacyAuthMigrationService.needsMigration()) {
+          await legacyAuthMigrationService.migrate();
+        }
+      } catch (e) {
+        Sentry.captureException(e);
       }
     };
     checkNeedsMigrationAndExec();

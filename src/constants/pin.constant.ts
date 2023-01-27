@@ -8,7 +8,10 @@ export const PIN_MODE = {
   SETUP: 'setup',
   CONFIRM: 'confirm',
   RESET: 'reset',
+  LEGACY_AUTH_MIGRATION: 'legacy_auth_migration',
 } as const;
+
+export type TPinMode = (typeof PIN_MODE)[keyof typeof PIN_MODE];
 
 export const PIN_STEP = {
   ENTER: 1,

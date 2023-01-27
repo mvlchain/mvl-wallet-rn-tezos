@@ -1,13 +1,15 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import crypto from 'react-native-quick-crypto';
 import TouchID from 'react-native-touch-id';
 
 import { AUTH_STAGE } from '@@constants/authStage.constant';
-import { PIN_MODE, PIN_STEP, PIN_REQUIRE_LENGTH } from '@@constants/pin.constant';
+import { PIN_MODE, PIN_REQUIRE_LENGTH, PIN_STEP } from '@@constants/pin.constant';
 import { TOAST_TYPE } from '@@constants/toastConfig.constant';
 import { useDi } from '@@hooks/useDi';
 import useToast from '@@hooks/useToast';
+import LegacyAuthManager from '@@store/LegacyAuthManager';
 import authPersistStore from '@@store/auth/authPersistStore';
 import { pinStore } from '@@store/pin/pinStore';
 import SecureKeychain, { SECURE_TYPES } from '@@utils/SecureKeychain';
@@ -53,6 +55,9 @@ function usePin() {
       case PIN_MODE.RESET:
         await checkSetUp();
         break;
+      case PIN_MODE.LEGACY_AUTH_MIGRATION:
+        await checkLegacyAuthMigration();
+        break;
     }
   };
 
@@ -65,7 +70,7 @@ function usePin() {
       setState({ error: { message: t('password_wrong_pin') } });
       setTimeout(() => {
         setInput('');
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -96,6 +101,44 @@ function usePin() {
         setInput('');
       }
     }
+  };
+
+  const checkLegacyAuthMigration = async () => {
+    const legacyPin = await LegacyAuthManager.getPIN();
+    if (legacyPin.length === 6) {
+      // ios, plain pinCode
+      if (legacyPin !== input) {
+        // should make user to re-enter pincode
+        // throw new Error(`plain pincode mismatch: ${legacyPin} !== ${pinCode}}`);
+        setState({ error: { message: t('password_wrong_pin') } });
+        setTimeout(() => {
+          setInput('');
+        }, 500);
+        return;
+      }
+    } else if (legacyPin.length > 6) {
+      // android, hashed pinCode
+      const hashed = crypto.createHash('sha512').update(input).digest('hex');
+      if (legacyPin.toLowerCase() !== hashed.toLowerCase()) {
+        // should make user to re-enter pincode
+        // throw new Error(`hashed pincode mismatch: ${input}, ${legacyPin} !== ${hashed}`);
+        setState({ error: { message: t('password_wrong_pin') } });
+        setTimeout(() => {
+          setInput('');
+        }, 500);
+        return;
+      }
+    } else {
+      // throw new Error(`unexpected PIN length: ${legacyPin.length}`);
+      setState({ error: { message: t('password_wrong_pin') } });
+      setTimeout(() => {
+        setInput('');
+      }, 500);
+      return;
+    }
+
+    success(input);
+    setState({ step: PIN_STEP.FINISH });
   };
 
   const bioAuth = () => {

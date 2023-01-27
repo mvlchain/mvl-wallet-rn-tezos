@@ -12,4 +12,6 @@
 -keep class com.facebook.hermes.unicode.** { *; }
 -keep class com.facebook.jni.** { *; }
 
-
+-keep class io.mvlchain.wallet.legacyauth.DeviceShare { *; }
+-keep class io.mvlchain.wallet.legacyauth.TorusShare { *; }
+-keep class io.mvlchain.wallet.legacyauth.RootKey { *; }
