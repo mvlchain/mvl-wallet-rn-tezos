@@ -93,6 +93,7 @@
   "currency_usd": "USD",
   "d_app_search_hint": "Search DApp or enter a link",
   "d_app_search_hint_ios": "Search or enter a link",
+  "d_app_hint": "Enter a link",
   "date": "Date",
   "delete_account": "Delete Account",
   "delete_account_agreement": "I have checked the contents and I agree to delete account",
@@ -428,5 +429,6 @@
   "msg_error_transaction_failure": "Transation failed",
   "btn_sign": "Sign",
   "sign_message": "Message",
-  "signature_request": "Signature request"
+  "signature_request": "Signature request",
+  "msg_error_browser_unsupported_network": "Unsupported network: {{name}}"
 }
