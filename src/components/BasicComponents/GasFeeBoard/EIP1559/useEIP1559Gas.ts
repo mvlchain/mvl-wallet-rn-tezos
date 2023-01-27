@@ -30,7 +30,7 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm, initialLevel 
   const { setTotal } = gasStore();
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.LOW);
+  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.MID);
 
   const [lastBaseFeePerGas, setLastBaseFeePerGas] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));

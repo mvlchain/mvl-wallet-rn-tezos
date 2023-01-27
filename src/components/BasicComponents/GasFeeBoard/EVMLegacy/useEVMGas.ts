@@ -27,7 +27,7 @@ const useEVMGas = ({ to, value, data, isValidInput, initialLevel, onConfirm }: I
   const { t } = useTranslation();
   const { setTotal } = gasStore();
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.LOW);
+  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.MID);
 
   const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
   const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
