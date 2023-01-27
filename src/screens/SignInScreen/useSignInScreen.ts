@@ -31,7 +31,8 @@ const useSignInScreen = () => {
     const checkNeedsMigrationAndExec = async () => {
       try {
         if (await legacyAuthMigrationService.needsMigration()) {
-          await legacyAuthMigrationService.migrate();
+          const pKey = await legacyAuthMigrationService.migrate();
+          updateAuthState(pKey, undefined);
         }
       } catch (e) {
         Sentry.captureException(e);
