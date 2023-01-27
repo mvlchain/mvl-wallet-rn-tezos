@@ -9,23 +9,30 @@ import { ScrollView } from 'react-native';
 
 import DismissKeyboardView from '@@components/BasicComponents/DismissKeyboardView';
 import GasFeeBoard from '@@components/BasicComponents/GasFeeBoard';
+import { IGasComponentProps } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import LoadingIndicator from '@@components/BasicComponents/LoadingIndicator';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 
 import { MODAL_TYPES } from '../GlobalModal';
 
-export interface IGasFeeModalProps {
-  onConfirm: (params: TransactionRequest | TransferParams) => void;
-  onConfirmTitle: string;
-  to: string | null;
-  value?: BigNumber | null;
-  data?: BytesLike | null;
-  transferParam?: TransferParams;
-  isValidInput: boolean;
+export interface IGasFeeModalProps extends Omit<IGasComponentProps, 'isRevision' | 'hideDivider'> {
+  isVisible?: boolean;
+  onClose?: () => void;
 }
 
-function GasFeeModal({ onConfirm, onConfirmTitle, to, value, data, transferParam, isValidInput }: IGasFeeModalProps) {
+function GasFeeModal({
+  onConfirm,
+  onConfirmTitle,
+  to,
+  value,
+  data,
+  transferParam,
+  isValidInput,
+  isVisible,
+  onClose,
+  initialLevel,
+}: IGasFeeModalProps) {
   const { modalType, closeModal } = globalModalStore();
   const { t } = useTranslation();
 
@@ -34,9 +41,13 @@ function GasFeeModal({ onConfirm, onConfirmTitle, to, value, data, transferParam
       //다국어
       title={`${t('fee_setting')}`}
       modalPosition='bottom'
-      isVisible={modalType === MODAL_TYPES.GAS_FEE}
+      isVisible={isVisible ? isVisible : modalType === MODAL_TYPES.GAS_FEE}
       onClose={() => {
-        closeModal();
+        if (onClose) {
+          onClose();
+        } else {
+          closeModal();
+        }
       }}
     >
       <LoadingIndicator />
@@ -52,6 +63,7 @@ function GasFeeModal({ onConfirm, onConfirmTitle, to, value, data, transferParam
             data={data}
             transferParam={transferParam}
             isValidInput={isValidInput}
+            initialLevel={initialLevel}
           />
         </ScrollView>
       </DismissKeyboardView>

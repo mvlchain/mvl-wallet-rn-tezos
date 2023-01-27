@@ -1,20 +1,23 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 
+import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
 import { BigNumber } from 'bignumber.js';
 import BN from 'bn.js';
 import { toChecksumAddress } from 'ethereumjs-util';
+import { BigNumber as BigNumberEther } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { Alert, Pressable } from 'react-native';
 
 import { ChevronRightBlackIcon, ChevronRightLightIcon } from '@@assets/image';
-import useEVMEstimate from '@@components/BasicComponents/GasFeeBoard/EVMLegacy/hooks/useEVMEstimate';
-import useEVMTotal from '@@components/BasicComponents/GasFeeBoard/EVMLegacy/hooks/useEVMTotal';
+import useEVMGas from '@@components/BasicComponents/GasFeeBoard/EVMLegacy/useEVMGas';
+import { IGasSettingInfo } from '@@components/BasicComponents/GasFeeBoard/GasFeeBoard.type';
 import { ModalLayout } from '@@components/BasicComponents/Modals/BaseModal/ModalLayout';
 import { KEYSTONE_TX_CANCELED } from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUI';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
+import { GAS_LEVEL } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
 import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
@@ -25,11 +28,12 @@ import tokenPersistStore from '@@store/token/tokenPersistStore';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { tagLogger } from '@@utils/Logger';
-import { formatBigNumber, BnToEtherBn } from '@@utils/formatBigNumber';
+import { formatBigNumber, BnToEtherBn, etherBNtoBN } from '@@utils/formatBigNumber';
 import { addHexPrefix, BNToHex } from '@@utils/number';
 
-import * as S from './ApprovalModal.style';
+import GasFeeModal from '../../GasFeeModal';
 
+import * as S from './ApprovalModal.style';
 const REVIEW = 'review';
 
 export function safeToChecksumAddress(address: string) {
@@ -53,27 +57,56 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const { tokenList } = tokenPersistStore();
 
   const { transaction, toggleDappTransactionModal, dappTransactionModalVisible } = rpcMethodsUiStore();
-  const { to, value, data } = transactionRequestStore();
-
-  const advanced = false;
-
-  const [gasPrice, setGasPrice] = useState<BigNumber | null>(null);
-  const [gasLimit, setGasLimit] = useState<BigNumber | null>(new BigNumber(21000));
-  const [isPaymentDisable, setIsPaymentDisable] = useState(true);
   logger.log(`transaction: ${JSON.stringify(transaction, null, 2)}`);
+  const { to, value, data } = transactionRequestStore();
+  const [isPaymentDisable, setIsPaymentDisable] = useState(true);
+  const [showGasFeeModal, setShowGasFeeModal] = useState<boolean>(false);
+  const onPressOpenGasFeeModal = () => {
+    setAdvanced(true);
+    setShowGasFeeModal(true);
+  };
+  const onPressCloseGasFeeModal = () => {
+    setShowGasFeeModal(false);
+  };
+  //가스피모달내부의 상태와 별개의 가스 값들,
+  //가스피모달을 오픈할때는 advanced 를 true로 해두어서 주기적인 estimategas를 방지한다.
+  const {
+    level,
+    advanced,
+    total,
+    leveledGasPrice: gasPrice,
+    gasLimit,
+    userInputGasPrice,
+    userInputGasLimit,
+    setUserInputGasPrice,
+    setUserInputGasLimit,
+    setAdvanced,
+    setLevel,
+  } = useEVMGas({
+    to,
+    value,
+    data,
+    isValidInput: true,
+    initialLevel: GAS_LEVEL.MID,
+  });
+
+  const onPressConfirmInGasFeeModal = (param: TransactionRequest, gasSettingInfo: IGasSettingInfo) => {
+    logger.log('press confirm button at gas fee modal!', param.gasPrice?.toString(), param.gasLimit?.toString(), gasSettingInfo);
+    switch (gasSettingInfo.advanced) {
+      case true:
+        setUserInputGasPrice(etherBNtoBN(param.gasPrice as BigNumberEther));
+        setUserInputGasLimit(etherBNtoBN(param.gasLimit as BigNumberEther));
+        break;
+      case false:
+        setAdvanced(advanced);
+        setLevel(gasSettingInfo.level);
+        break;
+    }
+    setShowGasFeeModal(false);
+  };
   const { coinDto } = useCoinDto();
-
-  const leveledGasPrice = useMemo(() => {
-    return gasPrice ? gasPrice.multipliedBy('1.3') : new BigNumber(0);
-  }, [gasPrice]);
-
-  //가스프라이스와 가스리밋이 설정되었을때 토탈가스비용을 계산합니다.
-  const total = useEVMTotal({ advanced, leveledGasPrice, gasLimit, userInputGasPrice: gasPrice, userInputGasLimit: gasLimit });
   const amountStr = useMemo(() => (total && formatBigNumber(total, coinDto.decimals)?.toFixed()) || '-', [total]);
-
   const { price: coinPrice } = useOneTokenPrice(coinDto, amountStr ?? '-');
-  //가스프라이스 조회와 가스사용량을 예측합니다.
-  useEVMEstimate({ advanced, to, value, data, isValidInput: true, setGasLimit, setGasPrice });
 
   useEffect(() => {
     const coin = tokenList[selectedNetwork].find((token) => token.contractAddress === null);
@@ -134,7 +167,9 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
           logger.log(`preparedTransaction: ${JSON.stringify(preparedTransaction, null, 2)}`);
 
           const { to, value, data } = preparedTransaction;
-          logger.log(`gasPrice: ${gasPrice}, gasLimit: ${gasLimit}, total: ${total}`);
+          const finalGasPrice = advanced ? userInputGasPrice : gasPrice;
+          const finalGasLimit = advanced ? userInputGasLimit : gasLimit;
+          logger.log(`gasPrice: ${finalGasPrice}, gasLimit: ${finalGasLimit}, total: ${total}`);
           if (!to || !value || !gasPrice || !gasLimit || !total) {
             throw new Error('baseFee, gas, total ,to, value is required');
           }
@@ -142,8 +177,8 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
           const networkByBase = getNetworkByBase(selectedNetwork);
           await transactionController.approveTransaction(preparedTransaction.id, async () => {
             const tx = await transactionService.sendTransaction(networkByBase, selectedWalletIndex[selectedNetwork], {
-              gasPrice: BnToEtherBn(gasPrice) ?? undefined,
-              gasLimit: BnToEtherBn(gasLimit) ?? undefined,
+              gasPrice: BnToEtherBn(finalGasPrice) ?? undefined,
+              gasLimit: BnToEtherBn(finalGasLimit) ?? undefined,
               to: to,
               value: value,
               data: data ?? undefined,
@@ -168,7 +203,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
         // setState({ transactionConfirmed: false });
       })();
     },
-    [state, transaction, gasPrice, gasLimit, total]
+    [state, transaction, gasPrice, gasLimit, total, advanced, userInputGasPrice, userInputGasLimit]
   );
 
   /**
@@ -268,10 +303,21 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
                 {coinPrice} {settedCurrency}
               </S.GreyText>
             </S.GasBalanceWrapper>
-            <ArrowIcon />
+            <ArrowIcon onPress={onPressOpenGasFeeModal} />
           </S.GasWrapper>
         </S.GasContainer>
       </Pressable>
+      <GasFeeModal
+        onConfirm={onPressConfirmInGasFeeModal}
+        onConfirmTitle={t('confirm')}
+        to={to}
+        value={value}
+        data={data}
+        isValidInput={true}
+        isVisible={showGasFeeModal}
+        onClose={onPressCloseGasFeeModal}
+        initialLevel={level}
+      />
     </ModalLayout>
   );
 };

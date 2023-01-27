@@ -19,12 +19,12 @@ import useTezosEstimate from './hooks/useTezosEstimate';
 import useTezosTipValidation from './hooks/useTezosTipValidation';
 import useTezosTotal from './hooks/useTezosTotal';
 
-const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITezosUseGasProps) => {
+const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, onConfirm }: ITezosUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [level, setLevel] = useState<TGasLevel>(GAS_LEVEL.LOW);
+  const [level, setLevel] = useState<TGasLevel>(initialLevel ?? GAS_LEVEL.LOW);
 
   const [baseFee, setBaseFee] = useState<BigNumber | null>(null);
   const [storageLimit, setStorageLimit] = useState<BigNumber | null>(null);
@@ -132,9 +132,9 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITez
   //버튼활성화여부를 판단합니다.
   const onConfirmValid = useMemo(() => {
     switch (advanced) {
-      case true:
-        return isValidInput && !!baseFee && !!leveledTip;
       case false:
+        return isValidInput && !!baseFee && !!leveledTip;
+      case true:
         return isValidInput && userInputBaseFeeValidation.status && userInputTipValidation.status;
     }
   }, [baseFee, leveledTip, userInputBaseFeeValidation.status, userInputTipValidation.status]);
@@ -142,6 +142,7 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITez
   //버튼을 눌렀을때 실행하는 함수입니다.
   //부모로부터 받은 트랜잭션을 실행할 함수를 감싸서 가스비를 주입해주는 함수입니다.
   const wrappedOnConfirm = () => {
+    if (!onConfirm) return;
     gasLogger.log('press gas confirm: ', 'to:', to, 'value:', value?.toFixed(), 'transferParam:', transferParam);
     if (!onConfirmValid || !to || !total) {
       gasLogger.error('gas is not ready.');
@@ -152,14 +153,14 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, onConfirm }: ITez
     const fee = total.toNumber();
 
     if (transferParam) {
-      onConfirm({ ...transferParam, fee });
+      onConfirm({ ...transferParam, fee }, { advanced, level });
     } else {
       if (!value) {
         gasLogger.error('gas is not ready.');
         return;
       }
       const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toFixed();
-      onConfirm({ to, amount, fee });
+      onConfirm({ to, amount, fee }, { advanced, level });
     }
   };
 
