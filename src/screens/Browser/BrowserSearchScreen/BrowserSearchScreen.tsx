@@ -58,14 +58,16 @@ function BrowserSearchScreen(props: IBrowserSearchScreenProps) {
       <S.ContentContainer>
         <S.History>{t('history')}</S.History>
       </S.ContentContainer>
-      <FlashList
-        data={filteredHistory}
-        extraData={filteredHistory}
-        keyExtractor={(item) => item.link}
-        renderItem={renderDappItem}
-        showsVerticalScrollIndicator={false}
-        estimatedItemSize={filteredHistory.length ?? 0}
-      />
+      {filteredHistory.length > 0 && (
+        <FlashList
+          data={filteredHistory}
+          extraData={filteredHistory}
+          keyExtractor={(item) => item.link}
+          renderItem={renderDappItem}
+          showsVerticalScrollIndicator={false}
+          estimatedItemSize={filteredHistory.length ?? 0}
+        />
+      )}
     </S.Container>
   );
 }
