@@ -73,10 +73,10 @@ const useEIP1559GasTipValidation = ({
 
   const runCheck = () => {
     switch (advanced) {
-      case true:
+      case false:
         check(maxFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
         return;
-      case false:
+      case true:
         check(userInputMaxFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
         return;
     }

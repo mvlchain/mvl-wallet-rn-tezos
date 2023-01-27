@@ -132,9 +132,9 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, onC
   //버튼활성화여부를 판단합니다.
   const onConfirmValid = useMemo(() => {
     switch (advanced) {
-      case true:
-        return isValidInput && !!baseFee && !!leveledTip;
       case false:
+        return isValidInput && !!baseFee && !!leveledTip;
+      case true:
         return isValidInput && userInputBaseFeeValidation.status && userInputTipValidation.status;
     }
   }, [baseFee, leveledTip, userInputBaseFeeValidation.status, userInputTipValidation.status]);
