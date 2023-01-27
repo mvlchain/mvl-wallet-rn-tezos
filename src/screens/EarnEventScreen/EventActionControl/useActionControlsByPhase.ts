@@ -176,17 +176,18 @@ export const useActionControlsByPhase = (
             };
           }),
           onActionButtonPress: async () => {
-            if (event.eventActionScheme) {
-              const [url, queryString] = event.eventActionScheme.split('?');
-              let query = qs.parse(queryString);
-              eventLogger.log(`eventActionScheme: ${event.eventActionScheme}, eventActionAuthRequired: ${event.eventActionAuthRequired}`);
-              if (event.eventActionAuthRequired) {
-                const deferredAuth = await repository.deferAuthForInject();
-                query = { ...query, ...deferredAuth };
-              }
-              const urlSuffix = qs.stringify(query, { addQueryPrefix: true });
-              await openUriForApp(`${url}${urlSuffix}`);
+            if (!event.eventActionScheme) return;
+            eventLogger.log(`eventActionScheme: ${event.eventActionScheme}, eventActionAuthRequired: ${event.eventActionAuthRequired}`);
+            if (!event.eventActionAuthRequired) {
+              await openUriForApp(event.eventActionScheme);
+              return;
             }
+            const [url, queryString] = event.eventActionScheme.split('?');
+            let query = qs.parse(queryString);
+            const deferredAuth = await repository.deferAuthForInject();
+            query = { ...query, ...deferredAuth };
+            const urlSuffix = qs.stringify(query, { addQueryPrefix: true });
+            await openUriForApp(`${url}${urlSuffix}`);
           },
         };
       }
