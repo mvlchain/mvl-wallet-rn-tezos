@@ -57,5 +57,5 @@ export interface IEventDetailsUiState {
   details: IEventDetails;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
-  refresh: (clearDeepLink: boolean) => Promise<void>;
+  refresh: (newDeepLink?: ThirdPartyDeepLink) => Promise<void>;
 }

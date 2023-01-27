@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import Toast from 'react-native-toast-message';
+
 import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-toast-message';
 
 import Webview from '@@components/BasicComponents/Webview';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
@@ -143,7 +144,7 @@ export function EarnEventDetailsScreen() {
       // TODO: disconnected successfully. do following tasks
       //  1. third-party disconnection modal
       console.log(`Details> disconnected and refreshing`);
-      uiState?.refresh(true);
+      uiState?.refresh();
     }
   }, [uiState]);
 
