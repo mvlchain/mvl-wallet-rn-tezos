@@ -46,9 +46,6 @@ class MockEarnEventRepository extends AbsTestEarnEventRepository {
     const res = mockApi<EarnEventDto[]>('v1/earn-event/list.json');
     return Promise.resolve(res ?? []);
   }
-  getUserPoints(eventId: string): Promise<EarnEventCurrentResponseDto[]> {
-    return Promise.resolve([]);
-  }
 }
 
 describe('useEarnEventList', () => {
