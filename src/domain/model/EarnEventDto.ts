@@ -27,6 +27,7 @@ export interface EarnEventDto {
    * DeepLink that will execute when the EventActionButton clicked
    */
   eventActionScheme: string | null;
+  eventActionAuthRequired: boolean;
 
   currency: string | null;
   currencyIconUrl?: string | null;

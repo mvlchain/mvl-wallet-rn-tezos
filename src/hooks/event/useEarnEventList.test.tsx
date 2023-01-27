@@ -15,6 +15,7 @@ import {
   EarnEventClaimCheckResponseDto,
   EarnEventGetClaimResponseDto,
   SimpleResponseDto,
+  DeferredAuthValidateDto,
 } from '@@generated/generated-scheme';
 import { getEventTimeDescriptionByEventPhase, useEarnEventList } from '@@hooks/event/useEarnEventList';
 import { renderHook, waitFor, Providers } from '@@test/test-utils';
@@ -67,6 +68,10 @@ class MockEarnEventRepository implements EarnEventRepository {
     throw new UnsupportOperationError();
   }
   disconnectThirdParty(appId: string): Promise<SimpleResponseDto> {
+    throw new UnsupportOperationError();
+  }
+
+  deferAuthForInject(): Promise<DeferredAuthValidateDto> {
     throw new UnsupportOperationError();
   }
 }
