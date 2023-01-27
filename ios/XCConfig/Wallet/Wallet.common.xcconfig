@@ -7,9 +7,6 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-// App Icon
-WALLET_APP_ICON = AppIcon
-
 // App Version
 WALLET_APP_VERSION = 1.0.0
 
