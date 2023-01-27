@@ -16,7 +16,7 @@ import { EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { useDi } from '@@hooks/useDi';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
-import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
+import { IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreen.type';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import { tagLogger } from '@@utils/Logger';
 import { format, isSvg } from '@@utils/strings';
