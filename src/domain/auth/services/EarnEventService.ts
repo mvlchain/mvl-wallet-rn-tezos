@@ -30,6 +30,7 @@ import { EarnEventRepository } from '../repositories/EarnEventRepository';
 export interface EarnEventService {
   getEarnEventDetailsUiState(id: string, data?: EarnEventDto, deepLink?: ThirdPartyDeepLink): Promise<IEventDetailsGroup>;
   refreshThirdParty(details: IEventDetails): Promise<IEventThirdParty>;
+  getClaimStatusInformation(details: IEventDetails, thirdParty: IEventThirdParty): Promise<ClaimStatusInformation | undefined>;
 }
 
 @injectable()
@@ -44,6 +45,8 @@ export class EarnEventServiceImpl {
       // event not found, exit
       throw new NotFoundError('Event not found');
     }
+
+    console.log(`Event> handling getEarnEventDetailsUiState(), with deeplink: ${JSON.stringify(deepLink)}`);
 
     // [details]
     const details: IValidEventDetails = {
