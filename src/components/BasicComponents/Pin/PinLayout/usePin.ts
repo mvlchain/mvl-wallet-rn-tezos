@@ -137,6 +137,7 @@ function usePin() {
       return;
     }
 
+    await SecureKeychain.setGenericPassword(input, SECURE_TYPES.REMEMBER_ME);
     success(input);
     setState({ step: PIN_STEP.FINISH });
   };
