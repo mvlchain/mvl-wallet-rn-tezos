@@ -23,6 +23,7 @@ import { useDi } from '@@hooks/useDi';
 import { IEventDetails, IEventThirdParty, IThirdPartyConnection } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreentype';
 import { ThirdPartyApp } from '@@screens/EarnEventScreen/ThirdPartyApp';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import utilStore from '@@store/util/utilStore';
 import { tagLogger } from '@@utils/Logger';
 import { assembleUrl, evaluateUrlScheme } from '@@utils/regex';
 import { isNotBlank, format, isBlank } from '@@utils/strings';
@@ -67,6 +68,7 @@ export const useEarnEventDetailsUiState = (
   const { t } = useTranslation();
   const { openModal, closeModal } = globalModalStore();
   const { connectThirdParty } = useConnectThirdParty();
+  const { startLoading, endLoading } = utilStore();
 
   useAppStateChange((isAppStateVisible: boolean) => {
     if (isAppStateVisible) {
@@ -210,30 +212,41 @@ export const useEarnEventDetailsUiState = (
   // State<ThirdParty>
   useEffect(() => {
     (async () => {
-      await refreshThirdParty();
+      try {
+        startLoading();
+        await refreshThirdParty();
+      } finally {
+        endLoading();
+      }
     })();
   }, [details]);
 
   // UseCase: useClaimStatusInformation, State<ClaimStatusInfo>
   useEffect(() => {
     (async () => {
-      const { event, phase } = details;
-      if (!event) return;
+      startLoading();
 
-      const thirdPartyConnection = thirdParty.connection;
-      if (phase === EventPhase.OnClaim) {
-        // get an OnClaim phase event id.
-        const claimStatus = await repository.getClaimStatus(event.id);
-        const claimInfo = await repository.getClaimInformation(event.id);
-        const fee = new Decimal(claimInfo.fee);
+      try {
+        const { event, phase } = details;
+        if (!event) return;
 
-        // isTxFeeVisible: 'transaction fee' component is visible when the claimInfo.fee is greater then zero.
-        setClaimStatusInfo({
-          ...claimStatus,
-          ...claimInfo,
-          isTxFeeVisible: fee.toNumber() > 0,
-          isEventActionButtonEnabled: isEventActionButtonEnabled(phase, thirdPartyConnection, claimInfo, thirdParty.isThirdPartySupported),
-        });
+        const thirdPartyConnection = thirdParty.connection;
+        if (phase === EventPhase.OnClaim) {
+          // get an OnClaim phase event id.
+          const claimStatus = await repository.getClaimStatus(event.id);
+          const claimInfo = await repository.getClaimInformation(event.id);
+          const fee = new Decimal(claimInfo.fee);
+
+          // isTxFeeVisible: 'transaction fee' component is visible when the claimInfo.fee is greater then zero.
+          setClaimStatusInfo({
+            ...claimStatus,
+            ...claimInfo,
+            isTxFeeVisible: fee.toNumber() > 0,
+            isEventActionButtonEnabled: isEventActionButtonEnabled(phase, thirdPartyConnection, claimInfo, thirdParty.isThirdPartySupported),
+          });
+        }
+      } finally {
+        endLoading();
       }
     })();
   }, [thirdParty]);
