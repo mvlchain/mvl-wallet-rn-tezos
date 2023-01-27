@@ -1,0 +1,10 @@
+diff --git a/node_modules/react-native-vision-camera/VisionCamera.podspec b/node_modules/react-native-vision-camera/VisionCamera.podspec
+index cbdf58e..2b4ad28 100644
+--- a/node_modules/react-native-vision-camera/VisionCamera.podspec
++++ b/node_modules/react-native-vision-camera/VisionCamera.podspec
+@@ -64,4 +64,5 @@ Pod::Spec.new do |s|
+   s.dependency "React-callinvoker"
+   s.dependency "React"
+   s.dependency "React-Core"
++  s.dependency "RNReanimated"
+ end
