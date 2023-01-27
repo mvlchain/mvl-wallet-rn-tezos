@@ -1,23 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Animated, BackHandler, Easing } from 'react-native';
 
+import { TOAST_TYPE } from '@@constants/toastConfig.constant';
 import useEarnEventMutation from '@@hooks/queries/useEarnEventMutation';
 import useEarnEventStatusQuery from '@@hooks/queries/useEarnEventStatusQuery';
+import useToast from '@@hooks/useToast';
 import { TRootStackNavigationProps } from '@@navigation/RootStack/RootStack.type';
 import utilStore from '@@store/util/utilStore';
 
 import { TTransactionHistoryRouteProps } from './EarnEventTransferringScreen.type';
 
 const useEarnEventTransferringScreen = () => {
+  const { t } = useTranslation();
   const { params } = useRoute<TTransactionHistoryRouteProps>();
   type rootStackProps = TRootStackNavigationProps<'MAIN'>;
   const rootNavigation = useNavigation<rootStackProps>();
   const { turnOffGlobalLoading } = utilStore();
+  const { showToast } = useToast();
 
   const [isEndMutation, setIsEndMutation] = useState(true);
 
+  // claim status
   const { refetch } = useEarnEventStatusQuery(params.eventId, {
     enabled: isEndMutation,
     refetchInterval: (data) => {
@@ -31,10 +37,18 @@ const useEarnEventTransferringScreen = () => {
       }
     },
   });
+
+  // claim request
   const { mutate } = useEarnEventMutation({
     onSuccess: () => {
       setIsEndMutation(true);
       refetch();
+    },
+    onError: (error) => {
+      setIsEndMutation(false);
+
+      showToast(TOAST_TYPE.ERROR, t('msg_error_claim_failure'));
+      rootNavigation.goBack();
     },
   });
 
