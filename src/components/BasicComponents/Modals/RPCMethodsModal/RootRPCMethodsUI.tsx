@@ -22,6 +22,7 @@ import { tagLogger } from '@@utils/Logger';
 import { fromWei, hexToBN } from '@@utils/number';
 
 import Approval from './Approval';
+import SignModal from './SignModal';
 
 export const KEYSTONE_TX_CANCELED = 'KeystoneError#Tx_canceled';
 
@@ -192,102 +193,17 @@ const RootRPCMethodsUI = () => {
 
   const toggleExpandedMessage = () => setShowExpandedMessage(!showExpandedMessage);
 
-  const renderPersonalMessage = (messageParams: any) => {
-    return (
-      <View>
-        <Text>{hexToText(messageParams.data)}</Text>
-      </View>
+  const renderSigningModal = () =>
+    showPendingApproval?.type === ApprovalTypes.SIGN_MESSAGE && (
+      <SignModal
+        isVisible={showPendingApproval?.type === ApprovalTypes.SIGN_MESSAGE}
+        signType={signType}
+        signMessageParams={signMessageParams}
+        onConfirm={() => onSignConfirmAction(signType)}
+        onCancel={() => onSignRejectAction(signType)}
+        onClose={() => onSignRejectAction(signType)}
+      />
     );
-  };
-  const renderTypedMessageV3 = (obj: any) => {
-    return Object.keys(obj).map((key) => (
-      <View key={key}>
-        {obj[key] && typeof obj[key] === 'object' ? (
-          <View>
-            <Text>{key}:</Text>
-            <View>{renderTypedMessageV3(obj[key])}</View>
-          </View>
-        ) : (
-          <Text>
-            <Text>{key}:</Text> {`${obj[key]}`}
-          </Text>
-        )}
-      </View>
-    ));
-  };
-
-  const renderTypedMessage = (messageParams: any) => {
-    if (messageParams.version === 'V1') {
-      return (
-        <View>
-          {messageParams.data.map((obj: any, i: number) => (
-            <View key={`${obj.name}_${i}`}>
-              <Text>{obj.name}:</Text>
-              <Text key={obj.name}>{` ${obj.value}`}</Text>
-            </View>
-          ))}
-        </View>
-      );
-    }
-    if (messageParams.version === 'V3' || messageParams.version === 'V4') {
-      const { message } = JSON.parse(messageParams.data);
-      return renderTypedMessageV3(message);
-    }
-  };
-
-  const renderSigningModal = () => (
-    <Modal
-      isVisible={showPendingApproval?.type === ApprovalTypes.SIGN_MESSAGE}
-      animationIn='slideInUp'
-      animationOut='slideOutDown'
-      style={styles.bottomModal}
-      backdropColor={colors.overlay.default}
-      backdropOpacity={1}
-      animationInTiming={600}
-      animationOutTiming={600}
-      onBackButtonPress={() => onSignRejectAction(signType)}
-      swipeDirection={'down'}
-      propagateSwipe
-    >
-      {signType === 'typed' && renderTypedMessage(signMessageParams)}
-      {signType === 'personal' && renderPersonalMessage(signMessageParams)}
-      <Button title={'Sign'} onPress={() => onSignConfirmAction(signType)} />
-      <Button title={'Cancel'} onPress={() => onSignRejectAction(signType)} />
-      {/*{signType === 'personal' && (*/}
-      {/*  <PersonalSign*/}
-      {/*    navigation={navigation}*/}
-      {/*    messageParams={signMessageParams}*/}
-      {/*    onCancel={onSignAction}*/}
-      {/*    onConfirm={onSignAction}*/}
-      {/*    currentPageInformation={currentPageMeta}*/}
-      {/*    toggleExpandedMessage={toggleExpandedMessage}*/}
-      {/*    showExpandedMessage={showExpandedMessage}*/}
-      {/*  />*/}
-      {/*)}*/}
-      {/*{signType === 'typed' && (*/}
-      {/*  <TypedSign*/}
-      {/*    navigation={navigation}*/}
-      {/*    messageParams={signMessageParams}*/}
-      {/*    onCancel={onSignAction}*/}
-      {/*    onConfirm={onSignAction}*/}
-      {/*    currentPageInformation={currentPageMeta}*/}
-      {/*    toggleExpandedMessage={toggleExpandedMessage}*/}
-      {/*    showExpandedMessage={showExpandedMessage}*/}
-      {/*  />*/}
-      {/*)}*/}
-      {/*{signType === 'eth' && (*/}
-      {/*  <MessageSign*/}
-      {/*    navigation={navigation}*/}
-      {/*    messageParams={signMessageParams}*/}
-      {/*    onCancel={onSignAction}*/}
-      {/*    onConfirm={onSignAction}*/}
-      {/*    currentPageInformation={currentPageMeta}*/}
-      {/*    toggleExpandedMessage={toggleExpandedMessage}*/}
-      {/*    showExpandedMessage={showExpandedMessage}*/}
-      {/*  />*/}
-      {/*)}*/}
-    </Modal>
-  );
 
   const renderDappTransactionModal = () => dappTransactionModalVisible && <Approval isVisible={dappTransactionModalVisible} />;
 
