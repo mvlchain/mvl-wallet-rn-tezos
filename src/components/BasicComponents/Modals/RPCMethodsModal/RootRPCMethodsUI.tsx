@@ -12,7 +12,6 @@ import Modal from 'react-native-modal';
 import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsModal/RootRPCMethodsUIStore';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase } from '@@constants/network.constant';
-import { TRANSACTION_METHOD, TRANSFER_FUNCTION_SIGNATURE } from '@@constants/transaction.constant';
 import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
 import { transactionRequestStore } from '@@store/transaction/transactionRequestStore';
@@ -20,7 +19,6 @@ import walletPersistStore from '@@store/wallet/walletPersistStore';
 import { mmLightColors } from '@@style/colors';
 import { ApprovalTypes } from '@@utils/BackgroundBridge/RPCMethodMiddleware';
 import { tagLogger } from '@@utils/Logger';
-import { formatBigNumber } from '@@utils/formatBigNumber';
 import { fromWei, hexToBN } from '@@utils/number';
 
 import Approval from './Approval';
@@ -39,7 +37,6 @@ const RootRPCMethodsUI = () => {
   const colors = mmLightColors;
   const blockChainService = useDi('WalletBlockChainService');
   const signMessageService = useDi('SignMessageService');
-  const transactionServiceEthers = useDi('TransactionServiceEthers');
 
   const { coinDto } = useCoinDto();
   const { selectedNetwork, selectedWalletIndex } = walletPersistStore();
@@ -84,14 +81,6 @@ const RootRPCMethodsUI = () => {
     });
   };
 
-  const checkTransfer = (data: string) => {
-    const fourByteSignature = data.substr(0, 10);
-    if (fourByteSignature === TRANSFER_FUNCTION_SIGNATURE) {
-      return true;
-    }
-    return false;
-  };
-
   const onUnapprovedTransaction = useCallback(
     async (transactionMeta: any) => {
       logger.log(`WB INCOMING> 8. onUnapprovedTransaction transactionMeta: ${JSON.stringify(transactionMeta, null, 2)}`);
@@ -118,13 +107,8 @@ const RootRPCMethodsUI = () => {
       logger.log('asset:  ', asset);
       transactionMeta.transaction.gas = hexToBN(gas);
       transactionMeta.transaction.gasPrice = gasPrice && hexToBN(gasPrice);
-      let valueWithDefaultZero = value || '0';
-      if (!value && checkTransfer(data)) {
-        const weiValue = transactionServiceEthers.decodeFunctionData(TRANSACTION_METHOD.TRANSFER, data);
-        const bnValue = new BigNumber(weiValue);
-        const value = formatBigNumber(bnValue, coinDto.decimals);
-        valueWithDefaultZero = value.toFixed();
-      }
+      const valueWithDefaultZero = value || '0';
+
       // const valueWithDefaultZero = value || '0';
       transactionMeta.transaction.value = hexToBN(valueWithDefaultZero);
       transactionMeta.transaction.readableValue = fromWei(transactionMeta.transaction.value);

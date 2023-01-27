@@ -6,7 +6,7 @@ import { GAS_ESTIMATE_TYPES } from '@metamask/controllers';
 import { BigNumber } from 'bignumber.js';
 import BN from 'bn.js';
 import { toChecksumAddress } from 'ethereumjs-util';
-import { BigNumber as BigNumberEther } from 'ethers';
+import { BytesLike, BigNumber as BigNumberEther } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { Alert, Pressable } from 'react-native';
 
@@ -19,6 +19,7 @@ import rpcMethodsUiStore from '@@components/BasicComponents/Modals/RPCMethodsMod
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { GAS_LEVEL } from '@@constants/gas.constant';
 import { getNetworkByBase } from '@@constants/network.constant';
+import { TRANSACTION_METHOD, TRANSFER_FUNCTION_SIGNATURE } from '@@constants/transaction.constant';
 import useCoinDto from '@@hooks/useCoinDto';
 import { useDi } from '@@hooks/useDi';
 import useOneTokenPrice from '@@hooks/useOneTokenPrice';
@@ -61,6 +62,9 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
   const { to, value, data } = transactionRequestStore();
   const [isPaymentDisable, setIsPaymentDisable] = useState(true);
   const [showGasFeeModal, setShowGasFeeModal] = useState<boolean>(false);
+  const [displayValue, setDisplayValue] = useState('0');
+  const [displayTo, setDisplayTo] = useState('0');
+
   const onPressOpenGasFeeModal = () => {
     setAdvanced(true);
     setShowGasFeeModal(true);
@@ -96,6 +100,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       case true:
         setUserInputGasPrice(etherBNtoBN(param.gasPrice as BigNumberEther));
         setUserInputGasLimit(etherBNtoBN(param.gasLimit as BigNumberEther));
+
         break;
       case false:
         setAdvanced(advanced);
@@ -238,6 +243,30 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     }
   }, [gasPrice]);
 
+  const checkTransfer = (data: BytesLike | null) => {
+    if (!data) return false;
+    const fourByteSignature = data.toString().substr(0, 10);
+    if (fourByteSignature === TRANSFER_FUNCTION_SIGNATURE) {
+      return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (checkTransfer(transaction.data)) {
+      const decodeFunctionData = transactionService.decodeFunctionData(TRANSACTION_METHOD.TRANSFER, transaction.data);
+      const weiValue = decodeFunctionData[1].toString();
+      const _to = decodeFunctionData[0];
+      const bnValue = new BigNumber(weiValue);
+      const fomalizedValue = formatBigNumber(bnValue, coinDto.decimals);
+      setDisplayValue(fomalizedValue.toFixed());
+      setDisplayTo(_to);
+    } else if (value) {
+      setDisplayValue(value.toFixed());
+      setDisplayTo(to ?? '');
+    }
+  }, [transaction.data]);
+
   /**
    * Returns transaction object with gas and gasPrice in hex format, value set to 0 in hex format
    * and to set to selectedAsset address
@@ -281,7 +310,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
     >
       {/* <S.Label>{label}</S.Label> */}
       <S.AmountText>
-        {value?.toFixed()} {transaction?.selectedAsset?.symbol}
+        {displayValue} {transaction?.selectedAsset?.symbol}
       </S.AmountText>
       <S.ContentContainer>
         <S.GreyText>{t('from')}</S.GreyText>
@@ -289,7 +318,7 @@ const Approval = ({ isVisible }: { isVisible: boolean }) => {
       </S.ContentContainer>
       <S.ContentContainer>
         <S.GreyText>{t('to')}</S.GreyText>
-        <S.BlackText>{transaction?.to}</S.BlackText>
+        <S.BlackText>{displayTo}</S.BlackText>
       </S.ContentContainer>
       <Pressable>
         <S.GasContainer>
