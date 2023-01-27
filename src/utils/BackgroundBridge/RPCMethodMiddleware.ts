@@ -1,5 +1,3 @@
-// @ts-ignore
-import { ethErrors } from 'eth-json-rpc-errors';
 import { createAsyncMiddleware } from 'json-rpc-engine';
 import { getVersion } from 'react-native-device-info';
 
@@ -50,9 +48,7 @@ interface RPCMethodsMiddleParameters {
 export const checkActiveAccountAndChainId = ({ address, chainId, activeAccounts }: any) => {
   if (address) {
     if (!activeAccounts || !activeAccounts.length || address.toLowerCase() !== activeAccounts?.[0]?.toLowerCase()) {
-      throw ethErrors.rpc.invalidParams({
-        message: `Invalid parameters: must provide an Ethereum address.`,
-      });
+      throw new Error(`Invalid parameters: must provide an Ethereum address.`);
     }
   }
 
@@ -229,7 +225,7 @@ export const getRpcMethodMiddleware = ({
         logger.log(`WB INCOMING> 6. eth_signTransaction`);
         // This is implemented later in our middleware stack – specifically, in
         // eth-json-rpc-middleware – but our UI does not support it.
-        throw ethErrors.rpc.methodNotSupported();
+        throw new Error('-32004');
       },
       eth_sign: async () => {
         logger.log(`WB INCOMING> 6. eth_sign`);
@@ -259,7 +255,7 @@ export const getRpcMethodMiddleware = ({
           res.result = rawSig;
         } else {
           res.result = AppConstants.ETH_SIGN_ERROR;
-          throw ethErrors.rpc.invalidParams(AppConstants.ETH_SIGN_ERROR);
+          throw new Error('eth_sign requires 32 byte message hash');
         }
       },
 
@@ -406,59 +402,6 @@ export const getRpcMethodMiddleware = ({
           appVersion = await getVersion();
         }
         res.result = `MetaMask/${appVersion}/Mobile`;
-      },
-
-      wallet_scanQRCode: () =>
-        new Promise<void>((resolve, reject) => {
-          checkTabActive();
-          navigation.navigate('QRScanner', {
-            onScanSuccess: (data: any) => {
-              const regex = new RegExp(req.params[0]);
-              if (regex && !regex.exec(data)) {
-                reject({ message: 'NO_REGEX_MATCH', data });
-              } else if (!regex && !/^(0x){1}[0-9a-fA-F]{40}$/i.exec(data.target_address)) {
-                reject({
-                  message: 'INVALID_ETHEREUM_ADDRESS',
-                  data: data.target_address,
-                });
-              }
-              let result = data;
-              if (data.target_address) {
-                result = data.target_address;
-              } else if (data.scheme) {
-                result = JSON.stringify(data);
-              }
-              res.result = result;
-              resolve();
-            },
-            onScanError: (e: { toString: () => any }) => {
-              throw ethErrors.rpc.internal(e.toString());
-            },
-          });
-        }),
-
-      wallet_watchAsset: async () => {
-        logger.log(`wallet_watchAsset called`);
-        res.result = true;
-        // const {
-        //   params: {
-        //     options: { address, decimals, image, symbol },
-        //     type,
-        //   },
-        // } = req;
-        // const { TokensController } = Engine.context;
-        //
-        // checkTabActive();
-        // try {
-        //   const watchAssetResult = await TokensController.watchAsset({ address, symbol, decimals, image }, type);
-        //   await watchAssetResult.result;
-        //   res.result = true;
-        // } catch (error) {
-        //   if ((error as Error).message === 'User rejected to watch the asset.') {
-        //     throw ethErrors.provider.userRejectedRequest();
-        //   }
-        //   throw error;
-        // }
       },
 
       /**

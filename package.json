@@ -73,7 +73,6 @@
     "buffer": "^6.0.3",
     "decimal.js": "^10.4.0",
     "end-of-stream": "^1.4.4",
-    "eth-json-rpc-errors": "^2.0.2",
     "eth-json-rpc-filters": "^5.0.0",
     "eth-json-rpc-infura": "^5.1.0",
     "eth-json-rpc-middleware": "4.3.0",
