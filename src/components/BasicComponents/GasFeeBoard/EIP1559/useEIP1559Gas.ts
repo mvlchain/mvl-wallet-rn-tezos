@@ -143,9 +143,9 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm, initialLevel 
   //버튼활성화여부를 판단합니다.
   const onConfirmValid = useMemo(() => {
     switch (advanced) {
-      case true:
-        return isValidInput && !!maxFeePerGas && !!leveledMaxFeePriorityFeePerGas && !!gasLimit;
       case false:
+        return isValidInput && !!maxFeePerGas && !!leveledMaxFeePriorityFeePerGas && !!gasLimit;
+      case true:
         return isValidInput && EIP1559GasPriceInputValidation.status && EIP1559GasTipInputValidation.status && EIP1559GasLimitInputValidation.status;
     }
   }, [

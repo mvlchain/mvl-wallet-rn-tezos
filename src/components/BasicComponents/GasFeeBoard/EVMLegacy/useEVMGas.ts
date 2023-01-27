@@ -90,9 +90,9 @@ const useEVMGas = ({ to, value, data, isValidInput, initialLevel, onConfirm }: I
   //버튼활성화여부를 판단합니다.
   const onConfirmValid = useMemo(() => {
     switch (advanced) {
-      case true:
-        return isValidInput && !!leveledGasPrice && !!gasLimit;
       case false:
+        return isValidInput && !!leveledGasPrice && !!gasLimit;
+      case true:
         return isValidInput && EVMGasPriceInputValidation.status && EVMGasLimitInputValidation.status;
     }
   }, [leveledGasPrice, gasLimit, EVMGasPriceInputValidation.status, EVMGasLimitInputValidation.status]);

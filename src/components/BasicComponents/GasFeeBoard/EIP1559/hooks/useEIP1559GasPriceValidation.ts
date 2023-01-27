@@ -92,10 +92,10 @@ const useEIP1559GasPriceValidation = ({
 
   const runCheck = () => {
     switch (advanced) {
-      case true:
+      case false:
         check(maxFeePerGas, lastBaseFeePerGas, leveledMaxFeePriorityFeePerGas, gasLimit);
         return;
-      case false:
+      case true:
         check(userInputMaxFeePerGas, lastBaseFeePerGas, userInputMaxPriorityFeePerGas, userInputGasLimit);
         return;
     }
