@@ -22,7 +22,7 @@ import { MODAL_TYPES } from '../../GlobalModal';
 import * as S from './ConfirmSendModal.style';
 import { IConfirmSendModalProps } from './ConfirmSendModal.type';
 
-function ConfirmSendModal({ onConfirm, tokenDto, to, value }: IConfirmSendModalProps) {
+function ConfirmSendModal({ onConfirm, tokenDto, to, value, onClose }: IConfirmSendModalProps) {
   const { t } = useTranslation();
   const { modalType, closeModal } = globalModalStore();
   const { selectedNetwork: pickNetwork } = walletPersistStore();
@@ -48,9 +48,11 @@ function ConfirmSendModal({ onConfirm, tokenDto, to, value }: IConfirmSendModalP
       modalPosition='bottom'
       isVisible={modalType === MODAL_TYPES.CONFIRM_SEND}
       onClose={() => {
+        onClose();
         closeModal();
       }}
       onCancel={() => {
+        onClose();
         closeModal();
       }}
       onConfirm={onConfirm}

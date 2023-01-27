@@ -17,6 +17,7 @@ function TezosGas({
   transferParam,
   isValidInput,
   initialLevel,
+  isHoldingGasEstimatePolling,
 }: ITezosGasComponentProps) {
   const { advanced, level, setLevel, total, toggleGasAdvanced, wrappedOnConfirm, onConfirmValid, userInputs } = useTezosGas({
     to,
@@ -25,6 +26,7 @@ function TezosGas({
     isValidInput,
     onConfirm,
     initialLevel,
+    isHoldingGasEstimatePolling,
   });
 
   return (

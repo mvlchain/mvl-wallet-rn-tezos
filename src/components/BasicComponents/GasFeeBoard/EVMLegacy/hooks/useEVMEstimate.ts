@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { BytesLike } from 'ethers';
+import { is } from 'immer/dist/internal';
 
 import { getNetworkByBase } from '@@constants/network.constant';
 import useDebounce from '@@hooks/useDebounce';
@@ -19,6 +20,7 @@ const useEVMEstimate = ({
   value,
   data,
   isValidInput,
+  isHoldingGasEstimatePolling,
   setGasLimit,
   setGasPrice,
 }: {
@@ -27,6 +29,7 @@ const useEVMEstimate = ({
   value?: BigNumber | null;
   data?: BytesLike | null;
   isValidInput: boolean;
+  isHoldingGasEstimatePolling?: boolean;
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setGasPrice: Dispatch<SetStateAction<BigNumber | null>>;
 }) => {
@@ -69,6 +72,7 @@ const useEVMEstimate = ({
     if (!isValidInput) return;
     //유저가 직접 입력하는 동안에는 주기적으로 가스를 조회하지 않는다.
     if (advanced) return;
+    if (isHoldingGasEstimatePolling) return;
     estimateGas({ to, value, data });
   }, 20000);
 };

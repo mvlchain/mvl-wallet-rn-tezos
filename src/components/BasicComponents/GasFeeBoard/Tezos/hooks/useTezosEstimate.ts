@@ -19,6 +19,7 @@ const useTezosEstimate = ({
   value,
   transferParam,
   isValidInput,
+  isHoldingGasEstimatePolling,
   setGasLimit,
   setBaseFee,
   setStorageFee,
@@ -29,6 +30,7 @@ const useTezosEstimate = ({
   value?: BigNumber | null;
   transferParam?: TransferParams | null;
   isValidInput: boolean;
+  isHoldingGasEstimatePolling?: boolean;
   setGasLimit: Dispatch<SetStateAction<BigNumber | null>>;
   setBaseFee: Dispatch<SetStateAction<BigNumber | null>>;
   setStorageLimit: Dispatch<SetStateAction<BigNumber | null>>;
@@ -83,6 +85,7 @@ const useTezosEstimate = ({
     if (!isValidInput) return;
     //유저가 직접 입력하는 동안에는 주기적으로 가스를 조회하지 않는다.
     if (advanced) return;
+    if (isHoldingGasEstimatePolling) return;
     estimateGas({ to, value, transferParam });
   }, 20000);
 };

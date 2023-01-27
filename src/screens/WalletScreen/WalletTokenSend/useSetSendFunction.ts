@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { TransferParams, WalletOperation } from '@taquito/taquito';
@@ -43,6 +45,8 @@ const useSetSendFunction = () => {
   const network = getNetworkConfig(selectedNetwork);
   const navigation = useNavigation<TTransactionResultRootStackProps>();
 
+  const [isHoldingGasEstimatePolling, setIsHoldingGasEstimatePolling] = useState<boolean>(false);
+
   const checkPin = async () => {
     try {
       let pinModalResolver, pinModalRejector;
@@ -51,7 +55,7 @@ const useSetSendFunction = () => {
         pinModalRejector = reject;
       });
       pinSet({ pinMode: PIN_MODE.CONFIRM, layout: PIN_LAYOUT.MODAL, pinModalResolver, pinModalRejector });
-      openModal(MODAL_TYPES.CONFIRM_TX_PIN, undefined);
+      openModal(MODAL_TYPES.CONFIRM_TX_PIN, () => setIsHoldingGasEstimatePolling(false));
       await pinModalObserver;
     } catch (err) {
       console.log(err);
@@ -138,7 +142,7 @@ const useSetSendFunction = () => {
     }
   };
 
-  return { send };
+  return { send, isHoldingGasEstimatePolling, setIsHoldingGasEstimatePolling };
 };
 
 export default useSetSendFunction;

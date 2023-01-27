@@ -19,7 +19,7 @@ import useTezosEstimate from './hooks/useTezosEstimate';
 import useTezosTipValidation from './hooks/useTezosTipValidation';
 import useTezosTotal from './hooks/useTezosTotal';
 
-const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, onConfirm }: ITezosUseGasProps) => {
+const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, isHoldingGasEstimatePolling, onConfirm }: ITezosUseGasProps) => {
   const gasLogger = tagLogger('Gas');
   const { setTotal } = gasStore();
   const { t } = useTranslation();
@@ -57,7 +57,18 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, onC
     userInputTip,
   });
   //가스프라이스 조회와 가스사용량을 예측합니다.
-  useTezosEstimate({ advanced, to, value, transferParam, isValidInput, setGasLimit, setStorageFee, setStorageLimit, setBaseFee });
+  useTezosEstimate({
+    advanced,
+    to,
+    value,
+    transferParam,
+    isValidInput,
+    isHoldingGasEstimatePolling,
+    setGasLimit,
+    setStorageFee,
+    setStorageLimit,
+    setBaseFee,
+  });
 
   useEffect(() => {
     setUserInputBaseFee(baseFee);
