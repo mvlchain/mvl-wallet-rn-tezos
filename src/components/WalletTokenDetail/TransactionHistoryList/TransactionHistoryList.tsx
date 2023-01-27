@@ -30,7 +30,7 @@ function TransactionHistoryList() {
       </S.TransactionHistoryLabelWrapper>
       {filteredData && filteredData.length > 0 ? (
         <S.HistoryList
-          refreshControl={<RefreshControl onRefresh={() => getHistory()} refreshing={false} tintColor='transparent' colors={['transparent']} />}
+          refreshControl={<RefreshControl onRefresh={() => getHistory()} refreshing={false} tintColor='rgba(0, 137, 231,0.5)' />}
           data={filteredData}
           renderItem={({ item }) => <TransactionHistoryListItem {...item} />}
           keyExtractor={(item, idx) => item.hash}
