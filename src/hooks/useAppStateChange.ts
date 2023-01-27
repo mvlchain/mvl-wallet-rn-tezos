@@ -14,7 +14,7 @@ import { AppState, AppStateStatus } from 'react-native';
  *
  * @param onAppStateChanged
  */
-export const useAppStateChange = (onAppStateChanged: (isAppStateVisible: boolean) => void) => {
+export const useAppStateChange = (onAppStateChanged: (isAppStateVisible: boolean) => void, dependencies: unknown[]) => {
   const currentAppState = useRef(AppState.currentState);
   const [appState, setAppState] = useState(AppState.currentState);
 
@@ -23,7 +23,7 @@ export const useAppStateChange = (onAppStateChanged: (isAppStateVisible: boolean
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, dependencies);
 
   const onAppStateChanging = (nextAppState: AppStateStatus) => {
     if (currentAppState.current.match(/inactive|background/) && nextAppState === 'active') {

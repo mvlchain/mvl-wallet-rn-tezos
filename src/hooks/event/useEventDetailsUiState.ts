@@ -4,7 +4,6 @@ import Url from 'url';
 
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import Decimal from 'decimal.js';
 import qs from 'qs';
 import { useTranslation } from 'react-i18next';
 
@@ -98,17 +97,6 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
 
   eventLogger.log(`useEarnEventDetailsUiState() starts with deepLink: ${JSON.stringify(deepLink)}`);
 
-  const { t } = useTranslation();
-  const { openModal, closeModal } = globalModalStore();
-  const { connectThirdParty } = useConnectThirdParty();
-  const { startLoading, endLoading } = utilStore();
-
-  useAppStateChange((isAppStateVisible: boolean) => {
-    if (isAppStateVisible) {
-      refresh();
-    }
-  });
-
   const [args, setArgs] = useState({
     id,
     data,
@@ -130,6 +118,15 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
     refresh: async (clearDeepLink: boolean) => {},
   });
 
+  useAppStateChange(
+    (isAppStateVisible: boolean) => {
+      if (isAppStateVisible) {
+        uiState.refresh(false);
+      }
+    },
+    [uiState]
+  );
+
   // ThirdParty connection callback. This will connect ThirdPartyApp if executed.
   const onThirdPartyConnectionConfirm = useCallback(async (appId: string, token: string | null, details: IEventDetails) => {
     if (token) {
@@ -148,7 +145,7 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
     (async () => {
       const { id, data, deepLink } = args;
 
-      eventLogger.log(`calling getEarnEventDetailsUiState(), with id: ${id}, data: ${JSON.stringify(data, null, 2)}, deepLink: ${deepLink}`);
+      eventLogger.log(`calling getEarnEventDetailsUiState(), with id: ${id}, data: ${data}, deepLink: ${deepLink}`);
 
       const res = await service.getEarnEventDetailsUiState(id, data, deepLink);
       const { details, thirdParty } = res;
