@@ -428,5 +428,5 @@
   "msg_error_transaction_failure": "Transation failed",
   "btn_sign": "Sign",
   "sign_message": "Message",
-  "signature_request": "Signature request",
+  "signature_request": "Signature request"
 }
