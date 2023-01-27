@@ -11,7 +11,7 @@ export interface IUseGasProps {
   data?: BytesLike | null;
   isValidInput: boolean;
   initialLevel?: TGasLevel;
-  onConfirm?: (params: TransactionRequest | TransferParams, gasSettingInfo?: IGasSettingInfo) => void;
+  onConfirm?: (params: TransactionRequest | TransferParams, gasSettingInfo: IGasSettingInfo) => void;
 }
 export interface IEVMGasComponentProps extends IUseGasProps {
   isRevision: boolean;
@@ -25,13 +25,6 @@ export interface ITezosUseGasProps extends Omit<IUseGasProps, 'data'> {
 
 export interface ITezosGasComponentProps extends ITezosUseGasProps, Omit<IEVMGasComponentProps, 'data'> {}
 export interface IGasComponentProps extends ITezosGasComponentProps, IEVMGasComponentProps {}
-
-export interface IGasInjectParamToOnConfirm {
-  to: string;
-  value?: BigNumber | null;
-  sendParam: TransactionRequest | TransferParams;
-}
-
 export interface IGasSettingInfo {
   advanced: boolean;
   level: TGasLevel;

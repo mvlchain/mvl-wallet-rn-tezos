@@ -153,14 +153,14 @@ const useTezosGas = ({ to, value, transferParam, isValidInput, initialLevel, onC
     const fee = total.toNumber();
 
     if (transferParam) {
-      onConfirm({ ...transferParam, fee });
+      onConfirm({ ...transferParam, fee }, { advanced, level });
     } else {
       if (!value) {
         gasLogger.error('gas is not ready.');
         return;
       }
       const amount = +formatBigNumber(value, TEZOS_TOKEN_LIST[0].decimals).toFixed();
-      onConfirm({ to, amount, fee });
+      onConfirm({ to, amount, fee }, { advanced, level });
     }
   };
 

@@ -192,7 +192,7 @@ const useEIP1559Gas = ({ to, value, data, isValidInput, onConfirm, initialLevel 
       'gasLimit',
       gasFeeInfo.gasLimit?.toString()
     );
-    onConfirm({ to, value: BnToEtherBn(value) ?? undefined, data: data ?? undefined, ...gasFeeInfo });
+    onConfirm({ to, value: BnToEtherBn(value) ?? undefined, data: data ?? undefined, ...gasFeeInfo }, { advanced, level });
   };
 
   useSetGasTotalGlobal(total, gasLimit);
