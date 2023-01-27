@@ -39,6 +39,7 @@ export type NetworkConfig = {
   coin: string;
   multicallAddress?: string;
   infuraNetwork?: 'mainnet' | 'goerli';
+  supportBrowser: boolean;
 };
 
 const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
@@ -53,6 +54,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     coin: 'ETH',
     multicallAddress: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
     infuraNetwork: 'mainnet',
+    supportBrowser: true,
   },
   [NETWORK.GOERLI]: {
     name: 'Ethereum Goerli Testnet',
@@ -65,6 +67,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     coin: 'ETH',
     multicallAddress: '0x77dCa2C955b15e9dE4dbBCf1246B4B85b651e50e',
     infuraNetwork: 'goerli',
+    supportBrowser: true,
   },
   [NETWORK.BSC]: {
     name: 'BNB Smart Chain',
@@ -76,6 +79,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
     multicallAddress: '0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb',
+    supportBrowser: true,
   },
   [NETWORK.BSC_TESTNET]: {
     name: 'BNB Smart Chain - Testnet',
@@ -87,6 +91,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
     multicallAddress: '0x6e5BB1a5Ad6F68A8D7D6A5e47750eC15773d6042',
+    supportBrowser: true,
   },
   [NETWORK.TEZOS]: {
     name: 'Tezos Mainnet',
@@ -97,6 +102,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
     coin: 'XTZ',
+    supportBrowser: false,
   },
   [NETWORK.TEZOS_GHOSTNET]: {
     name: 'Tezos Ghostnet',
@@ -107,6 +113,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
     coin: 'XTZ',
+    supportBrowser: false,
   },
 };
 

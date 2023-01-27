@@ -25,7 +25,6 @@ import {
   TradeSelectedDark,
 } from '@@assets/image';
 import { useAssetFromTheme, useColor } from '@@hooks/useTheme';
-import Browser from '@@screens/Browser';
 import BrowserMainScreen from '@@screens/Browser/BrowserMainScreen';
 import { EarnEventListScreen } from '@@screens/EarnEventScreen';
 import SettingScreen from '@@screens/SettingScreen';
