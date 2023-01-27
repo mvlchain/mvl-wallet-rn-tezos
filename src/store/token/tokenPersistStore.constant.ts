@@ -21,7 +21,7 @@ export const BSC_TOKEN_LIST = [
   {
     contractAddress: null,
     decimals: 18,
-    logoURI: 'https://tokens.1inch.io/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c_1.png',
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/bnb.svg',
     name: 'BNB',
     priceId: 'binancecoin',
     symbol: 'BNB',
@@ -67,7 +67,7 @@ export const BSC_TESTNET_TOKEN_LIST = [
   {
     contractAddress: null,
     decimals: 18,
-    logoURI: 'https://tokens.1inch.io/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c_1.png',
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/bnb.svg',
     name: 'BNB',
     priceId: 'binancecoin',
     symbol: 'BNB',
@@ -99,6 +99,22 @@ export const TEZOS_TOKEN_LIST = [
     priceId: 'tezos',
     symbol: 'XTZ',
   },
+  {
+    contractAddress: 'KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn',
+    decimals: 8,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/tzbtc.svg',
+    name: 'tzBTC',
+    priceId: 'tzbtc',
+    symbol: 'tzBTC',
+  },
+  {
+    contractAddress: 'KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV',
+    decimals: 18,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/kusd.svg',
+    name: 'Kolibri USD',
+    priceId: 'kolibri-usd',
+    symbol: 'kUSD',
+  },
 ];
 
 export const TEZOS_GHOSTNET_TOKEN_LIST = [
@@ -113,7 +129,7 @@ export const TEZOS_GHOSTNET_TOKEN_LIST = [
   {
     contractAddress: 'KT1Wdq6sj3ZkNqQ7CeE6kTNbJXfobMX7Eqpz',
     decimals: 8,
-    logoURI: undefined,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/tzbtc.svg',
     name: 'Test tzBTC',
     priceId: 'tzbtc',
     symbol: 'tzBTC',
@@ -121,7 +137,7 @@ export const TEZOS_GHOSTNET_TOKEN_LIST = [
   {
     contractAddress: 'KT1GG8Zd5rUp1XV8nMPRBY2tSyVn6NR5F4Q1',
     decimals: 18,
-    logoURI: undefined,
+    logoURI: 'https://mvl-nft-user-service.s3.ap-northeast-2.amazonaws.com/assets/kusd.svg',
     name: 'Test Kolibri USD',
     priceId: 'kolibri-usd',
     symbol: 'kUSD',
