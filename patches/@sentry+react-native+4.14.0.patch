@@ -1,0 +1,12 @@
+diff --git a/node_modules/@sentry/react-native/sentry.gradle b/node_modules/@sentry/react-native/sentry.gradle
+index fee1dae..651e7c1 100644
+--- a/node_modules/@sentry/react-native/sentry.gradle
++++ b/node_modules/@sentry/react-native/sentry.gradle
+@@ -71,6 +71,7 @@ gradle.projectsEvaluated {
+           variant = currentVariant[0]
+           releaseName = currentVariant[1]
+           versionCode = currentVariant[2]
++          sourcemapOutput = "$reactRoot/android/app/build/intermediates/sourcemaps/react/$variant/index.android.bundle.packager.map"
+ 
+           try {
+             if (versionCode instanceof String) {
