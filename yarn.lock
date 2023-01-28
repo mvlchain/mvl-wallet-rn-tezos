@@ -1865,6 +1865,17 @@
     ethereumjs-util "^7.0.9"
     ethereumjs-wallet "^1.0.1"
 
+"@metamask/eth-json-rpc-infura@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-infura/-/eth-json-rpc-infura-7.0.0.tgz#67bf7655539cd4234d85b1aa31b15e02be4671df"
+  integrity sha512-V8iDCw3H0QCD1XyjtNNAz5jYsJWS0jGCUxLWsePSJydAdJnBEObcUuzWzwS2/7c7BIINPJbQ/toQ62syDOyYWg==
+  dependencies:
+    "@metamask/utils" "^3.0.1"
+    eth-json-rpc-middleware "^8.1.0"
+    eth-rpc-errors "^4.0.3"
+    json-rpc-engine "^6.1.0"
+    node-fetch "^2.6.7"
+
 "@metamask/eth-sig-util@^4.0.0":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-4.0.1.tgz#3ad61f6ea9ad73ba5b19db780d40d9aae5157088"
@@ -1912,6 +1923,16 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@metamask/types/-/types-1.1.0.tgz#9bd14b33427932833c50c9187298804a18c2e025"
   integrity sha512-EEV/GjlYkOSfSPnYXfOosxa3TqYtIW3fhg6jdw+cok/OhMgNn4wCfbENFqjytrHMU2f7ZKtBAvtiP5V8H44sSw==
+
+"@metamask/utils@^3.0.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-3.4.1.tgz#7df750733960ee2bde27a00eb58fcfdf80570be2"
+  integrity sha512-FjhJrplzFiPNlNNuYXkY1ave55ULLZ3+kY/d3zaW5SjS5AjszlN7gsWz74VI32qME6VyD/gdoTOgqVbKlcEnag==
+  dependencies:
+    "@types/debug" "^4.1.7"
+    debug "^4.3.4"
+    semver "^7.3.8"
+    superstruct "^1.0.3"
 
 "@mvlchain/eslint-config@^1.0.1":
   version "1.0.2"
@@ -3220,6 +3241,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/debug@^4.1.7":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
+  integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
+  dependencies:
+    "@types/ms" "*"
+
 "@types/graceful-fs@^4.1.3":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.6.tgz#e14b2576a1c25026b7f02ede1de3b84c3a1efeae"
@@ -3300,6 +3328,11 @@
   version "4.14.191"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
   integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
+
+"@types/ms@*":
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
+  integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node-fetch@*":
   version "2.6.2"
@@ -6178,6 +6211,22 @@ eth-json-rpc-middleware@^6.0.0:
     pify "^3.0.0"
     safe-event-emitter "^1.0.1"
 
+eth-json-rpc-middleware@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/eth-json-rpc-middleware/-/eth-json-rpc-middleware-8.1.0.tgz#d2bf980768b43dcbcb7830ed1fcc34a16f63074d"
+  integrity sha512-0ZZDr6KoddqN4N100a7YWzLTYrVN0P49DJ3Su1vsRavPpieq92rgZymnQcr0tLFBQDEJg1MVqLex46fA0GEkDA==
+  dependencies:
+    "@metamask/safe-event-emitter" "^2.0.0"
+    btoa "^1.2.1"
+    clone "^2.1.1"
+    eth-block-tracker "^5.0.1"
+    eth-rpc-errors "^4.0.3"
+    eth-sig-util "^1.4.2"
+    json-rpc-engine "^6.1.0"
+    json-stable-stringify "^1.0.1"
+    node-fetch "^2.6.7"
+    pify "^3.0.0"
+
 eth-keyring-controller@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/eth-keyring-controller/-/eth-keyring-controller-6.2.1.tgz#61901071fc74059ed37cb5ae93870fdcae6e3781"
@@ -6243,7 +6292,7 @@ eth-rpc-errors@^3.0.0:
   dependencies:
     fast-safe-stringify "^2.0.6"
 
-eth-rpc-errors@^4.0.0, eth-rpc-errors@^4.0.2:
+eth-rpc-errors@^4.0.0, eth-rpc-errors@^4.0.2, eth-rpc-errors@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/eth-rpc-errors/-/eth-rpc-errors-4.0.3.tgz#6ddb6190a4bf360afda82790bb7d9d5e724f423a"
   integrity sha512-Z3ymjopaoft7JDoxZcEb3pwdGh7yiYMhOwm2doUt6ASXlMavpNlK6Cre0+IMl2VSGyEU9rkiperQhp5iRxn5Pg==
@@ -11811,7 +11860,7 @@ semaphore@>=1.0.1, semaphore@^1.0.3:
   resolved "https://registry.yarnpkg.com/semaphore/-/semaphore-1.1.0.tgz#aaad8b86b20fe8e9b32b16dc2ee682a8cd26a8aa"
   integrity sha512-O4OZEaNtkMd/K0i6js9SL+gqy0ZCBMgUvlSqHKi4IBdjhe7wB8pwztUk1BbZ1fmrvpwFrPbHzqd2w5pTcJH6LA==
 
-semver@7.x, semver@^7.3.5, semver@^7.3.7:
+semver@7.x, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
   integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
@@ -12494,6 +12543,11 @@ superstruct@^0.6.2:
   dependencies:
     clone-deep "^2.0.1"
     kind-of "^6.0.1"
+
+superstruct@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-1.0.3.tgz#de626a5b49c6641ff4d37da3c7598e7a87697046"
+  integrity sha512-8iTn3oSS8nRGn+C2pgXSKPI3jmpm6FExNazNpjvqS6ZUJQCej3PUXEKM8NjHBOs54ExM+LPW/FBRhymrdcCiSg==
 
 supports-color@^5.3.0, supports-color@^5.5.0:
   version "5.5.0"

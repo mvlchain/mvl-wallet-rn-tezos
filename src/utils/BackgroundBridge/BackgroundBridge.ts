@@ -7,10 +7,8 @@ import createFilterMiddleware from 'eth-json-rpc-filters';
 // @ts-ignore
 import createSubscriptionManager from 'eth-json-rpc-filters/subscriptionManager';
 import { JsonRpcEngine } from 'json-rpc-engine';
-import { createEngineStream } from 'json-rpc-middleware-stream';
 // @ts-ignore
 import ObjectMultiplex from 'obj-multiplex';
-import pump from 'pump';
 import { WebView } from 'react-native-webview';
 import { Duplex } from 'readable-stream';
 // @ts-ignore
@@ -20,8 +18,11 @@ import URL from 'url-parse';
 import { controllerManager } from '@@components/BasicComponents/Modals/RPCMethodsModal/controllerManager';
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
+import createEngineStream from '@@utils/BackgroundBridge/createEngineStream';
 import { tagLogger } from '@@utils/Logger';
 import { getAddress } from '@@utils/walletHelper';
+
+import pump from '../pump';
 
 import AppConstants from './AppConstants';
 import MobilePortStream from './MobilePortStream';
@@ -244,7 +245,6 @@ export class BackgroundBridge extends EventEmitter {
 
   onStateUpdate() {
     // const networkConfig = getNetworkConfig(NETWORK.GOERLI);
-    // const provider = EvmJsonRpcProviderHolder.getMetamaskProvider(networkConfig.rpcUrl);
     const { networkController } = controllerManager;
     const provider = networkController.provider;
     // @ts-ignore
@@ -289,10 +289,6 @@ export class BackgroundBridge extends EventEmitter {
     this.port.emit('disconnect', { name: this.port.name, data: null });
   };
 
-  /**
-   * A method for serving our ethereum provider over a given stream.
-   * @param {*} outStream - The stream to provide over.
-   */
   setupProviderConnection(outStream: Duplex) {
     this.engine = this.setupProviderEngine();
 

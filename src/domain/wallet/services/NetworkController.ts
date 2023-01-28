@@ -1,7 +1,6 @@
 import { BaseControllerV2, RestrictedControllerMessenger } from '@metamask/controllers';
+import { createProvider as createInfuraProvider } from '@metamask/eth-json-rpc-infura';
 import { Mutex } from 'async-mutex';
-// @ts-ignore
-import createInfuraProvider from 'eth-json-rpc-infura/src/createProvider';
 // @ts-ignore
 import EthQuery from 'eth-query';
 // @ts-ignore
@@ -77,7 +76,7 @@ export type NetworkControllerMessenger = RestrictedControllerMessenger<
 
 export type NetworkControllerOptions = {
   messenger: NetworkControllerMessenger;
-  infuraProjectId?: string;
+  infuraProjectId: string;
   state?: Partial<NetworkState>;
 };
 
@@ -96,7 +95,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
 
   private internalProviderConfig: ProviderConfig = {} as ProviderConfig;
 
-  private readonly infuraProjectId: string | undefined;
+  private readonly infuraProjectId: string;
 
   private mutex = new Mutex();
 
