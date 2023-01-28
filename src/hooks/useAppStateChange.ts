@@ -6,34 +6,21 @@ import { AppState, AppStateStatus } from 'react-native';
  * App visibility observer hook.
  * This will not work in the very first time when the component renders
  *
- * @example
- * useAppStateChange(isAppStateVisible => {
- *   isAppStateVisible == true if app is in foreground, false if app is in background
- *   console.log(isAppStateVisible);
- * });
- *
  * @param onAppStateChanged
  */
-export const useAppStateChange = (onAppStateChanged: (isAppStateVisible: boolean) => void) => {
-  const currentAppState = useRef(AppState.currentState);
+export const useAppStateChange = () => {
   const [appState, setAppState] = useState(AppState.currentState);
 
+  const onAppStateChanged = (nextAppState: AppStateStatus) => {
+    setAppState(nextAppState);
+  };
+
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', onAppStateChanging);
+    const subscription = AppState.addEventListener('change', onAppStateChanged);
     return () => {
       subscription.remove();
     };
   }, []);
 
-  const onAppStateChanging = (nextAppState: AppStateStatus) => {
-    if (currentAppState.current.match(/inactive|background/) && nextAppState === 'active') {
-      // foreground
-      onAppStateChanged(true);
-    } else if (appState === 'active' && nextAppState.match(/inactive|background/)) {
-      // background
-      onAppStateChanged(false);
-    }
-    currentAppState.current = nextAppState;
-    setAppState(nextAppState);
-  };
+  return appState;
 };

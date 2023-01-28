@@ -14,6 +14,7 @@ import { RTNSettingsRepositoryImpl } from '@@domain/auth/repositories/RTNSetting
 import { RootKeyRepositoryImpl } from '@@domain/auth/repositories/RootKeyRepository';
 import { ServerShareRepositoryImpl } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepositoryImpl } from '@@domain/auth/repositories/TorusShareRepository';
+import { EarnEventService, EarnEventServiceImpl } from '@@domain/auth/services/EarnEventService';
 import { UIServiceImpl } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasRepositoryEthers } from '@@domain/gas/gasRepositoryEthers/GasRepositoryEthers';
@@ -137,4 +138,8 @@ container.register('TransactionHistoryRepository', {
 
 container.register('SignMessageService', {
   useFactory: instancePerContainerCachingFactory<SignMessageService>((container) => container.resolve(SignMessageService)),
+});
+
+container.register('EarnEventService', {
+  useFactory: instancePerContainerCachingFactory<EarnEventService>((container) => container.resolve(EarnEventServiceImpl)),
 });

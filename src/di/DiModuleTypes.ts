@@ -8,6 +8,7 @@ import { RTNSettingsRepository } from '@@domain/auth/repositories/RTNSettingsRep
 import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
 import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
 import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
+import { EarnEventService } from '@@domain/auth/services/EarnEventService';
 import { UIService } from '@@domain/auth/services/UIService';
 import { EvmJsonRpcProviderHolder } from '@@domain/blockchain/EvmJsonRpcProviderHolder';
 import { GasRepositoryEthers } from '@@domain/gas/gasRepositoryEthers/GasRepositoryEthers';
@@ -39,6 +40,7 @@ export interface DiModuleTypes {
   TransactionServiceTezos: ITransactionServiceTezos;
   LegacyAuthMigrationService: ILegacyAuthMigrationService;
   EvmJsonRpcProviderHolder: EvmJsonRpcProviderHolder;
+  EarnEventService: EarnEventService;
 
   // Repository
   WalletRepository: WalletRepository;

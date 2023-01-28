@@ -1,34 +1,30 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback } from 'react';
 
-import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Linking, Alert, AppState, AppStateStatus } from 'react-native';
-import Toast from 'react-native-toast-message';
 
-import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import Webview from '@@components/BasicComponents/Webview';
-import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
-import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
+import { TOAST_TYPE } from '@@constants/toastConfig.constant';
 import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
-import { useAppStateChange } from '@@hooks/useAppStateChange';
+import useToast from '@@hooks/useToast';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
-import globalModalStore from '@@store/globalModal/globalModalStore';
-import { tagLogger } from '@@utils/Logger';
+import utilStore from '@@store/util/utilStore';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
 import { ThirdPartyApp } from '../ThirdPartyApp';
 
 import * as S from './EarnEventDetailsScreen.style';
-import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
+import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreen.type';
 
 /**
- * Event details screen that displays contents to the WebView.
- * WebView: display event contents (O)
- * EventActionControl (O)
- * RewardReceiptModal (O WebView based modal)
- * ThirdPartyApp (O)
+ * Screen displaying event details to the WebView
+ *
+ * WebView: display event contents
+ * EventActionControl
+ * RewardReceiptModal (WebView based modal)
+ * ThirdPartyApp
  * Alert modal
  *  • failed claim
  *  • transfer failed
@@ -43,9 +39,9 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  * UseCases
  *  • useConnectThirdParty
  *  • useDisconnectThirdParty
- *  • useThirdPartyConnection (O)
- *  • useUserPoints (O)
- *  • useClaimStatusInformation (O)
+ *  • useThirdPartyConnection
+ *  • useUserPoints
+ *  • useClaimStatusInformation
  *    - useClaimInfomation
  *    - useClaimStatus
  *
@@ -107,8 +103,8 @@ import { TEarnEventDetailsRouteProps } from './EarnEventDetailsScreentype';
  *  - add RetryTransferModal to claim reward again in EarnEventTransferringScreen
  *
  * DeepLinks
- *  clutchwallet://connect (O)
- *  clutchwallet://screen/earn (O)
+ *  clutchwallet://connect
+ *  clutchwallet://screen/earn
  *  clutchwallet://screen/trade
  */
 export function EarnEventDetailsScreen() {
@@ -117,43 +113,53 @@ export function EarnEventDetailsScreen() {
   if (!params) {
     console.error('inappropriate event params!');
   }
+  console.log(`Details> i: ${params.i}`);
 
+  const { showToast } = useToast();
   const { disconnectThirdParty } = useDisconnectThirdParty();
+  const { startLoading, endLoading } = utilStore();
 
-  const { details, thirdParty, claimStatusInfo, refresh } = useEarnEventDetailsUiState(params.i, params.data, params.deepLink);
-  const { event, phase } = details;
-  console.log(`Details> i: ${params.i}, data: ${event?.detailPageUrl}, deepLink: ${JSON.stringify(details.deepLink)}`);
+  const uiState = useEarnEventDetailsUiState({
+    id: params.i,
+    event: params.data,
+  });
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
       try {
         await openUriForApp(uri);
       } catch (e) {
-        Toast.show({
-          ...TOAST_DEFAULT_OPTION,
-          type: 'basic',
-          text1: t('msg_error_cannot_resolve_uri'),
-        });
+        showToast(TOAST_TYPE.BASIC, t('msg_error_cannot_resolve_uri'));
       }
     },
-    [event]
+    [uiState]
   );
 
   const onDisconnectThirdPartyPress = useCallback(async () => {
-    const res = await disconnectThirdParty(event?.app?.id);
-    if (res?.status === 'ok') {
-      // TODO: disconnected successfully. do following tasks
-      //  1. third-party disconnection modal
-      console.log(`Details> disconnected and refreshing`);
-      refresh(true);
-    }
-  }, [event]);
+    try {
+      startLoading();
 
-  if (!event) {
-    console.log(`Details> event is null`);
+      const res = await disconnectThirdParty(event?.app?.id);
+      if (res?.status === 'ok') {
+        // TODO: disconnected successfully. do following tasks
+        //  1. third-party disconnection modal
+        console.log(`Details> disconnected and refreshing`);
+        uiState?.refresh();
+      }
+    } catch (e) {
+      throw e;
+    } finally {
+      endLoading();
+    }
+  }, [uiState]);
+
+  if (!uiState) {
+    console.log(`Details> initial rendering with no data`);
     return null;
   }
 
+  const { details, thirdParty, claimStatusInfo, refresh } = uiState;
+  const { event, phase } = details;
   const isThirdPartyConnected = thirdParty.connection?.exists ?? false;
 
   function decorateThirdPartyApp(
