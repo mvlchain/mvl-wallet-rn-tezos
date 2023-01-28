@@ -56,7 +56,7 @@
     "@tkey/seed-phrase": "^7.0.0",
     "@tkey/storage-layer-torus": "^7.0.0",
     "@toruslabs/customauth": "^10.1.1",
-    "@toruslabs/customauth-react-native-sdk": "git+https://github.com/mvlchain/customauth-react-native-sdk.git#master",
+    "@toruslabs/customauth-react-native-sdk": "^4.0.1",
     "@tradle/react-native-http": "^2.0.1",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
