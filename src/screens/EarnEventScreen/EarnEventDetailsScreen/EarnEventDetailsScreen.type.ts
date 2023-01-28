@@ -1,7 +1,8 @@
 import { RouteProp } from '@react-navigation/native';
 
+import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
+import { EventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
 import { valueOf } from '@@utils/types';
@@ -15,6 +16,7 @@ export interface IEventThirdParty {
   isThirdPartySupported: boolean;
   connection?: IThirdPartyConnection;
   points: IEventPointAmount[];
+  isThirdPartyConnectionRequired: boolean;
   error: Error | unknown;
 }
 
@@ -36,5 +38,23 @@ export interface IEventPointAmount {
 export interface IEventDetails {
   event: EarnEventDto | undefined;
   phase: valueOf<typeof EventPhase>;
+}
+
+export interface IValidEventDetails {
+  event: EarnEventDto;
+  phase: valueOf<typeof EventPhase>;
   deepLink?: ThirdPartyDeepLink;
+}
+
+export interface IEventDetailsGroup {
+  details: IValidEventDetails;
+  thirdParty: IEventThirdParty;
+  claimStatusInfo: ClaimStatusInformation | undefined;
+}
+
+export interface IEventDetailsUiState {
+  details: IEventDetails;
+  thirdParty: IEventThirdParty;
+  claimStatusInfo: ClaimStatusInformation | undefined;
+  refresh: () => Promise<void>;
 }
