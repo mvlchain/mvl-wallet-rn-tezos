@@ -18,6 +18,7 @@ import {
 } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreen.type';
 import deepLinkStore from '@@store/deepLinkStore/deepLinkStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
+import utilStore from '@@store/util/utilStore';
 import { tagLogger } from '@@utils/Logger';
 import { format } from '@@utils/strings';
 
@@ -70,6 +71,10 @@ import { format } from '@@utils/strings';
  *   (amount > 0 || subCurrencyAmount == null || (subCurrencyAmount != null && subCurrencyAmount > 0)) &&
  *   currentPoint >= lowerLimitPoint
  * ```
+ *
+ * TODO:
+ *  - connect LoadingIndicator
+ *  - disconnect LoadingIndicator
  */
 export type useEarnEventDetailsUiStateProps = {
   id: string;
@@ -82,13 +87,23 @@ export const useEarnEventDetailsUiState = (props: useEarnEventDetailsUiStateProp
   const { connectThirdParty } = useConnectThirdParty();
   const service = useDi('EarnEventService');
   const eventLogger = tagLogger('Event');
+  const { startLoading, endLoading } = utilStore();
 
   const { id, event } = props;
   eventLogger.log(`useEarnEventDetailsUiState() started`);
 
   const refresh = useCallback(
     async (deepLink?: ThirdPartyDeepLink) => {
-      await getEarnEventDetailsUiState(id, event, deepLink);
+      try {
+        startLoading();
+        await getEarnEventDetailsUiState(id, event, deepLink);
+      } catch (e) {
+        // may require to handle error cases.
+        eventLogger.error(`getEarnEventDetailsUiState() failed: ${e}`);
+        throw e;
+      } finally {
+        endLoading();
+      }
     },
     [id, event]
   );
@@ -136,15 +151,23 @@ export const useEarnEventDetailsUiState = (props: useEarnEventDetailsUiStateProp
   // ThirdParty connection callback. This will connect ThirdPartyApp if executed.
   const onThirdPartyConnectionConfirm = useCallback(async (appId: string, token: string | null, details: IEventDetails) => {
     if (token) {
-      const res = await connectThirdParty(appId, token);
-      if (res && res.status === 'ok') {
-        const thirdParty = await service.refreshThirdParty(details);
-        const claimStatusInfo = await service.getClaimStatusInformation(details, thirdParty);
-        setUiState({
-          ...uiState,
-          thirdParty,
-          claimStatusInfo,
-        });
+      try {
+        startLoading();
+
+        const res = await connectThirdParty(appId, token);
+        if (res && res.status === 'ok') {
+          const thirdParty = await service.refreshThirdParty(details);
+          const claimStatusInfo = await service.getClaimStatusInformation(details, thirdParty);
+          setUiState({
+            ...uiState,
+            thirdParty,
+            claimStatusInfo,
+          });
+        }
+      } catch (e) {
+        throw e;
+      } finally {
+        endLoading();
       }
     }
   }, []);

@@ -9,6 +9,7 @@ import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
 import useToast from '@@hooks/useToast';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
+import utilStore from '@@store/util/utilStore';
 import { format } from '@@utils/strings';
 
 import { EventActionControl } from '../EventActionControl';
@@ -116,6 +117,7 @@ export function EarnEventDetailsScreen() {
 
   const { showToast } = useToast();
   const { disconnectThirdParty } = useDisconnectThirdParty();
+  const { startLoading, endLoading } = utilStore();
 
   const uiState = useEarnEventDetailsUiState({
     id: params.i,
@@ -134,12 +136,20 @@ export function EarnEventDetailsScreen() {
   );
 
   const onDisconnectThirdPartyPress = useCallback(async () => {
-    const res = await disconnectThirdParty(event?.app?.id);
-    if (res?.status === 'ok') {
-      // TODO: disconnected successfully. do following tasks
-      //  1. third-party disconnection modal
-      console.log(`Details> disconnected and refreshing`);
-      uiState?.refresh();
+    try {
+      startLoading();
+
+      const res = await disconnectThirdParty(event?.app?.id);
+      if (res?.status === 'ok') {
+        // TODO: disconnected successfully. do following tasks
+        //  1. third-party disconnection modal
+        console.log(`Details> disconnected and refreshing`);
+        uiState?.refresh();
+      }
+    } catch (e) {
+      throw e;
+    } finally {
+      endLoading();
     }
   }, [uiState]);
 
