@@ -1,0 +1,74 @@
+diff --git a/node_modules/json-rpc-engine/dist/JsonRpcEngine.js b/node_modules/json-rpc-engine/dist/JsonRpcEngine.js
+index 7e082cb..2abf929 100644
+--- a/node_modules/json-rpc-engine/dist/JsonRpcEngine.js
++++ b/node_modules/json-rpc-engine/dist/JsonRpcEngine.js
+@@ -110,11 +110,13 @@ class JsonRpcEngine extends safe_event_emitter_1.default {
+         if (!callerReq ||
+             Array.isArray(callerReq) ||
+             typeof callerReq !== 'object') {
+-            const error = new eth_rpc_errors_1.EthereumRpcError(eth_rpc_errors_1.errorCodes.rpc.invalidRequest, `Requests must be plain objects. Received: ${typeof callerReq}`, { request: callerReq });
++            // const error = new eth_rpc_errors_1.EthereumRpcError(eth_rpc_errors_1.errorCodes.rpc.invalidRequest, `Requests must be plain objects. Received: ${typeof callerReq}`, { request: callerReq });
++            const error = new Error(`Requests must be plain objects. Received: ${typeof callerReq}`);
+             return cb(error, { id: undefined, jsonrpc: '2.0', error });
+         }
+         if (typeof callerReq.method !== 'string') {
+-            const error = new eth_rpc_errors_1.EthereumRpcError(eth_rpc_errors_1.errorCodes.rpc.invalidRequest, `Must specify a string method. Received: ${typeof callerReq.method}`, { request: callerReq });
++            // const error = new eth_rpc_errors_1.EthereumRpcError(eth_rpc_errors_1.errorCodes.rpc.invalidRequest, `Must specify a string method. Received: ${typeof callerReq.method}`, { request: callerReq });
++            const error = new Error(`Must specify a string method. Received: ${typeof callerReq.method}`);
+             return cb(error, { id: callerReq.id, jsonrpc: '2.0', error });
+         }
+         const req = Object.assign({}, callerReq);
+@@ -127,6 +129,7 @@ class JsonRpcEngine extends safe_event_emitter_1.default {
+             await this._processRequest(req, res);
+         }
+         catch (_error) {
++            // accessing _error cause crash..
+             // A request handler error, a re-thrown middleware error, or something
+             // unexpected.
+             error = _error;
+@@ -135,7 +138,9 @@ class JsonRpcEngine extends safe_event_emitter_1.default {
+             // Ensure no result is present on an errored response
+             delete res.result;
+             if (!res.error) {
+-                res.error = eth_rpc_errors_1.serializeError(error);
++                // res.error = eth_rpc_errors_1.serializeError(error);
++                console.log(`JsonRpcEngine> _handle err: ${error}`);
++                res.error = error;
+             }
+         }
+         return cb(error, res);
+@@ -146,18 +151,23 @@ class JsonRpcEngine extends safe_event_emitter_1.default {
+      * are satisfied.
+      */
+     async _processRequest(req, res) {
+-        const [error, isComplete, returnHandlers,] = await JsonRpcEngine._runAllMiddleware(req, res, this._middleware);
+-        // Throw if "end" was not called, or if the response has neither a result
+-        // nor an error.
+-        JsonRpcEngine._checkForCompletion(req, res, isComplete);
+-        // The return handlers should run even if an error was encountered during
+-        // middleware processing.
+-        await JsonRpcEngine._runReturnHandlers(returnHandlers);
+-        // Now we re-throw the middleware processing error, if any, to catch it
+-        // further up the call chain.
+-        if (error) {
+-            throw error;
++        try {
++            const [error, isComplete, returnHandlers,] = await JsonRpcEngine._runAllMiddleware(req, res, this._middleware);
++            // Throw if "end" was not called, or if the response has neither a result
++            // nor an error.
++            JsonRpcEngine._checkForCompletion(req, res, isComplete);
++            // The return handlers should run even if an error was encountered during
++            // middleware processing.
++            await JsonRpcEngine._runReturnHandlers(returnHandlers);
++            // Now we re-throw the middleware processing error, if any, to catch it
++            // further up the call chain.
++            if (error) {
++                throw error;
++            }
++        } catch (e) {
++            throw new Error(`_processRequest error: ${e.message}`);
+         }
++
+     }
+     /**
+      * Serially executes the given stack of middleware.
