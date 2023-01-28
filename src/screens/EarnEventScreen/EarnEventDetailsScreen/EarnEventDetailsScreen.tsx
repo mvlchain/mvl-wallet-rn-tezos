@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 
 import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import Toast from 'react-native-toast-message';
 
 import Webview from '@@components/BasicComponents/Webview';
-import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
+import { TOAST_TYPE } from '@@constants/toastConfig.constant';
 import { useDisconnectThirdParty } from '@@hooks/event/useDisconnectThirdParty';
 import { useEarnEventDetailsUiState } from '@@hooks/event/useEventDetailsUiState';
+import useToast from '@@hooks/useToast';
 import { openUriForApp } from '@@navigation/DeepLinkOptions';
 import { format } from '@@utils/strings';
 
@@ -112,27 +112,22 @@ export function EarnEventDetailsScreen() {
   if (!params) {
     console.error('inappropriate event params!');
   }
+  console.log(`Details> i: ${params.i}`);
 
+  const { showToast } = useToast();
   const { disconnectThirdParty } = useDisconnectThirdParty();
 
   const uiState = useEarnEventDetailsUiState({
     id: params.i,
-    data: params.data,
-    deepLink: params.deepLink,
+    event: params.data,
   });
-
-  console.log(`Details> i: ${params.i}`);
 
   const onConnectThirdPartyPress = useCallback(
     async (uri: string) => {
       try {
         await openUriForApp(uri);
       } catch (e) {
-        Toast.show({
-          ...TOAST_DEFAULT_OPTION,
-          type: 'basic',
-          text1: t('msg_error_cannot_resolve_uri'),
-        });
+        showToast(TOAST_TYPE.BASIC, t('msg_error_cannot_resolve_uri'));
       }
     },
     [uiState]

@@ -1,37 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import Url from 'url';
-
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import qs from 'qs';
 import { useTranslation } from 'react-i18next';
 
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
-import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
-import { InvalidThirdPartyDeepLinkConnectionError } from '@@domain/error/InvalidThirdPartyConnectionRequestError';
-import { ClaimStatusInformation } from '@@domain/model/ClaimStatusInformation';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
 import { EventPhase, getEventPhase } from '@@domain/model/EventPhase';
 import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
-import { ThirdPartyConnectCheckResponseDto, EarnEventGetClaimResponseDto } from '@@generated/generated-scheme';
 import { useConnectThirdParty } from '@@hooks/event/useConnectThirdParty';
 import { useAppStateChange } from '@@hooks/useAppStateChange';
 import { useDi } from '@@hooks/useDi';
-import { TADA_DRIVER, TADA_RIDER } from '@@navigation/DeepLinkOptions';
 import {
   IEventDetailsUiState,
   IEventDetails,
   IEventThirdParty,
   IThirdPartyConnection,
+  IEventDetailsGroup,
 } from '@@screens/EarnEventScreen/EarnEventDetailsScreen/EarnEventDetailsScreen.type';
+import deepLinkStore from '@@store/deepLinkStore/deepLinkStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
-import utilStore from '@@store/util/utilStore';
 import { tagLogger } from '@@utils/Logger';
-import { assembleUrl, evaluateUrlScheme } from '@@utils/regex';
-import { isNotBlank, format, isBlank } from '@@utils/strings';
-import { valueOf } from '@@utils/types';
+import { format } from '@@utils/strings';
 
 /**
  * A hook that calculates EventDetails screen state.
@@ -85,30 +73,30 @@ import { valueOf } from '@@utils/types';
  */
 export type useEarnEventDetailsUiStateProps = {
   id: string;
-  data?: EarnEventDto;
-  deepLink?: ThirdPartyDeepLink;
+  event?: EarnEventDto;
 };
 
-export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventDetailsUiStateProps): IEventDetailsUiState => {
+export const useEarnEventDetailsUiState = (props: useEarnEventDetailsUiStateProps): IEventDetailsUiState => {
   const { t } = useTranslation();
-  const service = useDi('EarnEventService');
   const { openModal, closeModal } = globalModalStore();
   const { connectThirdParty } = useConnectThirdParty();
+  const service = useDi('EarnEventService');
   const eventLogger = tagLogger('Event');
-  const isFocused = useIsFocused();
 
-  eventLogger.log(`useEarnEventDetailsUiState() starts with deepLink: ${JSON.stringify(deepLink)}`);
+  const { id, event } = props;
+  eventLogger.log(`useEarnEventDetailsUiState() started`);
 
-  const [args, setArgs] = useState({
-    id,
-    data,
-    deepLink,
-  });
+  const refresh = useCallback(
+    async (deepLink?: ThirdPartyDeepLink) => {
+      await getEarnEventDetailsUiState(id, event, deepLink);
+    },
+    [id, event]
+  );
+
   const [uiState, setUiState] = useState<IEventDetailsUiState>({
     details: {
-      event: data,
-      phase: data ? getEventPhase(data) : EventPhase.NotAvailable,
-      deepLink,
+      event: event,
+      phase: event ? getEventPhase(event) : EventPhase.NotAvailable,
     },
     thirdParty: {
       isThirdPartySupported: false,
@@ -117,24 +105,33 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
       error: null,
     },
     claimStatusInfo: undefined,
-    refresh: async (newDeepLink?: ThirdPartyDeepLink) => {},
+    refresh: refresh,
   });
 
-  useEffect(() => {
-    setArgs({ ...args, deepLink });
-  }, [deepLink]);
+  const { getState, setState } = deepLinkStore;
+  const appState = useAppStateChange();
 
-  // 훅이 호출되기전에 호출된다.
-  // useAppStateChange(
-  //   (isAppStateVisible: boolean) => {
-  //     setIsAppStateVisible(isAppStateVisible);
-  //     // if (isAppStateVisible) {
-  //     //   console.log("EventDetails is visible");
-  //     //   uiState.refresh(deepLink);
-  //     // }
-  //   },
-  //   [deepLink, uiState]
-  // );
+  /*
+   * fetching uiState when AppState == active which is in foreground.
+   * if there's thirdPartyLink in deepLinkStore then it means this screen is navigated by DeepLink
+   * which will trgger thirdPartyApp connection
+   */
+  useEffect(() => {
+    const thirdPartyLink = getState().thirdPartyLink;
+    eventLogger.log(`EventDetails's refresh() with AppState: ${appState}, thirdPartyLink: ${getState().thirdPartyLink}`);
+    if (appState === 'active') {
+      refresh(thirdPartyLink);
+
+      if (thirdPartyLink) {
+        // consume deepLink not to repeat deepLink proces.
+        setState({
+          thirdPartyLink: undefined,
+        });
+      }
+    } else if (appState.match(/inactive|background/)) {
+      // in bacground
+    }
+  }, [appState]);
 
   // ThirdParty connection callback. This will connect ThirdPartyApp if executed.
   const onThirdPartyConnectionConfirm = useCallback(async (appId: string, token: string | null, details: IEventDetails) => {
@@ -152,21 +149,25 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
     }
   }, []);
 
+  // fetching uiState
   const getEarnEventDetailsUiState = useCallback(async (id: string, data?: EarnEventDto, deepLink?: ThirdPartyDeepLink) => {
-    eventLogger.log(`calling getEarnEventDetailsUiState(), with id: ${id}, data: ${data}, deepLink: ${deepLink}, `);
+    eventLogger.log(`getEarnEventDetailsUiState(), with id: ${id}, data: ${data}, deepLink: ${deepLink}, `);
 
     const res = await service.getEarnEventDetailsUiState(id, data, deepLink);
     const { details, thirdParty } = res;
     const { event } = details;
 
     eventLogger.log(
-      `isThirdPartyConnectionRequired: ${thirdParty.isThirdPartyConnectionRequired}, thirdPartyConnection: ${JSON.stringify(thirdParty.connection)}`
+      `isThirdPartyConnectionRequired: ${thirdParty.isThirdPartyConnectionRequired}, event:${event.app} thirdPartyConnection: ${JSON.stringify(
+        thirdParty.connection
+      )}`
     );
 
     const thirdPartyApp = event.app;
     if (thirdPartyApp && thirdParty.connection && thirdParty.isThirdPartyConnectionRequired) {
       const { appId, token } = thirdParty.connection;
 
+      eventLogger.log(`rendering connction modal`);
       openModal(MODAL_TYPES.TEXT_MODAL, {
         title: format(t('connect_thirdparty_dialog_title'), thirdPartyApp.name),
         label: format(t('connect_thirdparty_dialog_description'), thirdPartyApp.name),
@@ -179,32 +180,11 @@ export const useEarnEventDetailsUiState = ({ id, data, deepLink }: useEarnEventD
       });
     }
 
-    return res;
+    setUiState({
+      ...uiState,
+      ...res,
+    });
   }, []);
-
-  // const refresh = useCallback(async (newDeepLink?: ThirdPartyDeepLink) => {
-  //   const { id, data, deepLink } = args;
-  //   const res = await getEarnEventDetailsUiState(id, data, newDeepLink);
-  // }, [args]);
-
-  useEffect(() => {
-    (async () => {
-      console.log('calling a getEarnEventDetailsUiState');
-      const { id, data, deepLink } = args;
-      const res = await getEarnEventDetailsUiState(id, data, deepLink);
-
-      setUiState({
-        ...res,
-        refresh: async (newDeepLink?: ThirdPartyDeepLink) => {
-          setArgs({
-            id,
-            data: res.details.event,
-            deepLink: newDeepLink,
-          });
-        },
-      });
-    })();
-  }, [args]);
 
   return uiState;
 };
