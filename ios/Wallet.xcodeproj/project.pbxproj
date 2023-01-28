@@ -338,6 +338,7 @@
 				D2F652501030F74020BC9E66 /* [CP] Copy Pods Resources */,
 				A9E8FAE60903B46A4B853C9F /* [CP-User] [RNFB] Core Configuration */,
 				47D7C2CA296E79510088339A /* ShellScript */,
+				37CDD9F5561445129997B39C /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -415,7 +416,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -425,9 +426,9 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nset -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n\n/bin/sh ../node_modules/@sentry/react-native/scripts/collect-modules.sh\n";
 		};
 		2387ED1C2B24952F82CCD538 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -467,6 +468,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wallet-WalletTests/Pods-Wallet-WalletTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		37CDD9F5561445129997B39C /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym\n";
 		};
 		474CB102AE2570B72C3CFA05 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
