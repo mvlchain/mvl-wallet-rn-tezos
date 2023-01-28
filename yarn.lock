@@ -3037,9 +3037,10 @@
     socket.io-client "^4.5.3"
     unload "^2.3.1"
 
-"@toruslabs/customauth-react-native-sdk@git+https://github.com/mvlchain/customauth-react-native-sdk.git#master":
-  version "3.1.0"
-  resolved "git+https://github.com/mvlchain/customauth-react-native-sdk.git#2ebe6b8069c94564c02a49f5dc8687bfe5e5569f"
+"@toruslabs/customauth-react-native-sdk@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/customauth-react-native-sdk/-/customauth-react-native-sdk-4.0.1.tgz#1ee1783856d9ce82ad6451cac54d5123ca12d64f"
+  integrity sha512-Bk10NdcLeyhzeqf6DdnNlgp6BKTq+Ahmy42yzsqeaa1PtfxFEHd4OE8JuGqzgfSb1tPUmnnDbIWDNq3dW8G/rg==
 
 "@toruslabs/customauth@^10.1.1":
   version "10.1.1"
