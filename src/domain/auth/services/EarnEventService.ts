@@ -29,7 +29,7 @@ import { EarnEventRepository } from '../repositories/EarnEventRepository';
 
 export interface EarnEventService {
   getEarnEventDetailsUiState(id: string, data?: EarnEventDto, deepLink?: ThirdPartyDeepLink): Promise<IEventDetailsGroup>;
-  refreshThirdParty(details: IEventDetails): Promise<IEventThirdParty>;
+  refreshThirdParty(details: IEventDetails, deepLink?: ThirdPartyDeepLink): Promise<IEventThirdParty>;
   getClaimStatusInformation(details: IEventDetails, thirdParty: IEventThirdParty): Promise<ClaimStatusInformation | undefined>;
 }
 
@@ -56,7 +56,7 @@ export class EarnEventServiceImpl {
     };
 
     // [thirdParty]
-    const thirdParty = await this.refreshThirdParty(details);
+    const thirdParty = await this.refreshThirdParty(details, deepLink);
 
     // [claimStatusInfo]
     const claimStatusInfo = await this.getClaimStatusInformation(details, thirdParty);
@@ -84,8 +84,8 @@ export class EarnEventServiceImpl {
     }
   }
 
-  async refreshThirdParty(details: IEventDetails): Promise<IEventThirdParty> {
-    const { event, phase, deepLink } = details;
+  async refreshThirdParty(details: IEventDetails, deepLink?: ThirdPartyDeepLink): Promise<IEventThirdParty> {
+    const { event, phase } = details;
 
     const machine: IEventThirdParty = {
       isThirdPartySupported: false,
@@ -99,7 +99,7 @@ export class EarnEventServiceImpl {
     if (!thirdPartyApp) {
       return machine;
     }
-    this.eventLogger.log(`refreshThirdParty, details.deepLink: ${JSON.stringify(details.deepLink)}`);
+    this.eventLogger.log(`refreshThirdParty, details.deepLink: ${JSON.stringify(deepLink)}`);
 
     // UseCase: useThirdPartyConnection
     const { appId, token, error } = this.parseThirdPartyConnectionArgs(thirdPartyApp.id, deepLink);

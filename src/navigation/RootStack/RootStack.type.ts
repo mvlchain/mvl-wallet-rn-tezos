@@ -2,7 +2,6 @@ import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 
 import { Network } from '@@constants/network.constant';
 import { EarnEventDto } from '@@domain/model/EarnEventDto';
-import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { IGetTransactionHistoryResponse } from '@@domain/transaction/transactionHistoryRepository/TransactionHistoryRepository.type';
 import { TokenDto } from '@@store/token/tokenPersistStore.type';
 import { valueOf } from '@@utils/types';
@@ -48,7 +47,6 @@ export type TRootStackParamList = {
   EVENT_DETAILS: {
     i: string;
     data: EarnEventDto;
-    deepLink?: ThirdPartyDeepLink;
   };
   EARN_EVENT_TRNASFERRING: {
     eventId: string;

@@ -38,7 +38,6 @@ export interface IEventPointAmount {
 export interface IEventDetails {
   event: EarnEventDto | undefined;
   phase: valueOf<typeof EventPhase>;
-  deepLink?: ThirdPartyDeepLink;
 }
 
 export interface IValidEventDetails {
@@ -57,5 +56,5 @@ export interface IEventDetailsUiState {
   details: IEventDetails;
   thirdParty: IEventThirdParty;
   claimStatusInfo: ClaimStatusInformation | undefined;
-  refresh: (newDeepLink?: ThirdPartyDeepLink) => Promise<void>;
+  refresh: () => Promise<void>;
 }

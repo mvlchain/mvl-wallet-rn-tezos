@@ -6,8 +6,10 @@ import { container } from 'tsyringe';
 
 import { URL_DEEPLINK, URL_DYNAMIC_LINK } from '@@constants/url.constant';
 import { EarnEventRepository } from '@@domain/auth/repositories/EarnEventRepository';
+import { ThirdPartyDeepLink } from '@@domain/model/ThirdPartyDeepLink';
 import { WalletBlockChainService } from '@@domain/wallet/services/WalletBlockChainService';
 import { ROOT_STACK_ROUTE, TRootStackParamList } from '@@navigation/RootStack/RootStack.type';
+import deepLinkStore from '@@store/deepLinkStore/deepLinkStore';
 import { tagLogger } from '@@utils/Logger';
 import { evaluateQueryString, evaluateUrlScheme } from '@@utils/regex';
 
@@ -19,6 +21,7 @@ export const CLUTCH_APP_SCHEME = 'clutchwallet';
 
 const deepLinkLogger = tagLogger('DeepLink');
 const eventLogger = tagLogger('Event');
+const { getState, setState } = deepLinkStore;
 
 /**
  * React Navigation By DeepLinks
@@ -93,10 +96,13 @@ export const DeepLinkOptions: LinkingOptions<TRootStackParamList> = {
   },
 };
 
+/**
+ * 딥링크 처리 로직
+ */
 export const navigateByDeepLink = (url: string | null): void => {
   const link = parseDeepLink(url);
-  console.log(`QrPay> navigating a link: ${JSON.stringify(link)}`);
   if (link) {
+    deepLinkLogger.log(`navigating a link: ${JSON.stringify(link)}`);
     const { routeName, params } = link;
     R.navigate(routeName, params);
   }
@@ -117,18 +123,28 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
     const repository = container.resolve<EarnEventRepository>('EarnEventRepository');
     const eventId = params.e;
 
+    if (params.f && params.t) {
+      const deepLink: ThirdPartyDeepLink = {
+        appId: params.f.toString(),
+        token: params.t.toString(),
+        alias: params.a?.toString(),
+      };
+
+      // store deepLink
+      setState({
+        thirdPartyLink: deepLink,
+      });
+      // setThirdPartyLink(deepLink);
+      deepLinkLogger.log(`navigating EventDetails param: ${getState().thirdPartyLink}`);
+    }
+
     if (eventId) {
       repository
-        .getEvent(eventId?.toString())
+        .getEvent(eventId.toString())
         .then((event) => {
           R.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, {
             i: params.e,
             data: event,
-            deepLink: {
-              appId: params.f,
-              token: params.t,
-              alias: params.a,
-            },
           });
         })
         .catch((e) => {
@@ -139,15 +155,26 @@ export const parseDeepLink = (url: string | null): RouteLink | undefined => {
     // Link 2.
     // clutchwallet://screen/earn?i={eventId}
 
+    const repository = container.resolve<EarnEventRepository>('EarnEventRepository');
     const params = qs.parse(queryString);
+    const eventId = params.i?.toString();
     deepLinkLogger.log(`navigating EventDetails with id, params: ${JSON.stringify(params, null, 2)}`);
 
-    R.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [{ name: ROOT_STACK_ROUTE.MAIN }, { name: ROOT_STACK_ROUTE.EVENT_DETAILS, params: { i: params.i } }],
-      })
-    );
+    if (eventId) {
+      repository.getEvent(eventId).then((event) => {
+        R.navigate(ROOT_STACK_ROUTE.EVENT_DETAILS, {
+          i: params.e,
+          data: event,
+        });
+      });
+    }
+
+    // R.dispatch(
+    //   CommonActions.reset({
+    //     index: 1,
+    //     routes: [{ name: ROOT_STACK_ROUTE.MAIN }, { name: ROOT_STACK_ROUTE.EVENT_DETAILS, params: { i: params.i } }],
+    //   })
+    // );
   } else if (url.startsWith(`https://${URL_DYNAMIC_LINK}`) || url.startsWith(`https://${URL_DEEPLINK}`)) {
     // Link 3.
     // https://link.mvlclutch.io/short
