@@ -65,7 +65,7 @@ function SettingScreen() {
           <SettingMenu
             title={t('privacy_policy')}
             onPress={() => {
-              onPressSettingMenu(ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY);
+              onPressSettingMenu(ROOT_STACK_ROUTE.SETTING_PRIVACY_POLICY);
             }}
           />
           <SettingMenu
