@@ -4,7 +4,9 @@ import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 import { Animated, Easing, BackHandler } from 'react-native';
 
 import utilStore from '@@store/util/utilStore';
+import { tagLogger } from '@@utils/Logger';
 
+const logger = tagLogger('useLoadingIndicator');
 const useLoadingIndicator = () => {
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
@@ -39,7 +41,7 @@ const useLoadingIndicator = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    console.log(`blockChain: ${isLoadingCnt} | fetch: ${isFetching} | mutate: ${isMutating}`);
+    logger.log(`blockChain: ${isLoadingCnt} | fetch: ${isFetching} | mutate: ${isMutating}`);
 
     if (isLoadingCnt > 0 || isFetching || isMutating) {
       setIsLoading(true);
