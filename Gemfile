@@ -5,6 +5,7 @@ ruby '2.7.5'
 
 gem 'cocoapods', '~> 1.11', '>= 1.11.2'
 gem 'fastlane', '~> 2.211', '>= 2.211.0'
+gem 'dotenv', '~> 2.1', '>= 2.1.1'
 
 
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
