@@ -20,7 +20,7 @@ const encryptor = new Encryptor();
 
 // TODO: 다국어가 메타마스크에 있는 값임. 확인 필요.
 const defaultOptions = {
-  service: 'io.mvlchain.wallet',
+  service: 'io.mvlchain.wallet.secure',
   authenticationPromptTitle: t('authentication.auth_prompt_title'),
   authenticationPrompt: { title: t('authentication.auth_prompt_desc') },
   authenticationPromptDesc: t('authentication.auth_prompt_desc'),
@@ -154,4 +154,4 @@ const secureKeychain = {
 
 export default secureKeychain;
 
-export type SecureType = typeof SECURE_TYPES[keyof typeof SECURE_TYPES];
+export type SecureType = (typeof SECURE_TYPES)[keyof typeof SECURE_TYPES];
