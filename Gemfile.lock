@@ -279,6 +279,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods (~> 1.11, >= 1.11.2)
+  dotenv (~> 2.1, >= 2.1.1)
   fastlane (~> 2.211, >= 2.211.0)
   fastlane-plugin-yarn
 
