@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
