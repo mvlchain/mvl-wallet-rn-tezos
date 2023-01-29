@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Appearance, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 
 import { STATUSBAR_THEME, THEME } from '@@constants/setting.constant';
 import settingPersistStore from '@@store/setting/settingPersistStore';
@@ -9,17 +9,24 @@ import settingPersistStore from '@@store/setting/settingPersistStore';
 const useApp = () => {
   const { i18n } = useTranslation();
   const { settedLanguage, appTheme, setAppTheme } = settingPersistStore();
-  console.log(`Theme: ${JSON.stringify(appTheme)}`);
 
   useEffect(() => {
     i18n.changeLanguage(settedLanguage);
   }, [settedLanguage]);
 
-  // TODO: LightTheme 고정
-  // useEffect(() => {
-  //   const statusBarThemeStyle = getStatusBarThemeStyle(appTheme.displayName);
-  //   StatusBar.setBarStyle(STATUSBAR_THEME[statusBarThemeStyle]);
-  // }, [appTheme]);
+  useEffect(() => {
+    const getStatusBarThemeStyle = (themeStyle: string) => {
+      if (themeStyle === THEME.LIGHT) {
+        return THEME.DARK;
+      } else if (themeStyle === THEME.DARK) {
+        return THEME.LIGHT;
+      } else {
+        return THEME.DEFAULT;
+      }
+    };
+    const statusBarThemeStyle = getStatusBarThemeStyle(appTheme.displayName);
+    StatusBar.setBarStyle(STATUSBAR_THEME[statusBarThemeStyle]);
+  }, [appTheme]);
 
   // appearance change events(Theme)
   // TODO: LightTheme 고정
@@ -48,16 +55,6 @@ const useApp = () => {
   //     subscription.remove();
   //   };
   // }, [appTheme]);
-
-  const getStatusBarThemeStyle = (themeStyle: string) => {
-    if (themeStyle === THEME.LIGHT) {
-      return THEME.DARK;
-    } else if (themeStyle === THEME.DARK) {
-      return THEME.LIGHT;
-    } else {
-      return THEME.DEFAULT;
-    }
-  };
 
   return {
     appTheme,
