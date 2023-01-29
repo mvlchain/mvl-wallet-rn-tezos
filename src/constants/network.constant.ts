@@ -53,7 +53,6 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
     multicallAddress: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
-    infuraNetwork: 'mainnet',
     supportBrowser: true,
   },
   [NETWORK.GOERLI]: {

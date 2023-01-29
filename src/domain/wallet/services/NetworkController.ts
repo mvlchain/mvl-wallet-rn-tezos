@@ -142,15 +142,14 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
     switch (type) {
       case NETWORK.ETH:
       case NETWORK.GOERLI:
-        const infuraNetwork = networkConfig.infuraNetwork;
-        if (!infuraNetwork) {
-          throw new Error(`Undefined infura network: ${type}, ${infuraNetwork}`);
-        }
-        this.setupInfuraProvider(infuraNetwork);
-        break;
       case NETWORK.BSC:
       case NETWORK.BSC_TESTNET:
-        this.setupStandardProvider(networkConfig.rpcUrl, networkConfig.chainId.toString(10), networkConfig.coin, networkConfig.shortName);
+        const infuraNetwork = networkConfig.infuraNetwork;
+        if (infuraNetwork) {
+          this.setupInfuraProvider(infuraNetwork);
+        } else {
+          this.setupStandardProvider(networkConfig.rpcUrl, networkConfig.chainId.toString(10), networkConfig.coin, networkConfig.shortName);
+        }
         break;
       default:
         throw new Error(`Unrecognized network type: '${type}'`);
@@ -185,7 +184,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
         dataSubprovider: infuraSubprovider,
         engineParams: {
           blockTrackerProvider: infuraProvider,
-          pollingInterval: 12000,
+          pollingInterval: 36000,
         },
       },
     };
@@ -201,7 +200,7 @@ export class NetworkController extends BaseControllerV2<typeof name, NetworkStat
       ...this.internalProviderConfig,
       ...{
         chainId,
-        engineParams: { pollingInterval: 12000 },
+        engineParams: { pollingInterval: 36000 },
         nickname,
         rpcUrl: rpcTarget,
         ticker,
