@@ -80,8 +80,8 @@ function RootStack() {
           options={handleStackHeaderOption({ title: t('token_editor_title') })}
         />
         <Screen
-          key={ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY}
-          name={ROOT_STACK_ROUTE.SETTING_PRIVACY_POLITY}
+          key={ROOT_STACK_ROUTE.SETTING_PRIVACY_POLICY}
+          name={ROOT_STACK_ROUTE.SETTING_PRIVACY_POLICY}
           component={SettingPrivacyPolicyScreen}
           options={handleStackHeaderOption({ title: t('') })}
         />
