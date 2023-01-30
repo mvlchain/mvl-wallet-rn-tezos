@@ -27,12 +27,11 @@ Sentry.init({
 
 const errorHandler = (error) => {
   // You don't need to log error here because `setJSExceptionHandler` will use console.error in it.
-  const sentryEventId = Sentry.captureException(error);
   if (__DEV__) {
-    console.log(`sent sentryEventId: ${sentryEventId}`);
     return;
   }
-  Alert.alert('Unexpected Error', error.message);
+  const sentryEventId = Sentry.captureException(error);
+  Alert.alert(`Unexpected Error(${sentryEventId})`, error.message);
 };
 
 setJSExceptionHandler(errorHandler, true);
