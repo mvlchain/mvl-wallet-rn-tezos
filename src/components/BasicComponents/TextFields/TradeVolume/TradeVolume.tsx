@@ -58,11 +58,13 @@ export function TradeVolume(props: ITradeVolumeComponentProps) {
   const { t } = useTranslation();
   const { color } = useColor();
   const { total } = gasStore();
-  const { balance, getBalance } = useOneTokenBalance(tokenDto);
+  const { balance, getBalance } = useOneTokenBalance(tokenDto, hideBalance);
   const bnBalance = new BigNumber(balance).shiftedBy(tokenDto.decimals);
   const validStrBalance = total ? formatBigNumber(bnBalance.minus(total), tokenDto.decimals).toFixed() : balance;
 
   useEffect(() => {
+    // 최초 balance는 useOneTokenBalance훅 안에서 불러오기 때문에 중복 호출 방지를 위해 balance === '-'로 체크
+    if (balance === '-' || hideBalance) return;
     getBalance();
   }, [forceBalanceUpdate]);
 
