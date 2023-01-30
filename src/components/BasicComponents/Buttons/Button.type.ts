@@ -7,8 +7,8 @@ import { CommonColor, ThemeColor } from '@@style/theme';
 export const BUTTON_SIZE = { SMALL: 'small', FIT: 'fit', DEFAULT: 'default' } as const;
 export const BUTTON_TYPE = { PRIMARY: 'primary', SECONDARY: 'secondary', OUTLINE: 'outline', BLACK: 'black' } as const;
 
-export type TButtonType = typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];
-export type TButtonSizeType = typeof BUTTON_SIZE[keyof typeof BUTTON_SIZE];
+export type TButtonType = (typeof BUTTON_TYPE)[keyof typeof BUTTON_TYPE];
+export type TButtonSizeType = (typeof BUTTON_SIZE)[keyof typeof BUTTON_SIZE];
 export interface IBaseButtonWrapper {
   size?: TButtonSizeType;
 }
@@ -65,4 +65,5 @@ export interface ITextButtonComponentProps {
   wrapperStyle?: ViewProps['style'];
   textStyle?: TextProps['style'];
   onPress: Function;
+  Icon?: React.FC<SvgProps>;
 }

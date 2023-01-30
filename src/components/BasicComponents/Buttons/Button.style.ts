@@ -1,3 +1,4 @@
+import { StyleSheet } from 'react-native';
 import styled, { css } from 'styled-components/native';
 
 import { height, width } from '@@utils/ui';
@@ -119,6 +120,7 @@ export const TextWrapper = styled.View`
 
 //Text
 export const TextButtonContainer = styled.Pressable`
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   border-radius: ${width * 8}px;
@@ -129,3 +131,9 @@ export const TextButtonLabel = styled.Text<Type.ITextButtonLabelProps>`
   color: ${({ theme, disabled }) => (disabled ? theme.color.primaryDarkest : theme.color.primary)};
   background-color: ${({ theme, pressed }) => (pressed ? theme.color.grey100Grey900 : 'transparent')};
 `;
+
+export const inlineStyle = StyleSheet.create({
+  textIcon: {
+    marginRight: width * 8,
+  },
+});
