@@ -33,8 +33,8 @@ const useOneTokenBalance = (tokenDto: TokenDto, disable?: boolean) => {
     keepPreviousData: true,
     select: (data) => {
       let newData: IBalance = {};
-      const targetToken = data.filter((token) => token.asset.ticker === tokenDto.symbol)[0]?.amount || '0';
-      newData = { balance: formatFixed(targetToken, tokenDto.decimals) };
+      const targetTokenAmount = data.filter((token) => token.asset.ticker === tokenDto.symbol)[0]?.amount || '0';
+      newData = { balance: formatFixed(targetTokenAmount, tokenDto.decimals) };
       return newData;
     },
     onSuccess: (data) => {
