@@ -1,16 +1,18 @@
 import {
-  BASIC_USERNAME,
-  BASIC_PASSWORD,
   AUTH_REDIRECT_URL,
+  BASE_NETWORK,
+  BASE_URL,
+  BASIC_PASSWORD,
+  BASIC_USERNAME,
   BROWSER_REDIRECT_URL,
   GOOGLE_CLIENT_ID,
-  WEB3_AUTH_VERIFIER_GOOGLE,
-  WEB3_AUTH_VERIFIER_APPLE,
-  WEB3_AUTH_NETWORK,
-  WEB3_AUTH_NATIVE_NETWORK,
   WEB3_AUTH_LOGGING,
-  BASE_URL,
-  BASE_NETWORK,
+  WEB3_AUTH_NATIVE_NETWORK,
+  WEB3_AUTH_NETWORK,
+  WEB3_AUTH_VERIFIER_APPLE,
+  WEB3_AUTH_VERIFIER_GOOGLE,
+  SENTRY_DSN,
+  SENTRY_ENVIRONMENT,
 } from '@env';
 
 import { WalletAppConfig } from '@@config/appconfig.interface';
@@ -37,13 +39,15 @@ const walletAppConfig: WalletAppConfig = {
       logging: WEB3_AUTH_LOGGING === 'true',
     },
   },
+  sentry: {
+    dsn: SENTRY_DSN,
+    environment: SENTRY_ENVIRONMENT,
+  },
 };
 
 export default (): WalletAppConfig => {
-  if (!BASIC_USERNAME) {
-    console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    console.warn('BASIC_USERNAME is not set! Please check your .env file');
-    console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  if (!BASE_URL) {
+    console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nBASIC_USERNAME is not set! Please check your .env file\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   }
   return walletAppConfig;
 };

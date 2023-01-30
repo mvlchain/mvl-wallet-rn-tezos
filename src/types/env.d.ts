@@ -13,4 +13,13 @@ declare module '@env' {
   export const WEB3_AUTH_LOGGING: string;
   export const BASE_URL: string;
   export const BASE_NETWORK: 'testnet' | 'mainnet';
+  export const INFURA_ID: string;
+  export const ETH_RPC_URL: string;
+  export const GOERLI_RPC_URL: string;
+  export const BSC_RPC_URL: string;
+  export const BSC_TESTNET_RPC_URL: string;
+  export const TEZOS_RPC_URL: string;
+  export const TEZOS_GHOSTNET_RPC_URL: string;
+  export const SENTRY_DSN: string;
+  export const SENTRY_ENVIRONMENT: string;
 }
