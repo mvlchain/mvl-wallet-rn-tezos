@@ -86,6 +86,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     chainId: 97,
     bip44: 60,
     rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+    // rpcUrl: '***REMOVED***',
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
