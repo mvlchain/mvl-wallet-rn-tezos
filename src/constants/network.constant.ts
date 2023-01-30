@@ -1,3 +1,5 @@
+import { ETH_RPC_URL, GOERLI_RPC_URL, BSC_RPC_URL, BSC_TESTNET_RPC_URL, TEZOS_RPC_URL, TEZOS_GHOSTNET_RPC_URL } from '@env';
+
 import appconfig from '@@config/appconfig';
 import { valueOf } from '@@utils/types';
 
@@ -48,7 +50,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     shortName: 'Ethereum',
     chainId: 1,
     bip44: 60,
-    rpcUrl: '***REMOVED***',
+    rpcUrl: ETH_RPC_URL,
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
@@ -60,7 +62,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     shortName: 'Goerli Testnet',
     chainId: 5,
     bip44: 60,
-    rpcUrl: 'https://goerli.infura.io/v3/***REMOVED***',
+    rpcUrl: GOERLI_RPC_URL,
     networkFeeType: NETWORK_FEE_TYPE.EIP1559,
     networkId: NETWORK_ID.ETHEREUM,
     coin: 'ETH',
@@ -73,7 +75,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     shortName: 'BSC',
     chainId: 56,
     bip44: 60,
-    rpcUrl: '***REMOVED***',
+    rpcUrl: BSC_RPC_URL,
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
@@ -85,8 +87,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     shortName: 'BSC Testnet',
     chainId: 97,
     bip44: 60,
-    rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-    // rpcUrl: '***REMOVED***',
+    rpcUrl: BSC_TESTNET_RPC_URL,
     networkFeeType: NETWORK_FEE_TYPE.EVM_LEGACY_GAS,
     networkId: NETWORK_ID.BSC,
     coin: 'BNB',
@@ -98,7 +99,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     shortName: 'Tezos',
     chainId: 1729,
     bip44: 1729,
-    rpcUrl: 'https://mainnet-node.madfish.solutions/',
+    rpcUrl: TEZOS_RPC_URL,
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
     coin: 'XTZ',
@@ -109,7 +110,7 @@ const NETWORK_CONFIGS: Record<Network, NetworkConfig> = {
     shortName: 'Tezos Ghostnet',
     chainId: 1729,
     bip44: 1729,
-    rpcUrl: 'https://ghostnet.smartpy.io/',
+    rpcUrl: TEZOS_GHOSTNET_RPC_URL,
     networkFeeType: NETWORK_FEE_TYPE.TEZOS,
     networkId: NETWORK_ID.XTZ,
     coin: 'XTZ',

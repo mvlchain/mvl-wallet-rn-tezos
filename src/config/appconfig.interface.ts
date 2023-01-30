@@ -6,6 +6,10 @@ export interface WalletAppConfig {
   baseUrl: string;
   baseNetwork: BaseNetworkType;
   auth: AuthConfig;
+  sentry: {
+    dsn: string;
+    environment: string;
+  };
 }
 
 export interface AuthConfig {
