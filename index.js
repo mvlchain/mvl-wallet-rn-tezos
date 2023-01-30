@@ -17,12 +17,18 @@ if (__DEV__) {
   import('./src/ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
 
+const {
+  baseUrl,
+  auth: {
+    basic: { username, password },
+  },
+  sentry: { dsn, environment },
+} = appconfig();
+
 Sentry.init({
-  dsn: '***REMOVED***',
-  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-  // We recommend adjusting this value in production.
+  dsn,
   tracesSampleRate: __DEV__ ? 1.0 : 0.1,
-  environment: __DEV__ ? 'staging' : 'production',
+  environment: environment,
 });
 
 const errorHandler = (error) => {
@@ -37,13 +43,6 @@ const errorHandler = (error) => {
 setJSExceptionHandler(errorHandler, true);
 
 Decimal.set({ precision: 1e9, toExpPos: 9e15 });
-
-const {
-  baseUrl,
-  auth: {
-    basic: { username, password },
-  },
-} = appconfig();
 
 const basicCredential = `${username}:${password}`;
 const encoded = new Buffer(basicCredential, 'utf8').toString('base64');

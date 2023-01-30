@@ -1,3 +1,4 @@
+import { INFURA_ID } from '@env';
 import { ControllerMessenger, WalletDevice } from '@metamask/controllers';
 
 import { getNetworkByBase, getNetworkConfig } from '@@constants/network.constant';
@@ -40,7 +41,7 @@ class ControllerManager {
         }
       : undefined;
     const networkControllerOpts = {
-      infuraProjectId: '***REMOVED***',
+      infuraProjectId: INFURA_ID,
       state: initialState,
       messenger: this.controllerMessenger.getRestricted({
         name: 'NetworkController',
