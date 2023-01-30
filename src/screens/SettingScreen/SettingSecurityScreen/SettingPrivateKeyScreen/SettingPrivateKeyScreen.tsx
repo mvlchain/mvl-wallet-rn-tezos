@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { CopyIcon } from '@@assets/image';
 import { TextButton } from '@@components/BasicComponents/Buttons/TextButton';
 import Chip from '@@components/BasicComponents/Chip';
 import HideContentSection from '@@components/BasicComponents/HideContentSection';
@@ -50,6 +51,7 @@ function SettingPrivateKeyScreen() {
             onPress={onPressCopyPrivateKey}
             disabled={false}
             wrapperStyle={{ marginTop: height * 30, marginBottom: height * 18 }}
+            Icon={CopyIcon}
           />
         </>
       )}
