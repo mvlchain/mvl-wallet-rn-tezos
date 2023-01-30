@@ -7,10 +7,12 @@ import Toast from 'react-native-toast-message';
 import { IBottomSelectMenuProps } from '@@components/BasicComponents/Modals/BottomSelectModal/BottomSelectMenu/BottomSelectMenu.type';
 import { MODAL_TYPES } from '@@components/BasicComponents/Modals/GlobalModal';
 import { IWalletListMenuProps } from '@@components/BasicComponents/Modals/WalletListModal/WalletListMenu/WalletListMenu.type';
-import { getNetworkConfig, getNetworkByBase, NETWORK, Network, SUPPORTED_NETWORKS } from '@@constants/network.constant';
+import { AUTH_MODAL_NAME } from '@@constants/authModal.constant';
+import { getNetworkByBase, getNetworkConfig, NETWORK, Network, SUPPORTED_NETWORKS } from '@@constants/network.constant';
 import TOAST_DEFAULT_OPTION from '@@constants/toastConfig.constant';
 import useWalletsQuery from '@@hooks/queries/useWalletsQuery';
 import { useDi } from '@@hooks/useDi';
+import { authModalStore } from '@@store/auth/authModalStore';
 import authStore from '@@store/auth/authStore';
 import globalModalStore from '@@store/globalModal/globalModalStore';
 import walletPersistStore from '@@store/wallet/walletPersistStore';
@@ -24,6 +26,7 @@ const useSettingPrivateKeyScreen = () => {
   const { t } = useTranslation();
   const { openModal } = globalModalStore();
   const { pKey } = authStore();
+  const { close } = authModalStore();
   const { walletList } = walletPersistStore();
   const [type, setType] = useState<'hide' | 'show'>('hide');
   const [networkList, setNetworkList] = useState<IBottomSelectMenuProps[]>([]);
@@ -83,7 +86,10 @@ const useSettingPrivateKeyScreen = () => {
   }, [pkeySelectedNetwork, pkeyWalletIndex]);
 
   const onPressViewPrivatekey = async () => {
-    await uiService.triggerGetPincode();
+    const pincode = await uiService.triggerGetPincode();
+    if (pincode) {
+      close(AUTH_MODAL_NAME.PIN);
+    }
     setType('show');
   };
 
