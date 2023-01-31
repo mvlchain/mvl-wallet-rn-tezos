@@ -3,9 +3,9 @@ import { inject, injectable } from 'tsyringe';
 
 import { AUTH_PROVIDER, AuthProvider } from '@@constants/auth.constant';
 import { getNetworkConfig, NETWORK } from '@@constants/network.constant';
-import { DeviceShareRepository } from '@@domain/auth/repositories/DeviceShareRepository';
-import { ServerShareRepository } from '@@domain/auth/repositories/ServerShareRepository';
-import { TorusShareRepository } from '@@domain/auth/repositories/TorusShareRepository';
+import { DeviceShareRepository } from '@@domain/auth/repositories/IDeviceShareRepository';
+import { ServerShareRepository } from '@@domain/auth/repositories/IServerShareRepository';
+import { TorusShareRepository } from '@@domain/auth/repositories/ITorusShareRepository';
 import { Clutch, extendedKeyPath } from '@@domain/blockchain/Clutch';
 import { IWalletClient } from '@@domain/wallet/clients/WalletClient.type';
 import SecureKeychain from '@@utils/SecureKeychain';

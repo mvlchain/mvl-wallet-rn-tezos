@@ -2,16 +2,16 @@ import { injectable, inject } from 'tsyringe';
 
 import { getNetworkConfig, Network, NetworkId, NETWORK_ID } from '@@constants/network.constant';
 import { KeyClient } from '@@domain/auth/clients/KeyClient';
-import { RootKeyRepository } from '@@domain/auth/repositories/RootKeyRepository';
+import { RootKeyRepository } from '@@domain/auth/repositories/IRootKeyRepository';
 import { Clutch, CLUTCH_EXTENDED_KEY_PATH } from '@@domain/blockchain/Clutch';
 import { WalletDto } from '@@domain/model/WalletDto';
 import { WalletRepository } from '@@domain/wallet/repositories/WalletRepository';
 import { WalletResponseDto } from '@@generated/generated-scheme';
+import authStore from '@@store/auth/authStore';
 
 import { IWallet, IWalletClient } from '../clients/WalletClient.type';
 
 import * as Type from './WalletService.type';
-import authStore from "@@store/auth/authStore";
 
 export interface WalletService {
   extendedPublicKeyByCredentials(): Promise<string>;
